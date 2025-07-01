@@ -76,7 +76,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
 }
 
 function printReport(report: ReturnType<typeof verifyAnswer>): void {
-  console.log("ClaimGuard Verification Report");
+  console.log("Quorum Verification Report");
   console.log("");
   console.log(`Sources: ${report.sources.map((source) => source.title).join(", ")}`);
   console.log(
@@ -98,10 +98,10 @@ function printReport(report: ReturnType<typeof verifyAnswer>): void {
 }
 
 function printHelp(): void {
-  console.log(`ClaimGuard
+  console.log(`Quorum
 
 Usage:
-  claimguard verify --answer <path> --source <path> [--source <path>] [--json]
+  quorum verify --answer <path> --source <path> [--source <path>] [--json]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source examples/sources/hr-policy.md

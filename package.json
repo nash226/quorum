@@ -1,10 +1,10 @@
 {
-  "name": "claimguard",
+  "name": "quorum",
   "version": "0.1.0",
   "description": "Business-facing evidence layer for enterprise AI agent claims.",
   "type": "module",
   "bin": {
-    "claimguard": "./dist/cli.js"
+    "quorum": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

@@ -1,6 +1,6 @@
-# ClaimGuard
+# Quorum
 
-ClaimGuard is a business-facing evidence layer for enterprise AI agents.
+Quorum is a business-facing evidence layer for enterprise AI agents.
 
 It checks AI-generated business claims against approved company sources before
 those claims reach customers, employees, or downstream systems.
@@ -8,7 +8,7 @@ those claims reach customers, employees, or downstream systems.
 ## Why This Exists
 
 Enterprise AI is moving from experiments to production agents, but hallucination
-controls are still uneven. The first version of ClaimGuard focuses on a narrow,
+controls are still uneven. The first version of Quorum focuses on a narrow,
 high-value problem: detecting unsupported or contradicted claims in answers that
 should be grounded in company policy or knowledge documents.
 
