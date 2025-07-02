@@ -13,6 +13,15 @@ Healthcare coverage begins after 30 days of employment.
 `,
 };
 
+const supportPolicy: SourceDocument = {
+  id: "support_policy",
+  title: "Support Policy",
+  content: `
+Customers can cancel monthly subscriptions from account billing settings.
+Enterprise support requests receive a first response within four business hours.
+`,
+};
+
 test("verifies claims that match approved sources", () => {
   const report = verifyAnswer(
     "Full-time employees receive 20 days of paid vacation each calendar year.",
@@ -41,4 +50,25 @@ test("marks unrelated claims as unsupported", () => {
 
   assert.equal(report.summary.unsupported, 1);
   assert.equal(report.assessments[0]?.verdict, "unsupported");
+});
+
+test("routes partial source matches to review", () => {
+  const report = verifyAnswer("Healthcare coverage begins for workers after onboarding.", [
+    hrPolicy,
+  ]);
+
+  assert.equal(report.summary.needs_review, 1);
+  assert.equal(report.assessments[0]?.verdict, "needs_review");
+  assert.match(report.assessments[0]?.evidence[0]?.quote ?? "", /Healthcare/);
+});
+
+test("selects the strongest evidence across multiple sources", () => {
+  const report = verifyAnswer(
+    "Customers can cancel subscriptions from billing settings.",
+    [hrPolicy, supportPolicy],
+  );
+
+  assert.equal(report.summary.verified, 1);
+  assert.equal(report.assessments[0]?.verdict, "verified");
+  assert.equal(report.assessments[0]?.evidence[0]?.documentId, "support_policy");
 });
