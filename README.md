@@ -32,7 +32,7 @@ It returns a claim-by-claim evidence report:
 npm install
 npm test
 npm run build
-npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources
+npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json
 ```
 
 ## Product Direction

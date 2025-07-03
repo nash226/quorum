@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { readdir, readFile } from "node:fs/promises";
-import { basename, extname, join } from "node:path";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { basename, dirname, extname, join } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import type { SourceDocument } from "./domain.js";
 
@@ -9,6 +9,7 @@ interface VerifyArgs {
   sourcePaths: string[];
   sourceDirs: string[];
   json: boolean;
+  outPath?: string;
 }
 
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
@@ -37,19 +38,29 @@ async function main(): Promise<void> {
   );
 
   const report = verifyAnswer(answer, sources);
+  const jsonReport = JSON.stringify(report, null, 2);
+
+  if (parsed.outPath) {
+    await writeReportFile(parsed.outPath, jsonReport);
+  }
 
   if (parsed.json) {
-    console.log(JSON.stringify(report, null, 2));
+    console.log(jsonReport);
     return;
   }
 
   printReport(report);
+
+  if (parsed.outPath) {
+    console.log(`Report written to ${parsed.outPath}`);
+  }
 }
 
 function parseVerifyArgs(args: string[]): VerifyArgs {
   const sourcePaths: string[] = [];
   const sourceDirs: string[] = [];
   let answerPath = "";
+  let outPath: string | undefined;
   let json = false;
 
   for (let index = 0; index < args.length; index += 1) {
@@ -64,6 +75,9 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
       index += 1;
     } else if (arg === "--source-dir" && next) {
       sourceDirs.push(next);
+      index += 1;
+    } else if (arg === "--out" && next) {
+      outPath = next;
       index += 1;
     } else if (arg === "--json") {
       json = true;
@@ -80,7 +94,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
     throw new Error("Provide at least one --source <path> or --source-dir <path>");
   }
 
-  return { answerPath, sourcePaths, sourceDirs, json };
+  return { answerPath, sourcePaths, sourceDirs, json, outPath };
 }
 
 async function resolveSourcePaths(
@@ -115,6 +129,11 @@ async function listSourceFiles(sourceDir: string): Promise<string[]> {
   return files.flat();
 }
 
+async function writeReportFile(outPath: string, jsonReport: string): Promise<void> {
+  await mkdir(dirname(outPath), { recursive: true });
+  await writeFile(outPath, `${jsonReport}\n`, "utf8");
+}
+
 function printReport(report: ReturnType<typeof verifyAnswer>): void {
   console.log("Quorum Verification Report");
   console.log("");
@@ -141,10 +160,10 @@ function printHelp(): void {
   console.log(`Quorum
 
 Usage:
-  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json]
+  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>]
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources
+  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json
 `);
 }
 
