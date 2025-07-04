@@ -1,3 +1,8 @@
+---
+title: HR Benefits Policy
+updatedAt: 2026-05-31
+---
+
 # HR Policy
 
 Employees receive 12 weeks of paid parental leave.
