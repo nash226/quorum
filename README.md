@@ -44,7 +44,8 @@ npm run build
 npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json
 ```
 
-For a guided walkthrough, see [docs/demo.md](docs/demo.md).
+For a guided walkthrough, see [docs/demo.md](docs/demo.md). For planned
+increments, see [docs/roadmap.md](docs/roadmap.md).
 
 ## Product Direction
 
