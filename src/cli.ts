@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
-import { basename, dirname, extname, join } from "node:path";
+import { dirname, extname, join } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
-import type { SourceDocument } from "./domain.js";
+import { sourceDocumentFromFile } from "./source-loader.js";
 
 interface VerifyArgs {
   answerPath: string;
@@ -27,13 +27,9 @@ async function main(): Promise<void> {
   const answer = await readFile(parsed.answerPath, "utf8");
   const sourcePaths = await resolveSourcePaths(parsed.sourcePaths, parsed.sourceDirs);
   const sources = await Promise.all(
-    sourcePaths.map(async (sourcePath, index): Promise<SourceDocument> => {
+    sourcePaths.map(async (sourcePath, index) => {
       const content = await readFile(sourcePath, "utf8");
-      return {
-        id: `source_${index + 1}`,
-        title: basename(sourcePath),
-        content,
-      };
+      return sourceDocumentFromFile(sourcePath, content, index);
     }),
   );
 
