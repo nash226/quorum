@@ -7,7 +7,7 @@ policy source.
 
 ```bash
 npm install
-npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json
+npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --fail-on contradicted --fail-on unsupported
 ```
 
 ## Expected Result
@@ -20,7 +20,8 @@ The sample answer contains three claims:
 - `unsupported`: the catered lunch claim has no approved source evidence.
 
 The CLI prints a human-readable report and writes a machine-readable JSON report
-to `reports/hr-report.json`.
+to `reports/hr-report.json`. Because the sample contains risky claims, the demo
+command exits with status code `2` when `--fail-on` is enabled.
 
 ## Why This Matters
 
