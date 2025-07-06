@@ -1,7 +1,7 @@
 # Demo Workflow
 
-This demo shows Quorum checking an AI-generated HR answer against an approved
-policy source.
+This demo shows Quorum checking AI-generated HR and customer-support answers
+against approved policy sources.
 
 ## Run The Demo
 
@@ -31,9 +31,9 @@ The customer-support sample follows the same pattern: one contradicted refund
 window, one verified support-response claim, and one unsupported onboarding
 claim.
 
-The CLI prints a human-readable report and writes a machine-readable JSON report
-to `reports/hr-report.json`. Because the sample contains risky claims, the demo
-command exits with status code `2` when `--fail-on` is enabled.
+The CLI prints a human-readable report and writes machine-readable JSON reports
+under `reports/`. Because the samples contain risky claims, the demo commands
+exit with status code `2` when `--fail-on` is enabled.
 
 ## Why This Matters
 
