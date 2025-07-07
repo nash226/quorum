@@ -47,7 +47,8 @@ npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir exampl
 ```
 
 For a guided walkthrough, see [docs/demo.md](docs/demo.md). For planned
-increments, see [docs/roadmap.md](docs/roadmap.md).
+increments, see [docs/roadmap.md](docs/roadmap.md). For human sign-off during
+automation runs, see [docs/decision-queue.md](docs/decision-queue.md).
 
 ## Product Direction
 

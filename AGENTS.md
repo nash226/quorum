@@ -35,6 +35,20 @@ only purpose is to color a contribution graph.
 - Before merging work from a background thread, review the diff and run the
   relevant checks.
 
+## Human Decision Queue
+
+- Use GitHub issues labeled `needs-human-decision` as the human sign-off queue.
+- Create or update a decision issue when work needs product judgment,
+  credentials, paid services, destructive actions, public history rewriting,
+  secrets, ambiguous product direction, or unresolved failing CI after one
+  serious fix attempt.
+- Each decision issue should include the exact decision needed, context,
+  realistic options, a recommendation, and what answer would unblock the work.
+- After filing a decision issue, continue with another safe, unrelated task when
+  one exists.
+- Stop only when all useful work is blocked by open human decisions.
+- See `docs/decision-queue.md` for the queue workflow.
+
 ## Commit Style
 
 Use concise conventional commit messages:
