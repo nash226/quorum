@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -28,3 +31,35 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  refresh-status:
+    if: github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Refresh status document
+        run: npm run status:refresh
+
+      - name: Commit refreshed status document
+        run: |
+          if git diff --quiet -- docs/status.md; then
+            echo "No status changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/status.md
+          git commit -m "docs: refresh status page"
+          git push
