@@ -1,9 +1,10 @@
 import { basename } from "node:path";
-import type { SourceDocument } from "./domain.js";
+import type { SourceDocument, SourceTrustLevel } from "./domain.js";
 
 interface SourceMetadata {
   title?: string;
   updatedAt?: string;
+  trustLevel?: SourceTrustLevel;
 }
 
 interface ParsedSource {
@@ -22,6 +23,7 @@ export function sourceDocumentFromFile(
     id: `source_${index + 1}`,
     title: parsed.metadata.title ?? stripHtmlExtension(basename(sourcePath)),
     updatedAt: parsed.metadata.updatedAt,
+    trustLevel: parsed.metadata.trustLevel ?? "medium",
     content: parsed.body,
   };
 }
@@ -61,6 +63,8 @@ function parseFrontmatter(frontmatter: string): SourceMetadata {
       metadata.title = value;
     } else if ((key === "updatedAt" || key === "updated_at") && value) {
       metadata.updatedAt = value;
+    } else if ((key === "trustLevel" || key === "trust_level") && value) {
+      metadata.trustLevel = parseTrustLevel(value);
     }
   }
 
@@ -69,6 +73,17 @@ function parseFrontmatter(frontmatter: string): SourceMetadata {
 
 function stripQuotes(value: string): string {
   return value.replace(/^["']|["']$/g, "");
+}
+
+function parseTrustLevel(value: string): SourceTrustLevel | undefined {
+  switch (value.toLowerCase()) {
+    case "high":
+    case "medium":
+    case "low":
+      return value.toLowerCase() as SourceTrustLevel;
+    default:
+      return undefined;
+  }
 }
 
 function isHtmlSource(sourcePath: string): boolean {

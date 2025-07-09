@@ -28,7 +28,7 @@ The current CLI can:
 
 - read an AI-generated answer from a Markdown or text file
 - read one or more approved Markdown, text, or exported HTML source documents
-- load source metadata such as `title` and `updatedAt`
+- load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - split the answer into atomic claims
 - compare each claim against approved source snippets
 - label each claim as `verified`, `contradicted`, `unsupported`, or
@@ -91,11 +91,15 @@ Source files may include optional frontmatter metadata:
 ---
 title: HR Benefits Policy
 updatedAt: 2026-05-31
+trustLevel: high
 ---
 ```
 
 Quorum includes this metadata in reports so reviewers can see which approved
-source supported or contradicted each claim.
+source supported or contradicted each claim. `trustLevel` accepts `high`,
+`medium`, or `low` and helps Quorum prefer stronger approved sources when
+multiple passages are similarly relevant. Sources without a trust level default
+to `medium`.
 
 ## CLI Usage
 
