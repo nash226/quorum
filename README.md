@@ -163,7 +163,9 @@ Near-term work:
 - API surface for agent integrations
 
 See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
-[docs/product-brief.md](docs/product-brief.md) for the product brief.
+[docs/product-brief.md](docs/product-brief.md) for the product brief. For an
+auto-updated snapshot of what has shipped on `main`, see
+[docs/status.md](docs/status.md).
 
 ## Human Decision Queue
 
