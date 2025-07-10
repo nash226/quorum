@@ -4,6 +4,7 @@ import { dirname, extname, join } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import type { ClaimVerdict } from "./domain.js";
 import { parseClaimVerdict, shouldFailReport } from "./report-policy.js";
+import { renderMarkdownReport, renderTextReport } from "./report-renderer.js";
 import { sourceDocumentFromFile } from "./source-loader.js";
 
 interface VerifyArgs {
@@ -13,6 +14,7 @@ interface VerifyArgs {
   json: boolean;
   failOn: ClaimVerdict[];
   outPath?: string;
+  markdownOutPath?: string;
 }
 
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
@@ -38,10 +40,15 @@ async function main(): Promise<void> {
 
   const report = verifyAnswer(answer, sources);
   const jsonReport = JSON.stringify(report, null, 2);
+  const markdownReport = renderMarkdownReport(report);
   const shouldFail = shouldFailReport(report, parsed.failOn);
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
+  }
+
+  if (parsed.markdownOutPath) {
+    await writeReportFile(parsed.markdownOutPath, markdownReport);
   }
 
   if (parsed.json) {
@@ -52,10 +59,14 @@ async function main(): Promise<void> {
     return;
   }
 
-  printReport(report);
+  process.stdout.write(renderTextReport(report));
 
   if (parsed.outPath) {
     console.log(`Report written to ${parsed.outPath}`);
+  }
+
+  if (parsed.markdownOutPath) {
+    console.log(`Markdown report written to ${parsed.markdownOutPath}`);
   }
 
   if (shouldFail) {
@@ -68,6 +79,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
   const sourceDirs: string[] = [];
   let answerPath = "";
   let outPath: string | undefined;
+  let markdownOutPath: string | undefined;
   let json = false;
   const failOn: ClaimVerdict[] = [];
 
@@ -87,6 +99,9 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
     } else if (arg === "--out" && next) {
       outPath = next;
       index += 1;
+    } else if (arg === "--markdown-out" && next) {
+      markdownOutPath = next;
+      index += 1;
     } else if (arg === "--fail-on" && next) {
       failOn.push(parseClaimVerdict(next));
       index += 1;
@@ -105,7 +120,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
     throw new Error("Provide at least one --source <path> or --source-dir <path>");
   }
 
-  return { answerPath, sourcePaths, sourceDirs, json, failOn, outPath };
+  return { answerPath, sourcePaths, sourceDirs, json, failOn, outPath, markdownOutPath };
 }
 
 async function resolveSourcePaths(
@@ -140,43 +155,23 @@ async function listSourceFiles(sourceDir: string): Promise<string[]> {
   return files.flat();
 }
 
-async function writeReportFile(outPath: string, jsonReport: string): Promise<void> {
+async function writeReportFile(
+  outPath: string,
+  reportContents: string,
+): Promise<void> {
   await mkdir(dirname(outPath), { recursive: true });
-  await writeFile(outPath, `${jsonReport}\n`, "utf8");
-}
-
-function printReport(report: ReturnType<typeof verifyAnswer>): void {
-  console.log("Quorum Verification Report");
-  console.log("");
-  console.log(`Sources: ${report.sources.map((source) => source.title).join(", ")}`);
-  console.log(
-    `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
-  );
-  console.log("");
-
-  for (const assessment of report.assessments) {
-    console.log(`${assessment.verdict.toUpperCase()}  ${assessment.claim.text}`);
-    console.log(`Reason: ${assessment.reason}`);
-
-    for (const evidence of assessment.evidence) {
-      console.log(
-        `Evidence (${evidence.documentTitle}, ${evidence.documentTrustLevel} trust, score ${evidence.score}):`,
-      );
-      console.log(`  ${evidence.quote}`);
-    }
-
-    console.log("");
-  }
+  const output = reportContents.endsWith("\n") ? reportContents : `${reportContents}\n`;
+  await writeFile(outPath, output, "utf8");
 }
 
 function printHelp(): void {
   console.log(`Quorum
 
 Usage:
-  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--fail-on <verdict>]
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --fail-on contradicted --fail-on unsupported
+  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --fail-on contradicted --fail-on unsupported
 `);
 }
 

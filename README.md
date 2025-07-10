@@ -35,6 +35,7 @@ The current CLI can:
   `needs_review`
 - print a human-readable report
 - write a JSON report for workflow automation
+- write a Markdown reviewer report for approvals and handoff
 - fail a CI job when selected risky verdicts appear
 
 ## Example
@@ -43,7 +44,8 @@ The current CLI can:
 npm run dev -- verify \
   --answer examples/answers/hr-answer.md \
   --source-dir examples/sources \
-  --out reports/hr-report.json
+  --out reports/hr-report.json \
+  --markdown-out reports/hr-report.md
 ```
 
 Example output:
@@ -56,7 +58,7 @@ Summary: 1 verified, 1 contradicted, 1 unsupported, 0 needs review
 
 CONTRADICTED  Employees receive 18 weeks of paid parental leave.
 Reason: A closely matching approved source uses different numeric terms.
-Evidence (HR Benefits Policy, score 0.857):
+Evidence (HR Benefits Policy, high trust, score 0.857):
   Employees receive 12 weeks of paid parental leave.
 ```
 
@@ -80,7 +82,7 @@ cd quorum
 npm install
 npm test
 npm run build
-npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json
+npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md
 ```
 
 ## Source Metadata
@@ -104,7 +106,7 @@ to `medium`.
 ## CLI Usage
 
 ```text
-quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--fail-on <verdict>]
+quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--fail-on <verdict>]
 ```
 
 Options:
@@ -114,6 +116,7 @@ Options:
 - `--source-dir <path>`: directory of approved source documents
 - `--json`: print the full JSON report
 - `--out <path>`: write the JSON report to disk
+- `--markdown-out <path>`: write a reviewer-friendly Markdown report to disk
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
   repeated
 
