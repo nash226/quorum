@@ -20,6 +20,7 @@
 - print a human-readable report
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
+- write a reviewer decision CSV that teams can fill in claim by claim
 - fail a CI job when selected risky verdicts appear
 
 ## Roadmap Snapshot
@@ -34,7 +35,7 @@
 
 - Accept PDFs and exported knowledge base pages.
 - Add configurable source trust levels.
-- Track reviewer decisions against each claim.
+- Import reviewer decisions from filled claim-level exports.
 - Support batch verification for multiple answers.
 
 ## Recently Shipped

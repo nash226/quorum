@@ -2,7 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { verifyAnswer } from "../src/claim-verifier.js";
 import type { SourceDocument } from "../src/domain.js";
-import { renderMarkdownReport, renderTextReport } from "../src/report-renderer.js";
+import {
+  renderMarkdownReport,
+  renderReviewerDecisionCsv,
+  renderTextReport,
+} from "../src/report-renderer.js";
 
 const hrPolicy: SourceDocument = {
   id: "hr_policy",
@@ -51,4 +55,30 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
   assert.match(rendered, /- Verdict: `contradicted`/);
   assert.match(rendered, /> Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Evidence: No approved source snippet matched strongly enough\./);
+});
+
+test("renders a reviewer decision csv with claim context and blank reviewer fields", () => {
+  const report = verifyAnswer(
+    "Employees receive 18 weeks of paid parental leave.\nEmployees receive free catered lunch every day.",
+    [hrPolicy],
+    "2026-06-28T00:00:00.000Z",
+  );
+
+  const rendered = renderReviewerDecisionCsv(report);
+  const lines = rendered.trim().split("\n");
+
+  assert.equal(
+    lines[0],
+    "claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+  );
+  assert.match(
+    lines[1] ?? "",
+    /^claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
+  );
+  assert.match(lines[1] ?? "", /HR Policy/);
+  assert.match(
+    lines[2] ?? "",
+    /^claim_2,Employees receive free catered lunch every day\.,unsupported,/,
+  );
+  assert.match(lines[2] ?? "", /,,$/);
 });
