@@ -3,6 +3,7 @@ import test from "node:test";
 import { verifyAnswer } from "../src/claim-verifier.js";
 import type { SourceDocument } from "../src/domain.js";
 import {
+  renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
   renderTextReport,
@@ -81,4 +82,24 @@ test("renders a reviewer decision csv with claim context and blank reviewer fiel
     /^claim_2,Employees receive free catered lunch every day\.,unsupported,/,
   );
   assert.match(lines[2] ?? "", /,,$/);
+});
+
+test("renders a professional HTML reviewer report with escaped content", () => {
+  const report = verifyAnswer(
+    "Employees receive 18 weeks of paid parental leave.\n<Flag this answer for legal review.>",
+    [hrPolicy],
+    "2026-06-28T00:00:00.000Z",
+  );
+
+  const rendered = renderHtmlReport(report);
+
+  assert.match(rendered, /<!doctype html>/i);
+  assert.match(rendered, /<title>Quorum Verification Report<\/title>/);
+  assert.match(rendered, /Verification report for reviewer sign-off/);
+  assert.match(rendered, /<span class="badge badge--contradicted">contradicted<\/span>/);
+  assert.match(rendered, /HR Policy<\/strong>/);
+  assert.match(rendered, /high trust/);
+  assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
+  assert.match(rendered, /&lt;Flag this answer for legal review\.&gt;/);
+  assert.doesNotMatch(rendered, /<Flag this answer for legal review\.>/);
 });
