@@ -12,7 +12,6 @@ front of enterprise agent workflows.
 ## Next
 
 - Accept PDFs as approved sources.
-- Add CLI-level trust overrides for sources without metadata.
 - Support batch verification for multiple answers.
 
 ## Later

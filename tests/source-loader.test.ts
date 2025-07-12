@@ -12,6 +12,14 @@ test("builds source documents from file names when metadata is absent", () => {
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("applies the default trust override when metadata is absent", () => {
+  const source = sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
+    defaultTrustLevel: "high",
+  });
+
+  assert.equal(source.trustLevel, "high");
+});
+
 test("parses supported frontmatter metadata and strips it from content", () => {
   const parsed = parseSource("docs/hr-policy.md", `---
 title: HR Benefits Policy
@@ -31,6 +39,22 @@ Employees get 12 weeks.
   });
   assert.match(parsed.body, /^# HR Policy/);
   assert.doesNotMatch(parsed.body, /People Ops/);
+});
+
+test("keeps frontmatter trust levels ahead of the default override", () => {
+  const source = sourceDocumentFromFile(
+    "docs/hr-policy.md",
+    `---
+title: HR Benefits Policy
+trustLevel: low
+---
+Employees get 12 weeks.
+`,
+    0,
+    { defaultTrustLevel: "high" },
+  );
+
+  assert.equal(source.trustLevel, "low");
 });
 
 test("extracts readable text and title from exported html sources", () => {
