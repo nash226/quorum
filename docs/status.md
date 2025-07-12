@@ -22,6 +22,7 @@
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim
+- import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 
 ## Roadmap Snapshot
@@ -34,9 +35,8 @@
 
 ### Next In docs/roadmap.md
 
-- Accept PDFs and exported knowledge base pages.
-- Add configurable source trust levels.
-- Import reviewer decisions from filled claim-level exports.
+- Accept PDFs as approved sources.
+- Add CLI-level trust overrides for sources without metadata.
 - Support batch verification for multiple answers.
 
 ## Recently Shipped

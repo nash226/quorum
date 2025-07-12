@@ -11,9 +11,8 @@ front of enterprise agent workflows.
 
 ## Next
 
-- Accept PDFs and exported knowledge base pages.
-- Add configurable source trust levels.
-- Import reviewer decisions from filled claim-level exports.
+- Accept PDFs as approved sources.
+- Add CLI-level trust overrides for sources without metadata.
 - Support batch verification for multiple answers.
 
 ## Later
