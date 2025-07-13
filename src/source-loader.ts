@@ -1,4 +1,5 @@
 import { basename } from "node:path";
+import { PDFParse } from "pdf-parse";
 import type { SourceDocument, SourceTrustLevel } from "./domain.js";
 
 interface SourceMetadata {
@@ -20,13 +21,30 @@ export function sourceDocumentFromFile(
   sourcePath: string,
   content: string,
   index: number,
+  options?: SourceDocumentOptions,
+): Promise<SourceDocument>;
+export function sourceDocumentFromFile(
+  sourcePath: string,
+  content: Buffer,
+  index: number,
+  options?: SourceDocumentOptions,
+): Promise<SourceDocument>;
+export async function sourceDocumentFromFile(
+  sourcePath: string,
+  content: string | Buffer,
+  index: number,
   options: SourceDocumentOptions = {},
-): SourceDocument {
-  const parsed = parseSource(sourcePath, content);
+): Promise<SourceDocument> {
+  if (isPdfSource(sourcePath)) {
+    return pdfSourceDocumentFromFile(sourcePath, content, index, options);
+  }
+
+  const textContent = typeof content === "string" ? content : content.toString("utf8");
+  const parsed = parseSource(sourcePath, textContent);
 
   return {
     id: `source_${index + 1}`,
-    title: parsed.metadata.title ?? stripHtmlExtension(basename(sourcePath)),
+    title: parsed.metadata.title ?? sourceTitleFromPath(sourcePath),
     updatedAt: parsed.metadata.updatedAt,
     trustLevel: parsed.metadata.trustLevel ?? options.defaultTrustLevel ?? "medium",
     content: parsed.body,
@@ -105,8 +123,12 @@ function isHtmlSource(sourcePath: string): boolean {
   return /\.html?$/i.test(sourcePath);
 }
 
-function stripHtmlExtension(fileName: string): string {
-  return fileName.replace(/\.html?$/i, "");
+function isPdfSource(sourcePath: string): boolean {
+  return /\.pdf$/i.test(sourcePath);
+}
+
+function sourceTitleFromPath(sourcePath: string): string {
+  return basename(sourcePath).replace(/\.(html?|pdf)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
@@ -152,4 +174,42 @@ function decodeHtmlEntities(content: string): string {
     .replace(/&#39;|&apos;/gi, "'")
     .replace(/&lt;/gi, "<")
     .replace(/&gt;/gi, ">");
+}
+
+async function pdfSourceDocumentFromFile(
+  sourcePath: string,
+  content: string | Buffer,
+  index: number,
+  options: SourceDocumentOptions,
+): Promise<SourceDocument> {
+  const parser = new PDFParse({
+    data: typeof content === "string" ? Buffer.from(content, "binary") : content,
+  });
+
+  try {
+    const result = await parser.getText();
+
+    return {
+      id: `source_${index + 1}`,
+      title: sourceTitleFromPath(sourcePath),
+      updatedAt: undefined,
+      trustLevel: options.defaultTrustLevel ?? "medium",
+      content: normalizePdfText(result.text),
+    };
+  } finally {
+    await parser.destroy();
+  }
+}
+
+function normalizePdfText(content: string): string {
+  return content
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => !/^-- \d+ of \d+ --$/.test(line))
+    .join("\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
 }

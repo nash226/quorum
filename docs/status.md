@@ -13,6 +13,7 @@
 
 - read an AI-generated answer from a Markdown or text file
 - read one or more approved Markdown, text, or exported HTML source documents
+- read one or more approved Markdown, text, exported HTML, or PDF source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
@@ -36,7 +37,6 @@
 
 ### Next In docs/roadmap.md
 
-- Accept PDFs as approved sources.
 - Support batch verification for multiple answers.
 
 ## Recently Shipped
