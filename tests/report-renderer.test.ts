@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { verifyAnswer } from "../src/claim-verifier.js";
-import type { SourceDocument } from "../src/domain.js";
+import type { BatchVerificationReport, SourceDocument } from "../src/domain.js";
 import {
+  renderBatchHtmlReport,
+  renderBatchMarkdownReport,
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
@@ -102,4 +104,72 @@ test("renders a professional HTML reviewer report with escaped content", () => {
   assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /&lt;Flag this answer for legal review\.&gt;/);
   assert.doesNotMatch(rendered, /<Flag this answer for legal review\.>/);
+});
+
+test("renders a markdown batch report with per-answer summaries", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sourceCount: 1,
+    answerCount: 2,
+    answers: [
+      {
+        answerPath: "examples/answers/hr-answer.md",
+        report: verifyAnswer("Employees receive 12 weeks of paid parental leave.", [hrPolicy]),
+        shouldFail: false,
+      },
+      {
+        answerPath: "examples/answers/support-answer.md",
+        report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
+        shouldFail: true,
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 1,
+      needs_review: 0,
+      answersWithFailures: 1,
+    },
+  };
+
+  const rendered = renderBatchMarkdownReport(batchReport);
+
+  assert.match(rendered, /# Quorum Batch Verification Report/);
+  assert.match(rendered, /- Answers reviewed: 2/);
+  assert.match(rendered, /- Answers matching fail policy: 1/);
+  assert.match(rendered, /### 1\. examples\/answers\/hr-answer\.md/);
+  assert.match(rendered, /- Fail policy: clear/);
+  assert.match(rendered, /### 2\. examples\/answers\/support-answer\.md/);
+  assert.match(rendered, /- Fail policy: matched/);
+});
+
+test("renders an HTML batch report with escaped answer paths and fail status", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sourceCount: 2,
+    answerCount: 1,
+    answers: [
+      {
+        answerPath: "<queued>/support-answer.md",
+        report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
+        shouldFail: true,
+      },
+    ],
+    summary: {
+      verified: 0,
+      contradicted: 0,
+      unsupported: 1,
+      needs_review: 0,
+      answersWithFailures: 1,
+    },
+  };
+
+  const rendered = renderBatchHtmlReport(batchReport);
+
+  assert.match(rendered, /<!doctype html>/i);
+  assert.match(rendered, /<title>Quorum Batch Verification Report<\/title>/);
+  assert.match(rendered, /Batch verification report for review queues/);
+  assert.match(rendered, /Fail policy matched/);
+  assert.match(rendered, /&lt;queued&gt;\/support-answer\.md/);
+  assert.doesNotMatch(rendered, /<queued>\/support-answer\.md/);
 });

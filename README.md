@@ -98,6 +98,8 @@ npm run dev -- verify-batch \
   --answer-dir examples/answers \
   --source-dir examples/sources \
   --out reports/batch-report.json \
+  --markdown-out reports/batch-report.md \
+  --html-out reports/batch-report.html \
   --fail-on contradicted
 ```
 
@@ -144,7 +146,7 @@ npm run dev -- verify \
 
 ```text
 quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
-quorum verify-batch --answer-dir <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--fail-on <verdict>]
+quorum verify-batch --answer-dir <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path> [--json] [--out <path>]
 ```
 
@@ -160,6 +162,8 @@ Options:
 - `--out <path>`: write the JSON report to disk
 - `--markdown-out <path>`: write a reviewer-friendly Markdown report to disk
 - `--html-out <path>`: write a styled HTML reviewer report to disk
+- `verify-batch --markdown-out <path>`: write a batch summary in Markdown for review queues
+- `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
   repeated
