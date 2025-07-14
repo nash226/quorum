@@ -6,12 +6,13 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `671ad4b` on 2026-06-28, feat: add PDF source support
+- Latest shipped change: `a2af573` on 2026-06-28, feat: add batch verification cli
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
 
 - read an AI-generated answer from a Markdown or text file
+- batch verify multiple AI-generated answers from a directory
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, or PDF source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
@@ -43,6 +44,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-28 | [#19](https://github.com/nash226/quorum/pull/19) | feat: add batch verification cli | `a2af573` |
 | 2026-06-28 | [#18](https://github.com/nash226/quorum/pull/18) | feat: add PDF source support | `671ad4b` |
 | 2026-06-28 | [#17](https://github.com/nash226/quorum/pull/17) | feat: add source trust overrides | `33a1d81` |
 | 2026-06-28 | [#16](https://github.com/nash226/quorum/pull/16) | feat: import reviewer decision csvs | `5f554c6` |
@@ -50,5 +52,4 @@
 | 2026-06-28 | [#14](https://github.com/nash226/quorum/pull/14) | feat: add reviewer decision csv export | `ca29802` |
 | 2026-06-28 | Direct push | feat: add markdown reviewer reports | `0583999` |
 | 2026-06-28 | [#12](https://github.com/nash226/quorum/pull/12) | Add auto-updated status page | `6af38ec` |
-| 2026-06-28 | [#11](https://github.com/nash226/quorum/pull/11) | feat: add source trust levels | `ade7490` |
 
