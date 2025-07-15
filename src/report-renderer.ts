@@ -121,41 +121,31 @@ export function renderReviewerDecisionCsv(report: VerificationReport): string {
 }
 
 export function renderHtmlReport(report: VerificationReport): string {
-  const summaryCards = ([
-    ["Verified", report.summary.verified, "verified"],
-    ["Contradicted", report.summary.contradicted, "contradicted"],
-    ["Unsupported", report.summary.unsupported, "unsupported"],
-    ["Needs Review", report.summary.needs_review, "needs_review"],
-  ] as const)
-    .map(
-      ([label, value, verdict]) => `
-        <section class="summary-card summary-card--${verdict}">
-          <span class="summary-card__label">${escapeHtml(label)}</span>
-          <strong class="summary-card__value">${value}</strong>
-        </section>`,
+  return renderReviewConsoleHtmlReport(report);
+}
+
+function renderReviewConsoleHtmlReport(report: VerificationReport): string {
+  const selectedAssessment = selectPrimaryAssessment(report.assessments);
+  const averageScore = averageEvidenceScore(report.assessments);
+  const assessmentRows = report.assessments
+    .map((assessment) =>
+      renderReviewConsoleAssessmentRow(assessment, assessment === selectedAssessment),
     )
     .join("");
-
   const sourceItems = report.sources
     .map((source) => {
-      const meta = [`${source.trustLevel} trust`];
+      const metadata = [`${source.trustLevel} trust`];
 
       if (source.updatedAt) {
-        meta.push(`updated ${escapeHtml(source.updatedAt)}`);
+        metadata.push(`updated ${escapeHtml(source.updatedAt)}`);
       }
 
       return `
-        <li class="source-list__item">
-          <div>
-            <strong>${escapeHtml(source.title)}</strong>
-            <p>${meta.join(" · ")}</p>
-          </div>
-        </li>`;
+                <li class="source-item">
+                  <strong>${escapeHtml(source.title)}</strong>
+                  <span>${metadata.join(" - ")}</span>
+                </li>`;
     })
-    .join("");
-
-  const assessmentSections = report.assessments
-    .map((assessment, index) => renderHtmlAssessment(assessment, index + 1))
     .join("");
 
   return `<!doctype html>
@@ -163,25 +153,26 @@ export function renderHtmlReport(report: VerificationReport): string {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Quorum Verification Report</title>
+    <title>Quorum Review Console</title>
     <style>
       :root {
         color-scheme: light;
-        --page: #f4f1ea;
-        --panel: rgba(255, 252, 247, 0.92);
-        --panel-strong: #fffdf9;
-        --ink: #1f2933;
-        --muted: #66727f;
-        --line: rgba(31, 41, 51, 0.12);
-        --shadow: 0 20px 50px rgba(74, 57, 39, 0.12);
-        --verified: #1f7a4f;
-        --verified-soft: #e6f5ec;
-        --contradicted: #9f3a2c;
-        --contradicted-soft: #fbe9e5;
-        --unsupported: #8a6116;
-        --unsupported-soft: #fbf1dc;
-        --needs-review: #255a8f;
-        --needs-review-soft: #e8f1fb;
+        --app-bg: #eef2f6;
+        --nav-bg: #17202b;
+        --surface: #ffffff;
+        --surface-muted: #f7f9fb;
+        --ink: #202833;
+        --muted: #637083;
+        --line: #d8e0e8;
+        --line-strong: #c4ced8;
+        --verified: #16835b;
+        --verified-bg: #e7f4ee;
+        --contradicted: #b23b3b;
+        --contradicted-bg: #fae9e9;
+        --unsupported: #987018;
+        --unsupported-bg: #fbf3df;
+        --needs-review: #2d68a5;
+        --needs-review-bg: #e7f0fb;
       }
 
       * {
@@ -190,481 +181,600 @@ export function renderHtmlReport(report: VerificationReport): string {
 
       body {
         margin: 0;
-        font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+        font-family: "Aptos", "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
         color: var(--ink);
-        background:
-          radial-gradient(circle at top left, rgba(179, 146, 92, 0.18), transparent 28%),
-          radial-gradient(circle at top right, rgba(53, 95, 140, 0.12), transparent 24%),
-          linear-gradient(180deg, #f7f4ee 0%, #f1eee7 100%);
+        background: var(--app-bg);
       }
 
-      .shell {
-        max-width: 1360px;
-        margin: 0 auto;
-        padding: 40px 24px 72px;
+      button,
+      input {
+        font: inherit;
       }
 
-      .hero {
-        position: relative;
-        overflow: hidden;
-        padding: 32px;
-        border: 1px solid rgba(88, 67, 44, 0.1);
-        border-radius: 28px;
-        background:
-          linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(248, 243, 234, 0.88)),
-          #fff;
-        box-shadow: var(--shadow);
+      .app {
+        display: grid;
+        grid-template-columns: 228px minmax(0, 1fr);
+        min-height: 100vh;
       }
 
-      .hero::after {
-        content: "";
-        position: absolute;
-        inset: auto -8% -42% auto;
-        width: 340px;
-        height: 340px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(28, 88, 140, 0.18), transparent 62%);
-        pointer-events: none;
+      .rail {
+        padding: 18px 14px;
+        background: var(--nav-bg);
+        color: #dbe4ee;
       }
 
-      .eyebrow {
-        display: inline-flex;
+      .brand {
+        display: flex;
         align-items: center;
         gap: 10px;
-        padding: 7px 12px;
-        border-radius: 999px;
-        background: rgba(31, 41, 51, 0.06);
-        color: var(--muted);
-        font-size: 12px;
-        letter-spacing: 0.08em;
+        padding: 8px 10px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        background: #f1c766;
+        color: #161b22;
+        font-weight: 800;
+      }
+
+      .brand strong {
+        font-size: 17px;
+      }
+
+      .nav {
+        display: grid;
+        gap: 4px;
+        margin-top: 18px;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 34px;
+        padding: 0 10px;
+        border-radius: 6px;
+        color: #b6c2d0;
+        font-size: 14px;
+      }
+
+      .nav-item.active {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-item svg,
+      .btn svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+      }
+
+      .rail-section {
+        margin-top: 28px;
+        padding: 0 10px;
+      }
+
+      .rail-label {
+        margin-bottom: 9px;
+        color: #8190a2;
+        font-size: 11px;
         text-transform: uppercase;
+      }
+
+      .rail-meter {
+        height: 8px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.11);
+      }
+
+      .rail-meter span {
+        display: block;
+        width: 72%;
+        height: 100%;
+        background: #62c89b;
+      }
+
+      .main {
+        min-width: 0;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        height: 64px;
+        padding: 0 24px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.92);
+      }
+
+      .breadcrumb {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .search {
+        width: 280px;
+        height: 34px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--surface-muted);
+        color: var(--ink);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        height: 34px;
+        padding: 0 12px;
+        border: 1px solid var(--line-strong);
+        border-radius: 6px;
+        background: #ffffff;
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 650;
+      }
+
+      .btn.primary {
+        border-color: #1f2933;
+        background: #1f2933;
+        color: #ffffff;
+      }
+
+      .workspace {
+        padding: 24px;
+      }
+
+      .page-title {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 18px;
       }
 
       h1,
       h2,
-      h3 {
+      h3,
+      p {
         margin: 0;
-        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
-        font-weight: 700;
-        letter-spacing: -0.02em;
       }
 
       h1 {
-        margin-top: 18px;
-        font-size: clamp(2.3rem, 4vw, 3.7rem);
-        line-height: 0.96;
-        max-width: 9ch;
+        font-size: 26px;
+        line-height: 1.15;
       }
 
-      .hero__grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.95fr);
-        gap: 28px;
-        align-items: end;
-        margin-top: 20px;
-      }
-
-      .hero__lead {
-        max-width: 62ch;
-        margin-top: 16px;
+      .subtitle,
+      .small {
         color: var(--muted);
-        font-size: 1rem;
-        line-height: 1.6;
       }
 
-      .hero__meta {
-        display: grid;
-        gap: 14px;
-      }
-
-      .hero__meta-card {
-        padding: 18px 20px;
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.72);
-      }
-
-      .hero__meta-card span {
-        display: block;
-        color: var(--muted);
-        font-size: 0.78rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-      }
-
-      .hero__meta-card strong {
-        display: block;
+      .subtitle {
         margin-top: 6px;
-        font-size: 1rem;
-        line-height: 1.5;
+        font-size: 14px;
       }
 
-      .summary-grid {
+      .small {
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .status-strip {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 16px;
-        margin-top: 24px;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 18px;
       }
 
-      .summary-card {
-        padding: 18px 18px 20px;
-        border-radius: 22px;
+      .stat {
+        padding: 14px;
         border: 1px solid var(--line);
-        background: var(--panel);
-        box-shadow: 0 10px 28px rgba(55, 44, 31, 0.06);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: 0 1px 1px rgba(29, 40, 52, 0.04);
       }
 
-      .summary-card__label {
+      .stat span {
         display: block;
-        font-size: 0.82rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
         color: var(--muted);
+        font-size: 12px;
       }
 
-      .summary-card__value {
+      .stat strong {
         display: block;
-        margin-top: 12px;
-        font-size: 2.35rem;
-        line-height: 1;
+        margin-top: 7px;
+        font-size: 24px;
       }
 
-      .summary-card--verified {
-        background: linear-gradient(180deg, var(--verified-soft), rgba(255, 255, 255, 0.9));
-      }
-
-      .summary-card--contradicted {
-        background: linear-gradient(180deg, var(--contradicted-soft), rgba(255, 255, 255, 0.9));
-      }
-
-      .summary-card--unsupported {
-        background: linear-gradient(180deg, var(--unsupported-soft), rgba(255, 255, 255, 0.9));
-      }
-
-      .summary-card--needs_review {
-        background: linear-gradient(180deg, var(--needs-review-soft), rgba(255, 255, 255, 0.9));
-      }
-
-      .content-grid {
+      .layout {
         display: grid;
-        grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
-        gap: 22px;
-        margin-top: 24px;
-        align-items: start;
-      }
-
-      .stack {
-        display: grid;
-        gap: 18px;
+        grid-template-columns: minmax(0, 1fr) 390px;
+        gap: 16px;
       }
 
       .panel {
-        padding: 24px;
         border: 1px solid var(--line);
-        border-radius: 24px;
-        background: var(--panel);
-        box-shadow: 0 16px 36px rgba(55, 44, 31, 0.06);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: 0 1px 2px rgba(29, 40, 52, 0.05);
       }
 
-      .panel h2 {
-        font-size: 1.55rem;
-      }
-
-      .panel__subhead {
-        margin-top: 6px;
-        color: var(--muted);
-        font-size: 0.95rem;
-        line-height: 1.5;
-      }
-
-      .answer {
-        margin-top: 18px;
-        padding: 18px;
-        border-radius: 18px;
-        background: var(--panel-strong);
-        border: 1px solid var(--line);
-        white-space: pre-wrap;
-        line-height: 1.65;
-      }
-
-      .assessment-list {
-        display: grid;
-        gap: 16px;
-        margin-top: 18px;
-      }
-
-      .assessment {
-        padding: 20px;
-        border-radius: 22px;
-        border: 1px solid var(--line);
-        background: var(--panel-strong);
-      }
-
-      .assessment--verified {
-        box-shadow: inset 4px 0 0 var(--verified);
-      }
-
-      .assessment--contradicted {
-        box-shadow: inset 4px 0 0 var(--contradicted);
-      }
-
-      .assessment--unsupported {
-        box-shadow: inset 4px 0 0 var(--unsupported);
-      }
-
-      .assessment--needs_review {
-        box-shadow: inset 4px 0 0 var(--needs-review);
-      }
-
-      .assessment__topline {
+      .panel-head {
         display: flex;
+        align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        align-items: flex-start;
+        gap: 12px;
+        min-height: 54px;
+        padding: 0 16px;
+        border-bottom: 1px solid var(--line);
       }
 
-      .assessment__index {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 999px;
-        background: rgba(31, 41, 51, 0.06);
-        color: var(--muted);
-        font-size: 0.9rem;
-        flex: none;
+      .panel-head h2 {
+        font-size: 16px;
       }
 
-      .assessment__title {
+      .tabs {
         display: flex;
-        gap: 14px;
-        min-width: 0;
+        gap: 6px;
       }
 
-      .assessment h3 {
-        font-size: 1.2rem;
-        line-height: 1.35;
+      .tab {
+        padding: 6px 10px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 650;
       }
 
-      .badge {
+      .tab.active {
+        background: #e9edf2;
+        color: var(--ink);
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th {
+        height: 38px;
+        padding: 0 14px;
+        color: var(--muted);
+        border-bottom: 1px solid var(--line);
+        font-size: 11px;
+        text-align: left;
+        text-transform: uppercase;
+      }
+
+      td {
+        padding: 14px;
+        border-bottom: 1px solid var(--line);
+        font-size: 13px;
+        vertical-align: top;
+      }
+
+      tr.selected {
+        background: #fbfcfe;
+      }
+
+      .claim-text {
+        max-width: 470px;
+        font-weight: 650;
+        line-height: 1.45;
+      }
+
+      .pill {
         display: inline-flex;
         align-items: center;
-        padding: 8px 12px;
+        gap: 6px;
+        min-height: 24px;
+        padding: 0 8px;
         border-radius: 999px;
-        font-size: 0.76rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
+        font-size: 11px;
+        font-weight: 750;
         text-transform: uppercase;
         white-space: nowrap;
       }
 
-      .badge--verified {
+      .pill::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: currentColor;
+      }
+
+      .pill--verified {
+        background: var(--verified-bg);
         color: var(--verified);
-        background: var(--verified-soft);
       }
 
-      .badge--contradicted {
+      .pill--contradicted {
+        background: var(--contradicted-bg);
         color: var(--contradicted);
-        background: var(--contradicted-soft);
       }
 
-      .badge--unsupported {
+      .pill--unsupported {
+        background: var(--unsupported-bg);
         color: var(--unsupported);
-        background: var(--unsupported-soft);
       }
 
-      .badge--needs_review {
+      .pill--needs_review {
+        background: var(--needs-review-bg);
         color: var(--needs-review);
-        background: var(--needs-review-soft);
       }
 
-      .assessment__reason {
-        margin: 14px 0 0;
-        color: var(--muted);
-        line-height: 1.6;
+      .drawer {
+        position: sticky;
+        top: 84px;
       }
 
-      .evidence-list {
-        display: grid;
-        gap: 14px;
-        margin-top: 16px;
-      }
-
-      .evidence {
+      .drawer-body {
         padding: 16px;
-        border-radius: 18px;
+      }
+
+      .drawer h3 {
+        font-size: 20px;
+        line-height: 1.35;
+      }
+
+      .evidence-quote {
+        margin-top: 12px;
+        padding: 14px;
         border: 1px solid var(--line);
-        background: rgba(247, 243, 236, 0.65);
+        border-left: 3px solid var(--contradicted);
+        border-radius: 6px;
+        background: #fbfcfd;
+        font-size: 13px;
+        line-height: 1.55;
       }
 
-      .evidence__meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        align-items: center;
+      .evidence-quote--verified {
+        border-left-color: var(--verified);
+      }
+
+      .evidence-quote--unsupported {
+        border-left-color: var(--unsupported);
+      }
+
+      .evidence-quote--needs_review {
+        border-left-color: var(--needs-review);
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .field {
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--surface-muted);
+      }
+
+      .field span {
+        display: block;
         color: var(--muted);
-        font-size: 0.86rem;
+        font-size: 11px;
       }
 
-      .evidence blockquote {
-        margin: 12px 0 0;
-        padding-left: 14px;
-        border-left: 3px solid rgba(31, 41, 51, 0.14);
+      .field strong {
+        display: block;
+        margin-top: 5px;
+        font-size: 13px;
+      }
+
+      .decision-box {
+        margin-top: 14px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #ffffff;
+      }
+
+      .segmented {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        margin-top: 10px;
+        padding: 4px;
+        border-radius: 6px;
+        background: #edf1f5;
+      }
+
+      .segmented span {
+        padding: 7px 4px;
+        border-radius: 4px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .segmented .active {
+        background: #ffffff;
         color: var(--ink);
-        line-height: 1.65;
-      }
-
-      .evidence-empty {
-        margin-top: 16px;
-        padding: 15px 16px;
-        border-radius: 18px;
-        background: rgba(255, 247, 234, 0.75);
-        color: var(--muted);
-        border: 1px dashed rgba(138, 97, 22, 0.3);
+        box-shadow: 0 1px 2px rgba(29, 40, 52, 0.12);
       }
 
       .source-list {
         display: grid;
-        gap: 12px;
-        list-style: none;
+        gap: 8px;
+        margin: 14px 0 0;
         padding: 0;
-        margin: 18px 0 0;
+        list-style: none;
       }
 
-      .source-list__item {
-        padding: 16px;
+      .source-item {
+        padding: 10px;
         border: 1px solid var(--line);
-        border-radius: 18px;
-        background: var(--panel-strong);
+        border-radius: 6px;
+        background: var(--surface-muted);
       }
 
-      .source-list__item p {
-        margin: 6px 0 0;
+      .source-item strong,
+      .source-item span {
+        display: block;
+      }
+
+      .source-item span {
+        margin-top: 4px;
         color: var(--muted);
+        font-size: 12px;
       }
 
-      .legend {
-        display: grid;
-        gap: 10px;
-        margin-top: 18px;
+      .answer-panel {
+        margin-top: 16px;
       }
 
-      .legend__row {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        color: var(--muted);
+      .answer-text {
+        max-height: 190px;
+        overflow: auto;
+        white-space: pre-wrap;
+        font-size: 13px;
+        line-height: 1.55;
       }
 
-      .legend__swatch {
-        width: 14px;
-        height: 14px;
-        border-radius: 999px;
-      }
-
-      .review-note {
-        margin-top: 18px;
-        padding: 16px;
-        border-radius: 18px;
-        background: linear-gradient(180deg, rgba(37, 90, 143, 0.08), rgba(255, 255, 255, 0.82));
-        border: 1px solid rgba(37, 90, 143, 0.16);
-        color: var(--muted);
-        line-height: 1.6;
-      }
-
-      @media (max-width: 980px) {
-        .hero__grid,
-        .content-grid,
-        .summary-grid {
+      @media (max-width: 1020px) {
+        .app,
+        .layout {
           grid-template-columns: 1fr;
         }
 
-        .assessment__topline {
-          flex-direction: column;
+        .rail,
+        .drawer {
+          position: static;
+        }
+
+        .status-strip {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
     </style>
   </head>
   <body>
-    <main class="shell">
-      <section class="hero">
-        <span class="eyebrow">Quorum Evidence Review</span>
-        <div class="hero__grid">
-          <div>
-            <h1>Verification report for reviewer sign-off</h1>
-            <p class="hero__lead">
-              This report breaks an AI-generated answer into atomic business claims,
-              scores them against approved sources, and surfaces the evidence a human
-              reviewer should inspect before approving or editing the response.
-            </p>
+    <div class="app">
+      <aside class="rail">
+        <div class="brand">
+          <span class="brand-mark">Q</span>
+          <strong>Quorum</strong>
+        </div>
+        <nav class="nav">
+          <div class="nav-item active">${reviewIcon()} Review queue</div>
+          <div class="nav-item">${documentIcon()} Sources</div>
+          <div class="nav-item">${auditIcon()} Audit log</div>
+          <div class="nav-item">${exportIcon()} Exports</div>
+        </nav>
+        <section class="rail-section">
+          <div class="rail-label">Policy corpus</div>
+          <div class="small">${report.sources.length} approved documents</div>
+          <div style="height: 10px"></div>
+          <div class="rail-meter"><span></span></div>
+          <div style="height: 8px"></div>
+          <div class="small">Reviewer-ready evidence package</div>
+        </section>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="breadcrumb">Quorum / Review queue</div>
+          <div class="toolbar">
+            <input class="search" value="Current answer review" aria-label="Search" />
+            <button class="btn">${filterIcon()} Filter</button>
+            <button class="btn primary">${exportIcon()} Export</button>
           </div>
-          <div class="hero__meta">
-            <article class="hero__meta-card">
-              <span>Generated</span>
-              <strong>${escapeHtml(report.generatedAt)}</strong>
-            </article>
-            <article class="hero__meta-card">
-              <span>Sources reviewed</span>
-              <strong>${report.sources.length} approved documents</strong>
-            </article>
+        </header>
+
+        <section class="workspace">
+          <div class="page-title">
+            <div>
+              <h1>Claim review queue</h1>
+              <p class="subtitle">Evidence checks before agent answers reach HR and support workflows.</p>
+            </div>
+            <div class="toolbar">
+              <button class="btn">Assign</button>
+              <button class="btn primary">Mark reviewed</button>
+            </div>
           </div>
-        </div>
-        <div class="summary-grid">
-          ${summaryCards}
-        </div>
-      </section>
 
-      <section class="content-grid">
-        <div class="stack">
-          <article class="panel">
-            <h2>Submitted answer</h2>
-            <p class="panel__subhead">
-              Original model output under review before it reaches employees, customers,
-              or downstream systems.
-            </p>
-            <div class="answer">${escapeHtml(report.answer)}</div>
-          </article>
+          <section class="status-strip">
+            <div class="stat"><span>Answers reviewed</span><strong>1</strong></div>
+            <div class="stat"><span>Contradicted claims</span><strong>${report.summary.contradicted}</strong></div>
+            <div class="stat"><span>Unsupported claims</span><strong>${report.summary.unsupported}</strong></div>
+            <div class="stat"><span>Avg evidence score</span><strong>${averageScore}</strong></div>
+            <div class="stat"><span>Needs reviewer</span><strong>${report.summary.contradicted + report.summary.unsupported + report.summary.needs_review}</strong></div>
+          </section>
 
-          <article class="panel">
-            <h2>Claim-by-claim assessment</h2>
-            <p class="panel__subhead">
-              Review contradicted and unsupported claims first, then inspect claims marked
-              as needs review where evidence is related but not decisive.
-            </p>
-            <div class="assessment-list">
-              ${assessmentSections}
-            </div>
-          </article>
-        </div>
+          <section class="layout">
+            <article class="panel">
+              <div class="panel-head">
+                <h2>Open claims</h2>
+                <div class="tabs">
+                  <span class="tab active">High risk</span>
+                  <span class="tab">All</span>
+                  <span class="tab">Mine</span>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Verdict</th>
+                      <th>Claim</th>
+                      <th>Source match</th>
+                      <th>Owner</th>
+                      <th>SLA</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${assessmentRows}
+                  </tbody>
+                </table>
+              </div>
+            </article>
 
-        <aside class="stack">
-          <article class="panel">
-            <h2>Approved sources</h2>
-            <p class="panel__subhead">
-              Trust levels help Quorum prefer stronger evidence when passages are similarly relevant.
-            </p>
-            <ul class="source-list">
-              ${sourceItems}
-            </ul>
-          </article>
-
-          <article class="panel">
-            <h2>Verdict legend</h2>
-            <div class="legend">
-              ${renderLegendRow("verified", "Supported strongly enough to trust as written.")}
-              ${renderLegendRow("contradicted", "Conflicts with approved source language or numbers.")}
-              ${renderLegendRow("unsupported", "No approved source snippet matched strongly enough.")}
-              ${renderLegendRow("needs_review", "Related evidence exists, but support is still ambiguous.")}
-            </div>
-            <div class="review-note">
-              Reviewer workflow: approve verified claims, edit or reject contradicted claims,
-              and request source updates when the evidence base is incomplete or stale.
-            </div>
-          </article>
-        </aside>
-      </section>
-    </main>
+            <aside class="panel drawer">
+              ${renderReviewConsoleEvidencePanel(selectedAssessment)}
+              <section class="drawer-body answer-panel">
+                <h2>Submitted answer</h2>
+                <p class="subtitle">Original model output under review.</p>
+                <div class="field answer-text">${escapeHtml(report.answer)}</div>
+              </section>
+              <section class="drawer-body">
+                <h2>Approved sources</h2>
+                <ul class="source-list">
+                  ${sourceItems}
+                </ul>
+              </section>
+            </aside>
+          </section>
+        </section>
+      </main>
+    </div>
   </body>
 </html>
 `;
@@ -1063,52 +1173,174 @@ function escapeCsvValue(value: string): string {
   return value;
 }
 
-function renderHtmlAssessment(
-  assessment: ClaimAssessment,
-  index: number,
-): string {
-  const evidenceBlock =
-    assessment.evidence.length === 0
-      ? `<div class="evidence-empty">No approved source snippet matched strongly enough for automatic evidence attachment.</div>`
-      : `<div class="evidence-list">
-          ${assessment.evidence
-            .map(
-              (evidence) => `
-                <article class="evidence">
-                  <div class="evidence__meta">
-                    <strong>${escapeHtml(evidence.documentTitle)}</strong>
-                    <span>${escapeHtml(evidence.documentTrustLevel)} trust</span>
-                    <span>score ${evidence.score}</span>
-                  </div>
-                  <blockquote>${escapeHtml(evidence.quote)}</blockquote>
-                </article>`,
-            )
-            .join("")}
-        </div>`;
+function selectPrimaryAssessment(
+  assessments: ClaimAssessment[],
+): ClaimAssessment | undefined {
+  const priority: Record<ClaimAssessment["verdict"], number> = {
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 2,
+    verified: 3,
+  };
 
-  return `
-    <article class="assessment assessment--${assessment.verdict}">
-      <div class="assessment__topline">
-        <div class="assessment__title">
-          <span class="assessment__index">${index}</span>
-          <div>
-            <h3>${escapeHtml(assessment.claim.text)}</h3>
-          </div>
-        </div>
-        <span class="badge badge--${assessment.verdict}">${escapeVerdictLabel(assessment.verdict)}</span>
-      </div>
-      <p class="assessment__reason">${escapeHtml(assessment.reason)}</p>
-      ${evidenceBlock}
-    </article>`;
+  return [...assessments].sort(
+    (left, right) => priority[left.verdict] - priority[right.verdict],
+  )[0];
 }
 
-function renderLegendRow(verdict: ClaimAssessment["verdict"], description: string): string {
+function averageEvidenceScore(assessments: ClaimAssessment[]): string {
+  const scores = assessments.flatMap((assessment) =>
+    assessment.evidence.map((evidence) => evidence.score),
+  );
+
+  if (scores.length === 0) {
+    return "0.00";
+  }
+
+  const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+  return average.toFixed(2);
+}
+
+function renderReviewConsoleAssessmentRow(
+  assessment: ClaimAssessment,
+  selected: boolean,
+): string {
+  const primaryEvidence = assessment.evidence[0];
+  const sourceMatch = primaryEvidence
+    ? `<strong>${escapeHtml(primaryEvidence.documentTitle)}</strong><div class="small">${escapeHtml(primaryEvidence.documentTrustLevel)} trust - score ${primaryEvidence.score}</div>`
+    : `<span class="small">No approved snippet</span>`;
+
   return `
-    <div class="legend__row">
-      <span class="legend__swatch badge--${verdict}"></span>
-      <strong>${escapeVerdictLabel(verdict)}</strong>
-      <span>${escapeHtml(description)}</span>
-    </div>`;
+                    <tr${selected ? ` class="selected"` : ""}>
+                      <td><span class="pill pill--${assessment.verdict}">${escapeVerdictLabel(assessment.verdict)}</span></td>
+                      <td>
+                        <div class="claim-text">${escapeHtml(assessment.claim.text)}</div>
+                        <div class="small">Answer review / ${escapeHtml(assessment.claim.id)}</div>
+                      </td>
+                      <td>${sourceMatch}</td>
+                      <td>${escapeHtml(ownerForAssessment(assessment))}</td>
+                      <td><strong>${escapeHtml(slaForAssessment(assessment))}</strong></td>
+                    </tr>`;
+}
+
+function renderReviewConsoleEvidencePanel(
+  assessment: ClaimAssessment | undefined,
+): string {
+  if (!assessment) {
+    return `
+              <div class="panel-head">
+                <h2>Evidence detail</h2>
+              </div>
+              <div class="drawer-body">
+                <p class="subtitle">No claims were extracted from this answer.</p>
+              </div>`;
+  }
+
+  const primaryEvidence = assessment.evidence[0];
+  const evidenceQuote = primaryEvidence
+    ? `<div class="evidence-quote evidence-quote--${assessment.verdict}">
+        <strong>${escapeHtml(primaryEvidence.documentTitle)}</strong><br />
+        ${escapeHtml(primaryEvidence.quote)}
+      </div>`
+    : `<div class="evidence-quote evidence-quote--${assessment.verdict}">
+        No approved source snippet matched strongly enough for automatic evidence attachment.
+      </div>`;
+
+  const trustLevel = primaryEvidence?.documentTrustLevel ?? "n/a";
+  const score = primaryEvidence?.score.toString() ?? "n/a";
+  const sourceTitle = primaryEvidence?.documentTitle ?? "No source attached";
+  const recommendedDecision = decisionForAssessment(assessment);
+
+  return `
+              <div class="panel-head">
+                <h2>Evidence detail</h2>
+                <span class="pill pill--${assessment.verdict}">${escapeVerdictLabel(assessment.verdict)}</span>
+              </div>
+              <div class="drawer-body">
+                <h3>${escapeHtml(assessment.claim.text)}</h3>
+                <p class="subtitle">${escapeHtml(assessment.reason)}</p>
+                ${evidenceQuote}
+                <div class="field-grid">
+                  <div class="field"><span>Trust level</span><strong>${escapeHtml(trustLevel)}</strong></div>
+                  <div class="field"><span>Evidence score</span><strong>${escapeHtml(score)}</strong></div>
+                  <div class="field"><span>Source</span><strong>${escapeHtml(sourceTitle)}</strong></div>
+                  <div class="field"><span>Claim ID</span><strong>${escapeHtml(assessment.claim.id)}</strong></div>
+                </div>
+                <div class="decision-box">
+                  <strong>Reviewer decision</strong>
+                  <div class="segmented">
+                    <span${recommendedDecision === "Approve" ? ` class="active"` : ""}>Approve</span>
+                    <span${recommendedDecision === "Edit" ? ` class="active"` : ""}>Edit</span>
+                    <span${recommendedDecision === "Reject" ? ` class="active"` : ""}>Reject</span>
+                  </div>
+                </div>
+              </div>`;
+}
+
+function decisionForAssessment(assessment: ClaimAssessment): "Approve" | "Edit" | "Reject" {
+  if (assessment.verdict === "verified") {
+    return "Approve";
+  }
+
+  if (assessment.verdict === "unsupported") {
+    return "Reject";
+  }
+
+  return "Edit";
+}
+
+function ownerForAssessment(assessment: ClaimAssessment): string {
+  const evidenceTitle = assessment.evidence[0]?.documentTitle.toLowerCase() ?? "";
+
+  if (evidenceTitle.includes("hr")) {
+    return "People Ops";
+  }
+
+  if (evidenceTitle.includes("support")) {
+    return "Support Ops";
+  }
+
+  if (assessment.verdict === "verified") {
+    return "Auto";
+  }
+
+  return "Reviewer";
+}
+
+function slaForAssessment(assessment: ClaimAssessment): string {
+  if (assessment.verdict === "contradicted") {
+    return "Today";
+  }
+
+  if (assessment.verdict === "unsupported") {
+    return "1 day";
+  }
+
+  if (assessment.verdict === "needs_review") {
+    return "2 days";
+  }
+
+  return "Closed";
+}
+
+function reviewIcon(): string {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`;
+}
+
+function documentIcon(): string {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>`;
+}
+
+function auditIcon(): string {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-5"/></svg>`;
+}
+
+function exportIcon(): string {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>`;
+}
+
+function filterIcon(): string {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9v7l4 2v-9z"/></svg>`;
 }
 
 function escapeVerdictLabel(verdict: ClaimAssessment["verdict"]): string {
