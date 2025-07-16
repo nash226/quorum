@@ -11,12 +11,34 @@ export function extractClaims(answer: string): AtomicClaim[] {
 }
 
 function normalizeAnswer(answer: string): string {
-  return answer
-    .replace(/\r/g, "")
-    .split("\n")
-    .map((line) => stripMarkdownClaimPrefix(line.trim()))
-    .filter((line) => line.length > 0 && !isHeading(line))
-    .join("\n");
+  const normalizedLines: string[] = [];
+  let previousLineCanContinue = false;
+
+  for (const rawLine of answer.replace(/\r/g, "").split("\n")) {
+    const line = rawLine.trim();
+
+    if (line.length === 0 || isHeading(line)) {
+      previousLineCanContinue = false;
+      continue;
+    }
+
+    const explicitClaimPrefix = hasMarkdownClaimPrefix(line);
+    const normalizedLine = stripMarkdownClaimPrefix(line);
+
+    if (
+      !explicitClaimPrefix &&
+      previousLineCanContinue &&
+      normalizedLines.length > 0
+    ) {
+      normalizedLines[normalizedLines.length - 1] += ` ${normalizedLine}`;
+      continue;
+    }
+
+    normalizedLines.push(normalizedLine);
+    previousLineCanContinue = explicitClaimPrefix;
+  }
+
+  return normalizedLines.join("\n");
 }
 
 function stripMarkdownClaimPrefix(line: string): string {
@@ -25,6 +47,10 @@ function stripMarkdownClaimPrefix(line: string): string {
     .replace(/^[-*+]\s+/, "")
     .replace(/^\d+[.)]\s+/, "")
     .replace(/^\[[ xX]\]\s+/, "");
+}
+
+function hasMarkdownClaimPrefix(line: string): boolean {
+  return /^>\s*|^[-*+]\s+|^\d+[.)]\s+|^\[[ xX]\]\s+/.test(line);
 }
 
 function isHeading(line: string): boolean {
