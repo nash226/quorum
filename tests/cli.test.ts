@@ -121,6 +121,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     const batchOutPath = join(tempDir, "reports", "batch-report.json");
     const batchMarkdownOutPath = join(tempDir, "reports", "batch-report.md");
     const batchHtmlOutPath = join(tempDir, "reports", "batch-report.html");
+    const batchReviewCsvOutPath = join(tempDir, "reports", "batch-review.csv");
 
     await Promise.all([
       mkdir(answerDir, { recursive: true }),
@@ -154,6 +155,8 @@ test("verify-batch returns an aggregate report for each answer file", async () =
       batchMarkdownOutPath,
       "--html-out",
       batchHtmlOutPath,
+      "--review-csv-out",
+      batchReviewCsvOutPath,
       "--json",
     ]);
 
@@ -178,6 +181,10 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.equal(savedReport.answerCount, 2);
     assert.match(await readFile(batchMarkdownOutPath, "utf8"), /# Quorum Batch Verification Report/);
     assert.match(await readFile(batchHtmlOutPath, "utf8"), /<title>Quorum Batch Verification Report<\/title>/);
+    assert.match(
+      await readFile(batchReviewCsvOutPath, "utf8"),
+      /answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes/,
+    );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -226,19 +233,34 @@ test("verify-batch exits non-zero when a fail-on verdict appears in any answer",
   }
 });
 
-test("verify-batch rejects single-answer review csv output flags", async () => {
-  await assert.rejects(
-    runCli([
+test("verify-batch writes a combined reviewer decision csv", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-review-csv-"));
+
+  try {
+    const reviewCsvOutPath = join(tempDir, "reports", "batch-review.csv");
+
+    await runCli([
       "verify-batch",
       "--answer-dir",
       "examples/answers",
       "--source-dir",
       "examples/sources",
       "--review-csv-out",
-      "reports/batch.csv",
-    ]),
-    /Unknown or incomplete argument: --review-csv-out/,
-  );
+      reviewCsvOutPath,
+    ]);
+
+    const savedCsv = await readFile(reviewCsvOutPath, "utf8");
+    const lines = savedCsv.trim().split("\n");
+
+    assert.equal(
+      lines[0],
+      "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+    );
+    assert.match(lines[1] ?? "", /^examples\/answers\/hr-answer\.md,/);
+    assert.match(lines[lines.length - 1] ?? "", /,,$/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 async function runCli(args: string[]): Promise<string> {
