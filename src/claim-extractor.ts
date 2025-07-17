@@ -11,13 +11,20 @@ export function extractClaims(answer: string): AtomicClaim[] {
 }
 
 function normalizeAnswer(answer: string): string {
+  const lines = answer.replace(/\r/g, "").split("\n");
   const normalizedLines: string[] = [];
   let previousLineCanContinue = false;
 
-  for (const rawLine of answer.replace(/\r/g, "").split("\n")) {
+  for (let index = 0; index < lines.length; index += 1) {
+    const rawLine = lines[index] ?? "";
     const line = rawLine.trim();
 
     if (line.length === 0 || isHeading(line)) {
+      previousLineCanContinue = false;
+      continue;
+    }
+
+    if (isListIntro(line, lines, index)) {
       previousLineCanContinue = false;
       continue;
     }
@@ -55,4 +62,26 @@ function hasMarkdownClaimPrefix(line: string): boolean {
 
 function isHeading(line: string): boolean {
   return /^#{1,6}\s+/.test(line);
+}
+
+function isListIntro(
+  line: string,
+  lines: string[],
+  currentIndex: number,
+): boolean {
+  if (!/:$/.test(line)) {
+    return false;
+  }
+
+  for (let index = currentIndex + 1; index < lines.length; index += 1) {
+    const nextLine = (lines[index] ?? "").trim();
+
+    if (nextLine.length === 0) {
+      continue;
+    }
+
+    return hasMarkdownClaimPrefix(nextLine);
+  }
+
+  return false;
 }
