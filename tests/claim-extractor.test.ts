@@ -69,3 +69,33 @@ test("skips markdown list intro lines that only label the bullets", () => {
     ],
   );
 });
+
+test("keeps wrapped plain-text lines as one claim when the next line is a continuation", () => {
+  const claims = extractClaims(`Employees receive 12 weeks of paid parental leave
+for full-time staff only.
+
+Healthcare coverage begins after 30 days of employment.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+      "Healthcare coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
+test("does not merge separate plain-text claims that start on a new uppercase line", () => {
+  const claims = extractClaims(`Employees receive 12 weeks of paid parental leave
+Healthcare coverage begins after 30 days of employment
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave",
+      "Healthcare coverage begins after 30 days of employment",
+    ],
+  );
+});
