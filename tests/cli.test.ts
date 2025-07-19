@@ -263,6 +263,40 @@ test("verify-batch writes a combined reviewer decision csv", async () => {
   }
 });
 
+test("import-review preserves answer paths from batch reviewer decision csv files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-import-batch-review-"));
+
+  try {
+    const reviewCsvOutPath = join(tempDir, "reports", "batch-review.csv");
+
+    await runCli([
+      "verify-batch",
+      "--answer-dir",
+      "examples/answers",
+      "--source-dir",
+      "examples/sources",
+      "--review-csv-out",
+      reviewCsvOutPath,
+    ]);
+
+    const stdout = await runCli([
+      "import-review",
+      "--review-csv",
+      reviewCsvOutPath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      claims: Array<{ answerPath?: string }>;
+    };
+
+    assert.equal(report.claims[0]?.answerPath, "examples/answers/hr-answer.md");
+    assert.equal(report.claims[report.claims.length - 1]?.answerPath, "examples/answers/support-answer.md");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 async function runCli(args: string[]): Promise<string> {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", ...args], {
