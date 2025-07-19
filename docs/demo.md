@@ -39,6 +39,13 @@ For multi-answer workflows, Quorum can also export batch review summaries:
 ```bash
 npm run dev -- verify-batch --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --fail-on contradicted
 ```
+
+When a team wants to review only a selected subset, the same command also
+accepts repeated `--answer` paths:
+
+```bash
+npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer examples/answers/support-answer.md --source-dir examples/sources --review-csv-out reports/selected-review.csv
+```
 Because the samples contain risky claims, the demo commands exit with status
 code `2` when `--fail-on` is enabled.
 
