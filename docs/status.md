@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e1d6e90` on 2026-06-29, feat: accept explicit batch answer inputs
+- Latest shipped change: `30e33cb` on 2026-06-29, Show empty claim states in reports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -44,6 +44,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-29 | [#28](https://github.com/nash226/quorum/pull/28) | Show empty claim states in reports | `30e33cb` |
 | 2026-06-29 | [#27](https://github.com/nash226/quorum/pull/27) | feat: accept explicit batch answer inputs | `e1d6e90` |
 | 2026-06-29 | [#26](https://github.com/nash226/quorum/pull/26) | Preserve batch review answer paths | `01b6743` |
 | 2026-06-29 | [#25](https://github.com/nash226/quorum/pull/25) | Preserve wrapped plain-text claims | `ab2d9ec` |
@@ -51,5 +52,4 @@
 | 2026-06-29 | [#23](https://github.com/nash226/quorum/pull/23) | Preserve wrapped markdown claim items | `a950947` |
 | 2026-06-29 | [#22](https://github.com/nash226/quorum/pull/22) | add batch reviewer csv export | `a556182` |
 | 2026-06-29 | [#21](https://github.com/nash226/quorum/pull/21) | Render HTML report as review console | `525f02b` |
-| 2026-06-29 | Direct push | feat: add batch review report exports | `aee8052` |
 
