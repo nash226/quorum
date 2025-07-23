@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   importReviewerDecisions,
+  renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
 } from "../src/reviewer-decision-import.js";
 
@@ -73,4 +74,19 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
   assert.match(rendered, /VERIFIED  Employees receive 12 weeks/);
   assert.match(rendered, /Answer path: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /Reviewer verdict: pending reviewer decision/);
+});
+
+test("renders a reviewer decision import markdown report", () => {
+  const rendered = renderReviewerDecisionImportMarkdownReport(
+    importReviewerDecisions(`answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+examples/answers/support-answer.md,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,"","",`),
+  );
+
+  assert.match(rendered, /^# Quorum Reviewer Decision Import/m);
+  assert.match(rendered, /- Total claims: 2/);
+  assert.match(rendered, /### 1\. Employees receive 12 weeks/);
+  assert.match(rendered, /- Reviewer verdict: verified/);
+  assert.match(rendered, /- Answer path: `examples\/answers\/hr-answer\.md`/);
+  assert.match(rendered, /- Reviewer verdict: pending reviewer decision/);
 });

@@ -55,7 +55,7 @@ code `2` when `--fail-on` is enabled.
 After a reviewer fills in the exported CSV, import it back into Quorum with:
 
 ```bash
-npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json
+npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md
 ```
 
 The import summary preserves the model verdict, the reviewer verdict when one

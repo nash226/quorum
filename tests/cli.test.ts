@@ -503,6 +503,41 @@ test("import-review preserves answer paths from batch reviewer decision csv file
   }
 });
 
+test("import-review writes a markdown summary report", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-import-markdown-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "reports", "review.csv");
+    const markdownOutPath = join(tempDir, "reports", "review-import.md");
+
+    await mkdir(join(tempDir, "reports"), { recursive: true });
+    await writeFile(
+      reviewCsvPath,
+      `answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+examples/answers/support-answer.md,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,"","",`,
+      "utf8",
+    );
+
+    const stdout = await runCli([
+      "import-review",
+      "--review-csv",
+      reviewCsvPath,
+      "--markdown-out",
+      markdownOutPath,
+    ]);
+
+    assert.match(stdout, /Reviewer decision Markdown report written to/);
+
+    const markdownReport = await readFile(markdownOutPath, "utf8");
+    assert.match(markdownReport, /# Quorum Reviewer Decision Import/);
+    assert.match(markdownReport, /- Total claims: 2/);
+    assert.match(markdownReport, /- Answer path: `examples\/answers\/hr-answer\.md`/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 async function runCli(args: string[]): Promise<string> {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", ...args], {
