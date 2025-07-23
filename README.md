@@ -191,7 +191,7 @@ Options:
 - `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers
 - `verify-batch --summary-csv-out <path>`: write one CSV row per answer with verdict totals and fail-policy status
-- `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes
+- `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes, including evidence titles, trust levels, scores, and quotes
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
   repeated
 - `import-review --review-csv <path>`: import a filled reviewer decision CSV and
