@@ -90,6 +90,7 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
       `### ${index + 1}. ${answer.answerPath}`,
       "",
       `- Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
+      `- Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
       `- Verified: ${answer.report.summary.verified}`,
       `- Contradicted: ${answer.report.summary.contradicted}`,
       `- Unsupported: ${answer.report.summary.unsupported}`,
@@ -194,6 +195,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       "unsupported",
       "needs_review",
       "fail_policy",
+      "fail_verdicts",
     ],
     ...report.answers.map((answer) => [
       answer.answerPath,
@@ -203,6 +205,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       answer.report.summary.unsupported.toString(),
       answer.report.summary.needs_review.toString(),
       answer.shouldFail ? "matched" : "clear",
+      answer.failVerdicts.join(" | "),
     ]),
   ];
 
@@ -936,6 +939,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
             <span class="status-pill ${statusClass}">${answer.shouldFail ? "Fail policy matched" : "Fail policy clear"}</span>
           </div>
           <dl class="answer-card__summary">
+            <div><dt>Fail verdicts</dt><dd>${answer.failVerdicts.length > 0 ? escapeHtml(answer.failVerdicts.join(", ")) : "none"}</dd></div>
             <div><dt>Verified</dt><dd>${answer.report.summary.verified}</dd></div>
             <div><dt>Contradicted</dt><dd>${answer.report.summary.contradicted}</dd></div>
             <div><dt>Unsupported</dt><dd>${answer.report.summary.unsupported}</dd></div>
