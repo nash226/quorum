@@ -493,7 +493,7 @@ async function resolveSourcePaths(
     await Promise.all(sourceDirs.map((sourceDir) => listSourceFiles(sourceDir)))
   ).flat();
 
-  return Array.from(new Set([...sourcePaths, ...directoryFiles])).sort();
+  return dedupePathsInOrder([...sourcePaths, ...directoryFiles]);
 }
 
 async function resolveAnswerPaths(
