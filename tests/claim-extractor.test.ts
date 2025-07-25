@@ -70,6 +70,34 @@ test("skips markdown list intro lines that only label the bullets", () => {
   );
 });
 
+test("skips plain-text intro lines that only label the following claims", () => {
+  const claims = extractClaims(`Policy summary:
+
+Employees receive 12 weeks of paid parental leave.
+Healthcare coverage begins after 30 days of employment.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Healthcare coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
+test("skips plain-text intro lines before wrapped claim continuations", () => {
+  const claims = extractClaims(`Key details:
+
+Employees receive 12 weeks of paid parental leave
+for full-time staff only.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+  ]);
+});
+
 test("keeps wrapped plain-text lines as one claim when the next line is a continuation", () => {
   const claims = extractClaims(`Employees receive 12 weeks of paid parental leave
 for full-time staff only.
