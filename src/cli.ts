@@ -525,7 +525,7 @@ async function verifySingleAnswer(
   sources: SourceDocument[],
 ): Promise<VerificationReport> {
   const answer = await readFile(answerPath, "utf8");
-  return verifyAnswer(answer, sources);
+  return verifyAnswer(answer, sources, undefined, answerPath);
 }
 
 async function listSourceFiles(sourceDir: string): Promise<string[]> {

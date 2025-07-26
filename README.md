@@ -41,6 +41,7 @@ The current CLI can:
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim
+  while preserving the original answer path for reviewer handoff
 - write a one-row-per-answer batch summary CSV for queueing and workflow automation
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
@@ -194,6 +195,7 @@ Options:
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers
 - `verify-batch --summary-csv-out <path>`: write one CSV row per answer with verdict totals, fail-policy status, and the verdicts that triggered it
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes, including evidence titles, trust levels, scores, and quotes
+- single-answer and batch reviewer CSV exports include `answer_path` so review imports keep answer provenance
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
   repeated
 - `import-review --review-csv <path>`: import a filled reviewer decision CSV and
