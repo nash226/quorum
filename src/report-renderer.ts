@@ -202,6 +202,9 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
 }
 
 export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
+  const sourceTitles = report.sources.map((source) => source.title).join(" | ");
+  const sourceTrustLevels = report.sources.map((source) => source.trustLevel).join(" | ");
+  const sourceUpdatedAt = report.sources.map((source) => source.updatedAt ?? "").join(" | ");
   const rows = [
     [
       "answer_path",
@@ -212,6 +215,9 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       "needs_review",
       "fail_policy",
       "fail_verdicts",
+      "source_titles",
+      "source_trust_levels",
+      "source_updated_at",
     ],
     ...report.answers.map((answer) => [
       answer.answerPath,
@@ -222,6 +228,9 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       answer.report.summary.needs_review.toString(),
       answer.shouldFail ? "matched" : "clear",
       answer.failVerdicts.join(" | "),
+      sourceTitles,
+      sourceTrustLevels,
+      sourceUpdatedAt,
     ]),
   ];
 
