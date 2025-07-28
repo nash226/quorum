@@ -52,6 +52,7 @@ export interface BatchVerificationResult {
 
 export interface BatchVerificationReport {
   generatedAt: string;
+  sources: Array<Pick<SourceDocument, "id" | "title" | "updatedAt" | "trustLevel">>;
   sourceCount: number;
   answerCount: number;
   answers: BatchVerificationResult[];

@@ -178,7 +178,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
     }),
   );
 
-  const batchReport = summarizeBatchVerification(answers, sources.length);
+  const batchReport = summarizeBatchVerification(answers, sources);
   const jsonReport = JSON.stringify(batchReport, null, 2);
   const markdownReport = renderBatchMarkdownReport(batchReport);
   const htmlReport = renderBatchHtmlReport(batchReport);
@@ -588,7 +588,7 @@ function trimTrailingBlankLines(lines: string[]): string[] {
 
 function summarizeBatchVerification(
   answers: BatchVerificationResult[],
-  sourceCount: number,
+  sources: SourceDocument[],
 ): BatchVerificationReport {
   const summary = {
     verified: 0,
@@ -611,7 +611,13 @@ function summarizeBatchVerification(
 
   return {
     generatedAt: new Date().toISOString(),
-    sourceCount,
+    sources: sources.map((source) => ({
+      id: source.id,
+      title: source.title,
+      updatedAt: source.updatedAt,
+      trustLevel: source.trustLevel,
+    })),
+    sourceCount: sources.length,
     answerCount: answers.length,
     answers,
     summary,
@@ -623,7 +629,7 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
     "Quorum Batch Verification Report",
     "",
     `Answers: ${report.answerCount}`,
-    `Sources: ${report.sourceCount}`,
+    `Sources: ${report.sources.map((source) => source.title).join(", ")}`,
     `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
     `Answers matching fail policy: ${report.summary.answersWithFailures}`,
     "",

@@ -83,6 +83,18 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
     `- Needs review: ${report.summary.needs_review}`,
     `- Answers matching fail policy: ${report.summary.answersWithFailures}`,
     "",
+    "## Sources",
+    "",
+    ...report.sources.map((source) => {
+      const metadata = [`trust: ${source.trustLevel}`];
+
+      if (source.updatedAt) {
+        metadata.push(`updated: ${source.updatedAt}`);
+      }
+
+      return `- **${source.title}** (${metadata.join(", ")})`;
+    }),
+    "",
     "## Answer Reports",
     "",
   ];
@@ -896,6 +908,18 @@ function renderReviewConsoleHtmlReport(report: VerificationReport): string {
 }
 
 export function renderBatchHtmlReport(report: BatchVerificationReport): string {
+  const sourceList = report.sources
+    .map((source) => {
+      const metadata = [`${source.trustLevel} trust`];
+
+      if (source.updatedAt) {
+        metadata.push(`updated ${escapeHtml(source.updatedAt)}`);
+      }
+
+      return `
+            <li><strong>${escapeHtml(source.title)}</strong><span>${metadata.join(" - ")}</span></li>`;
+    })
+    .join("");
   const summaryCards = ([
     ["Answers", report.answerCount, "answers"],
     ["Verified", report.summary.verified, "verified"],
@@ -1084,6 +1108,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
       }
 
       .summary-grid,
+      .source-list,
       .answers-grid {
         display: grid;
         gap: 16px;
@@ -1097,6 +1122,35 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
       .answers-grid {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         margin-top: 24px;
+      }
+
+      .source-list {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        margin-top: 24px;
+        padding: 0;
+        list-style: none;
+      }
+
+      .source-list li {
+        padding: 16px 18px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .source-list strong,
+      .source-list span {
+        display: block;
+      }
+
+      .source-list strong {
+        font-size: 1rem;
+      }
+
+      .source-list span {
+        margin-top: 6px;
+        color: var(--muted);
+        line-height: 1.5;
       }
 
       .summary-card {
@@ -1324,6 +1378,9 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
         <div class="summary-grid">
           ${summaryCards}
         </div>
+        <ul class="source-list">
+          ${sourceList}
+        </ul>
       </section>
       <section class="answers-section">
         <div class="answers-grid">
