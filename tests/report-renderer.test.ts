@@ -46,7 +46,7 @@ test("renders the text report used by the CLI", () => {
 
   assert.match(rendered, /Quorum Verification Report/);
   assert.match(rendered, /Answer: examples\/answers\/hr-answer\.md/);
-  assert.match(rendered, /Sources: HR Policy/);
+  assert.match(rendered, /Sources:\n- HR Policy \(high trust, updated 2026-05-31\)/);
   assert.match(rendered, /VERIFIED  Full-time employees receive 20 days/);
   assert.match(rendered, /Evidence \(HR Policy, high trust, score /);
 });
