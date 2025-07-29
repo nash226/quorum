@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2736ecf` on 2026-06-29, feat: export batch summary source metadata
+- Latest shipped change: `12fd244` on 2026-06-29, fix: normalize fallback source titles
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-29 | [#44](https://github.com/nash226/quorum/pull/44) | fix: normalize fallback source titles | `12fd244` |
 | 2026-06-29 | [#43](https://github.com/nash226/quorum/pull/43) | feat: export batch summary source metadata | `2736ecf` |
 | 2026-06-29 | [#42](https://github.com/nash226/quorum/pull/42) | feat: surface batch report source metadata | `022b3a1` |
 | 2026-06-29 | [#41](https://github.com/nash226/quorum/pull/41) | fix: handle lettered claim lists | `014791c` |
@@ -52,5 +53,4 @@
 | 2026-06-29 | [#39](https://github.com/nash226/quorum/pull/39) | feat: preserve single-answer report provenance | `1993fbc` |
 | 2026-06-29 | [#38](https://github.com/nash226/quorum/pull/38) | fix: skip plain-text claim intro labels | `24bbbdf` |
 | 2026-06-29 | [#37](https://github.com/nash226/quorum/pull/37) | fix: preserve explicit source order | `e928458` |
-| 2026-06-29 | [#36](https://github.com/nash226/quorum/pull/36) | feat: surface batch fail verdict details | `cf7b7bf` |
 
