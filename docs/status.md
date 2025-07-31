@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `798702f` on 2026-06-30, docs: remove README status section
+- Latest shipped change: `44ffb7b` on 2026-06-30, docs: fix README demo video title
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-30 | [#49](https://github.com/nash226/quorum/pull/49) | docs: fix README demo video title | `44ffb7b` |
 | 2026-06-30 | [#48](https://github.com/nash226/quorum/pull/48) | docs: remove README status section | `798702f` |
 | 2026-06-30 | [#47](https://github.com/nash226/quorum/pull/47) | docs: add README demo video | `652193f` |
 | 2026-06-30 | [#46](https://github.com/nash226/quorum/pull/46) | fix: parse roman numeral claim lists | `e02df66` |
@@ -52,5 +53,4 @@
 | 2026-06-29 | [#44](https://github.com/nash226/quorum/pull/44) | fix: normalize fallback source titles | `12fd244` |
 | 2026-06-29 | [#43](https://github.com/nash226/quorum/pull/43) | feat: export batch summary source metadata | `2736ecf` |
 | 2026-06-29 | [#42](https://github.com/nash226/quorum/pull/42) | feat: surface batch report source metadata | `022b3a1` |
-| 2026-06-29 | [#41](https://github.com/nash226/quorum/pull/41) | fix: handle lettered claim lists | `014791c` |
 
