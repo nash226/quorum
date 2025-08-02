@@ -21,6 +21,7 @@ function normalizeAnswer(answer: string): string {
   const lines = answer.replace(/\r/g, "").split("\n");
   const normalizedLines: string[] = [];
   let previousLineCanContinue = false;
+  let previousLineBelongsToMarkdownClaim: boolean = false;
 
   for (let index = 0; index < lines.length; index += 1) {
     const rawLine = lines[index] ?? "";
@@ -38,21 +39,28 @@ function normalizeAnswer(answer: string): string {
 
     const explicitClaimPrefix = hasMarkdownClaimPrefix(line);
     const normalizedLine = stripMarkdownClaimPrefix(line);
+    const belongsToMarkdownClaim: boolean =
+      explicitClaimPrefix ||
+      (previousLineBelongsToMarkdownClaim && isIndentedContinuation(rawLine));
     const currentLineCanContinue =
-      explicitClaimPrefix || canContinuePlainLine(normalizedLine, lines, index);
+      explicitClaimPrefix ||
+      canContinuePlainLine(normalizedLine, lines, index, belongsToMarkdownClaim);
 
     if (
       !explicitClaimPrefix &&
       previousLineCanContinue &&
-      normalizedLines.length > 0
+      normalizedLines.length > 0 &&
+      shouldMergeWithPreviousLine(line, rawLine, previousLineBelongsToMarkdownClaim)
     ) {
       normalizedLines[normalizedLines.length - 1] += ` ${normalizedLine}`;
       previousLineCanContinue = currentLineCanContinue;
+      previousLineBelongsToMarkdownClaim = belongsToMarkdownClaim;
       continue;
     }
 
     normalizedLines.push(normalizedLine);
     previousLineCanContinue = currentLineCanContinue;
+    previousLineBelongsToMarkdownClaim = belongsToMarkdownClaim;
   }
 
   return normalizedLines.join("\n");
@@ -148,13 +156,15 @@ function canContinuePlainLine(
   line: string,
   lines: string[],
   currentIndex: number,
+  belongsToMarkdownClaim: boolean,
 ): boolean {
   if (/[.!?]$/.test(line)) {
     return false;
   }
 
   for (let index = currentIndex + 1; index < lines.length; index += 1) {
-    const nextLine = (lines[index] ?? "").trim();
+    const nextRawLine = lines[index] ?? "";
+    const nextLine = nextRawLine.trim();
 
     if (nextLine.length === 0) {
       return false;
@@ -168,8 +178,26 @@ function canContinuePlainLine(
       return false;
     }
 
-    return /^[a-z0-9("'[]/.test(nextLine);
+    return (
+      /^[a-z0-9("'[]/.test(nextLine) ||
+      (belongsToMarkdownClaim && isIndentedContinuation(nextRawLine))
+    );
   }
 
   return false;
+}
+
+function shouldMergeWithPreviousLine(
+  line: string,
+  rawLine: string,
+  previousLineBelongsToMarkdownClaim: boolean,
+): boolean {
+  return (
+    /^[a-z0-9("'[]/.test(line) ||
+    (previousLineBelongsToMarkdownClaim && isIndentedContinuation(rawLine))
+  );
+}
+
+function isIndentedContinuation(line: string): boolean {
+  return /^\s+/.test(line);
 }
