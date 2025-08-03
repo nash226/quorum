@@ -168,6 +168,22 @@ function stripTags(content: string): string {
 
 function decodeHtmlEntities(content: string): string {
   return content
+    .replace(/&#(?:x([0-9a-fA-F]+)|([0-9]+));/g, (_match, hex, decimal) => {
+      const numericValue =
+        typeof hex === "string" && hex.length > 0
+          ? Number.parseInt(hex, 16)
+          : Number.parseInt(decimal ?? "", 10);
+
+      if (!Number.isInteger(numericValue) || numericValue <= 0 || numericValue > 0x10ffff) {
+        return _match;
+      }
+
+      try {
+        return String.fromCodePoint(numericValue);
+      } catch {
+        return _match;
+      }
+    })
     .replace(/&nbsp;/gi, " ")
     .replace(/&amp;/gi, "&")
     .replace(/&quot;/gi, '"')
