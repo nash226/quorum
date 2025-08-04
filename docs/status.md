@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `833555b` on 2026-06-30, fix: decode numeric html entities
+- Latest shipped change: `12f0aa6` on 2026-06-30, fix: decode named html entities
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-30 | [#55](https://github.com/nash226/quorum/pull/55) | fix: decode named html entities | `12f0aa6` |
 | 2026-06-30 | Direct push | fix: decode numeric html entities | `833555b` |
 | 2026-06-30 | Direct push | fix: keep indented wrapped list claims together | `8dfe6ba` |
 | 2026-06-30 | [#52](https://github.com/nash226/quorum/pull/52) | fix: handle dash bullet claim lists | `a4970d2` |
@@ -52,5 +53,4 @@
 | 2026-06-30 | [#50](https://github.com/nash226/quorum/pull/50) | fix: handle parenthesized numeric claim lists | `7e568fc` |
 | 2026-06-30 | [#49](https://github.com/nash226/quorum/pull/49) | docs: fix README demo video title | `44ffb7b` |
 | 2026-06-30 | [#48](https://github.com/nash226/quorum/pull/48) | docs: remove README status section | `798702f` |
-| 2026-06-30 | [#47](https://github.com/nash226/quorum/pull/47) | docs: add README demo video | `652193f` |
 
