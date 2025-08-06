@@ -23,6 +23,7 @@ export interface EvidenceSnippet {
   documentId: string;
   documentTitle: string;
   documentTrustLevel: SourceTrustLevel;
+  documentUpdatedAt?: string;
   quote: string;
   score: number;
 }

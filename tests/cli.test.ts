@@ -199,7 +199,7 @@ test("verify records the answer path in JSON and reviewer csv outputs", async ()
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(lines[1] ?? "", new RegExp(`^${escapeRegExp(answerPath)},claim_1,`));
   } finally {
@@ -292,7 +292,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.match(await readFile(batchHtmlOutPath, "utf8"), /<title>Quorum Batch Verification Report<\/title>/);
     assert.match(
       await readFile(batchReviewCsvOutPath, "utf8"),
-      /answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
+      /answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
     );
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
@@ -799,7 +799,7 @@ test("verify-batch writes a combined reviewer decision csv", async () => {
 
     assert.equal(
       lines[0],
-      "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(lines[1] ?? "", /^examples\/answers\/hr-answer\.md,/);
     assert.match(lines[lines.length - 1] ?? "", /,,$/);
@@ -892,8 +892,8 @@ test("import-review writes a markdown summary report", async () => {
     await mkdir(join(tempDir, "reports"), { recursive: true });
     await writeFile(
       reviewCsvPath,
-      `answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
-examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+      `answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
 examples/answers/support-answer.md,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,"","",`,
       "utf8",
     );
@@ -928,9 +928,9 @@ test("import-review writes an html summary report", async () => {
     await mkdir(join(tempDir, "reports"), { recursive: true });
     await writeFile(
       reviewCsvPath,
-      `answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
-examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
-examples/answers/support-answer.md,claim_2,<Flag this answer for legal review.>,unsupported,No approved source contains enough overlapping policy language.,"","","","","","Needs counsel review before publish"`,
+      `answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+examples/answers/support-answer.md,claim_2,<Flag this answer for legal review.>,unsupported,No approved source contains enough overlapping policy language.,"","","","","","","Needs counsel review before publish"`,
       "utf8",
     );
 
