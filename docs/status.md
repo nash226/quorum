@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bbe3f77` on 2026-06-30, feat: include evidence freshness in reviewer csv exports
+- Latest shipped change: `5f4c7bf` on 2026-06-30, feat: include submitted answer in reviewer exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-30 | [#60](https://github.com/nash226/quorum/pull/60) | feat: include submitted answer in reviewer exports | `5f4c7bf` |
 | 2026-06-30 | [#59](https://github.com/nash226/quorum/pull/59) | feat: include evidence freshness in reviewer csv exports | `bbe3f77` |
 | 2026-06-30 | [#58](https://github.com/nash226/quorum/pull/58) | fix: correct html needs review summary | `18aefec` |
 | 2026-06-30 | Direct push | feat: keep imported evidence context in review reports | `68f5886` |
@@ -52,5 +53,4 @@
 | 2026-06-30 | [#55](https://github.com/nash226/quorum/pull/55) | fix: decode named html entities | `12f0aa6` |
 | 2026-06-30 | Direct push | fix: decode numeric html entities | `833555b` |
 | 2026-06-30 | Direct push | fix: keep indented wrapped list claims together | `8dfe6ba` |
-| 2026-06-30 | [#52](https://github.com/nash226/quorum/pull/52) | fix: handle dash bullet claim lists | `a4970d2` |
 
