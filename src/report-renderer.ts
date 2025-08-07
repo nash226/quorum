@@ -222,6 +222,10 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
     [
       "answer_path",
       "answer_preview",
+      "primary_verdict",
+      "primary_claim",
+      "primary_reason",
+      "primary_evidence_title",
       "total_claims",
       "verified",
       "contradicted",
@@ -233,20 +237,28 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       "source_trust_levels",
       "source_updated_at",
     ],
-    ...report.answers.map((answer) => [
-      answer.answerPath,
-      renderAnswerPreview(answer.report.answer),
-      answer.report.assessments.length.toString(),
-      answer.report.summary.verified.toString(),
-      answer.report.summary.contradicted.toString(),
-      answer.report.summary.unsupported.toString(),
-      answer.report.summary.needs_review.toString(),
-      answer.shouldFail ? "matched" : "clear",
-      answer.failVerdicts.join(" | "),
-      sourceTitles,
-      sourceTrustLevels,
-      sourceUpdatedAt,
-    ]),
+    ...report.answers.map((answer) => {
+      const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+
+      return [
+        answer.answerPath,
+        renderAnswerPreview(answer.report.answer),
+        primaryAssessment?.verdict ?? "",
+        primaryAssessment?.claim.text ?? "",
+        primaryAssessment?.reason ?? "",
+        primaryAssessment?.evidence[0]?.documentTitle ?? "",
+        answer.report.assessments.length.toString(),
+        answer.report.summary.verified.toString(),
+        answer.report.summary.contradicted.toString(),
+        answer.report.summary.unsupported.toString(),
+        answer.report.summary.needs_review.toString(),
+        answer.shouldFail ? "matched" : "clear",
+        answer.failVerdicts.join(" | "),
+        sourceTitles,
+        sourceTrustLevels,
+        sourceUpdatedAt,
+      ];
+    }),
   ];
 
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
