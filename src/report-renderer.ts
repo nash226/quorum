@@ -221,6 +221,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
   const rows = [
     [
       "answer_path",
+      "answer_preview",
       "total_claims",
       "verified",
       "contradicted",
@@ -234,6 +235,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
     ],
     ...report.answers.map((answer) => [
       answer.answerPath,
+      renderAnswerPreview(answer.report.answer),
       answer.report.assessments.length.toString(),
       answer.report.summary.verified.toString(),
       answer.report.summary.contradicted.toString(),
@@ -1516,6 +1518,16 @@ function escapeCsvValue(value: string): string {
   }
 
   return value;
+}
+
+function renderAnswerPreview(answer: string): string {
+  const normalized = answer.replace(/\s+/g, " ").trim();
+
+  if (normalized.length <= 120) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, 117).trimEnd()}...`;
 }
 
 function formatVerdictLabel(verdict: string): string {
