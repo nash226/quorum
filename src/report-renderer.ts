@@ -158,6 +158,7 @@ export function renderReviewerDecisionCsv(report: VerificationReport): string {
   const rows = [
     [
       "answer_path",
+      "answer_preview",
       "claim_id",
       "claim_text",
       "model_verdict",
@@ -172,6 +173,7 @@ export function renderReviewerDecisionCsv(report: VerificationReport): string {
     ],
     ...report.assessments.map((assessment) => [
       report.answerPath ?? "",
+      renderAnswerPreview(report.answer),
       assessment.claim.id,
       assessment.claim.text,
       assessment.verdict,
@@ -193,6 +195,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
   const rows = [
     [
       "answer_path",
+      "answer_preview",
       "claim_id",
       "claim_text",
       "model_verdict",
@@ -208,6 +211,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
     ...report.answers.flatMap((answer) =>
       answer.report.assessments.map((assessment) => [
         answer.answerPath,
+        renderAnswerPreview(answer.report.answer),
         assessment.claim.id,
         assessment.claim.text,
         assessment.verdict,

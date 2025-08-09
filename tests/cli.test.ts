@@ -199,9 +199,14 @@ test("verify records the answer path in JSON and reviewer csv outputs", async ()
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
-    assert.match(lines[1] ?? "", new RegExp(`^${escapeRegExp(answerPath)},claim_1,`));
+    assert.match(
+      lines[1] ?? "",
+      new RegExp(
+        `^${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,claim_1,`,
+      ),
+    );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -294,7 +299,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.match(await readFile(batchHtmlOutPath, "utf8"), /Answer preview/);
     assert.match(
       await readFile(batchReviewCsvOutPath, "utf8"),
-      /answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
+      /answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
     );
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
@@ -850,9 +855,12 @@ test("verify-batch writes a combined reviewer decision csv", async () => {
 
     assert.equal(
       lines[0],
-      "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
-    assert.match(lines[1] ?? "", /^examples\/answers\/hr-answer\.md,/);
+    assert.match(
+      lines[1] ?? "",
+      /^examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\..*,claim_1,/,
+    );
     assert.match(lines[lines.length - 1] ?? "", /,,$/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
