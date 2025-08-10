@@ -12,6 +12,7 @@ const REQUIRED_HEADERS = [
   "reviewer_notes",
 ] as const;
 const OPTIONAL_ANSWER_PATH_HEADER = "answer_path";
+const OPTIONAL_ANSWER_PREVIEW_HEADER = "answer_preview";
 const OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER = "evidence_trust_levels";
 const OPTIONAL_EVIDENCE_UPDATED_AT_HEADER = "evidence_updated_at";
 const OPTIONAL_EVIDENCE_SCORES_HEADER = "evidence_scores";
@@ -20,6 +21,7 @@ type ReviewerDecisionHeader = (typeof REQUIRED_HEADERS)[number];
 
 export interface ImportedReviewerDecision {
   answerPath?: string;
+  answerPreview?: string;
   claimId: string;
   claimText: string;
   modelVerdict: ClaimVerdict;
@@ -47,6 +49,7 @@ export interface ReviewerDecisionImportReport {
 
 interface ReviewerDecisionGroup {
   answerPath?: string;
+  answerPreview?: string;
   label: string;
   claims: ImportedReviewerDecision[];
   summary: ReviewerDecisionImportReport["summary"];
@@ -116,6 +119,7 @@ export function renderReviewerDecisionImportReport(
   for (const group of groups) {
     lines.push(
       `Answer: ${group.label}`,
+      ...(group.answerPreview ? [`Answer preview: ${group.answerPreview}`] : []),
       `Claims: ${group.summary.totalClaims} total, ${group.summary.reviewedClaims} reviewed, ${group.summary.pendingClaims} pending`,
       `Final verdicts: ${group.summary.verified} verified, ${group.summary.contradicted} contradicted, ${group.summary.unsupported} unsupported, ${group.summary.needs_review} needs review`,
       `Overrides: ${group.summary.overriddenClaims}`,
@@ -177,6 +181,7 @@ export function renderReviewerDecisionImportMarkdownReport(
     lines.push(
       `### ${group.label}`,
       "",
+      ...(group.answerPreview ? [`- Answer preview: ${group.answerPreview}`, ""] : []),
       `- Total claims: ${group.summary.totalClaims}`,
       `- Reviewed claims: ${group.summary.reviewedClaims}`,
       `- Pending claims: ${group.summary.pendingClaims}`,
@@ -240,6 +245,9 @@ export function renderReviewerDecisionImportHtmlReport(
                   <div>
                     <p class="eyebrow">Answer file</p>
                     <h2><code>${escapeHtml(group.label)}</code></h2>
+                    ${group.answerPreview
+                      ? `<p class="answer-group__preview">${escapeHtml(group.answerPreview)}</p>`
+                      : ""}
                   </div>
                   <div class="answer-group__meta">
                     <span>${group.summary.totalClaims} claims</span>
@@ -387,6 +395,13 @@ export function renderReviewerDecisionImportHtmlReport(
         gap: 10px;
         color: var(--muted);
         font-size: 14px;
+      }
+
+      .answer-group__preview {
+        margin: 10px 0 0;
+        color: #314150;
+        line-height: 1.5;
+        max-width: 72ch;
       }
 
       .answer-group__stats {
@@ -654,7 +669,9 @@ function groupImportedClaims(claims: ImportedReviewerDecision[]): ReviewerDecisi
   const groups: ReviewerDecisionGroup[] = [];
 
   for (const claim of claims) {
-    const group = groups.find((entry) => entry.answerPath === claim.answerPath);
+    const group = groups.find((entry) =>
+      entry.answerPath === claim.answerPath && entry.answerPreview === claim.answerPreview,
+    );
 
     if (group) {
       group.claims.push(claim);
@@ -666,7 +683,8 @@ function groupImportedClaims(claims: ImportedReviewerDecision[]): ReviewerDecisi
     accumulateClaimSummary(summary, claim);
     groups.push({
       answerPath: claim.answerPath,
-      label: claim.answerPath ?? "Unspecified answer",
+      answerPreview: claim.answerPreview,
+      label: claim.answerPath ?? claim.answerPreview ?? "Unspecified answer",
       claims: [claim],
       summary,
     });
@@ -711,12 +729,14 @@ function importDecisionRow(
   rowNumber: number,
   columnIndex: Record<ReviewerDecisionHeader, number> & {
     answerPath?: number;
+    answerPreview?: number;
     evidenceTrustLevels?: number;
     evidenceUpdatedAt?: number;
     evidenceScores?: number;
   },
 ): ImportedReviewerDecision {
   const answerPath = readOptionalValue(row, columnIndex.answerPath ?? -1) || undefined;
+  const answerPreview = readOptionalValue(row, columnIndex.answerPreview ?? -1) || undefined;
   const claimId = readRequiredValue(row, rowNumber, columnIndex.claim_id, "claim_id");
   const claimText = readRequiredValue(row, rowNumber, columnIndex.claim_text, "claim_text");
   const modelVerdict = parseVerdict(
@@ -733,6 +753,7 @@ function importDecisionRow(
 
   return {
     answerPath,
+    answerPreview,
     claimId,
     claimText,
     modelVerdict,
@@ -772,6 +793,7 @@ function createColumnIndex(
   headers: string[],
 ): Record<ReviewerDecisionHeader, number> & {
   answerPath?: number;
+  answerPreview?: number;
   evidenceTrustLevels?: number;
   evidenceUpdatedAt?: number;
   evidenceScores?: number;
@@ -785,6 +807,7 @@ function createColumnIndex(
   );
 
   const answerPathIndex = headers.indexOf(OPTIONAL_ANSWER_PATH_HEADER);
+  const answerPreviewIndex = headers.indexOf(OPTIONAL_ANSWER_PREVIEW_HEADER);
   const evidenceTrustLevelsIndex = headers.indexOf(OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER);
   const evidenceUpdatedAtIndex = headers.indexOf(OPTIONAL_EVIDENCE_UPDATED_AT_HEADER);
   const evidenceScoresIndex = headers.indexOf(OPTIONAL_EVIDENCE_SCORES_HEADER);
@@ -792,6 +815,7 @@ function createColumnIndex(
   return {
     ...requiredColumnIndex,
     ...(answerPathIndex === -1 ? {} : { answerPath: answerPathIndex }),
+    ...(answerPreviewIndex === -1 ? {} : { answerPreview: answerPreviewIndex }),
     ...(evidenceTrustLevelsIndex === -1
       ? {}
       : { evidenceTrustLevels: evidenceTrustLevelsIndex }),
