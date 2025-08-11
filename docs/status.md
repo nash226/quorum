@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b6504c6` on 2026-06-30, feat: preserve answer previews in review imports
+- Latest shipped change: `3c8ad95` on 2026-06-30, feat: extract html source metadata
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-30 | Direct push | feat: extract html source metadata | `3c8ad95` |
 | 2026-06-30 | [#69](https://github.com/nash226/quorum/pull/69) | feat: preserve answer previews in review imports | `b6504c6` |
 | 2026-06-30 | [#68](https://github.com/nash226/quorum/pull/68) | feat: add answer previews to reviewer csv exports | `73e3419` |
 | 2026-06-30 | [#67](https://github.com/nash226/quorum/pull/67) | feat: add batch stdout answer previews | `97a636c` |
@@ -52,5 +53,4 @@
 | 2026-06-30 | [#63](https://github.com/nash226/quorum/pull/63) | feat: highlight batch primary findings | `3a8012c` |
 | 2026-06-30 | [#62](https://github.com/nash226/quorum/pull/62) | feat: add primary batch summary findings | `25d9ff6` |
 | 2026-06-30 | [#61](https://github.com/nash226/quorum/pull/61) | feat: add batch summary answer previews | `475958b` |
-| 2026-06-30 | [#60](https://github.com/nash226/quorum/pull/60) | feat: include submitted answer in reviewer exports | `5f4c7bf` |
 
