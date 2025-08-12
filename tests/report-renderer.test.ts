@@ -48,7 +48,7 @@ test("renders the text report used by the CLI", () => {
   assert.match(rendered, /Answer: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /Sources:\n- HR Policy \(high trust, updated 2026-05-31\)/);
   assert.match(rendered, /VERIFIED  Full-time employees receive 20 days/);
-  assert.match(rendered, /Evidence \(HR Policy, high trust, score /);
+  assert.match(rendered, /Evidence \(HR Policy, high trust, updated 2026-05-31, score /);
 });
 
 test("renders a markdown reviewer report with summary, sources, and evidence", () => {
@@ -76,6 +76,7 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
   );
   assert.match(rendered, /### 1\. Employees receive 18 weeks of paid parental leave\./);
   assert.match(rendered, /- Verdict: `contradicted`/);
+  assert.match(rendered, /\*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
   assert.match(rendered, /> Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Evidence: No approved source snippet matched strongly enough\./);
 });
@@ -129,7 +130,8 @@ test("renders a professional HTML reviewer report with escaped content", () => {
   assert.match(rendered, /examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /<span class="pill pill--contradicted">contradicted<\/span>/);
   assert.match(rendered, /HR Policy<\/strong>/);
-  assert.match(rendered, /high trust/);
+  assert.match(rendered, /high trust, updated 2026-05-31, score /);
+  assert.match(rendered, /<span>Updated<\/span><strong>2026-05-31<\/strong>/);
   assert.match(rendered, /<span>Contradicted claims<\/span><strong>1<\/strong>/);
   assert.match(rendered, /<span>Unsupported claims<\/span><strong>1<\/strong>/);
   assert.match(rendered, /<span>Needs review<\/span><strong>0<\/strong>/);
@@ -194,6 +196,7 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /- Primary finding: verified/);
   assert.match(rendered, /- Primary claim: Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Primary evidence: HR Policy/);
+  assert.match(rendered, /\*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
   assert.match(rendered, /#### Submitted Answer/);
   assert.match(rendered, /> Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /#### Claim Assessments/);
@@ -246,6 +249,35 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.doesNotMatch(rendered, /<queued>\/support-answer\.md/);
   assert.match(rendered, /No approved source snippet matched strongly enough\./);
   assert.match(rendered, /claim-pill claim-pill--unsupported/);
+});
+
+test("renders evidence freshness metadata in batch html claims", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
+    sourceCount: 1,
+    answerCount: 1,
+    answers: [
+      {
+        answerPath: "examples/answers/hr-answer.md",
+        report: verifyAnswer("Employees receive 18 weeks of paid parental leave.", [hrPolicy]),
+        shouldFail: true,
+        failVerdicts: ["contradicted"],
+      },
+    ],
+    summary: {
+      verified: 0,
+      contradicted: 1,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithFailures: 1,
+    },
+  };
+
+  const rendered = renderBatchHtmlReport(batchReport);
+
+  assert.match(rendered, /HR Policy<\/strong> · high trust, updated 2026-05-31, score /);
+  assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
 });
 
 test("renders explicit empty states for batch answers with no extracted claims", () => {
