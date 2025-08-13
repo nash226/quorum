@@ -212,7 +212,7 @@ Options:
 - `verify-batch --markdown-out <path>`: write a batch summary in Markdown for review queues
 - `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers
-- `verify-batch --summary-csv-out <path>`: write one CSV row per answer with an `answer_preview`, the highest-priority claim finding and evidence title, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
+- `verify-batch --summary-csv-out <path>`: write one CSV row per answer with an `answer_preview`, the highest-priority claim finding, primary evidence title plus trust/freshness metadata, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
 - teams can use `--summary-csv-out` for queue-level routing while keeping `--review-csv-out` for claim-by-claim reviewer decisions on the same batch run
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes, including the original `answer_preview` plus evidence titles, trust levels, scores, and quotes
 - reviewer CSV exports also include `evidence_updated_at` so spreadsheet reviewers can see source freshness beside each claim
