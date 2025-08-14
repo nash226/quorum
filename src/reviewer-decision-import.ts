@@ -1,3 +1,4 @@
+import { parseDelimitedList } from "./csv-list.js";
 import type { ClaimVerdict } from "./domain.js";
 import { parseClaimVerdict } from "./report-policy.js";
 
@@ -763,15 +764,17 @@ function importDecisionRow(
       columnIndex.model_reason,
       "model_reason",
     ),
-    evidenceTitles: splitEvidenceList(readOptionalValue(row, columnIndex.evidence_titles)),
-    evidenceTrustLevels: splitEvidenceList(
+    evidenceTitles: parseDelimitedList(readOptionalValue(row, columnIndex.evidence_titles)),
+    evidenceTrustLevels: parseDelimitedList(
       readOptionalValue(row, columnIndex.evidenceTrustLevels ?? -1),
     ),
-    evidenceUpdatedAt: splitEvidenceList(
+    evidenceUpdatedAt: parseDelimitedList(
       readOptionalValue(row, columnIndex.evidenceUpdatedAt ?? -1),
     ),
-    evidenceScores: splitEvidenceList(readOptionalValue(row, columnIndex.evidenceScores ?? -1)),
-    evidenceQuotes: splitEvidenceList(readOptionalValue(row, columnIndex.evidence_quotes)),
+    evidenceScores: parseDelimitedList(
+      readOptionalValue(row, columnIndex.evidenceScores ?? -1),
+    ),
+    evidenceQuotes: parseDelimitedList(readOptionalValue(row, columnIndex.evidence_quotes)),
     reviewerVerdict,
     reviewerNotes,
     finalVerdict,
@@ -857,13 +860,6 @@ function parseVerdict(
       }`,
     );
   }
-}
-
-function splitEvidenceList(value: string): string[] {
-  return value
-    .split(" | ")
-    .map((entry) => entry.trim())
-    .filter(Boolean);
 }
 
 function parseCsv(content: string): string[][] {
