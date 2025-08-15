@@ -63,7 +63,7 @@ code `2` when `--fail-on` is enabled.
 After a reviewer fills in the exported CSV, import it back into Quorum with:
 
 ```bash
-npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md
+npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --summary-csv-out reports/hr-review-import-summary.csv
 ```
 
 The import summary preserves the model verdict, the reviewer verdict when one
@@ -72,7 +72,9 @@ When the CSV came from `verify-batch --review-csv-out`, the import also keeps
 the original `answer_path` and `answer_preview` for each reviewed claim so
 batch handoffs stay grouped by answer file with recognizable reviewer context.
 The JSON import artifact also includes answer-level `answerGroups` summaries so
-queue tooling can route follow-up work one answer at a time.
+queue tooling can route follow-up work one answer at a time. The summary CSV
+import artifact adds one row per answer group with reviewed, pending,
+overridden, and final verdict totals for spreadsheet queues.
 
 Quorum also accepts exported HTML knowledge base pages via `--source` or
 `--source-dir`, which lets teams verify answers against help-center exports

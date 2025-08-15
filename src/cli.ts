@@ -32,6 +32,7 @@ import {
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
+  renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
 import { renderAnswerPreview } from "./text.js";
@@ -68,6 +69,7 @@ interface ImportReviewArgs {
   outPath?: string;
   markdownOutPath?: string;
   htmlOutPath?: string;
+  summaryCsvOutPath?: string;
 }
 
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
@@ -251,6 +253,7 @@ async function runImportReview(args: string[]): Promise<void> {
   const jsonReport = JSON.stringify(report, null, 2);
   const markdownReport = renderReviewerDecisionImportMarkdownReport(report);
   const htmlReport = renderReviewerDecisionImportHtmlReport(report);
+  const summaryCsv = renderReviewerDecisionImportSummaryCsv(report);
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
@@ -262,6 +265,10 @@ async function runImportReview(args: string[]): Promise<void> {
 
   if (parsed.htmlOutPath) {
     await writeReportFile(parsed.htmlOutPath, htmlReport);
+  }
+
+  if (parsed.summaryCsvOutPath) {
+    await writeReportFile(parsed.summaryCsvOutPath, summaryCsv);
   }
 
   if (parsed.json) {
@@ -281,6 +288,10 @@ async function runImportReview(args: string[]): Promise<void> {
 
   if (parsed.htmlOutPath) {
     console.log(`Reviewer decision HTML report written to ${parsed.htmlOutPath}`);
+  }
+
+  if (parsed.summaryCsvOutPath) {
+    console.log(`Reviewer decision summary CSV written to ${parsed.summaryCsvOutPath}`);
   }
 }
 
@@ -449,6 +460,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   let outPath: string | undefined;
   let markdownOutPath: string | undefined;
   let htmlOutPath: string | undefined;
+  let summaryCsvOutPath: string | undefined;
   let json = false;
 
   for (let index = 0; index < args.length; index += 1) {
@@ -467,6 +479,9 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     } else if (arg === "--html-out" && next) {
       htmlOutPath = next;
       index += 1;
+    } else if (arg === "--summary-csv-out" && next) {
+      summaryCsvOutPath = next;
+      index += 1;
     } else if (arg === "--json") {
       json = true;
     } else {
@@ -484,6 +499,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     outPath,
     markdownOutPath,
     htmlOutPath,
+    summaryCsvOutPath,
   };
 }
 
@@ -731,12 +747,12 @@ function printHelp(): void {
 Usage:
   quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>]
+  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
-  npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html
+  npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv
 `);
 }
 
