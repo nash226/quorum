@@ -25,6 +25,9 @@ waiting on plan language"
     unsupported: 1,
     needs_review: 1,
   });
+  assert.equal(report.answerGroups.length, 1);
+  assert.equal(report.answerGroups[0]?.label, "Unspecified answer");
+  assert.equal(report.answerGroups[0]?.summary.reviewedClaims, 2);
 
   assert.equal(report.claims[0]?.finalVerdict, "verified");
   assert.equal(report.claims[0]?.overridden, true);
@@ -51,6 +54,10 @@ examples/answers/support-answer.md,Refunds are available within 14 days of purch
     report.claims[0]?.answerPreview,
     "Employees receive 12 weeks of paid parental leave.",
   );
+  assert.equal(report.answerGroups.length, 2);
+  assert.equal(report.answerGroups[0]?.label, "examples/answers/hr-answer.md");
+  assert.equal(report.answerGroups[0]?.summary.pendingClaims, 1);
+  assert.equal(report.answerGroups[1]?.summary.needs_review, 1);
   assert.equal(report.claims[1]?.answerPath, "examples/answers/support-answer.md");
   assert.deepEqual(report.claims[1]?.evidenceTrustLevels, ["medium"]);
   assert.deepEqual(report.claims[1]?.evidenceUpdatedAt, ["2026-06-01"]);
@@ -86,11 +93,31 @@ Refunds are available within 14 days of purchase.,claim_2,Refunds are available 
     report.claims[1]?.answerPreview,
     "Refunds are available within 14 days of purchase.",
   );
+  assert.equal(report.answerGroups.length, 2);
+  assert.equal(report.answerGroups[0]?.label, "Employees receive 12 weeks of paid parental leave.");
+  assert.equal(report.answerGroups[1]?.label, "Refunds are available within 14 days of purchase.");
 
   const rendered = renderReviewerDecisionImportReport(report);
   assert.match(rendered, /Answer: Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /Answer preview: Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /Answer: Refunds are available within 14 days of purchase\./);
+});
+
+test("groups imported reviewer decisions by answer in the JSON report", () => {
+  const report = importReviewerDecisions(`answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_2,Healthcare coverage begins after 30 days of employment.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.991,Healthcare coverage begins after 30 days of employment.,,
+examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,claim_3,Refunds are available within 14 days of purchase.,contradicted,A closely matching approved source uses different numeric terms.,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,needs_review,Escalate to support ops
+`);
+
+  assert.equal(report.answerGroups.length, 2);
+  assert.equal(report.answerGroups[0]?.label, "examples/answers/hr-answer.md");
+  assert.equal(report.answerGroups[0]?.claims.length, 2);
+  assert.equal(report.answerGroups[0]?.summary.reviewedClaims, 1);
+  assert.equal(report.answerGroups[0]?.summary.pendingClaims, 1);
+  assert.equal(report.answerGroups[1]?.label, "examples/answers/support-answer.md");
+  assert.equal(report.answerGroups[1]?.summary.needs_review, 1);
+  assert.equal(report.answerGroups[1]?.summary.overriddenClaims, 1);
 });
 
 test("rejects csv files that do not match the expected export columns", () => {
