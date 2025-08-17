@@ -35,7 +35,7 @@ import {
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
-import { renderAnswerPreview } from "./text.js";
+import { renderAnswerLabel, renderAnswerPreview } from "./text.js";
 
 interface VerifyArgs {
   sourcePaths: string[];
@@ -175,6 +175,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
       const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
 
       return {
+        answerLabel: renderAnswerLabel(answerPath),
         answerPath,
         report,
         shouldFail: failVerdicts.length > 0,
@@ -692,7 +693,8 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
     const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
 
     lines.push(
-      answer.answerPath,
+      answer.answerLabel,
+      `  Path: ${answer.answerPath}`,
       `  Summary: ${answer.report.summary.verified} verified, ${answer.report.summary.contradicted} contradicted, ${answer.report.summary.unsupported} unsupported, ${answer.report.summary.needs_review} needs review`,
       `  Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
       `  Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,

@@ -268,6 +268,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
       sourceCount: number;
       sources: Array<{ id: string; title: string; trustLevel: string }>;
       answers: Array<{
+        answerLabel: string;
         answerPath: string;
         shouldFail: boolean;
         failVerdicts: string[];
@@ -287,6 +288,10 @@ test("verify-batch returns an aggregate report for each answer file", async () =
       report.answers.map((answer) => answer.answerPath).sort(),
       [join(answerDir, "hr.md"), join(answerDir, "support.txt")],
     );
+    assert.deepEqual(
+      report.answers.map((answer) => answer.answerLabel).sort(),
+      ["hr", "support"],
+    );
     assert.deepEqual(report.answers.map((answer) => answer.failVerdicts), [[], []]);
     assert.equal(report.summary.verified, 2);
     assert.equal(report.summary.answersWithFailures, 0);
@@ -299,11 +304,11 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.match(await readFile(batchHtmlOutPath, "utf8"), /Answer preview/);
     assert.match(
       await readFile(batchReviewCsvOutPath, "utf8"),
-      /answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
+      /answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
     );
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at/,
+      /answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -697,7 +702,7 @@ test("verify-batch reports matching fail verdicts in json and summary csv output
 
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /hr\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,hr-policy,medium,,2,0,1,1,0,matched,contradicted \| unsupported,hr-policy,medium,/,
+      /hr,.*hr\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,hr-policy,medium,,2,0,1,1,0,matched,contradicted \| unsupported,hr-policy,medium,/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -855,11 +860,11 @@ test("verify-batch writes a combined reviewer decision csv", async () => {
 
     assert.equal(
       lines[0],
-      "answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
-      /^examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\..*,claim_1,/,
+      /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\..*,claim_1,/,
     );
     assert.match(lines[lines.length - 1] ?? "", /,,$/);
   } finally {

@@ -45,6 +45,7 @@ export interface VerificationReport {
 }
 
 export interface BatchVerificationResult {
+  answerLabel: string;
   answerPath: string;
   report: VerificationReport;
   shouldFail: boolean;
