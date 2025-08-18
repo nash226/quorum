@@ -86,3 +86,77 @@ export function renderAnswerLabel(answerPath: string): string {
   const extension = extname(answerPath);
   return basename(answerPath, extension);
 }
+
+export function renderAnswerLabels(answerPaths: string[]): string[] {
+  const partsByPath = answerPaths.map(splitAnswerLabelParts);
+  const labelDepths = partsByPath.map(() => 1);
+
+  while (true) {
+    const labels = partsByPath.map((parts, index) =>
+      renderAnswerLabelWithDepth(parts, labelDepths[index] ?? 1),
+    );
+    const duplicateIndexes = collectDuplicateLabelIndexes(labels);
+
+    if (duplicateIndexes.size === 0) {
+      return labels;
+    }
+
+    let advanced = false;
+
+    for (const index of duplicateIndexes) {
+      const parts = partsByPath[index] ?? [];
+      const currentDepth = labelDepths[index] ?? 1;
+
+      if (currentDepth < parts.length) {
+        labelDepths[index] = currentDepth + 1;
+        advanced = true;
+      }
+    }
+
+    if (!advanced) {
+      return labels;
+    }
+  }
+}
+
+function splitAnswerLabelParts(answerPath: string): string[] {
+  const normalizedPath = answerPath.replace(/\\/g, "/");
+  const parts = normalizedPath.split("/").filter(Boolean);
+
+  if (parts.length === 0) {
+    return [renderAnswerLabel(answerPath)];
+  }
+
+  const lastIndex = parts.length - 1;
+  const lastPart = parts[lastIndex] ?? "";
+  const extension = extname(lastPart);
+  parts[lastIndex] = extension ? lastPart.slice(0, -extension.length) : lastPart;
+
+  return parts;
+}
+
+function renderAnswerLabelWithDepth(parts: string[], depth: number): string {
+  return parts.slice(-depth).join("/");
+}
+
+function collectDuplicateLabelIndexes(labels: string[]): Set<number> {
+  const indexesByLabel = new Map<string, number[]>();
+
+  labels.forEach((label, index) => {
+    const indexes = indexesByLabel.get(label) ?? [];
+    indexes.push(index);
+    indexesByLabel.set(label, indexes);
+  });
+
+  const duplicates = new Set<number>();
+
+  for (const indexes of indexesByLabel.values()) {
+    if (indexes.length <= 1) {
+      continue;
+    }
+
+    indexes.forEach((index) => duplicates.add(index));
+  }
+
+  return duplicates;
+}
