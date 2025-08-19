@@ -1,6 +1,6 @@
 import { parseDelimitedList } from "./csv-list.js";
 import type { ClaimVerdict } from "./domain.js";
-import { parseClaimVerdict } from "./report-policy.js";
+import { matchingFailVerdicts, parseClaimVerdict } from "./report-policy.js";
 
 const REQUIRED_HEADERS = [
   "claim_id",
@@ -228,6 +228,7 @@ export function renderReviewerDecisionImportMarkdownReport(
 
 export function renderReviewerDecisionImportSummaryCsv(
   report: ReviewerDecisionImportReport,
+  failOn: ClaimVerdict[] = [],
 ): string {
   const rows = [
     [
@@ -251,9 +252,12 @@ export function renderReviewerDecisionImportSummaryCsv(
       "contradicted",
       "unsupported",
       "needs_review",
+      "fail_policy",
+      "fail_verdicts",
     ],
     ...report.answerGroups.map((group) => {
       const primaryClaim = selectPrimaryImportedClaim(group.claims);
+      const failVerdicts = matchingFailVerdicts(group, failOn);
 
       return [
         group.label,
@@ -276,6 +280,8 @@ export function renderReviewerDecisionImportSummaryCsv(
         group.summary.contradicted.toString(),
         group.summary.unsupported.toString(),
         group.summary.needs_review.toString(),
+        failVerdicts.length > 0 ? "matched" : "clear",
+        failVerdicts.join(" | "),
       ];
     }),
   ];
