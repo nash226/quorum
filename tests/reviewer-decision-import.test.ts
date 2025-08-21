@@ -45,18 +45,20 @@ waiting on plan language"
 });
 
 test("imports batch reviewer decisions with answer path context", () => {
-  const report = importReviewerDecisions(`answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
-examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,,
-examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,claim_2,Refunds are available within 14 days of purchase.,contradicted,A closely matching approved source uses different numeric terms.,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,needs_review,Escalate to support ops
+  const report = importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,,
+support-answer,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,claim_2,Refunds are available within 14 days of purchase.,contradicted,A closely matching approved source uses different numeric terms.,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,needs_review,Escalate to support ops
 `);
 
+  assert.equal(report.claims[0]?.answerLabel, "hr-answer");
   assert.equal(report.claims[0]?.answerPath, "examples/answers/hr-answer.md");
   assert.equal(
     report.claims[0]?.answerPreview,
     "Employees receive 12 weeks of paid parental leave.",
   );
   assert.equal(report.answerGroups.length, 2);
-  assert.equal(report.answerGroups[0]?.label, "examples/answers/hr-answer.md");
+  assert.equal(report.answerGroups[0]?.label, "hr-answer");
+  assert.equal(report.answerGroups[0]?.answerPath, "examples/answers/hr-answer.md");
   assert.equal(report.answerGroups[0]?.summary.pendingClaims, 1);
   assert.equal(report.answerGroups[1]?.summary.needs_review, 1);
   assert.equal(report.claims[1]?.answerPath, "examples/answers/support-answer.md");
@@ -105,18 +107,19 @@ Refunds are available within 14 days of purchase.,claim_2,Refunds are available 
 });
 
 test("groups imported reviewer decisions by answer in the JSON report", () => {
-  const report = importReviewerDecisions(`answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
-examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
-examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_2,Healthcare coverage begins after 30 days of employment.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.991,Healthcare coverage begins after 30 days of employment.,,
-examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,claim_3,Refunds are available within 14 days of purchase.,contradicted,A closely matching approved source uses different numeric terms.,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,needs_review,Escalate to support ops
+  const report = importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_2,Healthcare coverage begins after 30 days of employment.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.991,Healthcare coverage begins after 30 days of employment.,,
+support-answer,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,claim_3,Refunds are available within 14 days of purchase.,contradicted,A closely matching approved source uses different numeric terms.,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,needs_review,Escalate to support ops
 `);
 
   assert.equal(report.answerGroups.length, 2);
-  assert.equal(report.answerGroups[0]?.label, "examples/answers/hr-answer.md");
+  assert.equal(report.answerGroups[0]?.label, "hr-answer");
+  assert.equal(report.answerGroups[0]?.answerPath, "examples/answers/hr-answer.md");
   assert.equal(report.answerGroups[0]?.claims.length, 2);
   assert.equal(report.answerGroups[0]?.summary.reviewedClaims, 1);
   assert.equal(report.answerGroups[0]?.summary.pendingClaims, 1);
-  assert.equal(report.answerGroups[1]?.label, "examples/answers/support-answer.md");
+  assert.equal(report.answerGroups[1]?.label, "support-answer");
   assert.equal(report.answerGroups[1]?.summary.needs_review, 1);
   assert.equal(report.answerGroups[1]?.summary.overriddenClaims, 1);
 });
@@ -133,16 +136,17 @@ claim_1,Sample,Needs approval
 
 test("renders a reviewer decision import summary for humans", () => {
   const rendered = renderReviewerDecisionImportReport(
-    importReviewerDecisions(`answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
-examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
-examples/answers/support-answer.md,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,,"","",`),
+    importReviewerDecisions(`answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+hr-answer,examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+support-answer,examples/answers/support-answer.md,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,,"","",`),
   );
 
   assert.match(rendered, /Quorum Reviewer Decision Import/);
   assert.match(rendered, /Claims: 2 total, 1 reviewed, 1 pending/);
   assert.match(rendered, /Overrides: 0/);
   assert.match(rendered, /Answer Groups/);
-  assert.match(rendered, /Answer: examples\/answers\/hr-answer\.md/);
+  assert.match(rendered, /Answer: hr-answer/);
+  assert.match(rendered, /Answer file: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /VERIFIED  Employees receive 12 weeks/);
   assert.match(rendered, /Evidence:/);
   assert.match(
@@ -154,15 +158,16 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
 
 test("renders a reviewer decision import markdown report", () => {
   const rendered = renderReviewerDecisionImportMarkdownReport(
-    importReviewerDecisions(`answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
-examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
-examples/answers/support-answer.md,Employees receive free catered lunch every day.,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,,"","",`),
+    importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,,"","",`),
   );
 
   assert.match(rendered, /^# Quorum Reviewer Decision Import/m);
   assert.match(rendered, /- Total claims: 2/);
   assert.match(rendered, /## Answer Groups/);
-  assert.match(rendered, /### examples\/answers\/hr-answer\.md/);
+  assert.match(rendered, /### hr-answer/);
+  assert.match(rendered, /- Answer file: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /- Answer preview: Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /#### 1\. Employees receive 12 weeks/);
   assert.match(rendered, /- Evidence:/);
@@ -176,9 +181,9 @@ examples/answers/support-answer.md,Employees receive free catered lunch every da
 
 test("renders a reviewer decision import html report", () => {
   const rendered = renderReviewerDecisionImportHtmlReport(
-    importReviewerDecisions(`answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
-examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
-examples/answers/support-answer.md,<Flag this answer for legal review.>,claim_2,<Flag this answer for legal review.>,unsupported,No approved source contains enough overlapping policy language.,"","","","","","","Needs counsel review before publish"`),
+    importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+support-answer,examples/answers/support-answer.md,<Flag this answer for legal review.>,claim_2,<Flag this answer for legal review.>,unsupported,No approved source contains enough overlapping policy language.,"","","","","","","Needs counsel review before publish"`),
   );
 
   assert.match(rendered, /<!doctype html>/i);
@@ -186,7 +191,8 @@ examples/answers/support-answer.md,<Flag this answer for legal review.>,claim_2,
   assert.match(rendered, /Imported reviewer decisions, final verdicts/);
   assert.match(rendered, /<span>Total claims<\/span><strong>2<\/strong>/);
   assert.match(rendered, /Answer file/);
-  assert.match(rendered, /<code>examples\/answers\/hr-answer\.md<\/code>/);
+  assert.match(rendered, /<h2><code>hr-answer<\/code><\/h2>/);
+  assert.match(rendered, /<p class="answer-group__path"><code>examples\/answers\/hr-answer\.md<\/code><\/p>/);
   assert.match(rendered, /<p class="answer-group__preview">Employees receive 12 weeks of paid parental leave\.<\/p>/);
   assert.match(rendered, /1 claims<\/span>/);
   assert.match(rendered, /Evidence context/);
