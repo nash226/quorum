@@ -116,7 +116,9 @@ import output now includes an
 automation. `--summary-csv-out` writes one row per imported answer group with
 reviewed, pending, overridden, and final verdict counts for queue routing.
 `import-review --fail-on` evaluates those final verdicts after reviewer
-overrides, so teams can block publication on unresolved reviewed outcomes.
+overrides, so teams can block publication on unresolved reviewed outcomes, and
+the text, Markdown, and HTML import reports surface whether each answer matched
+that fail policy.
 
 To verify a directory of answers against the same approved source set:
 
