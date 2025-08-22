@@ -82,7 +82,7 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
   assert.match(rendered, /- Evidence: No approved source snippet matched strongly enough\./);
 });
 
-test("renders a reviewer decision csv with claim context and blank reviewer fields", () => {
+test("renders a reviewer decision csv with answer fail-policy context and blank reviewer fields", () => {
   const report = verifyAnswer(
     "Employees receive 18 weeks of paid parental leave.\nEmployees receive free catered lunch every day.",
     [hrPolicy],
@@ -90,16 +90,16 @@ test("renders a reviewer decision csv with claim context and blank reviewer fiel
     "examples/answers/hr-answer.md",
   );
 
-  const rendered = renderReviewerDecisionCsv(report);
+  const rendered = renderReviewerDecisionCsv(report, ["contradicted", "unsupported"]);
   const lines = rendered.trim().split("\n");
 
   assert.equal(
     lines[0],
-    "answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
-    /^examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
+    /^examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,matched,contradicted \| unsupported,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
   );
   assert.match(lines[1] ?? "", /HR Policy/);
   assert.match(lines[1] ?? "", /high/);
@@ -107,7 +107,7 @@ test("renders a reviewer decision csv with claim context and blank reviewer fiel
   assert.match(lines[1] ?? "", /0\.\d{3}/);
   assert.match(
     lines[2] ?? "",
-    /^examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,claim_2,Employees receive free catered lunch every day\.,unsupported,/,
+    /^examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,matched,contradicted \| unsupported,claim_2,Employees receive free catered lunch every day\.,unsupported,/,
   );
   assert.match(lines[2] ?? "", /,,$/);
 });

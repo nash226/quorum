@@ -199,12 +199,61 @@ test("verify records the answer path in JSON and reviewer csv outputs", async ()
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,claim_1,`,
+        `^${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,clear,,claim_1,`,
+      ),
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify writes reviewer csv fail-policy columns for single answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-review-fail-policy-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.md");
+    const reviewCsvOutPath = join(tempDir, "reports", "review.csv");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 18 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    await assert.rejects(
+      runCli([
+        "verify",
+        "--answer",
+        answerPath,
+        "--source",
+        sourcePath,
+        "--review-csv-out",
+        reviewCsvOutPath,
+        "--fail-on",
+        "contradicted",
+      ]),
+      (error: unknown) => {
+        assert.ok(error instanceof Error);
+        assert.match(error.message, /CLI exited with code 2/);
+        return true;
+      },
+    );
+
+    const reviewCsv = await readFile(reviewCsvOutPath, "utf8");
+    const lines = reviewCsv.trim().split("\n");
+    assert.equal(
+      lines[0],
+      "answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    );
+    assert.match(
+      lines[1] ?? "",
+      new RegExp(
+        `^${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,matched,contradicted,claim_1,`,
       ),
     );
   } finally {
@@ -441,8 +490,9 @@ test("verify preserves explicit source order ahead of directory-discovered files
     const secondSourcePath = join(tempDir, "second.md");
     const directorySourcePath = join(sourceDir, "directory.md");
 
+    await mkdir(sourceDir, { recursive: true });
+
     await Promise.all([
-      mkdir(sourceDir, { recursive: true }),
       writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
       writeFile(
         firstSourcePath,
