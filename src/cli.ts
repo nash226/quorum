@@ -107,8 +107,8 @@ async function runVerify(args: string[]): Promise<void> {
   const sources = await loadSources(parsed);
   const report = await verifySingleAnswer(parsed.answerPath, sources);
   const jsonReport = JSON.stringify(report, null, 2);
-  const htmlReport = renderHtmlReport(report);
-  const markdownReport = renderMarkdownReport(report);
+  const htmlReport = renderHtmlReport(report, parsed.failOn);
+  const markdownReport = renderMarkdownReport(report, parsed.failOn);
   const reviewerDecisionCsv = renderReviewerDecisionCsv(report, parsed.failOn);
   const shouldFail = shouldFailReport(report, parsed.failOn);
 
@@ -136,7 +136,7 @@ async function runVerify(args: string[]): Promise<void> {
     return;
   }
 
-  process.stdout.write(renderTextReport(report));
+  process.stdout.write(renderTextReport(report, parsed.failOn));
 
   if (parsed.outPath) {
     console.log(`Report written to ${parsed.outPath}`);

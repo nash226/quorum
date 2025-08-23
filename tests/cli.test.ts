@@ -261,6 +261,51 @@ test("verify writes reviewer csv fail-policy columns for single answers", async 
   }
 });
 
+test("verify threads fail-policy context into single-answer text, markdown, and html reports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-fail-policy-reports-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.md");
+    const markdownOutPath = join(tempDir, "reports", "review.md");
+    const htmlOutPath = join(tempDir, "reports", "review.html");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 18 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const result = await runCliAllowFailure([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--markdown-out",
+      markdownOutPath,
+      "--html-out",
+      htmlOutPath,
+      "--fail-on",
+      "contradicted",
+    ]);
+
+    assert.equal(result.code, 2);
+    assert.equal(result.stderr, "");
+    assert.match(result.stdout, /Fail policy: matched/);
+    assert.match(result.stdout, /Fail verdicts: contradicted/);
+
+    const [markdownReport, htmlReport] = await Promise.all([
+      readFile(markdownOutPath, "utf8"),
+      readFile(htmlOutPath, "utf8"),
+    ]);
+
+    assert.match(markdownReport, /- Fail policy: matched \(contradicted\)/);
+    assert.match(htmlReport, /<span>Fail policy<\/span>\s*<strong>matched \(contradicted\)<\/strong>/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch returns an aggregate report for each answer file", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-"));
 
