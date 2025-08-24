@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `27be1d2` on 2026-07-01, show import-review fail policy in reports
+- Latest shipped change: `e3ec7a0` on 2026-07-01, show single-answer fail policy in reports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-01 | [#90](https://github.com/nash226/quorum/pull/90) | show single-answer fail policy in reports | `e3ec7a0` |
 | 2026-07-01 | [#89](https://github.com/nash226/quorum/pull/89) | show import-review fail policy in reports | `27be1d2` |
 | 2026-07-01 | [#88](https://github.com/nash226/quorum/pull/88) | add single review fail policy csv context | `0b8826e` |
 | 2026-07-01 | [#87](https://github.com/nash226/quorum/pull/87) | preserve answer labels in review imports | `deca5cd` |
@@ -52,5 +53,4 @@
 | 2026-07-01 | [#85](https://github.com/nash226/quorum/pull/85) | add import-review summary fail policy columns | `514a034` |
 | 2026-07-01 | [#84](https://github.com/nash226/quorum/pull/84) | disambiguate batch answer labels | `56c3f2d` |
 | 2026-07-01 | [#83](https://github.com/nash226/quorum/pull/83) | add batch answer labels | `538e334` |
-| 2026-07-01 | [#82](https://github.com/nash226/quorum/pull/82) | feat: add import review summary evidence context | `3a0c590` |
 
