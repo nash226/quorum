@@ -226,6 +226,7 @@ Options:
 - `verify-batch --summary-csv-out <path>`: write one CSV row per answer with an `answer_label`, `answer_preview`, the highest-priority claim finding, primary evidence title plus trust/freshness metadata, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
 - teams can use `--summary-csv-out` for queue-level routing while keeping `--review-csv-out` for claim-by-claim reviewer decisions on the same batch run
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes, including a reviewer-friendly `answer_label`, the original `answer_preview`, answer-level fail-policy status and fail verdicts, and evidence titles, trust levels, scores, and quotes
+- reviewer CSV exports now include `answer_has_claims` so empty answers still survive spreadsheet review and `import-review` handoffs
 - reviewer CSV exports also include `evidence_updated_at` so spreadsheet reviewers can see source freshness beside each claim
 - single-answer and batch reviewer CSV exports include both `answer_path` and `answer_preview` so review imports keep answer provenance and quick reviewer context
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
