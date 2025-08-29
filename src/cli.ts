@@ -24,6 +24,7 @@ import {
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
+  renderSummaryCsv,
   renderTextAssessmentLines,
   renderTextReport,
 } from "./report-renderer.js";
@@ -51,6 +52,7 @@ interface VerifySingleArgs extends VerifyArgs {
   markdownOutPath?: string;
   htmlOutPath?: string;
   reviewCsvOutPath?: string;
+  summaryCsvOutPath?: string;
 }
 
 interface VerifyBatchArgs extends VerifyArgs {
@@ -134,6 +136,7 @@ async function runVerify(args: string[]): Promise<void> {
   const htmlReport = renderHtmlReport(report, parsed.failOn);
   const markdownReport = renderMarkdownReport(report, parsed.failOn);
   const reviewerDecisionCsv = renderReviewerDecisionCsv(report, parsed.failOn);
+  const summaryCsv = renderSummaryCsv(report, parsed.failOn);
   const shouldFail = shouldFailReport(report, parsed.failOn);
 
   if (parsed.outPath) {
@@ -150,6 +153,10 @@ async function runVerify(args: string[]): Promise<void> {
 
   if (parsed.reviewCsvOutPath) {
     await writeReportFile(parsed.reviewCsvOutPath, reviewerDecisionCsv);
+  }
+
+  if (parsed.summaryCsvOutPath) {
+    await writeReportFile(parsed.summaryCsvOutPath, summaryCsv);
   }
 
   if (parsed.json) {
@@ -176,6 +183,10 @@ async function runVerify(args: string[]): Promise<void> {
 
   if (parsed.reviewCsvOutPath) {
     console.log(`Reviewer decision CSV written to ${parsed.reviewCsvOutPath}`);
+  }
+
+  if (parsed.summaryCsvOutPath) {
+    console.log(`Summary CSV written to ${parsed.summaryCsvOutPath}`);
   }
 
   if (shouldFail) {
@@ -337,12 +348,14 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
     "--markdown-out",
     "--html-out",
     "--review-csv-out",
+    "--summary-csv-out",
   ]));
   let answerPath = "";
   let outPath: string | undefined;
   let markdownOutPath: string | undefined;
   let htmlOutPath: string | undefined;
   let reviewCsvOutPath: string | undefined;
+  let summaryCsvOutPath: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -363,6 +376,9 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
     } else if (arg === "--review-csv-out" && next) {
       reviewCsvOutPath = next;
       index += 1;
+    } else if (arg === "--summary-csv-out" && next) {
+      summaryCsvOutPath = next;
+      index += 1;
     }
   }
 
@@ -377,6 +393,7 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
     markdownOutPath,
     htmlOutPath,
     reviewCsvOutPath,
+    summaryCsvOutPath,
   };
 }
 
@@ -810,7 +827,7 @@ function printHelp(command?: CommandName): void {
     verify: `Quorum verify
 
 Usage:
-  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --answer <path|->          Answer file to verify, or - to read from stdin
@@ -823,10 +840,11 @@ Options:
   --markdown-out <path>      Write a reviewer-friendly Markdown report
   --html-out <path>          Write a styled HTML report
   --review-csv-out <path>    Write a reviewer decision CSV
+  --summary-csv-out <path>   Write a one-row summary CSV for this answer
   --fail-on <verdict>        Exit with code 2 when the verdict appears; may repeat
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
+  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
   cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --source-dir examples/sources --json
 `,
     "verify-batch": `Quorum verify-batch
@@ -879,12 +897,12 @@ Example:
   console.log(`Quorum
 
 Usage:
-  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
+  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
   cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --source-dir examples/sources --json
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
