@@ -178,6 +178,22 @@ test("extracts clean claims from parenthesized numeric markdown list answers", (
   );
 });
 
+test("extracts clean claims from inline enumerated answers", () => {
+  const claims = extractClaims(
+    "1) Employees receive 12 weeks of paid parental leave. 2) Managers approve travel within five business days. • Finance reviews international trips before booking. (a) Legal approves contract exceptions.",
+  );
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve travel within five business days.",
+      "Finance reviews international trips before booking.",
+      "Legal approves contract exceptions.",
+    ],
+  );
+});
+
 test("keeps wrapped parenthesized numeric markdown list items as single claims", () => {
   const claims = extractClaims(`Policy notes:
 
