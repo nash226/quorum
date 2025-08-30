@@ -132,6 +132,29 @@ test("falls back to html metadata when the page title is absent", async () => {
   assert.equal(source.content, "Escalate priority incidents immediately.");
 });
 
+test("falls back to the first html heading when title metadata is absent", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/vacation-policy.html",
+    `<!doctype html>
+<html>
+  <body>
+    <main>
+      <h1>Vacation Policy</h1>
+      <p>Full-time employees receive 20 days of paid vacation each calendar year.</p>
+    </main>
+  </body>
+</html>`,
+    3,
+  );
+
+  assert.equal(source.title, "Vacation Policy");
+  assert.equal(source.trustLevel, "medium");
+  assert.match(
+    source.content,
+    /Full-time employees receive 20 days of paid vacation each calendar year\./,
+  );
+});
+
 test("decodes numeric html entities from exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/benefits.html",

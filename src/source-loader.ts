@@ -134,12 +134,14 @@ function sourceTitleFromPath(sourcePath: string): string {
 function parseHtmlSource(content: string): ParsedSource {
   const normalized = content.replace(/\r\n/g, "\n");
   const titleMatch = normalized.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const headingMatch = normalized.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
   const title =
     (titleMatch ? decodeHtmlEntities(stripTags(titleMatch[1] ?? "")).trim() : "") ||
     findHtmlMetaContent(normalized, {
       property: ["og:title"],
       name: ["twitter:title", "title"],
-    });
+    }) ||
+    (headingMatch ? decodeHtmlEntities(stripTags(headingMatch[1] ?? "")).trim() : "");
   const updatedAt = findHtmlMetaContent(normalized, {
     property: ["article:modified_time", "og:updated_time"],
     name: ["last-modified", "last_modified", "updated_at", "updatedAt", "date.modified"],
