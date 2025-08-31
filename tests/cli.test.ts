@@ -99,7 +99,7 @@ test("verify-batch -h prints batch usage without requiring answers", async () =>
   assert.equal(result.stderr, "");
   assert.match(
     result.stdout,
-    /^Quorum verify-batch\n\nUsage:\n  quorum verify-batch \(\--answer <path> \| --answer-dir <path>\)\.\.\./,
+    /^Quorum verify-batch\n\nUsage:\n  quorum verify-batch \(\--answer <path\|-> \| --answer-dir <path>\)\.\.\./,
   );
   assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row-per-answer summary CSV/);
 });
@@ -596,6 +596,100 @@ test("verify-batch accepts repeated answer files alongside answer directories", 
       nestedAnswerPath,
     ]);
     assert.equal(report.summary.verified, 2);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch reads one answer from stdin alongside explicit files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-stdin-answer-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    const fileAnswerPath = join(tempDir, "support-answer.md");
+    const reviewCsvOutPath = join(tempDir, "reports", "batch-review.csv");
+
+    await Promise.all([
+      mkdir(sourceDir, { recursive: true }),
+      writeFile(
+        fileAnswerPath,
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "support-playbook.md"),
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli(
+      [
+        "verify-batch",
+        "--answer",
+        "-",
+        "--answer",
+        fileAnswerPath,
+        "--source-dir",
+        sourceDir,
+        "--review-csv-out",
+        reviewCsvOutPath,
+        "--json",
+      ],
+      {
+        stdin: "Employees receive 12 weeks of paid parental leave.\n",
+      },
+    );
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      answers: Array<{
+        answerLabel: string;
+        answerPath: string;
+        report: { answerPath?: string; summary: Record<string, number> };
+      }>;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerCount, 2);
+    assert.deepEqual(
+      report.answers.map((answer) => ({
+        answerLabel: answer.answerLabel,
+        answerPath: answer.answerPath,
+        reportAnswerPath: answer.report.answerPath,
+      })),
+      [
+        {
+          answerLabel: "<stdin>",
+          answerPath: "<stdin>",
+          reportAnswerPath: "<stdin>",
+        },
+        {
+          answerLabel: "support-answer",
+          answerPath: fileAnswerPath,
+          reportAnswerPath: fileAnswerPath,
+        },
+      ],
+    );
+    assert.equal(report.summary.verified, 2);
+
+    const reviewCsv = await readFile(reviewCsvOutPath, "utf8");
+    const lines = reviewCsv.trim().split("\n");
+    assert.match(
+      lines[1] ?? "",
+      /^<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,true,claim_1,/,
+    );
+    assert.match(
+      lines[2] ?? "",
+      new RegExp(
+        `^support-answer,${escapeRegExp(fileAnswerPath)},Refunds are available within 30 days of purchase\\.,clear,,true,claim_1,`,
+      ),
+    );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
