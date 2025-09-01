@@ -155,6 +155,31 @@ test("falls back to the first html heading when title metadata is absent", async
   );
 });
 
+test("falls back to a time datetime attribute when html update metadata is absent", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Benefits Policy</title>
+  </head>
+  <body>
+    <main>
+      <p><time datetime="2026-06-18T14:30:00Z">Updated June 18, 2026</time></p>
+      <p>Employees receive medical coverage after 30 days.</p>
+    </main>
+  </body>
+</html>`,
+    4,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-06-18T14:30:00Z");
+  assert.equal(source.trustLevel, "medium");
+  assert.match(source.content, /Updated June 18, 2026/);
+  assert.match(source.content, /Employees receive medical coverage after 30 days\./);
+});
+
 test("decodes numeric html entities from exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/benefits.html",
@@ -170,7 +195,7 @@ test("decodes numeric html entities from exported html sources", async () => {
     </main>
   </body>
 </html>`,
-    2,
+    5,
   );
 
   assert.equal(source.title, "Benefits — US");
@@ -193,7 +218,7 @@ test("decodes common named html entities from exported html sources", async () =
     </main>
   </body>
 </html>`,
-    4,
+    6,
   );
 
   assert.equal(source.title, "Support & Escalations — North America");
@@ -211,7 +236,7 @@ test("falls back to the html file name when the page has no title", async () => 
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.htm",
     "<html><body><p>Escalate priority incidents immediately.</p></body></html>",
-    3,
+    7,
   );
 
   assert.equal(source.title, "escalations");
