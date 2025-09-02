@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d1fc0d9` on 2026-07-02, fix: preserve no-claim batch primary finding
+- Latest shipped change: `b39192f` on 2026-07-02, feat: enrich summary csv evidence context
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -25,7 +25,7 @@
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path for reviewer handoff
-- write one-row summary CSVs for single-answer and batch verification workflows
+- write one-row summary CSVs for single-answer and batch verification workflows, including the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-02 | [#104](https://github.com/nash226/quorum/pull/104) | feat: enrich summary csv evidence context | `b39192f` |
 | 2026-07-02 | [#103](https://github.com/nash226/quorum/pull/103) | fix: preserve no-claim batch primary finding | `d1fc0d9` |
 | 2026-07-02 | [#102](https://github.com/nash226/quorum/pull/102) | fix: read html updated dates from time tags | `1c85e3d` |
 | 2026-07-02 | [#101](https://github.com/nash226/quorum/pull/101) | support stdin answers in verify-batch | `001fe64` |
@@ -52,5 +53,4 @@
 | 2026-07-02 | [#99](https://github.com/nash226/quorum/pull/99) | infer html source titles from headings | `aec4946` |
 | 2026-07-02 | [#98](https://github.com/nash226/quorum/pull/98) | add single verify summary csv | `ea2dd2a` |
 | 2026-07-02 | [#97](https://github.com/nash226/quorum/pull/97) | add command-specific help | `647b787` |
-| 2026-07-01 | [#96](https://github.com/nash226/quorum/pull/96) | handle lowercase roman claim lists | `53f0775` |
 
