@@ -751,6 +751,7 @@ function summarizeBatchVerification(
 }
 
 function renderBatchTextReport(report: BatchVerificationReport): string {
+  const noClaimsReason = "No claims were extracted from this answer.";
   const lines = [
     "Quorum Batch Verification Report",
     "",
@@ -764,6 +765,10 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
 
   for (const answer of report.answers) {
     const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+    const primaryFinding = primaryAssessment
+      ? formatVerdictLabel(primaryAssessment.verdict)
+      : "needs review";
+    const primaryReason = primaryAssessment?.reason ?? noClaimsReason;
 
     lines.push(
       answer.answerLabel,
@@ -772,13 +777,13 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
       `  Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
       `  Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
       `  Answer preview: ${renderAnswerPreview(answer.report.answer) || "No answer content provided."}`,
-      `  Primary finding: ${primaryAssessment ? formatVerdictLabel(primaryAssessment.verdict) : "none"}`,
+      `  Primary finding: ${primaryFinding}`,
+      `  Primary reason: ${primaryReason}`,
     );
 
     if (primaryAssessment) {
       lines.push(
         `  Primary claim: ${primaryAssessment.claim.text}`,
-        `  Primary reason: ${primaryAssessment.reason}`,
         `  Primary evidence: ${primaryAssessment.evidence[0]?.documentTitle ?? "No approved source snippet matched strongly enough."}`,
       );
     }
