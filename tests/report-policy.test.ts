@@ -33,3 +33,36 @@ test("fails reports when selected verdicts are present", () => {
   assert.deepEqual(matchingFailVerdicts(report, failOn), ["unsupported"]);
   assert.deepEqual(matchingFailVerdicts(report, ["contradicted"]), []);
 });
+
+test("treats reports with no extracted claims as implicit needs_review matches", () => {
+  const emptyReport = {
+    summary: {
+      verified: 0,
+      unsupported: 0,
+      contradicted: 0,
+      needs_review: 0,
+    },
+    assessments: [],
+  } satisfies Pick<VerificationReport, "summary" | "assessments">;
+
+  assert.equal(shouldFailReport(emptyReport, ["needs_review"]), true);
+  assert.deepEqual(matchingFailVerdicts(emptyReport, ["needs_review"]), ["needs_review"]);
+});
+
+test("treats imported answer groups with no claims as implicit needs_review matches", () => {
+  const emptyImportReport = {
+    summary: {
+      verified: 0,
+      unsupported: 0,
+      contradicted: 0,
+      needs_review: 0,
+    },
+    answerGroups: [{ claims: [] }],
+  };
+
+  assert.equal(shouldFailReport(emptyImportReport, ["needs_review"]), true);
+  assert.deepEqual(
+    matchingFailVerdicts(emptyImportReport, ["needs_review"]),
+    ["needs_review"],
+  );
+});
