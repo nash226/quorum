@@ -76,6 +76,14 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
     rendered,
     /> Employees receive 18 weeks of paid parental leave\.\n> Employees receive free catered lunch every day\./,
   );
+  assert.match(rendered, /## Primary Finding/);
+  assert.match(rendered, /- Verdict: `contradicted`/);
+  assert.match(
+    rendered,
+    /- Reason: A closely matching approved source uses different numeric terms\./,
+  );
+  assert.match(rendered, /- Claim: Employees receive 18 weeks of paid parental leave\./);
+  assert.match(rendered, /- Evidence: \*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
   assert.match(rendered, /### 1\. Employees receive 18 weeks of paid parental leave\./);
   assert.match(rendered, /- Verdict: `contradicted`/);
   assert.match(rendered, /\*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
@@ -241,6 +249,7 @@ test("renders explicit empty states when no claims are extracted from a single a
   const html = renderHtmlReport(report);
 
   assert.match(text, /No claims were extracted from this answer\./);
+  assert.match(markdown, /## Primary Finding\n\n- Verdict: `needs_review`\n- Reason: No claims were extracted from this answer\./);
   assert.match(markdown, /## Claim Assessments\n\nNo claims were extracted from this answer\./);
   assert.match(html, /No claims were extracted from this answer\./);
   assert.match(html, /<tr class="empty-row">/);
