@@ -194,6 +194,30 @@ test("extracts clean claims from inline enumerated answers", () => {
   );
 });
 
+test("splits semicolon-delimited policy clauses into separate claims", () => {
+  const claims = extractClaims(
+    "Employees receive 12 weeks of paid parental leave; Healthcare coverage begins after 30 days of employment.",
+  );
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave",
+      "Healthcare coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
+test("keeps lowercase semicolon continuations in the same claim", () => {
+  const claims = extractClaims(
+    "Employees receive 12 weeks of paid parental leave; for full-time staff only.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave; for full-time staff only.",
+  ]);
+});
+
 test("keeps wrapped parenthesized numeric markdown list items as single claims", () => {
   const claims = extractClaims(`Policy notes:
 
