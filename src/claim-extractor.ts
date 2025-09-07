@@ -124,6 +124,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     UNICODE_BULLET_PREFIX,
     DASH_BULLET_PREFIX,
     /^\d+[.)]\s+/,
+    /^\d+:\s+/,
     /^\(\d+\)\s+/,
     /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
     /^\[[ xX]\]\s+/,
