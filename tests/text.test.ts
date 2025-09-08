@@ -47,3 +47,15 @@ test("strips inline list markers when splitting sentences", () => {
     ],
   );
 });
+
+test("strips inline numeric-colon list markers when splitting sentences", () => {
+  assert.deepEqual(
+    splitIntoSentences(
+      "1: Employees receive 12 weeks. 2: Managers approve travel within five business days.",
+    ),
+    [
+      "Employees receive 12 weeks.",
+      "Managers approve travel within five business days.",
+    ],
+  );
+});
