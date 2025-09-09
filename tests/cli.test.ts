@@ -299,6 +299,52 @@ test("verify reads the answer from stdin when --answer - is used", async () => {
   }
 });
 
+test("verify ignores indented markdown code blocks in the answer", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-indented-code-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.md");
+
+    await Promise.all([
+      writeFile(
+        answerPath,
+        `Deployment notes:
+
+    npm run deploy --force
+
+Employees receive 12 weeks of paid parental leave.
+`,
+        "utf8",
+      ),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      summary: Record<string, number>;
+      assessments: Array<{ claim: { text: string } }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.summary.unsupported, 0);
+    assert.deepEqual(
+      report.assessments.map((assessment) => assessment.claim.text),
+      ["Employees receive 12 weeks of paid parental leave."],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify treats no-claim answers as fail-policy matches for needs_review", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-needs-review-"));
 
