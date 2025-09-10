@@ -139,12 +139,20 @@ function parseHtmlSource(content: string): ParsedSource {
     (titleMatch ? decodeHtmlEntities(stripTags(titleMatch[1] ?? "")).trim() : "") ||
     findHtmlMetaContent(normalized, {
       property: ["og:title"],
-      name: ["twitter:title", "title"],
+      name: ["og:title", "twitter:title", "title"],
     }) ||
     (headingMatch ? decodeHtmlEntities(stripTags(headingMatch[1] ?? "")).trim() : "");
   const updatedAt = findHtmlMetaContent(normalized, {
     property: ["article:modified_time", "og:updated_time"],
-    name: ["last-modified", "last_modified", "updated_at", "updatedAt", "date.modified"],
+    name: [
+      "article:modified_time",
+      "og:updated_time",
+      "last-modified",
+      "last_modified",
+      "updated_at",
+      "updatedAt",
+      "date.modified",
+    ],
     httpEquiv: ["last-modified"],
   }) || findHtmlTimeDate(normalized);
   const trustLevel = tryParseTrustLevel(
