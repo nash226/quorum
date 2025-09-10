@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `dfff72e` on 2026-07-02, fix: ignore fenced answer code blocks
+- Latest shipped change: `ce95793` on 2026-07-02, ignore indented answer code blocks
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-02 | [#115](https://github.com/nash226/quorum/pull/115) | ignore indented answer code blocks | `ce95793` |
 | 2026-07-02 | [#114](https://github.com/nash226/quorum/pull/114) | fix: ignore fenced answer code blocks | `dfff72e` |
 | 2026-07-02 | [#113](https://github.com/nash226/quorum/pull/113) | fix: preserve quoted claim continuations | `045f2dd` |
 | 2026-07-02 | [#112](https://github.com/nash226/quorum/pull/112) | fix: support inline numeric-colon claims | `daae353` |
@@ -52,5 +53,4 @@
 | 2026-07-02 | [#110](https://github.com/nash226/quorum/pull/110) | ignore setext headings during claim extraction | `639a14e` |
 | 2026-07-02 | [#109](https://github.com/nash226/quorum/pull/109) | fix: split semicolon-delimited claims | `03d6a73` |
 | 2026-07-02 | [#108](https://github.com/nash226/quorum/pull/108) | highlight primary finding in markdown reports | `52ae76d` |
-| 2026-07-02 | [#107](https://github.com/nash226/quorum/pull/107) | read HTML updated dates from http-equiv metadata | `582ebb3` |
 
