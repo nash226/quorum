@@ -32,10 +32,21 @@ function normalizeAnswer(answer: string): string {
   let previousLineCanContinue = false;
   let previousLineBelongsToMarkdownClaim: boolean = false;
   let activeFenceCharacter: "`" | "~" | undefined;
+  let insideIndentedCodeBlock = false;
 
   for (let index = 0; index < lines.length; index += 1) {
     const rawLine = lines[index] ?? "";
     const line = rawLine.trim();
+
+    if (insideIndentedCodeBlock) {
+      if (line.length === 0) {
+        insideIndentedCodeBlock = false;
+      }
+
+      previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
+      continue;
+    }
 
     if (activeFenceCharacter) {
       if (isClosingFence(line, activeFenceCharacter)) {
@@ -50,6 +61,13 @@ function normalizeAnswer(answer: string): string {
     const openingFenceCharacter = getOpeningFenceCharacter(line);
     if (openingFenceCharacter) {
       activeFenceCharacter = openingFenceCharacter;
+      previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
+      continue;
+    }
+
+    if (isIndentedCodeBlockLine(rawLine, previousLineBelongsToMarkdownClaim)) {
+      insideIndentedCodeBlock = true;
       previousLineCanContinue = false;
       previousLineBelongsToMarkdownClaim = false;
       continue;
@@ -137,6 +155,17 @@ function isClosingFence(line: string, fenceCharacter: "`" | "~"): boolean {
   }
 
   return /^~{3,}\s*$/.test(line);
+}
+
+function isIndentedCodeBlockLine(
+  rawLine: string,
+  previousLineBelongsToMarkdownClaim: boolean,
+): boolean {
+  if (previousLineBelongsToMarkdownClaim) {
+    return false;
+  }
+
+  return /^(?: {4,}|\t)/.test(rawLine);
 }
 
 function isSetextHeading(line: string, lines: string[], currentIndex: number): boolean {
