@@ -156,6 +156,53 @@ test("reads html title and updated date metadata from name attributes when expor
   assert.equal(source.content, "Escalate priority incidents immediately.");
 });
 
+test("reads html title metadata from dublin core name attributes", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<!doctype html>
+<html>
+  <head>
+    <meta name="dcterms.title" content="Benefits Policy Handbook" />
+  </head>
+  <body>
+    <main>
+      <p>Employees receive medical coverage after 30 days.</p>
+    </main>
+  </body>
+</html>`,
+    4,
+  );
+
+  assert.equal(source.title, "Benefits Policy Handbook");
+  assert.equal(source.updatedAt, undefined);
+  assert.equal(source.trustLevel, "medium");
+  assert.equal(source.content, "Employees receive medical coverage after 30 days.");
+});
+
+test("reads html updated dates from dublin core name attributes", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Benefits Policy</title>
+    <meta name="DC.date.modified" content="2026-06-22T11:30:00Z" />
+  </head>
+  <body>
+    <main>
+      <p>Employees receive medical coverage after 30 days.</p>
+    </main>
+  </body>
+</html>`,
+    5,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-06-22T11:30:00Z");
+  assert.equal(source.trustLevel, "medium");
+  assert.match(source.content, /Employees receive medical coverage after 30 days\./);
+});
+
 test("falls back to the first html heading when title metadata is absent", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/vacation-policy.html",
@@ -168,7 +215,7 @@ test("falls back to the first html heading when title metadata is absent", async
     </main>
   </body>
 </html>`,
-    4,
+    6,
   );
 
   assert.equal(source.title, "Vacation Policy");
@@ -194,7 +241,7 @@ test("falls back to a time datetime attribute when html update metadata is absen
     </main>
   </body>
 </html>`,
-    5,
+    7,
   );
 
   assert.equal(source.title, "Benefits Policy");
@@ -219,7 +266,7 @@ test("reads html updated dates from http-equiv metadata", async () => {
     </main>
   </body>
 </html>`,
-    6,
+    8,
   );
 
   assert.equal(source.title, "Benefits Policy");
@@ -243,7 +290,7 @@ test("decodes numeric html entities from exported html sources", async () => {
     </main>
   </body>
 </html>`,
-    7,
+    9,
   );
 
   assert.equal(source.title, "Benefits — US");
@@ -266,7 +313,7 @@ test("decodes common named html entities from exported html sources", async () =
     </main>
   </body>
 </html>`,
-    8,
+    10,
   );
 
   assert.equal(source.title, "Support & Escalations — North America");
@@ -284,7 +331,7 @@ test("falls back to the html file name when the page has no title", async () => 
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.htm",
     "<html><body><p>Escalate priority incidents immediately.</p></body></html>",
-    9,
+    11,
   );
 
   assert.equal(source.title, "escalations");
