@@ -179,6 +179,29 @@ test("reads html title metadata from dublin core name attributes", async () => {
   assert.equal(source.content, "Employees receive medical coverage after 30 days.");
 });
 
+test("reads html title metadata from itemprop attributes", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<!doctype html>
+<html>
+  <head>
+    <meta itemprop="headline" content="Benefits Policy Handbook" />
+  </head>
+  <body>
+    <main>
+      <p>Employees receive medical coverage after 30 days.</p>
+    </main>
+  </body>
+</html>`,
+    5,
+  );
+
+  assert.equal(source.title, "Benefits Policy Handbook");
+  assert.equal(source.updatedAt, undefined);
+  assert.equal(source.trustLevel, "medium");
+  assert.equal(source.content, "Employees receive medical coverage after 30 days.");
+});
+
 test("reads html updated dates from dublin core name attributes", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/benefits.html",
@@ -203,6 +226,30 @@ test("reads html updated dates from dublin core name attributes", async () => {
   assert.match(source.content, /Employees receive medical coverage after 30 days\./);
 });
 
+test("reads html updated dates from itemprop attributes", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Benefits Policy</title>
+    <meta itemprop="dateModified" content="2026-06-23T09:45:00Z" />
+  </head>
+  <body>
+    <main>
+      <p>Employees receive medical coverage after 30 days.</p>
+    </main>
+  </body>
+</html>`,
+    6,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-06-23T09:45:00Z");
+  assert.equal(source.trustLevel, "medium");
+  assert.match(source.content, /Employees receive medical coverage after 30 days\./);
+});
+
 test("falls back to the first html heading when title metadata is absent", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/vacation-policy.html",
@@ -215,7 +262,7 @@ test("falls back to the first html heading when title metadata is absent", async
     </main>
   </body>
 </html>`,
-    6,
+    7,
   );
 
   assert.equal(source.title, "Vacation Policy");
@@ -241,7 +288,7 @@ test("falls back to a time datetime attribute when html update metadata is absen
     </main>
   </body>
 </html>`,
-    7,
+    8,
   );
 
   assert.equal(source.title, "Benefits Policy");
@@ -266,7 +313,7 @@ test("reads html updated dates from http-equiv metadata", async () => {
     </main>
   </body>
 </html>`,
-    8,
+    9,
   );
 
   assert.equal(source.title, "Benefits Policy");
@@ -290,7 +337,7 @@ test("decodes numeric html entities from exported html sources", async () => {
     </main>
   </body>
 </html>`,
-    9,
+    10,
   );
 
   assert.equal(source.title, "Benefits — US");
@@ -313,7 +360,7 @@ test("decodes common named html entities from exported html sources", async () =
     </main>
   </body>
 </html>`,
-    10,
+    11,
   );
 
   assert.equal(source.title, "Support & Escalations — North America");
