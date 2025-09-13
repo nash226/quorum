@@ -118,6 +118,7 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
     `- Contradicted: ${report.summary.contradicted}`,
     `- Unsupported: ${report.summary.unsupported}`,
     `- Needs review: ${report.summary.needs_review}`,
+    `- Answers with no extracted claims: ${report.summary.answersWithoutClaims}`,
     `- Answers matching fail policy: ${report.summary.answersWithFailures}`,
     "",
     "## Sources",
@@ -1179,6 +1180,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
     ["Contradicted", report.summary.contradicted, "contradicted"],
     ["Unsupported", report.summary.unsupported, "unsupported"],
     ["Needs Review", report.summary.needs_review, "needs_review"],
+    ["No Claims", report.summary.answersWithoutClaims, "no_claims"],
   ] as const)
     .map(
       ([label, value, tone]) => `
@@ -1502,6 +1504,11 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
         background: var(--needs-review-soft);
       }
 
+      .summary-card--no_claims {
+        border-color: rgba(90, 74, 46, 0.18);
+        background: rgba(242, 235, 223, 0.95);
+      }
+
       .answers-section {
         margin-top: 32px;
       }
@@ -1749,6 +1756,10 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
           <section class="hero__meta-card">
             <span>Fail policy matches</span>
             <strong>${report.summary.answersWithFailures} answers</strong>
+          </section>
+          <section class="hero__meta-card">
+            <span>No extracted claims</span>
+            <strong>${report.summary.answersWithoutClaims} answers</strong>
           </section>
         </div>
         <div class="summary-grid">

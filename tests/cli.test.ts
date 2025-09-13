@@ -631,6 +631,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     );
     assert.deepEqual(report.answers.map((answer) => answer.failVerdicts), [[], []]);
     assert.equal(report.summary.verified, 2);
+    assert.equal(report.summary.answersWithoutClaims, 0);
     assert.equal(report.summary.answersWithFailures, 0);
 
     const savedReport = JSON.parse(await readFile(batchOutPath, "utf8")) as typeof report;
@@ -1350,6 +1351,7 @@ test("verify-batch prints an explicit empty state in the default text output", a
 
     assert.match(stdout, /Primary finding: needs review/);
     assert.match(stdout, /Primary reason: No claims were extracted from this answer\./);
+    assert.match(stdout, /Answers with no extracted claims: 1/);
     assert.match(stdout, /No claims were extracted from this answer\./);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -1394,10 +1396,11 @@ test("verify-batch treats no-claim answers as fail-policy matches for needs_revi
     assert.equal(result.code, 2);
 
     const report = JSON.parse(result.stdout) as {
-      summary: { answersWithFailures: number };
+      summary: { answersWithoutClaims: number; answersWithFailures: number };
       answers: Array<{ shouldFail: boolean; failVerdicts: string[] }>;
     };
 
+    assert.equal(report.summary.answersWithoutClaims, 1);
     assert.equal(report.summary.answersWithFailures, 1);
     assert.equal(report.answers[0]?.shouldFail, true);
     assert.deepEqual(report.answers[0]?.failVerdicts, ["needs_review"]);
