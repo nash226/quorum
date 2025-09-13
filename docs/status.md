@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `edd8555` on 2026-07-02, support html itemprop metadata
+- Latest shipped change: `11b34ba` on 2026-07-02, feat: surface no-claim counts in batch summaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-02 | [#120](https://github.com/nash226/quorum/pull/120) | feat: surface no-claim counts in batch summaries | `11b34ba` |
 | 2026-07-02 | [#119](https://github.com/nash226/quorum/pull/119) | support html itemprop metadata | `edd8555` |
 | 2026-07-02 | [#118](https://github.com/nash226/quorum/pull/118) | reject empty source sets | `42a96b9` |
 | 2026-07-02 | [#117](https://github.com/nash226/quorum/pull/117) | support dublin core html metadata | `616165e` |
@@ -52,5 +53,4 @@
 | 2026-07-02 | [#115](https://github.com/nash226/quorum/pull/115) | ignore indented answer code blocks | `ce95793` |
 | 2026-07-02 | [#114](https://github.com/nash226/quorum/pull/114) | fix: ignore fenced answer code blocks | `dfff72e` |
 | 2026-07-02 | [#113](https://github.com/nash226/quorum/pull/113) | fix: preserve quoted claim continuations | `045f2dd` |
-| 2026-07-02 | [#112](https://github.com/nash226/quorum/pull/112) | fix: support inline numeric-colon claims | `daae353` |
 
