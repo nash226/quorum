@@ -8,6 +8,7 @@ const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
 const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 const UNICODE_BULLET_PREFIX = /^(?:[\u2022\u2023\u25E6\u2043\u2219])\s+/;
 const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
+const DEFINITION_LIST_PREFIX = /^:\s+/;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
@@ -73,7 +74,12 @@ function normalizeAnswer(answer: string): string {
       continue;
     }
 
-    if (line.length === 0 || isHeading(line) || isSetextHeading(line, lines, index)) {
+    if (
+      line.length === 0 ||
+      isHeading(line) ||
+      isSetextHeading(line, lines, index) ||
+      isDefinitionListTerm(line, lines, index)
+    ) {
       previousLineCanContinue = false;
       continue;
     }
@@ -190,6 +196,24 @@ function isSetextHeadingUnderline(line: string): boolean {
   return /^(?:={2,}|-{2,})$/.test(line);
 }
 
+function isDefinitionListTerm(line: string, lines: string[], currentIndex: number): boolean {
+  if (DEFINITION_LIST_PREFIX.test(line)) {
+    return false;
+  }
+
+  for (let index = currentIndex + 1; index < lines.length; index += 1) {
+    const nextLine = (lines[index] ?? "").trim();
+
+    if (nextLine.length === 0) {
+      continue;
+    }
+
+    return DEFINITION_LIST_PREFIX.test(nextLine);
+  }
+
+  return false;
+}
+
 function stripOneMarkdownClaimPrefix(line: string): string {
   const directPrefixes = [
     /^>\s*/,
@@ -201,6 +225,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     /^\(\d+\)\s+/,
     /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
     /^\[[ xX]\]\s+/,
+    DEFINITION_LIST_PREFIX,
   ];
 
   for (const prefix of directPrefixes) {
