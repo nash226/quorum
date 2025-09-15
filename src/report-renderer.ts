@@ -159,7 +159,7 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
       ...(primaryAssessment
         ? [
             `- Primary claim: ${primaryAssessment.claim.text}`,
-            `- Primary evidence: ${primaryAssessment.evidence[0]?.documentTitle ?? "No approved source snippet matched strongly enough."}`,
+            `- Primary evidence: ${renderMarkdownPrimaryEvidenceLabel(primaryAssessment.evidence[0] ?? null)}`,
           ]
         : []),
       "",
@@ -1929,6 +1929,19 @@ function renderMarkdownPrimaryEvidenceLabel(evidence: {
   }
 
   return `**${evidence.documentTitle}** (${renderEvidenceMetadata(evidence)})`;
+}
+
+export function renderTextPrimaryEvidenceLabel(evidence: {
+  documentTitle: string;
+  documentTrustLevel: string;
+  documentUpdatedAt?: string;
+  score: number;
+} | null): string {
+  if (!evidence) {
+    return "No approved source snippet matched strongly enough.";
+  }
+
+  return renderEvidenceLabel(evidence);
 }
 
 function renderReviewConsoleAssessmentRow(
