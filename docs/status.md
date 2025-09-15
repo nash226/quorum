@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ff33c19` on 2026-07-03, reject repeated batch stdin answers
+- Latest shipped change: `4083694` on 2026-07-03, enrich batch primary evidence summaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-03 | [#122](https://github.com/nash226/quorum/pull/122) | enrich batch primary evidence summaries | `4083694` |
 | 2026-07-03 | [#121](https://github.com/nash226/quorum/pull/121) | reject repeated batch stdin answers | `ff33c19` |
 | 2026-07-02 | [#120](https://github.com/nash226/quorum/pull/120) | feat: surface no-claim counts in batch summaries | `11b34ba` |
 | 2026-07-02 | [#119](https://github.com/nash226/quorum/pull/119) | support html itemprop metadata | `edd8555` |
@@ -52,5 +53,4 @@
 | 2026-07-02 | [#117](https://github.com/nash226/quorum/pull/117) | support dublin core html metadata | `616165e` |
 | 2026-07-02 | [#116](https://github.com/nash226/quorum/pull/116) | fix: read html meta name fallbacks | `539c283` |
 | 2026-07-02 | [#115](https://github.com/nash226/quorum/pull/115) | ignore indented answer code blocks | `ce95793` |
-| 2026-07-02 | [#114](https://github.com/nash226/quorum/pull/114) | fix: ignore fenced answer code blocks | `dfff72e` |
 
