@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0920e08` on 2026-07-03, support markdown definition list claims
+- Latest shipped change: `b28e4b6` on 2026-07-03, support markdown table claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-03 | [#124](https://github.com/nash226/quorum/pull/124) | support markdown table claims | `b28e4b6` |
 | 2026-07-03 | [#123](https://github.com/nash226/quorum/pull/123) | support markdown definition list claims | `0920e08` |
 | 2026-07-03 | [#122](https://github.com/nash226/quorum/pull/122) | enrich batch primary evidence summaries | `4083694` |
 | 2026-07-03 | [#121](https://github.com/nash226/quorum/pull/121) | reject repeated batch stdin answers | `ff33c19` |
@@ -52,5 +53,4 @@
 | 2026-07-02 | [#119](https://github.com/nash226/quorum/pull/119) | support html itemprop metadata | `edd8555` |
 | 2026-07-02 | [#118](https://github.com/nash226/quorum/pull/118) | reject empty source sets | `42a96b9` |
 | 2026-07-02 | [#117](https://github.com/nash226/quorum/pull/117) | support dublin core html metadata | `616165e` |
-| 2026-07-02 | [#116](https://github.com/nash226/quorum/pull/116) | fix: read html meta name fallbacks | `539c283` |
 
