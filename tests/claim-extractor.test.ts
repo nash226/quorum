@@ -100,6 +100,38 @@ Support policy
   );
 });
 
+test("extracts clean claims from markdown table answers", () => {
+  const claims = extractClaims(`| Policy | Details |
+| --- | --- |
+| Parental leave | Employees receive 12 weeks of paid parental leave. |
+| Healthcare | Coverage begins after 30 days of employment. |
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Parental leave: Employees receive 12 weeks of paid parental leave.",
+      "Healthcare: Coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
+test("extracts markdown tables without trailing pipe punctuation noise", () => {
+  const claims = extractClaims(`| Queue | Policy |
+| --- | --- |
+| Refunds | Customers can request refunds within 30 days |
+| Escalations | Managers approve exceptions within two business days |
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Refunds: Customers can request refunds within 30 days",
+      "Escalations: Managers approve exceptions within two business days",
+    ],
+  );
+});
+
 test("keeps wrapped blockquote lines as a single claim", () => {
   const claims = extractClaims(`## Support Notes
 
