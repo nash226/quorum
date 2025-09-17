@@ -10,6 +10,7 @@ const UNICODE_BULLET_PREFIX = /^(?:[\u2022\u2023\u25E6\u2043\u2219])\s+/;
 const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
 const DEFINITION_LIST_PREFIX = /^:\s+/;
 const MARKDOWN_TABLE_SEPARATOR_CELL = /^:?-{3,}:?$/;
+const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
@@ -238,6 +239,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     /^\(\d+\)\s+/,
     /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
     /^\[[ xX]\]\s+/,
+    MARKDOWN_CALLOUT_PREFIX,
     DEFINITION_LIST_PREFIX,
   ];
 
