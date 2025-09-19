@@ -221,7 +221,11 @@ function isIndentedCodeBlockLine(
 
 function isSetextHeading(line: string, lines: string[], currentIndex: number): boolean {
   if (isSetextHeadingUnderline(line)) {
-    return true;
+    return hasSetextHeadingContentAbove(lines, currentIndex);
+  }
+
+  if (!isSetextHeadingText(line)) {
+    return false;
   }
 
   for (let index = currentIndex + 1; index < lines.length; index += 1) {
@@ -239,6 +243,24 @@ function isSetextHeading(line: string, lines: string[], currentIndex: number): b
 
 function isSetextHeadingUnderline(line: string): boolean {
   return /^(?:={2,}|-{2,})$/.test(line);
+}
+
+function hasSetextHeadingContentAbove(lines: string[], currentIndex: number): boolean {
+  for (let index = currentIndex - 1; index >= 0; index -= 1) {
+    const previousLine = (lines[index] ?? "").trim();
+
+    if (previousLine.length === 0) {
+      continue;
+    }
+
+    return isSetextHeadingText(previousLine);
+  }
+
+  return false;
+}
+
+function isSetextHeadingText(line: string): boolean {
+  return !/[.!?]$/.test(line);
 }
 
 function isDefinitionListTerm(line: string, lines: string[], currentIndex: number): boolean {
