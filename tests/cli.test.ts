@@ -206,6 +206,64 @@ test("verify matches claims against html sources with named entities", async () 
   }
 });
 
+test("verify-batch discovers html answers from answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourcePath = join(tempDir, "support-policy.md");
+
+    await mkdir(answerDir, { recursive: true });
+    await Promise.all([
+      writeFile(
+        join(answerDir, "support-answer.html"),
+        `<!doctype html>
+<html>
+  <body>
+    <details>
+      <summary>Support policy</summary>
+      <ul>
+        <li>Customers&rsquo; refund requests require manager review after 30 days.</li>
+      </ul>
+    </details>
+  </body>
+</html>`,
+        "utf8",
+      ),
+      writeFile(
+        sourcePath,
+        "Customers’ refund requests require manager review after 30 days.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      summary: { verified: number };
+      answers: Array<{ answerPath: string; report: { assessments: Array<{ claim: { text: string } }> } }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.match(report.answers[0]?.answerPath ?? "", /support-answer\.html$/);
+    assert.deepEqual(
+      report.answers[0]?.report.assessments.map((assessment) => assessment.claim.text),
+      ["Customers’ refund requests require manager review after 30 days."],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims extracted from markdown table answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-table-answer-"));
 
