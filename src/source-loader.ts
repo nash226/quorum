@@ -260,6 +260,9 @@ function normalizeHtmlText(content: string): string {
     content
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+      .replace(/<table\b[^>]*>[\s\S]*?<\/table>/gi, (tableMarkup: string) =>
+        normalizeHtmlTableMarkup(tableMarkup),
+      )
       .replace(/<(br|\/p|\/div|\/li|\/section|\/article|\/h[1-6])\b[^>]*>/gi, "\n")
       .replace(/<li\b[^>]*>/gi, "- ")
       .replace(/<\/?(p|div|ul|ol|section|article|main|header|footer|aside|body|html)\b[^>]*>/gi, "\n")
@@ -270,6 +273,50 @@ function normalizeHtmlText(content: string): string {
     .join("\n")
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
+}
+
+function normalizeHtmlTableMarkup(tableMarkup: string): string {
+  const rows = Array.from(tableMarkup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi))
+    .map((match) => normalizeHtmlTableRow(match[1] ?? ""))
+    .filter((row): row is string => Boolean(row));
+
+  return rows.join("\n");
+}
+
+function normalizeHtmlTableRow(rowMarkup: string): string | undefined {
+  const cells = Array.from(rowMarkup.matchAll(/<(th|td)\b[^>]*>([\s\S]*?)<\/\1>/gi)).map(
+    (match) => ({
+      kind: (match[1] ?? "").toLowerCase(),
+      text: normalizeHtmlTableCell(match[2] ?? ""),
+    }),
+  );
+
+  const populatedCells = cells.filter((cell) => cell.text.length > 0);
+  if (populatedCells.length < 2) {
+    return undefined;
+  }
+
+  if (populatedCells.every((cell) => cell.kind === "th")) {
+    return undefined;
+  }
+
+  const [firstCell, ...otherCells] = populatedCells.map((cell) => cell.text);
+  if (!firstCell) {
+    return otherCells.join("; ");
+  }
+
+  return `${firstCell}: ${otherCells.join("; ")}`;
+}
+
+function normalizeHtmlTableCell(cellMarkup: string): string {
+  return decodeHtmlEntities(
+    cellMarkup
+      .replace(/<br\b[^>]*\/?>/gi, "\n")
+      .replace(/<[^>]+>/g, " "),
+  )
+    .replace(/\s*\n\s*/g, " ")
     .replace(/[ \t]{2,}/g, " ")
     .trim();
 }
