@@ -14,7 +14,7 @@ const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
 const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
 const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
 const HTML_ANSWER_MARKUP_PATTERN =
-  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|script|style)\b/i;
+  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|thead|tbody|tfoot|tr|td|th|script|style)\b/i;
 const HTML_BLOCK_BREAK_TAGS =
   /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/details|\/h[1-6])\b[^>]*>/gi;
 const HTML_BLOCK_TAGS =
@@ -212,6 +212,9 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
       .replace(/<!doctype[^>]*>/gi, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+      .replace(/<table\b[^>]*>[\s\S]*?<\/table>/gi, (tableMarkup: string) =>
+        normalizeHtmlTableMarkup(tableMarkup),
+      )
       .replace(
         /<summary\b[^>]*>([\s\S]*?)<\/summary>/gi,
         (_match, summaryContent: string) => `${summaryContent.trim()}:\n`,
@@ -224,6 +227,50 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .replace(/[ \t]{2,}/g, " ");
+}
+
+function normalizeHtmlTableMarkup(tableMarkup: string): string {
+  const rows = Array.from(tableMarkup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi))
+    .map((match) => normalizeHtmlTableRow(match[1] ?? ""))
+    .filter((row): row is string => Boolean(row));
+
+  return rows.join("\n");
+}
+
+function normalizeHtmlTableRow(rowMarkup: string): string | undefined {
+  const cells = Array.from(rowMarkup.matchAll(/<(th|td)\b[^>]*>([\s\S]*?)<\/\1>/gi)).map(
+    (match) => ({
+      kind: (match[1] ?? "").toLowerCase(),
+      text: normalizeHtmlTableCell(match[2] ?? ""),
+    }),
+  );
+
+  const populatedCells = cells.filter((cell) => cell.text.length > 0);
+  if (populatedCells.length < 2) {
+    return undefined;
+  }
+
+  if (populatedCells.every((cell) => cell.kind === "th")) {
+    return undefined;
+  }
+
+  const [firstCell, ...otherCells] = populatedCells.map((cell) => cell.text);
+  if (!firstCell) {
+    return otherCells.join("; ");
+  }
+
+  return `${firstCell}: ${otherCells.join("; ")}`;
+}
+
+function normalizeHtmlTableCell(cellMarkup: string): string {
+  return decodeHtmlEntities(
+    cellMarkup
+      .replace(/<br\b[^>]*\/?>/gi, "\n")
+      .replace(/<[^>]+>/g, " "),
+  )
+    .replace(/\s*\n\s*/g, " ")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
 }
 
 function stripMarkdownClaimPrefix(line: string): string {

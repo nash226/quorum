@@ -298,6 +298,38 @@ test("falls back to a time datetime attribute when html update metadata is absen
   assert.match(source.content, /Employees receive medical coverage after 30 days\./);
 });
 
+test("extracts readable text from html table sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Benefits Policy</title>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr><th>Policy</th><th>Details</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Parental leave</td><td>Employees receive 12 weeks of paid parental leave.</td></tr>
+        <tr><td>Healthcare</td><td>Coverage begins after 30 days of employment.</td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>`,
+    9,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.match(source.content, /Benefits Policy/);
+  assert.match(
+    source.content,
+    /Parental leave: Employees receive 12 weeks of paid parental leave\./,
+  );
+  assert.match(source.content, /Healthcare: Coverage begins after 30 days of employment\./);
+});
+
 test("reads html updated dates from http-equiv metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/benefits.html",
