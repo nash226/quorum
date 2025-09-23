@@ -322,6 +322,68 @@ Coverage begins after 30 days of employment.
   }
 });
 
+test("verify strips inline html formatting from html answers before matching", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-inline-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.html");
+    const sourcePath = join(tempDir, "hr-policy.md");
+
+    await Promise.all([
+      writeFile(
+        answerPath,
+        `<!doctype html>
+<html>
+  <body>
+    <p>Employees receive <a href="/policy">12 weeks of paid parental leave</a> for full-time staff.</p>
+    <p><strong>Managers</strong> approve exceptions within <em>five business days</em>.</p>
+  </body>
+</html>`,
+        "utf8",
+      ),
+      writeFile(
+        sourcePath,
+        [
+          "Employees receive 12 weeks of paid parental leave for full-time staff.",
+          "Managers approve exceptions within five business days.",
+          "",
+        ].join("\n"),
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      summary: Record<string, number>;
+      assessments: Array<{ claim: { text: string }; verdict: string }>;
+    };
+
+    assert.deepEqual(report.summary, {
+      verified: 2,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+    assert.deepEqual(
+      report.assessments.map((assessment) => assessment.claim.text),
+      [
+        "Employees receive 12 weeks of paid parental leave for full-time staff.",
+        "Managers approve exceptions within five business days.",
+      ],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims extracted from html table answers against html table sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-table-answer-"));
 
