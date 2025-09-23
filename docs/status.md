@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `506e812` on 2026-07-03, support html table claims
+- Latest shipped change: `5c8bc3f` on 2026-07-03, fix: strip inline html tags from answer claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-03 | [#133](https://github.com/nash226/quorum/pull/133) | fix: strip inline html tags from answer claims | `5c8bc3f` |
 | 2026-07-03 | [#132](https://github.com/nash226/quorum/pull/132) | support html table claims | `506e812` |
 | 2026-07-03 | [#131](https://github.com/nash226/quorum/pull/131) | feat: support html answer inputs | `ec09416` |
 | 2026-07-03 | [#130](https://github.com/nash226/quorum/pull/130) | strip reference links from extracted claims | `b7380dc` |
@@ -52,5 +53,4 @@
 | 2026-07-03 | [#128](https://github.com/nash226/quorum/pull/128) | preserve claims before markdown separators | `42017c2` |
 | 2026-07-03 | [#127](https://github.com/nash226/quorum/pull/127) | ignore markdown metadata lines in claim extraction | `0f4cb62` |
 | 2026-07-03 | [#126](https://github.com/nash226/quorum/pull/126) | support escaped pipes in markdown tables | `a48d534` |
-| 2026-07-03 | [#125](https://github.com/nash226/quorum/pull/125) | support markdown callout claims | `4bc5816` |
 
