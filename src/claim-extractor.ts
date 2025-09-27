@@ -212,6 +212,7 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
   return decodeHtmlEntities(
     answer
       .replace(/<!doctype[^>]*>/gi, " ")
+      .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, " ")
       .replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
