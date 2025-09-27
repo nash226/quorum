@@ -17,6 +17,9 @@ interface SourceDocumentOptions {
   defaultTrustLevel?: SourceTrustLevel;
 }
 
+const HTML_PAGE_CHROME_PATTERN =
+  /<(nav|form|button|select|textarea|template|noscript|svg)\b[^>]*>[\s\S]*?<\/\1>/gi;
+
 export function sourceDocumentFromFile(
   sourcePath: string,
   content: string,
@@ -258,6 +261,7 @@ function parseHtmlAttributes(tag: string): Record<string, string> {
 function normalizeHtmlText(content: string): string {
   return decodeHtmlEntities(
     content
+      .replace(HTML_PAGE_CHROME_PATTERN, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
       .replace(/<dl\b[^>]*>[\s\S]*?<\/dl>/gi, (descriptionListMarkup: string) =>
