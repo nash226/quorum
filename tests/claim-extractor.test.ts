@@ -877,6 +877,28 @@ test("strips inline html formatting and links from html answer claims", () => {
   );
 });
 
+test("ignores html head metadata before html answer claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <head>
+    <title>HR Policy Summary</title>
+    <meta name="description" content="Internal answer draft" />
+  </head>
+  <body>
+    <p>Employees receive 12 weeks of paid parental leave.</p>
+    <p>Managers approve exceptions within five business days.</p>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve exceptions within five business days.",
+    ],
+  );
+});
+
 test("strips inline-only html fragments before extracting claims", () => {
   const claims = extractClaims(`
 <a href="/policy">Employees receive 12 weeks of paid parental leave.</a>
