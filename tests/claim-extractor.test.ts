@@ -196,6 +196,44 @@ test("extracts clean claims from html description list answers", () => {
   );
 });
 
+test("extracts claims from html figure captions", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <figure>
+      <img src="/leave-policy.png" alt="Leave policy summary" />
+      <figcaption>Employees receive 12 weeks of paid parental leave.</figcaption>
+    </figure>
+  </body>
+</html>`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+  ]);
+});
+
+test("extracts table captions alongside html table row claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <table>
+      <caption>Support response targets.</caption>
+      <thead>
+        <tr><th>Queue</th><th>Policy</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Enterprise</td><td>First response arrives within four business hours.</td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Support response targets.",
+    "Enterprise: First response arrives within four business hours.",
+  ]);
+});
+
 test("keeps escaped pipes inside markdown table cells", () => {
   const claims = extractClaims(`| Policy | Details |
 | --- | --- |
