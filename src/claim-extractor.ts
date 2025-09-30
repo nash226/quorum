@@ -13,6 +13,7 @@ const MARKDOWN_TABLE_SEPARATOR_CELL = /^:?-{3,}:?$/;
 const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
 const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
 const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
+const MARKDOWN_TABLE_HTML_BREAK_PLACEHOLDER = "__QUORUM_TABLE_HTML_BREAK__";
 const HTML_ANSWER_MARKUP_PATTERN =
   /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code|script|style)\b/i;
 const HTML_PAGE_CHROME_PATTERN =
@@ -44,7 +45,9 @@ function splitCompoundClaim(sentence: string): string[] {
 }
 
 function normalizeAnswer(answer: string): string {
-  const lines = normalizeHtmlAnswerMarkup(answer).replace(/\r/g, "").split("\n");
+  const lines = normalizeHtmlAnswerMarkup(protectMarkdownTableHtmlBreaks(answer))
+    .replace(/\r/g, "")
+    .split("\n");
   const normalizedLines: string[] = [];
   let previousLineCanContinue = false;
   let previousLineBelongsToMarkdownClaim: boolean = false;
@@ -204,6 +207,18 @@ function normalizeAnswer(answer: string): string {
   }
 
   return normalizedLines.join("\n");
+}
+
+function protectMarkdownTableHtmlBreaks(answer: string): string {
+  return answer
+    .replace(/\r/g, "")
+    .split("\n")
+    .map((line) =>
+      line.includes("|")
+        ? line.replace(/<br\b[^>]*\/?>/gi, MARKDOWN_TABLE_HTML_BREAK_PLACEHOLDER)
+        : line,
+    )
+    .join("\n");
 }
 
 function normalizeHtmlAnswerMarkup(answer: string): string {
@@ -743,7 +758,20 @@ function normalizeMarkdownTableRow(
     return undefined;
   }
 
-  const [firstCell, ...otherCells] = cells;
+  const [rawFirstCell, ...rawOtherCells] = cells;
+  const firstCell = rawFirstCell ? normalizeMarkdownTableCell(rawFirstCell) : "";
+
+  if (rawOtherCells.length === 1 && rawOtherCells[0]?.includes(MARKDOWN_TABLE_HTML_BREAK_PLACEHOLDER)) {
+    const fragments = splitMarkdownTableCellFragments(rawOtherCells[0]);
+
+    if (!firstCell) {
+      return fragments.join("\n");
+    }
+
+    return fragments.map((fragment) => `${firstCell}: ${fragment}`).join("\n");
+  }
+
+  const otherCells = rawOtherCells.map(normalizeMarkdownTableCell);
   if (!firstCell) {
     return otherCells.join("; ");
   }
@@ -753,6 +781,19 @@ function normalizeMarkdownTableRow(
   }
 
   return `${firstCell}: ${otherCells.join("; ")}`;
+}
+
+function normalizeMarkdownTableCell(cell: string): string {
+  return normalizeHtmlTableCell(
+    cell.replaceAll(MARKDOWN_TABLE_HTML_BREAK_PLACEHOLDER, "<br>"),
+  );
+}
+
+function splitMarkdownTableCellFragments(cell: string): string[] {
+  return cell
+    .split(MARKDOWN_TABLE_HTML_BREAK_PLACEHOLDER)
+    .map(normalizeMarkdownTableCell)
+    .filter(Boolean);
 }
 
 function parseMarkdownTableCells(line: string): string[] | undefined {

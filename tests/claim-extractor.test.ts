@@ -147,6 +147,24 @@ test("extracts markdown tables without trailing pipe punctuation noise", () => {
   );
 });
 
+test("extracts markdown table claims when cells use inline html line breaks", () => {
+  const claims = extractClaims(`| Policy | Details |
+| --- | --- |
+| Parental leave | Employees receive 12 weeks of paid parental leave.<br>For full-time staff only. |
+| Support | Managers approve billing exceptions within five business days.<br />Escalations require director review after that. |
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Parental leave: Employees receive 12 weeks of paid parental leave.",
+      "Parental leave: For full-time staff only.",
+      "Support: Managers approve billing exceptions within five business days.",
+      "Support: Escalations require director review after that.",
+    ],
+  );
+});
+
 test("extracts clean claims from html table answers", () => {
   const claims = extractClaims(`<!doctype html>
 <html>
