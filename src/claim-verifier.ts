@@ -184,6 +184,13 @@ function compareEvidenceCandidates(left: CandidateEvidence, right: CandidateEvid
     return trustDelta;
   }
 
+  const freshnessDelta =
+    evidenceUpdatedAtRank(right.documentUpdatedAt) - evidenceUpdatedAtRank(left.documentUpdatedAt);
+
+  if (freshnessDelta !== 0) {
+    return freshnessDelta;
+  }
+
   return scoreDelta;
 }
 
@@ -196,6 +203,15 @@ function trustLevelRank(trustLevel: SourceTrustLevel): number {
     case "low":
       return 1;
   }
+}
+
+function evidenceUpdatedAtRank(updatedAt?: string): number {
+  if (!updatedAt) {
+    return Number.NEGATIVE_INFINITY;
+  }
+
+  const timestamp = Date.parse(updatedAt);
+  return Number.isNaN(timestamp) ? Number.NEGATIVE_INFINITY : timestamp;
 }
 
 function summarize(assessments: ClaimAssessment[]): Record<ClaimVerdict, number> {
