@@ -165,6 +165,31 @@ test("ignores html dialog chrome in exported html sources", async () => {
   assert.doesNotMatch(source.content, /Answer copied to clipboard|Dismiss/);
 });
 
+test("ignores html comments in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <main>
+      <p>Customers can request refunds within 30 days.</p>
+      <!-- internal note: route > legal before updating annual-plan exceptions -->
+      <p>Annual plans require support approval.</p>
+    </main>
+  </body>
+</html>`,
+    4,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /Annual plans require support approval\./);
+  assert.doesNotMatch(source.content, /route|legal|annual-plan exceptions/);
+});
+
 test("preserves html figure and table captions in exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/support.html",
