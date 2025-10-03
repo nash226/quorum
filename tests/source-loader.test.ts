@@ -190,6 +190,35 @@ test("ignores html comments in exported html sources", async () => {
   assert.doesNotMatch(source.content, /route|legal|annual-plan exceptions/);
 });
 
+test("preserves html details summaries as readable source section labels", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <main>
+      <details open>
+        <summary>Refund exceptions</summary>
+        <p>Customers can request refunds within 30 days.</p>
+        <ul>
+          <li>Annual plans require support approval.</li>
+        </ul>
+      </details>
+    </main>
+  </body>
+</html>`,
+    5,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Refund exceptions:/);
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /- Annual plans require support approval\./);
+});
+
 test("preserves html figure and table captions in exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/support.html",
