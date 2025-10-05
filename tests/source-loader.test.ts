@@ -198,6 +198,39 @@ test("ignores html dialog chrome in exported html sources", async () => {
   assert.doesNotMatch(source.content, /Answer copied to clipboard|Dismiss/);
 });
 
+test("ignores hidden html chrome in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <div hidden>
+      <p>Knowledge base navigation</p>
+    </div>
+    <aside aria-hidden="true">
+      <p>Cookie preferences</p>
+    </aside>
+    <section inert>
+      <p>Copied to clipboard</p>
+    </section>
+    <main>
+      <p>Customers can request refunds within 30 days.</p>
+      <p>Annual plans require support approval.</p>
+    </main>
+  </body>
+</html>`,
+    4,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /Annual plans require support approval\./);
+  assert.doesNotMatch(source.content, /Knowledge base navigation|Cookie preferences|Copied to clipboard/);
+});
+
 test("ignores html comments in exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",
@@ -349,7 +382,7 @@ test("reads html title metadata from dublin core name attributes", async () => {
     </main>
   </body>
 </html>`,
-    4,
+    5,
   );
 
   assert.equal(source.title, "Benefits Policy Handbook");
@@ -372,7 +405,7 @@ test("reads html title metadata from itemprop attributes", async () => {
     </main>
   </body>
 </html>`,
-    5,
+    6,
   );
 
   assert.equal(source.title, "Benefits Policy Handbook");
