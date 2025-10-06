@@ -18,6 +18,11 @@ const HTML_ANSWER_MARKUP_PATTERN =
   /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code|script|style)\b/i;
 const HTML_PAGE_CHROME_PATTERN =
   /<(nav|form|button|select|textarea|template|noscript|svg|dialog|header|footer|aside)\b[^>]*>[\s\S]*?<\/\1>/gi;
+const HTML_HIDDEN_SECTION_PATTERNS = [
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\shidden(?:\s|=|>|\/))[^>]*>[\s\S]*?<\/\1>/gi,
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\sinert(?:\s|=|>|\/))[^>]*>[\s\S]*?<\/\1>/gi,
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\saria-hidden\s*=\s*["']?true["']?)[^>]*>[\s\S]*?<\/\1>/gi,
+];
 const HTML_BLOCK_BREAK_TAGS =
   /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/details|\/figure|\/figcaption|\/h[1-6])\b[^>]*>/gi;
 const HTML_BLOCK_TAGS =
@@ -226,8 +231,13 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
     return answer;
   }
 
+  const answerWithoutHiddenChrome = HTML_HIDDEN_SECTION_PATTERNS.reduce(
+    (normalizedAnswer, pattern) => normalizedAnswer.replace(pattern, " "),
+    answer,
+  );
+
   return decodeHtmlEntities(
-    answer
+    answerWithoutHiddenChrome
       .replace(/<!doctype[^>]*>/gi, " ")
       .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, " ")
       .replace(HTML_PAGE_CHROME_PATTERN, " ")
