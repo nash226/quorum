@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { verifyAnswer } from "../src/claim-verifier.js";
 import type { SourceDocument } from "../src/domain.js";
+import { sourceDocumentFromFile } from "../src/source-loader.js";
 
 const hrPolicy: SourceDocument = {
   id: "hr_policy",
@@ -140,6 +141,25 @@ test("routes partial source matches to review", () => {
   assert.equal(report.summary.needs_review, 1);
   assert.equal(report.assessments[0]?.verdict, "needs_review");
   assert.match(report.assessments[0]?.evidence[0]?.quote ?? "", /Healthcare/);
+});
+
+test("uses normalized markdown table rows as reviewer-friendly evidence quotes", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.md",
+    `| Policy | Details |
+| --- | --- |
+| Healthcare | Coverage begins after 30 days of employment. |
+`,
+    0,
+  );
+
+  const report = verifyAnswer("Coverage begins after 30 days of employment.", [source]);
+
+  assert.equal(report.summary.verified, 1);
+  assert.equal(
+    report.assessments[0]?.evidence[0]?.quote,
+    "Healthcare: Coverage begins after 30 days of employment.",
+  );
 });
 
 test("selects the strongest evidence across multiple sources", () => {
