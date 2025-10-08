@@ -1,6 +1,7 @@
 import { basename } from "node:path";
 import { PDFParse } from "pdf-parse";
 import type { SourceDocument, SourceTrustLevel } from "./domain.js";
+import { stripByteOrderMark } from "./text.js";
 
 interface SourceMetadata {
   title?: string;
@@ -61,11 +62,13 @@ export async function sourceDocumentFromFile(
 }
 
 export function parseSource(sourcePath: string, content: string): ParsedSource {
+  const normalizedContent = stripByteOrderMark(content);
+
   if (isHtmlSource(sourcePath)) {
-    return parseHtmlSource(content);
+    return parseHtmlSource(normalizedContent);
   }
 
-  const normalized = content.replace(/\r\n/g, "\n");
+  const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
   if (!frontmatterDelimiter) {
