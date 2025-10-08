@@ -68,6 +68,16 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
   assert.equal(report.claims[1]?.reviewerVerdict, "needs_review");
 });
 
+test("imports reviewer csv files that start with a utf-8 byte order mark", () => {
+  const report = importReviewerDecisions(`\uFEFFanswer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+`);
+
+  assert.equal(report.summary.totalClaims, 1);
+  assert.equal(report.answerGroups[0]?.label, "hr-answer");
+  assert.equal(report.answerGroups[0]?.summary.reviewedClaims, 1);
+});
+
 test("imports reviewer csv metadata rows for answers with no extracted claims", () => {
   const report = importReviewerDecisions(`answer_label,answer_path,answer_preview,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
 empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from this answer.,,,,

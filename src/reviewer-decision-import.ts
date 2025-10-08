@@ -1,6 +1,7 @@
 import { parseDelimitedList } from "./csv-list.js";
 import type { ClaimVerdict } from "./domain.js";
 import { matchingFailVerdicts, parseClaimVerdict } from "./report-policy.js";
+import { stripByteOrderMark } from "./text.js";
 
 const REQUIRED_HEADERS = [
   "claim_id",
@@ -73,7 +74,7 @@ interface ImportedAnswerGroupSeed {
 export function importReviewerDecisions(
   csvContent: string,
 ): ReviewerDecisionImportReport {
-  const rows = parseCsv(csvContent);
+  const rows = parseCsv(stripByteOrderMark(csvContent));
 
   if (rows.length === 0) {
     throw new Error("Reviewer decision CSV is empty.");
