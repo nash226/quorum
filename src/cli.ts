@@ -643,6 +643,10 @@ async function listFilesWithExtensions(
   const entries = await readdir(directory, { withFileTypes: true });
   const files = await Promise.all(
     entries.map(async (entry): Promise<string[]> => {
+      if (isHiddenPathEntry(entry.name)) {
+        return [];
+      }
+
       const path = join(directory, entry.name);
 
       if (entry.isDirectory()) {
@@ -658,6 +662,10 @@ async function listFilesWithExtensions(
   );
 
   return files.flat().sort();
+}
+
+function isHiddenPathEntry(name: string): boolean {
+  return name.startsWith(".");
 }
 
 async function readAnswer(answerPath: string): Promise<string> {
