@@ -1033,6 +1033,32 @@ test("ignores hidden html chrome before extracting claims", () => {
   );
 });
 
+test("ignores inline css-hidden html sections before extracting claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <div style="display: none;">
+      <p>Draft policy change pending approval.</p>
+    </div>
+    <section style="visibility:hidden">
+      <p>Copied to clipboard.</p>
+    </section>
+    <main>
+      <p>Customers can request refunds within 30 days.</p>
+      <p>Annual plans require support approval.</p>
+    </main>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Customers can request refunds within 30 days.",
+      "Annual plans require support approval.",
+    ],
+  );
+});
+
 test("ignores html header, footer, and aside chrome before extracting claims", () => {
   const claims = extractClaims(`<!doctype html>
 <html>
