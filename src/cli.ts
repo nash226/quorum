@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { dirname, extname, join, resolve } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import type {
@@ -295,6 +295,9 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
 async function runImportReview(args: string[]): Promise<void> {
   const parsed = parseImportReviewArgs(args);
+  if (parsed.reviewCsvPath !== "-") {
+    await ensureFilePath(parsed.reviewCsvPath, "Reviewer decision CSV");
+  }
   const csvContent = await readTextInput(parsed.reviewCsvPath);
   const report = importReviewerDecisions(csvContent);
   const jsonReport = JSON.stringify(report, null, 2);
@@ -579,6 +582,7 @@ async function resolveSourcePaths(
   sourcePaths: string[],
   sourceDirs: string[],
 ): Promise<string[]> {
+  await Promise.all(sourcePaths.map((sourcePath) => ensureFilePath(sourcePath, "Approved source")));
   const directoryFiles = (
     await Promise.all(sourceDirs.map((sourceDir) => listSourceFiles(sourceDir)))
   ).flat();
@@ -619,6 +623,10 @@ async function verifySingleAnswer(
   answerPath: string,
   sources: SourceDocument[],
 ): Promise<VerificationReport> {
+  if (answerPath !== "-") {
+    await ensureFilePath(answerPath, "Answer");
+  }
+
   const answer = await readAnswer(answerPath);
   return verifyAnswer(
     answer,
@@ -629,17 +637,19 @@ async function verifySingleAnswer(
 }
 
 async function listSourceFiles(sourceDir: string): Promise<string[]> {
-  return listFilesWithExtensions(sourceDir, SOURCE_EXTENSIONS);
+  return listFilesWithExtensions(sourceDir, SOURCE_EXTENSIONS, "Approved source");
 }
 
 async function listAnswerFiles(answerDir: string): Promise<string[]> {
-  return listFilesWithExtensions(answerDir, ANSWER_EXTENSIONS);
+  return listFilesWithExtensions(answerDir, ANSWER_EXTENSIONS, "Answer");
 }
 
 async function listFilesWithExtensions(
   directory: string,
   extensions: ReadonlySet<string>,
+  label: string,
 ): Promise<string[]> {
+  await ensureDirectoryPath(directory, label);
   const entries = await readdir(directory, { withFileTypes: true });
   const files = await Promise.all(
     entries.map(async (entry): Promise<string[]> => {
@@ -650,7 +660,7 @@ async function listFilesWithExtensions(
       const path = join(directory, entry.name);
 
       if (entry.isDirectory()) {
-        return listFilesWithExtensions(path, extensions);
+        return listFilesWithExtensions(path, extensions, label);
       }
 
       if (entry.isFile() && extensions.has(extname(entry.name).toLowerCase())) {
@@ -688,6 +698,46 @@ async function readStdin(): Promise<string> {
   }
 
   return Buffer.concat(chunks).toString("utf8");
+}
+
+async function ensureFilePath(path: string, label: string): Promise<void> {
+  let pathStat;
+
+  try {
+    pathStat = await stat(path);
+  } catch (error) {
+    if (isMissingPathError(error)) {
+      throw new Error(`${label} file not found: ${path}`);
+    }
+
+    throw error;
+  }
+
+  if (!pathStat.isFile()) {
+    throw new Error(`${label} path is not a file: ${path}`);
+  }
+}
+
+async function ensureDirectoryPath(path: string, label: string): Promise<void> {
+  let pathStat;
+
+  try {
+    pathStat = await stat(path);
+  } catch (error) {
+    if (isMissingPathError(error)) {
+      throw new Error(`${label} directory not found: ${path}`);
+    }
+
+    throw error;
+  }
+
+  if (!pathStat.isDirectory()) {
+    throw new Error(`${label} path is not a directory: ${path}`);
+  }
+}
+
+function isMissingPathError(error: unknown): error is NodeJS.ErrnoException {
+  return error instanceof Error && "code" in error && error.code === "ENOENT";
 }
 
 function dedupePathsInOrder(paths: string[]): string[] {
