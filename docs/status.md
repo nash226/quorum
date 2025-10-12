@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d71615c` on 2026-07-04, ignore collapsed html details content
+- Latest shipped change: `ff6b9a4` on 2026-07-04, clarify missing CLI input path errors
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-04 | [#157](https://github.com/nash226/quorum/pull/157) | clarify missing CLI input path errors | `ff6b9a4` |
 | 2026-07-04 | [#156](https://github.com/nash226/quorum/pull/156) | ignore collapsed html details content | `d71615c` |
 | 2026-07-04 | [#155](https://github.com/nash226/quorum/pull/155) | ignore inline css-hidden html content | `033f84a` |
 | 2026-07-04 | [#154](https://github.com/nash226/quorum/pull/154) | ignore hidden answer and source files | `79caaa4` |
@@ -52,5 +53,4 @@
 | 2026-07-04 | [#152](https://github.com/nash226/quorum/pull/152) | support plus-delimited source frontmatter | `b0644b1` |
 | 2026-07-04 | [#151](https://github.com/nash226/quorum/pull/151) | normalize markdown table sources | `9994e0b` |
 | 2026-07-04 | [#150](https://github.com/nash226/quorum/pull/150) | ignore hidden html answer chrome | `d49c6e3` |
-| 2026-07-04 | [#149](https://github.com/nash226/quorum/pull/149) | ignore hidden html source chrome | `2a81db7` |
 
