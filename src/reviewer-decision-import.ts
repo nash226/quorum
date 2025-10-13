@@ -16,11 +16,14 @@ const REQUIRED_HEADERS = [
 const OPTIONAL_ANSWER_LABEL_HEADER = "answer_label";
 const OPTIONAL_ANSWER_PATH_HEADER = "answer_path";
 const OPTIONAL_ANSWER_PREVIEW_HEADER = "answer_preview";
+const OPTIONAL_ANSWER_FAIL_POLICY_HEADER = "answer_fail_policy";
+const OPTIONAL_ANSWER_FAIL_VERDICTS_HEADER = "answer_fail_verdicts";
 const OPTIONAL_ANSWER_HAS_CLAIMS_HEADER = "answer_has_claims";
 const OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER = "evidence_trust_levels";
 const OPTIONAL_EVIDENCE_UPDATED_AT_HEADER = "evidence_updated_at";
 const OPTIONAL_EVIDENCE_SCORES_HEADER = "evidence_scores";
 const NO_CLAIMS_REVIEW_REASON = "No claims were extracted from this answer.";
+type ImportedAnswerFailPolicy = "matched" | "clear";
 
 type ReviewerDecisionHeader = (typeof REQUIRED_HEADERS)[number];
 
@@ -28,6 +31,8 @@ export interface ImportedReviewerDecision {
   answerLabel?: string;
   answerPath?: string;
   answerPreview?: string;
+  originalAnswerFailPolicy?: ImportedAnswerFailPolicy;
+  originalAnswerFailVerdicts: ClaimVerdict[];
   claimId: string;
   claimText: string;
   modelVerdict: ClaimVerdict;
@@ -58,6 +63,8 @@ export interface ReviewerDecisionGroup {
   answerLabel?: string;
   answerPath?: string;
   answerPreview?: string;
+  originalAnswerFailPolicy?: ImportedAnswerFailPolicy;
+  originalAnswerFailVerdicts: ClaimVerdict[];
   label: string;
   claims: ImportedReviewerDecision[];
   emptyStateReason?: string;
@@ -68,6 +75,8 @@ interface ImportedAnswerGroupSeed {
   answerLabel?: string;
   answerPath?: string;
   answerPreview?: string;
+  originalAnswerFailPolicy?: ImportedAnswerFailPolicy;
+  originalAnswerFailVerdicts: ClaimVerdict[];
   emptyStateReason?: string;
 }
 
@@ -157,6 +166,15 @@ export function renderReviewerDecisionImportReport(
         ? [`Answer file: ${group.answerPath}`]
         : []),
       ...(group.answerPreview ? [`Answer preview: ${group.answerPreview}`] : []),
+      ...(group.originalAnswerFailPolicy
+        ? [
+            `Original answer fail policy: ${
+              group.originalAnswerFailPolicy === "matched"
+                ? `matched (${group.originalAnswerFailVerdicts.join(", ") || "none recorded"})`
+                : "clear"
+            }`,
+          ]
+        : []),
       `Claims: ${group.summary.totalClaims} total, ${group.summary.reviewedClaims} reviewed, ${group.summary.pendingClaims} pending`,
       `Final verdicts: ${group.summary.verified} verified, ${group.summary.contradicted} contradicted, ${group.summary.unsupported} unsupported, ${group.summary.needs_review} needs review`,
       `Overrides: ${group.summary.overriddenClaims}`,
@@ -231,6 +249,15 @@ export function renderReviewerDecisionImportMarkdownReport(
         ? [`- Answer file: ${group.answerPath}`]
         : []),
       ...(group.answerPreview ? [`- Answer preview: ${group.answerPreview}`, ""] : []),
+      ...(group.originalAnswerFailPolicy
+        ? [
+            `- Original answer fail policy: ${
+              group.originalAnswerFailPolicy === "matched"
+                ? `matched (${group.originalAnswerFailVerdicts.join(", ") || "none recorded"})`
+                : "clear"
+            }`,
+          ]
+        : []),
       `- Total claims: ${group.summary.totalClaims}`,
       `- Reviewed claims: ${group.summary.reviewedClaims}`,
       `- Pending claims: ${group.summary.pendingClaims}`,
@@ -303,6 +330,8 @@ export function renderReviewerDecisionImportSummaryCsv(
       "contradicted",
       "unsupported",
       "needs_review",
+      "original_answer_fail_policy",
+      "original_answer_fail_verdicts",
       "fail_policy",
       "fail_verdicts",
     ],
@@ -331,6 +360,8 @@ export function renderReviewerDecisionImportSummaryCsv(
         group.summary.contradicted.toString(),
         group.summary.unsupported.toString(),
         group.summary.needs_review.toString(),
+        group.originalAnswerFailPolicy ?? "",
+        group.originalAnswerFailVerdicts.join(" | "),
         failVerdicts.length > 0 ? "matched" : "clear",
         failVerdicts.join(" | "),
       ];
@@ -376,6 +407,13 @@ export function renderReviewerDecisionImportHtmlReport(
                     }
                     ${group.answerPreview
                       ? `<p class="answer-group__preview">${escapeHtml(group.answerPreview)}</p>`
+                      : ""}
+                    ${group.originalAnswerFailPolicy
+                      ? `<p class="answer-group__preview">Original answer fail policy: ${escapeHtml(
+                          group.originalAnswerFailPolicy === "matched"
+                            ? `matched (${group.originalAnswerFailVerdicts.join(", ") || "none recorded"})`
+                            : "clear",
+                        )}</p>`
                       : ""}
                   </div>
                   <div class="answer-group__meta">
@@ -880,6 +918,8 @@ function importDecisionRow(
     answerLabel?: number;
     answerPath?: number;
     answerPreview?: number;
+    answerFailPolicy?: number;
+    answerFailVerdicts?: number;
     answerHasClaims?: number;
     evidenceTrustLevels?: number;
     evidenceUpdatedAt?: number;
@@ -889,6 +929,14 @@ function importDecisionRow(
   const answerLabel = readOptionalValue(row, columnIndex.answerLabel ?? -1) || undefined;
   const answerPath = readOptionalValue(row, columnIndex.answerPath ?? -1) || undefined;
   const answerPreview = readOptionalValue(row, columnIndex.answerPreview ?? -1) || undefined;
+  const originalAnswerFailPolicy = parseOptionalAnswerFailPolicy(
+    readOptionalValue(row, columnIndex.answerFailPolicy ?? -1),
+    rowNumber,
+  );
+  const originalAnswerFailVerdicts = parseOptionalAnswerFailVerdicts(
+    readOptionalValue(row, columnIndex.answerFailVerdicts ?? -1),
+    rowNumber,
+  );
   const answerHasClaims = parseOptionalBoolean(
     readOptionalValue(row, columnIndex.answerHasClaims ?? -1),
     rowNumber,
@@ -900,6 +948,8 @@ function importDecisionRow(
       answerLabel,
       answerPath,
       answerPreview,
+      originalAnswerFailPolicy,
+      originalAnswerFailVerdicts,
       emptyStateReason:
         readOptionalValue(row, columnIndex.model_reason) || NO_CLAIMS_REVIEW_REASON,
     };
@@ -923,6 +973,8 @@ function importDecisionRow(
     answerLabel,
     answerPath,
     answerPreview,
+    originalAnswerFailPolicy,
+    originalAnswerFailVerdicts,
     claimId,
     claimText,
     modelVerdict,
@@ -968,6 +1020,8 @@ function getOrCreateImportedGroup(
     value.answerLabel ?? "",
     value.answerPath ?? "",
     value.answerPreview ?? "",
+    value.originalAnswerFailPolicy ?? "",
+    value.originalAnswerFailVerdicts.join("|"),
   ].join("\u0000");
   const existing = groups.get(key);
 
@@ -979,6 +1033,8 @@ function getOrCreateImportedGroup(
     answerLabel: value.answerLabel,
     answerPath: value.answerPath,
     answerPreview: value.answerPreview,
+    originalAnswerFailPolicy: value.originalAnswerFailPolicy,
+    originalAnswerFailVerdicts: value.originalAnswerFailVerdicts,
     label: value.answerLabel ?? value.answerPath ?? value.answerPreview ?? "Unspecified answer",
     claims: [],
     emptyStateReason:
@@ -1013,12 +1069,50 @@ function parseOptionalBoolean(
   );
 }
 
+function parseOptionalAnswerFailPolicy(
+  value: string,
+  rowNumber: number,
+): ImportedAnswerFailPolicy | undefined {
+  const normalized = value.trim().toLowerCase();
+
+  if (!normalized) {
+    return undefined;
+  }
+
+  if (normalized === "matched" || normalized === "clear") {
+    return normalized;
+  }
+
+  throw new Error(
+    `Invalid ${OPTIONAL_ANSWER_FAIL_POLICY_HEADER} value on row ${rowNumber}: expected matched or clear, received "${value}"`,
+  );
+}
+
+function parseOptionalAnswerFailVerdicts(
+  value: string,
+  rowNumber: number,
+): ClaimVerdict[] {
+  return parseDelimitedList(value).map((verdict) => {
+    try {
+      return parseClaimVerdict(verdict);
+    } catch (error) {
+      throw new Error(
+        `Row ${rowNumber} has invalid ${OPTIONAL_ANSWER_FAIL_VERDICTS_HEADER}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+  });
+}
+
 function createColumnIndex(
   headers: string[],
 ): Record<ReviewerDecisionHeader, number> & {
   answerLabel?: number;
   answerPath?: number;
   answerPreview?: number;
+  answerFailPolicy?: number;
+  answerFailVerdicts?: number;
   answerHasClaims?: number;
   evidenceTrustLevels?: number;
   evidenceUpdatedAt?: number;
@@ -1035,6 +1129,8 @@ function createColumnIndex(
   const answerPathIndex = headers.indexOf(OPTIONAL_ANSWER_PATH_HEADER);
   const answerLabelIndex = headers.indexOf(OPTIONAL_ANSWER_LABEL_HEADER);
   const answerPreviewIndex = headers.indexOf(OPTIONAL_ANSWER_PREVIEW_HEADER);
+  const answerFailPolicyIndex = headers.indexOf(OPTIONAL_ANSWER_FAIL_POLICY_HEADER);
+  const answerFailVerdictsIndex = headers.indexOf(OPTIONAL_ANSWER_FAIL_VERDICTS_HEADER);
   const answerHasClaimsIndex = headers.indexOf(OPTIONAL_ANSWER_HAS_CLAIMS_HEADER);
   const evidenceTrustLevelsIndex = headers.indexOf(OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER);
   const evidenceUpdatedAtIndex = headers.indexOf(OPTIONAL_EVIDENCE_UPDATED_AT_HEADER);
@@ -1045,6 +1141,10 @@ function createColumnIndex(
     ...(answerLabelIndex === -1 ? {} : { answerLabel: answerLabelIndex }),
     ...(answerPathIndex === -1 ? {} : { answerPath: answerPathIndex }),
     ...(answerPreviewIndex === -1 ? {} : { answerPreview: answerPreviewIndex }),
+    ...(answerFailPolicyIndex === -1 ? {} : { answerFailPolicy: answerFailPolicyIndex }),
+    ...(answerFailVerdictsIndex === -1
+      ? {}
+      : { answerFailVerdicts: answerFailVerdictsIndex }),
     ...(answerHasClaimsIndex === -1 ? {} : { answerHasClaims: answerHasClaimsIndex }),
     ...(evidenceTrustLevelsIndex === -1
       ? {}
