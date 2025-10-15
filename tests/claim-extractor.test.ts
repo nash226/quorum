@@ -131,6 +131,22 @@ test("extracts clean claims from markdown table answers", () => {
   );
 });
 
+test("extracts claims from one-column markdown table answers", () => {
+  const claims = extractClaims(`| Policy |
+| --- |
+| Employees receive 12 weeks of paid parental leave. |
+| Managers approve exceptions within five business days. |
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve exceptions within five business days.",
+    ],
+  );
+});
+
 test("extracts markdown tables without trailing pipe punctuation noise", () => {
   const claims = extractClaims(`| Queue | Policy |
 | --- | --- |
@@ -186,6 +202,31 @@ test("extracts clean claims from html table answers", () => {
     [
       "Parental leave: Employees receive 12 weeks of paid parental leave.",
       "Healthcare: Coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
+test("extracts claims from one-column html table answers", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <table>
+      <thead>
+        <tr><th>Policy</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Employees receive 12 weeks of paid parental leave.</td></tr>
+        <tr><td>Managers approve exceptions within five business days.</td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve exceptions within five business days.",
     ],
   );
 });
