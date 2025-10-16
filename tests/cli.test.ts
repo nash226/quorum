@@ -1856,6 +1856,54 @@ Managers approve travel within five business days, and international trips requi
   }
 });
 
+test("verify-batch prioritizes risky answers first in the default text output", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-order-text-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(
+        join(answerDir, "clear.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(answerDir, "risky.md"),
+        "Employees receive free catered lunch every day.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const result = await runCliAllowFailure([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--fail-on",
+      "unsupported",
+    ]);
+
+    assert.equal(result.code, 2);
+    assert.match(result.stdout, /risky[\s\S]*clear/);
+    assert.doesNotMatch(result.stdout, /clear[\s\S]*risky/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch prints an explicit empty state in the default text output", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-empty-text-"));
 
