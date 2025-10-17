@@ -702,6 +702,57 @@ Managers approve travel within five business days, and international trips requi
   );
 });
 
+test("renders readable html answer previews in batch summary csv rows", () => {
+  const supportPolicy: SourceDocument = {
+    id: "support_policy",
+    title: "Support Policy",
+    trustLevel: "medium",
+    content: "Refunds are available within 30 days of purchase.",
+  };
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: [
+      {
+        id: supportPolicy.id,
+        title: supportPolicy.title,
+        trustLevel: supportPolicy.trustLevel,
+        updatedAt: supportPolicy.updatedAt,
+      },
+    ],
+    sourceCount: 1,
+    answerCount: 1,
+    answers: [
+      {
+        answerLabel: "support-html",
+        answerPath: "examples/answers/support.html",
+        report: verifyAnswer(
+          "<!doctype html><html><body><main><h1>Support Queue</h1><p>Refunds are available within 30 days of purchase.</p></main></body></html>",
+          [supportPolicy],
+        ),
+        shouldFail: false,
+        failVerdicts: [],
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithoutClaims: 0,
+      answersWithFailures: 0,
+    },
+  };
+
+  const rendered = renderBatchSummaryCsv(batchReport);
+
+  assert.match(
+    rendered,
+    /support-html,examples\/answers\/support\.html,Support Queue Refunds are available within 30 days of purchase\.,verified,/,
+  );
+  assert.doesNotMatch(rendered, /<!doctype html>/i);
+  assert.doesNotMatch(rendered, /<main>|<p>/);
+});
+
 test("renders no-claim batch summary csv rows with an explicit review signal", () => {
   const batchReport: BatchVerificationReport = {
     generatedAt: "2026-06-29T00:00:00.000Z",
