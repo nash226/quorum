@@ -182,7 +182,8 @@ npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir exampl
 ## Source Metadata
 
 Source files may include optional frontmatter metadata with either `---` or
-`+++` delimiters:
+`+++` delimiters. `---` frontmatter uses YAML-style `key: value` pairs, while
+`+++` frontmatter accepts TOML-style `key = value` pairs:
 
 ```markdown
 ---
@@ -190,6 +191,14 @@ title: HR Benefits Policy
 updatedAt: 2026-05-31
 trustLevel: high
 ---
+```
+
+```toml
++++
+title = "HR Benefits Policy"
+updatedAt = "2026-05-31"
+trustLevel = "high"
++++
 ```
 
 Quorum includes this metadata in reports so reviewers can see which approved
