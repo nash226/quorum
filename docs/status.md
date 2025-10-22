@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `66168fc` on 2026-07-05, parse TOML source frontmatter
+- Latest shipped change: `e9fae2a` on 2026-07-05, prefer page headings over html title chrome
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-05 | [#170](https://github.com/nash226/quorum/pull/170) | prefer page headings over html title chrome | `e9fae2a` |
 | 2026-07-05 | [#169](https://github.com/nash226/quorum/pull/169) | parse TOML source frontmatter | `66168fc` |
 | 2026-07-04 | [#168](https://github.com/nash226/quorum/pull/168) | smoke pdf source verification | `0a2cfa3` |
 | 2026-07-04 | [#167](https://github.com/nash226/quorum/pull/167) | add example cli smoke check | `9df344c` |
@@ -52,5 +53,4 @@
 | 2026-07-04 | [#165](https://github.com/nash226/quorum/pull/165) | ignore screen-reader-only html content | `2841e1b` |
 | 2026-07-04 | [#164](https://github.com/nash226/quorum/pull/164) | clean html answer previews | `d609b7e` |
 | 2026-07-04 | [#163](https://github.com/nash226/quorum/pull/163) | prioritize risky batch review outputs | `cb87dbd` |
-| 2026-07-04 | [#162](https://github.com/nash226/quorum/pull/162) | keep batch answer labels in nested reports | `5f09615` |
 
