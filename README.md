@@ -171,10 +171,16 @@ answers without jumping straight to JSON.
 ## Programmatic API
 
 Quorum also exposes a small package API for agent and workflow integrations
-that want the verification flow without shelling out to the CLI:
+that want the verification and reviewer-import flows without shelling out to
+the CLI:
 
 ```ts
-import { loadSources, verifyAnswerBatch, verifyAnswerFile } from "quorum";
+import {
+  importReviewerDecisionFile,
+  loadSources,
+  verifyAnswerBatch,
+  verifyAnswerFile,
+} from "quorum";
 
 const sources = await loadSources({
   sourcePaths: [],
@@ -190,10 +196,15 @@ const batchReport = await verifyAnswerBatch({
   sources,
   failOn: ["contradicted", "unsupported"],
 });
+
+const importedReview = await importReviewerDecisionFile("reports/hr-review.csv");
 ```
 
 For in-memory callers, `verifyAnswer(answerText, sources)` remains available for
-teams that already manage file I/O themselves.
+teams that already manage file I/O themselves. Reviewer import helpers such as
+`importReviewerDecisions` and
+`renderReviewerDecisionImportMarkdownReport` are also exported for teams that
+already manage CSV content in memory.
 
 ## Quick Start
 
