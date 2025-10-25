@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `881cc58` on 2026-07-05, add reviewer import package api
+- Latest shipped change: `dd16894` on 2026-07-05, export package report renderers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-05 | [#174](https://github.com/nash226/quorum/pull/174) | export package report renderers | `dd16894` |
 | 2026-07-05 | [#173](https://github.com/nash226/quorum/pull/173) | add reviewer import package api | `881cc58` |
 | 2026-07-05 | [#172](https://github.com/nash226/quorum/pull/172) | add package verification api | `9ef4564` |
 | 2026-07-05 | [#171](https://github.com/nash226/quorum/pull/171) | refresh roadmap after batch launch | `08eae6a` |
@@ -53,5 +54,4 @@
 | 2026-07-05 | [#169](https://github.com/nash226/quorum/pull/169) | parse TOML source frontmatter | `66168fc` |
 | 2026-07-04 | [#168](https://github.com/nash226/quorum/pull/168) | smoke pdf source verification | `0a2cfa3` |
 | 2026-07-04 | [#167](https://github.com/nash226/quorum/pull/167) | add example cli smoke check | `9df344c` |
-| 2026-07-04 | [#166](https://github.com/nash226/quorum/pull/166) | filter html answer preview chrome | `44027ae` |
 
