@@ -209,6 +209,18 @@ already manage CSV content in memory. Verification report helpers such as
 `renderReviewerDecisionCsv`, and the batch renderer variants are exported too,
 so package consumers can generate the same human-review artifacts as the CLI.
 
+For fixture-driven evaluation work, Quorum also exports
+`loadEvaluationFixture`, `evaluateFixtureFile`, and
+`renderEvaluationScorecard` so teams can keep HR or support benchmark cases in
+versioned JSON files and score the current verifier against expected verdicts:
+
+```ts
+import { evaluateFixtureFile, renderEvaluationScorecard } from "quorum";
+
+const scorecard = await evaluateFixtureFile("examples/evaluations/hr-policy.json");
+console.log(renderEvaluationScorecard(scorecard));
+```
+
 ## Quick Start
 
 ```bash

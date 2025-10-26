@@ -11,6 +11,17 @@ export type {
   VerificationReport,
 } from "./domain.js";
 export {
+  evaluateFixture,
+  evaluateFixtureFile,
+  loadEvaluationFixture,
+  renderEvaluationScorecard,
+} from "./evaluation.js";
+export type {
+  EvaluationClaimScore,
+  EvaluationFixture,
+  EvaluationScorecard,
+} from "./evaluation.js";
+export {
   importReviewerDecisions,
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
