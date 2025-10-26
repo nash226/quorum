@@ -190,8 +190,20 @@ try {
   assert.equal(readJson(importReportPath).answerGroups.length, 2);
   assert.match(readFileSync(importSummaryCsvPath, "utf8"), /^answer_label,answer_path,/);
 
+  const evaluationStdout = runCli([
+    "evaluate",
+    "--fixture",
+    "examples/evaluations/hr-policy.json",
+    "--fixture",
+    "examples/evaluations/support-policy.json",
+    "--fail-on-mismatch",
+  ]);
+
+  assert.match(evaluationStdout, /Quorum Evaluation Report/);
+  assert.match(evaluationStdout, /Fixtures with mismatches: 0/);
+
   console.log(
-    "Smoke check passed: verify, PDF verify, verify-batch, and import-review example flows succeeded.",
+    "Smoke check passed: verify, PDF verify, verify-batch, import-review, and evaluate example flows succeeded.",
   );
 } finally {
   rmSync(tempDir, { recursive: true, force: true });

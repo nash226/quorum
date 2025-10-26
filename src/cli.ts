@@ -9,6 +9,11 @@ import type {
   SourceTrustLevel,
 } from "./domain.js";
 import {
+  evaluateFixtureFile,
+  renderEvaluationScorecard,
+  type EvaluationScorecard,
+} from "./evaluation.js";
+import {
   parseClaimVerdict,
   shouldFailReport,
 } from "./report-policy.js";
@@ -78,8 +83,15 @@ interface ImportReviewArgs {
   summaryCsvOutPath?: string;
 }
 
+interface EvaluateArgs {
+  fixturePaths: string[];
+  json: boolean;
+  failOnMismatch: boolean;
+  outPath?: string;
+}
+
 const HELP_FLAGS = new Set(["--help", "-h"]);
-type CommandName = "verify" | "verify-batch" | "import-review";
+type CommandName = "verify" | "verify-batch" | "import-review" | "evaluate";
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -121,6 +133,16 @@ async function main(): Promise<void> {
     }
 
     await runImportReview(args);
+    return;
+  }
+
+  if (command === "evaluate") {
+    if (args.some(isHelpFlag)) {
+      printHelp("evaluate");
+      return;
+    }
+
+    await runEvaluate(args);
     return;
   }
 
@@ -318,6 +340,42 @@ async function runImportReview(args: string[]): Promise<void> {
   }
 
   if (shouldFail) {
+    process.exitCode = 2;
+  }
+}
+
+async function runEvaluate(args: string[]): Promise<void> {
+  const parsed = parseEvaluateArgs(args);
+
+  await Promise.all(
+    parsed.fixturePaths.map((fixturePath) => ensureFilePath(fixturePath, "Evaluation fixture")),
+  );
+
+  const scorecards = await Promise.all(
+    parsed.fixturePaths.map((fixturePath) => evaluateFixtureFile(fixturePath)),
+  );
+  const jsonReport = JSON.stringify(
+    scorecards.length === 1 ? scorecards[0] : scorecards,
+    null,
+    2,
+  );
+  const shouldFail = scorecards.some(hasEvaluationMismatch);
+
+  if (parsed.outPath) {
+    await writeReportFile(parsed.outPath, jsonReport);
+  }
+
+  if (parsed.json) {
+    console.log(jsonReport);
+  } else {
+    process.stdout.write(renderEvaluationTextReport(scorecards));
+
+    if (parsed.outPath) {
+      console.log(`Evaluation report written to ${parsed.outPath}`);
+    }
+  }
+
+  if (parsed.failOnMismatch && shouldFail) {
     process.exitCode = 2;
   }
 }
@@ -547,6 +605,43 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   };
 }
 
+function parseEvaluateArgs(args: string[]): EvaluateArgs {
+  const fixturePaths: string[] = [];
+  let outPath: string | undefined;
+  let json = false;
+  let failOnMismatch = false;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    const next = args[index + 1];
+
+    if (arg === "--fixture" && next) {
+      fixturePaths.push(next);
+      index += 1;
+    } else if (arg === "--out" && next) {
+      outPath = next;
+      index += 1;
+    } else if (arg === "--json") {
+      json = true;
+    } else if (arg === "--fail-on-mismatch") {
+      failOnMismatch = true;
+    } else {
+      throw new Error(`Unknown or incomplete argument: ${arg}`);
+    }
+  }
+
+  if (fixturePaths.length === 0) {
+    throw new Error("Provide at least one --fixture <path>");
+  }
+
+  return {
+    fixturePaths,
+    json,
+    failOnMismatch,
+    outPath,
+  };
+}
+
 async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
   return loadSourceDocuments({
     sourcePaths: args.sourcePaths,
@@ -670,6 +765,31 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
+function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): string {
+  const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const lines = ["Quorum Evaluation Report", ""];
+
+  scorecards.forEach((scorecard, index) => {
+    if (index > 0) {
+      lines.push("");
+    }
+
+    lines.push(...renderEvaluationScorecard(scorecard).trimEnd().split("\n"));
+  });
+
+  lines.push(
+    "",
+    `Fixtures: ${scorecards.length}`,
+    `Fixtures with mismatches: ${mismatchCount}`,
+  );
+
+  return `${lines.join("\n")}\n`;
+}
+
+function hasEvaluationMismatch(scorecard: EvaluationScorecard): boolean {
+  return !scorecard.summaryMatches || scorecard.matchedClaims < scorecard.totalExpectedClaims;
+}
+
 function indentLines(lines: string[], prefix: string): string[] {
   return lines.map((line) => (line.length === 0 ? line : `${prefix}${line}`));
 }
@@ -773,6 +893,21 @@ Example:
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
 `,
+    evaluate: `Quorum evaluate
+
+Usage:
+  quorum evaluate --fixture <path>... [--json] [--out <path>] [--fail-on-mismatch]
+
+Options:
+  --fixture <path>          Evaluation fixture JSON file; may be repeated
+  --json                    Print the evaluation scorecard JSON
+  --out <path>              Write the JSON scorecard output to disk
+  --fail-on-mismatch        Exit with code 2 when any fixture summary or claim verdict mismatches
+
+Example:
+  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --fail-on-mismatch
+  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --json
+`,
   };
 
   if (command) {
@@ -786,6 +921,7 @@ Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum evaluate --fixture <path>... [--json] [--out <path>] [--fail-on-mismatch]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
@@ -794,6 +930,7 @@ Example:
   cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
+  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --fail-on-mismatch
 `);
 }
 
