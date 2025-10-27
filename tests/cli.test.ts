@@ -122,7 +122,11 @@ test("evaluate --help prints evaluation usage without requiring fixtures", async
 
   assert.equal(result.code, 0);
   assert.equal(result.stderr, "");
-  assert.match(result.stdout, /^Quorum evaluate\n\nUsage:\n  quorum evaluate --fixture <path>\.\.\./);
+  assert.match(
+    result.stdout,
+    /^Quorum evaluate\n\nUsage:\n  quorum evaluate \(\--fixture <path> \| --fixture-dir <path>\)\.\.\./,
+  );
+  assert.match(result.stdout, /--fixture-dir <path>\s+Directory of evaluation fixture JSON files/);
   assert.match(result.stdout, /--fail-on-mismatch\s+Exit with code 2 when any fixture summary or claim verdict mismatches/);
 });
 
@@ -179,6 +183,13 @@ test("evaluate reports a missing evaluation fixture with a clear error", async (
   );
 });
 
+test("evaluate reports a file passed to --fixture-dir with a clear error", async () => {
+  await assert.rejects(
+    runCli(["evaluate", "--fixture-dir", "examples/evaluations/hr-policy.json"]),
+    /Evaluation fixture path is not a directory: examples\/evaluations\/hr-policy\.json/,
+  );
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 
@@ -231,6 +242,85 @@ test("evaluate renders scorecards for shipped example fixtures", async () => {
   assert.match(stdout, /Evaluation Fixture: Support policy example/);
   assert.match(stdout, /Fixtures: 2/);
   assert.match(stdout, /Fixtures with mismatches: 0/);
+});
+
+test("evaluate loads fixture directories recursively", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-dir-"));
+
+  try {
+    const answersDir = join(tempDir, "answers");
+    const sourcesDir = join(tempDir, "sources");
+    const nestedDir = join(tempDir, "nested");
+    await Promise.all([
+      mkdir(answersDir, { recursive: true }),
+      mkdir(sourcesDir, { recursive: true }),
+      mkdir(nestedDir, { recursive: true }),
+    ]);
+
+    const hrFixture = {
+      ...(JSON.parse(
+        await readFile(resolve("examples/evaluations/hr-policy.json"), "utf8"),
+      ) as {
+        answerPath: string;
+        sourcePaths: string[];
+      }),
+      answerPath: "answers/hr-answer.md",
+      sourcePaths: ["sources/hr-policy.md"],
+    };
+    const supportFixture = {
+      ...(JSON.parse(
+        await readFile(resolve("examples/evaluations/support-policy.json"), "utf8"),
+      ) as {
+        answerPath: string;
+        sourcePaths: string[];
+      }),
+      answerPath: "../answers/support-answer.md",
+      sourcePaths: ["../sources/support-playbook.md"],
+    };
+
+    await Promise.all([
+      writeFile(
+        join(answersDir, "hr-answer.md"),
+        await readFile(resolve("examples/answers/hr-answer.md"), "utf8"),
+        "utf8",
+      ),
+      writeFile(
+        join(answersDir, "support-answer.md"),
+        await readFile(resolve("examples/answers/support-answer.md"), "utf8"),
+        "utf8",
+      ),
+      writeFile(
+        join(sourcesDir, "hr-policy.md"),
+        await readFile(resolve("examples/sources/hr-policy.md"), "utf8"),
+        "utf8",
+      ),
+      writeFile(
+        join(sourcesDir, "support-playbook.md"),
+        await readFile(resolve("examples/sources/support-playbook.md"), "utf8"),
+        "utf8",
+      ),
+      writeFile(
+        join(tempDir, "hr-policy.json"),
+        JSON.stringify(hrFixture, null, 2),
+        "utf8",
+      ),
+      writeFile(
+        join(nestedDir, "support-policy.json"),
+        JSON.stringify(supportFixture, null, 2),
+        "utf8",
+      ),
+      writeFile(join(nestedDir, "notes.txt"), "ignore me\n", "utf8"),
+    ]);
+
+    const stdout = await runCli(["evaluate", "--fixture-dir", tempDir]);
+
+    assert.match(stdout, /Evaluation Fixture: HR policy example/);
+    assert.match(stdout, /Evaluation Fixture: Support policy example/);
+    assert.match(stdout, /Fixtures: 2/);
+    assert.match(stdout, /Fixtures with mismatches: 0/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("evaluate exits with code 2 when fail-on-mismatch sees a fixture mismatch", async () => {
