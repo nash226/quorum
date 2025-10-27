@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
+import { dirname, extname, join, resolve } from "node:path";
 import type {
   BatchVerificationReport,
   ClaimAssessment,
@@ -85,6 +85,7 @@ interface ImportReviewArgs {
 
 interface EvaluateArgs {
   fixturePaths: string[];
+  fixtureDirPaths: string[];
   json: boolean;
   failOnMismatch: boolean;
   outPath?: string;
@@ -346,13 +347,17 @@ async function runImportReview(args: string[]): Promise<void> {
 
 async function runEvaluate(args: string[]): Promise<void> {
   const parsed = parseEvaluateArgs(args);
+  const fixturePaths = await resolveEvaluationFixturePaths(
+    parsed.fixturePaths,
+    parsed.fixtureDirPaths,
+  );
 
   await Promise.all(
-    parsed.fixturePaths.map((fixturePath) => ensureFilePath(fixturePath, "Evaluation fixture")),
+    fixturePaths.map((fixturePath) => ensureFilePath(fixturePath, "Evaluation fixture")),
   );
 
   const scorecards = await Promise.all(
-    parsed.fixturePaths.map((fixturePath) => evaluateFixtureFile(fixturePath)),
+    fixturePaths.map((fixturePath) => evaluateFixtureFile(fixturePath)),
   );
   const jsonReport = JSON.stringify(
     scorecards.length === 1 ? scorecards[0] : scorecards,
@@ -607,6 +612,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
 
 function parseEvaluateArgs(args: string[]): EvaluateArgs {
   const fixturePaths: string[] = [];
+  const fixtureDirPaths: string[] = [];
   let outPath: string | undefined;
   let json = false;
   let failOnMismatch = false;
@@ -617,6 +623,9 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
 
     if (arg === "--fixture" && next) {
       fixturePaths.push(next);
+      index += 1;
+    } else if (arg === "--fixture-dir" && next) {
+      fixtureDirPaths.push(next);
       index += 1;
     } else if (arg === "--out" && next) {
       outPath = next;
@@ -630,16 +639,56 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
     }
   }
 
-  if (fixturePaths.length === 0) {
-    throw new Error("Provide at least one --fixture <path>");
+  if (fixturePaths.length === 0 && fixtureDirPaths.length === 0) {
+    throw new Error("Provide at least one --fixture <path> or --fixture-dir <path>");
   }
 
   return {
     fixturePaths,
+    fixtureDirPaths,
     json,
     failOnMismatch,
     outPath,
   };
+}
+
+async function resolveEvaluationFixturePaths(
+  fixturePaths: string[],
+  fixtureDirPaths: string[],
+): Promise<string[]> {
+  const directoryFiles = (
+    await Promise.all(
+      fixtureDirPaths.map((fixtureDirPath) => listEvaluationFixtureFiles(fixtureDirPath)),
+    )
+  ).flat();
+
+  return dedupePathsInOrder([...fixturePaths, ...directoryFiles]);
+}
+
+async function listEvaluationFixtureFiles(fixtureDirPath: string): Promise<string[]> {
+  await ensureDirectoryPath(fixtureDirPath, "Evaluation fixture");
+  const entries = await readdir(fixtureDirPath, { withFileTypes: true });
+  const files = await Promise.all(
+    entries.map(async (entry): Promise<string[]> => {
+      if (entry.name.startsWith(".")) {
+        return [];
+      }
+
+      const path = join(fixtureDirPath, entry.name);
+
+      if (entry.isDirectory()) {
+        return listEvaluationFixtureFiles(path);
+      }
+
+      if (entry.isFile() && extname(entry.name).toLowerCase() === ".json") {
+        return [path];
+      }
+
+      return [];
+    }),
+  );
+
+  return files.flat().sort();
 }
 
 async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
@@ -684,6 +733,42 @@ async function ensureFilePath(path: string, label: string): Promise<void> {
   if (!pathStat.isFile()) {
     throw new Error(`${label} path is not a file: ${path}`);
   }
+}
+
+async function ensureDirectoryPath(path: string, label: string): Promise<void> {
+  let pathStat;
+
+  try {
+    pathStat = await stat(path);
+  } catch (error) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+      throw new Error(`${label} directory not found: ${path}`);
+    }
+
+    throw error;
+  }
+
+  if (!pathStat.isDirectory()) {
+    throw new Error(`${label} path is not a directory: ${path}`);
+  }
+}
+
+function dedupePathsInOrder(paths: string[]): string[] {
+  const seen = new Set<string>();
+  const uniquePaths: string[] = [];
+
+  for (const path of paths) {
+    const normalizedPath = resolve(path);
+
+    if (seen.has(normalizedPath)) {
+      continue;
+    }
+
+    seen.add(normalizedPath);
+    uniquePaths.push(path);
+  }
+
+  return uniquePaths;
 }
 
 function trimTrailingBlankLines(lines: string[]): string[] {
@@ -896,16 +981,18 @@ Example:
     evaluate: `Quorum evaluate
 
 Usage:
-  quorum evaluate --fixture <path>... [--json] [--out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--fail-on-mismatch]
 
 Options:
   --fixture <path>          Evaluation fixture JSON file; may be repeated
+  --fixture-dir <path>      Directory of evaluation fixture JSON files; may be repeated
   --json                    Print the evaluation scorecard JSON
   --out <path>              Write the JSON scorecard output to disk
   --fail-on-mismatch        Exit with code 2 when any fixture summary or claim verdict mismatches
 
 Example:
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --fail-on-mismatch
+  npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --json
 `,
   };
@@ -921,7 +1008,7 @@ Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum evaluate --fixture <path>... [--json] [--out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--fail-on-mismatch]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
@@ -931,6 +1018,7 @@ Example:
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --fail-on-mismatch
+  npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
 `);
 }
 

@@ -230,6 +230,14 @@ npm run dev -- evaluate \
   --fail-on-mismatch
 ```
 
+Or point Quorum at a fixture directory and let it discover nested JSON fixtures:
+
+```bash
+npm run dev -- evaluate \
+  --fixture-dir examples/evaluations \
+  --fail-on-mismatch
+```
+
 `evaluate` prints one scorecard per fixture, highlights claim-level verdict
 mismatches, and can exit with status code `2` when a labeled benchmark drifts.
 
