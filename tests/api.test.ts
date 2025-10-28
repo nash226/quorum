@@ -4,6 +4,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  evaluateFixtureFiles,
+  hasEvaluationMismatch,
   importReviewerDecisionFile,
   importReviewerDecisions,
   loadSources,
@@ -11,6 +13,7 @@ import {
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
   renderBatchSummaryCsv,
+  renderEvaluationTextReport,
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionImportMarkdownReport,
@@ -239,4 +242,18 @@ claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched appr
   assert.equal(report.summary.pendingClaims, 1);
   assert.match(markdown, /# Quorum Reviewer Decision Import/);
   assert.match(markdown, /- Pending claims: 1/);
+});
+
+test("programmatic API exports batch evaluation helpers", async () => {
+  const scorecards = await evaluateFixtureFiles({
+    fixturePaths: [],
+    fixtureDirPaths: [join(process.cwd(), "examples/evaluations")],
+    generatedAt: "2026-07-05T03:00:00.000Z",
+  });
+
+  const rendered = renderEvaluationTextReport(scorecards);
+
+  assert.equal(scorecards.length, 2);
+  assert.equal(scorecards.some(hasEvaluationMismatch), false);
+  assert.match(rendered, /Fixtures: 2/);
 });

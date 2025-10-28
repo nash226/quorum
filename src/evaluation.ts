@@ -1,5 +1,5 @@
-import { readFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { readdir, readFile, stat } from "node:fs/promises";
+import { dirname, extname, join, resolve } from "node:path";
 import type { ClaimVerdict, VerificationReport } from "./domain.js";
 import { loadSourceDocuments, verifyAnswerFile } from "./workflow.js";
 
@@ -32,6 +32,12 @@ export interface EvaluationScorecard {
   matchedClaims: number;
   totalExpectedClaims: number;
   score: number;
+}
+
+export interface EvaluationBatchOptions {
+  fixturePaths: string[];
+  fixtureDirPaths: string[];
+  generatedAt?: string;
 }
 
 export async function loadEvaluationFixture(fixturePath: string): Promise<EvaluationFixture> {
@@ -119,6 +125,38 @@ export async function evaluateFixtureFile(
   });
 }
 
+export async function evaluateFixtureFiles(
+  options: EvaluationBatchOptions,
+): Promise<EvaluationScorecard[]> {
+  const fixturePaths = await resolveEvaluationFixturePaths(
+    options.fixturePaths,
+    options.fixtureDirPaths,
+  );
+
+  await Promise.all(
+    fixturePaths.map((fixturePath) => ensureFilePath(fixturePath, "Evaluation fixture")),
+  );
+
+  return Promise.all(
+    fixturePaths.map((fixturePath) =>
+      evaluateFixtureFile(fixturePath, { generatedAt: options.generatedAt }),
+    ),
+  );
+}
+
+export async function resolveEvaluationFixturePaths(
+  fixturePaths: string[],
+  fixtureDirPaths: string[],
+): Promise<string[]> {
+  const directoryFiles = (
+    await Promise.all(
+      fixtureDirPaths.map((fixtureDirPath) => listEvaluationFixtureFiles(fixtureDirPath)),
+    )
+  ).flat();
+
+  return dedupePathsInOrder([...fixturePaths, ...directoryFiles]);
+}
+
 export function renderEvaluationScorecard(scorecard: EvaluationScorecard): string {
   const lines = [
     `Evaluation Fixture: ${scorecard.fixtureName}`,
@@ -153,6 +191,31 @@ export function renderEvaluationScorecard(scorecard: EvaluationScorecard): strin
   return `${lines.join("\n")}\n`;
 }
 
+export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): string {
+  const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const lines = ["Quorum Evaluation Report", ""];
+
+  scorecards.forEach((scorecard, index) => {
+    if (index > 0) {
+      lines.push("");
+    }
+
+    lines.push(...renderEvaluationScorecard(scorecard).trimEnd().split("\n"));
+  });
+
+  lines.push(
+    "",
+    `Fixtures: ${scorecards.length}`,
+    `Fixtures with mismatches: ${mismatchCount}`,
+  );
+
+  return `${lines.join("\n")}\n`;
+}
+
+export function hasEvaluationMismatch(scorecard: EvaluationScorecard): boolean {
+  return !scorecard.summaryMatches || scorecard.matchedClaims < scorecard.totalExpectedClaims;
+}
+
 function hasMatchingSummary(
   expected: Record<ClaimVerdict, number>,
   actual: Record<ClaimVerdict, number>,
@@ -163,4 +226,88 @@ function hasMatchingSummary(
     expected.unsupported === actual.unsupported &&
     expected.needs_review === actual.needs_review
   );
+}
+
+async function listEvaluationFixtureFiles(fixtureDirPath: string): Promise<string[]> {
+  await ensureDirectoryPath(fixtureDirPath, "Evaluation fixture");
+  const entries = await readdir(fixtureDirPath, { withFileTypes: true });
+  const files = await Promise.all(
+    entries.map(async (entry): Promise<string[]> => {
+      if (entry.name.startsWith(".")) {
+        return [];
+      }
+
+      const path = join(fixtureDirPath, entry.name);
+
+      if (entry.isDirectory()) {
+        return listEvaluationFixtureFiles(path);
+      }
+
+      if (entry.isFile() && extname(entry.name).toLowerCase() === ".json") {
+        return [path];
+      }
+
+      return [];
+    }),
+  );
+
+  return files.flat().sort();
+}
+
+async function ensureFilePath(path: string, label: string): Promise<void> {
+  let pathStat;
+
+  try {
+    pathStat = await stat(path);
+  } catch (error) {
+    if (isMissingPathError(error)) {
+      throw new Error(`${label} file not found: ${path}`);
+    }
+
+    throw error;
+  }
+
+  if (!pathStat.isFile()) {
+    throw new Error(`${label} path is not a file: ${path}`);
+  }
+}
+
+async function ensureDirectoryPath(path: string, label: string): Promise<void> {
+  let pathStat;
+
+  try {
+    pathStat = await stat(path);
+  } catch (error) {
+    if (isMissingPathError(error)) {
+      throw new Error(`${label} directory not found: ${path}`);
+    }
+
+    throw error;
+  }
+
+  if (!pathStat.isDirectory()) {
+    throw new Error(`${label} path is not a directory: ${path}`);
+  }
+}
+
+function isMissingPathError(error: unknown): error is NodeJS.ErrnoException {
+  return error instanceof Error && "code" in error && error.code === "ENOENT";
+}
+
+function dedupePathsInOrder(paths: string[]): string[] {
+  const seen = new Set<string>();
+  const uniquePaths: string[] = [];
+
+  for (const path of paths) {
+    const normalizedPath = resolve(path);
+
+    if (seen.has(normalizedPath)) {
+      continue;
+    }
+
+    seen.add(normalizedPath);
+    uniquePaths.push(path);
+  }
+
+  return uniquePaths;
 }

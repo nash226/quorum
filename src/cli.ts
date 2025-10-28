@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
-import { dirname, extname, join, resolve } from "node:path";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
 import type {
   BatchVerificationReport,
   ClaimAssessment,
@@ -9,9 +9,9 @@ import type {
   SourceTrustLevel,
 } from "./domain.js";
 import {
-  evaluateFixtureFile,
-  renderEvaluationScorecard,
-  type EvaluationScorecard,
+  evaluateFixtureFiles,
+  hasEvaluationMismatch,
+  renderEvaluationTextReport,
 } from "./evaluation.js";
 import {
   parseClaimVerdict,
@@ -347,18 +347,10 @@ async function runImportReview(args: string[]): Promise<void> {
 
 async function runEvaluate(args: string[]): Promise<void> {
   const parsed = parseEvaluateArgs(args);
-  const fixturePaths = await resolveEvaluationFixturePaths(
-    parsed.fixturePaths,
-    parsed.fixtureDirPaths,
-  );
-
-  await Promise.all(
-    fixturePaths.map((fixturePath) => ensureFilePath(fixturePath, "Evaluation fixture")),
-  );
-
-  const scorecards = await Promise.all(
-    fixturePaths.map((fixturePath) => evaluateFixtureFile(fixturePath)),
-  );
+  const scorecards = await evaluateFixtureFiles({
+    fixturePaths: parsed.fixturePaths,
+    fixtureDirPaths: parsed.fixtureDirPaths,
+  });
   const jsonReport = JSON.stringify(
     scorecards.length === 1 ? scorecards[0] : scorecards,
     null,
@@ -652,45 +644,6 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
   };
 }
 
-async function resolveEvaluationFixturePaths(
-  fixturePaths: string[],
-  fixtureDirPaths: string[],
-): Promise<string[]> {
-  const directoryFiles = (
-    await Promise.all(
-      fixtureDirPaths.map((fixtureDirPath) => listEvaluationFixtureFiles(fixtureDirPath)),
-    )
-  ).flat();
-
-  return dedupePathsInOrder([...fixturePaths, ...directoryFiles]);
-}
-
-async function listEvaluationFixtureFiles(fixtureDirPath: string): Promise<string[]> {
-  await ensureDirectoryPath(fixtureDirPath, "Evaluation fixture");
-  const entries = await readdir(fixtureDirPath, { withFileTypes: true });
-  const files = await Promise.all(
-    entries.map(async (entry): Promise<string[]> => {
-      if (entry.name.startsWith(".")) {
-        return [];
-      }
-
-      const path = join(fixtureDirPath, entry.name);
-
-      if (entry.isDirectory()) {
-        return listEvaluationFixtureFiles(path);
-      }
-
-      if (entry.isFile() && extname(entry.name).toLowerCase() === ".json") {
-        return [path];
-      }
-
-      return [];
-    }),
-  );
-
-  return files.flat().sort();
-}
-
 async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
   return loadSourceDocuments({
     sourcePaths: args.sourcePaths,
@@ -848,31 +801,6 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
   }
 
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
-}
-
-function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): string {
-  const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
-  const lines = ["Quorum Evaluation Report", ""];
-
-  scorecards.forEach((scorecard, index) => {
-    if (index > 0) {
-      lines.push("");
-    }
-
-    lines.push(...renderEvaluationScorecard(scorecard).trimEnd().split("\n"));
-  });
-
-  lines.push(
-    "",
-    `Fixtures: ${scorecards.length}`,
-    `Fixtures with mismatches: ${mismatchCount}`,
-  );
-
-  return `${lines.join("\n")}\n`;
-}
-
-function hasEvaluationMismatch(scorecard: EvaluationScorecard): boolean {
-  return !scorecard.summaryMatches || scorecard.matchedClaims < scorecard.totalExpectedClaims;
 }
 
 function indentLines(lines: string[], prefix: string): string[] {
