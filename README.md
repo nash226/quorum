@@ -210,15 +210,31 @@ already manage CSV content in memory. Verification report helpers such as
 so package consumers can generate the same human-review artifacts as the CLI.
 
 For fixture-driven evaluation work, Quorum also exports
-`loadEvaluationFixture`, `evaluateFixtureFile`, and
-`renderEvaluationScorecard` so teams can keep HR or support benchmark cases in
-versioned JSON files and score the current verifier against expected verdicts:
+`loadEvaluationFixture`, `evaluateFixtureFile`, `evaluateFixtureFiles`,
+`renderEvaluationScorecard`, `renderEvaluationTextReport`, and
+`hasEvaluationMismatch` so teams can keep HR or support benchmark cases in
+versioned JSON files, discover nested fixture directories, and score the
+current verifier against expected verdicts:
 
 ```ts
-import { evaluateFixtureFile, renderEvaluationScorecard } from "quorum";
+import {
+  evaluateFixtureFile,
+  evaluateFixtureFiles,
+  hasEvaluationMismatch,
+  renderEvaluationScorecard,
+  renderEvaluationTextReport,
+} from "quorum";
 
 const scorecard = await evaluateFixtureFile("examples/evaluations/hr-policy.json");
 console.log(renderEvaluationScorecard(scorecard));
+
+const scorecards = await evaluateFixtureFiles({
+  fixturePaths: [],
+  fixtureDirPaths: ["examples/evaluations"],
+});
+
+console.log(renderEvaluationTextReport(scorecards));
+console.log(scorecards.some(hasEvaluationMismatch));
 ```
 
 The CLI can run those same fixtures directly:
