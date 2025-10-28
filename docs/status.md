@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a9f8959` on 2026-07-05, add evaluation cli command
+- Latest shipped change: `fdf7f54` on 2026-07-05, add evaluate fixture directory support
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-05 | [#177](https://github.com/nash226/quorum/pull/177) | add evaluate fixture directory support | `fdf7f54` |
 | 2026-07-05 | [#176](https://github.com/nash226/quorum/pull/176) | add evaluation cli command | `a9f8959` |
 | 2026-07-05 | [#175](https://github.com/nash226/quorum/pull/175) | add evaluation fixture scorecards | `fd15a9e` |
 | 2026-07-05 | [#174](https://github.com/nash226/quorum/pull/174) | export package report renderers | `dd16894` |
@@ -53,5 +54,4 @@
 | 2026-07-05 | [#172](https://github.com/nash226/quorum/pull/172) | add package verification api | `9ef4564` |
 | 2026-07-05 | [#171](https://github.com/nash226/quorum/pull/171) | refresh roadmap after batch launch | `08eae6a` |
 | 2026-07-05 | [#170](https://github.com/nash226/quorum/pull/170) | prefer page headings over html title chrome | `e9fae2a` |
-| 2026-07-05 | [#169](https://github.com/nash226/quorum/pull/169) | parse TOML source frontmatter | `66168fc` |
 
