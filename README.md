@@ -211,7 +211,8 @@ so package consumers can generate the same human-review artifacts as the CLI.
 
 For fixture-driven evaluation work, Quorum also exports
 `loadEvaluationFixture`, `evaluateFixtureFile`, `evaluateFixtureFiles`,
-`renderEvaluationScorecard`, `renderEvaluationTextReport`, and
+`renderEvaluationScorecard`, `renderEvaluationTextReport`,
+`renderEvaluationSummaryCsv`, and
 `hasEvaluationMismatch` so teams can keep HR or support benchmark cases in
 versioned JSON files, discover nested fixture directories, and score the
 current verifier against expected verdicts:
@@ -222,6 +223,7 @@ import {
   evaluateFixtureFiles,
   hasEvaluationMismatch,
   renderEvaluationScorecard,
+  renderEvaluationSummaryCsv,
   renderEvaluationTextReport,
 } from "quorum";
 
@@ -234,6 +236,7 @@ const scorecards = await evaluateFixtureFiles({
 });
 
 console.log(renderEvaluationTextReport(scorecards));
+console.log(renderEvaluationSummaryCsv(scorecards));
 console.log(scorecards.some(hasEvaluationMismatch));
 ```
 
@@ -243,6 +246,7 @@ The CLI can run those same fixtures directly:
 npm run dev -- evaluate \
   --fixture examples/evaluations/hr-policy.json \
   --fixture examples/evaluations/support-policy.json \
+  --summary-csv-out reports/evaluation-summary.csv \
   --fail-on-mismatch
 ```
 
@@ -255,7 +259,8 @@ npm run dev -- evaluate \
 ```
 
 `evaluate` prints one scorecard per fixture, highlights claim-level verdict
-mismatches, and can exit with status code `2` when a labeled benchmark drifts.
+mismatches, can write a one-row-per-fixture summary CSV for spreadsheet or CI
+triage, and can exit with status code `2` when a labeled benchmark drifts.
 
 ## Quick Start
 
@@ -326,7 +331,7 @@ npm run dev -- verify \
 quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-quorum evaluate --fixture <path>... [--json] [--out <path>] [--fail-on-mismatch]
+quorum evaluate --fixture <path>... [--json] [--out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
 ```
 
 Options:
@@ -380,6 +385,9 @@ Options:
 - `evaluate --json`: print the evaluation scorecard JSON for one fixture, or a
   JSON array when multiple fixtures are provided
 - `evaluate --out <path>`: write the evaluation scorecard JSON to disk
+- `evaluate --summary-csv-out <path>`: write one CSV row per fixture with the
+  fixture path, answer path, source paths, summary match state, claim-match
+  score, and expected vs actual verdict totals
 - `evaluate --fail-on-mismatch`: exit with code `2` when any fixture summary or
   expected claim verdict does not match the current verifier output
 
