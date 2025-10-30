@@ -196,10 +196,13 @@ try {
     "examples/evaluations/hr-policy.json",
     "--fixture",
     "examples/evaluations/support-policy.json",
+    "--markdown-out",
+    join(tempDir, "evaluation-report.md"),
     "--fail-on-mismatch",
   ]);
 
   assert.match(evaluationStdout, /Quorum Evaluation Report/);
+  assert.match(readFileSync(join(tempDir, "evaluation-report.md"), "utf8"), /^# Quorum Evaluation Report/);
   assert.match(evaluationStdout, /Fixtures with mismatches: 0/);
 
   console.log(
