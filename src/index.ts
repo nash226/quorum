@@ -54,6 +54,7 @@ export {
 export {
   importReviewerDecisionFile,
   loadSourceDocuments as loadSources,
+  loadSourceDocumentsFromContent as loadSourcesFromContent,
   resolveAnswerPaths,
   resolveSourcePaths,
   STDIN_ANSWER_PATH,
@@ -65,6 +66,8 @@ export type {
   BatchVerificationOptions,
   InMemoryAnswerInput,
   InMemoryBatchVerificationOptions,
+  InMemorySourceInput,
+  InMemorySourceLoadOptions,
   SourceLoadOptions,
 } from "./workflow.js";
 export { parseSource, parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
