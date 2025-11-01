@@ -265,6 +265,343 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
+export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): string {
+  const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const fixtureCards = scorecards
+    .map((scorecard, index) => {
+      const claimItems =
+        scorecard.claims.length === 0
+          ? `<p class="empty-state">No claims were extracted from this answer.</p>`
+          : `<ul class="claim-list">${scorecard.claims
+              .map((claim) => {
+                const expectedVerdict = claim.expectedVerdict
+                  ? `<span class="expected-chip">Expected ${escapeHtml(claim.expectedVerdict)}</span>`
+                  : "";
+
+                return `<li class="claim-item">
+                  <div class="claim-header">
+                    <span class="claim-index">Claim ${claim.index + 1}</span>
+                    <div class="claim-badges">
+                      <span class="verdict-chip verdict-${escapeHtml(claim.actualVerdict)}">${escapeHtml(claim.actualVerdict)}</span>
+                      ${expectedVerdict}
+                    </div>
+                  </div>
+                  <p>${escapeHtml(claim.claimText)}</p>
+                </li>`;
+              })
+              .join("")}</ul>`;
+
+      return `<article class="fixture-card">
+        <div class="fixture-card-header">
+          <div>
+            <p class="eyebrow">Fixture ${index + 1}</p>
+            <h2>${escapeHtml(scorecard.fixtureName)}</h2>
+          </div>
+          <span class="match-badge ${scorecard.summaryMatches ? "match-yes" : "match-no"}">
+            ${scorecard.summaryMatches ? "Summary match" : "Summary mismatch"}
+          </span>
+        </div>
+        <dl class="meta-grid">
+          ${scorecard.fixturePath ? `<div><dt>Fixture path</dt><dd>${escapeHtml(scorecard.fixturePath)}</dd></div>` : ""}
+          <div><dt>Answer path</dt><dd>${escapeHtml(scorecard.answerPath)}</dd></div>
+          <div><dt>Sources</dt><dd>${scorecard.sourcePaths.map(escapeHtml).join("<br />")}</dd></div>
+          <div><dt>Claim verdict score</dt><dd>${scorecard.matchedClaims}/${scorecard.totalExpectedClaims} (${Math.round(scorecard.score * 100)}%)</dd></div>
+        </dl>
+        <div class="summary-grid">
+          <section class="summary-card">
+            <h3>Expected summary</h3>
+            <ul>
+              ${renderHtmlSummaryList(scorecard.expectedSummary)}
+            </ul>
+          </section>
+          <section class="summary-card">
+            <h3>Actual summary</h3>
+            <ul>
+              ${renderHtmlSummaryList(scorecard.actualSummary)}
+            </ul>
+          </section>
+        </div>
+        <section class="claims-section">
+          <h3>Claim verdicts</h3>
+          ${claimItems}
+        </section>
+      </article>`;
+    })
+    .join("");
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quorum Evaluation Report</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page-bg: #f4efe6;
+        --surface: rgba(255, 252, 247, 0.96);
+        --surface-strong: #fffdf8;
+        --border: rgba(97, 73, 44, 0.18);
+        --text: #20160f;
+        --muted: #6f5a46;
+        --accent: #9e5b2a;
+        --accent-soft: rgba(158, 91, 42, 0.12);
+        --good: #1f7a4d;
+        --good-soft: rgba(31, 122, 77, 0.12);
+        --bad: #a33f1f;
+        --bad-soft: rgba(163, 63, 31, 0.12);
+        --warn: #8b5e00;
+        --warn-soft: rgba(139, 94, 0, 0.14);
+        --shadow: 0 24px 60px rgba(54, 36, 21, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+        background:
+          radial-gradient(circle at top, rgba(158, 91, 42, 0.14), transparent 30rem),
+          linear-gradient(180deg, #f7f2ea 0%, var(--page-bg) 100%);
+        color: var(--text);
+      }
+
+      main {
+        width: min(1100px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 3rem 0 4rem;
+      }
+
+      .hero,
+      .fixture-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        padding: 2.25rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .eyebrow {
+        margin: 0 0 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: 0.8rem;
+        color: var(--accent);
+      }
+
+      h1, h2, h3, p { margin-top: 0; }
+      h1 { margin-bottom: 0.75rem; font-size: clamp(2.2rem, 3vw, 3.4rem); }
+      h2 { margin-bottom: 0.5rem; font-size: clamp(1.5rem, 2vw, 2.1rem); }
+      h3 { margin-bottom: 0.75rem; font-size: 1.05rem; }
+      p, li, dd { line-height: 1.55; }
+
+      .summary-strip {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+      }
+
+      .summary-stat,
+      .summary-card {
+        background: var(--surface-strong);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 1rem 1.1rem;
+      }
+
+      .summary-stat span,
+      dt {
+        display: block;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .summary-stat strong {
+        display: block;
+        margin-top: 0.4rem;
+        font-size: 1.8rem;
+      }
+
+      .fixture-list {
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      .fixture-card {
+        padding: 1.5rem;
+      }
+
+      .fixture-card-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: start;
+      }
+
+      .match-badge,
+      .verdict-chip,
+      .expected-chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 0.3rem 0.75rem;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+
+      .match-yes {
+        background: var(--good-soft);
+        color: var(--good);
+      }
+
+      .match-no {
+        background: var(--bad-soft);
+        color: var(--bad);
+      }
+
+      .meta-grid,
+      .summary-grid {
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .meta-grid {
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        margin: 1.25rem 0;
+      }
+
+      .meta-grid div {
+        background: var(--surface-strong);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 0.9rem 1rem;
+      }
+
+      dd {
+        margin: 0.35rem 0 0;
+        font-size: 0.98rem;
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      }
+
+      .summary-card ul,
+      .claim-list {
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+
+      .claims-section {
+        margin-top: 1.25rem;
+      }
+
+      .claim-item {
+        background: var(--surface-strong);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1rem;
+      }
+
+      .claim-item + .claim-item {
+        margin-top: 0.75rem;
+      }
+
+      .claim-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: start;
+        margin-bottom: 0.75rem;
+      }
+
+      .claim-index {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .claim-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .verdict-verified {
+        background: var(--good-soft);
+        color: var(--good);
+      }
+
+      .verdict-contradicted,
+      .verdict-unsupported {
+        background: var(--bad-soft);
+        color: var(--bad);
+      }
+
+      .verdict-needs_review {
+        background: var(--warn-soft);
+        color: var(--warn);
+      }
+
+      .expected-chip {
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .empty-state {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      @media (max-width: 720px) {
+        main {
+          width: min(100% - 1rem, 1100px);
+          padding-top: 1rem;
+        }
+
+        .hero,
+        .fixture-card {
+          border-radius: 20px;
+          padding: 1.2rem;
+        }
+
+        .fixture-card-header,
+        .claim-header {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Quorum evaluation</p>
+        <h1>Fixture scorecard report</h1>
+        <p>Review benchmark fixtures, compare expected and actual verdict totals, and spot claim-level drift before workflow changes ship.</p>
+        <div class="summary-strip">
+          <article class="summary-stat">
+            <span>Fixtures</span>
+            <strong>${scorecards.length}</strong>
+          </article>
+          <article class="summary-stat">
+            <span>Mismatches</span>
+            <strong>${mismatchCount}</strong>
+          </article>
+        </div>
+      </section>
+      <section class="fixture-list">
+        ${fixtureCards}
+      </section>
+    </main>
+  </body>
+</html>`;
+}
+
 export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): string {
   const rows = [
     [
@@ -387,6 +724,15 @@ function renderMarkdownSummaryList(summary: Record<ClaimVerdict, number>): strin
   ];
 }
 
+function renderHtmlSummaryList(summary: Record<ClaimVerdict, number>): string {
+  return [
+    `<li>Verified: ${summary.verified}</li>`,
+    `<li>Contradicted: ${summary.contradicted}</li>`,
+    `<li>Unsupported: ${summary.unsupported}</li>`,
+    `<li>Needs review: ${summary.needs_review}</li>`,
+  ].join("");
+}
+
 async function ensureDirectoryPath(path: string, label: string): Promise<void> {
   let pathStat;
 
@@ -435,4 +781,13 @@ function trimTrailingBlankLines(lines: string[]): string[] {
   }
 
   return trimmed;
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }

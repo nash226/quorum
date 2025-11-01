@@ -7,6 +7,7 @@ import {
   evaluateFixtureFile,
   hasEvaluationMismatch,
   loadEvaluationFixture,
+  renderEvaluationHtmlReport,
   renderEvaluationMarkdownReport,
   renderEvaluationScorecard,
   renderEvaluationSummaryCsv,
@@ -323,4 +324,61 @@ test("renders evaluation markdown report with fixture summaries", () => {
   assert.match(rendered, /- Fixture path: `\/tmp\/fixtures\/support\.json`/);
   assert.match(rendered, /#### Claim Verdicts/);
   assert.match(rendered, /Claim 1: `verified` \(expected `verified`\)/);
+});
+
+test("renders evaluation html report with fixture summaries", () => {
+  const rendered = renderEvaluationHtmlReport([
+    {
+      fixtureName: "Support policy example",
+      fixturePath: "/tmp/fixtures/support.json",
+      answerPath: "/tmp/answers/support.md",
+      sourcePaths: ["/tmp/sources/support.md"],
+      report: {
+        generatedAt: "2026-07-05T10:30:00.000Z",
+        answerPath: "/tmp/answers/support.md",
+        answerLabel: "support",
+        answerPreview: "Preview",
+        answer: "Answer text",
+        sources: [],
+        assessments: [],
+        summary: {
+          verified: 1,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+        },
+      },
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      actualSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      summaryMatches: true,
+      claims: [
+        {
+          index: 0,
+          claimText: "Refunds are available for 30 days.",
+          actualVerdict: "verified",
+          expectedVerdict: "verified",
+          matches: true,
+        },
+      ],
+      matchedClaims: 1,
+      totalExpectedClaims: 1,
+      score: 1,
+    },
+  ]);
+
+  assert.match(rendered, /<!doctype html>/i);
+  assert.match(rendered, /Fixture scorecard report/);
+  assert.match(rendered, /Support policy example/);
+  assert.match(rendered, /Expected summary/);
+  assert.match(rendered, /Claim verdicts/);
 });
