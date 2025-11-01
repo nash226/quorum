@@ -85,10 +85,10 @@ import artifact adds one row per answer group with reviewed, pending,
 overridden, and final verdict totals for spreadsheet queues.
 
 For benchmark-driven evaluation work, Quorum can also export a reviewer-friendly
-Markdown scorecard:
+Markdown or HTML scorecard:
 
 ```bash
-npm run dev -- evaluate --fixture-dir examples/evaluations --markdown-out reports/evaluation-report.md --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
+npm run dev -- evaluate --fixture-dir examples/evaluations --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
 ```
 
 Quorum also accepts exported HTML knowledge base pages via `--source` or
