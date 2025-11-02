@@ -262,10 +262,69 @@ test("renders evaluation summary csv rows for each fixture", () => {
     },
   ]);
 
-  assert.match(rendered, /^fixture_name,fixture_path,answer_path,source_paths,summary_match,/);
+  assert.match(
+    rendered,
+    /^fixture_name,fixture_path,answer_path,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,/,
+  );
   assert.match(rendered, /Support policy example/);
   assert.match(rendered, /\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md/);
-  assert.match(rendered, /yes,0,0,1\.000,no,1,0,0,0,1,0,0,0/);
+  assert.match(rendered, /yes,0,0,1\.000,no,none,,,,,1,0,0,0,1,0,0,0/);
+});
+
+test("evaluation summary csv includes first mismatched claim details", () => {
+  const rendered = renderEvaluationSummaryCsv([
+    {
+      fixtureName: "HR mismatch example",
+      fixturePath: "/tmp/fixtures/hr.json",
+      answerPath: "/tmp/answers/hr.md",
+      sourcePaths: ["/tmp/sources/hr.md"],
+      report: {
+        generatedAt: "2026-07-05T10:20:00.000Z",
+        answerPath: "/tmp/answers/hr.md",
+        answerLabel: "hr",
+        answerPreview: "Preview",
+        answer: "Answer text",
+        sources: [],
+        assessments: [],
+        summary: {
+          verified: 0,
+          contradicted: 1,
+          unsupported: 0,
+          needs_review: 0,
+        },
+      },
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      actualSummary: {
+        verified: 0,
+        contradicted: 1,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      summaryMatches: false,
+      claims: [
+        {
+          index: 0,
+          claimText: "Employees receive 18 weeks of paid parental leave.",
+          actualVerdict: "contradicted",
+          expectedVerdict: "verified",
+          matches: false,
+        },
+      ],
+      matchedClaims: 0,
+      totalExpectedClaims: 1,
+      score: 0,
+    },
+  ]);
+
+  assert.match(
+    rendered,
+    /HR mismatch example,[^,\n]+,[^,\n]+,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,1,0,0,0,0,1,0,0/,
+  );
 });
 
 test("renders evaluation markdown report with fixture summaries", () => {
