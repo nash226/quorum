@@ -5,6 +5,7 @@ import { join } from "node:path";
 import test from "node:test";
 import {
   evaluateFixtureFiles,
+  evaluateFixtures,
   hasEvaluationMismatch,
   importReviewerDecisionFile,
   importReviewerDecisions,
@@ -307,6 +308,64 @@ test("programmatic API rejects empty in-memory source batches", async () => {
     {
       message: "At least one in-memory source is required.",
     },
+  );
+});
+
+test("programmatic API evaluates in-memory fixture arrays for workflow callers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-evaluation-batch-"));
+
+  try {
+    const answerPath = join(tempDir, "answers", "hr-answer.md");
+    const sourcePath = join(tempDir, "sources", "hr-policy.md");
+    const fixturePath = join(tempDir, "fixtures", "hr-policy.json");
+
+    await mkdir(join(tempDir, "answers"), { recursive: true });
+    await mkdir(join(tempDir, "sources"), { recursive: true });
+    await mkdir(join(tempDir, "fixtures"), { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const scorecards = await evaluateFixtures({
+      fixtures: [
+        {
+          name: "HR policy fixture",
+          answerPath: "answers/hr-answer.md",
+          sourcePaths: ["sources/hr-policy.md"],
+          expectedSummary: {
+            verified: 1,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+          },
+          expectedClaimVerdicts: ["verified"],
+        },
+      ],
+      baseDir: tempDir,
+      fixturePaths: [fixturePath],
+      generatedAt: "2026-07-05T19:00:00.000Z",
+    });
+
+    assert.equal(scorecards.length, 1);
+    assert.equal(scorecards[0]?.fixtureName, "HR policy fixture");
+    assert.equal(scorecards[0]?.fixturePath, fixturePath);
+    assert.equal(scorecards[0]?.answerPath, answerPath);
+    assert.deepEqual(scorecards[0]?.sourcePaths, [sourcePath]);
+    assert.equal(scorecards[0]?.report.generatedAt, "2026-07-05T19:00:00.000Z");
+    assert.equal(scorecards[0]?.summaryMatches, true);
+    assert.equal(scorecards[0]?.score, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API rejects empty in-memory evaluation batches", async () => {
+  await assert.rejects(
+    evaluateFixtures({
+      fixtures: [],
+    }),
+    /At least one evaluation fixture is required\./,
   );
 });
 
