@@ -305,7 +305,8 @@ PDF source parsing behavior without writing temporary files first, as long as
 each source includes a representative `sourcePath` extension.
 
 For fixture-driven evaluation work, Quorum also exports
-`loadEvaluationFixture`, `evaluateFixtureFile`, `evaluateFixtureFiles`,
+`loadEvaluationFixture`, `loadEvaluationFixtureFromContent`,
+`evaluateFixtureContents`, `evaluateFixtureFile`, `evaluateFixtureFiles`,
 `renderEvaluationScorecard`, `renderEvaluationTextReport`,
 `renderEvaluationMarkdownReport`, `renderEvaluationHtmlReport`,
 `renderEvaluationSummaryCsv`, and
@@ -315,10 +316,12 @@ current verifier against expected verdicts:
 
 ```ts
 import {
+  evaluateFixtureContents,
   evaluateFixtureFile,
   evaluateFixtureFiles,
   renderEvaluationHtmlReport,
   hasEvaluationMismatch,
+  loadEvaluationFixtureFromContent,
   renderEvaluationMarkdownReport,
   renderEvaluationScorecard,
   renderEvaluationSummaryCsv,
@@ -338,6 +341,37 @@ console.log(renderEvaluationMarkdownReport(scorecards));
 console.log(renderEvaluationHtmlReport(scorecards));
 console.log(renderEvaluationSummaryCsv(scorecards));
 console.log(scorecards.some(hasEvaluationMismatch));
+```
+
+For embedded runners that already have fixture JSON in memory, Quorum can load
+and evaluate those definitions without writing temporary fixture files first:
+
+```ts
+const fixtureJson = JSON.stringify({
+  name: "Support policy fixture",
+  answerPath: "../answers/support-answer.md",
+  sourcePaths: ["../sources/support-playbook.md"],
+  expectedSummary: {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  },
+  expectedClaimVerdicts: ["contradicted", "verified", "unsupported"],
+});
+
+const fixture = loadEvaluationFixtureFromContent(fixtureJson);
+const embeddedScorecards = await evaluateFixtureContents({
+  fixtures: [
+    {
+      fixturePath: "examples/evaluations/support-policy.json",
+      content: fixtureJson,
+    },
+  ],
+});
+
+console.log(fixture.name);
+console.log(renderEvaluationScorecard(embeddedScorecards[0]));
 ```
 
 The CLI can run those same fixtures directly:

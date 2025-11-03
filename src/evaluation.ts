@@ -49,8 +49,22 @@ export interface InMemoryEvaluationBatchOptions {
   generatedAt?: string;
 }
 
+export interface InMemoryEvaluationFixtureInput {
+  fixturePath: string;
+  content: string | Buffer;
+}
+
+export interface InMemoryEvaluationFixtureFileBatchOptions {
+  fixtures: InMemoryEvaluationFixtureInput[];
+  generatedAt?: string;
+}
+
 export async function loadEvaluationFixture(fixturePath: string): Promise<EvaluationFixture> {
   return JSON.parse(await readFile(fixturePath, "utf8")) as EvaluationFixture;
+}
+
+export function loadEvaluationFixtureFromContent(content: string | Buffer): EvaluationFixture {
+  return JSON.parse(content.toString()) as EvaluationFixture;
 }
 
 export async function evaluateFixture(
@@ -150,6 +164,21 @@ export async function evaluateFixtures(
       }),
     ),
   );
+}
+
+export async function evaluateFixtureContents(
+  options: InMemoryEvaluationFixtureFileBatchOptions,
+): Promise<EvaluationScorecard[]> {
+  if (options.fixtures.length === 0) {
+    throw new Error("At least one in-memory evaluation fixture is required.");
+  }
+
+  return evaluateFixtures({
+    fixtures: options.fixtures.map((fixture) => loadEvaluationFixtureFromContent(fixture.content)),
+    baseDirs: options.fixtures.map((fixture) => dirname(fixture.fixturePath)),
+    fixturePaths: options.fixtures.map((fixture) => fixture.fixturePath),
+    generatedAt: options.generatedAt,
+  });
 }
 
 export async function evaluateFixtureFiles(
