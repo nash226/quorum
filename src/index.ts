@@ -66,6 +66,7 @@ export {
   resolveSourcePaths,
   STDIN_ANSWER_PATH,
   verifyAnswers,
+  verifyAnswerContents,
   verifyAnswerFile,
   verifyBatchAnswers as verifyAnswerBatch,
 } from "./workflow.js";
@@ -75,6 +76,7 @@ export type {
   InMemoryBatchVerificationOptions,
   InMemorySourceInput,
   InMemorySourceLoadOptions,
+  InMemorySingleVerificationOptions,
   SourceLoadOptions,
 } from "./workflow.js";
 export { parseSource, parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";

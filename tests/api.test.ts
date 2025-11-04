@@ -27,6 +27,7 @@ import {
   renderSummaryCsv,
   renderTextReport,
   verifyAnswers,
+  verifyAnswerContents,
   verifyAnswer,
   verifyAnswerBatch,
   verifyAnswerFile,
@@ -298,6 +299,43 @@ Employees receive 12 weeks of paid parental leave.
     needs_review: 0,
     answersWithoutClaims: 0,
     answersWithFailures: 0,
+  });
+});
+
+test("programmatic API verifies one in-memory answer against raw source content", async () => {
+  const report = await verifyAnswerContents({
+    answer: "Refunds are available for 30 days from the purchase date.",
+    answerLabel: "support-agent draft",
+    sources: [
+      {
+        sourcePath: "help/refunds.html",
+        content: `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <main>
+      <p>Refunds are available for 30 days from the purchase date.</p>
+    </main>
+  </body>
+</html>`,
+      },
+    ],
+    defaultTrustLevel: "high",
+    generatedAt: "2026-07-05T03:30:00.000Z",
+  });
+
+  assert.equal(report.answerLabel, "support-agent draft");
+  assert.equal(report.answerPath, undefined);
+  assert.equal(report.generatedAt, "2026-07-05T03:30:00.000Z");
+  assert.equal(report.sources[0]?.title, "Refund Policy");
+  assert.equal(report.sources[0]?.trustLevel, "high");
+  assert.deepEqual(report.summary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
   });
 });
 
