@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  evaluateFixtureContent,
   evaluateFixtureContents,
   evaluateFixtureFiles,
   evaluateFixtures,
@@ -448,6 +449,59 @@ test("programmatic API loads and evaluates in-memory fixture JSON files", async 
     assert.deepEqual(scorecards[0]?.sourcePaths, [sourcePath]);
     assert.equal(scorecards[0]?.report.generatedAt, "2026-07-05T20:30:00.000Z");
     assert.equal(scorecards[0]?.summaryMatches, true);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API evaluates one in-memory fixture JSON file", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-evaluation-single-content-"));
+
+  try {
+    const answerPath = join(tempDir, "answers", "support-answer.md");
+    const sourcePath = join(tempDir, "sources", "support-policy.md");
+    const fixturePath = join(tempDir, "fixtures", "support-policy.json");
+    const fixtureContent = JSON.stringify({
+      name: "Support policy fixture",
+      answerPath: "../answers/support-answer.md",
+      sourcePaths: ["../sources/support-policy.md"],
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      expectedClaimVerdicts: ["verified"],
+    });
+
+    await mkdir(join(tempDir, "answers"), { recursive: true });
+    await mkdir(join(tempDir, "sources"), { recursive: true });
+    await mkdir(join(tempDir, "fixtures"), { recursive: true });
+    await Promise.all([
+      writeFile(
+        answerPath,
+        "Refunds are available for 30 days from the purchase date.\n",
+        "utf8",
+      ),
+      writeFile(
+        sourcePath,
+        "Refunds are available for 30 days from the purchase date.\n",
+        "utf8",
+      ),
+    ]);
+
+    const scorecard = await evaluateFixtureContent({
+      fixturePath,
+      content: fixtureContent,
+      generatedAt: "2026-07-05T20:45:00.000Z",
+    });
+
+    assert.equal(scorecard.fixturePath, fixturePath);
+    assert.equal(scorecard.answerPath, answerPath);
+    assert.deepEqual(scorecard.sourcePaths, [sourcePath]);
+    assert.equal(scorecard.report.generatedAt, "2026-07-05T20:45:00.000Z");
+    assert.equal(scorecard.summaryMatches, true);
+    assert.equal(scorecard.score, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

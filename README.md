@@ -320,7 +320,7 @@ reuse a loaded source set across multiple answers.
 
 For fixture-driven evaluation work, Quorum also exports
 `loadEvaluationFixture`, `loadEvaluationFixtureFromContent`,
-`evaluateFixtureContents`, `evaluateFixtureFile`, `evaluateFixtureFiles`,
+`evaluateFixtureContent`, `evaluateFixtureContents`, `evaluateFixtureFile`, `evaluateFixtureFiles`,
 `renderEvaluationScorecard`, `renderEvaluationTextReport`,
 `renderEvaluationMarkdownReport`, `renderEvaluationHtmlReport`,
 `renderEvaluationSummaryCsv`, and
@@ -330,6 +330,7 @@ current verifier against expected verdicts:
 
 ```ts
 import {
+  evaluateFixtureContent,
   evaluateFixtureContents,
   evaluateFixtureFile,
   evaluateFixtureFiles,
@@ -375,6 +376,10 @@ const fixtureJson = JSON.stringify({
 });
 
 const fixture = loadEvaluationFixtureFromContent(fixtureJson);
+const embeddedScorecard = await evaluateFixtureContent({
+  fixturePath: "examples/evaluations/support-policy.json",
+  content: fixtureJson,
+});
 const embeddedScorecards = await evaluateFixtureContents({
   fixtures: [
     {
@@ -385,6 +390,7 @@ const embeddedScorecards = await evaluateFixtureContents({
 });
 
 console.log(fixture.name);
+console.log(renderEvaluationScorecard(embeddedScorecard));
 console.log(renderEvaluationScorecard(embeddedScorecards[0]));
 ```
 

@@ -59,6 +59,12 @@ export interface InMemoryEvaluationFixtureFileBatchOptions {
   generatedAt?: string;
 }
 
+export interface InMemoryEvaluationFixtureFileOptions {
+  fixturePath: string;
+  content: string | Buffer;
+  generatedAt?: string;
+}
+
 export async function loadEvaluationFixture(fixturePath: string): Promise<EvaluationFixture> {
   return JSON.parse(await readFile(fixturePath, "utf8")) as EvaluationFixture;
 }
@@ -179,6 +185,26 @@ export async function evaluateFixtureContents(
     fixturePaths: options.fixtures.map((fixture) => fixture.fixturePath),
     generatedAt: options.generatedAt,
   });
+}
+
+export async function evaluateFixtureContent(
+  options: InMemoryEvaluationFixtureFileOptions,
+): Promise<EvaluationScorecard> {
+  const [scorecard] = await evaluateFixtureContents({
+    fixtures: [
+      {
+        fixturePath: options.fixturePath,
+        content: options.content,
+      },
+    ],
+    generatedAt: options.generatedAt,
+  });
+
+  if (!scorecard) {
+    throw new Error("Expected one evaluation scorecard.");
+  }
+
+  return scorecard;
 }
 
 export async function evaluateFixtureFiles(
