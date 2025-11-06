@@ -6,6 +6,7 @@ export type {
   ClaimAssessment,
   ClaimVerdict,
   EvidenceSnippet,
+  SingleVerificationResult,
   SourceDocument,
   SourceTrustLevel,
   VerificationReport,
@@ -68,9 +69,12 @@ export {
   resolveSourcePaths,
   STDIN_ANSWER_PATH,
   verifyAnswers,
+  verifyAnswerFileResult,
   verifyAnswerBatchContents,
   verifyAnswerContents,
+  verifyAnswerContentsResult,
   verifyAnswerFile,
+  verifyAnswerResult,
   verifyBatchAnswers as verifyAnswerBatch,
 } from "./workflow.js";
 export type {
@@ -80,6 +84,8 @@ export type {
   InMemoryBatchVerificationOptions,
   InMemorySourceInput,
   InMemorySourceLoadOptions,
+  SingleFileVerificationOptions,
+  SingleVerificationResultOptions,
   InMemorySingleVerificationOptions,
   SourceLoadOptions,
 } from "./workflow.js";

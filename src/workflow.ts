@@ -5,6 +5,7 @@ import type {
   BatchVerificationReport,
   BatchVerificationResult,
   ClaimVerdict,
+  SingleVerificationResult,
   SourceDocument,
   SourceTrustLevel,
   VerificationReport,
@@ -65,6 +66,22 @@ export interface InMemorySingleVerificationOptions {
   answerLabel?: string;
   sources: InMemorySourceInput[];
   defaultTrustLevel?: SourceTrustLevel;
+  generatedAt?: string;
+}
+
+export interface SingleFileVerificationOptions {
+  answerPath: string;
+  sources: SourceDocument[];
+  failOn?: ClaimVerdict[];
+  generatedAt?: string;
+}
+
+export interface SingleVerificationResultOptions {
+  answer: string;
+  answerPath?: string;
+  answerLabel?: string;
+  sources: SourceDocument[];
+  failOn?: ClaimVerdict[];
   generatedAt?: string;
 }
 
@@ -155,6 +172,19 @@ export async function verifyAnswerFile(
   );
 }
 
+export async function verifyAnswerFileResult(
+  options: SingleFileVerificationOptions,
+): Promise<SingleVerificationResult> {
+  return buildSingleVerificationResult(
+    await verifyAnswerFile(
+      options.answerPath,
+      options.sources,
+      options.generatedAt ?? new Date().toISOString(),
+    ),
+    options.failOn,
+  );
+}
+
 export async function verifyAnswerContents(
   options: InMemorySingleVerificationOptions,
 ): Promise<VerificationReport> {
@@ -178,6 +208,14 @@ export async function verifyAnswerContents(
   }
 
   return report;
+}
+
+export async function verifyAnswerContentsResult(
+  options: InMemorySingleVerificationOptions & {
+    failOn?: ClaimVerdict[];
+  },
+): Promise<SingleVerificationResult> {
+  return buildSingleVerificationResult(await verifyAnswerContents(options), options.failOn);
 }
 
 export async function verifyBatchAnswers(
@@ -262,6 +300,27 @@ export function verifyAnswers(
   return summarizeBatchVerification(answers, options.sources, generatedAt);
 }
 
+export function verifyAnswerResult(
+  options: SingleVerificationResultOptions,
+): SingleVerificationResult {
+  const report = verifyAnswer(
+    options.answer,
+    options.sources,
+    options.generatedAt ?? new Date().toISOString(),
+    options.answerPath,
+  );
+
+  if (options.answerPath === undefined) {
+    delete report.answerPath;
+  }
+
+  if (options.answerLabel !== undefined) {
+    report.answerLabel = options.answerLabel;
+  }
+
+  return buildSingleVerificationResult(report, options.failOn);
+}
+
 export async function verifyAnswerBatchContents(
   options: InMemoryBatchContentVerificationOptions,
 ): Promise<BatchVerificationReport> {
@@ -286,6 +345,19 @@ export async function importReviewerDecisionFile(
   }
 
   return importReviewerDecisions(await readTextInput(reviewCsvPath));
+}
+
+function buildSingleVerificationResult(
+  report: VerificationReport,
+  failOn: ClaimVerdict[] | undefined,
+): SingleVerificationResult {
+  const failVerdicts = matchingFailVerdicts(report, failOn ?? []);
+
+  return {
+    report,
+    shouldFail: failVerdicts.length > 0,
+    failVerdicts,
+  };
 }
 
 async function listSourceFiles(sourceDir: string): Promise<string[]> {
