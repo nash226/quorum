@@ -30,11 +30,14 @@ import {
   renderSummaryCsv,
   renderTextReport,
   verifyAnswers,
+  verifyAnswersResult,
   verifyAnswerBatchContents,
+  verifyAnswerBatchContentsResult,
   verifyAnswerContents,
   verifyAnswerContentsResult,
   verifyAnswer,
   verifyAnswerBatch,
+  verifyAnswerBatchResult,
   verifyAnswerFile,
   verifyAnswerFileResult,
   verifyAnswerResult,
@@ -427,6 +430,37 @@ Employees receive 12 weeks of paid parental leave.
   assert.deepEqual(result.failVerdicts, []);
 });
 
+test("programmatic API returns top-level fail-policy metadata for in-memory batches", () => {
+  const result = verifyAnswersResult({
+    answers: [
+      {
+        answer: "Employees receive 16 weeks of paid parental leave.",
+        answerPath: "answers/hr.md",
+      },
+      {
+        answer: "Short.",
+        answerLabel: "empty draft",
+      },
+    ],
+    sources: [
+      {
+        id: "source_1",
+        title: "Benefits policy",
+        trustLevel: "high",
+        content: "Employees receive 12 weeks of paid parental leave.",
+      },
+    ],
+    failOn: ["needs_review", "contradicted", "unsupported"],
+    generatedAt: "2026-07-05T03:43:00.000Z",
+  });
+
+  assert.equal(result.report.generatedAt, "2026-07-05T03:43:00.000Z");
+  assert.equal(result.report.summary.answersWithFailures, 2);
+  assert.equal(result.report.summary.answersWithoutClaims, 1);
+  assert.equal(result.shouldFail, true);
+  assert.deepEqual(result.failVerdicts, ["needs_review", "contradicted"]);
+});
+
 test("programmatic API batches in-memory answers against raw source content", async () => {
   const report = await verifyAnswerBatchContents({
     answers: [
@@ -500,6 +534,84 @@ Employees receive 12 weeks of paid parental leave.
   );
   assert.equal(report.sources[1]?.title, "Refund Policy");
   assert.equal(report.sources[1]?.trustLevel, "medium");
+});
+
+test("programmatic API returns top-level fail-policy metadata for batch file verification", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-batch-result-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await mkdir(answerDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "empty.md"), "Short.\n", "utf8"),
+      writeFile(
+        join(answerDir, "hr.md"),
+        "Employees receive 16 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const sources = await loadSources({
+      sourcePaths: [sourcePath],
+      sourceDirs: [],
+      defaultTrustLevel: "high",
+    });
+    const result = await verifyAnswerBatchResult({
+      answerPaths: [],
+      answerDirPaths: [answerDir],
+      sources,
+      failOn: ["needs_review", "contradicted"],
+      generatedAt: "2026-07-05T03:46:00.000Z",
+    });
+
+    assert.equal(result.report.generatedAt, "2026-07-05T03:46:00.000Z");
+    assert.equal(result.report.summary.answersWithFailures, 2);
+    assert.equal(result.report.summary.answersWithoutClaims, 1);
+    assert.equal(result.shouldFail, true);
+    assert.deepEqual(result.failVerdicts, ["needs_review", "contradicted"]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API returns top-level fail-policy metadata for raw-content batches", async () => {
+  const result = await verifyAnswerBatchContentsResult({
+    answers: [
+      {
+        answer: "Refunds are available for 14 days from the purchase date.",
+        answerLabel: "support escalation",
+      },
+      {
+        answer: "Short.",
+        answerPath: "answers/empty.md",
+      },
+    ],
+    sources: [
+      {
+        sourcePath: "help/refunds.html",
+        content: `<!doctype html>
+<html>
+  <body>
+    <main>
+      <p>Refunds are available for 30 days from the purchase date.</p>
+    </main>
+  </body>
+</html>`,
+      },
+    ],
+    defaultTrustLevel: "high",
+    failOn: ["unsupported", "needs_review", "contradicted"],
+    generatedAt: "2026-07-05T03:47:00.000Z",
+  });
+
+  assert.equal(result.report.generatedAt, "2026-07-05T03:47:00.000Z");
+  assert.equal(result.report.summary.answersWithFailures, 2);
+  assert.equal(result.report.summary.answersWithoutClaims, 1);
+  assert.equal(result.shouldFail, true);
+  assert.deepEqual(result.failVerdicts, ["needs_review", "contradicted"]);
 });
 
 test("programmatic API rejects empty in-memory source batches", async () => {
