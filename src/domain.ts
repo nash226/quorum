@@ -75,3 +75,9 @@ export interface BatchVerificationReport {
     answersWithFailures: number;
   };
 }
+
+export interface BatchVerificationRunResult {
+  report: BatchVerificationReport;
+  shouldFail: boolean;
+  failVerdicts: ClaimVerdict[];
+}
