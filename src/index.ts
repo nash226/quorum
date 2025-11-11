@@ -73,6 +73,13 @@ export {
   renderTextReport,
 } from "./report-renderer.js";
 export {
+  CLAIM_VERDICTS,
+  matchingFailVerdicts,
+  parseClaimVerdict,
+  shouldFailReport,
+} from "./report-policy.js";
+export type { FailPolicyReport } from "./report-policy.js";
+export {
   importReviewerDecisionFile,
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
