@@ -24,6 +24,14 @@ function runCli(args, options = {}) {
   });
 }
 
+function runCommand(command, args, options = {}) {
+  return execFileSync(command, args, {
+    cwd: repoRoot,
+    encoding: "utf8",
+    ...options,
+  });
+}
+
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
 }
@@ -92,6 +100,7 @@ requireBuiltCli();
 const api = await import(pathToFileURL(join(repoRoot, "dist", "src", "index.js")).href);
 
 const tempDir = mkdtempSync(join(tmpdir(), "quorum-smoke-"));
+let packedPackageFilename;
 
 try {
   const singleReportPath = join(tempDir, "hr-report.json");
@@ -250,9 +259,50 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
   assert.equal(apiEvaluationFixtureResult.hasMismatch, false);
   assert.equal(apiEvaluationFixtureResult.scorecard.summaryMatches, true);
 
+  const packedPackage = JSON.parse(runCommand("npm", ["pack", "--json"]))[0];
+  assert.ok(packedPackage);
+  packedPackageFilename = packedPackage.filename;
+  const packedPaths = new Set(packedPackage.files.map((file) => file.path));
+  assert.ok(packedPaths.has("dist/src/index.js"));
+  assert.ok(packedPaths.has("dist/src/index.d.ts"));
+  assert.ok(packedPaths.has("dist/src/cli.js"));
+  assert.ok(packedPaths.has("README.md"));
+  assert.ok(!packedPaths.has("src/index.ts"));
+  assert.ok(!packedPaths.has("tests/api.test.ts"));
+
+  const consumerDir = mkdtempSync(join(tempDir, "consumer-"));
+  writeFileSync(
+    join(consumerDir, "package.json"),
+    JSON.stringify(
+      {
+        name: "quorum-smoke-consumer",
+        private: true,
+        type: "module",
+      },
+      null,
+      2,
+    ),
+  );
+  runCommand("npm", ["install", join(repoRoot, packedPackage.filename)], {
+    cwd: consumerDir,
+    stdio: "pipe",
+  });
+  const packedApi = await import(
+    pathToFileURL(join(consumerDir, "node_modules", "quorum", "dist", "src", "index.js")).href
+  );
+  const packedReport = packedApi.verifyAnswerResult({
+    answer: "Employees receive 12 weeks of paid parental leave.",
+    sources: apiSources,
+    generatedAt: "2026-07-06T00:00:00.000Z",
+  });
+  assert.equal(packedReport.report.summary.verified, 1);
+
   console.log(
-    "Smoke check passed: CLI verify/import/evaluate flows and built package API helpers succeeded.",
+    "Smoke check passed: CLI flows, built package helpers, and packed npm artifact succeeded.",
   );
 } finally {
   rmSync(tempDir, { recursive: true, force: true });
+  if (packedPackageFilename) {
+    rmSync(join(repoRoot, packedPackageFilename), { force: true });
+  }
 }
