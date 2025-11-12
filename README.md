@@ -262,6 +262,24 @@ const evaluationResult = await evaluateFixtureFilesResult({
 });
 ```
 
+For workflow runners that want the same recursive file discovery as the CLI,
+Quorum also exports `resolveSourcePaths`, `resolveAnswerPaths`, and
+`resolveEvaluationFixturePaths` so callers can expand explicit files plus
+nested directories in the same stable order before handing the results to
+verification or evaluation helpers:
+
+```ts
+import {
+  resolveAnswerPaths,
+  resolveEvaluationFixturePaths,
+  resolveSourcePaths,
+} from "quorum";
+
+const sourcePaths = await resolveSourcePaths([], ["examples/sources"]);
+const answerPaths = await resolveAnswerPaths([], ["examples/answers"]);
+const fixturePaths = await resolveEvaluationFixturePaths([], ["examples/evaluations"]);
+```
+
 For in-memory callers, `verifyAnswer(answerText, sources)` remains available for
 teams that already manage file I/O themselves, and `verifyAnswers({ answers,
 sources })` batches multiple in-memory agent responses without writing temp
