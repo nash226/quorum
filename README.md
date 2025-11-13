@@ -192,6 +192,8 @@ import {
   verifyAnswerBatch,
   verifyAnswerBatchResult,
   verifyAnswerFile,
+  verifyAnswerFileInputs,
+  verifyAnswerFileInputsResult,
   verifyAnswerFileResult,
   verifyAnswerResult,
 } from "quorum";
@@ -204,9 +206,24 @@ const sources = await loadSources({
 
 const report = await verifyAnswerFile("examples/answers/hr-answer.md", sources);
 
+const directFileReport = await verifyAnswerFileInputs({
+  answerPath: "examples/answers/hr-answer.md",
+  sourcePaths: [],
+  sourceDirs: ["examples/sources"],
+  defaultTrustLevel: "high",
+});
+
 const gatedReport = await verifyAnswerFileResult({
   answerPath: "examples/answers/hr-answer.md",
   sources,
+  failOn: ["contradicted", "unsupported"],
+});
+
+const directFileResult = await verifyAnswerFileInputsResult({
+  answerPath: "examples/answers/hr-answer.md",
+  sourcePaths: [],
+  sourceDirs: ["examples/sources"],
+  defaultTrustLevel: "high",
   failOn: ["contradicted", "unsupported"],
 });
 
@@ -263,6 +280,8 @@ const evaluationResult = await evaluateFixtureFilesResult({
 ```
 
 For workflow runners that want the same recursive file discovery as the CLI,
+`verifyAnswerFileInputs` and `verifyAnswerFileInputsResult` accept the same
+`sourcePaths` plus `sourceDirs` shape as the CLI for a single answer, and
 Quorum also exports `resolveSourcePaths`, `resolveAnswerPaths`, and
 `resolveEvaluationFixturePaths` so callers can expand explicit files plus
 nested directories in the same stable order before handing the results to

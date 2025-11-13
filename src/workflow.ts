@@ -82,6 +82,16 @@ export interface SingleFileVerificationOptions {
   generatedAt?: string;
 }
 
+export interface SingleFileInputVerificationOptions extends SourceLoadOptions {
+  answerPath: string;
+  generatedAt?: string;
+}
+
+export interface SingleFileInputVerificationResultOptions
+  extends SingleFileInputVerificationOptions {
+  failOn?: ClaimVerdict[];
+}
+
 export interface SingleVerificationResultOptions {
   answer: string;
   answerPath?: string;
@@ -189,6 +199,28 @@ export async function verifyAnswerFileResult(
     ),
     options.failOn,
   );
+}
+
+export async function verifyAnswerFileInputs(
+  options: SingleFileInputVerificationOptions,
+): Promise<VerificationReport> {
+  const sources = await loadSourceDocuments({
+    sourcePaths: options.sourcePaths,
+    sourceDirs: options.sourceDirs,
+    defaultTrustLevel: options.defaultTrustLevel,
+  });
+
+  return verifyAnswerFile(
+    options.answerPath,
+    sources,
+    options.generatedAt ?? new Date().toISOString(),
+  );
+}
+
+export async function verifyAnswerFileInputsResult(
+  options: SingleFileInputVerificationResultOptions,
+): Promise<SingleVerificationResult> {
+  return buildSingleVerificationResult(await verifyAnswerFileInputs(options), options.failOn);
 }
 
 export async function verifyAnswerContents(
