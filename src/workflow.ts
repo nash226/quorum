@@ -77,6 +77,7 @@ export interface InMemorySingleVerificationOptions {
 
 export interface SingleFileVerificationOptions {
   answerPath: string;
+  answerLabel?: string;
   sources: SourceDocument[];
   failOn?: ClaimVerdict[];
   generatedAt?: string;
@@ -84,6 +85,7 @@ export interface SingleFileVerificationOptions {
 
 export interface SingleFileInputVerificationOptions extends SourceLoadOptions {
   answerPath: string;
+  answerLabel?: string;
   generatedAt?: string;
 }
 
@@ -174,18 +176,25 @@ export async function verifyAnswerFile(
   answerPath: string,
   sources: SourceDocument[],
   generatedAt = new Date().toISOString(),
+  answerLabel?: string,
 ): Promise<VerificationReport> {
   if (answerPath !== "-") {
     await ensureFilePath(answerPath, "Answer");
   }
 
   const answer = await readTextInput(answerPath);
-  return verifyAnswer(
+  const report = verifyAnswer(
     answer,
     sources,
     generatedAt,
     answerPath === "-" ? STDIN_ANSWER_PATH : answerPath,
   );
+
+  if (answerLabel !== undefined) {
+    report.answerLabel = answerLabel;
+  }
+
+  return report;
 }
 
 export async function verifyAnswerFileResult(
@@ -196,6 +205,7 @@ export async function verifyAnswerFileResult(
       options.answerPath,
       options.sources,
       options.generatedAt ?? new Date().toISOString(),
+      options.answerLabel,
     ),
     options.failOn,
   );
@@ -214,6 +224,7 @@ export async function verifyAnswerFileInputs(
     options.answerPath,
     sources,
     options.generatedAt ?? new Date().toISOString(),
+    options.answerLabel,
   );
 }
 
