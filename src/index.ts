@@ -84,6 +84,8 @@ export {
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
   importReviewerDecisionFileResult,
+  verifyAnswerBatchFileInputs,
+  verifyAnswerBatchFileInputsResult,
   loadSourceDocuments as loadSources,
   loadSourceDocumentsFromContent as loadSourcesFromContent,
   resolveAnswerPaths,
@@ -104,6 +106,8 @@ export {
   verifyBatchAnswers as verifyAnswerBatch,
 } from "./workflow.js";
 export type {
+  BatchFileInputVerificationOptions,
+  BatchFileInputVerificationResultOptions,
   BatchVerificationOptions,
   InMemoryAnswerInput,
   InMemoryBatchContentVerificationOptions,

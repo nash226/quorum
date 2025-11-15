@@ -94,6 +94,18 @@ export interface SingleFileInputVerificationResultOptions
   failOn?: ClaimVerdict[];
 }
 
+export interface BatchFileInputVerificationOptions extends SourceLoadOptions {
+  answerPaths: string[];
+  answerDirPaths: string[];
+  failOn?: ClaimVerdict[];
+  generatedAt?: string;
+}
+
+export interface BatchFileInputVerificationResultOptions
+  extends BatchFileInputVerificationOptions {
+  failOn?: ClaimVerdict[];
+}
+
 export interface SingleVerificationResultOptions {
   answer: string;
   answerPath?: string;
@@ -232,6 +244,33 @@ export async function verifyAnswerFileInputsResult(
   options: SingleFileInputVerificationResultOptions,
 ): Promise<SingleVerificationResult> {
   return buildSingleVerificationResult(await verifyAnswerFileInputs(options), options.failOn);
+}
+
+export async function verifyAnswerBatchFileInputs(
+  options: BatchFileInputVerificationOptions,
+): Promise<BatchVerificationReport> {
+  const sources = await loadSourceDocuments({
+    sourcePaths: options.sourcePaths,
+    sourceDirs: options.sourceDirs,
+    defaultTrustLevel: options.defaultTrustLevel,
+  });
+
+  return verifyBatchAnswers({
+    answerPaths: options.answerPaths,
+    answerDirPaths: options.answerDirPaths,
+    sources,
+    failOn: options.failOn,
+    generatedAt: options.generatedAt,
+  });
+}
+
+export async function verifyAnswerBatchFileInputsResult(
+  options: BatchFileInputVerificationResultOptions,
+): Promise<BatchVerificationRunResult> {
+  return buildBatchVerificationResult(
+    await verifyAnswerBatchFileInputs(options),
+    options.failOn,
+  );
 }
 
 export async function verifyAnswerContents(
