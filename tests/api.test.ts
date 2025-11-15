@@ -46,6 +46,8 @@ import {
   verifyAnswersResult,
   verifyAnswerBatchContents,
   verifyAnswerBatchContentsResult,
+  verifyAnswerBatchFileInputs,
+  verifyAnswerBatchFileInputsResult,
   verifyAnswerContents,
   verifyAnswerContentsResult,
   verifyAnswer,
@@ -317,6 +319,57 @@ test("programmatic API batches file and directory answers with fail verdicts", a
         { label: "hr-answer", shouldFail: true },
       ],
     );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API batches file inputs without a separate source-loading step", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-batch-file-inputs-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(answerDir, "hr.md");
+    const sourcePath = join(sourceDir, "policy.md");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+        "utf8",
+      ),
+    ]);
+
+    const report = await verifyAnswerBatchFileInputs({
+      answerPaths: [],
+      answerDirPaths: [answerDir],
+      sourcePaths: [],
+      sourceDirs: [sourceDir],
+      generatedAt: "2026-07-06T13:00:00.000Z",
+    });
+
+    assert.equal(report.generatedAt, "2026-07-06T13:00:00.000Z");
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sources[0]?.title, "HR Policy");
+    assert.deepEqual(report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithoutClaims: 0,
+      answersWithFailures: 0,
+    });
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -769,6 +822,47 @@ test("programmatic API returns top-level fail-policy metadata for batch file ver
     });
 
     assert.equal(result.report.generatedAt, "2026-07-05T03:46:00.000Z");
+    assert.equal(result.report.summary.answersWithFailures, 2);
+    assert.equal(result.report.summary.answersWithoutClaims, 1);
+    assert.equal(result.shouldFail, true);
+    assert.deepEqual(result.failVerdicts, ["needs_review", "contradicted"]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API returns top-level fail-policy metadata for batch file inputs", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-batch-file-input-result-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(join(answerDir, "empty.md"), "Short.\n", "utf8"),
+      writeFile(
+        join(answerDir, "hr.md"),
+        "Employees receive 16 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const result = await verifyAnswerBatchFileInputsResult({
+      answerPaths: [],
+      answerDirPaths: [answerDir],
+      sourcePaths: [],
+      sourceDirs: [sourceDir],
+      defaultTrustLevel: "high",
+      failOn: ["needs_review", "contradicted"],
+      generatedAt: "2026-07-06T13:05:00.000Z",
+    });
+
+    assert.equal(result.report.generatedAt, "2026-07-06T13:05:00.000Z");
     assert.equal(result.report.summary.answersWithFailures, 2);
     assert.equal(result.report.summary.answersWithoutClaims, 1);
     assert.equal(result.shouldFail, true);
