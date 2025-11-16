@@ -115,6 +115,24 @@ export interface SingleVerificationResultOptions {
   generatedAt?: string;
 }
 
+export interface ReviewerDecisionContentImportOptions {
+  reviewCsvContent: string;
+}
+
+export interface ReviewerDecisionContentImportResultOptions
+  extends ReviewerDecisionContentImportOptions {
+  failOn?: ClaimVerdict[];
+}
+
+export interface ReviewerDecisionFileImportOptions {
+  reviewCsvPath: string;
+}
+
+export interface ReviewerDecisionFileImportResultOptions
+  extends ReviewerDecisionFileImportOptions {
+  failOn?: ClaimVerdict[];
+}
+
 export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
 export const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
 export const STDIN_ANSWER_PATH = "<stdin>";
@@ -455,20 +473,46 @@ export async function verifyAnswerBatchContentsResult(
 
 export function importReviewerDecisionContents(
   reviewCsvContent: string,
+): ReviewerDecisionImportReport;
+export function importReviewerDecisionContents(
+  options: ReviewerDecisionContentImportOptions,
+): ReviewerDecisionImportReport;
+export function importReviewerDecisionContents(
+  reviewCsvContentOrOptions: string | ReviewerDecisionContentImportOptions,
 ): ReviewerDecisionImportReport {
-  return importReviewerDecisions(reviewCsvContent);
+  return importReviewerDecisions(resolveReviewCsvContent(reviewCsvContentOrOptions));
 }
 
 export function importReviewerDecisionContentsResult(
   reviewCsvContent: string,
+  failOn?: ClaimVerdict[],
+): ReviewerDecisionImportResult;
+export function importReviewerDecisionContentsResult(
+  options: ReviewerDecisionContentImportResultOptions,
+): ReviewerDecisionImportResult;
+export function importReviewerDecisionContentsResult(
+  reviewCsvContentOrOptions: string | ReviewerDecisionContentImportResultOptions,
   failOn: ClaimVerdict[] = [],
 ): ReviewerDecisionImportResult {
-  return importReviewerDecisionsResult(reviewCsvContent, failOn);
+  const options =
+    typeof reviewCsvContentOrOptions === "string"
+      ? { reviewCsvContent: reviewCsvContentOrOptions, failOn }
+      : reviewCsvContentOrOptions;
+
+  return importReviewerDecisionsResult(options.reviewCsvContent, options.failOn ?? []);
 }
 
 export async function importReviewerDecisionFile(
   reviewCsvPath: string,
+): Promise<ReviewerDecisionImportReport>;
+export async function importReviewerDecisionFile(
+  options: ReviewerDecisionFileImportOptions,
+): Promise<ReviewerDecisionImportReport>;
+export async function importReviewerDecisionFile(
+  reviewCsvPathOrOptions: string | ReviewerDecisionFileImportOptions,
 ): Promise<ReviewerDecisionImportReport> {
+  const reviewCsvPath = resolveReviewCsvPath(reviewCsvPathOrOptions);
+
   if (reviewCsvPath !== "-") {
     await ensureFilePath(reviewCsvPath, "Reviewer decision CSV");
   }
@@ -478,13 +522,26 @@ export async function importReviewerDecisionFile(
 
 export async function importReviewerDecisionFileResult(
   reviewCsvPath: string,
+  failOn?: ClaimVerdict[],
+): Promise<ReviewerDecisionImportResult>;
+export async function importReviewerDecisionFileResult(
+  options: ReviewerDecisionFileImportResultOptions,
+): Promise<ReviewerDecisionImportResult>;
+export async function importReviewerDecisionFileResult(
+  reviewCsvPathOrOptions: string | ReviewerDecisionFileImportResultOptions,
   failOn: ClaimVerdict[] = [],
 ): Promise<ReviewerDecisionImportResult> {
+  const options =
+    typeof reviewCsvPathOrOptions === "string"
+      ? { reviewCsvPath: reviewCsvPathOrOptions, failOn }
+      : reviewCsvPathOrOptions;
+  const reviewCsvPath = options.reviewCsvPath;
+
   if (reviewCsvPath !== "-") {
     await ensureFilePath(reviewCsvPath, "Reviewer decision CSV");
   }
 
-  return importReviewerDecisionsResult(await readTextInput(reviewCsvPath), failOn);
+  return importReviewerDecisionsResult(await readTextInput(reviewCsvPath), options.failOn ?? []);
 }
 
 function buildSingleVerificationResult(
@@ -631,6 +688,22 @@ function dedupePathsInOrder(paths: string[]): string[] {
   }
 
   return uniquePaths;
+}
+
+function resolveReviewCsvContent(
+  reviewCsvContentOrOptions: string | ReviewerDecisionContentImportOptions,
+): string {
+  return typeof reviewCsvContentOrOptions === "string"
+    ? reviewCsvContentOrOptions
+    : reviewCsvContentOrOptions.reviewCsvContent;
+}
+
+function resolveReviewCsvPath(
+  reviewCsvPathOrOptions: string | ReviewerDecisionFileImportOptions,
+): string {
+  return typeof reviewCsvPathOrOptions === "string"
+    ? reviewCsvPathOrOptions
+    : reviewCsvPathOrOptions.reviewCsvPath;
 }
 
 function summarizeBatchVerification(

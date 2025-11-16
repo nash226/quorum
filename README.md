@@ -265,12 +265,20 @@ const directBatchResult = await verifyAnswerBatchFileInputsResult({
 });
 
 const importedReview = await importReviewerDecisionFile("reports/hr-review.csv");
+const importedReviewWithOptions = await importReviewerDecisionFile({
+  reviewCsvPath: "reports/hr-review.csv",
+});
 
 const importedEmbeddedReview = importReviewerDecisionContents(
   `claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
 claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,,
 `,
 );
+const importedEmbeddedReviewWithOptions = importReviewerDecisionContents({
+  reviewCsvContent: `claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,,
+`,
+});
 
 const importedEmbeddedReviewResult = importReviewerDecisionContentsResult(
   `claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
@@ -278,6 +286,12 @@ claim_1,Employees receive free catered lunch every day.,unsupported,No approved 
 `,
   ["unsupported"],
 );
+const importedEmbeddedReviewResultWithOptions = importReviewerDecisionContentsResult({
+  reviewCsvContent: `claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+claim_1,Employees receive free catered lunch every day.,unsupported,No approved source matched strongly enough,,,unsupported,Needs People Ops review
+`,
+  failOn: ["unsupported"],
+});
 
 const evaluationScorecards = await evaluateFixtures({
   fixtures: [
