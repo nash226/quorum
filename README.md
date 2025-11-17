@@ -639,7 +639,9 @@ console.log(renderEvaluationScorecard(embeddedScorecards[0]));
 Each evaluation fixture can mix explicit `sourcePaths` with recursive
 `sourceDirs`, so domain scorecards can point at a maintained source bundle
 without rewriting every fixture when a benchmark adds another approved
-document.
+document. Evaluation scorecards and `--summary-csv-out` exports preserve those
+configured source directories alongside the resolved source files so drift
+reviews can see both the maintained bundle and the exact documents loaded.
 
 The CLI can run those same fixtures directly:
 
@@ -795,9 +797,9 @@ Options:
 - `evaluate --html-out <path>`: write a styled HTML evaluation report for
   reviewer walkthroughs, demos, and benchmark drift review
 - `evaluate --summary-csv-out <path>`: write one CSV row per fixture with the
-  fixture path, answer path, source paths, summary match state, claim-match
-  score, expected vs actual verdict totals, and the first mismatched claim's
-  expected versus actual verdict when drift appears
+  fixture path, answer path, source directories, source paths, summary match
+  state, claim-match score, expected vs actual verdict totals, and the first
+  mismatched claim's expected versus actual verdict when drift appears
 - `evaluate --fail-on-mismatch`: exit with code `2` when any fixture summary or
   expected claim verdict does not match the current verifier output
 
