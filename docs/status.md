@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9482451` on 2026-07-06, feat: support source directories in evaluation fixtures
+- Latest shipped change: `5b1c2d1` on 2026-07-06, expose evaluation source directories
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-06 | [#204](https://github.com/nash226/quorum/pull/204) | expose evaluation source directories | `5b1c2d1` |
 | 2026-07-06 | Direct push | feat: support source directories in evaluation fixtures | `9482451` |
 | 2026-07-06 | [#202](https://github.com/nash226/quorum/pull/202) | feat: support reviewer import option helpers | `ff2b74f` |
 | 2026-07-06 | [#201](https://github.com/nash226/quorum/pull/201) | add batch file-input verification helpers | `ff0eb42` |
@@ -53,5 +54,4 @@
 | 2026-07-06 | [#199](https://github.com/nash226/quorum/pull/199) | add file-input verification helpers | `15ec0eb` |
 | 2026-07-06 | [#198](https://github.com/nash226/quorum/pull/198) | cover path discovery helpers | `bc1a25b` |
 | 2026-07-06 | [#197](https://github.com/nash226/quorum/pull/197) | publish built npm package | `3b4e868` |
-| 2026-07-06 | [#196](https://github.com/nash226/quorum/pull/196) | export report policy helpers | `eaea613` |
 
