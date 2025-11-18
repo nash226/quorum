@@ -11,6 +11,7 @@ import {
   evaluateFixtureContentResult,
   evaluateFixtureContents,
   evaluateFixtureContentsResult,
+  evaluateFixtureFile,
   evaluateFixtureFileResult,
   evaluateFixtureFiles,
   evaluateFixtureFilesResult,
@@ -1195,12 +1196,10 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
     fixtureDirPaths: [join(process.cwd(), "examples/evaluations")],
     generatedAt: "2026-07-05T21:30:00.000Z",
   });
-  const singleResult = await evaluateFixtureFileResult(
-    join(process.cwd(), "examples/evaluations/hr-policy.json"),
-    {
-      generatedAt: "2026-07-05T21:30:00.000Z",
-    },
-  );
+  const singleResult = await evaluateFixtureFileResult({
+    fixturePath: join(process.cwd(), "examples/evaluations/hr-policy.json"),
+    generatedAt: "2026-07-05T21:30:00.000Z",
+  });
   const contentResult = await evaluateFixtureContentResult({
     fixturePath: join(process.cwd(), "examples/evaluations/hr-policy.json"),
     content: await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json")),
@@ -1214,6 +1213,25 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
   assert.equal(contentResult.hasMismatch, false);
   assert.equal(contentResult.scorecard.fixtureName, "HR policy example");
+});
+
+test("programmatic API accepts object-style single fixture file evaluation helpers", async () => {
+  const fixturePath = join(process.cwd(), "examples/evaluations/support-policy.json");
+
+  const scorecard = await evaluateFixtureFile({
+    fixturePath,
+    generatedAt: "2026-07-05T21:35:00.000Z",
+  });
+  const result = await evaluateFixtureFileResult({
+    fixturePath,
+    generatedAt: "2026-07-05T21:35:00.000Z",
+  });
+
+  assert.equal(scorecard.fixturePath, fixturePath);
+  assert.equal(scorecard.report.generatedAt, "2026-07-05T21:35:00.000Z");
+  assert.equal(result.hasMismatch, false);
+  assert.equal(result.scorecard.fixturePath, fixturePath);
+  assert.equal(result.scorecard.report.generatedAt, "2026-07-05T21:35:00.000Z");
 });
 
 test("programmatic API exports verification report renderers", () => {

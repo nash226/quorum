@@ -46,6 +46,8 @@ export type {
   InMemoryEvaluationFixtureInput,
   InMemoryEvaluationBatchOptions,
   EvaluationScorecard,
+  SingleEvaluationFileOptions,
+  SingleEvaluationFileResultOptions,
 } from "./evaluation.js";
 export {
   importReviewerDecisions,
