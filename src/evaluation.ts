@@ -7,6 +7,7 @@ import { loadSourceDocuments, resolveSourcePaths, verifyAnswerFile } from "./wor
 export interface EvaluationFixture {
   name: string;
   answerPath: string;
+  answerLabel?: string;
   sourcePaths?: string[];
   sourceDirs?: string[];
   defaultTrustLevel?: SourceTrustLevel;
@@ -26,6 +27,7 @@ export interface EvaluationScorecard {
   fixtureName: string;
   fixturePath?: string;
   answerPath: string;
+  answerLabel?: string;
   sourceDirs: string[];
   sourcePaths: string[];
   report: VerificationReport;
@@ -121,6 +123,7 @@ export async function evaluateFixture(
     answerPath,
     sources,
     options.generatedAt ?? new Date().toISOString(),
+    fixture.answerLabel,
   );
   const actualSummary = {
     verified: report.summary.verified,
@@ -152,6 +155,7 @@ export async function evaluateFixture(
     fixtureName: fixture.name,
     fixturePath: options.fixturePath,
     answerPath,
+    answerLabel: report.answerLabel,
     sourceDirs,
     sourcePaths,
     report,
@@ -347,6 +351,7 @@ export function renderEvaluationScorecard(scorecard: EvaluationScorecard): strin
   const lines = [
     `Evaluation Fixture: ${scorecard.fixtureName}`,
     `Answer: ${scorecard.answerPath}`,
+    ...(scorecard.answerLabel ? [`Answer label: ${scorecard.answerLabel}`] : []),
     ...(scorecard.sourceDirs.length > 0
       ? [`Source directories: ${scorecard.sourceDirs.join(", ")}`]
       : []),
@@ -421,6 +426,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
       "",
       ...(scorecard.fixturePath ? [`- Fixture path: \`${scorecard.fixturePath}\``] : []),
       `- Answer path: \`${scorecard.answerPath}\``,
+      ...(scorecard.answerLabel ? [`- Answer label: \`${scorecard.answerLabel}\``] : []),
       ...(scorecard.sourceDirs.length > 0
         ? [`- Source directories: ${scorecard.sourceDirs.map((sourceDir) => `\`${sourceDir}\``).join(", ")}`]
         : []),
@@ -495,6 +501,11 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
         <dl class="meta-grid">
           ${scorecard.fixturePath ? `<div><dt>Fixture path</dt><dd>${escapeHtml(scorecard.fixturePath)}</dd></div>` : ""}
           <div><dt>Answer path</dt><dd>${escapeHtml(scorecard.answerPath)}</dd></div>
+          ${
+            scorecard.answerLabel
+              ? `<div><dt>Answer label</dt><dd>${escapeHtml(scorecard.answerLabel)}</dd></div>`
+              : ""
+          }
           ${
             scorecard.sourceDirs.length > 0
               ? `<div><dt>Source directories</dt><dd>${scorecard.sourceDirs.map(escapeHtml).join("<br />")}</dd></div>`
@@ -804,6 +815,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       "fixture_name",
       "fixture_path",
       "answer_path",
+      "answer_label",
       "source_dirs",
       "source_paths",
       "summary_match",
@@ -829,6 +841,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       scorecard.fixtureName,
       scorecard.fixturePath ?? "",
       scorecard.answerPath,
+      scorecard.answerLabel ?? "",
       serializeDelimitedList(scorecard.sourceDirs),
       serializeDelimitedList(scorecard.sourcePaths),
       scorecard.summaryMatches ? "yes" : "no",
