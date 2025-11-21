@@ -267,8 +267,45 @@ export async function verifyAnswerFile(
 }
 
 export async function verifyAnswerFileResult(
+  answerPath: string,
+  sources: SourceDocument[],
+  failOn?: ClaimVerdict[],
+): Promise<SingleVerificationResult>;
+export async function verifyAnswerFileResult(
+  answerPath: string,
+  sources: SourceDocument[],
+  generatedAt?: string,
+  answerLabel?: string,
+  failOn?: ClaimVerdict[],
+): Promise<SingleVerificationResult>;
+export async function verifyAnswerFileResult(
   options: SingleFileVerificationOptions,
+): Promise<SingleVerificationResult>;
+export async function verifyAnswerFileResult(
+  answerPathOrOptions: string | SingleFileVerificationOptions,
+  sources?: SourceDocument[],
+  generatedAtOrFailOn?: string | ClaimVerdict[],
+  answerLabel?: string,
+  failOn: ClaimVerdict[] = [],
 ): Promise<SingleVerificationResult> {
+  const options =
+    typeof answerPathOrOptions === "string"
+      ? {
+          answerPath: answerPathOrOptions,
+          sources: sources ?? [],
+          generatedAt:
+            typeof generatedAtOrFailOn === "string" ? generatedAtOrFailOn : new Date().toISOString(),
+          answerLabel,
+          failOn: Array.isArray(generatedAtOrFailOn) ? generatedAtOrFailOn : failOn,
+        }
+      : answerPathOrOptions;
+
+  if (typeof answerPathOrOptions === "string" && sources === undefined) {
+    throw new Error(
+      "verifyAnswerFileResult requires sources when called with positional arguments.",
+    );
+  }
+
   return buildSingleVerificationResult(
     await verifyAnswerFile(
       options.answerPath,
