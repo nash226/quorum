@@ -1,6 +1,7 @@
 {
   "name": "HR policy example",
   "answerPath": "../answers/hr-answer.md",
+  "answerLabel": "HR reviewer packet",
   "sourcePaths": ["../sources/hr-policy.md"],
   "expectedSummary": {
     "verified": 1,

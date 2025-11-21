@@ -1,6 +1,7 @@
 {
   "name": "Support policy example",
   "answerPath": "../answers/support-answer.md",
+  "answerLabel": "Support reviewer packet",
   "sourcePaths": ["../sources/support-playbook.md"],
   "expectedSummary": {
     "verified": 1,
