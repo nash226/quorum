@@ -205,6 +205,19 @@ test("evaluate reports a file passed to --fixture-dir with a clear error", async
   );
 });
 
+test("evaluate reports when a fixture directory resolves to no fixture files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-eval-dir-"));
+
+  try {
+    await assert.rejects(
+      runCli(["evaluate", "--fixture-dir", tempDir]),
+      new RegExp(`No evaluation fixture files found in ${tempDir.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}`),
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 

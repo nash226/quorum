@@ -1191,6 +1191,16 @@ test("programmatic API rejects empty in-memory evaluation fixture JSON batches",
   );
 });
 
+test("programmatic API rejects empty file-backed evaluation batches", async () => {
+  await assert.rejects(
+    evaluateFixtureFiles({
+      fixturePaths: [],
+      fixtureDirPaths: [],
+    }),
+    /No evaluation fixture files found in /,
+  );
+});
+
 test("programmatic API returns mismatch metadata for in-memory evaluation batches", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-eval-result-"));
 

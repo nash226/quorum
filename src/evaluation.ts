@@ -309,6 +309,11 @@ export async function evaluateFixtureFiles(
     options.fixtureDirPaths,
   );
 
+  if (fixturePaths.length === 0) {
+    const locations = [...options.fixturePaths, ...options.fixtureDirPaths].join(", ");
+    throw new Error(`No evaluation fixture files found in ${locations}`);
+  }
+
   await Promise.all(
     fixturePaths.map((fixturePath) => ensureFilePath(fixturePath, "Evaluation fixture")),
   );
