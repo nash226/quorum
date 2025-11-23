@@ -184,6 +184,9 @@ import {
   evaluateFixtures,
   loadSources,
   loadSourcesFromContent,
+  renderAnswerLabel,
+  renderAnswerLabels,
+  renderAnswerPreview,
   verifyAnswers,
   verifyAnswersResult,
   verifyAnswerBatchContents,
@@ -275,6 +278,15 @@ const directBatchResult = await verifyAnswerBatchFileInputsResult({
   failOn: ["contradicted", "unsupported"],
 });
 
+const fallbackAnswerLabel = renderAnswerLabel("examples/answers/hr-answer.md");
+const reviewerQueueLabels = renderAnswerLabels([
+  "exports/hr/answer.md",
+  "exports/support/answer.md",
+]);
+const answerPreview = renderAnswerPreview(
+  "<main><p>Refunds are available within 30 days of purchase.</p></main>",
+);
+
 const importedReview = await importReviewerDecisionFile("reports/hr-review.csv");
 const importedReviewWithOptions = await importReviewerDecisionFile({
   reviewCsvPath: "reports/hr-review.csv",
@@ -359,6 +371,11 @@ const sourcePaths = await resolveSourcePaths([], ["examples/sources"]);
 const answerPaths = await resolveAnswerPaths([], ["examples/answers"]);
 const fixturePaths = await resolveEvaluationFixturePaths([], ["examples/evaluations"]);
 ```
+
+Workflow integrations can also reuse Quorum's reviewer-facing naming and
+preview logic without reimplementing path parsing or HTML cleanup.
+`renderAnswerLabel`, `renderAnswerLabels`, and `renderAnswerPreview` mirror the
+same behavior used by the CLI, reviewer CSVs, and HTML reports.
 
 For in-memory callers, `verifyAnswer(answerText, sources)` remains available for
 teams that already manage file I/O themselves, and `verifyAnswers({ answers,
