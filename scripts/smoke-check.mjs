@@ -371,7 +371,12 @@ if (report.report.summary.verified !== 1) {
   const consumerTsconfigPath = join(consumerDir, "tsconfig.json");
   writeFileSync(
     consumerTypecheckPath,
-    `import { verifyAnswerResult, type SourceDocument } from "quorum";
+    `import {
+  verifyAnswerContentsResult,
+  verifyAnswerResult,
+  type InMemorySingleVerificationResultOptions,
+  type SourceDocument,
+} from "quorum";
 
 const sources: SourceDocument[] = [
   {
@@ -391,6 +396,20 @@ const report = verifyAnswerResult({
 if (report.report.summary.verified !== 1) {
   throw new Error("Expected packed quorum types to resolve through the package entrypoint.");
 }
+
+const rawOptions: InMemorySingleVerificationResultOptions = {
+  answer: "Employees receive 12 weeks of paid parental leave.",
+  sources: [
+    {
+      sourcePath: "policies/hr-policy.md",
+      content: "Employees receive 12 weeks of paid parental leave.",
+    },
+  ],
+  failOn: ["contradicted"],
+  generatedAt: "2026-07-06T00:10:00.000Z",
+};
+
+await verifyAnswerContentsResult(rawOptions);
 `,
     "utf8",
   );

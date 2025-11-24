@@ -22,6 +22,7 @@ import {
   importReviewerDecisionFileResult,
   importReviewerDecisions,
   importReviewerDecisionsResult,
+  type InMemorySingleVerificationResultOptions,
   loadEvaluationFixtureFromContent,
   loadSources,
   loadSourcesFromContent,
@@ -760,7 +761,7 @@ test("programmatic API returns fail-policy metadata for one in-memory answer", (
 });
 
 test("programmatic API returns fail-policy metadata for one raw-content verification", async () => {
-  const result = await verifyAnswerContentsResult({
+  const options: InMemorySingleVerificationResultOptions = {
     answer: "Employees receive 12 weeks of paid parental leave.",
     answerPath: "answers/hr.md",
     sources: [
@@ -776,7 +777,8 @@ Employees receive 12 weeks of paid parental leave.
     ],
     failOn: ["unsupported"],
     generatedAt: "2026-07-05T03:42:00.000Z",
-  });
+  };
+  const result = await verifyAnswerContentsResult(options);
 
   assert.equal(result.report.generatedAt, "2026-07-05T03:42:00.000Z");
   assert.equal(result.report.answerPath, "answers/hr.md");
