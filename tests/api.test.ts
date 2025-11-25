@@ -1618,8 +1618,64 @@ test("programmatic API exports fail-policy helpers for workflow callers", () => 
   assert.deepEqual(matchingFailVerdicts(report, ["needs_review", "unsupported"]), [
     "needs_review",
   ]);
+  assert.deepEqual(
+    matchingFailVerdicts(report, ["needs_review", "needs_review", "unsupported"]),
+    ["needs_review"],
+  );
   assert.equal(shouldFailReport(report, ["unsupported"]), false);
   assert.equal(shouldFailReport(report, ["needs_review"]), true);
+});
+
+test("programmatic API de-duplicates repeated fail verdicts in workflow results", async () => {
+  const singleResult = verifyAnswerResult({
+    answer: "Employees receive 16 weeks of paid parental leave.",
+    sources: [
+      {
+        id: "source_1",
+        title: "Benefits policy",
+        trustLevel: "high",
+        content: "Employees receive 12 weeks of paid parental leave.",
+      },
+    ],
+    failOn: ["contradicted", "contradicted"],
+    generatedAt: "2026-07-06T00:16:00.000Z",
+  });
+
+  assert.deepEqual(singleResult.failVerdicts, ["contradicted"]);
+
+  const batchResult = verifyAnswersResult({
+    answers: [
+      {
+        answer: "Short.",
+        answerPath: "answers/empty.md",
+      },
+      {
+        answer: "Employees receive 16 weeks of paid parental leave.",
+        answerPath: "answers/hr.md",
+      },
+    ],
+    sources: [
+      {
+        id: "source_1",
+        title: "Benefits policy",
+        trustLevel: "high",
+        content: "Employees receive 12 weeks of paid parental leave.",
+      },
+    ],
+    failOn: ["needs_review", "needs_review", "contradicted", "contradicted"],
+    generatedAt: "2026-07-06T00:17:00.000Z",
+  });
+
+  assert.deepEqual(batchResult.failVerdicts, ["needs_review", "contradicted"]);
+
+  const importResult = importReviewerDecisionContentsResult(
+    `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,unsupported,Needs policy follow-up
+`,
+    ["unsupported", "unsupported"],
+  );
+
+  assert.deepEqual(importResult.failVerdicts, ["unsupported"]);
 });
 
 test("programmatic API exports batch evaluation helpers", async () => {
