@@ -28,13 +28,24 @@ export function matchingFailVerdicts(
   report: FailPolicyReport,
   failOn: ClaimVerdict[],
 ): ClaimVerdict[] {
-  return failOn.filter((verdict) => {
-    if (verdict === "needs_review" && hasImplicitNeedsReview(report)) {
-      return true;
+  const matchedVerdicts: ClaimVerdict[] = [];
+
+  for (const verdict of failOn) {
+    if (matchedVerdicts.includes(verdict)) {
+      continue;
     }
 
-    return report.summary[verdict] > 0;
-  });
+    if (verdict === "needs_review" && hasImplicitNeedsReview(report)) {
+      matchedVerdicts.push(verdict);
+      continue;
+    }
+
+    if (report.summary[verdict] > 0) {
+      matchedVerdicts.push(verdict);
+    }
+  }
+
+  return matchedVerdicts;
 }
 
 export type FailPolicyReport = Pick<VerificationReport, "summary"> & {
