@@ -100,7 +100,11 @@ test("verify-batch -h prints batch usage without requiring answers", async () =>
   assert.equal(result.stderr, "");
   assert.match(
     result.stdout,
-    /^Quorum verify-batch\n\nUsage:\n  quorum verify-batch \(\--answer <path\|-> \| --answer-dir <path>\)\.\.\./,
+    /^Quorum verify-batch\n\nUsage:\n  quorum verify-batch \(\--answer <path\|-> \[--answer-label <label>\] \| --answer-dir <path>\)\.\.\./,
+  );
+  assert.match(
+    result.stdout,
+    /--answer-label <label>\s+Apply a reviewer-facing label to the most recent explicit --answer input/,
   );
   assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row-per-answer summary CSV/);
 });
@@ -1486,6 +1490,102 @@ test("verify-batch reads one answer from stdin alongside explicit files", async 
         `^support-answer,${escapeRegExp(fileAnswerPath)},Refunds are available within 30 days of purchase\\.,clear,,true,claim_1,`,
       ),
     );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch preserves custom labels for explicit answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-custom-labels-"));
+
+  try {
+    const explicitAnswerPath = join(tempDir, "support-answer.md");
+    const answerDir = join(tempDir, "answers");
+    const directoryAnswerPath = join(answerDir, "hr-answer.md");
+    const sourceDir = join(tempDir, "sources");
+    const reviewCsvOutPath = join(tempDir, "reports", "batch-review.csv");
+    const summaryCsvOutPath = join(tempDir, "reports", "batch-summary.csv");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(
+        explicitAnswerPath,
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+      writeFile(
+        directoryAnswerPath,
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "support-playbook.md"),
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer",
+      explicitAnswerPath,
+      "--answer-label",
+      "Support escalation packet",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--review-csv-out",
+      reviewCsvOutPath,
+      "--summary-csv-out",
+      summaryCsvOutPath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answers: Array<{
+        answerLabel: string;
+        answerPath: string;
+        report: { answerLabel?: string };
+      }>;
+    };
+
+    assert.deepEqual(
+      report.answers.map((answer) => ({
+        answerLabel: answer.answerLabel,
+        answerPath: answer.answerPath,
+        reportAnswerLabel: answer.report.answerLabel,
+      })),
+      [
+        {
+          answerLabel: "Support escalation packet",
+          answerPath: explicitAnswerPath,
+          reportAnswerLabel: "Support escalation packet",
+        },
+        {
+          answerLabel: "hr-answer",
+          answerPath: directoryAnswerPath,
+          reportAnswerLabel: "hr-answer",
+        },
+      ],
+    );
+
+    const reviewCsv = await readFile(reviewCsvOutPath, "utf8");
+    assert.match(reviewCsv, /^Support escalation packet,/m);
+    assert.match(reviewCsv, /^hr-answer,/m);
+
+    const summaryCsv = await readFile(summaryCsvOutPath, "utf8");
+    assert.match(summaryCsv, /^Support escalation packet,/m);
+    assert.match(summaryCsv, /^hr-answer,/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
