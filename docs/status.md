@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `828f783` on 2026-07-06, dedupe repeated fail-on verdicts
+- Latest shipped change: `daca8d4` on 2026-07-06, label explicit batch answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-06 | [#216](https://github.com/nash226/quorum/pull/216) | label explicit batch answers | `daca8d4` |
 | 2026-07-06 | [#215](https://github.com/nash226/quorum/pull/215) | dedupe repeated fail-on verdicts | `828f783` |
 | 2026-07-06 | [#214](https://github.com/nash226/quorum/pull/214) | export in-memory result options type | `50e6e76` |
 | 2026-07-06 | [#213](https://github.com/nash226/quorum/pull/213) | harden package entrypoints for consumers | `39db754` |
@@ -53,5 +54,4 @@
 | 2026-07-06 | [#211](https://github.com/nash226/quorum/pull/211) | reject empty evaluation fixture batches | `613b75f` |
 | 2026-07-06 | [#210](https://github.com/nash226/quorum/pull/210) | add positional verifyAnswerFileResult helper | `4fc18e7` |
 | 2026-07-06 | [#209](https://github.com/nash226/quorum/pull/209) | preserve evaluation answer labels | `d7b57c9` |
-| 2026-07-06 | [#208](https://github.com/nash226/quorum/pull/208) | feat: add object-style verifyAnswerFile helper | `1e57a7a` |
 
