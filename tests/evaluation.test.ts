@@ -29,6 +29,10 @@ test("loads and evaluates the HR example fixture", async () => {
 
   assert.equal(scorecard.fixtureName, "HR policy example");
   assert.equal(scorecard.answerLabel, "HR reviewer packet");
+  assert.equal(
+    scorecard.answerPreview,
+    "Employees receive 18 weeks of paid parental leave. Full-time employees receive 20 days of paid vacation each calendar...",
+  );
   assert.deepEqual(scorecard.sourceDirs, []);
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.matchedClaims, 3);
@@ -48,6 +52,10 @@ test("evaluates fixture files relative to the fixture directory", async () => {
 
   assert.equal(scorecard.fixtureName, "Support policy example");
   assert.equal(scorecard.answerLabel, "Support reviewer packet");
+  assert.equal(
+    scorecard.answerPreview,
+    "Annual plan customers can request a refund within 30 days of purchase. Enterprise support requests receive a first re...",
+  );
   assert.deepEqual(scorecard.sourceDirs, []);
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.matchedClaims, 3);
@@ -67,6 +75,10 @@ test("evaluates one in-memory fixture file relative to its fixture path", async 
   assert.equal(scorecard.fixtureName, "HR policy example");
   assert.equal(scorecard.fixturePath, fixturePath);
   assert.equal(scorecard.answerLabel, "HR reviewer packet");
+  assert.equal(
+    scorecard.answerPreview,
+    "Employees receive 18 weeks of paid parental leave. Full-time employees receive 20 days of paid vacation each calendar...",
+  );
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.report.generatedAt, "2026-07-05T10:06:00.000Z");
 });
@@ -174,6 +186,7 @@ test("renders mismatch details in evaluation scorecards", () => {
     fixtureName: "Mismatch fixture",
     answerPath: "/tmp/answer.md",
     answerLabel: "HR escalation packet",
+    answerPreview: "Benefits begin on day one.",
     sourceDirs: ["/tmp/source-bundle"],
     sourcePaths: ["/tmp/source.md"],
     report: {
@@ -220,6 +233,7 @@ test("renders mismatch details in evaluation scorecards", () => {
 
   assert.match(rendered, /Summary match: no/);
   assert.match(rendered, /Answer label: HR escalation packet/);
+  assert.match(rendered, /Answer preview: Benefits begin on day one\./);
   assert.match(rendered, /Source directories: \/tmp\/source-bundle/);
   assert.match(rendered, /Claim mismatches:/);
   assert.match(rendered, /expected verified, got contradicted/);
@@ -231,6 +245,7 @@ test("renders evaluation text report totals and mismatch detection", () => {
       fixtureName: "Match fixture",
       answerPath: "/tmp/answer-1.md",
       answerLabel: "answer-1",
+      answerPreview: "Preview 1",
       sourceDirs: [],
       sourcePaths: ["/tmp/source-1.md"],
       report: {
@@ -270,6 +285,7 @@ test("renders evaluation text report totals and mismatch detection", () => {
       fixtureName: "Mismatch fixture",
       answerPath: "/tmp/answer-2.md",
       answerLabel: "answer-2",
+      answerPreview: "Preview 2",
       sourceDirs: [],
       sourcePaths: ["/tmp/source-2.md"],
       report: {
@@ -323,6 +339,7 @@ test("renders evaluation summary csv rows for each fixture", () => {
       fixturePath: "/tmp/fixtures/support.json",
       answerPath: "/tmp/answers/support.md",
       answerLabel: "Support reviewer packet",
+      answerPreview: "Support answer preview",
       sourceDirs: ["/tmp/sources"],
       sourcePaths: ["/tmp/sources/support.md", "/tmp/sources/refunds.md"],
       report: {
@@ -362,11 +379,11 @@ test("renders evaluation summary csv rows for each fixture", () => {
 
   assert.match(
     rendered,
-    /^fixture_name,fixture_path,answer_path,answer_label,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,/,
+    /^fixture_name,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,/,
   );
   assert.match(rendered, /Support policy example/);
-  assert.match(rendered, /\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md/);
-  assert.match(rendered, /Support reviewer packet,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,yes,0,0,1\.000,no,none,,,,,1,0,0,0,1,0,0,0/);
+  assert.match(rendered, /Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md/);
+  assert.match(rendered, /Support reviewer packet,Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,yes,0,0,1\.000,no,none,,,,,1,0,0,0,1,0,0,0/);
 });
 
 test("evaluation summary csv includes first mismatched claim details", () => {
@@ -376,6 +393,7 @@ test("evaluation summary csv includes first mismatched claim details", () => {
       fixturePath: "/tmp/fixtures/hr.json",
       answerPath: "/tmp/answers/hr.md",
       answerLabel: "HR reviewer packet",
+      answerPreview: "HR answer preview",
       sourceDirs: [],
       sourcePaths: ["/tmp/sources/hr.md"],
       report: {
@@ -423,7 +441,7 @@ test("evaluation summary csv includes first mismatched claim details", () => {
 
   assert.match(
     rendered,
-    /HR mismatch example,[^,\n]+,[^,\n]+,HR reviewer packet,,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,1,0,0,0,0,1,0,0/,
+    /HR mismatch example,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,1,0,0,0,0,1,0,0/,
   );
 });
 
@@ -434,6 +452,7 @@ test("renders evaluation markdown report with fixture summaries", () => {
       fixturePath: "/tmp/fixtures/support.json",
       answerPath: "/tmp/answers/support.md",
       answerLabel: "Support reviewer packet",
+      answerPreview: "Support answer preview",
       sourceDirs: ["/tmp/source-bundle"],
       sourcePaths: ["/tmp/sources/support.md"],
       report: {
@@ -484,6 +503,7 @@ test("renders evaluation markdown report with fixture summaries", () => {
   assert.match(rendered, /### 1\. Support policy example/);
   assert.match(rendered, /- Fixture path: `\/tmp\/fixtures\/support\.json`/);
   assert.match(rendered, /- Answer label: `Support reviewer packet`/);
+  assert.match(rendered, /- Answer preview: Support answer preview/);
   assert.match(rendered, /- Source directories: `\/tmp\/source-bundle`/);
   assert.match(rendered, /#### Claim Verdicts/);
   assert.match(rendered, /Claim 1: `verified` \(expected `verified`\)/);
@@ -496,6 +516,7 @@ test("renders evaluation html report with fixture summaries", () => {
       fixturePath: "/tmp/fixtures/support.json",
       answerPath: "/tmp/answers/support.md",
       answerLabel: "Support reviewer packet",
+      answerPreview: "Support answer preview",
       sourceDirs: ["/tmp/source-bundle"],
       sourcePaths: ["/tmp/sources/support.md"],
       report: {
@@ -543,6 +564,7 @@ test("renders evaluation html report with fixture summaries", () => {
 
   assert.match(rendered, /<!doctype html>/i);
   assert.match(rendered, /<dt>Answer label<\/dt><dd>Support reviewer packet<\/dd>/);
+  assert.match(rendered, /<dt>Answer preview<\/dt><dd>Support answer preview<\/dd>/);
   assert.match(rendered, /<dt>Source directories<\/dt><dd>\/tmp\/source-bundle<\/dd>/);
   assert.match(rendered, /Fixture scorecard report/);
   assert.match(rendered, /Support policy example/);

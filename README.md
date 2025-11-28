@@ -703,8 +703,9 @@ without rewriting every fixture when a benchmark adds another approved
 document. Fixtures can also set `answerLabel` to preserve the reviewer-facing
 name of an answer alongside its file path. Evaluation scorecards and
 `--summary-csv-out` exports preserve those configured source directories,
-resolved source files, and optional answer labels so drift reviews can see both
-the maintained bundle and the reviewer-facing context loaded for each answer.
+resolved source files, optional answer labels, and reviewer-friendly answer
+previews so drift reviews can see both the maintained bundle and the reviewer
+context loaded for each answer.
 
 The CLI can run those same fixtures directly:
 
@@ -728,8 +729,8 @@ npm run dev -- evaluate \
 
 `evaluate` prints one scorecard per fixture, highlights claim-level verdict
 mismatches, can write Markdown and HTML reports for async review, can write a
-one-row-per-fixture summary CSV for spreadsheet or CI triage, and can exit with
-status code `2` when a labeled benchmark drifts.
+one-row-per-fixture summary CSV with answer previews for spreadsheet or CI
+triage, and can exit with status code `2` when a labeled benchmark drifts.
 
 ## Quick Start
 
