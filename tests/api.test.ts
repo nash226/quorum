@@ -3,10 +3,10 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { createApiServer, startApiServer } from "../src/api-server.js";
 import {
   ANSWER_EXTENSIONS,
   CLAIM_VERDICTS,
-  createApiServer,
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
   evaluateFixtureContent,
@@ -49,7 +49,6 @@ import {
   resolveAnswerPaths,
   resolveSourcePaths,
   SOURCE_EXTENSIONS,
-  startApiServer,
   shouldFailReport,
   verifyAnswers,
   verifyAnswersResult,
