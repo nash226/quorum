@@ -1088,6 +1088,7 @@ Endpoints:
   GET  /health              Return a simple readiness response
   POST /verify              Verify one answer from JSON request content
   POST /verify-batch        Verify multiple answers from JSON request content
+  POST /import-review       Import reviewer CSV content from JSON request content
 
 Example:
   npm run dev -- serve --port 3000
