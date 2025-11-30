@@ -364,6 +364,7 @@ Available endpoints:
 - `GET /health`
 - `POST /verify`
 - `POST /verify-batch`
+- `POST /import-review`
 
 Single-answer verification request example:
 
@@ -388,6 +389,10 @@ Batch verification uses the same source shape and accepts an `answers` array of
 Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
 `verifyAnswerBatchContentsResult` shapes so workflow callers get the report,
 matched fail verdicts, and `shouldFail` status in one JSON payload.
+Reviewer-decision import accepts a `{ reviewCsvContent, failOn? }` JSON body at
+`POST /import-review` and returns the same `importReviewerDecisionContentsResult`
+shape used by the package API, including grouped answer summaries and
+reviewer-aware fail-policy matches.
 Node integrations that want to embed the server directly can import the same
 helpers from `quorum/server`.
 
