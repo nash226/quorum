@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `14f9fe9` on 2026-07-07, smoke check serve api
+- Latest shipped change: `5b568d0` on 2026-07-07, feat: add reviewer import http endpoint
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-07 | [#221](https://github.com/nash226/quorum/pull/221) | feat: add reviewer import http endpoint | `5b568d0` |
 | 2026-07-07 | [#220](https://github.com/nash226/quorum/pull/220) | smoke check serve api | `14f9fe9` |
 | 2026-07-07 | [#219](https://github.com/nash226/quorum/pull/219) | add lightweight verification api | `edb6096` |
 | 2026-07-07 | [#218](https://github.com/nash226/quorum/pull/218) | add evaluation answer previews | `fe76876` |
@@ -54,5 +55,4 @@
 | 2026-07-06 | [#216](https://github.com/nash226/quorum/pull/216) | label explicit batch answers | `daca8d4` |
 | 2026-07-06 | [#215](https://github.com/nash226/quorum/pull/215) | dedupe repeated fail-on verdicts | `828f783` |
 | 2026-07-06 | [#214](https://github.com/nash226/quorum/pull/214) | export in-memory result options type | `50e6e76` |
-| 2026-07-06 | [#213](https://github.com/nash226/quorum/pull/213) | harden package entrypoints for consumers | `39db754` |
 
