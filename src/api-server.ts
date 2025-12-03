@@ -1,4 +1,5 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
+import { evaluateFixtureContentsResult, type InMemoryEvaluationFixtureInput } from "./evaluation.js";
 import { parseClaimVerdict } from "./report-policy.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
 import {
@@ -37,6 +38,13 @@ export interface VerifyBatchApiRequest {
 export interface ImportReviewApiRequest {
   reviewCsvContent: string;
   failOn?: string[];
+}
+
+export interface EvaluateApiRequest {
+  fixtures: Array<{
+    fixturePath: string;
+    content: string;
+  }>;
 }
 
 export interface ApiServerOptions {
@@ -130,6 +138,11 @@ async function handleApiRequest(
           path: "/import-review",
           description: "Import reviewer CSV content from JSON request content.",
         },
+        {
+          method: "POST",
+          path: "/evaluate",
+          description: "Evaluate fixture JSON content from request payloads.",
+        },
       ],
     });
     return;
@@ -191,6 +204,20 @@ async function handleApiRequest(
     const result = importReviewerDecisionContentsResult({
       reviewCsvContent: body.reviewCsvContent,
       failOn: body.failOn,
+    });
+    writeJson(response, 200, result);
+    return;
+  }
+
+  if (url === "/evaluate") {
+    if (request.method !== "POST") {
+      writeMethodNotAllowed(response, "POST");
+      return;
+    }
+
+    const body = parseEvaluateRequest(await readJsonBody(request));
+    const result = await evaluateFixtureContentsResult({
+      fixtures: body.fixtures,
     });
     writeJson(response, 200, result);
     return;
@@ -272,6 +299,21 @@ function parseImportReviewRequest(value: unknown): {
   };
 }
 
+function parseEvaluateRequest(value: unknown): {
+  fixtures: InMemoryEvaluationFixtureInput[];
+} {
+  const record = requireRecord(value, "Evaluate request body");
+  const fixturesValue = record.fixtures;
+
+  if (!Array.isArray(fixturesValue) || fixturesValue.length === 0) {
+    throw requestError("fixtures must be a non-empty array.");
+  }
+
+  return {
+    fixtures: fixturesValue.map((fixture, index) => parseFixtureInput(fixture, index)),
+  };
+}
+
 function parseAnswerInput(value: unknown, index: number): InMemoryAnswerInput {
   const record = requireRecord(value, `answers[${index}]`);
 
@@ -279,6 +321,15 @@ function parseAnswerInput(value: unknown, index: number): InMemoryAnswerInput {
     answer: requireString(record.answer, `answers[${index}].answer`),
     answerPath: optionalString(record.answerPath, `answers[${index}].answerPath`),
     answerLabel: optionalString(record.answerLabel, `answers[${index}].answerLabel`),
+  };
+}
+
+function parseFixtureInput(value: unknown, index: number): InMemoryEvaluationFixtureInput {
+  const record = requireRecord(value, `fixtures[${index}]`);
+
+  return {
+    fixturePath: requireString(record.fixturePath, `fixtures[${index}].fixturePath`),
+    content: requireString(record.content, `fixtures[${index}].content`),
   };
 }
 
@@ -502,6 +553,34 @@ function buildOpenApiDocument(request: IncomingMessage) {
           },
         },
       },
+      "/evaluate": {
+        post: {
+          summary: "Evaluate fixtures",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    fixtures: {
+                      type: "array",
+                      minItems: 1,
+                      items: { $ref: "#/components/schemas/ApiEvaluationFixtureInput" },
+                    },
+                  },
+                  required: ["fixtures"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Evaluation scorecard batch result.",
+            },
+          },
+        },
+      },
     },
     components: {
       schemas: {
@@ -512,6 +591,14 @@ function buildOpenApiDocument(request: IncomingMessage) {
             content: { type: "string" },
           },
           required: ["sourcePath", "content"],
+        },
+        ApiEvaluationFixtureInput: {
+          type: "object",
+          properties: {
+            fixturePath: { type: "string" },
+            content: { type: "string" },
+          },
+          required: ["fixturePath", "content"],
         },
         SourceTrustLevel: {
           type: "string",
