@@ -389,6 +389,8 @@ curl -s http://127.0.0.1:3000/verify \
 
 Batch verification uses the same source shape and accepts an `answers` array of
 `{ answer, answerPath?, answerLabel? }` objects at `POST /verify-batch`.
+All `POST` endpoints require `Content-Type: application/json` and return `415`
+when callers send a different media type.
 Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
 `verifyAnswerBatchContentsResult` shapes so workflow callers get the report,
 matched fail verdicts, and `shouldFail` status in one JSON payload.
