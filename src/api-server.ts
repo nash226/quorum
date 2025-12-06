@@ -427,6 +427,16 @@ function optionalString(value: unknown, fieldName: string): string | undefined {
 function buildOpenApiDocument(request: IncomingMessage) {
   const host = request.headers.host;
   const servers = host ? [{ url: `http://${host}` }] : [];
+  const topLevelSummarySchema = {
+    type: "object",
+    properties: {
+      verified: { type: "integer", minimum: 0 },
+      contradicted: { type: "integer", minimum: 0 },
+      unsupported: { type: "integer", minimum: 0 },
+      needs_review: { type: "integer", minimum: 0 },
+    },
+    required: ["verified", "contradicted", "unsupported", "needs_review"],
+  };
 
   return {
     openapi: "3.1.0",
@@ -438,6 +448,21 @@ function buildOpenApiDocument(request: IncomingMessage) {
     },
     servers,
     paths: {
+      "/": {
+        get: {
+          summary: "Service discovery",
+          responses: {
+            "200": {
+              description: "Available Quorum local API endpoints.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiIndexResponse" },
+                },
+              },
+            },
+          },
+        },
+      },
       "/health": {
         get: {
           summary: "Readiness check",
@@ -465,6 +490,17 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Machine-readable API description for this server.",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      openapi: { type: "string" },
+                    },
+                    required: ["openapi"],
+                  },
+                },
+              },
             },
           },
         },
@@ -501,6 +537,11 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Single-answer verification result.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/SingleVerificationResult" },
+                },
+              },
             },
           },
         },
@@ -547,6 +588,11 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Batch verification result.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/BatchVerificationRunResult" },
+                },
+              },
             },
           },
         },
@@ -575,6 +621,11 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Reviewer decision import result.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ReviewerDecisionImportResult" },
+                },
+              },
             },
           },
         },
@@ -603,6 +654,11 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Evaluation scorecard batch result.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/EvaluationBatchRunResult" },
+                },
+              },
             },
           },
         },
@@ -610,6 +666,29 @@ function buildOpenApiDocument(request: IncomingMessage) {
     },
     components: {
       schemas: {
+        ApiDiscoveryEndpoint: {
+          type: "object",
+          properties: {
+            method: {
+              type: "string",
+              enum: ["GET", "POST", "OPTIONS"],
+            },
+            path: { type: "string" },
+            description: { type: "string" },
+          },
+          required: ["method", "path", "description"],
+        },
+        ApiIndexResponse: {
+          type: "object",
+          properties: {
+            service: { type: "string", const: "quorum" },
+            endpoints: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ApiDiscoveryEndpoint" },
+            },
+          },
+          required: ["service", "endpoints"],
+        },
         ApiSourceInput: {
           type: "object",
           properties: {
@@ -633,6 +712,328 @@ function buildOpenApiDocument(request: IncomingMessage) {
         ClaimVerdict: {
           type: "string",
           enum: ["verified", "unsupported", "contradicted", "needs_review"],
+        },
+        SourceSummary: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            title: { type: "string" },
+            updatedAt: { type: "string" },
+            trustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
+          },
+          required: ["id", "title", "trustLevel"],
+        },
+        AtomicClaim: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            text: { type: "string" },
+          },
+          required: ["id", "text"],
+        },
+        EvidenceSnippet: {
+          type: "object",
+          properties: {
+            documentId: { type: "string" },
+            documentTitle: { type: "string" },
+            documentTrustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
+            documentUpdatedAt: { type: "string" },
+            quote: { type: "string" },
+            score: { type: "number" },
+          },
+          required: ["documentId", "documentTitle", "documentTrustLevel", "quote", "score"],
+        },
+        ClaimAssessment: {
+          type: "object",
+          properties: {
+            claim: { $ref: "#/components/schemas/AtomicClaim" },
+            verdict: { $ref: "#/components/schemas/ClaimVerdict" },
+            evidence: {
+              type: "array",
+              items: { $ref: "#/components/schemas/EvidenceSnippet" },
+            },
+            reason: { type: "string" },
+          },
+          required: ["claim", "verdict", "evidence", "reason"],
+        },
+        VerificationSummary: topLevelSummarySchema,
+        VerificationReport: {
+          type: "object",
+          properties: {
+            generatedAt: { type: "string" },
+            answerPath: { type: "string" },
+            answerLabel: { type: "string" },
+            answerPreview: { type: "string" },
+            answer: { type: "string" },
+            sources: {
+              type: "array",
+              items: { $ref: "#/components/schemas/SourceSummary" },
+            },
+            assessments: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ClaimAssessment" },
+            },
+            summary: { $ref: "#/components/schemas/VerificationSummary" },
+          },
+          required: [
+            "generatedAt",
+            "answerPreview",
+            "answer",
+            "sources",
+            "assessments",
+            "summary",
+          ],
+        },
+        SingleVerificationResult: {
+          type: "object",
+          properties: {
+            report: { $ref: "#/components/schemas/VerificationReport" },
+            shouldFail: { type: "boolean" },
+            failVerdicts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ClaimVerdict" },
+            },
+          },
+          required: ["report", "shouldFail", "failVerdicts"],
+        },
+        BatchVerificationResult: {
+          type: "object",
+          properties: {
+            answerLabel: { type: "string" },
+            answerPath: { type: "string" },
+            report: { $ref: "#/components/schemas/VerificationReport" },
+            shouldFail: { type: "boolean" },
+            failVerdicts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ClaimVerdict" },
+            },
+          },
+          required: ["answerLabel", "answerPath", "report", "shouldFail", "failVerdicts"],
+        },
+        BatchVerificationSummary: {
+          allOf: [
+            topLevelSummarySchema,
+            {
+              type: "object",
+              properties: {
+                answersWithoutClaims: { type: "integer", minimum: 0 },
+                answersWithFailures: { type: "integer", minimum: 0 },
+              },
+              required: ["answersWithoutClaims", "answersWithFailures"],
+            },
+          ],
+        },
+        BatchVerificationReport: {
+          type: "object",
+          properties: {
+            generatedAt: { type: "string" },
+            sources: {
+              type: "array",
+              items: { $ref: "#/components/schemas/SourceSummary" },
+            },
+            sourceCount: { type: "integer", minimum: 0 },
+            answerCount: { type: "integer", minimum: 0 },
+            answers: {
+              type: "array",
+              items: { $ref: "#/components/schemas/BatchVerificationResult" },
+            },
+            summary: { $ref: "#/components/schemas/BatchVerificationSummary" },
+          },
+          required: [
+            "generatedAt",
+            "sources",
+            "sourceCount",
+            "answerCount",
+            "answers",
+            "summary",
+          ],
+        },
+        BatchVerificationRunResult: {
+          type: "object",
+          properties: {
+            report: { $ref: "#/components/schemas/BatchVerificationReport" },
+            shouldFail: { type: "boolean" },
+            failVerdicts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ClaimVerdict" },
+            },
+          },
+          required: ["report", "shouldFail", "failVerdicts"],
+        },
+        ImportedReviewerDecision: {
+          type: "object",
+          properties: {
+            answerLabel: { type: "string" },
+            answerPath: { type: "string" },
+            answerPreview: { type: "string" },
+            originalAnswerFailPolicy: {
+              type: "string",
+              enum: ["matched", "clear"],
+            },
+            originalAnswerFailVerdicts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ClaimVerdict" },
+            },
+            claimId: { type: "string" },
+            claimText: { type: "string" },
+            modelVerdict: { $ref: "#/components/schemas/ClaimVerdict" },
+            modelReason: { type: "string" },
+            evidenceTitles: { type: "array", items: { type: "string" } },
+            evidenceTrustLevels: { type: "array", items: { type: "string" } },
+            evidenceUpdatedAt: { type: "array", items: { type: "string" } },
+            evidenceScores: { type: "array", items: { type: "string" } },
+            evidenceQuotes: { type: "array", items: { type: "string" } },
+            reviewerVerdict: { $ref: "#/components/schemas/ClaimVerdict" },
+            reviewerNotes: { type: "string" },
+            finalVerdict: { $ref: "#/components/schemas/ClaimVerdict" },
+            overridden: { type: "boolean" },
+          },
+          required: [
+            "originalAnswerFailVerdicts",
+            "claimId",
+            "claimText",
+            "modelVerdict",
+            "modelReason",
+            "evidenceTitles",
+            "evidenceTrustLevels",
+            "evidenceUpdatedAt",
+            "evidenceScores",
+            "evidenceQuotes",
+            "finalVerdict",
+            "overridden",
+          ],
+        },
+        ReviewerDecisionImportSummary: {
+          allOf: [
+            topLevelSummarySchema,
+            {
+              type: "object",
+              properties: {
+                totalClaims: { type: "integer", minimum: 0 },
+                reviewedClaims: { type: "integer", minimum: 0 },
+                pendingClaims: { type: "integer", minimum: 0 },
+                overriddenClaims: { type: "integer", minimum: 0 },
+              },
+              required: [
+                "totalClaims",
+                "reviewedClaims",
+                "pendingClaims",
+                "overriddenClaims",
+              ],
+            },
+          ],
+        },
+        ReviewerDecisionGroup: {
+          type: "object",
+          properties: {
+            answerLabel: { type: "string" },
+            answerPath: { type: "string" },
+            answerPreview: { type: "string" },
+            originalAnswerFailPolicy: {
+              type: "string",
+              enum: ["matched", "clear"],
+            },
+            originalAnswerFailVerdicts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ClaimVerdict" },
+            },
+            label: { type: "string" },
+            claims: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ImportedReviewerDecision" },
+            },
+            emptyStateReason: { type: "string" },
+            summary: { $ref: "#/components/schemas/ReviewerDecisionImportSummary" },
+          },
+          required: ["originalAnswerFailVerdicts", "label", "claims", "summary"],
+        },
+        ReviewerDecisionImportReport: {
+          type: "object",
+          properties: {
+            claims: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ImportedReviewerDecision" },
+            },
+            answerGroups: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ReviewerDecisionGroup" },
+            },
+            summary: { $ref: "#/components/schemas/ReviewerDecisionImportSummary" },
+          },
+          required: ["claims", "answerGroups", "summary"],
+        },
+        ReviewerDecisionImportResult: {
+          type: "object",
+          properties: {
+            report: { $ref: "#/components/schemas/ReviewerDecisionImportReport" },
+            shouldFail: { type: "boolean" },
+            failVerdicts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ClaimVerdict" },
+            },
+          },
+          required: ["report", "shouldFail", "failVerdicts"],
+        },
+        EvaluationClaimScore: {
+          type: "object",
+          properties: {
+            index: { type: "integer", minimum: 0 },
+            claimText: { type: "string" },
+            actualVerdict: { $ref: "#/components/schemas/ClaimVerdict" },
+            expectedVerdict: { $ref: "#/components/schemas/ClaimVerdict" },
+            matches: { type: "boolean" },
+          },
+          required: ["index", "claimText", "actualVerdict", "matches"],
+        },
+        EvaluationScorecard: {
+          type: "object",
+          properties: {
+            fixtureName: { type: "string" },
+            fixturePath: { type: "string" },
+            answerPath: { type: "string" },
+            answerLabel: { type: "string" },
+            answerPreview: { type: "string" },
+            sourceDirs: { type: "array", items: { type: "string" } },
+            sourcePaths: { type: "array", items: { type: "string" } },
+            report: { $ref: "#/components/schemas/VerificationReport" },
+            expectedSummary: { $ref: "#/components/schemas/VerificationSummary" },
+            actualSummary: { $ref: "#/components/schemas/VerificationSummary" },
+            summaryMatches: { type: "boolean" },
+            claims: {
+              type: "array",
+              items: { $ref: "#/components/schemas/EvaluationClaimScore" },
+            },
+            matchedClaims: { type: "integer", minimum: 0 },
+            totalExpectedClaims: { type: "integer", minimum: 0 },
+            score: { type: "number" },
+          },
+          required: [
+            "fixtureName",
+            "answerPath",
+            "answerPreview",
+            "sourceDirs",
+            "sourcePaths",
+            "report",
+            "expectedSummary",
+            "actualSummary",
+            "summaryMatches",
+            "claims",
+            "matchedClaims",
+            "totalExpectedClaims",
+            "score",
+          ],
+        },
+        EvaluationBatchRunResult: {
+          type: "object",
+          properties: {
+            scorecards: {
+              type: "array",
+              items: { $ref: "#/components/schemas/EvaluationScorecard" },
+            },
+            shouldFail: { type: "boolean" },
+            mismatchCount: { type: "integer", minimum: 0 },
+          },
+          required: ["scorecards", "shouldFail", "mismatchCount"],
         },
       },
     },

@@ -1084,7 +1084,8 @@ Options:
   --host <host>             Host interface to bind; defaults to 127.0.0.1
   --port <port>             Port to bind; defaults to 3000, use 0 for an ephemeral port
 
-Endpoints:
+  Endpoints:
+  GET  /                    Return API discovery metadata for local callers
   GET  /health              Return a simple readiness response
   GET  /openapi.json        Return the machine-readable API description
   POST /verify              Verify one answer from JSON request content
