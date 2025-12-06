@@ -404,8 +404,11 @@ fixture entry includes `{ fixturePath, content }`, and returns the same
 workflow callers can score benchmark fixtures without writing them to disk.
 `GET /` returns a small JSON endpoint index for human inspection, and
 `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
-workflow clients can discover request payload shapes without scraping the
-README. Browser-based local tooling can call the same endpoints directly
+workflow clients can discover both request and response payload shapes without
+scraping the README. The OpenAPI document includes reusable schemas for the
+discovery, verify, batch verify, import-review, and evaluate responses so
+typed local clients can generate against the same contract as the CLI-backed
+server. Browser-based local tooling can call the same endpoints directly
 because the server replies with permissive CORS headers and handles `OPTIONS`
 preflight requests for JSON clients.
 Node integrations that want to embed the server directly can import the same

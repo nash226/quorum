@@ -1798,11 +1798,27 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       openapi: string;
       info: { title: string; version: string };
       servers: Array<{ url: string }>;
-      paths: Record<string, { get?: { summary: string }; post?: { summary: string } }>;
+      paths: Record<
+        string,
+        {
+          get?: { summary: string; responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }> };
+          post?: { summary: string; responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }> };
+        }
+      >;
       components: {
         schemas: {
+          ApiIndexResponse: {
+            required: string[];
+          };
+          BatchVerificationRunResult: Record<string, unknown>;
           ClaimVerdict: { enum: string[] };
+          EvaluationBatchRunResult: Record<string, unknown>;
+          ReviewerDecisionImportResult: Record<string, unknown>;
+          SingleVerificationResult: Record<string, unknown>;
           SourceTrustLevel: { enum: string[] };
+          VerificationReport: {
+            required: string[];
+          };
         };
       };
     };
@@ -1811,11 +1827,45 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.info.title, "Quorum Local API");
     assert.equal(openApi.info.version, "0.1.0");
     assert.deepEqual(openApi.servers, [{ url: api.url }]);
+    assert.equal(openApi.paths["/"]?.get?.summary, "Service discovery");
     assert.equal(openApi.paths["/health"]?.get?.summary, "Readiness check");
     assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
     assert.equal(openApi.paths["/import-review"]?.post?.summary, "Import reviewer decisions");
     assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
+    assert.equal(
+      openApi.paths["/"]?.get?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ApiIndexResponse",
+    );
+    assert.equal(
+      openApi.paths["/verify"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/SingleVerificationResult",
+    );
+    assert.equal(
+      openApi.paths["/verify-batch"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/BatchVerificationRunResult",
+    );
+    assert.equal(
+      openApi.paths["/import-review"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ReviewerDecisionImportResult",
+    );
+    assert.equal(
+      openApi.paths["/evaluate"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/EvaluationBatchRunResult",
+    );
+    assert.deepEqual(openApi.components.schemas.ApiIndexResponse.required, ["service", "endpoints"]);
+    assert.deepEqual(openApi.components.schemas.VerificationReport.required, [
+      "generatedAt",
+      "answerPreview",
+      "answer",
+      "sources",
+      "assessments",
+      "summary",
+    ]);
+    assert.ok(openApi.components.schemas.SingleVerificationResult);
+    assert.ok(openApi.components.schemas.BatchVerificationRunResult);
+    assert.ok(openApi.components.schemas.ReviewerDecisionImportResult);
+    assert.ok(openApi.components.schemas.EvaluationBatchRunResult);
     assert.deepEqual(openApi.components.schemas.SourceTrustLevel.enum, ["low", "medium", "high"]);
     assert.deepEqual(openApi.components.schemas.ClaimVerdict.enum, [
       "verified",
