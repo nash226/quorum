@@ -1807,6 +1807,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       >;
       components: {
         schemas: {
+          ApiErrorResponse: {
+            required: string[];
+          };
           ApiIndexResponse: {
             required: string[];
           };
@@ -1853,7 +1856,20 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       openApi.paths["/evaluate"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/EvaluationBatchRunResult",
     );
+    assert.equal(
+      openApi.paths["/verify"]?.post?.responses?.["400"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ApiErrorResponse",
+    );
+    assert.equal(
+      openApi.paths["/verify"]?.post?.responses?.["415"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ApiErrorResponse",
+    );
+    assert.equal(
+      openApi.paths["/verify"]?.post?.responses?.["500"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ApiErrorResponse",
+    );
     assert.deepEqual(openApi.components.schemas.ApiIndexResponse.required, ["service", "endpoints"]);
+    assert.deepEqual(openApi.components.schemas.ApiErrorResponse.required, ["error"]);
     assert.deepEqual(openApi.components.schemas.VerificationReport.required, [
       "generatedAt",
       "answerPreview",
