@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b9e2d24` on 2026-07-07, feat: enrich openapi response schemas
+- Latest shipped change: `03de69a` on 2026-07-07, test: smoke evaluate api
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-07 | [#229](https://github.com/nash226/quorum/pull/229) | test: smoke evaluate api | `03de69a` |
 | 2026-07-07 | [#228](https://github.com/nash226/quorum/pull/228) | feat: enrich openapi response schemas | `b9e2d24` |
 | 2026-07-07 | [#227](https://github.com/nash226/quorum/pull/227) | fix: require json content type for api posts | `c983f91` |
 | 2026-07-07 | [#226](https://github.com/nash226/quorum/pull/226) | add API CORS preflight support | `ade96a8` |
@@ -54,5 +55,4 @@
 | 2026-07-07 | [#224](https://github.com/nash226/quorum/pull/224) | add evaluation api endpoint | `c621904` |
 | 2026-07-07 | [#223](https://github.com/nash226/quorum/pull/223) | test: smoke import-review api | `fc1ffeb` |
 | 2026-07-07 | [#222](https://github.com/nash226/quorum/pull/222) | add API discovery endpoints | `c3f94e6` |
-| 2026-07-07 | [#221](https://github.com/nash226/quorum/pull/221) | feat: add reviewer import http endpoint | `5b568d0` |
 
