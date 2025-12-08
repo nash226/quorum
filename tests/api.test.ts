@@ -1762,6 +1762,8 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(indexResponse.headers.get("access-control-allow-origin"), "*");
     assert.deepEqual(await indexResponse.json(), {
       service: "quorum",
+      version: "0.1.0",
+      openapiPath: "/openapi.json",
       endpoints: [
         { method: "GET", path: "/health", description: "Return a simple readiness response." },
         {
@@ -1790,7 +1792,11 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
 
     const healthResponse = await fetch(`${api.url}/health`);
     assert.equal(healthResponse.status, 200);
-    assert.deepEqual(await healthResponse.json(), { ok: true });
+    assert.deepEqual(await healthResponse.json(), {
+      ok: true,
+      service: "quorum",
+      version: "0.1.0",
+    });
 
     const openApiResponse = await fetch(`${api.url}/openapi.json`);
     assert.equal(openApiResponse.status, 200);
@@ -1808,6 +1814,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       components: {
         schemas: {
           ApiErrorResponse: {
+            required: string[];
+          };
+          ApiHealthResponse: {
             required: string[];
           };
           ApiIndexResponse: {
@@ -1868,7 +1877,17 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       openApi.paths["/verify"]?.post?.responses?.["500"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",
     );
-    assert.deepEqual(openApi.components.schemas.ApiIndexResponse.required, ["service", "endpoints"]);
+    assert.deepEqual(openApi.components.schemas.ApiIndexResponse.required, [
+      "service",
+      "version",
+      "openapiPath",
+      "endpoints",
+    ]);
+    assert.deepEqual(openApi.components.schemas.ApiHealthResponse.required, [
+      "ok",
+      "service",
+      "version",
+    ]);
     assert.deepEqual(openApi.components.schemas.ApiErrorResponse.required, ["error"]);
     assert.deepEqual(openApi.components.schemas.VerificationReport.required, [
       "generatedAt",
