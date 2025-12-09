@@ -65,6 +65,90 @@ const ALLOWED_METHODS = "GET, POST, OPTIONS";
 const ALLOWED_HEADERS = "Content-Type";
 const API_SERVICE_NAME = "quorum";
 const API_VERSION = "0.1.0";
+const OPENAPI_VERIFY_EXAMPLE = {
+  answer: "Employees receive 12 weeks of paid parental leave.",
+  answerPath: "answers/hr.md",
+  answerLabel: "HR policy answer",
+  sources: [
+    {
+      sourcePath: "sources/hr-policy.md",
+      content: `---
+title: HR Policy
+trustLevel: high
+updatedAt: 2026-05-31
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+    },
+  ],
+  defaultTrustLevel: "high",
+  failOn: ["contradicted", "unsupported"],
+} as const;
+const OPENAPI_VERIFY_BATCH_EXAMPLE = {
+  answers: [
+    {
+      answer: "Employees receive 12 weeks of paid parental leave.",
+      answerPath: "answers/hr.md",
+      answerLabel: "HR policy answer",
+    },
+    {
+      answer: "Refund requests are answered within one business day.",
+      answerPath: "answers/support.md",
+      answerLabel: "Support queue answer",
+    },
+  ],
+  sources: [
+    {
+      sourcePath: "sources/hr-policy.md",
+      content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+    },
+    {
+      sourcePath: "sources/support-playbook.md",
+      content: `---
+title: Support Playbook
+trustLevel: medium
+---
+Refund requests receive an initial response within one business day.
+`,
+    },
+  ],
+  failOn: ["unsupported"],
+} as const;
+const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
+  reviewCsvContent: [
+    "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_title,evidence_quote,reviewer_verdict,reviewer_notes",
+    "HR policy answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved for publish",
+  ].join("\n"),
+  failOn: ["needs_review"],
+} as const;
+const OPENAPI_EVALUATE_EXAMPLE = {
+  fixtures: [
+    {
+      fixturePath: "evaluations/hr-policy.json",
+      content: JSON.stringify(
+        {
+          answerPath: "answers/hr.md",
+          answer: "Employees receive 12 weeks of paid parental leave.",
+          sourcePaths: ["sources/hr-policy.md"],
+          expectedSummary: {
+            verified: 1,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+          },
+          expectedClaimVerdicts: ["verified"],
+        },
+        null,
+        2,
+      ),
+    },
+  ],
+} as const;
 
 export function createApiServer(): Server {
   return createServer(async (request, response) => {
@@ -550,6 +634,12 @@ function buildOpenApiDocument(request: IncomingMessage) {
                   },
                   required: ["answer", "sources"],
                 },
+                examples: {
+                  hrPolicyAnswer: {
+                    summary: "Verify a single HR policy answer",
+                    value: OPENAPI_VERIFY_EXAMPLE,
+                  },
+                },
               },
             },
           },
@@ -602,6 +692,12 @@ function buildOpenApiDocument(request: IncomingMessage) {
                   },
                   required: ["answers", "sources"],
                 },
+                examples: {
+                  mixedBatchReviewQueue: {
+                    summary: "Verify a small batch of reviewer-facing answers",
+                    value: OPENAPI_VERIFY_BATCH_EXAMPLE,
+                  },
+                },
               },
             },
           },
@@ -636,6 +732,12 @@ function buildOpenApiDocument(request: IncomingMessage) {
                   },
                   required: ["reviewCsvContent"],
                 },
+                examples: {
+                  reviewedQueueExport: {
+                    summary: "Import one reviewed CSV row from a handoff queue",
+                    value: OPENAPI_IMPORT_REVIEW_EXAMPLE,
+                  },
+                },
               },
             },
           },
@@ -669,6 +771,12 @@ function buildOpenApiDocument(request: IncomingMessage) {
                     },
                   },
                   required: ["fixtures"],
+                },
+                examples: {
+                  hrFixtureScorecard: {
+                    summary: "Evaluate one HR fixture against expected verdicts",
+                    value: OPENAPI_EVALUATE_EXAMPLE,
+                  },
                 },
               },
             },

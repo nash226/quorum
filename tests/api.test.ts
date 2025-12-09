@@ -1808,7 +1808,19 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
         string,
         {
           get?: { summary: string; responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }> };
-          post?: { summary: string; responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }> };
+          post?: {
+            summary: string;
+            requestBody?: {
+              content?: Record<
+                string,
+                {
+                  examples?: Record<string, { summary?: string; value?: unknown }>;
+                  schema?: { $ref?: string };
+                }
+              >;
+            };
+            responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }>;
+          };
         }
       >;
       components: {
@@ -1845,6 +1857,110 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
     assert.equal(openApi.paths["/import-review"]?.post?.summary, "Import reviewer decisions");
     assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
+    assert.deepEqual(
+      openApi.paths["/verify"]?.post?.requestBody?.content?.["application/json"]?.examples?.[
+        "hrPolicyAnswer"
+      ]?.value,
+      {
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        answerPath: "answers/hr.md",
+        answerLabel: "HR policy answer",
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+updatedAt: 2026-05-31
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        defaultTrustLevel: "high",
+        failOn: ["contradicted", "unsupported"],
+      },
+    );
+    assert.deepEqual(
+      openApi.paths["/verify-batch"]?.post?.requestBody?.content?.["application/json"]?.examples?.[
+        "mixedBatchReviewQueue"
+      ]?.value,
+      {
+        answers: [
+          {
+            answer: "Employees receive 12 weeks of paid parental leave.",
+            answerPath: "answers/hr.md",
+            answerLabel: "HR policy answer",
+          },
+          {
+            answer: "Refund requests are answered within one business day.",
+            answerPath: "answers/support.md",
+            answerLabel: "Support queue answer",
+          },
+        ],
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+          {
+            sourcePath: "sources/support-playbook.md",
+            content: `---
+title: Support Playbook
+trustLevel: medium
+---
+Refund requests receive an initial response within one business day.
+`,
+          },
+        ],
+        failOn: ["unsupported"],
+      },
+    );
+    assert.deepEqual(
+      openApi.paths["/import-review"]?.post?.requestBody?.content?.["application/json"]?.examples?.[
+        "reviewedQueueExport"
+      ]?.value,
+      {
+        reviewCsvContent: [
+          "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_title,evidence_quote,reviewer_verdict,reviewer_notes",
+          "HR policy answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved for publish",
+        ].join("\n"),
+        failOn: ["needs_review"],
+      },
+    );
+    assert.deepEqual(
+      openApi.paths["/evaluate"]?.post?.requestBody?.content?.["application/json"]?.examples?.[
+        "hrFixtureScorecard"
+      ]?.value,
+      {
+        fixtures: [
+          {
+            fixturePath: "evaluations/hr-policy.json",
+            content: JSON.stringify(
+              {
+                answerPath: "answers/hr.md",
+                answer: "Employees receive 12 weeks of paid parental leave.",
+                sourcePaths: ["sources/hr-policy.md"],
+                expectedSummary: {
+                  verified: 1,
+                  contradicted: 0,
+                  unsupported: 0,
+                  needs_review: 0,
+                },
+                expectedClaimVerdicts: ["verified"],
+              },
+              null,
+              2,
+            ),
+          },
+        ],
+      },
+    );
     assert.equal(
       openApi.paths["/"]?.get?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiIndexResponse",
