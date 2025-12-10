@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e31377f` on 2026-07-07, feat: add openapi request examples
+- Latest shipped change: `dea5dab` on 2026-07-07, feat: support generatedAt in local api requests
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-07 | [#233](https://github.com/nash226/quorum/pull/233) | feat: support generatedAt in local api requests | `dea5dab` |
 | 2026-07-07 | [#232](https://github.com/nash226/quorum/pull/232) | feat: add openapi request examples | `e31377f` |
 | 2026-07-07 | [#231](https://github.com/nash226/quorum/pull/231) | feat: expose api version metadata | `e618e91` |
 | 2026-07-07 | [#230](https://github.com/nash226/quorum/pull/230) | feat: document api error responses | `72696e0` |
@@ -54,5 +55,4 @@
 | 2026-07-07 | [#228](https://github.com/nash226/quorum/pull/228) | feat: enrich openapi response schemas | `b9e2d24` |
 | 2026-07-07 | [#227](https://github.com/nash226/quorum/pull/227) | fix: require json content type for api posts | `c983f91` |
 | 2026-07-07 | [#226](https://github.com/nash226/quorum/pull/226) | add API CORS preflight support | `ade96a8` |
-| 2026-07-07 | [#225](https://github.com/nash226/quorum/pull/225) | test: smoke quorum server export | `9927bde` |
 
