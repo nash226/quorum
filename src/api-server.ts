@@ -1,8 +1,10 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { evaluateFixtureContentsResult, type InMemoryEvaluationFixtureInput } from "./evaluation.js";
-import { parseClaimVerdict } from "./report-policy.js";
+import { CLAIM_VERDICTS, parseClaimVerdict } from "./report-policy.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
 import {
+  ANSWER_EXTENSIONS,
+  SOURCE_EXTENSIONS,
   importReviewerDecisionContentsResult,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
@@ -68,6 +70,13 @@ const ALLOWED_METHODS = "GET, POST, OPTIONS";
 const ALLOWED_HEADERS = "Content-Type";
 const API_SERVICE_NAME = "quorum";
 const API_VERSION = "0.1.0";
+const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
+const API_CAPABILITIES = {
+  sourceExtensions: [...SOURCE_EXTENSIONS],
+  answerExtensions: [...ANSWER_EXTENSIONS],
+  verdicts: CLAIM_VERDICTS,
+  trustLevels: [...SOURCE_TRUST_LEVELS],
+} as const;
 const OPENAPI_VERIFY_EXAMPLE = {
   answer: "Employees receive 12 weeks of paid parental leave.",
   answerPath: "answers/hr.md",
@@ -226,6 +235,7 @@ async function handleApiRequest(
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
+      capabilities: API_CAPABILITIES,
       endpoints: [
         { method: "GET", path: "/health", description: "Return a simple readiness response." },
         { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
@@ -840,12 +850,35 @@ function buildOpenApiDocument(request: IncomingMessage) {
             service: { type: "string", const: API_SERVICE_NAME },
             version: { type: "string", const: API_VERSION },
             openapiPath: { type: "string", const: OPENAPI_PATH },
+            capabilities: { $ref: "#/components/schemas/ApiCapabilities" },
             endpoints: {
               type: "array",
               items: { $ref: "#/components/schemas/ApiDiscoveryEndpoint" },
             },
           },
-          required: ["service", "version", "openapiPath", "endpoints"],
+          required: ["service", "version", "openapiPath", "capabilities", "endpoints"],
+        },
+        ApiCapabilities: {
+          type: "object",
+          properties: {
+            sourceExtensions: {
+              type: "array",
+              items: { type: "string" },
+            },
+            answerExtensions: {
+              type: "array",
+              items: { type: "string" },
+            },
+            verdicts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ClaimVerdict" },
+            },
+            trustLevels: {
+              type: "array",
+              items: { $ref: "#/components/schemas/SourceTrustLevel" },
+            },
+          },
+          required: ["sourceExtensions", "answerExtensions", "verdicts", "trustLevels"],
         },
         ApiHealthResponse: {
           type: "object",
@@ -874,7 +907,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
         },
         SourceTrustLevel: {
           type: "string",
-          enum: ["low", "medium", "high"],
+          enum: [...SOURCE_TRUST_LEVELS],
         },
         ClaimVerdict: {
           type: "string",
