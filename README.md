@@ -406,6 +406,11 @@ Evaluation accepts a `{ fixtures }` JSON body at `POST /evaluate`, where each
 fixture entry includes `{ fixturePath, content }`, and returns the same
 `evaluateFixtureContentsResult` batch shape used by the package API so
 workflow callers can score benchmark fixtures without writing them to disk.
+API and in-memory source inputs may also include explicit `title`,
+`updatedAt`, and `trustLevel` fields when a caller wants to preserve source
+metadata without rewriting the raw document content; those explicit fields take
+precedence over any frontmatter or HTML metadata already embedded in the
+source body.
 `GET /` returns a small JSON endpoint index plus capability metadata for
 supported source extensions, answer extensions, verdicts, and trust levels, so
 local clients can avoid hardcoding Quorum's current contract, and
