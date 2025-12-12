@@ -68,13 +68,13 @@ export interface StartedApiServer {
   close(): Promise<void>;
 }
 
-const OPENAPI_PATH = "/openapi.json";
+export const OPENAPI_PATH = "/openapi.json";
 const ALLOWED_METHODS = "GET, POST, OPTIONS";
 const ALLOWED_HEADERS = "Content-Type";
-const API_SERVICE_NAME = "quorum";
-const API_VERSION = "0.1.0";
+export const API_SERVICE_NAME = "quorum";
+export const API_VERSION = "0.1.0";
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
-const API_CAPABILITIES = {
+export const API_CAPABILITIES = {
   sourceExtensions: [...SOURCE_EXTENSIONS],
   answerExtensions: [...ANSWER_EXTENSIONS],
   verdicts: CLAIM_VERDICTS,
