@@ -3,10 +3,21 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { createApiServer, startApiServer } from "../src/api-server.js";
+import {
+  API_CAPABILITIES as SERVER_API_CAPABILITIES,
+  API_SERVICE_NAME as SERVER_API_SERVICE_NAME,
+  API_VERSION as SERVER_API_VERSION,
+  createApiServer,
+  OPENAPI_PATH as SERVER_OPENAPI_PATH,
+  startApiServer,
+} from "../src/api-server.js";
 import {
   ANSWER_EXTENSIONS,
+  API_CAPABILITIES,
+  API_SERVICE_NAME,
+  API_VERSION,
   CLAIM_VERDICTS,
+  createApiServer as rootCreateApiServer,
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
   evaluateFixtureContent,
@@ -48,7 +59,9 @@ import {
   renderTextReport,
   resolveAnswerPaths,
   resolveSourcePaths,
+  OPENAPI_PATH,
   SOURCE_EXTENSIONS,
+  startApiServer as rootStartApiServer,
   shouldFailReport,
   verifyAnswers,
   verifyAnswersResult,
@@ -71,6 +84,15 @@ import {
 test("programmatic API exposes supported source and answer extensions", () => {
   assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
   assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm"]);
+});
+
+test("programmatic API re-exports embedded server helpers and metadata", () => {
+  assert.strictEqual(rootCreateApiServer, createApiServer);
+  assert.strictEqual(rootStartApiServer, startApiServer);
+  assert.strictEqual(OPENAPI_PATH, SERVER_OPENAPI_PATH);
+  assert.strictEqual(API_SERVICE_NAME, SERVER_API_SERVICE_NAME);
+  assert.strictEqual(API_VERSION, SERVER_API_VERSION);
+  assert.deepEqual(API_CAPABILITIES, SERVER_API_CAPABILITIES);
 });
 
 test("programmatic API verifies an answer file against loaded sources", async () => {
