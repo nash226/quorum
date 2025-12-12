@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `da913da` on 2026-07-07, feat: accept explicit metadata for api sources
+- Latest shipped change: `e5b028b` on 2026-07-07, feat: export api server helpers from root entrypoint
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-07 | [#236](https://github.com/nash226/quorum/pull/236) | feat: export api server helpers from root entrypoint | `e5b028b` |
 | 2026-07-07 | [#235](https://github.com/nash226/quorum/pull/235) | feat: accept explicit metadata for api sources | `da913da` |
 | 2026-07-07 | [#234](https://github.com/nash226/quorum/pull/234) | feat: expose api discovery capabilities | `09b82fc` |
 | 2026-07-07 | [#233](https://github.com/nash226/quorum/pull/233) | feat: support generatedAt in local api requests | `dea5dab` |
@@ -54,5 +55,4 @@
 | 2026-07-07 | [#231](https://github.com/nash226/quorum/pull/231) | feat: expose api version metadata | `e618e91` |
 | 2026-07-07 | [#230](https://github.com/nash226/quorum/pull/230) | feat: document api error responses | `72696e0` |
 | 2026-07-07 | [#229](https://github.com/nash226/quorum/pull/229) | test: smoke evaluate api | `03de69a` |
-| 2026-07-07 | [#228](https://github.com/nash226/quorum/pull/228) | feat: enrich openapi response schemas | `b9e2d24` |
 
