@@ -1443,7 +1443,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
 
   assert.equal(batchResult.shouldFail, false);
   assert.equal(batchResult.mismatchCount, 0);
-  assert.equal(batchResult.scorecards.length, 2);
+  assert.equal(batchResult.scorecards.length, 4);
   assert.equal(singleResult.hasMismatch, false);
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
   assert.equal(contentResult.hasMismatch, false);
@@ -2495,9 +2495,9 @@ test("programmatic API exports batch evaluation helpers", async () => {
 
   const rendered = renderEvaluationTextReport(scorecards);
 
-  assert.equal(scorecards.length, 2);
+  assert.equal(scorecards.length, 4);
   assert.equal(scorecards.some(hasEvaluationMismatch), false);
-  assert.match(rendered, /Fixtures: 2/);
+  assert.match(rendered, /Fixtures: 4/);
   assert.match(renderEvaluationHtmlReport(scorecards), /<!doctype html>/i);
   assert.match(renderEvaluationSummaryCsv(scorecards), /fixture_name,fixture_path,answer_path/);
 });
