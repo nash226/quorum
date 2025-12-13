@@ -1,0 +1,13 @@
+{
+  "name": "HR onboarding policy example",
+  "answerPath": "../../answers/hr-onboarding-answer.md",
+  "answerLabel": "HR onboarding reviewer packet",
+  "sourcePaths": ["../../sources/hr-policy.md"],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "needs_review"]
+}

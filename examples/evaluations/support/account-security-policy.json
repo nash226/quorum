@@ -1,0 +1,13 @@
+{
+  "name": "Support account policy example",
+  "answerPath": "../../answers/support-account-answer.md",
+  "answerLabel": "Support account reviewer packet",
+  "sourcePaths": ["../../sources/support-playbook.md"],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 1,
+    "unsupported": 0,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "contradicted"]
+}

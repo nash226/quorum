@@ -63,6 +63,25 @@ test("evaluates fixture files relative to the fixture directory", async () => {
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates nested shipped fixture files for additional domain coverage", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/hr/onboarding-policy.json"),
+    generatedAt: "2026-07-05T10:05:30.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR onboarding policy example");
+  assert.equal(scorecard.answerLabel, "HR onboarding reviewer packet");
+  assert.equal(
+    scorecard.answerPreview,
+    "Healthcare coverage begins after 30 days of employment. Remote employees may request ergonomic equipment reimbursemen...",
+  );
+  assert.deepEqual(scorecard.sourceDirs, []);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.matchedClaims, 3);
+  assert.equal(scorecard.totalExpectedClaims, 3);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates one in-memory fixture file relative to its fixture path", async () => {
   const fixturePath = resolve("examples/evaluations/hr-policy.json");
   const fixtureContent = await loadEvaluationFixture(fixturePath);
@@ -91,7 +110,9 @@ test("resolves fixture paths from nested directories in stable order", async () 
 
   assert.deepEqual(fixturePaths, [
     resolve("examples/evaluations/hr-policy.json"),
+    resolve("examples/evaluations/hr/onboarding-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
+    resolve("examples/evaluations/support/account-security-policy.json"),
   ]);
 });
 
@@ -102,10 +123,15 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 2);
+  assert.equal(scorecards.length, 4);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
-    ["HR policy example", "Support policy example"],
+    [
+      "HR policy example",
+      "HR onboarding policy example",
+      "Support policy example",
+      "Support account policy example",
+    ],
   );
   assert.ok(
     scorecards.every(

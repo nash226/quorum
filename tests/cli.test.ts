@@ -309,7 +309,9 @@ test("evaluate writes a one-row-per-fixture summary csv", async () => {
       /^fixture_name,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
     );
     assert.match(summaryCsv, /HR policy example/);
+    assert.match(summaryCsv, /HR onboarding policy example/);
     assert.match(summaryCsv, /Support policy example/);
+    assert.match(summaryCsv, /Support account policy example/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -2577,13 +2579,29 @@ test("import-review preserves answer paths from batch reviewer decision csv file
     assert.equal(report.claims[0]?.answerPath, "examples/answers/hr-answer.md");
     assert.equal(report.claims[0]?.originalAnswerFailPolicy, "clear");
     assert.deepEqual(report.claims[0]?.originalAnswerFailVerdicts, []);
-    assert.equal(report.claims[report.claims.length - 1]?.answerPath, "examples/answers/support-answer.md");
-    assert.equal(report.answerGroups[0]?.label, "hr-answer");
-    assert.equal(report.answerGroups[0]?.answerPath, "examples/answers/hr-answer.md");
-    assert.equal(report.answerGroups[0]?.originalAnswerFailPolicy, "clear");
-    assert.deepEqual(report.answerGroups[0]?.originalAnswerFailVerdicts, []);
-    assert.equal(report.answerGroups[0]?.summary.totalClaims, 3);
-    assert.equal(report.answerGroups[1]?.label, "support-answer");
+    assert.ok(
+      report.claims.some(
+        (claim) =>
+          claim.answerLabel === "support-answer" &&
+          claim.answerPath === "examples/answers/support-answer.md",
+      ),
+    );
+    assert.ok(
+      report.claims.some(
+        (claim) =>
+          claim.answerLabel === "hr-onboarding-answer" &&
+          claim.answerPath === "examples/answers/hr-onboarding-answer.md",
+      ),
+    );
+
+    const hrGroup = report.answerGroups.find((group) => group.label === "hr-answer");
+    const supportGroup = report.answerGroups.find((group) => group.label === "support-answer");
+
+    assert.equal(hrGroup?.answerPath, "examples/answers/hr-answer.md");
+    assert.equal(hrGroup?.originalAnswerFailPolicy, "clear");
+    assert.deepEqual(hrGroup?.originalAnswerFailVerdicts, []);
+    assert.equal(hrGroup?.summary.totalClaims, 3);
+    assert.equal(supportGroup?.answerPath, "examples/answers/support-answer.md");
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
