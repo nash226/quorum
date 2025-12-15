@@ -1086,8 +1086,11 @@ Options:
 
   Endpoints:
   GET  /                    Return API discovery metadata for local callers
+  HEAD /                    Return service discovery headers without a response body
   GET  /health              Return a simple readiness response
+  HEAD /health              Return readiness headers without a response body
   GET  /openapi.json        Return the machine-readable API description
+  HEAD /openapi.json        Return OpenAPI headers without a response body
   POST /verify              Verify one answer from JSON request content
   POST /verify-batch        Verify multiple answers from JSON request content
   POST /import-review       Import reviewer CSV content from JSON request content

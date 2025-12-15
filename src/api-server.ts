@@ -69,7 +69,7 @@ export interface StartedApiServer {
 }
 
 export const OPENAPI_PATH = "/openapi.json";
-const ALLOWED_METHODS = "GET, POST, OPTIONS";
+const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
 const ALLOWED_HEADERS = "Content-Type";
 export const API_SERVICE_NAME = "quorum";
 export const API_VERSION = "0.1.0";
@@ -234,21 +234,26 @@ async function handleApiRequest(
 ): Promise<void> {
   applyCorsHeaders(response);
   const url = request.url ?? "/";
+  const isHeadRequest = request.method === "HEAD";
 
   if (request.method === "OPTIONS") {
     writeNoContent(response);
     return;
   }
 
-  if (request.method === "GET" && url === "/") {
+  if ((request.method === "GET" || isHeadRequest) && url === "/") {
     writeJson(response, 200, {
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
       capabilities: API_CAPABILITIES,
       endpoints: [
+        { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
+        { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
         { method: "GET", path: "/health", description: "Return a simple readiness response." },
+        { method: "HEAD", path: "/health", description: "Return readiness headers without a JSON body." },
         { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
+        { method: "HEAD", path: OPENAPI_PATH, description: "Return OpenAPI headers without a JSON body." },
         { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
         {
           method: "POST",
@@ -266,21 +271,21 @@ async function handleApiRequest(
           description: "Evaluate fixture JSON content from request payloads.",
         },
       ],
-    });
+    }, isHeadRequest);
     return;
   }
 
-  if (request.method === "GET" && url === "/health") {
+  if ((request.method === "GET" || isHeadRequest) && url === "/health") {
     writeJson(response, 200, {
       ok: true,
       service: API_SERVICE_NAME,
       version: API_VERSION,
-    });
+    }, isHeadRequest);
     return;
   }
 
-  if (request.method === "GET" && url === OPENAPI_PATH) {
-    writeJson(response, 200, buildOpenApiDocument(request));
+  if ((request.method === "GET" || isHeadRequest) && url === OPENAPI_PATH) {
+    writeJson(response, 200, buildOpenApiDocument(request), isHeadRequest);
     return;
   }
 
@@ -608,6 +613,20 @@ function buildOpenApiDocument(request: IncomingMessage) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
+        head: {
+          summary: "Service discovery headers",
+          responses: {
+            "200": {
+              description: "Header-only discovery response for probes and lightweight clients.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiIndexResponse" },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
       },
       "/health": {
         get: {
@@ -624,6 +643,20 @@ function buildOpenApiDocument(request: IncomingMessage) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
+        head: {
+          summary: "Readiness check headers",
+          responses: {
+            "200": {
+              description: "Header-only readiness response for load balancers and probes.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiHealthResponse" },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
       },
       [OPENAPI_PATH]: {
         get: {
@@ -631,6 +664,26 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Machine-readable API description for this server.",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      openapi: { type: "string" },
+                    },
+                    required: ["openapi"],
+                  },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+        head: {
+          summary: "OpenAPI description headers",
+          responses: {
+            "200": {
+              description: "Header-only OpenAPI response for schema probes.",
               content: {
                 "application/json": {
                   schema: {
@@ -851,7 +904,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
           properties: {
             method: {
               type: "string",
-              enum: ["GET", "POST", "OPTIONS"],
+              enum: ["GET", "HEAD", "POST", "OPTIONS"],
             },
             path: { type: "string" },
             description: { type: "string" },
@@ -1273,10 +1326,24 @@ function writeNoContent(response: ServerResponse): void {
   response.end();
 }
 
-function writeJson(response: ServerResponse, statusCode: number, payload: unknown): void {
+function writeJson(
+  response: ServerResponse,
+  statusCode: number,
+  payload: unknown,
+  omitBody = false,
+): void {
+  const body = `${JSON.stringify(payload, null, 2)}\n`;
+
   response.statusCode = statusCode;
   response.setHeader("Content-Type", "application/json; charset=utf-8");
-  response.end(`${JSON.stringify(payload, null, 2)}\n`);
+  response.setHeader("Content-Length", Buffer.byteLength(body, "utf8"));
+
+  if (omitBody) {
+    response.end();
+    return;
+  }
+
+  response.end(body);
 }
 
 class ApiRequestError extends Error {
