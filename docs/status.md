@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `990bf2d` on 2026-07-07, feat: summarize aggregate evaluation claim scores
+- Latest shipped change: `64ca1e7` on 2026-07-07, feat: add HEAD support for local api discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-07 | [#240](https://github.com/nash226/quorum/pull/240) | feat: add HEAD support for local api discovery | `64ca1e7` |
 | 2026-07-07 | [#239](https://github.com/nash226/quorum/pull/239) | feat: summarize aggregate evaluation claim scores | `990bf2d` |
 | 2026-07-07 | [#238](https://github.com/nash226/quorum/pull/238) | test: expand evaluation fixture coverage | `de6b9df` |
 | 2026-07-07 | [#237](https://github.com/nash226/quorum/pull/237) | fix: ignore collapsed html detail summaries | `d57a1eb` |
@@ -54,5 +55,4 @@
 | 2026-07-07 | [#235](https://github.com/nash226/quorum/pull/235) | feat: accept explicit metadata for api sources | `da913da` |
 | 2026-07-07 | [#234](https://github.com/nash226/quorum/pull/234) | feat: expose api discovery capabilities | `09b82fc` |
 | 2026-07-07 | [#233](https://github.com/nash226/quorum/pull/233) | feat: support generatedAt in local api requests | `dea5dab` |
-| 2026-07-07 | [#232](https://github.com/nash226/quorum/pull/232) | feat: add openapi request examples | `e31377f` |
 
