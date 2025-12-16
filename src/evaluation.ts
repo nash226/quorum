@@ -1,15 +1,24 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { dirname, extname, join, resolve } from "node:path";
+import { verifyAnswer } from "./claim-verifier.js";
 import { serializeDelimitedList } from "./csv-list.js";
 import type { ClaimVerdict, SourceTrustLevel, VerificationReport } from "./domain.js";
-import { loadSourceDocuments, resolveSourcePaths, verifyAnswerFile } from "./workflow.js";
+import {
+  loadSourceDocuments,
+  loadSourceDocumentsFromContent,
+  resolveSourcePaths,
+  type InMemorySourceInput,
+  verifyAnswerFile,
+} from "./workflow.js";
 
 export interface EvaluationFixture {
   name: string;
   answerPath: string;
+  answer?: string;
   answerLabel?: string;
   sourcePaths?: string[];
   sourceDirs?: string[];
+  sources?: InMemorySourceInput[];
   defaultTrustLevel?: SourceTrustLevel;
   expectedSummary: Record<ClaimVerdict, number>;
   expectedClaimVerdicts?: ClaimVerdict[];
@@ -111,23 +120,55 @@ export async function evaluateFixture(
   } = {},
 ): Promise<EvaluationScorecard> {
   const baseDir = options.baseDir ?? process.cwd();
-  const answerPath = resolve(baseDir, fixture.answerPath);
+  const answerPath = resolveFixtureMetadataPath(baseDir, fixture.answerPath);
   const sourceDirs = (fixture.sourceDirs ?? []).map((sourceDir) => resolve(baseDir, sourceDir));
   const sourcePaths = await resolveSourcePaths(
     (fixture.sourcePaths ?? []).map((sourcePath) => resolve(baseDir, sourcePath)),
     sourceDirs,
   );
-  const sources = await loadSourceDocuments({
-    sourcePaths,
-    sourceDirs: [],
-    defaultTrustLevel: fixture.defaultTrustLevel,
-  });
-  const report = await verifyAnswerFile(
-    answerPath,
-    sources,
-    options.generatedAt ?? new Date().toISOString(),
-    fixture.answerLabel,
-  );
+  const inlineSources = (fixture.sources ?? []).map((source) => ({
+    ...source,
+    sourcePath: resolveFixtureMetadataPath(baseDir, source.sourcePath),
+  }));
+  const [fileSources, memorySources] = await Promise.all([
+    sourcePaths.length > 0
+      ? loadSourceDocuments({
+          sourcePaths,
+          sourceDirs: [],
+          defaultTrustLevel: fixture.defaultTrustLevel,
+        })
+      : Promise.resolve([]),
+    inlineSources.length > 0
+      ? loadSourceDocumentsFromContent({
+          sources: inlineSources,
+          defaultTrustLevel: fixture.defaultTrustLevel,
+        })
+      : Promise.resolve([]),
+  ]);
+  const sources = [...fileSources, ...memorySources];
+
+  if (sources.length === 0) {
+    throw new Error("Evaluation fixture requires at least one source path, source directory, or in-memory source.");
+  }
+
+  const report =
+    fixture.answer !== undefined
+      ? verifyAnswer(
+          fixture.answer,
+          sources,
+          options.generatedAt ?? new Date().toISOString(),
+          answerPath,
+        )
+      : await verifyAnswerFile(
+          answerPath,
+          sources,
+          options.generatedAt ?? new Date().toISOString(),
+          fixture.answerLabel,
+        );
+
+  if (fixture.answer !== undefined && fixture.answerLabel !== undefined) {
+    report.answerLabel = fixture.answerLabel;
+  }
   const actualSummary = {
     verified: report.summary.verified,
     contradicted: report.summary.contradicted,
@@ -1093,6 +1134,10 @@ function normalizeSingleEvaluationFileOptions(
   }
 
   return fixturePathOrOptions;
+}
+
+function resolveFixtureMetadataPath(baseDir: string, filePath: string): string {
+  return filePath.startsWith("<") ? filePath : resolve(baseDir, filePath);
 }
 
 function trimTrailingBlankLines(lines: string[]): string[] {

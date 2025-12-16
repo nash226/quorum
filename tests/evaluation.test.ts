@@ -207,6 +207,55 @@ test("evaluates fixture sources discovered from source directories", async () =>
   }
 });
 
+test("evaluates inline fixture answers and sources without reading answer files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-eval-inline-"));
+  const fixturePath = join(tempDir, "fixtures", "hr-inline.json");
+
+  try {
+    await mkdir(join(tempDir, "fixtures"), { recursive: true });
+
+    const scorecard = await evaluateFixture(
+      {
+        name: "Inline HR fixture",
+        answerPath: "../answers/hr-inline.md",
+        answer: "Employees receive 12 weeks of paid parental leave.\n",
+        answerLabel: "HR API reviewer packet",
+        sources: [
+          {
+            sourcePath: "../sources/hr-policy.md",
+            title: "HR Policy",
+            trustLevel: "high",
+            content: "Employees receive 12 weeks of paid parental leave.\n",
+          },
+        ],
+        expectedSummary: {
+          verified: 1,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+        },
+        expectedClaimVerdicts: ["verified"],
+      },
+      {
+        baseDir: join(tempDir, "fixtures"),
+        fixturePath,
+        generatedAt: "2026-07-08T04:00:00.000Z",
+      },
+    );
+
+    assert.equal(scorecard.fixturePath, fixturePath);
+    assert.equal(scorecard.answerPath, join(tempDir, "answers", "hr-inline.md"));
+    assert.equal(scorecard.answerLabel, "HR API reviewer packet");
+    assert.deepEqual(scorecard.sourcePaths, []);
+    assert.equal(scorecard.report.sources[0]?.title, "HR Policy");
+    assert.equal(scorecard.summaryMatches, true);
+    assert.equal(scorecard.matchedClaims, 1);
+    assert.equal(scorecard.score, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("renders mismatch details in evaluation scorecards", () => {
   const rendered = renderEvaluationScorecard({
     fixtureName: "Mismatch fixture",
