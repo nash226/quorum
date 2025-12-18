@@ -2,7 +2,6 @@
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import type {
-  BatchVerificationReport,
   ClaimAssessment,
   ClaimVerdict,
   SourceDocument,
@@ -21,6 +20,7 @@ import {
   shouldFailReport,
 } from "./report-policy.js";
 import {
+  renderBatchTextReport,
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
@@ -879,79 +879,6 @@ function trimTrailingBlankLines(lines: string[]): string[] {
   }
 
   return trimmed;
-}
-
-function renderTextSourceLabel(source: {
-  title: string;
-  trustLevel: string;
-  updatedAt?: string;
-}): string {
-  const metadata = [`${source.trustLevel} trust`];
-
-  if (source.updatedAt) {
-    metadata.push(`updated ${source.updatedAt}`);
-  }
-
-  return `${source.title} (${metadata.join(", ")})`;
-}
-
-function renderBatchTextReport(report: BatchVerificationReport): string {
-  const noClaimsReason = "No claims were extracted from this answer.";
-  const orderedAnswers = orderBatchAnswersForReview(report.answers);
-  const lines = [
-    "Quorum Batch Verification Report",
-    "",
-    `Answers: ${report.answerCount}`,
-    "Sources:",
-    ...report.sources.map((source) => `- ${renderTextSourceLabel(source)}`),
-    `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
-    `Answers with no extracted claims: ${report.summary.answersWithoutClaims}`,
-    `Answers matching fail policy: ${report.summary.answersWithFailures}`,
-    "",
-  ];
-
-  for (const answer of orderedAnswers) {
-    const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
-    const primaryFinding = primaryAssessment
-      ? formatVerdictLabel(primaryAssessment.verdict)
-      : "needs review";
-    const primaryReason = primaryAssessment?.reason ?? noClaimsReason;
-
-    lines.push(
-      answer.answerLabel,
-      `  Path: ${answer.answerPath}`,
-      `  Summary: ${answer.report.summary.verified} verified, ${answer.report.summary.contradicted} contradicted, ${answer.report.summary.unsupported} unsupported, ${answer.report.summary.needs_review} needs review`,
-      `  Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
-      `  Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
-      `  Answer preview: ${renderAnswerPreview(answer.report.answer) || "No answer content provided."}`,
-      `  Primary finding: ${primaryFinding}`,
-      `  Primary reason: ${primaryReason}`,
-    );
-
-    if (primaryAssessment) {
-      lines.push(
-        `  Primary claim: ${primaryAssessment.claim.text}`,
-        `  Primary evidence: ${renderTextPrimaryEvidenceLabel(primaryAssessment.evidence[0] ?? null)}`,
-      );
-    }
-
-    if (answer.report.assessments.length === 0) {
-      lines.push("  No claims were extracted from this answer.", "");
-      continue;
-    }
-
-    lines.push("");
-
-    for (const assessment of answer.report.assessments) {
-      lines.push(...indentLines(renderTextAssessmentLines(assessment), "  "), "");
-    }
-  }
-
-  return `${trimTrailingBlankLines(lines).join("\n")}\n`;
-}
-
-function indentLines(lines: string[], prefix: string): string[] {
-  return lines.map((line) => (line.length === 0 ? line : `${prefix}${line}`));
 }
 
 function formatVerdictLabel(verdict: ClaimVerdict): string {

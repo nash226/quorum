@@ -48,12 +48,17 @@ import {
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
   renderBatchSummaryCsv,
+  renderBatchTextReport,
   renderEvaluationHtmlReport,
+  renderEvaluationMarkdownReport,
   renderEvaluationSummaryCsv,
   renderEvaluationTextReport,
   renderHtmlReport,
   renderMarkdownReport,
+  renderReviewerDecisionImportHtmlReport,
+  renderReviewerDecisionImportReport,
   renderReviewerDecisionImportMarkdownReport,
+  renderReviewerDecisionImportSummaryCsv,
   renderReviewerDecisionCsv,
   renderSummaryCsv,
   renderTextReport,
@@ -1834,6 +1839,10 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
         answerExtensions: [".md", ".markdown", ".txt", ".html", ".htm"],
         verdicts: ["verified", "unsupported", "contradicted", "needs_review"],
         trustLevels: ["low", "medium", "high"],
+        verifyArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
+        verifyBatchArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
+        importReviewArtifacts: ["text", "markdown", "html", "summary_csv"],
+        evaluateArtifacts: ["text", "markdown", "html", "summary_csv"],
       },
       endpoints: [
         { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
@@ -1906,11 +1915,21 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
                 string,
                 {
                   examples?: Record<string, { summary?: string; value?: unknown }>;
-                  schema?: { $ref?: string };
+                  schema?: { $ref?: string; allOf?: Array<{ $ref?: string; properties?: Record<string, unknown> }> };
                 }
               >;
             };
-            responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }>;
+            responses?: Record<
+              string,
+              {
+                content?: Record<
+                  string,
+                  {
+                    schema?: { $ref?: string; allOf?: Array<{ $ref?: string; properties?: Record<string, unknown> }> };
+                  }
+                >;
+              }
+            >;
           };
         }
       >;
@@ -1985,6 +2004,7 @@ Employees receive 12 weeks of paid parental leave.
         ],
         defaultTrustLevel: "high",
         failOn: ["contradicted", "unsupported"],
+        includeArtifacts: ["markdown", "review_csv"],
       },
     );
     assert.deepEqual(
@@ -2030,6 +2050,7 @@ Refund requests receive an initial response within one business day.
           },
         ],
         failOn: ["unsupported"],
+        includeArtifacts: ["html", "summary_csv"],
       },
     );
     assert.deepEqual(
@@ -2042,6 +2063,7 @@ Refund requests receive an initial response within one business day.
           "HR policy answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved for publish",
         ].join("\n"),
         failOn: ["needs_review"],
+        includeArtifacts: ["markdown", "summary_csv"],
       },
     );
     assert.deepEqual(
@@ -2079,6 +2101,7 @@ Refund requests receive an initial response within one business day.
             ),
           },
         ],
+        includeArtifacts: ["html", "summary_csv"],
       },
     );
     assert.equal(
@@ -2086,19 +2109,19 @@ Refund requests receive an initial response within one business day.
       "#/components/schemas/ApiIndexResponse",
     );
     assert.equal(
-      openApi.paths["/verify"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      openApi.paths["/verify"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
       "#/components/schemas/SingleVerificationResult",
     );
     assert.equal(
-      openApi.paths["/verify-batch"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      openApi.paths["/verify-batch"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
       "#/components/schemas/BatchVerificationRunResult",
     );
     assert.equal(
-      openApi.paths["/import-review"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      openApi.paths["/import-review"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
       "#/components/schemas/ReviewerDecisionImportResult",
     );
     assert.equal(
-      openApi.paths["/evaluate"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      openApi.paths["/evaluate"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
       "#/components/schemas/EvaluationBatchRunResult",
     );
     assert.equal(
@@ -2125,6 +2148,10 @@ Refund requests receive an initial response within one business day.
       "answerExtensions",
       "verdicts",
       "trustLevels",
+      "verifyArtifacts",
+      "verifyBatchArtifacts",
+      "importReviewArtifacts",
+      "evaluateArtifacts",
     ]);
     assert.deepEqual(openApi.components.schemas.ApiHealthResponse.required, [
       "ok",
@@ -2555,6 +2582,172 @@ test("programmatic API serves evaluation over HTTP", async () => {
     assert.equal(result.scorecards[0]?.summaryMatches, true);
     assert.equal(result.scorecards[0]?.matchedClaims, 3);
     assert.equal(result.scorecards[0]?.totalExpectedClaims, 3);
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API can embed reviewer artifacts in HTTP responses", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const verifyResponse = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        answerLabel: "HR reviewer packet",
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        failOn: ["contradicted"],
+        includeArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
+      }),
+    });
+    assert.equal(verifyResponse.status, 200);
+    const verifyResult = await verifyResponse.json() as Awaited<ReturnType<typeof verifyAnswerContentsResult>> & {
+      artifacts: Record<string, string>;
+    };
+    assert.equal(verifyResult.artifacts.text, renderTextReport(verifyResult.report, verifyResult.failVerdicts));
+    assert.equal(
+      verifyResult.artifacts.markdown,
+      renderMarkdownReport(verifyResult.report, verifyResult.failVerdicts),
+    );
+    assert.equal(verifyResult.artifacts.html, renderHtmlReport(verifyResult.report, verifyResult.failVerdicts));
+    assert.equal(
+      verifyResult.artifacts.review_csv,
+      renderReviewerDecisionCsv(verifyResult.report, verifyResult.failVerdicts),
+    );
+    assert.equal(
+      verifyResult.artifacts.summary_csv,
+      renderSummaryCsv(verifyResult.report, verifyResult.failVerdicts),
+    );
+
+    const batchResponse = await fetch(`${api.url}/verify-batch`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answers: [
+          {
+            answer: "Employees receive 12 weeks of paid parental leave.",
+            answerPath: "answers/hr.md",
+            answerLabel: "HR reviewer packet",
+          },
+          {
+            answer: "Refund requests are answered within one business day.",
+            answerPath: "answers/support.md",
+            answerLabel: "Support reviewer packet",
+          },
+        ],
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+          {
+            sourcePath: "sources/support-playbook.md",
+            content: `---
+title: Support Playbook
+trustLevel: medium
+---
+Refund requests receive an initial response within one business day.
+`,
+          },
+        ],
+        includeArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
+      }),
+    });
+    assert.equal(batchResponse.status, 200);
+    const batchResult = await batchResponse.json() as Awaited<ReturnType<typeof verifyAnswerBatchContentsResult>> & {
+      artifacts: Record<string, string>;
+    };
+    assert.equal(batchResult.artifacts.text, renderBatchTextReport(batchResult.report));
+    assert.equal(batchResult.artifacts.markdown, renderBatchMarkdownReport(batchResult.report));
+    assert.equal(batchResult.artifacts.html, renderBatchHtmlReport(batchResult.report));
+    assert.equal(batchResult.artifacts.review_csv, renderBatchReviewerDecisionCsv(batchResult.report));
+    assert.equal(batchResult.artifacts.summary_csv, renderBatchSummaryCsv(batchResult.report));
+
+    const importResponse = await fetch(`${api.url}/import-review`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewCsvContent: `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
+`,
+        failOn: ["needs_review"],
+        includeArtifacts: ["text", "markdown", "html", "summary_csv"],
+      }),
+    });
+    assert.equal(importResponse.status, 200);
+    const importResult = await importResponse.json() as ReturnType<typeof importReviewerDecisionContentsResult> & {
+      artifacts: Record<string, string>;
+    };
+    assert.equal(
+      importResult.artifacts.text,
+      renderReviewerDecisionImportReport(importResult.report, importResult.failVerdicts),
+    );
+    assert.equal(
+      importResult.artifacts.markdown,
+      renderReviewerDecisionImportMarkdownReport(importResult.report, importResult.failVerdicts),
+    );
+    assert.equal(
+      importResult.artifacts.html,
+      renderReviewerDecisionImportHtmlReport(importResult.report, importResult.failVerdicts),
+    );
+    assert.equal(
+      importResult.artifacts.summary_csv,
+      renderReviewerDecisionImportSummaryCsv(importResult.report),
+    );
+
+    const fixtureContent = await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8");
+    const evaluateResponse = await fetch(`${api.url}/evaluate`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        fixtures: [
+          {
+            fixturePath: join(process.cwd(), "examples/evaluations/hr-policy.json"),
+            content: fixtureContent,
+          },
+        ],
+        includeArtifacts: ["text", "markdown", "html", "summary_csv"],
+      }),
+    });
+    assert.equal(evaluateResponse.status, 200);
+    const evaluateResult = await evaluateResponse.json() as Awaited<ReturnType<typeof evaluateFixtureContentsResult>> & {
+      artifacts: Record<string, string>;
+    };
+    assert.equal(evaluateResult.artifacts.text, renderEvaluationTextReport(evaluateResult.scorecards));
+    assert.equal(
+      evaluateResult.artifacts.markdown,
+      renderEvaluationMarkdownReport(evaluateResult.scorecards),
+    );
+    assert.equal(evaluateResult.artifacts.html, renderEvaluationHtmlReport(evaluateResult.scorecards));
+    assert.equal(
+      evaluateResult.artifacts.summary_csv,
+      renderEvaluationSummaryCsv(evaluateResult.scorecards),
+    );
   } finally {
     await api.close();
   }
