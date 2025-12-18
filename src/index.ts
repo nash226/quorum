@@ -82,6 +82,7 @@ export type {
   ReviewerDecisionImportResult,
 } from "./reviewer-decision-import.js";
 export {
+  renderBatchTextReport,
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,

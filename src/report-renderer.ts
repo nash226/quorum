@@ -45,6 +45,61 @@ export function renderTextReport(
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
+export function renderBatchTextReport(report: BatchVerificationReport): string {
+  const noClaimsReason = "No claims were extracted from this answer.";
+  const orderedAnswers = orderBatchAnswersForReview(report.answers);
+  const lines = [
+    "Quorum Batch Verification Report",
+    "",
+    `Answers: ${report.answerCount}`,
+    "Sources:",
+    ...report.sources.map((source) => `- ${renderTextSourceLabel(source)}`),
+    `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
+    `Answers with no extracted claims: ${report.summary.answersWithoutClaims}`,
+    `Answers matching fail policy: ${report.summary.answersWithFailures}`,
+    "",
+  ];
+
+  for (const answer of orderedAnswers) {
+    const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+    const primaryFinding = primaryAssessment
+      ? formatVerdictLabel(primaryAssessment.verdict)
+      : "needs review";
+    const primaryReason = primaryAssessment?.reason ?? noClaimsReason;
+
+    lines.push(
+      answer.answerLabel,
+      `  Path: ${answer.answerPath}`,
+      `  Summary: ${answer.report.summary.verified} verified, ${answer.report.summary.contradicted} contradicted, ${answer.report.summary.unsupported} unsupported, ${answer.report.summary.needs_review} needs review`,
+      `  Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
+      `  Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
+      `  Answer preview: ${renderAnswerPreview(answer.report.answer) || "No answer content provided."}`,
+      `  Primary finding: ${primaryFinding}`,
+      `  Primary reason: ${primaryReason}`,
+    );
+
+    if (primaryAssessment) {
+      lines.push(
+        `  Primary claim: ${primaryAssessment.claim.text}`,
+        `  Primary evidence: ${renderTextPrimaryEvidenceLabel(primaryAssessment.evidence[0] ?? null)}`,
+      );
+    }
+
+    if (answer.report.assessments.length === 0) {
+      lines.push("  No claims were extracted from this answer.", "");
+      continue;
+    }
+
+    lines.push("");
+
+    for (const assessment of answer.report.assessments) {
+      lines.push(...indentLines(renderTextAssessmentLines(assessment), "  "), "");
+    }
+  }
+
+  return `${trimTrailingBlankLines(lines).join("\n")}\n`;
+}
+
 export function renderMarkdownReport(
   report: VerificationReport,
   failOn: ClaimVerdict[] = [],
@@ -1846,6 +1901,10 @@ function renderTextSourceLabel(source: {
   }
 
   return `${source.title} (${metadata.join(", ")})`;
+}
+
+function indentLines(lines: string[], prefix: string): string[] {
+  return lines.map((line) => (line.length === 0 ? line : `${prefix}${line}`));
 }
 
 function renderMarkdownAssessment(
