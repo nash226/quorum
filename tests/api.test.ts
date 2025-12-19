@@ -2005,6 +2005,7 @@ Employees receive 12 weeks of paid parental leave.
         defaultTrustLevel: "high",
         failOn: ["contradicted", "unsupported"],
         includeArtifacts: ["markdown", "review_csv"],
+        failOnStatus: true,
       },
     );
     assert.deepEqual(
@@ -2051,6 +2052,7 @@ Refund requests receive an initial response within one business day.
         ],
         failOn: ["unsupported"],
         includeArtifacts: ["html", "summary_csv"],
+        failOnStatus: true,
       },
     );
     assert.deepEqual(
@@ -2064,6 +2066,7 @@ Refund requests receive an initial response within one business day.
         ].join("\n"),
         failOn: ["needs_review"],
         includeArtifacts: ["markdown", "summary_csv"],
+        failOnStatus: true,
       },
     );
     assert.deepEqual(
@@ -2102,6 +2105,7 @@ Refund requests receive an initial response within one business day.
           },
         ],
         includeArtifacts: ["html", "summary_csv"],
+        failOnStatus: true,
       },
     );
     assert.equal(
@@ -2748,6 +2752,165 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       evaluateResult.artifacts.summary_csv,
       renderEvaluationSummaryCsv(evaluateResult.scorecards),
     );
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API can return conflict statuses for fail-policy matches when requested", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const verifyResponse = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 18 weeks of paid parental leave.",
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        failOn: ["contradicted"],
+        failOnStatus: true,
+      }),
+    });
+    assert.equal(verifyResponse.status, 409);
+    const verifyResult = await verifyResponse.json() as Awaited<ReturnType<typeof verifyAnswerContentsResult>>;
+    assert.equal(verifyResult.shouldFail, true);
+    assert.deepEqual(verifyResult.failVerdicts, ["contradicted"]);
+
+    const batchResponse = await fetch(`${api.url}/verify-batch`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answers: [
+          {
+            answer: "Employees receive 18 weeks of paid parental leave.",
+            answerPath: "answers/hr.md",
+          },
+        ],
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        failOn: ["contradicted"],
+        failOnStatus: true,
+      }),
+    });
+    assert.equal(batchResponse.status, 409);
+    const batchResult = await batchResponse.json() as Awaited<ReturnType<typeof verifyAnswerBatchContentsResult>>;
+    assert.equal(batchResult.shouldFail, true);
+    assert.deepEqual(batchResult.failVerdicts, ["contradicted"]);
+
+    const importResponse = await fetch(`${api.url}/import-review`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewCsvContent: `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
+`,
+        failOn: ["needs_review"],
+        failOnStatus: true,
+      }),
+    });
+    assert.equal(importResponse.status, 409);
+    const importResult = await importResponse.json() as ReturnType<typeof importReviewerDecisionContentsResult>;
+    assert.equal(importResult.shouldFail, true);
+    assert.deepEqual(importResult.failVerdicts, ["needs_review"]);
+
+    const evaluateResponse = await fetch(`${api.url}/evaluate`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        fixtures: [
+          {
+            fixturePath: join(process.cwd(), "tmp-fixtures", "hr-inline.json"),
+            content: JSON.stringify({
+              name: "Inline HR API fixture",
+              answerPath: "../answers/hr-inline.md",
+              answer: "Employees receive 18 weeks of paid parental leave.\n",
+              sources: [
+                {
+                  sourcePath: "../sources/hr-policy.md",
+                  title: "HR Policy",
+                  trustLevel: "high",
+                  content: "Employees receive 12 weeks of paid parental leave.\n",
+                },
+              ],
+              expectedSummary: {
+                verified: 1,
+                contradicted: 0,
+                unsupported: 0,
+                needs_review: 0,
+              },
+              expectedClaimVerdicts: ["verified"],
+            }),
+          },
+        ],
+        failOnStatus: true,
+      }),
+    });
+    assert.equal(evaluateResponse.status, 409);
+    const evaluateResult = await evaluateResponse.json() as Awaited<ReturnType<typeof evaluateFixtureContentsResult>>;
+    assert.equal(evaluateResult.shouldFail, true);
+    assert.equal(evaluateResult.mismatchCount, 1);
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API validates failOnStatus request fields", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        failOnStatus: "yes",
+      }),
+    });
+
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), {
+      error: "failOnStatus must be a boolean.",
+    });
   } finally {
     await api.close();
   }
