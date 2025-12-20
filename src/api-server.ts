@@ -116,6 +116,11 @@ const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
 const ALLOWED_HEADERS = "Content-Type";
 export const API_SERVICE_NAME = "quorum";
 export const API_VERSION = "0.1.0";
+export const API_DISCOVERY_HEADERS = {
+  service: "X-Quorum-Service",
+  version: "X-Quorum-Version",
+  openapiPath: "X-Quorum-OpenAPI-Path",
+} as const;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
   sourceExtensions: [...SOURCE_EXTENSIONS],
@@ -296,6 +301,7 @@ async function handleApiRequest(
   response: ServerResponse,
 ): Promise<void> {
   applyCorsHeaders(response);
+  applyApiDiscoveryHeaders(response);
   const url = request.url ?? "/";
   const isHeadRequest = request.method === "HEAD";
 
@@ -1776,6 +1782,12 @@ function applyCorsHeaders(response: ServerResponse): void {
   response.setHeader("Access-Control-Allow-Origin", "*");
   response.setHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
   response.setHeader("Access-Control-Allow-Headers", ALLOWED_HEADERS);
+}
+
+function applyApiDiscoveryHeaders(response: ServerResponse): void {
+  response.setHeader(API_DISCOVERY_HEADERS.service, API_SERVICE_NAME);
+  response.setHeader(API_DISCOVERY_HEADERS.version, API_VERSION);
+  response.setHeader(API_DISCOVERY_HEADERS.openapiPath, OPENAPI_PATH);
 }
 
 function writeNoContent(response: ServerResponse): void {
