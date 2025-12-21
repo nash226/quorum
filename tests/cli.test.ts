@@ -236,6 +236,39 @@ test("evaluate reports when a fixture directory resolves to no fixture files", a
   }
 });
 
+test("evaluate reports invalid fixture fields with a clear error", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-invalid-eval-"));
+  const fixturePath = join(tempDir, "broken.json");
+
+  try {
+    await writeFile(
+      fixturePath,
+      JSON.stringify({
+        name: "Broken fixture",
+        answerPath: "answers/hr.md",
+        sourcePaths: ["sources/hr-policy.md"],
+        expectedSummary: {
+          verified: 1,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+        },
+        expectedClaimVerdicts: ["bad"],
+      }),
+      "utf8",
+    );
+
+    await assert.rejects(
+      runCli(["evaluate", "--fixture", fixturePath]),
+      new RegExp(
+        `${fixturePath.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}\\.expectedClaimVerdicts\\[0\\] unsupported verdict "bad"\\. Expected one of: verified, unsupported, contradicted, needs_review`,
+      ),
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 
