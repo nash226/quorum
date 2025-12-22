@@ -365,6 +365,8 @@ Available endpoints:
 
 - `GET /`
 - `HEAD /`
+- `GET /capabilities`
+- `HEAD /capabilities`
 - `GET /health`
 - `HEAD /health`
 - `GET /openapi.json`
@@ -425,11 +427,12 @@ precedence over any frontmatter or HTML metadata already embedded in the
 source body.
 `GET /` returns a small JSON endpoint index plus capability metadata for
 supported source extensions, answer extensions, verdicts, trust levels, and
-opt-in artifact names for each workflow surface, so local clients can avoid
-hardcoding Quorum's current contract, and
-`HEAD /`, `HEAD /health`, and `HEAD /openapi.json` expose the same status code
-and headers without a JSON body, which makes lightweight readiness probes and
-schema checks easier to wire into orchestrators and load balancers.
+opt-in artifact names for each workflow surface, while `GET /capabilities`
+returns just that capability contract when a local client does not need the
+endpoint listing. `HEAD /`, `HEAD /capabilities`, `HEAD /health`, and
+`HEAD /openapi.json` expose the same status code and headers without a JSON
+body, which makes lightweight readiness probes and schema checks easier to wire
+into orchestrators and load balancers.
 Those responses also include `X-Quorum-Service`, `X-Quorum-Version`, and
 `X-Quorum-OpenAPI-Path` headers so callers can confirm they reached Quorum and
 discover the local schema path without parsing a response body first.
@@ -451,8 +454,9 @@ evaluation mismatches instead of always returning `200`, which lets workflow
 gates block risky outputs without parsing the body first.
 Node integrations that want to embed the server directly can now import
 `createApiServer`, `startApiServer`, and stable discovery metadata such as
-`OPENAPI_PATH` from the main `quorum` entrypoint, while `quorum/server`
-remains available for callers that prefer the dedicated subpath.
+`CAPABILITIES_PATH` and `OPENAPI_PATH` from the main `quorum` entrypoint,
+while `quorum/server` remains available for callers that prefer the dedicated
+subpath.
 
 `verifyAnswerFile` accepts either positional arguments or a single options
 object with `answerPath`, `sources`, `generatedAt`, and `answerLabel`.

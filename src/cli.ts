@@ -1014,6 +1014,8 @@ Options:
   Endpoints:
   GET  /                    Return API discovery metadata for local callers
   HEAD /                    Return service discovery headers without a response body
+  GET  /capabilities        Return supported Quorum capabilities without endpoint listings
+  HEAD /capabilities        Return capability discovery headers without a response body
   GET  /health              Return a simple readiness response
   HEAD /health              Return readiness headers without a response body
   GET  /openapi.json        Return the machine-readable API description
