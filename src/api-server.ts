@@ -112,6 +112,7 @@ export interface StartedApiServer {
   close(): Promise<void>;
 }
 
+export const CAPABILITIES_PATH = "/capabilities";
 export const OPENAPI_PATH = "/openapi.json";
 const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
 const ALLOWED_HEADERS = "Content-Type";
@@ -133,6 +134,40 @@ export const API_CAPABILITIES = {
   importReviewArtifacts: [...IMPORT_REVIEW_ARTIFACTS],
   evaluateArtifacts: [...EVALUATE_ARTIFACTS],
 } as const;
+const API_ENDPOINTS = [
+  { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
+  { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
+  {
+    method: "GET",
+    path: CAPABILITIES_PATH,
+    description: "Return supported Quorum capabilities without endpoint listings.",
+  },
+  {
+    method: "HEAD",
+    path: CAPABILITIES_PATH,
+    description: "Return capability discovery headers without a JSON body.",
+  },
+  { method: "GET", path: "/health", description: "Return a simple readiness response." },
+  { method: "HEAD", path: "/health", description: "Return readiness headers without a JSON body." },
+  { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
+  { method: "HEAD", path: OPENAPI_PATH, description: "Return OpenAPI headers without a JSON body." },
+  { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
+  {
+    method: "POST",
+    path: "/verify-batch",
+    description: "Verify multiple answers from JSON request content.",
+  },
+  {
+    method: "POST",
+    path: "/import-review",
+    description: "Import reviewer CSV content from JSON request content.",
+  },
+  {
+    method: "POST",
+    path: "/evaluate",
+    description: "Evaluate fixture JSON content from request payloads.",
+  },
+] as const;
 const OPENAPI_VERIFY_EXAMPLE = {
   answer: "Employees receive 12 weeks of paid parental leave.",
   answerPath: "answers/hr.md",
@@ -322,30 +357,17 @@ async function handleApiRequest(
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
       capabilities: API_CAPABILITIES,
-      endpoints: [
-        { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
-        { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
-        { method: "GET", path: "/health", description: "Return a simple readiness response." },
-        { method: "HEAD", path: "/health", description: "Return readiness headers without a JSON body." },
-        { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
-        { method: "HEAD", path: OPENAPI_PATH, description: "Return OpenAPI headers without a JSON body." },
-        { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
-        {
-          method: "POST",
-          path: "/verify-batch",
-          description: "Verify multiple answers from JSON request content.",
-        },
-        {
-          method: "POST",
-          path: "/import-review",
-          description: "Import reviewer CSV content from JSON request content.",
-        },
-        {
-          method: "POST",
-          path: "/evaluate",
-          description: "Evaluate fixture JSON content from request payloads.",
-        },
-      ],
+      endpoints: API_ENDPOINTS,
+    }, isHeadRequest);
+    return;
+  }
+
+  if ((request.method === "GET" || isHeadRequest) && url === CAPABILITIES_PATH) {
+    writeJson(response, 200, {
+      service: API_SERVICE_NAME,
+      version: API_VERSION,
+      openapiPath: OPENAPI_PATH,
+      capabilities: API_CAPABILITIES,
     }, isHeadRequest);
     return;
   }
@@ -784,6 +806,36 @@ function buildOpenApiDocument(request: IncomingMessage) {
           },
         },
       },
+      [CAPABILITIES_PATH]: {
+        get: {
+          summary: "Capability discovery",
+          responses: {
+            "200": {
+              description: "Supported Quorum capabilities without endpoint listings.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiCapabilitiesResponse" },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+        head: {
+          summary: "Capability discovery headers",
+          responses: {
+            "200": {
+              description: "Header-only capability discovery response for lightweight clients.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiCapabilitiesResponse" },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+      },
       "/health": {
         get: {
           summary: "Readiness check",
@@ -1212,6 +1264,16 @@ function buildOpenApiDocument(request: IncomingMessage) {
             },
           },
           required: ["service", "version", "openapiPath", "capabilities", "endpoints"],
+        },
+        ApiCapabilitiesResponse: {
+          type: "object",
+          properties: {
+            service: { type: "string", const: API_SERVICE_NAME },
+            version: { type: "string", const: API_VERSION },
+            openapiPath: { type: "string", const: OPENAPI_PATH },
+            capabilities: { $ref: "#/components/schemas/ApiCapabilities" },
+          },
+          required: ["service", "version", "openapiPath", "capabilities"],
         },
         ApiCapabilities: {
           type: "object",
