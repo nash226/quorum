@@ -1,5 +1,6 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import {
+  EvaluationFixtureValidationError,
   evaluateFixtureContentsResult,
   renderEvaluationHtmlReport,
   renderEvaluationMarkdownReport,
@@ -250,6 +251,11 @@ export function createApiServer(): Server {
     } catch (error: unknown) {
       if (error instanceof ApiRequestError) {
         writeJson(response, error.statusCode, { error: error.message });
+        return;
+      }
+
+      if (error instanceof EvaluationFixtureValidationError) {
+        writeJson(response, 400, { error: error.message });
         return;
       }
 
