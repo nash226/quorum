@@ -321,6 +321,9 @@ Employees receive 12 weeks of paid parental leave.
   try {
     const indexResponse = await fetch(server.url);
     assert.equal(indexResponse.status, 200);
+    assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(indexResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(indexResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     const indexPayload = await indexResponse.json();
     assert.equal(indexPayload.service, "quorum");
     assert.equal(indexPayload.version, "0.1.0");
@@ -332,12 +335,40 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/health"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/openapi.json"), true);
 
+    const capabilitiesResponse = await fetch(`${server.url}/capabilities`);
+    assert.equal(capabilitiesResponse.status, 200);
+    assert.equal(capabilitiesResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(capabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    const capabilitiesPayload = await capabilitiesResponse.json();
+    assert.equal(capabilitiesPayload.service, "quorum");
+    assert.equal(capabilitiesPayload.version, "0.1.0");
+    assert.equal(capabilitiesPayload.openapiPath, "/openapi.json");
+    assert.deepEqual(capabilitiesPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
+    assert.deepEqual(capabilitiesPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
+    assert.deepEqual(capabilitiesPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
+    assert.deepEqual(capabilitiesPayload.capabilities.trustLevels, ["low", "medium", "high"]);
+    assert.equal("endpoints" in capabilitiesPayload, false);
+
+    const headCapabilitiesResponse = await fetch(`${server.url}/capabilities`, { method: "HEAD" });
+    assert.equal(headCapabilitiesResponse.status, 200);
+    assert.equal(headCapabilitiesResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(headCapabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(headCapabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(await headCapabilitiesResponse.text(), "");
+
     const headHealthResponse = await fetch(`${server.url}/health`, { method: "HEAD" });
     assert.equal(headHealthResponse.status, 200);
+    assert.equal(headHealthResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(headHealthResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(headHealthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(await headHealthResponse.text(), "");
 
     const openApiResponse = await fetch(`${server.url}/openapi.json`);
     assert.equal(openApiResponse.status, 200);
+    assert.equal(openApiResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(openApiResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(openApiResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     const openApiPayload = await openApiResponse.json();
     assert.equal(openApiPayload.openapi, "3.1.0");
     assert.equal(openApiPayload.info.title, "Quorum Local API");
@@ -345,6 +376,9 @@ Employees receive 12 weeks of paid parental leave.
 
     const healthResponse = await fetch(`${server.url}/health`);
     assert.equal(healthResponse.status, 200);
+    assert.equal(healthResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(healthResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(healthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.deepEqual(await healthResponse.json(), {
       ok: true,
       service: "quorum",
