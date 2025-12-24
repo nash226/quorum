@@ -15,6 +15,7 @@ import {
 
 export interface EvaluationFixture {
   name: string;
+  domain?: string;
   answerPath: string;
   answer?: string;
   answerLabel?: string;
@@ -36,6 +37,7 @@ export interface EvaluationClaimScore {
 
 export interface EvaluationScorecard {
   fixtureName: string;
+  domain?: string;
   fixturePath?: string;
   answerPath: string;
   answerLabel?: string;
@@ -233,6 +235,7 @@ export async function evaluateFixture(
 
   return {
     fixtureName: fixture.name,
+    domain: fixture.domain,
     fixturePath: options.fixturePath,
     answerPath,
     answerLabel: report.answerLabel,
@@ -438,6 +441,7 @@ export async function resolveEvaluationFixturePaths(
 export function renderEvaluationScorecard(scorecard: EvaluationScorecard): string {
   const lines = [
     `Evaluation Fixture: ${scorecard.fixtureName}`,
+    ...(scorecard.domain ? [`Domain: ${scorecard.domain}`] : []),
     `Answer: ${scorecard.answerPath}`,
     ...(scorecard.answerLabel ? [`Answer label: ${scorecard.answerLabel}`] : []),
     `Answer preview: ${scorecard.answerPreview || "No answer content provided."}`,
@@ -519,6 +523,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
     lines.push(
       `### ${index + 1}. ${scorecard.fixtureName}`,
       "",
+      ...(scorecard.domain ? [`- Domain: \`${scorecard.domain}\``] : []),
       ...(scorecard.fixturePath ? [`- Fixture path: \`${scorecard.fixturePath}\``] : []),
       `- Answer path: \`${scorecard.answerPath}\``,
       ...(scorecard.answerLabel ? [`- Answer label: \`${scorecard.answerLabel}\``] : []),
@@ -590,6 +595,11 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
           <div>
             <p class="eyebrow">Fixture ${index + 1}</p>
             <h2>${escapeHtml(scorecard.fixtureName)}</h2>
+            ${
+              scorecard.domain
+                ? `<p class="fixture-domain">${escapeHtml(scorecard.domain)}</p>`
+                : ""
+            }
           </div>
           <span class="match-badge ${scorecard.summaryMatches ? "match-yes" : "match-no"}">
             ${scorecard.summaryMatches ? "Summary match" : "Summary mismatch"}
@@ -736,6 +746,12 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
       .fixture-list {
         display: grid;
         gap: 1.25rem;
+      }
+
+      .fixture-domain {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
       }
 
       .fixture-card {
@@ -919,6 +935,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
   const rows = [
     [
       "fixture_name",
+      "domain",
       "fixture_path",
       "answer_path",
       "answer_label",
@@ -946,6 +963,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
     ],
     ...scorecards.map((scorecard) => [
       scorecard.fixtureName,
+      scorecard.domain ?? "",
       scorecard.fixturePath ?? "",
       scorecard.answerPath,
       scorecard.answerLabel ?? "",
@@ -1001,6 +1019,7 @@ function validateEvaluationFixture(
 
   return {
     name: requireNonEmptyString(record.name, `${fixtureLabel}.name`),
+    domain: optionalNonEmptyString(record.domain, `${fixtureLabel}.domain`),
     answerPath: requireNonEmptyString(record.answerPath, `${fixtureLabel}.answerPath`),
     answer: optionalNonEmptyString(record.answer, `${fixtureLabel}.answer`),
     answerLabel: optionalNonEmptyString(record.answerLabel, `${fixtureLabel}.answerLabel`),

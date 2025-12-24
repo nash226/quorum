@@ -3120,5 +3120,5 @@ test("programmatic API exports batch evaluation helpers", async () => {
   assert.equal(scorecards.some(hasEvaluationMismatch), false);
   assert.match(rendered, /Fixtures: 4/);
   assert.match(renderEvaluationHtmlReport(scorecards), /<!doctype html>/i);
-  assert.match(renderEvaluationSummaryCsv(scorecards), /fixture_name,fixture_path,answer_path/);
+  assert.match(renderEvaluationSummaryCsv(scorecards), /fixture_name,domain,fixture_path,answer_path/);
 });

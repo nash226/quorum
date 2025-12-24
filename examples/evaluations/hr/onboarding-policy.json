@@ -1,5 +1,6 @@
 {
   "name": "HR onboarding policy example",
+  "domain": "hr",
   "answerPath": "../../answers/hr-onboarding-answer.md",
   "answerLabel": "HR onboarding reviewer packet",
   "sourcePaths": ["../../sources/hr-policy.md"],
