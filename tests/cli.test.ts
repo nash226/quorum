@@ -341,7 +341,7 @@ test("evaluate writes a one-row-per-fixture summary csv", async () => {
     assert.match(stdout, /Evaluation summary CSV written to/);
     assert.match(
       summaryCsv,
-      /^fixture_name,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
+      /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
     );
     assert.match(summaryCsv, /HR policy example/);
     assert.match(summaryCsv, /HR onboarding policy example/);

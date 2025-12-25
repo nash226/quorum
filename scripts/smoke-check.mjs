@@ -659,7 +659,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.equal(evaluateConflictResult.mismatchCount, 1);
     assert.match(
       evaluateConflictResult.artifacts.summary_csv,
-      /^fixture_name,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
+      /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
     );
   } finally {
     await server.stop();
