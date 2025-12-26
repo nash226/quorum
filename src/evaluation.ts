@@ -88,6 +88,17 @@ export interface EvaluationAggregateSummary {
   totalExpectedClaims: number;
   score: number | null;
   scoreLabel: string;
+  domains: EvaluationDomainAggregateSummary[];
+}
+
+export interface EvaluationDomainAggregateSummary {
+  domain: string;
+  fixtureCount: number;
+  mismatchCount: number;
+  matchedClaims: number;
+  totalExpectedClaims: number;
+  score: number | null;
+  scoreLabel: string;
 }
 
 export interface InMemoryEvaluationBatchOptions {
@@ -499,6 +510,16 @@ export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): s
     `Overall claim verdict score: ${aggregate.scoreLabel}`,
   );
 
+  if (aggregate.domains.length > 0) {
+    lines.push("", "Domain rollups:");
+
+    aggregate.domains.forEach((domainSummary) => {
+      lines.push(
+        `- ${domainSummary.domain}: ${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"}, ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"}, ${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims} matched (${domainSummary.scoreLabel})`,
+      );
+    });
+  }
+
   return `${lines.join("\n")}\n`;
 }
 
@@ -515,6 +536,17 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
     `- Matched claim verdicts: ${aggregate.matchedClaims}/${aggregate.totalExpectedClaims}`,
     `- Overall claim verdict score: ${aggregate.scoreLabel}`,
     "",
+    ...(aggregate.domains.length > 0
+      ? [
+          "### Domain Rollups",
+          "",
+          ...aggregate.domains.map(
+            (domainSummary) =>
+              `- \`${domainSummary.domain}\`: ${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"}, ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"}, ${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims} matched (${domainSummary.scoreLabel})`,
+          ),
+          "",
+        ]
+      : []),
     "## Fixtures",
     "",
   ];
@@ -566,6 +598,29 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
 export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): string {
   const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
   const aggregate = summarizeEvaluationScorecards(scorecards);
+  const domainCards =
+    aggregate.domains.length === 0
+      ? ""
+      : `<section class="domain-rollups">
+        <div class="section-heading">
+          <p class="eyebrow">Benchmark groups</p>
+          <h2>Domain rollups</h2>
+        </div>
+        <div class="domain-grid">
+          ${aggregate.domains
+            .map(
+              (domainSummary) => `<article class="summary-card domain-card">
+            <h3>${escapeHtml(domainSummary.domain)}</h3>
+            <p>${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"} with ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"}.</p>
+            <dl>
+              <div><dt>Matched claims</dt><dd>${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims}</dd></div>
+              <div><dt>Score</dt><dd>${domainSummary.scoreLabel}</dd></div>
+            </dl>
+          </article>`,
+            )
+            .join("")}
+        </div>
+      </section>`;
   const fixtureCards = scorecards
     .map((scorecard, index) => {
       const claimItems =
@@ -721,7 +776,8 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
       }
 
       .summary-stat,
-      .summary-card {
+      .summary-card,
+      .domain-card {
         background: var(--surface-strong);
         border: 1px solid var(--border);
         border-radius: 18px;
@@ -746,6 +802,35 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
       .fixture-list {
         display: grid;
         gap: 1.25rem;
+      }
+
+      .domain-rollups {
+        margin-bottom: 1.5rem;
+      }
+
+      .section-heading {
+        margin-bottom: 0.9rem;
+      }
+
+      .domain-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        gap: 0.9rem;
+      }
+
+      .domain-card h3 {
+        margin-bottom: 0.45rem;
+      }
+
+      .domain-card p {
+        margin-bottom: 1rem;
+        color: var(--muted);
+      }
+
+      .domain-card dl {
+        margin: 0;
+        display: grid;
+        gap: 0.75rem;
       }
 
       .fixture-domain {
@@ -923,6 +1008,7 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
           </article>
         </div>
       </section>
+      ${domainCards}
       <section class="fixture-list">
         ${fixtureCards}
       </section>
@@ -1393,6 +1479,45 @@ function summarizeEvaluationScorecards(
     (total, scorecard) => total + scorecard.totalExpectedClaims,
     0,
   );
+  const domains = Array.from(
+    scorecards.reduce((groups, scorecard) => {
+      if (!scorecard.domain) {
+        return groups;
+      }
+
+      const group = groups.get(scorecard.domain) ?? [];
+      group.push(scorecard);
+      groups.set(scorecard.domain, group);
+      return groups;
+    }, new Map<string, EvaluationScorecard[]>()),
+  )
+    .sort(([leftDomain], [rightDomain]) => leftDomain.localeCompare(rightDomain))
+    .map(([domain, domainScorecards]) => {
+      const domainMatchedClaims = domainScorecards.reduce(
+        (total, scorecard) => total + scorecard.matchedClaims,
+        0,
+      );
+      const domainTotalExpectedClaims = domainScorecards.reduce(
+        (total, scorecard) => total + scorecard.totalExpectedClaims,
+        0,
+      );
+      const mismatchCount = domainScorecards.filter(hasEvaluationMismatch).length;
+      const score =
+        domainTotalExpectedClaims > 0
+          ? domainMatchedClaims / domainTotalExpectedClaims
+          : null;
+
+      return {
+        domain,
+        fixtureCount: domainScorecards.length,
+        mismatchCount,
+        matchedClaims: domainMatchedClaims,
+        totalExpectedClaims: domainTotalExpectedClaims,
+        score,
+        scoreLabel:
+          score === null ? "n/a" : `${Math.round((domainMatchedClaims / domainTotalExpectedClaims) * 100)}%`,
+      };
+    });
 
   return {
     fixtureCount: scorecards.length,
@@ -1401,6 +1526,7 @@ function summarizeEvaluationScorecards(
     score: totalExpectedClaims > 0 ? matchedClaims / totalExpectedClaims : null,
     scoreLabel:
       totalExpectedClaims > 0 ? `${Math.round((matchedClaims / totalExpectedClaims) * 100)}%` : "n/a",
+    domains,
   };
 }
 
