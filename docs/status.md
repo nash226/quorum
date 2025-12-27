@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c48eb93` on 2026-07-08, feat: add evaluation domain rollups
+- Latest shipped change: `f4ad192` on 2026-07-08, feat: add evaluation mismatch evidence context
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-08 | [#256](https://github.com/nash226/quorum/pull/256) | feat: add evaluation mismatch evidence context | `f4ad192` |
 | 2026-07-08 | [#255](https://github.com/nash226/quorum/pull/255) | feat: add evaluation domain rollups | `c48eb93` |
 | 2026-07-08 | [#254](https://github.com/nash226/quorum/pull/254) | fix: correct import-review OpenAPI example | `9f4b91d` |
 | 2026-07-08 | [#253](https://github.com/nash226/quorum/pull/253) | feat: add evaluation fixture domains | `36294b3` |
@@ -54,5 +55,4 @@
 | 2026-07-08 | [#251](https://github.com/nash226/quorum/pull/251) | test: cover API discovery smoke checks | `e159d1c` |
 | 2026-07-08 | [#250](https://github.com/nash226/quorum/pull/250) | feat: add API capabilities endpoint | `781156e` |
 | 2026-07-08 | [#249](https://github.com/nash226/quorum/pull/249) | fix: validate evaluation fixtures | `2bf65a1` |
-| 2026-07-08 | [#248](https://github.com/nash226/quorum/pull/248) | fix: preserve inline evaluation source paths | `caae244` |
 
