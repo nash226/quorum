@@ -133,7 +133,8 @@ reviewer-aware final verdicts. The JSON import output now includes an
 `answerGroups` array with per-answer summaries and grouped claims for workflow
 automation. `--summary-csv-out` writes one row per imported answer group with
 reviewed, pending, overridden, final verdict counts, and the original exported
-answer-level fail-policy context for queue routing.
+answer-level fail-policy context plus grouped source titles, trust levels, and
+update dates for queue routing and audit handoff.
 `import-review --fail-on` evaluates those final verdicts after reviewer
 overrides, so teams can block publication on unresolved reviewed outcomes, and
 the text, Markdown, and HTML import reports surface whether each answer matched
