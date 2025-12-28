@@ -1113,6 +1113,14 @@ function validateEvaluationFixture(
     );
   }
 
+  const expectedSummary = parseExpectedSummary(record.expectedSummary, fixtureLabel);
+  const expectedClaimVerdicts = parseExpectedClaimVerdicts(
+    record.expectedClaimVerdicts,
+    fixtureLabel,
+  );
+
+  validateExpectedClaimTotals(expectedSummary, expectedClaimVerdicts, fixtureLabel);
+
   return {
     name: requireNonEmptyString(record.name, `${fixtureLabel}.name`),
     domain: optionalNonEmptyString(record.domain, `${fixtureLabel}.domain`),
@@ -1126,11 +1134,8 @@ function validateEvaluationFixture(
       record.defaultTrustLevel,
       `${fixtureLabel}.defaultTrustLevel`,
     ),
-    expectedSummary: parseExpectedSummary(record.expectedSummary, fixtureLabel),
-    expectedClaimVerdicts: parseExpectedClaimVerdicts(
-      record.expectedClaimVerdicts,
-      fixtureLabel,
-    ),
+    expectedSummary,
+    expectedClaimVerdicts,
   };
 }
 
@@ -1291,6 +1296,28 @@ function parseExpectedClaimVerdicts(
       throw error;
     }
   });
+}
+
+function validateExpectedClaimTotals(
+  expectedSummary: Record<ClaimVerdict, number>,
+  expectedClaimVerdicts: ClaimVerdict[] | undefined,
+  fixtureLabel: string,
+): void {
+  if (expectedClaimVerdicts === undefined) {
+    return;
+  }
+
+  const expectedClaimCount =
+    expectedSummary.verified +
+    expectedSummary.contradicted +
+    expectedSummary.unsupported +
+    expectedSummary.needs_review;
+
+  if (expectedClaimVerdicts.length !== expectedClaimCount) {
+    throw new EvaluationFixtureValidationError(
+      `${fixtureLabel}.expectedClaimVerdicts must include ${expectedClaimCount} entries to match the totals in ${fixtureLabel}.expectedSummary.`,
+    );
+  }
 }
 
 function requireNonNegativeInteger(value: unknown, fieldName: string): number {
