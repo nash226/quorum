@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d4a374f` on 2026-07-08, feat: add import-review summary source context
+- Latest shipped change: `b3716c9` on 2026-07-08, validate evaluation fixture claim totals
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-08 | [#258](https://github.com/nash226/quorum/pull/258) | validate evaluation fixture claim totals | `b3716c9` |
 | 2026-07-08 | [#257](https://github.com/nash226/quorum/pull/257) | feat: add import-review summary source context | `d4a374f` |
 | 2026-07-08 | [#256](https://github.com/nash226/quorum/pull/256) | feat: add evaluation mismatch evidence context | `f4ad192` |
 | 2026-07-08 | [#255](https://github.com/nash226/quorum/pull/255) | feat: add evaluation domain rollups | `c48eb93` |
@@ -54,5 +55,4 @@
 | 2026-07-08 | [#253](https://github.com/nash226/quorum/pull/253) | feat: add evaluation fixture domains | `36294b3` |
 | 2026-07-08 | [#252](https://github.com/nash226/quorum/pull/252) | feat: export api discovery types | `a32723d` |
 | 2026-07-08 | [#251](https://github.com/nash226/quorum/pull/251) | test: cover API discovery smoke checks | `e159d1c` |
-| 2026-07-08 | [#250](https://github.com/nash226/quorum/pull/250) | feat: add API capabilities endpoint | `781156e` |
 
