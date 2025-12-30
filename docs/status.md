@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f045808` on 2026-07-08, fix IPv6 API server URLs
+- Latest shipped change: `dc9f5b5` on 2026-07-08, test: verify installed package cli in smoke check
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-08 | [#260](https://github.com/nash226/quorum/pull/260) | test: verify installed package cli in smoke check | `dc9f5b5` |
 | 2026-07-08 | [#259](https://github.com/nash226/quorum/pull/259) | fix IPv6 API server URLs | `f045808` |
 | 2026-07-08 | [#258](https://github.com/nash226/quorum/pull/258) | validate evaluation fixture claim totals | `b3716c9` |
 | 2026-07-08 | [#257](https://github.com/nash226/quorum/pull/257) | feat: add import-review summary source context | `d4a374f` |
@@ -54,5 +55,4 @@
 | 2026-07-08 | [#255](https://github.com/nash226/quorum/pull/255) | feat: add evaluation domain rollups | `c48eb93` |
 | 2026-07-08 | [#254](https://github.com/nash226/quorum/pull/254) | fix: correct import-review OpenAPI example | `9f4b91d` |
 | 2026-07-08 | [#253](https://github.com/nash226/quorum/pull/253) | feat: add evaluation fixture domains | `36294b3` |
-| 2026-07-08 | [#252](https://github.com/nash226/quorum/pull/252) | feat: export api discovery types | `a32723d` |
 
