@@ -22,6 +22,7 @@ import {
   API_DISCOVERY_HEADERS,
   API_SERVICE_NAME,
   API_VERSION,
+  createOpenApiDocument,
   type ApiCapabilitiesResponse,
   type ApiDiscoveryEndpoint,
   type ApiDiscoveryResponse,
@@ -111,6 +112,24 @@ test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(API_VERSION, SERVER_API_VERSION);
   assert.deepEqual(API_CAPABILITIES, SERVER_API_CAPABILITIES);
   assert.deepEqual(API_ENDPOINTS, SERVER_API_ENDPOINTS);
+});
+
+test("programmatic API can build the OpenAPI document without starting the server", () => {
+  const openApi = createOpenApiDocument({
+    serverUrl: "http://127.0.0.1:3000/",
+  }) as {
+    openapi: string;
+    info: { title: string; version: string };
+    servers: Array<{ url: string }>;
+    paths: Record<string, { post?: { summary: string } }>;
+  };
+
+  assert.equal(openApi.openapi, "3.1.0");
+  assert.equal(openApi.info.title, "Quorum Local API");
+  assert.equal(openApi.info.version, API_VERSION);
+  assert.deepEqual(openApi.servers, [{ url: "http://127.0.0.1:3000" }]);
+  assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
+  assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
 });
 
 test("programmatic API verifies an answer file against loaded sources", async () => {
