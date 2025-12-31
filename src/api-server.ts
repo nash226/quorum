@@ -129,6 +129,10 @@ export interface ApiHealthResponse {
   version: string;
 }
 
+export interface OpenApiDocumentOptions {
+  serverUrl?: string;
+}
+
 export interface StartedApiServer {
   host: string;
   port: number;
@@ -416,7 +420,14 @@ async function handleApiRequest(
   }
 
   if ((request.method === "GET" || isHeadRequest) && url === OPENAPI_PATH) {
-    writeJson(response, 200, buildOpenApiDocument(request), isHeadRequest);
+    writeJson(
+      response,
+      200,
+      createOpenApiDocument({
+        serverUrl: request.headers.host ? `http://${request.headers.host}` : undefined,
+      }),
+      isHeadRequest,
+    );
     return;
   }
 
@@ -772,9 +783,11 @@ function optionalBoolean(value: unknown, fieldName: string): boolean | undefined
   return value;
 }
 
-function buildOpenApiDocument(request: IncomingMessage) {
-  const host = request.headers.host;
-  const servers = host ? [{ url: `http://${host}` }] : [];
+export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
+  const serverUrl = options.serverUrl?.trim();
+  const normalizedServerUrl =
+    serverUrl && serverUrl.length > 0 ? serverUrl.replace(/\/+$/, "") : undefined;
+  const servers = normalizedServerUrl ? [{ url: normalizedServerUrl }] : [];
   const topLevelSummarySchema = {
     type: "object",
     properties: {
