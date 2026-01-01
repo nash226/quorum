@@ -374,6 +374,8 @@ Available endpoints:
 - `HEAD /capabilities`
 - `GET /health`
 - `HEAD /health`
+- `GET /healthz`
+- `HEAD /healthz`
 - `GET /openapi.json`
 - `HEAD /openapi.json`
 - `POST /verify`
@@ -434,10 +436,12 @@ source body.
 supported source extensions, answer extensions, verdicts, trust levels, and
 opt-in artifact names for each workflow surface, while `GET /capabilities`
 returns just that capability contract when a local client does not need the
-endpoint listing. `HEAD /`, `HEAD /capabilities`, `HEAD /health`, and
-`HEAD /openapi.json` expose the same status code and headers without a JSON
-body, which makes lightweight readiness probes and schema checks easier to wire
-into orchestrators and load balancers.
+endpoint listing. `GET /healthz` and `HEAD /healthz` mirror `/health` for load
+balancers and orchestrators that expect the conventional probe path. `HEAD /`,
+`HEAD /capabilities`, `HEAD /health`, `HEAD /healthz`, and `HEAD /openapi.json`
+expose the same status code and headers without a JSON body, which makes
+lightweight readiness probes and schema checks easier to wire into orchestrators
+and load balancers.
 Those responses also include `X-Quorum-Service`, `X-Quorum-Version`, and
 `X-Quorum-OpenAPI-Path` headers so callers can confirm they reached Quorum and
 discover the local schema path without parsing a response body first.
