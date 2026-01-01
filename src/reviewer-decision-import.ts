@@ -21,6 +21,7 @@ const OPTIONAL_ANSWER_FAIL_VERDICTS_HEADER = "answer_fail_verdicts";
 const OPTIONAL_ANSWER_HAS_CLAIMS_HEADER = "answer_has_claims";
 const OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER = "evidence_trust_levels";
 const OPTIONAL_EVIDENCE_UPDATED_AT_HEADER = "evidence_updated_at";
+const OPTIONAL_EVIDENCE_SOURCE_PATHS_HEADER = "evidence_source_paths";
 const OPTIONAL_EVIDENCE_SCORES_HEADER = "evidence_scores";
 const NO_CLAIMS_REVIEW_REASON = "No claims were extracted from this answer.";
 type ImportedAnswerFailPolicy = "matched" | "clear";
@@ -40,6 +41,7 @@ export interface ImportedReviewerDecision {
   evidenceTitles: string[];
   evidenceTrustLevels: string[];
   evidenceUpdatedAt: string[];
+  evidenceSourcePaths: string[];
   evidenceScores: string[];
   evidenceQuotes: string[];
   reviewerVerdict?: ClaimVerdict;
@@ -333,6 +335,7 @@ export function renderReviewerDecisionImportSummaryCsv(
       "primary_evidence_title",
       "primary_evidence_trust_level",
       "primary_evidence_updated_at",
+      "primary_evidence_source_path",
       "primary_evidence_score",
       "primary_evidence_quote",
       "total_claims",
@@ -350,6 +353,7 @@ export function renderReviewerDecisionImportSummaryCsv(
       "source_titles",
       "source_trust_levels",
       "source_updated_at",
+      "source_paths",
     ],
     ...report.answerGroups.map((group) => {
       const primaryClaim = selectPrimaryImportedClaim(group.claims);
@@ -367,6 +371,7 @@ export function renderReviewerDecisionImportSummaryCsv(
         primaryClaim?.evidenceTitles[0] ?? "",
         primaryClaim?.evidenceTrustLevels[0] ?? "",
         primaryClaim?.evidenceUpdatedAt[0] ?? "",
+        primaryClaim?.evidenceSourcePaths[0] ?? "",
         primaryClaim?.evidenceScores[0] ?? "",
         primaryClaim?.evidenceQuotes[0] ?? "",
         group.summary.totalClaims.toString(),
@@ -384,6 +389,7 @@ export function renderReviewerDecisionImportSummaryCsv(
         serializeDelimitedList(sourceSummary.titles),
         serializeDelimitedList(sourceSummary.trustLevels),
         serializeDelimitedList(sourceSummary.updatedAt),
+        serializeDelimitedList(sourceSummary.paths),
       ];
     }),
   ];
@@ -819,6 +825,7 @@ function renderImportedEvidenceLines(claim: ImportedReviewerDecision): string[] 
       item.title,
       ...(item.trustLevel ? [`${item.trustLevel} trust`] : []),
       ...(item.updatedAt ? [`updated ${item.updatedAt}`] : []),
+      ...(item.path ? [`path ${item.path}`] : []),
       ...(item.score ? [`score ${item.score}`] : []),
     ];
 
@@ -830,6 +837,7 @@ function collectImportedEvidence(claim: ImportedReviewerDecision): Array<{
   title: string;
   trustLevel?: string;
   updatedAt?: string;
+  path?: string;
   score?: string;
   quote?: string;
 }> {
@@ -837,6 +845,7 @@ function collectImportedEvidence(claim: ImportedReviewerDecision): Array<{
     claim.evidenceTitles.length,
     claim.evidenceTrustLevels.length,
     claim.evidenceUpdatedAt.length,
+    claim.evidenceSourcePaths.length,
     claim.evidenceScores.length,
     claim.evidenceQuotes.length,
   );
@@ -846,14 +855,15 @@ function collectImportedEvidence(claim: ImportedReviewerDecision): Array<{
     const title = claim.evidenceTitles[index];
     const trustLevel = claim.evidenceTrustLevels[index];
     const updatedAt = claim.evidenceUpdatedAt[index];
+    const path = claim.evidenceSourcePaths[index];
     const score = claim.evidenceScores[index];
     const quote = claim.evidenceQuotes[index];
 
-    if (!title && !trustLevel && !updatedAt && !score && !quote) {
+    if (!title && !trustLevel && !updatedAt && !path && !score && !quote) {
       continue;
     }
 
-    evidence.push({ title: title || "Untitled evidence", trustLevel, updatedAt, score, quote });
+    evidence.push({ title: title || "Untitled evidence", trustLevel, updatedAt, path, score, quote });
   }
 
   return evidence;
@@ -932,8 +942,9 @@ function summarizeImportedGroupSources(
   titles: string[];
   trustLevels: string[];
   updatedAt: string[];
+  paths: string[];
 } {
-  const sources: Array<{ title: string; trustLevel: string; updatedAt: string }> = [];
+  const sources: Array<{ title: string; trustLevel: string; updatedAt: string; path: string }> = [];
   const seen = new Set<string>();
 
   for (const claim of group.claims) {
@@ -941,24 +952,26 @@ function summarizeImportedGroupSources(
       claim.evidenceTitles.length,
       claim.evidenceTrustLevels.length,
       claim.evidenceUpdatedAt.length,
+      claim.evidenceSourcePaths.length,
     );
 
     for (let index = 0; index < maxEvidenceItems; index += 1) {
       const title = claim.evidenceTitles[index] ?? "";
       const trustLevel = claim.evidenceTrustLevels[index] ?? "";
       const updatedAt = claim.evidenceUpdatedAt[index] ?? "";
+      const path = claim.evidenceSourcePaths[index] ?? "";
 
-      if (!title && !trustLevel && !updatedAt) {
+      if (!title && !trustLevel && !updatedAt && !path) {
         continue;
       }
 
-      const key = `${title}\u0000${trustLevel}\u0000${updatedAt}`;
+      const key = `${title}\u0000${trustLevel}\u0000${updatedAt}\u0000${path}`;
       if (seen.has(key)) {
         continue;
       }
 
       seen.add(key);
-      sources.push({ title, trustLevel, updatedAt });
+      sources.push({ title, trustLevel, updatedAt, path });
     }
   }
 
@@ -966,6 +979,7 @@ function summarizeImportedGroupSources(
     titles: sources.map((source) => source.title),
     trustLevels: sources.map((source) => source.trustLevel),
     updatedAt: sources.map((source) => source.updatedAt),
+    paths: sources.map((source) => source.path),
   };
 }
 
@@ -999,6 +1013,7 @@ function importDecisionRow(
     answerHasClaims?: number;
     evidenceTrustLevels?: number;
     evidenceUpdatedAt?: number;
+    evidenceSourcePaths?: number;
     evidenceScores?: number;
   },
 ): ImportedReviewerDecision | ImportedAnswerGroupSeed {
@@ -1066,6 +1081,9 @@ function importDecisionRow(
     ),
     evidenceUpdatedAt: parseDelimitedList(
       readOptionalValue(row, columnIndex.evidenceUpdatedAt ?? -1),
+    ),
+    evidenceSourcePaths: parseDelimitedList(
+      readOptionalValue(row, columnIndex.evidenceSourcePaths ?? -1),
     ),
     evidenceScores: parseDelimitedList(
       readOptionalValue(row, columnIndex.evidenceScores ?? -1),
@@ -1192,6 +1210,7 @@ function createColumnIndex(
   answerHasClaims?: number;
   evidenceTrustLevels?: number;
   evidenceUpdatedAt?: number;
+  evidenceSourcePaths?: number;
   evidenceScores?: number;
 } {
   const requiredColumnIndex = REQUIRED_HEADERS.reduce(
@@ -1210,6 +1229,7 @@ function createColumnIndex(
   const answerHasClaimsIndex = headers.indexOf(OPTIONAL_ANSWER_HAS_CLAIMS_HEADER);
   const evidenceTrustLevelsIndex = headers.indexOf(OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER);
   const evidenceUpdatedAtIndex = headers.indexOf(OPTIONAL_EVIDENCE_UPDATED_AT_HEADER);
+  const evidenceSourcePathsIndex = headers.indexOf(OPTIONAL_EVIDENCE_SOURCE_PATHS_HEADER);
   const evidenceScoresIndex = headers.indexOf(OPTIONAL_EVIDENCE_SCORES_HEADER);
 
   return {
@@ -1226,6 +1246,9 @@ function createColumnIndex(
       ? {}
       : { evidenceTrustLevels: evidenceTrustLevelsIndex }),
     ...(evidenceUpdatedAtIndex === -1 ? {} : { evidenceUpdatedAt: evidenceUpdatedAtIndex }),
+    ...(evidenceSourcePathsIndex === -1
+      ? {}
+      : { evidenceSourcePaths: evidenceSourcePathsIndex }),
     ...(evidenceScoresIndex === -1 ? {} : { evidenceScores: evidenceScoresIndex }),
   };
 }

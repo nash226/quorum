@@ -856,6 +856,7 @@ function summarizeBatchVerification(
     generatedAt,
     sources: sources.map((source) => ({
       id: source.id,
+      sourcePath: source.sourcePath,
       title: source.title,
       updatedAt: source.updatedAt,
       trustLevel: source.trustLevel,

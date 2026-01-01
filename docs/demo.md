@@ -51,9 +51,9 @@ The same batch run can now produce two reviewer-facing queue artifacts:
 
 - `reports/batch-summary.csv`: one row per answer with an `answer_label`,
   `answer_preview`, primary finding, fail-policy status, primary evidence
-  trust/freshness, and source metadata for queue routing.
+  trust/freshness/path context, and source metadata for queue routing.
 - `reports/batch-review.csv`: one row per claim with evidence quotes, trust
-  levels, scores, answer-level fail-policy status, and reviewer-decision
+  levels, source paths, scores, answer-level fail-policy status, and reviewer-decision
   columns for detailed review.
 
 When a team wants to review only a selected subset, the same command also

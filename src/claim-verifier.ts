@@ -50,8 +50,9 @@ export function verifyAnswer(
     answerLabel: answerPath ? renderAnswerLabel(answerPath) : undefined,
     answerPreview: renderAnswerPreview(answer),
     answer,
-    sources: sources.map(({ id, title, updatedAt, trustLevel }) => ({
+    sources: sources.map(({ id, sourcePath, title, updatedAt, trustLevel }) => ({
       id,
+      sourcePath,
       title,
       updatedAt,
       trustLevel,
@@ -118,6 +119,7 @@ function findBestEvidence(
   const candidates = sources.flatMap((source) =>
     splitIntoSentences(source.content).map((sentence) => ({
       documentId: source.id,
+      documentPath: source.sourcePath,
       documentTitle: source.title,
       documentTrustLevel: source.trustLevel,
       documentUpdatedAt: source.updatedAt,
@@ -232,6 +234,7 @@ function summarize(assessments: ClaimAssessment[]): Record<ClaimVerdict, number>
 function stripInternalFields(candidate: CandidateEvidence): EvidenceSnippet {
   return {
     documentId: candidate.documentId,
+    documentPath: candidate.documentPath,
     documentTitle: candidate.documentTitle,
     documentTrustLevel: candidate.documentTrustLevel,
     documentUpdatedAt: candidate.documentUpdatedAt,

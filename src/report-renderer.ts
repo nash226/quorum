@@ -133,6 +133,10 @@ export function renderMarkdownReport(
         metadata.push(`updated: ${source.updatedAt}`);
       }
 
+      if (source.sourcePath) {
+        metadata.push(`path: ${source.sourcePath}`);
+      }
+
       return `- **${source.title}** (${metadata.join(", ")})`;
     }),
     "",
@@ -191,6 +195,10 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
 
       if (source.updatedAt) {
         metadata.push(`updated: ${source.updatedAt}`);
+      }
+
+      if (source.sourcePath) {
+        metadata.push(`path: ${source.sourcePath}`);
       }
 
       return `- **${source.title}** (${metadata.join(", ")})`;
@@ -274,6 +282,7 @@ export function renderReviewerDecisionCsv(
       "evidence_titles",
       "evidence_trust_levels",
       "evidence_updated_at",
+      "evidence_source_paths",
       "evidence_scores",
       "evidence_quotes",
       "reviewer_verdict",
@@ -299,6 +308,9 @@ export function renderReviewerDecisionCsv(
           ),
           serializeDelimitedList(
             assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? ""),
+          ),
+          serializeDelimitedList(
+            assessment.evidence.map((evidence) => evidence.documentPath ?? ""),
           ),
           serializeDelimitedList(
             assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
@@ -350,6 +362,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
       "evidence_titles",
       "evidence_trust_levels",
       "evidence_updated_at",
+      "evidence_source_paths",
       "evidence_scores",
       "evidence_quotes",
       "reviewer_verdict",
@@ -376,6 +389,9 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
             ),
             serializeDelimitedList(
               assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? ""),
+            ),
+            serializeDelimitedList(
+              assessment.evidence.map((evidence) => evidence.documentPath ?? ""),
             ),
             serializeDelimitedList(
               assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
@@ -432,6 +448,7 @@ export function renderSummaryCsv(
       "primary_evidence_title",
       "primary_evidence_trust_level",
       "primary_evidence_updated_at",
+      "primary_evidence_source_path",
       "primary_evidence_score",
       "primary_evidence_quote",
       "total_claims",
@@ -444,6 +461,7 @@ export function renderSummaryCsv(
       "source_titles",
       "source_trust_levels",
       "source_updated_at",
+      "source_paths",
     ],
     [
       answerLabel,
@@ -455,6 +473,7 @@ export function renderSummaryCsv(
       primaryAssessment?.evidence[0]?.documentTitle ?? "",
       primaryAssessment?.evidence[0]?.documentTrustLevel ?? "",
       primaryAssessment?.evidence[0]?.documentUpdatedAt ?? "",
+      primaryAssessment?.evidence[0]?.documentPath ?? "",
       primaryAssessment?.evidence[0]?.score.toFixed(3) ?? "",
       primaryAssessment?.evidence[0]?.quote ?? "",
       report.assessments.length.toString(),
@@ -467,6 +486,7 @@ export function renderSummaryCsv(
       report.sources.map((source) => source.title).join(" | "),
       report.sources.map((source) => source.trustLevel).join(" | "),
       report.sources.map((source) => source.updatedAt ?? "").join(" | "),
+      report.sources.map((source) => source.sourcePath ?? "").join(" | "),
     ],
   ];
 
@@ -489,6 +509,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       "primary_evidence_title",
       "primary_evidence_trust_level",
       "primary_evidence_updated_at",
+      "primary_evidence_source_path",
       "primary_evidence_score",
       "primary_evidence_quote",
       "total_claims",
@@ -501,6 +522,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       "source_titles",
       "source_trust_levels",
       "source_updated_at",
+      "source_paths",
     ],
     ...orderedAnswers.map((answer) => {
       const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
@@ -518,6 +540,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
         primaryAssessment?.evidence[0]?.documentTitle ?? "",
         primaryAssessment?.evidence[0]?.documentTrustLevel ?? "",
         primaryAssessment?.evidence[0]?.documentUpdatedAt ?? "",
+        primaryAssessment?.evidence[0]?.documentPath ?? "",
         primaryAssessment?.evidence[0]?.score.toFixed(3) ?? "",
         primaryAssessment?.evidence[0]?.quote ?? "",
         answer.report.assessments.length.toString(),
@@ -530,6 +553,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
         sourceTitles,
         sourceTrustLevels,
         sourceUpdatedAt,
+        report.sources.map((source) => source.sourcePath ?? "").join(" | "),
       ];
     }),
   ];
@@ -595,6 +619,10 @@ function renderReviewConsoleHtmlReport(
 
       if (source.updatedAt) {
         metadata.push(`updated ${escapeHtml(source.updatedAt)}`);
+      }
+
+      if (source.sourcePath) {
+        metadata.push(`path ${escapeHtml(source.sourcePath)}`);
       }
 
       return `
@@ -1264,6 +1292,10 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
         metadata.push(`updated ${escapeHtml(source.updatedAt)}`);
       }
 
+      if (source.sourcePath) {
+        metadata.push(`path ${escapeHtml(source.sourcePath)}`);
+      }
+
       return `
             <li><strong>${escapeHtml(source.title)}</strong><span>${metadata.join(" - ")}</span></li>`;
     })
@@ -1893,11 +1925,16 @@ function renderTextSourceLabel(source: {
   title: string;
   trustLevel: string;
   updatedAt?: string;
+  sourcePath?: string;
 }): string {
   const metadata = [`${source.trustLevel} trust`];
 
   if (source.updatedAt) {
     metadata.push(`updated ${source.updatedAt}`);
+  }
+
+  if (source.sourcePath) {
+    metadata.push(`path ${source.sourcePath}`);
   }
 
   return `${source.title} (${metadata.join(", ")})`;
@@ -1995,12 +2032,17 @@ function averageEvidenceScore(assessments: ClaimAssessment[]): string {
 function renderEvidenceMetadata(evidence: {
   documentTrustLevel: string;
   documentUpdatedAt?: string;
+  documentPath?: string;
   score: number;
 }): string {
   const metadata = [`${evidence.documentTrustLevel} trust`];
 
   if (evidence.documentUpdatedAt) {
     metadata.push(`updated ${evidence.documentUpdatedAt}`);
+  }
+
+  if (evidence.documentPath) {
+    metadata.push(`path ${evidence.documentPath}`);
   }
 
   metadata.push(`score ${evidence.score}`);
@@ -2011,6 +2053,7 @@ function renderEvidenceLabel(evidence: {
   documentTitle: string;
   documentTrustLevel: string;
   documentUpdatedAt?: string;
+  documentPath?: string;
   score: number;
 }): string {
   return `${evidence.documentTitle}, ${renderEvidenceMetadata(evidence)}`;
@@ -2020,6 +2063,7 @@ function renderMarkdownPrimaryEvidenceLabel(evidence: {
   documentTitle: string;
   documentTrustLevel: string;
   documentUpdatedAt?: string;
+  documentPath?: string;
   score: number;
 } | null): string {
   if (!evidence) {
@@ -2033,6 +2077,7 @@ export function renderTextPrimaryEvidenceLabel(evidence: {
   documentTitle: string;
   documentTrustLevel: string;
   documentUpdatedAt?: string;
+  documentPath?: string;
   score: number;
 } | null): string {
   if (!evidence) {
