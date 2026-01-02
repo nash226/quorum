@@ -1041,6 +1041,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       "first_mismatch_evidence_title",
       "first_mismatch_evidence_trust_level",
       "first_mismatch_evidence_updated_at",
+      "first_mismatch_evidence_source_path",
       "first_mismatch_evidence_score",
       "first_mismatch_evidence_quote",
       "expected_verified",
@@ -1074,6 +1075,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       renderFirstMismatchEvidenceTitle(scorecard),
       renderFirstMismatchEvidenceTrustLevel(scorecard),
       renderFirstMismatchEvidenceUpdatedAt(scorecard),
+      renderFirstMismatchEvidenceSourcePath(scorecard),
       renderFirstMismatchEvidenceScore(scorecard),
       renderFirstMismatchEvidenceQuote(scorecard),
       scorecard.expectedSummary.verified.toString(),
@@ -1357,6 +1359,10 @@ function renderFirstMismatchEvidenceTrustLevel(scorecard: EvaluationScorecard): 
 
 function renderFirstMismatchEvidenceUpdatedAt(scorecard: EvaluationScorecard): string {
   return firstMismatchEvidence(scorecard)?.documentUpdatedAt ?? "";
+}
+
+function renderFirstMismatchEvidenceSourcePath(scorecard: EvaluationScorecard): string {
+  return firstMismatchEvidence(scorecard)?.documentPath ?? "";
 }
 
 function renderFirstMismatchEvidenceScore(scorecard: EvaluationScorecard): string {
