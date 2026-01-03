@@ -223,6 +223,7 @@ try {
   const batchReportPath = join(tempDir, "batch-report.json");
   const batchReviewCsvPath = join(tempDir, "batch-review.csv");
   const batchSummaryCsvPath = join(tempDir, "batch-summary.csv");
+  const openApiPath = join(tempDir, "openapi.json");
 
   const batchStdout = runCli([
     "verify-batch",
@@ -242,6 +243,15 @@ try {
   assert.equal(readJson(batchReportPath).answerCount, 4);
   assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^answer_label,answer_path,/);
   assert.match(readFileSync(batchSummaryCsvPath, "utf8"), /^answer_label,answer_path,/);
+
+  const openApiStdout = runCli(["openapi", "--out", openApiPath]);
+  const openApiDocument = readJson(openApiPath);
+  assert.match(openApiStdout, /OpenAPI document written to/);
+  assert.equal(openApiDocument.openapi, "3.1.0");
+  assert.ok(openApiDocument.paths["/verify"]);
+  assert.ok(openApiDocument.paths["/verify-batch"]);
+  assert.ok(openApiDocument.paths["/import-review"]);
+  assert.ok(openApiDocument.paths["/evaluate"]);
 
   const importReportPath = join(tempDir, "review-import.json");
   const importSummaryCsvPath = join(tempDir, "review-import-summary.csv");
