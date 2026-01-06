@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a79b655` on 2026-07-09, feat: add OpenAPI discovery examples
+- Latest shipped change: `6e76476` on 2026-07-09, feat: add html evaluation fixture example
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-09 | Direct push | feat: add html evaluation fixture example | `6e76476` |
 | 2026-07-09 | [#270](https://github.com/nash226/quorum/pull/270) | feat: add OpenAPI discovery examples | `a79b655` |
 | 2026-07-09 | [#268](https://github.com/nash226/quorum/pull/268) | feat: add OpenAPI evaluate response example | `0892bb3` |
 | 2026-07-09 | [#267](https://github.com/nash226/quorum/pull/267) | feat: add openapi error response examples | `bd86304` |
@@ -54,5 +55,4 @@
 | 2026-07-09 | [#265](https://github.com/nash226/quorum/pull/265) | add openapi cli export | `949c470` |
 | 2026-07-08 | [#264](https://github.com/nash226/quorum/pull/264) | feat: add evaluation mismatch source paths | `01f7dd3` |
 | 2026-07-08 | [#263](https://github.com/nash226/quorum/pull/263) | feat: add source paths to review exports | `7922cbf` |
-| 2026-07-08 | [#262](https://github.com/nash226/quorum/pull/262) | feat: add healthz probe alias | `bb7562f` |
 
