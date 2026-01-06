@@ -1951,6 +1951,10 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     };
     assert.equal(indexResponse.status, 200);
     assert.equal(indexResponse.headers.get("access-control-allow-origin"), "*");
+    assert.equal(
+      indexResponse.headers.get("access-control-expose-headers"),
+      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path",
+    );
     assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(indexResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(indexResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
@@ -2718,6 +2722,10 @@ test("programmatic API answers CORS preflight requests", async () => {
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
     assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type");
+    assert.equal(
+      response.headers.get("access-control-expose-headers"),
+      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path",
+    );
     assert.equal(response.headers.get("x-quorum-service"), "quorum");
     assert.equal(response.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(response.headers.get("x-quorum-openapi-path"), "/openapi.json");
