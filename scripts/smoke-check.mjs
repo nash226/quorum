@@ -240,7 +240,7 @@ try {
   ]);
 
   assert.match(batchStdout, /Quorum Batch Verification Report/);
-  assert.equal(readJson(batchReportPath).answerCount, 4);
+  assert.equal(readJson(batchReportPath).answerCount, 5);
   assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^answer_label,answer_path,/);
   assert.match(readFileSync(batchSummaryCsvPath, "utf8"), /^answer_label,answer_path,/);
 
@@ -271,7 +271,7 @@ try {
   );
 
   assert.match(importStdout, /Quorum Reviewer Decision Import/);
-  assert.equal(readJson(importReportPath).answerGroups.length, 4);
+  assert.equal(readJson(importReportPath).answerGroups.length, 5);
   assert.match(readFileSync(importSummaryCsvPath, "utf8"), /^answer_label,answer_path,/);
 
   const evaluationStdout = runCli([

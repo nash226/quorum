@@ -1,0 +1,14 @@
+{
+  "name": "Support billing HTML example",
+  "domain": "support",
+  "answerPath": "../../answers/support-billing-answer.html",
+  "answerLabel": "Support billing reviewer packet",
+  "sourcePaths": ["../../sources/support-billing-policy.html"],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
