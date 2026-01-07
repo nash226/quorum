@@ -133,6 +133,7 @@ test("evaluate --help prints evaluation usage without requiring fixtures", async
   );
   assert.match(result.stdout, /--markdown-out <path>\s+Write a Markdown evaluation report/);
   assert.match(result.stdout, /--fixture-dir <path>\s+Directory of evaluation fixture JSON files/);
+  assert.match(result.stdout, /--domain-summary-csv-out <path>/);
   assert.match(result.stdout, /--fail-on-mismatch\s+Exit with code 2 when any fixture summary or claim verdict mismatches/);
 });
 
@@ -396,6 +397,32 @@ test("evaluate writes a one-row-per-fixture summary csv", async () => {
     assert.match(summaryCsv, /HR onboarding policy example/);
     assert.match(summaryCsv, /Support policy example/);
     assert.match(summaryCsv, /Support account policy example/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("evaluate writes a one-row-per-domain summary csv", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-domain-summary-"));
+
+  try {
+    const summaryCsvPath = join(tempDir, "evaluation-domain-summary.csv");
+    const stdout = await runCli([
+      "evaluate",
+      "--fixture-dir",
+      "examples/evaluations",
+      "--domain-summary-csv-out",
+      summaryCsvPath,
+    ]);
+    const summaryCsv = await readFile(summaryCsvPath, "utf8");
+
+    assert.match(stdout, /Evaluation domain summary CSV written to/);
+    assert.match(
+      summaryCsv,
+      /^domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label$/m,
+    );
+    assert.match(summaryCsv, /^hr,2,0,6,6,1\.000,100%$/m);
+    assert.match(summaryCsv, /^support,3,0,9,9,1\.000,100%$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
