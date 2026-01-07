@@ -53,6 +53,7 @@ export {
   evaluateFixtureFile,
   evaluateFixtureFileResult,
   hasEvaluationMismatch,
+  renderEvaluationDomainSummaryCsv,
   renderEvaluationHtmlReport,
   loadEvaluationFixture,
   loadEvaluationFixtureFromContent,
