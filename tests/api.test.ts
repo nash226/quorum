@@ -60,6 +60,7 @@ import {
   renderBatchReviewerDecisionCsv,
   renderBatchSummaryCsv,
   renderBatchTextReport,
+  renderEvaluationDomainSummaryCsv,
   renderEvaluationHtmlReport,
   renderEvaluationMarkdownReport,
   renderEvaluationSummaryCsv,
@@ -2317,7 +2318,7 @@ Refund requests receive an initial response within one business day.
             ),
           },
         ],
-        includeArtifacts: ["html", "summary_csv"],
+        includeArtifacts: ["html", "summary_csv", "domain_summary_csv"],
         failOnStatus: true,
       },
     );
@@ -3152,7 +3153,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
             content: fixtureContent,
           },
         ],
-        includeArtifacts: ["text", "markdown", "html", "summary_csv"],
+        includeArtifacts: ["text", "markdown", "html", "summary_csv", "domain_summary_csv"],
       }),
     });
     assert.equal(evaluateResponse.status, 200);
@@ -3179,6 +3180,10 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.equal(
       evaluateResult.artifacts.summary_csv,
       renderEvaluationSummaryCsv(evaluateResult.scorecards),
+    );
+    assert.equal(
+      evaluateResult.artifacts.domain_summary_csv,
+      renderEvaluationDomainSummaryCsv(evaluateResult.scorecards),
     );
   } finally {
     await api.close();
