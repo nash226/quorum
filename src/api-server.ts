@@ -7,8 +7,10 @@ import {
   renderEvaluationMarkdownReport,
   renderEvaluationSummaryCsv,
   renderEvaluationTextReport,
+  type EvaluationBatchRunResult,
   type InMemoryEvaluationFixtureInput,
 } from "./evaluation.js";
+import type { BatchVerificationRunResult, SingleVerificationResult } from "./domain.js";
 import { CLAIM_VERDICTS, parseClaimVerdict } from "./report-policy.js";
 import {
   renderBatchHtmlReport,
@@ -23,6 +25,7 @@ import {
   renderTextReport,
 } from "./report-renderer.js";
 import {
+  type ReviewerDecisionImportResult,
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
@@ -44,10 +47,31 @@ const VERIFY_BATCH_ARTIFACTS = ["text", "markdown", "html", "review_csv", "summa
 const IMPORT_REVIEW_ARTIFACTS = ["text", "markdown", "html", "summary_csv"] as const;
 const EVALUATE_ARTIFACTS = ["text", "markdown", "html", "summary_csv", "domain_summary_csv"] as const;
 
-type VerifyArtifact = (typeof VERIFY_ARTIFACTS)[number];
-type VerifyBatchArtifact = (typeof VERIFY_BATCH_ARTIFACTS)[number];
-type ImportReviewArtifact = (typeof IMPORT_REVIEW_ARTIFACTS)[number];
-type EvaluateArtifact = (typeof EVALUATE_ARTIFACTS)[number];
+export type ApiVerifyArtifact = (typeof VERIFY_ARTIFACTS)[number];
+export type ApiVerifyBatchArtifact = (typeof VERIFY_BATCH_ARTIFACTS)[number];
+export type ApiImportReviewArtifact = (typeof IMPORT_REVIEW_ARTIFACTS)[number];
+export type ApiEvaluateArtifact = (typeof EVALUATE_ARTIFACTS)[number];
+
+export type ApiVerifyArtifacts = Partial<Record<ApiVerifyArtifact, string>>;
+export type ApiVerifyBatchArtifacts = Partial<Record<ApiVerifyBatchArtifact, string>>;
+export type ApiImportReviewArtifacts = Partial<Record<ApiImportReviewArtifact, string>>;
+export type ApiEvaluateArtifacts = Partial<Record<ApiEvaluateArtifact, string>>;
+
+export type ApiVerifyResponse = SingleVerificationResult & {
+  artifacts?: ApiVerifyArtifacts;
+};
+
+export type ApiVerifyBatchResponse = BatchVerificationRunResult & {
+  artifacts?: ApiVerifyBatchArtifacts;
+};
+
+export type ApiImportReviewResponse = ReviewerDecisionImportResult & {
+  artifacts?: ApiImportReviewArtifacts;
+};
+
+export type ApiEvaluateResponse = EvaluationBatchRunResult & {
+  artifacts?: ApiEvaluateArtifacts;
+};
 
 export interface ApiSourceInput {
   sourcePath: string;
@@ -65,7 +89,7 @@ export interface VerifyApiRequest {
   defaultTrustLevel?: string;
   generatedAt?: string;
   failOn?: string[];
-  includeArtifacts?: VerifyArtifact[];
+  includeArtifacts?: ApiVerifyArtifact[];
   failOnStatus?: boolean;
 }
 
@@ -79,14 +103,14 @@ export interface VerifyBatchApiRequest {
   defaultTrustLevel?: string;
   generatedAt?: string;
   failOn?: string[];
-  includeArtifacts?: VerifyBatchArtifact[];
+  includeArtifacts?: ApiVerifyBatchArtifact[];
   failOnStatus?: boolean;
 }
 
 export interface ImportReviewApiRequest {
   reviewCsvContent: string;
   failOn?: string[];
-  includeArtifacts?: ImportReviewArtifact[];
+  includeArtifacts?: ApiImportReviewArtifact[];
   failOnStatus?: boolean;
 }
 
@@ -96,7 +120,7 @@ export interface EvaluateApiRequest {
     content: string;
   }>;
   generatedAt?: string;
-  includeArtifacts?: EvaluateArtifact[];
+  includeArtifacts?: ApiEvaluateArtifact[];
   failOnStatus?: boolean;
 }
 
@@ -1255,7 +1279,7 @@ function parseVerifyRequest(value: unknown): {
   defaultTrustLevel?: ReturnType<typeof parseSourceTrustLevel>;
   generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
-  includeArtifacts?: VerifyArtifact[];
+  includeArtifacts?: ApiVerifyArtifact[];
   failOnStatus?: boolean;
 } {
   const record = requireRecord(value, "Verify request body");
@@ -1279,7 +1303,7 @@ function parseVerifyBatchRequest(value: unknown): {
   defaultTrustLevel?: ReturnType<typeof parseSourceTrustLevel>;
   generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
-  includeArtifacts?: VerifyBatchArtifact[];
+  includeArtifacts?: ApiVerifyBatchArtifact[];
   failOnStatus?: boolean;
 } {
   const record = requireRecord(value, "Batch verify request body");
@@ -1303,7 +1327,7 @@ function parseVerifyBatchRequest(value: unknown): {
 function parseImportReviewRequest(value: unknown): {
   reviewCsvContent: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
-  includeArtifacts?: ImportReviewArtifact[];
+  includeArtifacts?: ApiImportReviewArtifact[];
   failOnStatus?: boolean;
 } {
   const record = requireRecord(value, "Import review request body");
@@ -1319,7 +1343,7 @@ function parseImportReviewRequest(value: unknown): {
 function parseEvaluateRequest(value: unknown): {
   fixtures: InMemoryEvaluationFixtureInput[];
   generatedAt?: string;
-  includeArtifacts?: EvaluateArtifact[];
+  includeArtifacts?: ApiEvaluateArtifact[];
   failOnStatus?: boolean;
 } {
   const record = requireRecord(value, "Evaluate request body");
@@ -2620,7 +2644,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
 
 function buildVerifyArtifacts(
   result: Awaited<ReturnType<typeof verifyAnswerContentsResult>>,
-  includeArtifacts?: VerifyArtifact[],
+  includeArtifacts?: ApiVerifyArtifact[],
 ) {
   return buildArtifacts(includeArtifacts, {
     text: () => renderTextReport(result.report, result.failVerdicts),
@@ -2633,7 +2657,7 @@ function buildVerifyArtifacts(
 
 function buildVerifyBatchArtifacts(
   result: Awaited<ReturnType<typeof verifyAnswerBatchContentsResult>>,
-  includeArtifacts?: VerifyBatchArtifact[],
+  includeArtifacts?: ApiVerifyBatchArtifact[],
 ) {
   return buildArtifacts(includeArtifacts, {
     text: () => renderBatchTextReport(result.report),
@@ -2646,7 +2670,7 @@ function buildVerifyBatchArtifacts(
 
 function buildImportReviewArtifacts(
   result: ReturnType<typeof importReviewerDecisionContentsResult>,
-  includeArtifacts?: ImportReviewArtifact[],
+  includeArtifacts?: ApiImportReviewArtifact[],
 ) {
   return buildArtifacts(includeArtifacts, {
     text: () => renderReviewerDecisionImportReport(result.report, result.failVerdicts),
@@ -2658,7 +2682,7 @@ function buildImportReviewArtifacts(
 
 function buildEvaluateArtifacts(
   result: Awaited<ReturnType<typeof evaluateFixtureContentsResult>>,
-  includeArtifacts?: EvaluateArtifact[],
+  includeArtifacts?: ApiEvaluateArtifact[],
 ) {
   return buildArtifacts(includeArtifacts, {
     text: () => renderEvaluationTextReport(result.scorecards),
