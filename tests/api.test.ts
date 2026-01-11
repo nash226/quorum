@@ -2037,6 +2037,10 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
         {
           get?: { summary: string; responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }> };
           head?: { summary: string; responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }> };
+          options?: {
+            summary: string;
+            responses?: Record<string, { headers?: Record<string, { description?: string }> }>;
+          };
           post?: {
             summary: string;
             requestBody?: {
@@ -2111,17 +2115,30 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.deepEqual(openApi.servers, [{ url: api.url }]);
     assert.equal(openApi.paths["/"]?.get?.summary, "Service discovery");
     assert.equal(openApi.paths["/"]?.head?.summary, "Service discovery headers");
+    assert.equal(openApi.paths["/"]?.options?.summary, "Service discovery preflight");
     assert.equal(openApi.paths["/capabilities"]?.get?.summary, "Capability discovery");
     assert.equal(openApi.paths["/capabilities"]?.head?.summary, "Capability discovery headers");
+    assert.equal(openApi.paths["/capabilities"]?.options?.summary, "Capability discovery preflight");
     assert.equal(openApi.paths["/health"]?.get?.summary, "Readiness check");
     assert.equal(openApi.paths["/health"]?.head?.summary, "Readiness check headers");
+    assert.equal(openApi.paths["/health"]?.options?.summary, "Readiness preflight");
     assert.equal(openApi.paths["/healthz"]?.get?.summary, "Readiness check alias");
     assert.equal(openApi.paths["/healthz"]?.head?.summary, "Readiness check alias headers");
+    assert.equal(openApi.paths["/healthz"]?.options?.summary, "Readiness alias preflight");
+    assert.equal(openApi.paths["/openapi.json"]?.options?.summary, "OpenAPI description preflight");
     assert.equal(openApi.paths["/openapi.json"]?.head?.summary, "OpenAPI description headers");
+    assert.equal(openApi.paths["/verify"]?.options?.summary, "Verify preflight");
     assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
+    assert.equal(openApi.paths["/verify-batch"]?.options?.summary, "Batch verify preflight");
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
+    assert.equal(openApi.paths["/import-review"]?.options?.summary, "Reviewer import preflight");
     assert.equal(openApi.paths["/import-review"]?.post?.summary, "Import reviewer decisions");
+    assert.equal(openApi.paths["/evaluate"]?.options?.summary, "Evaluation preflight");
     assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
+    assert.equal(
+      openApi.paths["/verify"]?.options?.responses?.["204"]?.headers?.["Access-Control-Allow-Methods"]?.description,
+      "HTTP methods allowed by this endpoint.",
+    );
     const discoveryExamples = openApi.paths["/"]?.get?.responses?.["200"]?.content?.["application/json"] as
       | { examples?: Record<string, { value: unknown }> }
       | undefined;
