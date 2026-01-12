@@ -172,6 +172,33 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
   );
 });
 
+test("filters evaluation fixture files by domain", async () => {
+  const scorecards = await evaluateFixtureFiles({
+    fixtureDirPaths: [resolve("examples/evaluations")],
+    fixturePaths: [],
+    domains: ["hr"],
+    generatedAt: "2026-07-09T20:20:00.000Z",
+  });
+
+  assert.equal(scorecards.length, 2);
+  assert.deepEqual(
+    scorecards.map((scorecard) => scorecard.fixtureName),
+    ["HR policy example", "HR onboarding policy example"],
+  );
+  assert.ok(scorecards.every((scorecard) => scorecard.domain === "hr"));
+});
+
+test("reports when domain filters match no evaluation fixtures", async () => {
+  await assert.rejects(
+    evaluateFixtureFiles({
+      fixtureDirPaths: [resolve("examples/evaluations")],
+      fixturePaths: [],
+      domains: ["finance"],
+    }),
+    /No evaluation fixtures matched domain filter: finance/,
+  );
+});
+
 test("evaluates fixture sources discovered from source directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-eval-source-dirs-"));
 

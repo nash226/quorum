@@ -57,6 +57,7 @@ export interface EvaluationScorecard {
 export interface EvaluationBatchOptions {
   fixturePaths: string[];
   fixtureDirPaths: string[];
+  domains?: string[];
   generatedAt?: string;
 }
 
@@ -106,6 +107,7 @@ export interface InMemoryEvaluationBatchOptions {
   baseDir?: string;
   baseDirs?: string[];
   fixturePaths?: string[];
+  domains?: string[];
   generatedAt?: string;
 }
 
@@ -116,6 +118,7 @@ export interface InMemoryEvaluationFixtureInput {
 
 export interface InMemoryEvaluationFixtureFileBatchOptions {
   fixtures: InMemoryEvaluationFixtureInput[];
+  domains?: string[];
   generatedAt?: string;
 }
 
@@ -332,8 +335,14 @@ export async function evaluateFixtures(
     throw new Error("At least one evaluation fixture is required.");
   }
 
+  const selectedFixtures = selectEvaluationFixtures(options.fixtures, options.domains);
+
+  if (selectedFixtures.length === 0) {
+    throw new Error(renderNoMatchingEvaluationDomainsMessage(options.domains));
+  }
+
   return Promise.all(
-    options.fixtures.map((fixture, index) =>
+    selectedFixtures.map(({ fixture, index }) =>
       evaluateFixture(fixture, {
         baseDir: options.baseDirs?.[index] ?? options.baseDir,
         fixturePath: options.fixturePaths?.[index],
@@ -362,6 +371,7 @@ export async function evaluateFixtureContents(
     ),
     baseDirs: options.fixtures.map((fixture) => dirname(fixture.fixturePath)),
     fixturePaths: options.fixtures.map((fixture) => fixture.fixturePath),
+    domains: options.domains,
     generatedAt: options.generatedAt,
   });
 }
@@ -422,10 +432,19 @@ export async function evaluateFixtureFiles(
     })),
   );
 
+  const selectedFixtures = selectEvaluationFixtures(
+    fixtures.map(({ fixture }) => fixture),
+    options.domains,
+  );
+
+  if (selectedFixtures.length === 0) {
+    throw new Error(renderNoMatchingEvaluationDomainsMessage(options.domains));
+  }
+
   return evaluateFixtures({
-    fixtures: fixtures.map(({ fixture }) => fixture),
-    baseDirs: fixtures.map(({ fixturePath }) => dirname(fixturePath)),
-    fixturePaths: fixtures.map(({ fixturePath }) => fixturePath),
+    fixtures: selectedFixtures.map(({ fixture }) => fixture),
+    baseDirs: selectedFixtures.map(({ index }) => dirname(fixtures[index]!.fixturePath)),
+    fixturePaths: selectedFixtures.map(({ index }) => fixtures[index]!.fixturePath),
     generatedAt: options.generatedAt,
   });
 }
@@ -1430,6 +1449,27 @@ function hasMatchingSummary(
     expected.unsupported === actual.unsupported &&
     expected.needs_review === actual.needs_review
   );
+}
+
+function selectEvaluationFixtures(
+  fixtures: EvaluationFixture[],
+  domains: string[] | undefined,
+): Array<{ fixture: EvaluationFixture; index: number }> {
+  const domainFilter = domains?.length ? new Set(domains) : undefined;
+
+  return fixtures
+    .map((fixture, index) => ({ fixture, index }))
+    .filter(({ fixture }) => {
+      if (!domainFilter) {
+        return true;
+      }
+
+      return fixture.domain !== undefined && domainFilter.has(fixture.domain);
+    });
+}
+
+function renderNoMatchingEvaluationDomainsMessage(domains: string[] | undefined): string {
+  return `No evaluation fixtures matched domain filter: ${(domains ?? []).join(", ")}`;
 }
 
 async function listEvaluationFixtureFiles(fixtureDirPath: string): Promise<string[]> {

@@ -131,6 +131,7 @@ test("evaluate --help prints evaluation usage without requiring fixtures", async
     result.stdout,
     /^Quorum evaluate\n\nUsage:\n  quorum evaluate \(\--fixture <path> \| --fixture-dir <path>\)\.\.\./,
   );
+  assert.match(result.stdout, /--domain <name>\s+Only evaluate fixtures whose domain matches this value/);
   assert.match(result.stdout, /--markdown-out <path>\s+Write a Markdown evaluation report/);
   assert.match(result.stdout, /--fixture-dir <path>\s+Directory of evaluation fixture JSON files/);
   assert.match(result.stdout, /--domain-summary-csv-out <path>/);
@@ -375,6 +376,21 @@ test("evaluate renders scorecards for shipped example fixtures", async () => {
   assert.match(stdout, /Fixtures with mismatches: 0/);
 });
 
+test("evaluate filters shipped example fixtures by domain", async () => {
+  const stdout = await runCli([
+    "evaluate",
+    "--fixture-dir",
+    "examples/evaluations",
+    "--domain",
+    "hr",
+  ]);
+
+  assert.match(stdout, /Evaluation Fixture: HR policy example/);
+  assert.match(stdout, /Evaluation Fixture: HR onboarding policy example/);
+  assert.doesNotMatch(stdout, /Evaluation Fixture: Support policy example/);
+  assert.match(stdout, /Fixtures: 2/);
+});
+
 test("evaluate writes a one-row-per-fixture summary csv", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-summary-"));
 
@@ -593,6 +609,19 @@ test("evaluate exits with code 2 when fail-on-mismatch sees a fixture mismatch",
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
+});
+
+test("evaluate reports when a domain filter matches no fixtures", async () => {
+  await assert.rejects(
+    runCli([
+      "evaluate",
+      "--fixture-dir",
+      "examples/evaluations",
+      "--domain",
+      "finance",
+    ]),
+    /No evaluation fixtures matched domain filter: finance/,
+  );
 });
 
 test("verify matches claims against html sources with named entities", async () => {
