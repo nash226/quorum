@@ -477,7 +477,8 @@ preflight requests for JSON clients.
 JSON response to embed reviewer-facing text, Markdown, HTML, and CSV artifacts
 without writing files first. Evaluation responses can also embed a
 `domain_summary_csv` artifact so workflow callers can route fixture results by
-domain without recomputing the aggregate rollup.
+domain without recomputing the aggregate rollup, plus an
+`aggregate_summary_csv` artifact for one-row overall benchmark gating.
 Those same POST endpoints also accept `failOnStatus: true` when local
 orchestrators want Quorum to return HTTP `409` for matched fail policies or
 evaluation mismatches instead of always returning `200`, which lets workflow
@@ -786,7 +787,8 @@ For fixture-driven evaluation work, Quorum also exports
 `evaluateFixtureContent`, `evaluateFixtureContents`, `evaluateFixtureFile`, `evaluateFixtureFiles`,
 `renderEvaluationScorecard`, `renderEvaluationTextReport`,
 `renderEvaluationMarkdownReport`, `renderEvaluationHtmlReport`,
-`renderEvaluationSummaryCsv`, `renderEvaluationDomainSummaryCsv`, and
+`renderEvaluationSummaryCsv`, `renderEvaluationDomainSummaryCsv`,
+`renderEvaluationAggregateSummaryCsv`, and
 `hasEvaluationMismatch` so teams can keep HR or support benchmark cases in
 versioned JSON files, discover nested fixture directories, and score the
 current verifier against expected verdicts:
@@ -798,6 +800,7 @@ import {
   evaluateFixtureFile,
   evaluateFixtureFiles,
   renderEvaluationHtmlReport,
+  renderEvaluationAggregateSummaryCsv,
   hasEvaluationMismatch,
   loadEvaluationFixtureFromContent,
   renderEvaluationDomainSummaryCsv,
@@ -822,6 +825,7 @@ console.log(renderEvaluationMarkdownReport(scorecards));
 console.log(renderEvaluationHtmlReport(scorecards));
 console.log(renderEvaluationSummaryCsv(scorecards));
 console.log(renderEvaluationDomainSummaryCsv(scorecards));
+console.log(renderEvaluationAggregateSummaryCsv(scorecards));
 console.log(scorecards.some(hasEvaluationMismatch));
 ```
 
@@ -888,6 +892,7 @@ npm run dev -- evaluate \
   --html-out reports/evaluation-report.html \
   --summary-csv-out reports/evaluation-summary.csv \
   --domain-summary-csv-out reports/evaluation-domain-summary.csv \
+  --aggregate-summary-csv-out reports/evaluation-aggregate-summary.csv \
   --fail-on-mismatch
 ```
 
@@ -976,7 +981,7 @@ npm run dev -- verify \
 quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-quorum evaluate --fixture <path>... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
+quorum evaluate --fixture <path>... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
 quorum openapi [--server-url <url>] [--out <path>]
 ```
 
@@ -1054,6 +1059,9 @@ Options:
 - `evaluate --domain-summary-csv-out <path>`: write one CSV row per fixture
   domain with aggregate fixture counts, mismatch counts, matched claims, and
   score labels for benchmark routing
+- `evaluate --aggregate-summary-csv-out <path>`: write one overall CSV row
+  with total fixture counts, mismatches, matched claims, overall score, and
+  per-domain score rollups for CI gates and dashboards
 - `evaluate --fail-on-mismatch`: exit with code `2` when any fixture summary or
   expected claim verdict does not match the current verifier output
 

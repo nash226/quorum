@@ -1137,6 +1137,49 @@ export function renderEvaluationDomainSummaryCsv(scorecards: EvaluationScorecard
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
 }
 
+export function renderEvaluationAggregateSummaryCsv(scorecards: EvaluationScorecard[]): string {
+  const aggregate = summarizeEvaluationScorecards(scorecards);
+  const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const rows = [
+    [
+      "fixture_count",
+      "mismatch_count",
+      "matched_claims",
+      "total_expected_claims",
+      "score",
+      "score_label",
+      "domains",
+      "domain_fixture_counts",
+      "domain_mismatch_counts",
+      "domain_scores",
+      "domain_score_labels",
+    ],
+    [
+      aggregate.fixtureCount.toString(),
+      mismatchCount.toString(),
+      aggregate.matchedClaims.toString(),
+      aggregate.totalExpectedClaims.toString(),
+      aggregate.score === null ? "" : aggregate.score.toFixed(3),
+      aggregate.scoreLabel,
+      serializeDelimitedList(aggregate.domains.map((domainSummary) => domainSummary.domain)),
+      serializeDelimitedList(
+        aggregate.domains.map((domainSummary) => domainSummary.fixtureCount.toString()),
+      ),
+      serializeDelimitedList(
+        aggregate.domains.map((domainSummary) => domainSummary.mismatchCount.toString()),
+      ),
+      serializeDelimitedList(
+        aggregate.domains.map((domainSummary) =>
+          domainSummary.score === null ? "" : domainSummary.score.toFixed(3),
+        ),
+      ),
+      serializeDelimitedList(aggregate.domains.map((domainSummary) => domainSummary.scoreLabel)),
+    ],
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 export function hasEvaluationMismatch(scorecard: EvaluationScorecard): boolean {
   return !scorecard.summaryMatches || scorecard.matchedClaims < scorecard.totalExpectedClaims;
 }
