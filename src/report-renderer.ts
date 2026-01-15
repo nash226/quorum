@@ -269,6 +269,7 @@ export function renderReviewerDecisionCsv(
   const answerLabel = report.answerLabel ?? (report.answerPath ? renderAnswerLabel(report.answerPath) : "");
   const rows = [
     [
+      "generated_at",
       "answer_label",
       "answer_path",
       "answer_preview",
@@ -290,6 +291,7 @@ export function renderReviewerDecisionCsv(
     ],
     ...(report.assessments.length > 0
       ? report.assessments.map((assessment) => [
+          report.generatedAt,
           answerLabel,
           report.answerPath ?? "",
           renderAnswerPreview(report.answer),
@@ -322,6 +324,7 @@ export function renderReviewerDecisionCsv(
           "",
         ])
       : [[
+          report.generatedAt,
           answerLabel,
           report.answerPath ?? "",
           renderAnswerPreview(report.answer),
@@ -349,6 +352,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
   const orderedAnswers = orderBatchAnswersForReview(report.answers);
   const rows = [
     [
+      "generated_at",
       "answer_label",
       "answer_path",
       "answer_preview",
@@ -371,6 +375,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
     ...orderedAnswers.flatMap((answer) =>
       answer.report.assessments.length > 0
         ? answer.report.assessments.map((assessment) => [
+            report.generatedAt,
             answer.answerLabel,
             answer.answerPath,
             renderAnswerPreview(answer.report.answer),
@@ -403,6 +408,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
             "",
           ])
         : [[
+            report.generatedAt,
             answer.answerLabel,
             answer.answerPath,
             renderAnswerPreview(answer.report.answer),
@@ -439,6 +445,7 @@ export function renderSummaryCsv(
     primaryAssessment?.reason ?? "No claims were extracted from this answer.";
   const rows = [
     [
+      "generated_at",
       "answer_label",
       "answer_path",
       "answer_preview",
@@ -464,6 +471,7 @@ export function renderSummaryCsv(
       "source_paths",
     ],
     [
+      report.generatedAt,
       answerLabel,
       report.answerPath ?? "",
       renderAnswerPreview(report.answer),
@@ -500,6 +508,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
   const sourceUpdatedAt = report.sources.map((source) => source.updatedAt ?? "").join(" | ");
   const rows = [
     [
+      "generated_at",
       "answer_label",
       "answer_path",
       "answer_preview",
@@ -531,6 +540,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
         primaryAssessment?.reason ?? "No claims were extracted from this answer.";
 
       return [
+        report.generatedAt,
         answer.answerLabel,
         answer.answerPath,
         renderAnswerPreview(answer.report.answer),
