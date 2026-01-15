@@ -51,6 +51,7 @@ export interface ImportedReviewerDecision {
 }
 
 export interface ReviewerDecisionImportReport {
+  generatedAt: string;
   claims: ImportedReviewerDecision[];
   answerGroups: ReviewerDecisionGroup[];
   summary: {
@@ -90,6 +91,7 @@ interface ImportedAnswerGroupSeed {
 
 export function importReviewerDecisions(
   csvContent: string,
+  generatedAt = new Date().toISOString(),
 ): ReviewerDecisionImportReport {
   const rows = parseCsv(stripByteOrderMark(csvContent));
 
@@ -142,6 +144,7 @@ export function importReviewerDecisions(
   }
 
   return {
+    generatedAt,
     claims,
     answerGroups: groupImportedClaims(claims, answerGroupSeeds),
     summary,
@@ -151,8 +154,9 @@ export function importReviewerDecisions(
 export function importReviewerDecisionsResult(
   csvContent: string,
   failOn: ClaimVerdict[] = [],
+  generatedAt = new Date().toISOString(),
 ): ReviewerDecisionImportResult {
-  return buildReviewerDecisionImportResult(importReviewerDecisions(csvContent), failOn);
+  return buildReviewerDecisionImportResult(importReviewerDecisions(csvContent, generatedAt), failOn);
 }
 
 export function renderReviewerDecisionImportReport(
@@ -325,6 +329,7 @@ export function renderReviewerDecisionImportSummaryCsv(
 ): string {
   const rows = [
     [
+      "generated_at",
       "answer_label",
       "answer_path",
       "answer_preview",
@@ -361,6 +366,7 @@ export function renderReviewerDecisionImportSummaryCsv(
       const sourceSummary = summarizeImportedGroupSources(group);
 
       return [
+        report.generatedAt,
         group.label,
         group.answerPath ?? "",
         group.answerPreview ?? "",

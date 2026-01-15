@@ -134,6 +134,7 @@ export interface SingleVerificationResultOptions {
 
 export interface ReviewerDecisionContentImportOptions {
   reviewCsvContent: string;
+  generatedAt?: string;
 }
 
 export interface ReviewerDecisionContentImportResultOptions
@@ -143,6 +144,7 @@ export interface ReviewerDecisionContentImportResultOptions
 
 export interface ReviewerDecisionFileImportOptions {
   reviewCsvPath: string;
+  generatedAt?: string;
 }
 
 export interface ReviewerDecisionFileImportResultOptions
@@ -576,7 +578,15 @@ export function importReviewerDecisionContents(
 export function importReviewerDecisionContents(
   reviewCsvContentOrOptions: string | ReviewerDecisionContentImportOptions,
 ): ReviewerDecisionImportReport {
-  return importReviewerDecisions(resolveReviewCsvContent(reviewCsvContentOrOptions));
+  const options =
+    typeof reviewCsvContentOrOptions === "string"
+      ? { reviewCsvContent: reviewCsvContentOrOptions }
+      : reviewCsvContentOrOptions;
+
+  return importReviewerDecisions(
+    options.reviewCsvContent,
+    options.generatedAt ?? new Date().toISOString(),
+  );
 }
 
 export function importReviewerDecisionContentsResult(
@@ -595,7 +605,11 @@ export function importReviewerDecisionContentsResult(
       ? { reviewCsvContent: reviewCsvContentOrOptions, failOn }
       : reviewCsvContentOrOptions;
 
-  return importReviewerDecisionsResult(options.reviewCsvContent, options.failOn ?? []);
+  return importReviewerDecisionsResult(
+    options.reviewCsvContent,
+    options.failOn ?? [],
+    options.generatedAt ?? new Date().toISOString(),
+  );
 }
 
 export async function importReviewerDecisionFile(
@@ -607,13 +621,20 @@ export async function importReviewerDecisionFile(
 export async function importReviewerDecisionFile(
   reviewCsvPathOrOptions: string | ReviewerDecisionFileImportOptions,
 ): Promise<ReviewerDecisionImportReport> {
-  const reviewCsvPath = resolveReviewCsvPath(reviewCsvPathOrOptions);
+  const options =
+    typeof reviewCsvPathOrOptions === "string"
+      ? { reviewCsvPath: reviewCsvPathOrOptions }
+      : reviewCsvPathOrOptions;
+  const reviewCsvPath = options.reviewCsvPath;
 
   if (reviewCsvPath !== "-") {
     await ensureFilePath(reviewCsvPath, "Reviewer decision CSV");
   }
 
-  return importReviewerDecisions(await readTextInput(reviewCsvPath));
+  return importReviewerDecisions(
+    await readTextInput(reviewCsvPath),
+    options.generatedAt ?? new Date().toISOString(),
+  );
 }
 
 export async function importReviewerDecisionFileResult(
@@ -637,7 +658,11 @@ export async function importReviewerDecisionFileResult(
     await ensureFilePath(reviewCsvPath, "Reviewer decision CSV");
   }
 
-  return importReviewerDecisionsResult(await readTextInput(reviewCsvPath), options.failOn ?? []);
+  return importReviewerDecisionsResult(
+    await readTextInput(reviewCsvPath),
+    options.failOn ?? [],
+    options.generatedAt ?? new Date().toISOString(),
+  );
 }
 
 function buildSingleVerificationResult(
