@@ -187,10 +187,10 @@ try {
   assert.equal(readJson(singleReportPath).summary.contradicted, 1);
   assert.equal(readJson(singleReportPath).answerLabel, "HR reviewer packet");
   assert.match(readFileSync(singleHtmlPath, "utf8"), /Quorum Review Console/);
-  assert.match(readFileSync(singleReviewCsvPath, "utf8"), /^answer_label,answer_path,/);
-  assert.match(readFileSync(singleReviewCsvPath, "utf8"), /^HR reviewer packet,/m);
-  assert.match(readFileSync(singleSummaryCsvPath, "utf8"), /^answer_label,answer_path,/);
-  assert.match(readFileSync(singleSummaryCsvPath, "utf8"), /^HR reviewer packet,/m);
+  assert.match(readFileSync(singleReviewCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
+  assert.match(readFileSync(singleReviewCsvPath, "utf8"), /^[^,\n]+,HR reviewer packet,/m);
+  assert.match(readFileSync(singleSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
+  assert.match(readFileSync(singleSummaryCsvPath, "utf8"), /^[^,\n]+,HR reviewer packet,/m);
 
   const pdfAnswerPath = join(tempDir, "pdf-answer.md");
   const pdfSourcePath = join(tempDir, "hr-policy.pdf");
@@ -241,8 +241,8 @@ try {
 
   assert.match(batchStdout, /Quorum Batch Verification Report/);
   assert.equal(readJson(batchReportPath).answerCount, 5);
-  assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^answer_label,answer_path,/);
-  assert.match(readFileSync(batchSummaryCsvPath, "utf8"), /^answer_label,answer_path,/);
+  assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
+  assert.match(readFileSync(batchSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
 
   const openApiStdout = runCli(["openapi", "--out", openApiPath]);
   const openApiDocument = readJson(openApiPath);
@@ -634,7 +634,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(verifyConflictResult.shouldFail, true);
     assert.deepEqual(verifyConflictResult.failVerdicts, ["contradicted"]);
     assert.match(verifyConflictResult.artifacts.text, /Quorum Verification Report/);
-    assert.match(verifyConflictResult.artifacts.summary_csv, /^answer_label,answer_path,/);
+    assert.match(verifyConflictResult.artifacts.summary_csv, /^generated_at,answer_label,answer_path,/);
 
     const batchConflictResponse = await fetch(`${server.url}/verify-batch`, {
       method: "POST",
