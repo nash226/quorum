@@ -25,6 +25,8 @@ export function renderTextReport(
   const lines = [
     "Quorum Verification Report",
     "",
+    `Generated: ${report.generatedAt}`,
+    "",
     ...(report.answerPath ? [`Answer: ${report.answerPath}`] : []),
     "Sources:",
     ...report.sources.map((source) => `- ${renderTextSourceLabel(source)}`),
@@ -50,6 +52,8 @@ export function renderBatchTextReport(report: BatchVerificationReport): string {
   const orderedAnswers = orderBatchAnswersForReview(report.answers);
   const lines = [
     "Quorum Batch Verification Report",
+    "",
+    `Generated: ${report.generatedAt}`,
     "",
     `Answers: ${report.answerCount}`,
     "Sources:",
