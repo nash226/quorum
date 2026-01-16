@@ -2313,6 +2313,7 @@ Refund requests receive an initial response within one business day.
           "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
           "HR policy answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved for publish",
         ].join("\n"),
+        generatedAt: "2026-07-07T19:22:00.000Z",
         failOn: ["needs_review"],
         includeArtifacts: ["markdown", "summary_csv"],
         failOnStatus: true,
@@ -3678,5 +3679,5 @@ test("programmatic API exports batch evaluation helpers", async () => {
   assert.equal(scorecards.some(hasEvaluationMismatch), false);
   assert.match(rendered, /Fixtures: 6/);
   assert.match(renderEvaluationHtmlReport(scorecards), /<!doctype html>/i);
-  assert.match(renderEvaluationSummaryCsv(scorecards), /fixture_name,domain,fixture_path,answer_path/);
+  assert.match(renderEvaluationSummaryCsv(scorecards), /generated_at,fixture_name,domain,fixture_path,answer_path/);
 });

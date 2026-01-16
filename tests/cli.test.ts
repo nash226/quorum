@@ -410,7 +410,7 @@ test("evaluate writes a one-row-per-fixture summary csv", async () => {
     assert.match(stdout, /Evaluation summary CSV written to/);
     assert.match(
       summaryCsv,
-      /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,first_mismatch_evidence_title,first_mismatch_evidence_trust_level,first_mismatch_evidence_updated_at,first_mismatch_evidence_source_path,first_mismatch_evidence_score,first_mismatch_evidence_quote,/,
+      /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,first_mismatch_evidence_title,first_mismatch_evidence_trust_level,first_mismatch_evidence_updated_at,first_mismatch_evidence_source_path,first_mismatch_evidence_score,first_mismatch_evidence_quote,/,
     );
     assert.match(summaryCsv, /HR policy example/);
     assert.match(summaryCsv, /HR onboarding policy example/);
@@ -439,10 +439,10 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
     assert.match(stdout, /Evaluation domain summary CSV written to/);
     assert.match(
       summaryCsv,
-      /^domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label$/m,
+      /^generated_at,domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label$/m,
     );
-    assert.match(summaryCsv, /^hr,3,0,9,9,1\.000,100%$/m);
-    assert.match(summaryCsv, /^support,3,0,9,9,1\.000,100%$/m);
+    assert.match(summaryCsv, /^[^,\n]+,hr,3,0,9,9,1\.000,100%$/m);
+    assert.match(summaryCsv, /^[^,\n]+,support,3,0,9,9,1\.000,100%$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -465,9 +465,9 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
     assert.match(stdout, /Evaluation aggregate summary CSV written to/);
     assert.match(
       summaryCsv,
-      /^fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels$/m,
+      /^generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels$/m,
     );
-    assert.match(summaryCsv, /^6,0,18,18,1\.000,100%,hr \| support,3 \| 3,0 \| 0,1\.000 \| 1\.000,100% \| 100%$/m);
+    assert.match(summaryCsv, /^[^,\n]+,6,0,18,18,1\.000,100%,hr \| support,3 \| 3,0 \| 0,1\.000 \| 1\.000,100% \| 100%$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -1067,7 +1067,7 @@ test("verify records an explicit reviewer-facing answer label in JSON and review
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^[^,]+,HR reviewer packet,${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,clear,,true,claim_1,`,
+        `^[^,\\n]+,HR reviewer packet,${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,clear,,true,claim_1,`,
       ),
     );
   } finally {
@@ -1112,7 +1112,7 @@ test("verify reads the answer from stdin when --answer - is used", async () => {
     const lines = reviewCsv.trim().split("\n");
     assert.match(
       lines[1] ?? "",
-      /^[^,]+,<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,true,claim_1,/,
+      /^[^,\n]+,<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,true,claim_1,/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -1274,7 +1274,7 @@ test("verify treats no-claim answers as fail-policy matches for needs_review", a
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^[^,]+,empty,${escapeRegExp(answerPath)},Short\\.,matched,needs_review,false,,,,No claims were extracted from this answer\\.,,,,,,,$`,
+        `^[^,\\n]+,empty,${escapeRegExp(answerPath)},Short\\.,matched,needs_review,false,,,,No claims were extracted from this answer\\.,,,,,,,$`,
       ),
     );
   } finally {
@@ -1323,7 +1323,7 @@ test("verify writes reviewer csv fail-policy columns for single answers", async 
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^[^,]+,answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,matched,contradicted,true,claim_1,`,
+        `^[^,\\n]+,answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,matched,contradicted,true,claim_1,`,
       ),
     );
   } finally {
@@ -1369,7 +1369,7 @@ test("verify writes a summary csv for single answers", async () => {
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^[^,]+,answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,contradicted,Employees receive 18 weeks of paid parental leave\\.,A closely matching approved source uses different numeric terms\\.,hr-policy,medium,,${escapeRegExp(sourcePath)},0\\.857,Employees receive 12 weeks of paid parental leave\\.,1,0,1,0,0,matched,contradicted,hr-policy,medium,,${escapeRegExp(sourcePath)}$`,
+        `^[^,\\n]+,answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,contradicted,Employees receive 18 weeks of paid parental leave\\.,A closely matching approved source uses different numeric terms\\.,hr-policy,medium,,${escapeRegExp(sourcePath)},0\\.857,Employees receive 12 weeks of paid parental leave\\.,1,0,1,0,0,matched,contradicted,hr-policy,medium,,${escapeRegExp(sourcePath)}$`,
       ),
     );
   } finally {
@@ -1668,12 +1668,12 @@ test("verify-batch reads one answer from stdin alongside explicit files", async 
     const lines = reviewCsv.trim().split("\n");
     assert.match(
       lines[1] ?? "",
-      /^[^,]+,<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,true,claim_1,/,
+      /^[^,\n]+,<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,true,claim_1,/,
     );
     assert.match(
       lines[2] ?? "",
       new RegExp(
-        `^[^,]+,support-answer,${escapeRegExp(fileAnswerPath)},Refunds are available within 30 days of purchase\\.,clear,,true,claim_1,`,
+        `^[^,\\n]+,support-answer,${escapeRegExp(fileAnswerPath)},Refunds are available within 30 days of purchase\\.,clear,,true,claim_1,`,
       ),
     );
   } finally {
@@ -2632,7 +2632,7 @@ test("verify-batch writes a combined reviewer decision csv", async () => {
     );
     assert.match(
       lines[1] ?? "",
-      /^[^,]+,hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\..*,clear,,true,claim_1,/,
+      /^[^,\n]+,hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\..*,clear,,true,claim_1,/,
     );
     assert.match(lines[lines.length - 1] ?? "", /,,$/);
   } finally {
@@ -2938,15 +2938,15 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
     const lines = summaryCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
+      "generated_at,answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
     );
-    assert.equal(
-      lines[1],
-      "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,,0.998,Employees receive 12 weeks of paid parental leave.,1,1,0,0,1,0,0,0,clear,,clear,,HR Policy,high,2026-05-31,",
+    assert.match(
+      lines[1] ?? "",
+      /^[^,\n]+,hr-answer,examples\/answers\/hr-answer\.md,Employees receive 12 weeks of paid parental leave\.,verified,Employees receive 12 weeks of paid parental leave\.,The claim is strongly supported by an approved source\.,Approved,HR Policy,high,2026-05-31,,0\.998,Employees receive 12 weeks of paid parental leave\.,1,1,0,0,1,0,0,0,clear,,clear,,HR Policy,high,2026-05-31,$/,
     );
-    assert.equal(
-      lines[2],
-      "support-answer,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,matched,contradicted,matched,needs_review,Support Playbook,medium,2026-06-01,",
+    assert.match(
+      lines[2] ?? "",
+      /^[^,\n]+,support-answer,examples\/answers\/support-answer\.md,Refunds are available within 14 days of purchase\.,needs_review,Refunds are available within 14 days of purchase\.,A closely matching approved source uses different numeric terms\.,Escalate to support ops,Support Playbook,medium,2026-06-01,,0\.842,Refunds are available within 30 days of purchase\.,1,1,0,1,0,0,0,1,matched,contradicted,matched,needs_review,Support Playbook,medium,2026-06-01,$/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });

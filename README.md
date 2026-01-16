@@ -427,7 +427,7 @@ when callers send a different media type.
 Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
 `verifyAnswerBatchContentsResult` shapes so workflow callers get the report,
 matched fail verdicts, and `shouldFail` status in one JSON payload.
-Reviewer-decision import accepts a `{ reviewCsvContent, failOn? }` JSON body at
+Reviewer-decision import accepts a `{ reviewCsvContent, generatedAt?, failOn? }` JSON body at
 `POST /import-review` and returns the same `importReviewerDecisionContentsResult`
 shape used by the package API, including grouped answer summaries and
 reviewer-aware fail-policy matches.
@@ -1006,11 +1006,11 @@ Options:
   CSV exports
 - `--markdown-out <path>`: write a reviewer-friendly Markdown report to disk
 - `--html-out <path>`: write a styled HTML reviewer report to disk
-- `verify --summary-csv-out <path>`: write one CSV row for the submitted answer with its `answer_label`, preview, primary finding, primary evidence trust/freshness/path context, verdict totals, fail-policy status, and reviewed source metadata
+- `verify --summary-csv-out <path>`: write one CSV row for the submitted answer with a `generated_at` timestamp plus its `answer_label`, preview, primary finding, primary evidence trust/freshness/path context, verdict totals, fail-policy status, and reviewed source metadata
 - `verify-batch --markdown-out <path>`: write a batch summary in Markdown for review queues
 - `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
-- `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers, including a run-level `generated_at` timestamp plus an `answer_label` column for faster spreadsheet triage alongside the original `answer_path`
-- `verify-batch --summary-csv-out <path>`: write one CSV row per answer with a run-level `generated_at` timestamp, an `answer_label`, `answer_preview`, the highest-priority claim finding, primary evidence title plus trust/freshness/path metadata, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
+- `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers, including an `answer_label` column for faster spreadsheet triage alongside the original `answer_path`
+- `verify-batch --summary-csv-out <path>`: write one CSV row per answer with a shared `generated_at` timestamp plus an `answer_label`, `answer_preview`, the highest-priority claim finding, primary evidence title plus trust/freshness/path metadata, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
 - `verify-batch --answer-label <label>`: apply a reviewer-facing label to the most recent explicit `--answer` input without changing the stored `answer_path`
 - `verify-batch --answer -`: pipe one generated answer into a batch run while still mixing in file-based answers for queue-style review
 - teams can use `--summary-csv-out` for queue-level routing while keeping `--review-csv-out` for claim-by-claim reviewer decisions on the same batch run
@@ -1031,7 +1031,7 @@ Options:
 - `import-review --html-out <path>`: write the imported reviewer decision
   summary as a polished HTML handoff for review meetings and approvals
 - `import-review --summary-csv-out <path>`: write one CSV row per imported
-  answer group with the primary final finding, reviewer/model rationale,
+  answer group with a `generated_at` timestamp plus the primary final finding, reviewer/model rationale,
   primary evidence title plus trust/freshness/path/score/quote context,
   reviewed/pending status, reviewer overrides, and final verdict totals
 - `import-review --fail-on <verdict>`: exit with code `2` when that final
@@ -1050,17 +1050,17 @@ Options:
   disk instead of stdout
 - `evaluate --html-out <path>`: write a styled HTML evaluation report for
   reviewer walkthroughs, demos, and benchmark drift review
-- `evaluate --summary-csv-out <path>`: write one CSV row per fixture with the
-  fixture path, optional domain, answer path, source directories, source
+- `evaluate --summary-csv-out <path>`: write one CSV row per fixture with its
+  `generated_at` timestamp plus the fixture path, optional domain, answer path, source directories, source
   paths, summary match state, claim-match score, expected vs actual verdict
   totals, and the first mismatched claim's expected versus actual verdict plus
   primary evidence title, trust, freshness, source path, score, and quote when drift
   appears
 - `evaluate --domain-summary-csv-out <path>`: write one CSV row per fixture
-  domain with aggregate fixture counts, mismatch counts, matched claims, and
+  domain with the run `generated_at` timestamp plus aggregate fixture counts, mismatch counts, matched claims, and
   score labels for benchmark routing
 - `evaluate --aggregate-summary-csv-out <path>`: write one overall CSV row
-  with total fixture counts, mismatches, matched claims, overall score, and
+  with the run `generated_at` timestamp plus total fixture counts, mismatches, matched claims, overall score, and
   per-domain score rollups for CI gates and dashboards
 - `evaluate --fail-on-mismatch`: exit with code `2` when any fixture summary or
   expected claim verdict does not match the current verifier output
