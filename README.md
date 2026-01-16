@@ -45,6 +45,7 @@ The current CLI can:
 - label each claim as `verified`, `contradicted`, `unsupported`, or
   `needs_review`
 - print a human-readable report
+- include the report generation timestamp in text output for audit-friendly handoff
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
