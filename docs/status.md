@@ -22,6 +22,7 @@
 - label each claim as `verified`, `contradicted`, `unsupported`, or `needs_review`
 - print a human-readable report
 - include the report generation timestamp in text output for audit-friendly handoff
+- accept `--generated-at <timestamp>` on report-producing CLI workflows when CI retries or snapshot tests need a stable audit timestamp
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review

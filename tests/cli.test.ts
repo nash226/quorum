@@ -74,6 +74,37 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("verify uses a caller-supplied generated timestamp", async () => {
+  const stdout = await runCli([
+    "verify",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--source",
+    "examples/sources/hr-policy.md",
+    "--generated-at",
+    "2026-07-10T12:34:56.000Z",
+    "--json",
+  ]);
+
+  const report = JSON.parse(stdout) as { generatedAt: string };
+  assert.equal(report.generatedAt, "2026-07-10T12:34:56.000Z");
+});
+
+test("generated-at rejects invalid timestamps", async () => {
+  await assert.rejects(
+    runCli([
+      "verify",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--generated-at",
+      "tomorrow",
+    ]),
+    /Invalid --generated-at timestamp: tomorrow/,
+  );
+});
+
 test("top-level help exits cleanly", async () => {
   const result = await runCliAllowFailure(["--help"]);
 
@@ -91,6 +122,7 @@ test("verify --help prints command-specific usage without requiring sources", as
   assert.match(result.stdout, /--answer-label <label>\s+Reviewer-facing label to use instead of the path-derived default/);
   assert.match(result.stdout, /--review-csv-out <path>\s+Write a reviewer decision CSV/);
   assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row summary CSV for this answer/);
+  assert.match(result.stdout, /--generated-at <timestamp>\s+Use this ISO timestamp in generated reports/);
 });
 
 test("verify-batch -h prints batch usage without requiring answers", async () => {
@@ -137,6 +169,7 @@ test("evaluate --help prints evaluation usage without requiring fixtures", async
   assert.match(result.stdout, /--domain-summary-csv-out <path>/);
   assert.match(result.stdout, /--aggregate-summary-csv-out <path>/);
   assert.match(result.stdout, /--fail-on-mismatch\s+Exit with code 2 when any fixture summary or claim verdict mismatches/);
+  assert.match(result.stdout, /--generated-at <timestamp>\s+Use this ISO timestamp in generated reports/);
 });
 
 test("serve --help prints API usage without starting the server", async () => {
