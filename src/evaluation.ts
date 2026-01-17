@@ -472,6 +472,7 @@ export function renderEvaluationScorecard(scorecard: EvaluationScorecard): strin
   const lines = [
     `Evaluation Fixture: ${scorecard.fixtureName}`,
     ...(scorecard.domain ? [`Domain: ${scorecard.domain}`] : []),
+    `Generated at: ${scorecard.report.generatedAt}`,
     `Answer: ${scorecard.answerPath}`,
     ...(scorecard.answerLabel ? [`Answer label: ${scorecard.answerLabel}`] : []),
     `Answer preview: ${scorecard.answerPreview || "No answer content provided."}`,
@@ -550,6 +551,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
     "",
     "## Summary",
     "",
+    `- Generated at: ${summarizeGeneratedAtValues(scorecards)}`,
     `- Fixtures: ${scorecards.length}`,
     `- Fixtures with mismatches: ${mismatchCount}`,
     `- Matched claim verdicts: ${aggregate.matchedClaims}/${aggregate.totalExpectedClaims}`,
@@ -1008,6 +1010,7 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
         <p class="eyebrow">Quorum evaluation</p>
         <h1>Fixture scorecard report</h1>
         <p>Review benchmark fixtures, compare expected and actual verdict totals, and spot claim-level drift before workflow changes ship.</p>
+        <p class="generated-at">Generated at ${escapeHtml(summarizeGeneratedAtValues(scorecards))}</p>
         <div class="summary-strip">
           <article class="summary-stat">
             <span>Fixtures</span>
