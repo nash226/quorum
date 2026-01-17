@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `779908e` on 2026-07-10, feat: timestamp text reports
+- Latest shipped change: `a78e8b3` on 2026-07-10, feat: timestamp evaluation reports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-10 | Direct push | feat: timestamp evaluation reports | `a78e8b3` |
 | 2026-07-10 | [#285](https://github.com/nash226/quorum/pull/285) | feat: timestamp text reports | `779908e` |
 | 2026-07-10 | [#284](https://github.com/nash226/quorum/pull/284) | feat: add generated timestamps to summary csv exports | `271bab7` |
 | 2026-07-10 | [#283](https://github.com/nash226/quorum/pull/283) | feat: add generated timestamps to review csv exports | `95210fa` |
@@ -55,5 +56,4 @@
 | 2026-07-09 | [#281](https://github.com/nash226/quorum/pull/281) | docs: clarify HTTP API workflow coverage | `bd32989` |
 | 2026-07-09 | [#280](https://github.com/nash226/quorum/pull/280) | test: add pdf evaluation fixture | `83cc979` |
 | 2026-07-09 | [#279](https://github.com/nash226/quorum/pull/279) | feat: filter evaluation scorecards by domain | `cdaa28d` |
-| 2026-07-09 | [#278](https://github.com/nash226/quorum/pull/278) | feat: expose api options discovery | `f354f51` |
 
