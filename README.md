@@ -427,6 +427,9 @@ optional `generatedAt` timestamp so workflow runners can keep report output
 stable across retries and fixture snapshots.
 All `POST` endpoints require `Content-Type: application/json` and return `415`
 when callers send a different media type.
+JSON request bodies are limited to 1 MiB; larger payloads return `413` before
+verification or evaluation starts so an oversized workflow input cannot cause
+unbounded request buffering.
 Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
 `verifyAnswerBatchContentsResult` shapes so workflow callers get the report,
 matched fail verdicts, and `shouldFail` status in one JSON payload.
