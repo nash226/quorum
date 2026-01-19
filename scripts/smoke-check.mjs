@@ -376,6 +376,29 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/healthz"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/openapi.json"), true);
 
+    const discoveryPreflightResponse = await fetch(`${server.url}/verify`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "https://smoke.example",
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type",
+      },
+    });
+    assert.equal(discoveryPreflightResponse.status, 204);
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-origin"), "*");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path");
+    assert.equal(discoveryPreflightResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+
+    const discoveryOpenApiResponse = await fetch(`${server.url}/openapi.json`);
+    assert.equal(discoveryOpenApiResponse.status, 200);
+    const discoveryOpenApiPayload = await discoveryOpenApiResponse.json();
+    assert.equal(discoveryOpenApiPayload.openapi, "3.1.0");
+    assert.equal(discoveryOpenApiPayload.paths["/verify"].post.operationId, "postVerify");
+    assert.equal(discoveryOpenApiPayload.paths["/verify"].options.operationId, "optionsVerify");
+    assert.equal(discoveryOpenApiPayload.paths["/evaluate"].post.operationId, "postEvaluate");
+
     const capabilitiesResponse = await fetch(`${server.url}/capabilities`);
     assert.equal(capabilitiesResponse.status, 200);
     assert.equal(capabilitiesResponse.headers.get("x-quorum-service"), "quorum");
