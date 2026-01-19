@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7c98f27` on 2026-07-10, fix: cap API request body size
+- Latest shipped change: `6f1e20c` on 2026-07-10, feat: add OpenAPI operation identifiers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-10 | Direct push | feat: add OpenAPI operation identifiers | `6f1e20c` |
 | 2026-07-10 | Direct push | fix: cap API request body size | `7c98f27` |
 | 2026-07-10 | Direct push | feat: allow stable CLI report timestamps | `4cfc833` |
 | 2026-07-10 | Direct push | feat: timestamp evaluation reports | `a78e8b3` |
@@ -56,5 +57,4 @@
 | 2026-07-10 | [#284](https://github.com/nash226/quorum/pull/284) | feat: add generated timestamps to summary csv exports | `271bab7` |
 | 2026-07-10 | [#283](https://github.com/nash226/quorum/pull/283) | feat: add generated timestamps to review csv exports | `95210fa` |
 | 2026-07-09 | [#282](https://github.com/nash226/quorum/pull/282) | feat: add evaluation aggregate summary csv | `769b05e` |
-| 2026-07-09 | [#281](https://github.com/nash226/quorum/pull/281) | docs: clarify HTTP API workflow coverage | `bd32989` |
 
