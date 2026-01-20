@@ -233,9 +233,9 @@ support-answer,examples/answers/support-answer.md,Employees receive free catered
 
 test("renders a reviewer decision import html report", () => {
   const rendered = renderReviewerDecisionImportHtmlReport(
-    importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
-hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
-support-answer,examples/answers/support-answer.md,<Flag this answer for legal review.>,claim_2,<Flag this answer for legal review.>,unsupported,No approved source contains enough overlapping policy language.,"","","","","","","Needs counsel review before publish"`),
+    importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+support-answer,examples/answers/support-answer.md,<Flag this answer for legal review.>,claim_2,<Flag this answer for legal review.>,unsupported,No approved source contains enough overlapping policy language.,"","","","","","","","Needs counsel review before publish"`),
     ["unsupported"],
   );
 
@@ -252,7 +252,7 @@ support-answer,examples/answers/support-answer.md,<Flag this answer for legal re
   assert.match(rendered, /Fail policy clear/);
   assert.match(rendered, /Fail policy matched \(unsupported\)/);
   assert.match(rendered, /Evidence context/);
-  assert.match(rendered, /<strong>HR Policy - high trust - updated 2026-05-31 - score 0\.998<\/strong>/);
+  assert.match(rendered, /<strong>HR Policy - high trust - updated 2026-05-31 - path examples\/sources\/hr-policy\.md - score 0\.998<\/strong>/);
   assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /Needs counsel review before publish/);
   assert.match(rendered, /&lt;Flag this answer for legal review\.\&gt;/);
