@@ -457,8 +457,9 @@ metadata without rewriting the raw document content; those explicit fields take
 precedence over any frontmatter or HTML metadata already embedded in the
 source body.
 `GET /` returns a small JSON endpoint index plus capability metadata for
-supported source extensions, answer extensions, verdicts, trust levels, and
-opt-in artifact names for each workflow surface, while `GET /capabilities`
+supported HTTP methods, the maximum JSON request size, source extensions,
+answer extensions, verdicts, trust levels, and opt-in artifact names for each
+workflow surface, while `GET /capabilities`
 returns just that capability contract when a local client does not need the
 endpoint listing. `GET /healthz` and `HEAD /healthz` mirror `/health` for load
 balancers and orchestrators that expect the conventional probe path. `HEAD /`,

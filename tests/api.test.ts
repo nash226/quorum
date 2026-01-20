@@ -111,6 +111,11 @@ test("programmatic API exposes supported source and answer extensions", () => {
   assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm"]);
 });
 
+test("API discovery exposes transport limits and supported methods", () => {
+  assert.deepEqual(API_CAPABILITIES.httpMethods, ["GET", "HEAD", "POST", "OPTIONS"]);
+  assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
+});
+
 test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(rootCreateApiServer, createApiServer);
   assert.strictEqual(rootStartApiServer, startApiServer);
@@ -2636,6 +2641,8 @@ Refund requests receive an initial response within one business day.
       "capabilities",
     ]);
     assert.deepEqual(openApi.components.schemas.ApiCapabilities.required, [
+      "httpMethods",
+      "maxRequestBytes",
       "sourceExtensions",
       "answerExtensions",
       "verdicts",
