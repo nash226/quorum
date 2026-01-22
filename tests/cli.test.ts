@@ -169,6 +169,7 @@ test("evaluate --help prints evaluation usage without requiring fixtures", async
   assert.match(result.stdout, /--domain-summary-csv-out <path>/);
   assert.match(result.stdout, /--aggregate-summary-csv-out <path>/);
   assert.match(result.stdout, /--fail-on-mismatch\s+Exit with code 2 when any fixture summary or claim verdict mismatches/);
+  assert.match(result.stdout, /--min-score <0\.\.1>\s+Exit with code 2 when the aggregate claim score is below this threshold/);
   assert.match(result.stdout, /--generated-at <timestamp>\s+Use this ISO timestamp in generated reports/);
 });
 

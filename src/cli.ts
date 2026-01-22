@@ -16,6 +16,7 @@ import {
   renderEvaluationMarkdownReport,
   renderEvaluationTextReport,
   renderEvaluationSummaryCsv,
+  summarizeEvaluationScorecards,
 } from "./evaluation.js";
 import {
   parseClaimVerdict,
@@ -99,6 +100,7 @@ interface EvaluateArgs {
   domains: string[];
   json: boolean;
   failOnMismatch: boolean;
+  minScore?: number;
   outPath?: string;
   markdownOutPath?: string;
   htmlOutPath?: string;
@@ -404,6 +406,7 @@ async function runEvaluate(args: string[]): Promise<void> {
     fixtureDirPaths: parsed.fixtureDirPaths,
     domains: parsed.domains,
     generatedAt: parsed.generatedAt,
+    minScore: parsed.minScore,
   });
   const jsonReport = JSON.stringify(
     scorecards.length === 1 ? scorecards[0] : scorecards,
@@ -415,7 +418,10 @@ async function runEvaluate(args: string[]): Promise<void> {
   const summaryCsvReport = renderEvaluationSummaryCsv(scorecards);
   const domainSummaryCsvReport = renderEvaluationDomainSummaryCsv(scorecards);
   const aggregateSummaryCsvReport = renderEvaluationAggregateSummaryCsv(scorecards);
-  const shouldFail = scorecards.some(hasEvaluationMismatch);
+  const aggregateScore = summarizeEvaluationScorecards(scorecards).score;
+  const scoreThresholdPassed =
+    parsed.minScore === undefined || (aggregateScore !== null && aggregateScore >= parsed.minScore);
+  const shouldFail = scorecards.some(hasEvaluationMismatch) || !scoreThresholdPassed;
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
@@ -445,6 +451,10 @@ async function runEvaluate(args: string[]): Promise<void> {
     console.log(jsonReport);
   } else {
     process.stdout.write(renderEvaluationTextReport(scorecards));
+
+    if (parsed.minScore !== undefined) {
+      console.log(`Minimum score: ${parsed.minScore} (${scoreThresholdPassed ? "passed" : "failed"})`);
+    }
 
     if (parsed.outPath) {
       console.log(`Evaluation report written to ${parsed.outPath}`);
@@ -847,6 +857,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
   let aggregateSummaryCsvOutPath: string | undefined;
   let json = false;
   let failOnMismatch = false;
+  let minScore: number | undefined;
   let generatedAt: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
@@ -886,6 +897,9 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
       json = true;
     } else if (arg === "--fail-on-mismatch") {
       failOnMismatch = true;
+    } else if (arg === "--min-score" && next) {
+      minScore = parseMinScore(next);
+      index += 1;
     } else if (arg === "--generated-at" && next) {
       generatedAt = parseGeneratedAt(next);
       index += 1;
@@ -904,6 +918,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
     domains,
     json,
     failOnMismatch,
+    minScore,
     outPath,
     markdownOutPath,
     htmlOutPath,
@@ -1046,6 +1061,16 @@ function parseGeneratedAt(value: string): string {
   return value;
 }
 
+function parseMinScore(value: string): number {
+  const score = Number(value);
+
+  if (!Number.isFinite(score) || score < 0 || score > 1) {
+    throw new Error(`Invalid --min-score value: ${value}. Expected a number between 0 and 1.`);
+  }
+
+  return score;
+}
+
 function printHelp(command?: CommandName): void {
   const helpTextByCommand: Record<CommandName, string> = {
     verify: `Quorum verify
@@ -1138,6 +1163,7 @@ Options:
   --aggregate-summary-csv-out <path>
                             Write a one-row overall aggregate CSV
   --fail-on-mismatch        Exit with code 2 when any fixture summary or claim verdict mismatches
+  --min-score <0..1>        Exit with code 2 when the aggregate claim score is below this threshold
 
 Example:
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --aggregate-summary-csv-out reports/evaluation-aggregate-summary.csv --fail-on-mismatch

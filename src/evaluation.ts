@@ -59,6 +59,7 @@ export interface EvaluationBatchOptions {
   fixtureDirPaths: string[];
   domains?: string[];
   generatedAt?: string;
+  minScore?: number;
 }
 
 export interface SingleEvaluationFileOptions {
@@ -81,6 +82,8 @@ export interface EvaluationBatchRunResult {
   shouldFail: boolean;
   mismatchCount: number;
   summary: EvaluationAggregateSummary;
+  minScore?: number;
+  scoreThresholdPassed?: boolean;
 }
 
 export interface EvaluationAggregateSummary {
@@ -109,6 +112,7 @@ export interface InMemoryEvaluationBatchOptions {
   fixturePaths?: string[];
   domains?: string[];
   generatedAt?: string;
+  minScore?: number;
 }
 
 export interface InMemoryEvaluationFixtureInput {
@@ -120,6 +124,7 @@ export interface InMemoryEvaluationFixtureFileBatchOptions {
   fixtures: InMemoryEvaluationFixtureInput[];
   domains?: string[];
   generatedAt?: string;
+  minScore?: number;
 }
 
 export interface InMemoryEvaluationFixtureFileOptions {
@@ -379,7 +384,7 @@ export async function evaluateFixtureContents(
 export async function evaluateFixtureContentsResult(
   options: InMemoryEvaluationFixtureFileBatchOptions,
 ): Promise<EvaluationBatchRunResult> {
-  return buildEvaluationBatchResult(await evaluateFixtureContents(options));
+  return buildEvaluationBatchResult(await evaluateFixtureContents(options), options.minScore);
 }
 
 export async function evaluateFixtureContent(
@@ -452,7 +457,7 @@ export async function evaluateFixtureFiles(
 export async function evaluateFixtureFilesResult(
   options: EvaluationBatchOptions,
 ): Promise<EvaluationBatchRunResult> {
-  return buildEvaluationBatchResult(await evaluateFixtureFiles(options));
+  return buildEvaluationBatchResult(await evaluateFixtureFiles(options), options.minScore);
 }
 
 export async function resolveEvaluationFixturePaths(
@@ -1251,15 +1256,19 @@ function buildEvaluationFixtureResult(
 
 function buildEvaluationBatchResult(
   scorecards: EvaluationScorecard[],
+  minScore?: number,
 ): EvaluationBatchRunResult {
   const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
   const summary = summarizeEvaluationScorecards(scorecards);
+  const scoreThresholdPassed =
+    minScore === undefined || (summary.score !== null && summary.score >= minScore);
 
   return {
     scorecards,
-    shouldFail: mismatchCount > 0,
+    shouldFail: mismatchCount > 0 || !scoreThresholdPassed,
     mismatchCount,
     summary,
+    ...(minScore === undefined ? {} : { minScore, scoreThresholdPassed }),
   };
 }
 
@@ -1666,7 +1675,7 @@ function trimTrailingBlankLines(lines: string[]): string[] {
   return trimmed;
 }
 
-function summarizeEvaluationScorecards(
+export function summarizeEvaluationScorecards(
   scorecards: EvaluationScorecard[],
 ): EvaluationAggregateSummary {
   const matchedClaims = scorecards.reduce(
