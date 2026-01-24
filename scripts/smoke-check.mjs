@@ -579,8 +579,8 @@ Employees receive 12 weeks of paid parental leave.
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        reviewCsvContent: `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
-HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
+        reviewCsvContent: `answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR reviewer packet,answers/hr.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
 `,
         failOn: ["needs_review"],
       }),
@@ -591,6 +591,10 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.deepEqual(importReviewResult.failVerdicts, ["needs_review"]);
     assert.equal(importReviewResult.report.summary.needs_review, 1);
     assert.equal(importReviewResult.report.answerGroups[0]?.label, "HR reviewer packet");
+    assert.equal(
+      importReviewResult.report.answerGroups[0]?.answerPreview,
+      "Employees receive 12 weeks of paid parental leave.",
+    );
 
     const evaluationFixtureContent = readFileSync(
       join(repoRoot, "examples", "evaluations", "hr-policy.json"),
