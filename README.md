@@ -216,6 +216,11 @@ Quorum also exposes a small package API for agent and workflow integrations
 that want the verification and reviewer-import flows without shelling out to
 the CLI:
 
+The local HTTP API exposes its stable service, version, OpenAPI path, request
+size, and request-correlation response headers in the generated `/openapi.json`
+contract, including on error responses, so workflow clients can discover and
+trace calls without relying on undocumented transport behavior.
+
 ```ts
 import {
   ANSWER_EXTENSIONS,
