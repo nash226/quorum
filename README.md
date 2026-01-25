@@ -57,8 +57,16 @@ The current CLI can:
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
+- report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
 ## Example
+
+Check the installed CLI contract version before wiring it into a workflow:
+
+```bash
+npm run dev -- --version
+# quorum 0.1.0
+```
 
 ```bash
 npm run dev -- verify \
