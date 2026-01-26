@@ -45,6 +45,7 @@ import {
 } from "./reviewer-decision-import.js";
 import { API_VERSION, createOpenApiDocument, startApiServer } from "./api-server.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
+import { extractClaims } from "./claim-extractor.js";
 import { renderAnswerPreview, stripByteOrderMark } from "./text.js";
 import {
   importReviewerDecisionFile,
@@ -121,7 +122,14 @@ interface OpenApiArgs {
 }
 
 const HELP_FLAGS = new Set(["--help", "-h"]);
-type CommandName = "verify" | "verify-batch" | "import-review" | "evaluate" | "serve" | "openapi";
+type CommandName =
+  | "verify"
+  | "verify-batch"
+  | "extract-claims"
+  | "import-review"
+  | "evaluate"
+  | "serve"
+  | "openapi";
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -158,6 +166,16 @@ async function main(): Promise<void> {
     }
 
     await runVerifyBatch(args);
+    return;
+  }
+
+  if (command === "extract-claims") {
+    if (args.some(isHelpFlag)) {
+      printHelp("extract-claims");
+      return;
+    }
+
+    await runExtractClaims(args);
     return;
   }
 
@@ -342,6 +360,20 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   if (shouldFail) {
     process.exitCode = 2;
+  }
+}
+
+async function runExtractClaims(args: string[]): Promise<void> {
+  const parsed = parseExtractClaimsArgs(args);
+  const claims = extractClaims(await readTextInput(parsed.answerPath));
+
+  if (parsed.json) {
+    console.log(JSON.stringify(claims, null, 2));
+    return;
+  }
+
+  for (const claim of claims) {
+    console.log(`${claim.id}: ${claim.text}`);
   }
 }
 
@@ -588,6 +620,36 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
     reviewCsvOutPath,
     summaryCsvOutPath,
   };
+}
+
+interface ExtractClaimsArgs {
+  answerPath: string;
+  json: boolean;
+}
+
+function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
+  let answerPath = "";
+  let json = false;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    const next = args[index + 1];
+
+    if (arg === "--answer" && next) {
+      answerPath = next;
+      index += 1;
+    } else if (arg === "--json") {
+      json = true;
+    } else {
+      throw new Error(`Unknown or incomplete argument: ${arg}`);
+    }
+  }
+
+  if (!answerPath) {
+    throw new Error("Missing --answer <path|->");
+  }
+
+  return { answerPath, json };
 }
 
 function parseServeArgs(args: string[]): ServeArgs {
@@ -1129,6 +1191,19 @@ Example:
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
   cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
 `,
+    "extract-claims": `Quorum extract-claims
+
+Usage:
+  quorum extract-claims --answer <path|-> [--json]
+
+Options:
+  --answer <path|->          Answer file to inspect, or - to read from stdin
+  --json                     Print claims as a JSON array
+
+Example:
+  npm run dev -- extract-claims --answer examples/answers/hr-answer.md --json
+  cat examples/answers/hr-answer.md | npm run dev -- extract-claims --answer -
+`,
     "import-review": `Quorum import-review
 
 Usage:
@@ -1229,6 +1304,7 @@ Example:
 Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum extract-claims --answer <path|-> [--json]
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
   quorum serve [--host <host>] [--port <port>]
@@ -1240,6 +1316,7 @@ Example:
   cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --answer-label "HR reviewer packet" --source-dir examples/sources --json
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
   cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
+  npm run dev -- extract-claims --answer examples/answers/hr-answer.md --json
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --aggregate-summary-csv-out reports/evaluation-aggregate-summary.csv --fail-on-mismatch

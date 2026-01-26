@@ -68,6 +68,14 @@ npm run dev -- --version
 # quorum 0.1.0
 ```
 
+Preview the normalized atomic claims Quorum will verify without loading source
+documents:
+
+```bash
+npm run dev -- extract-claims --answer examples/answers/hr-answer.md --json
+cat examples/answers/hr-answer.md | npm run dev -- extract-claims --answer -
+```
+
 ```bash
 npm run dev -- verify \
   --answer examples/answers/hr-answer.md \
