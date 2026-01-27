@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `425bf25` on 2026-07-11, feat: expose claim extraction over HTTP
+- Latest shipped change: `d10823f` on 2026-07-11, fix: list claim extraction in server help
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -51,6 +51,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-11 | Direct push | fix: list claim extraction in server help | `d10823f` |
 | 2026-07-11 | Direct push | feat: expose claim extraction over HTTP | `425bf25` |
 | 2026-07-11 | Direct push | feat: add claim extraction cli command | `e3c8cbd` |
 | 2026-07-10 | Direct push | feat: export claim extraction helper | `9d72e85` |
@@ -58,5 +59,4 @@
 | 2026-07-10 | Direct push | feat: document API response headers in OpenAPI | `06e1e29` |
 | 2026-07-10 | Direct push | test: cover imported answer previews in api smoke | `cd1af4a` |
 | 2026-07-10 | Direct push | fix: allow browser request correlation headers | `8b31ef8` |
-| 2026-07-10 | Direct push | feat: add API request correlation headers | `8b294a4` |
 
