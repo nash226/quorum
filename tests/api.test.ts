@@ -1526,6 +1526,33 @@ test("programmatic API returns mismatch metadata for in-memory evaluation batche
   }
 });
 
+test("programmatic in-memory evaluation batches enforce minimum aggregate scores", async () => {
+  const answerPath = join(process.cwd(), "examples/answers/hr-answer.md");
+  const sourcePath = join(process.cwd(), "examples/sources/hr-policy.md");
+  const result = await evaluateFixturesResult({
+    fixtures: [
+      {
+        name: "HR threshold fixture",
+        answerPath,
+        sourcePaths: [sourcePath],
+        expectedSummary: {
+          verified: 3,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+        },
+        expectedClaimVerdicts: ["verified", "verified", "verified"],
+      },
+    ],
+    minScore: 1,
+  });
+
+  assert.equal(result.shouldFail, true);
+  assert.equal(result.minScore, 1);
+  assert.equal(result.scoreThresholdPassed, false);
+  assert.equal(result.mismatchCount, 1);
+});
+
 test("programmatic API returns mismatch metadata for in-memory evaluation fixture JSON helpers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-eval-content-result-"));
 

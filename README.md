@@ -953,6 +953,11 @@ path string or an options object with `fixturePath` and `generatedAt`, which
 keeps single-fixture evaluation calls consistent with Quorum's other file-based
 programmatic helpers.
 
+Batch result helpers, including `evaluateFixturesResult`, enforce the optional
+`minScore` threshold and return `scoreThresholdPassed` alongside `shouldFail`,
+so in-memory evaluation gates behave consistently with file-backed and HTTP
+evaluation workflows.
+
 Each evaluation fixture can mix explicit `sourcePaths` with recursive
 `sourceDirs`, so domain scorecards can point at a maintained source bundle
 without rewriting every fixture when a benchmark adds another approved
