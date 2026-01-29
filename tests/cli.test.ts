@@ -209,6 +209,7 @@ test("evaluate --help prints evaluation usage without requiring fixtures", async
   assert.match(result.stdout, /--aggregate-summary-csv-out <path>/);
   assert.match(result.stdout, /--fail-on-mismatch\s+Exit with code 2 when any fixture summary or claim verdict mismatches/);
   assert.match(result.stdout, /--min-score <0\.\.1>\s+Exit with code 2 when the aggregate claim score is below this threshold/);
+  assert.match(result.stdout, /--result-json\s+Print the evaluation result with score, mismatch, and threshold metadata/);
   assert.match(result.stdout, /--generated-at <timestamp>\s+Use this ISO timestamp in generated reports/);
 });
 
@@ -708,6 +709,60 @@ test("evaluate exits with code 2 when fail-on-mismatch sees a fixture mismatch",
     assert.equal(result.code, 2);
     assert.match(result.stdout, /Summary match: no/);
     assert.match(result.stdout, /Fixtures with mismatches: 1/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("evaluate result-json exposes score gates and enforces min-score without fail-on-mismatch", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-result-"));
+
+  try {
+    const fixturePath = join(tempDir, "fixture.json");
+    await writeFile(
+      fixturePath,
+      JSON.stringify(
+        {
+          name: "Threshold fixture",
+          answerPath: resolve("examples/answers/hr-answer.md"),
+          sourcePaths: [resolve("examples/sources/hr-policy.md")],
+          expectedSummary: {
+            verified: 3,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+          },
+          expectedClaimVerdicts: ["verified", "verified", "verified"],
+        },
+        null,
+        2,
+      ),
+      "utf8",
+    );
+
+    const result = await runCliAllowFailure([
+      "evaluate",
+      "--fixture",
+      fixturePath,
+      "--result-json",
+      "--min-score",
+      "1",
+    ]);
+
+    assert.equal(result.code, 2);
+    const payload = JSON.parse(result.stdout) as {
+      shouldFail: boolean;
+      mismatchCount: number;
+      minScore: number;
+      scoreThresholdPassed: boolean;
+      summary: { score: number | null };
+    };
+
+    assert.equal(payload.shouldFail, true);
+    assert.equal(payload.mismatchCount, 1);
+    assert.equal(payload.minScore, 1);
+    assert.equal(payload.scoreThresholdPassed, false);
+    assert.equal(payload.summary.score, 1 / 3);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
