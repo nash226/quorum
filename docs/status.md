@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `257e009` on 2026-07-11, feat: expose evaluation result json
+- Latest shipped change: `d12a2af` on 2026-07-11, feat: persist evaluation gate results
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -51,6 +51,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-11 | Direct push | feat: persist evaluation gate results | `d12a2af` |
 | 2026-07-11 | Direct push | feat: expose evaluation result json | `257e009` |
 | 2026-07-11 | Direct push | fix: enforce in-memory evaluation score thresholds | `d43f021` |
 | 2026-07-11 | Direct push | docs: document evaluation CLI filters | `e1bcd80` |
@@ -58,5 +59,4 @@
 | 2026-07-11 | Direct push | feat: expose claim extraction over HTTP | `425bf25` |
 | 2026-07-11 | Direct push | feat: add claim extraction cli command | `e3c8cbd` |
 | 2026-07-10 | Direct push | feat: export claim extraction helper | `9d72e85` |
-| 2026-07-10 | Direct push | feat: add CLI version command | `f7cfebd` |
 
