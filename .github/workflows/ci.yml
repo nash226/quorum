@@ -35,6 +35,9 @@ jobs:
       - name: Smoke check
         run: npm run smoke
 
+      - name: Evaluate shipped policy fixtures
+        run: npm run evaluate:ci
+
   refresh-status:
     if: github.ref == 'refs/heads/main'
     needs: test
