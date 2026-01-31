@@ -235,6 +235,9 @@ result alongside its scorecard files instead of capturing stdout.
 The repository CI workflow runs `npm run evaluate:ci` against the shipped HR and
 support fixtures, requiring zero expected-result mismatches and an aggregate
 claim score of at least `0.95`.
+Run `npm run check` locally to execute the same full gate as CI: tests, the
+TypeScript build, the end-to-end smoke check, and the shipped-fixture score
+gate.
 
 ## Programmatic API
 
