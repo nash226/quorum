@@ -532,9 +532,9 @@ Employees receive 12 weeks of paid parental leave.
       }),
     });
     assert.equal(invalidContentTypeResponse.status, 415);
-    assert.deepEqual(await invalidContentTypeResponse.json(), {
-      error: "Content-Type must be application/json.",
-    });
+    const invalidContentTypePayload = await invalidContentTypeResponse.json();
+    assert.equal(invalidContentTypePayload.error, "Content-Type must be application/json.");
+    assert.match(invalidContentTypePayload.requestId, /^[0-9a-f-]{36}$/);
 
     const batchVerifyResponse = await fetch(`${server.url}/verify-batch`, {
       method: "POST",
