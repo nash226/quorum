@@ -937,6 +937,10 @@ Employees receive 12 weeks of paid parental leave.
   startApiServer,
   verifyAnswerResult,
 } from "quorum";
+import {
+  API_SERVICE_NAME as SERVER_API_SERVICE_NAME,
+  startApiServer as startServerSubpath,
+} from "quorum/server";
 
 const report = verifyAnswerResult({
   answer: "Employees receive 12 weeks of paid parental leave.",
@@ -953,6 +957,10 @@ const report = verifyAnswerResult({
 
 if (report.report.summary.verified !== 1) {
   throw new Error("Expected packed quorum import to verify one claim.");
+}
+
+if (SERVER_API_SERVICE_NAME !== API_SERVICE_NAME) {
+  throw new Error("Expected quorum/server to expose the same API service metadata.");
 }
 
 const api = await startApiServer({ host: "127.0.0.1", port: 0 });
@@ -974,6 +982,18 @@ try {
 
   if (response.status !== 200) {
     throw new Error("Expected packed quorum root export to serve a health response.");
+  }
+
+  const serverSubpath = await startServerSubpath({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const subpathResponse = await fetch(\`\${serverSubpath.url}/health\`);
+
+    if (subpathResponse.status !== 200) {
+      throw new Error("Expected packed quorum/server export to serve a health response.");
+    }
+  } finally {
+    await serverSubpath.close();
   }
 } finally {
   await api.close();
