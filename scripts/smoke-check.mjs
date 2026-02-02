@@ -192,6 +192,26 @@ try {
   assert.match(readFileSync(singleSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
   assert.match(readFileSync(singleSummaryCsvPath, "utf8"), /^[^,\n]+,HR reviewer packet,/m);
 
+  const stdinReportPath = join(tempDir, "stdin-report.json");
+  const stdinStdout = runCli(
+    [
+      "verify",
+      "--answer",
+      "-",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--out",
+      stdinReportPath,
+    ],
+    {
+      input: "Employees receive 12 weeks of paid parental leave.\n",
+    },
+  );
+
+  assert.match(stdinStdout, /Quorum Verification Report/);
+  assert.equal(readJson(stdinReportPath).answerPath, "<stdin>");
+  assert.equal(readJson(stdinReportPath).summary.verified, 1);
+
   const pdfAnswerPath = join(tempDir, "pdf-answer.md");
   const pdfSourcePath = join(tempDir, "hr-policy.pdf");
   const pdfReportPath = join(tempDir, "pdf-report.json");
