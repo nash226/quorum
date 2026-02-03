@@ -1,0 +1,14 @@
+{
+  "name": "Empty answer example",
+  "domain": "support",
+  "answerPath": "../answers/empty-answer.md",
+  "answerLabel": "Support empty draft",
+  "sourcePaths": ["../sources/support-playbook.md"],
+  "expectedSummary": {
+    "verified": 0,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": []
+}
