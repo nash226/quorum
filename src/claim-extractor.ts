@@ -14,6 +14,7 @@ const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
 const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
 const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
 const MARKDOWN_TABLE_HTML_BREAK_PLACEHOLDER = "__QUORUM_TABLE_HTML_BREAK__";
+const EXPLICIT_CLAIM_MARKER = "QUORUMEXPLICITCLAIM";
 const OPEN_HTML_DETAILS_ATTRIBUTE =
   /(^|\s)open(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?(?=\s|$)/i;
 const HTML_ANSWER_MARKUP_PATTERN =
@@ -39,12 +40,24 @@ const HTML_HEADING_PATTERN = /<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
-    .flatMap(splitCompoundClaim)
-    .filter((sentence) => sentence.length >= 12)
-    .map((text, index) => ({
+    .flatMap((sentence) => {
+      const isExplicitClaim = sentence.startsWith(EXPLICIT_CLAIM_MARKER);
+      const text = isExplicitClaim ? sentence.slice(EXPLICIT_CLAIM_MARKER.length) : sentence;
+
+      return splitCompoundClaim(text).map((part) => ({ isExplicitClaim, text: part }));
+    })
+    .filter(
+      ({ isExplicitClaim, text }) =>
+        Boolean(text) && (isExplicitClaim || (text.length >= 12 && !isThematicBreak(text))),
+    )
+    .map(({ text }, index) => ({
       id: `claim_${index + 1}`,
       text,
     }));
+}
+
+function isThematicBreak(text: string): boolean {
+  return /^(?:-{3,}|_{3,}|\*{3,})$/.test(text);
 }
 
 function splitCompoundClaim(sentence: string): string[] {
@@ -176,7 +189,7 @@ function normalizeAnswer(answer: string): string {
     if (tableRowCells) {
       const tableRowClaim = normalizeMarkdownTableRow(tableRowCells, lines, index);
       if (tableRowClaim) {
-        normalizedLines.push(tableRowClaim);
+        normalizedLines.push(`${EXPLICIT_CLAIM_MARKER}${tableRowClaim}`);
       }
 
       previousLineCanContinue = false;
@@ -210,7 +223,9 @@ function normalizeAnswer(answer: string): string {
       continue;
     }
 
-    normalizedLines.push(normalizedLine);
+    normalizedLines.push(
+      `${explicitClaimPrefix ? EXPLICIT_CLAIM_MARKER : ""}${normalizedLine}`,
+    );
     seenBodyContent = true;
     previousLineCanContinue = currentLineCanContinue;
     previousLineBelongsToMarkdownClaim = belongsToMarkdownClaim;
