@@ -161,6 +161,8 @@ test("verify --help prints command-specific usage without requiring sources", as
   assert.match(result.stdout, /--answer-label <label>\s+Reviewer-facing label to use instead of the path-derived default/);
   assert.match(result.stdout, /--review-csv-out <path>\s+Write a reviewer decision CSV/);
   assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row summary CSV for this answer/);
+  assert.match(result.stdout, /--result-json\s+Print the report with shouldFail and failVerdicts metadata/);
+  assert.match(result.stdout, /--result-json-out <path>\s+Write the gate-aware result JSON to disk/);
   assert.match(result.stdout, /--generated-at <timestamp>\s+Use this ISO timestamp in generated reports/);
 });
 
@@ -178,6 +180,66 @@ test("verify-batch -h prints batch usage without requiring answers", async () =>
     /--answer-label <label>\s+Apply a reviewer-facing label to the most recent explicit --answer input/,
   );
   assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row-per-answer summary CSV/);
+  assert.match(result.stdout, /--result-json\s+Print the batch report with shouldFail and failVerdicts metadata/);
+  assert.match(result.stdout, /--result-json-out <path>\s+Write the gate-aware batch result JSON to disk/);
+});
+
+test("verify result-json includes gate metadata and can be written to disk", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-result-json-"));
+
+  try {
+    const resultJsonOutPath = join(tempDir, "reports", "verify-result.json");
+    const result = await runCliAllowFailure([
+      "verify",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--result-json",
+      "--result-json-out",
+      resultJsonOutPath,
+      "--fail-on",
+      "contradicted",
+    ]);
+
+    assert.equal(result.code, 2);
+    const parsed = JSON.parse(result.stdout) as {
+      report: { summary: { contradicted: number } };
+      shouldFail: boolean;
+      failVerdicts: string[];
+    };
+    assert.equal(parsed.shouldFail, true);
+    assert.deepEqual(parsed.failVerdicts, ["contradicted"]);
+    assert.equal(parsed.report.summary.contradicted, 1);
+    assert.deepEqual(JSON.parse(await readFile(resultJsonOutPath, "utf8")), parsed);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch result-json reports aggregate gate metadata", async () => {
+  const result = await runCliAllowFailure([
+    "verify-batch",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--source",
+    "examples/sources/hr-policy.md",
+    "--result-json",
+    "--fail-on",
+    "contradicted",
+    "--fail-on",
+    "unsupported",
+  ]);
+
+  assert.equal(result.code, 2);
+  const parsed = JSON.parse(result.stdout) as {
+    report: { summary: { answersWithFailures: number } };
+    shouldFail: boolean;
+    failVerdicts: string[];
+  };
+  assert.equal(parsed.shouldFail, true);
+  assert.deepEqual(parsed.failVerdicts, ["contradicted", "unsupported"]);
+  assert.equal(parsed.report.summary.answersWithFailures, 1);
 });
 
 test("import-review --help prints import usage without requiring a csv path", async () => {
