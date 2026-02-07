@@ -2224,6 +2224,13 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           EvaluationBatchRunResult: {
             required: string[];
           };
+          ApiEvaluationFixtureInput: {
+            properties: Record<string, unknown>;
+          };
+          EvaluationFixture: {
+            required: string[];
+            properties: Record<string, unknown>;
+          };
           EvaluationScorecard: {
             properties: Record<string, unknown>;
           };
@@ -2241,6 +2248,33 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.info.title, "Quorum Local API");
     assert.equal(openApi.info.version, "0.1.0");
     assert.deepEqual(openApi.servers, [{ url: api.url }]);
+    assert.deepEqual(openApi.components.schemas.ApiEvaluationFixtureInput.properties, {
+      fixturePath: { type: "string" },
+      content: {
+        type: "string",
+        description: "JSON-encoded evaluation fixture document.",
+        contentMediaType: "application/json",
+        contentSchema: { $ref: "#/components/schemas/EvaluationFixture" },
+      },
+    });
+    assert.deepEqual(openApi.components.schemas.EvaluationFixture.required, [
+      "name",
+      "answerPath",
+      "expectedSummary",
+    ]);
+    assert.deepEqual(Object.keys(openApi.components.schemas.EvaluationFixture.properties), [
+      "name",
+      "domain",
+      "answerPath",
+      "answer",
+      "answerLabel",
+      "sourcePaths",
+      "sourceDirs",
+      "sources",
+      "defaultTrustLevel",
+      "expectedSummary",
+      "expectedClaimVerdicts",
+    ]);
     const operationId = (operation: object | undefined) =>
       (operation as { operationId?: string } | undefined)?.operationId;
     assert.equal(operationId(openApi.paths["/"]?.get), "getApiDiscovery");
