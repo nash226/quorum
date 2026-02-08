@@ -3111,7 +3111,7 @@ function buildImportReviewArtifacts(
     text: () => renderReviewerDecisionImportReport(result.report, result.failVerdicts),
     markdown: () => renderReviewerDecisionImportMarkdownReport(result.report, result.failVerdicts),
     html: () => renderReviewerDecisionImportHtmlReport(result.report, result.failVerdicts),
-    summary_csv: () => renderReviewerDecisionImportSummaryCsv(result.report),
+    summary_csv: () => renderReviewerDecisionImportSummaryCsv(result.report, result.failVerdicts),
   });
 }
 
