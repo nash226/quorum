@@ -3386,7 +3386,7 @@ Employees receive 12 weeks of paid parental leave.
           },
         ],
         failOn: ["contradicted"],
-        includeArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
+        includeArtifacts: ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"],
       }),
     });
     assert.equal(verifyResponse.status, 200);
@@ -3398,6 +3398,10 @@ Employees receive 12 weeks of paid parental leave.
       renderMarkdownReport(verifyResult.report, verifyResult.failVerdicts),
     );
     assert.equal(verifyResult.artifacts.html, renderHtmlReport(verifyResult.report, verifyResult.failVerdicts));
+    {
+      const { artifacts: _artifacts, ...resultWithoutArtifacts } = verifyResult;
+      assert.deepEqual(JSON.parse(verifyResult.artifacts.result_json ?? "null"), resultWithoutArtifacts);
+    }
     assert.equal(
       verifyResult.artifacts.review_csv,
       renderReviewerDecisionCsv(verifyResult.report, verifyResult.failVerdicts),
@@ -3445,7 +3449,7 @@ Refund requests receive an initial response within one business day.
 `,
           },
         ],
-        includeArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
+        includeArtifacts: ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"],
       }),
     });
     assert.equal(batchResponse.status, 200);
@@ -3454,6 +3458,10 @@ Refund requests receive an initial response within one business day.
     assert.equal(batchResult.artifacts.text, renderBatchTextReport(batchResult.report));
     assert.equal(batchResult.artifacts.markdown, renderBatchMarkdownReport(batchResult.report));
     assert.equal(batchResult.artifacts.html, renderBatchHtmlReport(batchResult.report));
+    {
+      const { artifacts: _artifacts, ...resultWithoutArtifacts } = batchResult;
+      assert.deepEqual(JSON.parse(batchResult.artifacts.result_json ?? "null"), resultWithoutArtifacts);
+    }
     assert.equal(batchResult.artifacts.review_csv, renderBatchReviewerDecisionCsv(batchResult.report));
     assert.equal(batchResult.artifacts.summary_csv, renderBatchSummaryCsv(batchResult.report));
 
@@ -3467,7 +3475,7 @@ Refund requests receive an initial response within one business day.
 HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
 `,
         failOn: ["needs_review"],
-        includeArtifacts: ["text", "markdown", "html", "summary_csv"],
+        includeArtifacts: ["text", "markdown", "html", "result_json", "summary_csv"],
       }),
     });
     assert.equal(importResponse.status, 200);
@@ -3485,6 +3493,10 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       importResult.artifacts.html,
       renderReviewerDecisionImportHtmlReport(importResult.report, importResult.failVerdicts),
     );
+    {
+      const { artifacts: _artifacts, ...resultWithoutArtifacts } = importResult;
+      assert.deepEqual(JSON.parse(importResult.artifacts.result_json ?? "null"), resultWithoutArtifacts);
+    }
     assert.equal(
       importResult.artifacts.summary_csv,
       renderReviewerDecisionImportSummaryCsv(importResult.report, importResult.failVerdicts),
