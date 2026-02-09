@@ -160,19 +160,45 @@ test("HTTP API extracts normalized claims without loading sources", async () => 
   try {
     const response = await fetch(`${api.url}/extract-claims`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        "X-Quorum-Request-Id": "extract-claims-contract-test",
+      },
       body: JSON.stringify({
         answer: "Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days.",
       }),
     });
 
     assert.equal(response.status, 200);
+    assert.equal(response.headers.get("x-quorum-request-id"), "extract-claims-contract-test");
     assert.deepEqual(await response.json(), {
       claims: [
         { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
         { id: "claim_2", text: "Managers approve travel within five business days." },
       ],
     });
+  } finally {
+    await api.close();
+  }
+});
+
+test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/extract-claims`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "http://localhost:4173",
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type, x-quorum-request-id",
+      },
+    });
+
+    assert.equal(response.status, 204);
+    assert.equal(response.headers.get("access-control-allow-origin"), "*");
+    assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
+    assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id");
   } finally {
     await api.close();
   }
@@ -2292,6 +2318,8 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(operationId(openApi.paths["/openapi.json"]?.get), "getOpenApi");
     assert.equal(operationId(openApi.paths["/openapi.json"]?.head), "headOpenApi");
     assert.equal(operationId(openApi.paths["/openapi.json"]?.options), "optionsOpenApi");
+    assert.equal(operationId(openApi.paths["/extract-claims"]?.options), "optionsExtractClaims");
+    assert.equal(operationId(openApi.paths["/extract-claims"]?.post), "postExtractClaims");
     assert.equal(operationId(openApi.paths["/verify"]?.options), "optionsVerify");
     assert.equal(operationId(openApi.paths["/verify"]?.post), "postVerify");
     assert.equal(operationId(openApi.paths["/verify-batch"]?.options), "optionsVerifyBatch");
@@ -2314,6 +2342,8 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/healthz"]?.options?.summary, "Readiness alias preflight");
     assert.equal(openApi.paths["/openapi.json"]?.options?.summary, "OpenAPI description preflight");
     assert.equal(openApi.paths["/openapi.json"]?.head?.summary, "OpenAPI description headers");
+    assert.equal(openApi.paths["/extract-claims"]?.options?.summary, "Claim extraction preflight");
+    assert.equal(openApi.paths["/extract-claims"]?.post?.summary, "Extract normalized claims");
     assert.equal(openApi.paths["/verify"]?.options?.summary, "Verify preflight");
     assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
     const verifyResponses = openApi.paths["/verify"]?.post?.responses as
