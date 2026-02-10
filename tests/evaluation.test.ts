@@ -112,6 +112,29 @@ test("evaluates shipped HTML fixture files for exported help-center style covera
   );
 });
 
+test("evaluates a shipped fixture that discovers approved sources from a directory", async () => {
+  const fixturePath = resolve("examples/evaluations/support/source-directory-policy.json");
+  const scorecard = await evaluateFixtureFile({
+    fixturePath,
+    generatedAt: "2026-07-12T17:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support source directory example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support source directory reviewer packet");
+  assert.deepEqual(scorecard.sourceDirs, [resolve("examples/sources")]);
+  assert.deepEqual(scorecard.sourcePaths, [
+    resolve("examples/sources/hr-policy.md"),
+    resolve("examples/sources/hr-policy.pdf"),
+    resolve("examples/sources/support-billing-policy.html"),
+    resolve("examples/sources/support-playbook.md"),
+  ]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.matchedClaims, 3);
+  assert.equal(scorecard.totalExpectedClaims, 3);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates shipped PDF fixture files for document-export coverage", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/pdf-policy.json"),
@@ -174,6 +197,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support-policy.json"),
     resolve("examples/evaluations/support/account-security-policy.json"),
     resolve("examples/evaluations/support/html-billing-policy.json"),
+    resolve("examples/evaluations/support/source-directory-policy.json"),
   ]);
 });
 
@@ -205,7 +229,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 7);
+  assert.equal(scorecards.length, 8);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -216,6 +240,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support policy example",
       "Support account policy example",
       "Support billing HTML example",
+      "Support source directory example",
     ],
   );
   assert.ok(
