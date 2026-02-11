@@ -791,6 +791,7 @@ const OPENAPI_EVALUATE_RESPONSE_EXAMPLE = {
     },
   ],
   mismatchCount: 0,
+  failureReasons: [],
   summary: {
     fixtureCount: 1,
     matchedClaims: 1,
@@ -1099,6 +1100,7 @@ const OPENAPI_EVALUATE_CONFLICT_RESPONSE_EXAMPLE = {
     ],
   },
   shouldFail: true,
+  failureReasons: ["mismatch"],
 } as const;
 
 export function createApiServer(): Server {
@@ -3068,12 +3070,17 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               items: { $ref: "#/components/schemas/EvaluationScorecard" },
             },
             shouldFail: { type: "boolean" },
+            failureReasons: {
+              type: "array",
+              items: { type: "string", enum: ["mismatch", "min_score"] },
+              description: "Evaluation gates that caused shouldFail to be true.",
+            },
             mismatchCount: { type: "integer", minimum: 0 },
             minScore: { type: "number", minimum: 0, maximum: 1 },
             scoreThresholdPassed: { type: "boolean" },
             summary: { $ref: "#/components/schemas/EvaluationAggregateSummary" },
           },
-          required: ["scorecards", "shouldFail", "mismatchCount", "summary"],
+          required: ["scorecards", "shouldFail", "failureReasons", "mismatchCount", "summary"],
         },
       },
     },
