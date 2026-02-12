@@ -286,6 +286,8 @@ test("serve --help prints API usage without starting the server", async () => {
   assert.match(result.stdout, /GET  \/capabilities\s+Return supported Quorum capabilities without endpoint listings/);
   assert.match(result.stdout, /HEAD \/health\s+Return readiness headers without a response body/);
   assert.match(result.stdout, /GET  \/health\s+Return a simple readiness response/);
+  assert.match(result.stdout, /GET  \/version\s+Return the service and HTTP contract version/);
+  assert.match(result.stdout, /HEAD \/version\s+Return version headers without a response body/);
   assert.match(result.stdout, /GET  \/openapi\.json\s+Return the machine-readable API description/);
   assert.match(result.stdout, /OPTIONS \*\s+Return CORS preflight headers for browser-based local clients/);
   assert.match(result.stdout, /POST \/extract-claims\s+Extract normalized claims from answer content/);
