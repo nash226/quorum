@@ -176,6 +176,11 @@ export interface ApiHealthResponse {
   version: string;
 }
 
+export interface ApiVersionResponse {
+  service: string;
+  version: string;
+}
+
 export interface OpenApiDocumentOptions {
   serverUrl?: string;
 }
@@ -189,6 +194,7 @@ export interface StartedApiServer {
 }
 
 export const CAPABILITIES_PATH = "/capabilities";
+export const VERSION_PATH = "/version";
 export const OPENAPI_PATH = "/openapi.json";
 export const API_MAX_REQUEST_BYTES = 1024 * 1024;
 const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
@@ -260,6 +266,9 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     path: "/healthz",
     description: "Return CORS preflight headers for the conventional readiness probe path.",
   },
+  { method: "GET", path: VERSION_PATH, description: "Return the Quorum service and contract version." },
+  { method: "HEAD", path: VERSION_PATH, description: "Return version headers without a JSON body." },
+  { method: "OPTIONS", path: VERSION_PATH, description: "Return CORS preflight headers for version clients." },
   { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
   { method: "HEAD", path: OPENAPI_PATH, description: "Return OpenAPI headers without a JSON body." },
   {
@@ -321,6 +330,10 @@ const OPENAPI_CAPABILITIES_RESPONSE_EXAMPLE = {
 } as const;
 const OPENAPI_HEALTH_RESPONSE_EXAMPLE = {
   ok: true,
+  service: API_SERVICE_NAME,
+  version: API_VERSION,
+} as const;
+const OPENAPI_VERSION_RESPONSE_EXAMPLE = {
   service: API_SERVICE_NAME,
   version: API_VERSION,
 } as const;
@@ -1215,6 +1228,15 @@ async function handleApiRequest(
     return;
   }
 
+  if ((request.method === "GET" || isHeadRequest) && url === VERSION_PATH) {
+    const versionResponse: ApiVersionResponse = {
+      service: API_SERVICE_NAME,
+      version: API_VERSION,
+    };
+    writeJson(response, 200, versionResponse, isHeadRequest);
+    return;
+  }
+
   if ((request.method === "GET" || isHeadRequest) && url === OPENAPI_PATH) {
     writeJson(
       response,
@@ -1961,6 +1983,46 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
         options: corsPreflightOperation("optionsHealthz", "Readiness alias preflight"),
       },
+      [VERSION_PATH]: {
+        get: {
+          operationId: "getVersion",
+          summary: "Service version",
+          responses: {
+            "200": {
+              description: "Quorum service and HTTP contract version.",
+              headers: apiResponseHeaders,
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiVersionResponse" },
+                  examples: {
+                    version: {
+                      summary: "Read the Quorum service version",
+                      value: OPENAPI_VERSION_RESPONSE_EXAMPLE,
+                    },
+                  },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+        head: {
+          operationId: "headVersion",
+          summary: "Service version headers",
+          responses: {
+            "200": {
+              description: "Header-only version response for lightweight clients.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiVersionResponse" },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+        options: corsPreflightOperation("optionsVersion", "Version preflight"),
+      },
       [OPENAPI_PATH]: {
         get: {
           operationId: "getOpenApi",
@@ -2506,6 +2568,14 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             capabilities: { $ref: "#/components/schemas/ApiCapabilities" },
           },
           required: ["service", "version", "openapiPath", "capabilities"],
+        },
+        ApiVersionResponse: {
+          type: "object",
+          properties: {
+            service: { type: "string", const: API_SERVICE_NAME },
+            version: { type: "string", const: API_VERSION },
+          },
+          required: ["service", "version"],
         },
         ApiCapabilities: {
           type: "object",
