@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9bfa476` on 2026-07-12, fix: route API requests by pathname
+- Latest shipped change: `60bb2da` on 2026-07-12, feat: explain evaluation gate failures
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -53,6 +53,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-12 | Direct push | feat: explain evaluation gate failures | `60bb2da` |
 | 2026-07-12 | Direct push | fix: route API requests by pathname | `9bfa476` |
 | 2026-07-12 | Direct push | test: cover evaluation source directory fixtures | `9ed4544` |
 | 2026-07-12 | Direct push | chore: verify packages before publish | `3df44b1` |
@@ -60,5 +61,4 @@
 | 2026-07-12 | [#327](https://github.com/nash226/quorum/pull/327) | feat: expose api result json artifacts | `c9403d3` |
 | 2026-07-12 | Direct push | fix: preserve import review gate in summary artifact | `36ad3f3` |
 | 2026-07-12 | [#325](https://github.com/nash226/quorum/pull/325) | test: verify packed batch result gates | `b5b209a` |
-| 2026-07-12 | Direct push | feat: describe inline evaluation fixtures in OpenAPI | `cce77a5` |
 
