@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7b89d1e` on 2026-07-12, feat: expose HTTP API version endpoint
+- Latest shipped change: `0db3acf` on 2026-07-12, docs: list version probes in serve help
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -53,6 +53,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-12 | Direct push | docs: list version probes in serve help | `0db3acf` |
 | 2026-07-12 | Direct push | feat: expose HTTP API version endpoint | `7b89d1e` |
 | 2026-07-12 | Direct push | feat: explain evaluation gate failures | `60bb2da` |
 | 2026-07-12 | Direct push | fix: route API requests by pathname | `9bfa476` |
@@ -60,5 +61,4 @@
 | 2026-07-12 | Direct push | chore: verify packages before publish | `3df44b1` |
 | 2026-07-12 | Direct push | test: cover extract claims API contract | `98446d8` |
 | 2026-07-12 | [#327](https://github.com/nash226/quorum/pull/327) | feat: expose api result json artifacts | `c9403d3` |
-| 2026-07-12 | Direct push | fix: preserve import review gate in summary artifact | `36ad3f3` |
 
