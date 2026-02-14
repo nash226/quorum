@@ -111,6 +111,10 @@ test("top-level help exits cleanly", async () => {
   assert.equal(result.code, 0);
   assert.equal(result.stderr, "");
   assert.match(result.stdout, /^Quorum\n\nUsage:/);
+  assert.match(result.stdout, /quorum verify .*--generated-at <timestamp>.*--result-json-out <path>/);
+  assert.match(result.stdout, /quorum verify-batch .*--generated-at <timestamp>.*--result-json-out <path>/);
+  assert.match(result.stdout, /quorum import-review .*--generated-at <timestamp>/);
+  assert.match(result.stdout, /quorum evaluate .*--generated-at <timestamp>.*--min-score <0\.\.1>/);
 });
 
 test("version reports the CLI and API contract version", async () => {
