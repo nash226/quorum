@@ -2899,6 +2899,10 @@ Refund requests receive an initial response within one business day.
     ]);
     assert.ok(openApi.components.schemas.SingleVerificationResult);
     assert.ok(openApi.components.schemas.BatchVerificationRunResult);
+    assert.deepEqual(
+      (openApi.components.schemas.SingleVerificationResult as { required: string[] }).required,
+      ["requestId", "report", "shouldFail", "failVerdicts"],
+    );
     assert.deepEqual(openApi.components.schemas.EvaluationAggregateSummary.required, [
       "fixtureCount",
       "matchedClaims",
@@ -2935,7 +2939,7 @@ Refund requests receive an initial response within one business day.
     assert.ok(openApi.components.schemas.EvaluationBatchRunResult);
     assert.deepEqual(
       (openApi.components.schemas.EvaluationBatchRunResult.required as string[]).slice().sort(),
-      ["failureReasons", "mismatchCount", "scorecards", "shouldFail", "summary"],
+      ["failureReasons", "mismatchCount", "requestId", "scorecards", "shouldFail", "summary"],
     );
     assert.deepEqual(openApi.components.schemas.SourceTrustLevel.enum, ["low", "medium", "high"]);
     assert.deepEqual(openApi.components.schemas.ClaimVerdict.enum, [
@@ -2972,6 +2976,7 @@ Employees receive 12 weeks of paid parental leave.
 
     assert.equal(verifyResponse.status, 200);
     const result = await verifyResponse.json() as {
+      requestId: string;
       shouldFail: boolean;
       failVerdicts: string[];
       report: {
@@ -2982,6 +2987,7 @@ Employees receive 12 weeks of paid parental leave.
     };
 
     assert.equal(result.shouldFail, false);
+    assert.equal(result.requestId, verifyResponse.headers.get("x-quorum-request-id"));
     assert.deepEqual(result.failVerdicts, []);
     assert.equal(result.report.generatedAt, generatedAt);
     assert.equal(result.report.answerLabel, "HR reviewer packet");
@@ -3464,7 +3470,7 @@ Employees receive 12 weeks of paid parental leave.
     );
     assert.equal(verifyResult.artifacts.html, renderHtmlReport(verifyResult.report, verifyResult.failVerdicts));
     {
-      const { artifacts: _artifacts, ...resultWithoutArtifacts } = verifyResult;
+      const { artifacts: _artifacts, requestId: _requestId, ...resultWithoutArtifacts } = verifyResult;
       assert.deepEqual(JSON.parse(verifyResult.artifacts.result_json ?? "null"), resultWithoutArtifacts);
     }
     assert.equal(
@@ -3524,7 +3530,7 @@ Refund requests receive an initial response within one business day.
     assert.equal(batchResult.artifacts.markdown, renderBatchMarkdownReport(batchResult.report));
     assert.equal(batchResult.artifacts.html, renderBatchHtmlReport(batchResult.report));
     {
-      const { artifacts: _artifacts, ...resultWithoutArtifacts } = batchResult;
+      const { artifacts: _artifacts, requestId: _requestId, ...resultWithoutArtifacts } = batchResult;
       assert.deepEqual(JSON.parse(batchResult.artifacts.result_json ?? "null"), resultWithoutArtifacts);
     }
     assert.equal(batchResult.artifacts.review_csv, renderBatchReviewerDecisionCsv(batchResult.report));
@@ -3559,7 +3565,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       renderReviewerDecisionImportHtmlReport(importResult.report, importResult.failVerdicts),
     );
     {
-      const { artifacts: _artifacts, ...resultWithoutArtifacts } = importResult;
+      const { artifacts: _artifacts, requestId: _requestId, ...resultWithoutArtifacts } = importResult;
       assert.deepEqual(JSON.parse(importResult.artifacts.result_json ?? "null"), resultWithoutArtifacts);
     }
     assert.equal(
@@ -3612,7 +3618,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       renderEvaluationMarkdownReport(evaluateResult.scorecards),
     );
     assert.equal(evaluateResult.artifacts.html, renderEvaluationHtmlReport(evaluateResult.scorecards));
-    const { artifacts: _artifacts, ...resultWithoutArtifacts } = evaluateResult;
+    const { artifacts: _artifacts, requestId: _requestId, ...resultWithoutArtifacts } = evaluateResult;
     assert.deepEqual(
       JSON.parse(evaluateResult.artifacts.result_json ?? "null"),
       resultWithoutArtifacts,

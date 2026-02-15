@@ -69,18 +69,22 @@ export type ApiImportReviewArtifacts = Partial<Record<ApiImportReviewArtifact, s
 export type ApiEvaluateArtifacts = Partial<Record<ApiEvaluateArtifact, string>>;
 
 export type ApiVerifyResponse = SingleVerificationResult & {
+  requestId: string;
   artifacts?: ApiVerifyArtifacts;
 };
 
 export type ApiVerifyBatchResponse = BatchVerificationRunResult & {
+  requestId: string;
   artifacts?: ApiVerifyBatchArtifacts;
 };
 
 export type ApiImportReviewResponse = ReviewerDecisionImportResult & {
+  requestId: string;
   artifacts?: ApiImportReviewArtifacts;
 };
 
 export type ApiEvaluateResponse = EvaluationBatchRunResult & {
+  requestId: string;
   artifacts?: ApiEvaluateArtifacts;
 };
 
@@ -2858,6 +2862,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         SingleVerificationResult: {
           type: "object",
           properties: {
+            requestId: { type: "string", minLength: 1, maxLength: 128 },
             report: { $ref: "#/components/schemas/VerificationReport" },
             shouldFail: { type: "boolean" },
             failVerdicts: {
@@ -2865,7 +2870,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               items: { $ref: "#/components/schemas/ClaimVerdict" },
             },
           },
-          required: ["report", "shouldFail", "failVerdicts"],
+          required: ["requestId", "report", "shouldFail", "failVerdicts"],
         },
         BatchVerificationResult: {
           type: "object",
@@ -2922,6 +2927,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         BatchVerificationRunResult: {
           type: "object",
           properties: {
+            requestId: { type: "string", minLength: 1, maxLength: 128 },
             report: { $ref: "#/components/schemas/BatchVerificationReport" },
             shouldFail: { type: "boolean" },
             failVerdicts: {
@@ -2929,7 +2935,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               items: { $ref: "#/components/schemas/ClaimVerdict" },
             },
           },
-          required: ["report", "shouldFail", "failVerdicts"],
+          required: ["requestId", "report", "shouldFail", "failVerdicts"],
         },
         ImportedReviewerDecision: {
           type: "object",
@@ -3037,6 +3043,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         ReviewerDecisionImportResult: {
           type: "object",
           properties: {
+            requestId: { type: "string", minLength: 1, maxLength: 128 },
             report: { $ref: "#/components/schemas/ReviewerDecisionImportReport" },
             shouldFail: { type: "boolean" },
             failVerdicts: {
@@ -3044,7 +3051,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               items: { $ref: "#/components/schemas/ClaimVerdict" },
             },
           },
-          required: ["report", "shouldFail", "failVerdicts"],
+          required: ["requestId", "report", "shouldFail", "failVerdicts"],
         },
         EvaluationClaimScore: {
           type: "object",
@@ -3135,6 +3142,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         EvaluationBatchRunResult: {
           type: "object",
           properties: {
+            requestId: { type: "string", minLength: 1, maxLength: 128 },
             scorecards: {
               type: "array",
               items: { $ref: "#/components/schemas/EvaluationScorecard" },
@@ -3150,7 +3158,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             scoreThresholdPassed: { type: "boolean" },
             summary: { $ref: "#/components/schemas/EvaluationAggregateSummary" },
           },
-          required: ["scorecards", "shouldFail", "failureReasons", "mismatchCount", "summary"],
+          required: ["requestId", "scorecards", "shouldFail", "failureReasons", "mismatchCount", "summary"],
         },
       },
     },
@@ -3250,7 +3258,11 @@ function writeOperationResult<T extends { shouldFail: boolean }>(
   payload: object,
   failOnStatus?: boolean,
 ): void {
-  writeJson(response, failOnStatus && result.shouldFail ? 409 : 200, payload);
+  const requestId = response.getHeader(API_REQUEST_ID_HEADER);
+  writeJson(response, failOnStatus && result.shouldFail ? 409 : 200, {
+    ...payload,
+    ...(typeof requestId === "string" ? { requestId } : {}),
+  });
 }
 
 function writeMethodNotAllowed(response: ServerResponse, allow: string): void {
