@@ -606,8 +606,9 @@ Successful `POST /verify`, `POST /verify-batch`, `POST /import-review`, and
 envelope too, so audit records can retain the correlation value without storing
 response headers separately.
 `POST /extract-claims` previews the normalized `{ id, text }` claim objects used
-by verification. Its OpenAPI operation IDs, CORS preflight, and request-correlation
-header are covered by both the TypeScript API suite and the packed-package smoke
+by verification and returns the same `requestId` in its JSON response and
+`X-Quorum-Request-Id` header. Its OpenAPI operation IDs, CORS preflight, and
+request-correlation contract are covered by both the TypeScript API suite and the packed-package smoke
 check, keeping browser and generated-client integrations aligned. `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover both request and response payload shapes without
 scraping the README. The OpenAPI document includes reusable schemas for the
