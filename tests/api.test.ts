@@ -178,6 +178,7 @@ test("HTTP API extracts normalized claims without loading sources", async () => 
     assert.equal(response.status, 200);
     assert.equal(response.headers.get("x-quorum-request-id"), "extract-claims-contract-test");
     assert.deepEqual(await response.json(), {
+      requestId: "extract-claims-contract-test",
       claims: [
         { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
         { id: "claim_2", text: "Managers approve travel within five business days." },
@@ -229,6 +230,7 @@ test("HTTP API routes valid requests with query strings by pathname", async () =
     });
     assert.equal(extractClaimsResponse.status, 200);
     assert.deepEqual(await extractClaimsResponse.json(), {
+      requestId: extractClaimsResponse.headers.get("x-quorum-request-id"),
       claims: [{ id: "claim_1", text: "Employees receive 12 weeks of leave." }],
     });
   } finally {
