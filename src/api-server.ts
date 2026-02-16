@@ -270,6 +270,9 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     path: "/healthz",
     description: "Return CORS preflight headers for the conventional readiness probe path.",
   },
+  { method: "GET", path: "/readyz", description: "Return a simple readiness response using the Kubernetes probe alias." },
+  { method: "HEAD", path: "/readyz", description: "Return readiness headers on the Kubernetes probe alias without a JSON body." },
+  { method: "OPTIONS", path: "/readyz", description: "Return CORS preflight headers for the Kubernetes readiness probe alias." },
   { method: "GET", path: VERSION_PATH, description: "Return the Quorum service and contract version." },
   { method: "HEAD", path: VERSION_PATH, description: "Return version headers without a JSON body." },
   { method: "OPTIONS", path: VERSION_PATH, description: "Return CORS preflight headers for version clients." },
@@ -1222,7 +1225,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && (url === "/health" || url === "/healthz")) {
+  if ((request.method === "GET" || isHeadRequest) && (url === "/health" || url === "/healthz" || url === "/readyz")) {
     const healthResponse: ApiHealthResponse = {
       ok: true,
       service: API_SERVICE_NAME,
@@ -2011,6 +2014,58 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
         options: corsPreflightOperation("optionsHealthz", "Readiness alias preflight"),
+      },
+      "/readyz": {
+        get: {
+          operationId: "getReadyz",
+          summary: "Kubernetes readiness check alias",
+          responses: {
+            "200": {
+              description: "Server is ready to accept requests through the Kubernetes probe alias.",
+              headers: {
+                ...apiResponseHeaders,
+                "Cache-Control": {
+                  schema: { type: "string", const: "no-store" },
+                  description: "Readiness responses must not be cached by probes or intermediaries.",
+                },
+              },
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiHealthResponse" },
+                  examples: {
+                    kubernetesReadinessAlias: {
+                      summary: "A Kubernetes-compatible readiness probe response",
+                      value: OPENAPI_HEALTH_RESPONSE_EXAMPLE,
+                    },
+                  },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+        head: {
+          operationId: "headReadyz",
+          summary: "Kubernetes readiness check alias headers",
+          responses: {
+            "200": {
+              description: "Header-only readiness response on the Kubernetes probe alias.",
+              headers: {
+                "Cache-Control": {
+                  schema: { type: "string", const: "no-store" },
+                  description: "Readiness responses must not be cached by probes or intermediaries.",
+                },
+              },
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiHealthResponse" },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+        options: corsPreflightOperation("optionsReadyz", "Kubernetes readiness alias preflight"),
       },
       [VERSION_PATH]: {
         get: {
