@@ -172,6 +172,8 @@ test("HTTP API extracts normalized claims without loading sources", async () => 
       },
       body: JSON.stringify({
         answer: "Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days.",
+        answerPath: "answers/hr-answer.md",
+        answerLabel: "HR reviewer packet",
       }),
     });
 
@@ -179,6 +181,8 @@ test("HTTP API extracts normalized claims without loading sources", async () => 
     assert.equal(response.headers.get("x-quorum-request-id"), "extract-claims-contract-test");
     assert.deepEqual(await response.json(), {
       requestId: "extract-claims-contract-test",
+      answerPath: "answers/hr-answer.md",
+      answerLabel: "HR reviewer packet",
       claims: [
         { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
         { id: "claim_2", text: "Managers approve travel within five business days." },
