@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `17c9bdd` on 2026-07-13, fix: ignore inline html code claims
+- Latest shipped change: `0365c4a` on 2026-07-13, feat: add Kubernetes liveness probe alias
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -54,6 +54,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | feat: add Kubernetes liveness probe alias | `0365c4a` |
 | 2026-07-13 | Direct push | fix: ignore inline html code claims | `17c9bdd` |
 | 2026-07-13 | Direct push | feat: include answer previews in claim extraction | `f9c3385` |
 | 2026-07-13 | Direct push | feat: include request ids in discovery bodies | `d6ae56c` |
@@ -61,5 +62,4 @@
 | 2026-07-13 | [#341](https://github.com/nash226/quorum/pull/341) | feat: correlate claim preview responses | `c7cc30d` |
 | 2026-07-13 | Direct push | feat: add Kubernetes readiness probe alias | `7e7d01c` |
 | 2026-07-13 | [#339](https://github.com/nash226/quorum/pull/339) | fix: prevent cached readiness responses | `47939e4` |
-| 2026-07-12 | Direct push | feat: include request ids in API results | `440f5aa` |
 
