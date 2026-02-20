@@ -160,6 +160,8 @@ export interface ExtractClaimsApiResponse {
 export interface ApiServerOptions {
   host?: string;
   port?: number;
+  /** Restrict browser CORS responses to these exact origins. */
+  corsAllowedOrigins?: readonly string[];
 }
 
 export type ApiCapabilityMap = typeof API_CAPABILITIES;
@@ -1141,10 +1143,10 @@ const OPENAPI_EVALUATE_CONFLICT_RESPONSE_EXAMPLE = {
   failureReasons: ["mismatch"],
 } as const;
 
-export function createApiServer(): Server {
+export function createApiServer(options: ApiServerOptions = {}): Server {
   return createServer(async (request, response) => {
     try {
-      await handleApiRequest(request, response);
+      await handleApiRequest(request, response, options);
     } catch (error: unknown) {
       if (error instanceof ApiRequestError) {
         writeApiError(response, error.statusCode, error.message);
@@ -1164,7 +1166,7 @@ export function createApiServer(): Server {
 export async function startApiServer(options: ApiServerOptions = {}): Promise<StartedApiServer> {
   const host = options.host ?? "127.0.0.1";
   const port = options.port ?? 3000;
-  const server = createApiServer();
+  const server = createApiServer(options);
 
   await new Promise<void>((resolve, reject) => {
     server.once("error", reject);
@@ -1208,9 +1210,10 @@ function formatServerOrigin(host: string, port: number): string {
 async function handleApiRequest(
   request: IncomingMessage,
   response: ServerResponse,
+  options: ApiServerOptions,
 ): Promise<void> {
   applyRequestIdHeader(request, response);
-  applyCorsHeaders(response);
+  applyCorsHeaders(request, response, options.corsAllowedOrigins);
   applyApiDiscoveryHeaders(response);
   const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
   const isHeadRequest = request.method === "HEAD";
@@ -3473,8 +3476,23 @@ function writeMethodNotAllowed(response: ServerResponse, allow: string): void {
   writeApiError(response, 405, `Method not allowed. Use ${allow}.`);
 }
 
-function applyCorsHeaders(response: ServerResponse): void {
-  response.setHeader("Access-Control-Allow-Origin", "*");
+function applyCorsHeaders(
+  request: IncomingMessage,
+  response: ServerResponse,
+  allowedOrigins?: readonly string[],
+): void {
+  if (allowedOrigins === undefined) {
+    response.setHeader("Access-Control-Allow-Origin", "*");
+  } else {
+    const requestOrigin = request.headers.origin;
+
+    if (typeof requestOrigin === "string" && allowedOrigins.includes(requestOrigin)) {
+      response.setHeader("Access-Control-Allow-Origin", requestOrigin);
+    }
+
+    response.setHeader("Vary", "Origin");
+  }
+
   response.setHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
   response.setHeader("Access-Control-Allow-Headers", API_CORS_ALLOWED_HEADERS);
   response.setHeader("Access-Control-Expose-Headers", EXPOSED_HEADERS);
