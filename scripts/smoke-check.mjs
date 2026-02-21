@@ -262,7 +262,19 @@ try {
   assert.match(batchStdout, /Quorum Batch Verification Report/);
   assert.equal(readJson(batchReportPath).answerCount, 6);
   assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
-  assert.match(readFileSync(batchSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
+  const batchSummaryCsv = readFileSync(batchSummaryCsvPath, "utf8");
+  assert.match(
+    batchSummaryCsv,
+    /^generated_at,answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths$/m,
+  );
+  const hrBatchSummaryRow = batchSummaryCsv
+    .split("\n")
+    .find((row) => row.includes(",hr-answer,examples/answers/hr-answer.md,"));
+  assert.ok(hrBatchSummaryRow);
+  assert.match(
+    hrBatchSummaryRow,
+    /,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,HR Benefits Policy,high,2026-05-31,examples\/sources\/hr-policy\.md,0\.857,Employees receive 12 weeks of paid parental leave\.,3,1,1,1,0,clear,,/,
+  );
 
   const openApiStdout = runCli(["openapi", "--out", openApiPath]);
   const openApiDocument = readJson(openApiPath);
