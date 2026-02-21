@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ae9ec27` on 2026-07-13, feat: document request correlation input in OpenAPI
+- Latest shipped change: `c4e5628` on 2026-07-13, feat: export API probe path constants
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -54,6 +54,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | [#349](https://github.com/nash226/quorum/pull/349) | feat: export API probe path constants | `c4e5628` |
 | 2026-07-13 | Direct push | feat: document request correlation input in OpenAPI | `ae9ec27` |
 | 2026-07-13 | Direct push | feat: configure API CORS origins | `3f9591d` |
 | 2026-07-13 | Direct push | feat: add Kubernetes liveness probe alias | `0365c4a` |
@@ -61,5 +62,4 @@
 | 2026-07-13 | Direct push | feat: include answer previews in claim extraction | `f9c3385` |
 | 2026-07-13 | Direct push | feat: include request ids in discovery bodies | `d6ae56c` |
 | 2026-07-13 | Direct push | feat: preserve claim preview answer context | `9a2b26c` |
-| 2026-07-13 | [#341](https://github.com/nash226/quorum/pull/341) | feat: correlate claim preview responses | `c7cc30d` |
 
