@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0565ffa` on 2026-07-13, test: cover batch summary routing context
+- Latest shipped change: `37c097a` on 2026-07-13, feat: expose claim presence in summary csv
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -29,7 +29,7 @@
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path for reviewer handoff
-- write one-row summary CSVs for single-answer and batch verification workflows, including the primary evidence score and quote
+- write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
@@ -54,6 +54,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | [#351](https://github.com/nash226/quorum/pull/351) | feat: expose claim presence in summary csv | `37c097a` |
 | 2026-07-13 | Direct push | test: cover batch summary routing context | `0565ffa` |
 | 2026-07-13 | [#349](https://github.com/nash226/quorum/pull/349) | feat: export API probe path constants | `c4e5628` |
 | 2026-07-13 | Direct push | feat: document request correlation input in OpenAPI | `ae9ec27` |
@@ -61,5 +62,4 @@
 | 2026-07-13 | Direct push | feat: add Kubernetes liveness probe alias | `0365c4a` |
 | 2026-07-13 | Direct push | fix: ignore inline html code claims | `17c9bdd` |
 | 2026-07-13 | Direct push | feat: include answer previews in claim extraction | `f9c3385` |
-| 2026-07-13 | Direct push | feat: include request ids in discovery bodies | `d6ae56c` |
 
