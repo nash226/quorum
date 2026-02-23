@@ -41,7 +41,7 @@ The current CLI can:
 - read an AI-generated answer from a Markdown, text, or exported HTML file
 - batch verify multiple AI-generated answers from a directory
 - read one or more approved Markdown, text, or exported HTML source documents
-- read one or more approved Markdown, text, exported HTML, or PDF source documents
+- read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
@@ -1164,7 +1164,10 @@ metadata such as `<meta itemprop="headline">` and
 review trust level alongside the HTML export.
 
 For PDF source documents, Quorum also reads embedded document info such as the
-PDF `Title` and modification date when those fields are present.
+PDF `Title` and modification date when those fields are present. DOCX source
+documents are converted to readable text before claim extraction, so Word-based
+HR and support policies can enter the same verification workflow without a
+manual export step.
 
 When approved sources do not yet include frontmatter, the CLI can override that
 default during verification:
@@ -1289,6 +1292,7 @@ Supported source extensions today:
 - `.html`
 - `.htm`
 - `.pdf`
+- `.docx`
 
 ## Project Structure
 
