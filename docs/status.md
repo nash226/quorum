@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `37c097a` on 2026-07-13, feat: expose claim presence in summary csv
+- Latest shipped change: `e6b5070` on 2026-07-13, feat: preserve claim presence in review summaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -54,6 +54,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | feat: preserve claim presence in review summaries | `e6b5070` |
 | 2026-07-13 | [#351](https://github.com/nash226/quorum/pull/351) | feat: expose claim presence in summary csv | `37c097a` |
 | 2026-07-13 | Direct push | test: cover batch summary routing context | `0565ffa` |
 | 2026-07-13 | [#349](https://github.com/nash226/quorum/pull/349) | feat: export API probe path constants | `c4e5628` |
@@ -61,5 +62,4 @@
 | 2026-07-13 | Direct push | feat: configure API CORS origins | `3f9591d` |
 | 2026-07-13 | Direct push | feat: add Kubernetes liveness probe alias | `0365c4a` |
 | 2026-07-13 | Direct push | fix: ignore inline html code claims | `17c9bdd` |
-| 2026-07-13 | Direct push | feat: include answer previews in claim extraction | `f9c3385` |
 
