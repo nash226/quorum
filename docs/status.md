@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5f4ce01` on 2026-07-13, feat: ingest DOCX policy sources
+- Latest shipped change: `14bcab3` on 2026-07-13, feat: expose API request timeout
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -54,6 +54,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | feat: expose API request timeout | `14bcab3` |
 | 2026-07-13 | Direct push | feat: ingest DOCX policy sources | `5f4ce01` |
 | 2026-07-13 | [#353](https://github.com/nash226/quorum/pull/353) | feat: bound API request duration | `f6c76f6` |
 | 2026-07-13 | Direct push | feat: preserve claim presence in review summaries | `e6b5070` |
@@ -61,5 +62,4 @@
 | 2026-07-13 | Direct push | test: cover batch summary routing context | `0565ffa` |
 | 2026-07-13 | [#349](https://github.com/nash226/quorum/pull/349) | feat: export API probe path constants | `c4e5628` |
 | 2026-07-13 | Direct push | feat: document request correlation input in OpenAPI | `ae9ec27` |
-| 2026-07-13 | Direct push | feat: configure API CORS origins | `3f9591d` |
 
