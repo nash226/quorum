@@ -991,6 +991,60 @@ test("verify-batch discovers html answers from answer directories", async () => 
   }
 });
 
+test("verify-batch discovers PDF and DOCX answers from answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-document-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourcePath = join(tempDir, "policy.md");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+
+    await mkdir(answerDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "leave-answer.pdf"), createSimplePdf("Employees receive 12 weeks of paid leave.")),
+      readFile(docxFixturePath).then((content) => writeFile(join(answerDir, "support-answer.docx"), content)),
+      writeFile(
+        sourcePath,
+        "Employees receive 12 weeks of paid leave. Walking on imported air.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      summary: { verified: number };
+      answers: Array<{
+        answerPath: string;
+        report: { summary: { verified: number }; assessments: Array<{ claim: { text: string } }> };
+      }>;
+    };
+
+    assert.equal(report.answerCount, 2);
+    assert.equal(report.summary.verified, 2);
+    assert.deepEqual(
+      report.answers.map((answer) => answer.report.assessments[0]?.claim.text),
+      ["Employees receive 12 weeks of paid leave.", "Walking on imported air"],
+    );
+    assert.deepEqual(
+      report.answers.map((answer) => answer.report.summary.verified),
+      [1, 1],
+    );
+    assert.match(report.answers[0]?.answerPath ?? "", /leave-answer\.pdf$/);
+    assert.match(report.answers[1]?.answerPath ?? "", /support-answer\.docx$/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify ignores collapsed html details body content in answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-collapsed-details-answer-"));
 
