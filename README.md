@@ -470,6 +470,11 @@ const evaluationResult = await evaluateFixtureFilesResult({
 });
 ```
 
+The async in-memory verification helpers also accept `Uint8Array` answer
+content for PDF and DOCX documents. Provide an `answerPath` ending in `.pdf`
+or `.docx` so Quorum selects the matching document extractor; text answers
+remain supported without a path.
+
 When a fixture includes `expectedClaimVerdicts`, keep that list length aligned
 with the total claims declared in `expectedSummary` so evaluation scorecards
 stay internally consistent.
