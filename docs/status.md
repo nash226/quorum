@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a3dafcc` on 2026-07-13, feat: accept binary answers in content workflows
+- Latest shipped change: `b72d56c` on 2026-07-13, feat: accept base64 document content over HTTP
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -55,6 +55,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | feat: accept base64 document content over HTTP | `b72d56c` |
 | 2026-07-13 | [#357](https://github.com/nash226/quorum/pull/357) | feat: accept binary answers in content workflows | `a3dafcc` |
 | 2026-07-13 | Direct push | feat: accept PDF and DOCX answer files | `1567320` |
 | 2026-07-13 | Direct push | feat: expose API request timeout | `14bcab3` |
@@ -62,5 +63,4 @@
 | 2026-07-13 | [#353](https://github.com/nash226/quorum/pull/353) | feat: bound API request duration | `f6c76f6` |
 | 2026-07-13 | Direct push | feat: preserve claim presence in review summaries | `e6b5070` |
 | 2026-07-13 | [#351](https://github.com/nash226/quorum/pull/351) | feat: expose claim presence in summary csv | `37c097a` |
-| 2026-07-13 | Direct push | test: cover batch summary routing context | `0565ffa` |
 
