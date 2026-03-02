@@ -1174,8 +1174,18 @@ export function createApiServer(options: ApiServerOptions = {}): Server {
     }
   });
 
-  server.requestTimeout = options.requestTimeoutMs ?? API_REQUEST_TIMEOUT_MS;
+  server.requestTimeout = resolveRequestTimeoutMs(options.requestTimeoutMs);
   return server;
+}
+
+function resolveRequestTimeoutMs(requestTimeoutMs: number | undefined): number {
+  const resolved = requestTimeoutMs ?? API_REQUEST_TIMEOUT_MS;
+
+  if (!Number.isSafeInteger(resolved) || resolved <= 0) {
+    throw new Error("requestTimeoutMs must be a positive safe integer in milliseconds.");
+  }
+
+  return resolved;
 }
 
 export async function startApiServer(options: ApiServerOptions = {}): Promise<StartedApiServer> {
@@ -1229,7 +1239,7 @@ async function handleApiRequest(
 ): Promise<void> {
   applyRequestIdHeader(request, response);
   applyCorsHeaders(request, response, options.corsAllowedOrigins);
-  applyApiDiscoveryHeaders(response, options.requestTimeoutMs ?? API_REQUEST_TIMEOUT_MS);
+  applyApiDiscoveryHeaders(response, resolveRequestTimeoutMs(options.requestTimeoutMs));
   const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
   const isHeadRequest = request.method === "HEAD";
 
