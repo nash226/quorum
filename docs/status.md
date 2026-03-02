@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6f65caf` on 2026-07-13, test: verify packaged OpenAPI entrypoints
+- Latest shipped change: `6f90c51` on 2026-07-13, fix: validate API request timeout
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -56,6 +56,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | fix: validate API request timeout | `6f90c51` |
 | 2026-07-13 | Direct push | test: verify packaged OpenAPI entrypoints | `6f65caf` |
 | 2026-07-13 | Direct push | test: smoke test query-string API routes | `7350444` |
 | 2026-07-13 | [#364](https://github.com/nash226/quorum/pull/364) | test: smoke test binary source uploads | `e744aac` |
@@ -63,5 +64,4 @@
 | 2026-07-13 | [#362](https://github.com/nash226/quorum/pull/362) | test: cover batch binary API uploads | `6ad6061` |
 | 2026-07-13 | Direct push | fix: keep reviewer Markdown exports structurally safe | `bb85e32` |
 | 2026-07-13 | Direct push | test: cover uncached Kubernetes probe schemas | `e349cfa` |
-| 2026-07-13 | [#359](https://github.com/nash226/quorum/pull/359) | feat: accept base64 answers for claim previews | `0495f74` |
 
