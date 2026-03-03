@@ -1396,6 +1396,8 @@ Options:
   HEAD /health              Return readiness headers without a response body
   GET  /healthz             Return a simple readiness response on the conventional probe path
   HEAD /healthz             Return readiness headers on the conventional probe path without a response body
+  GET  /readyz              Return a simple readiness response using the Kubernetes probe alias
+  HEAD /readyz              Return readiness headers on the Kubernetes probe alias without a response body
   GET  /livez               Return a simple liveness response using the Kubernetes probe alias
   HEAD /livez               Return liveness headers on the Kubernetes probe alias without a response body
   GET  /version             Return the service and HTTP contract version
