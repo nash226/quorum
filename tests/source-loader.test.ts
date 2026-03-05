@@ -120,6 +120,21 @@ Employees get 12 weeks.
   assert.equal(source.trustLevel, "low");
 });
 
+test("rejects invalid source freshness metadata", async () => {
+  await assert.rejects(
+    sourceDocumentFromFile(
+      "docs/hr-policy.md",
+      `---
+updatedAt: not-a-timestamp
+---
+Employees get 12 weeks.
+`,
+      0,
+    ),
+    /Invalid updatedAt timestamp for source: docs\/hr-policy\.md/,
+  );
+});
+
 test("prefers explicit source metadata overrides over parsed metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",

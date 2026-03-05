@@ -4140,6 +4140,29 @@ test("HTTP API rejects invalid generatedAt timestamps across report workflows", 
   }
 });
 
+test("HTTP API rejects invalid source updatedAt timestamps", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answer: "Policy.",
+        sources: [{ sourcePath: "policy.md", content: "Policy.", updatedAt: "not-a-timestamp" }],
+      }),
+    });
+
+    assert.equal(response.status, 400);
+    assert.equal(
+      (await response.json() as { error: string }).error,
+      "sources[0].updatedAt must be a valid timestamp.",
+    );
+  } finally {
+    await api.close();
+  }
+});
+
 test("evaluate endpoint rejects misaligned fixture expectations with a 400", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
