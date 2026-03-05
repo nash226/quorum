@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5088c51` on 2026-07-13, fix: validate source freshness timestamps
+- Latest shipped change: `93cb4a5` on 2026-07-13, fix: prevent caching API evidence responses
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -58,6 +58,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | fix: prevent caching API evidence responses | `93cb4a5` |
 | 2026-07-13 | Direct push | fix: validate source freshness timestamps | `5088c51` |
 | 2026-07-13 | Direct push | fix: validate HTTP report timestamps | `c18da55` |
 | 2026-07-13 | Direct push | test: smoke test Kubernetes probe aliases | `95ea238` |
@@ -65,5 +66,4 @@
 | 2026-07-13 | Direct push | fix: validate API request timeout | `6f90c51` |
 | 2026-07-13 | Direct push | test: verify packaged OpenAPI entrypoints | `6f65caf` |
 | 2026-07-13 | Direct push | test: smoke test query-string API routes | `7350444` |
-| 2026-07-13 | [#364](https://github.com/nash226/quorum/pull/364) | test: smoke test binary source uploads | `e744aac` |
 
