@@ -178,6 +178,10 @@ The packaged `npm run smoke` check also verifies that the HTTP
 `POST /import-review` workflow preserves the exported `answer_preview` inside
 its grouped answer response, so API queue clients retain recognizable context
 even when they only submit reviewer CSV content.
+It also verifies that the same API workflow can return `summary_csv` with the
+primary reviewer verdict and evidence title, trust level, freshness, source
+path, score, and quote needed to route a review queue row without first
+parsing the full JSON report.
 It also exercises `verify --answer -` end to end, confirming that a streamed
 answer produces a verified report with the stable `<stdin>` answer path.
 `import-review --fail-on` evaluates those final verdicts after reviewer

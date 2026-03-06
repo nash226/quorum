@@ -825,10 +825,11 @@ Employees receive 12 weeks of paid parental leave.
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        reviewCsvContent: `answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
-HR reviewer packet,answers/hr.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
+        reviewCsvContent: `answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+HR reviewer packet,answers/hr.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,high,2026-05-31,policies/hr-policy.md,1.000,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
 `,
         failOn: ["needs_review"],
+        includeArtifacts: ["summary_csv"],
       }),
     });
     assert.equal(importReviewResponse.status, 200);
@@ -840,6 +841,14 @@ HR reviewer packet,answers/hr.md,Employees receive 12 weeks of paid parental lea
     assert.equal(
       importReviewResult.report.answerGroups[0]?.answerPreview,
       "Employees receive 12 weeks of paid parental leave.",
+    );
+    assert.match(
+      importReviewResult.artifacts.summary_csv,
+      /^generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,/,
+    );
+    assert.match(
+      importReviewResult.artifacts.summary_csv,
+      /HR reviewer packet,answers\/hr\.md,Employees receive 12 weeks of paid parental leave\.,true,needs_review,Employees receive 12 weeks of paid parental leave\.,Matched approved policy,Need HR confirmation,HR Policy,high,2026-05-31,policies\/hr-policy\.md,1\.000,Employees receive 12 weeks of paid parental leave\./,
     );
 
     const evaluationFixtureContent = readFileSync(
