@@ -548,7 +548,9 @@ for both `GET` and `HEAD` probe calls.
 All JSON API responses, including verification reports, reviewer imports,
 evaluation results, claim previews, and API errors, also include
 `Cache-Control: no-store` so intermediaries do not retain evidence or reviewer
-decision data from a workflow request.
+decision data from a workflow request. The generated OpenAPI response contract
+declares that same `Cache-Control` header for successful, fail-gated, and error
+responses so generated clients can preserve the no-store behavior explicitly.
 The `/readyz` alias provides the same uncached readiness contract for Kubernetes
 probes and deployment systems that use the conventional readiness path.
 The `/livez` alias provides the same uncached health response for Kubernetes
