@@ -118,6 +118,7 @@ interface EvaluateArgs {
 interface ServeArgs {
   host?: string;
   port?: number;
+  requestTimeoutMs?: number;
   corsAllowedOrigins?: string[];
 }
 
@@ -612,6 +613,7 @@ async function runServe(args: string[]): Promise<void> {
   const api = await startApiServer({
     host: parsed.host,
     port: parsed.port,
+    requestTimeoutMs: parsed.requestTimeoutMs,
     corsAllowedOrigins: parsed.corsAllowedOrigins,
   });
 
@@ -739,6 +741,7 @@ function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
 function parseServeArgs(args: string[]): ServeArgs {
   let host: string | undefined;
   let port: number | undefined;
+  let requestTimeoutMs: number | undefined;
   const corsAllowedOrigins: string[] = [];
 
   for (let index = 0; index < args.length; index += 1) {
@@ -763,6 +766,18 @@ function parseServeArgs(args: string[]): ServeArgs {
       continue;
     }
 
+    if (arg === "--request-timeout-ms" && next) {
+      const parsedTimeout = Number(next);
+
+      if (!Number.isSafeInteger(parsedTimeout) || parsedTimeout <= 0) {
+        throw new Error(`Invalid --request-timeout-ms value: ${next}`);
+      }
+
+      requestTimeoutMs = parsedTimeout;
+      index += 1;
+      continue;
+    }
+
     if (arg === "--cors-origin" && next) {
       corsAllowedOrigins.push(next);
       index += 1;
@@ -772,7 +787,12 @@ function parseServeArgs(args: string[]): ServeArgs {
     throw new Error(`Unknown or incomplete argument: ${arg}`);
   }
 
-  return { host, port, corsAllowedOrigins: corsAllowedOrigins.length > 0 ? corsAllowedOrigins : undefined };
+  return {
+    host,
+    port,
+    requestTimeoutMs,
+    corsAllowedOrigins: corsAllowedOrigins.length > 0 ? corsAllowedOrigins : undefined,
+  };
 }
 
 function parseOpenApiArgs(args: string[]): OpenApiArgs {
@@ -1380,11 +1400,13 @@ Example:
     serve: `Quorum serve
 
 Usage:
-  quorum serve [--host <host>] [--port <port>]
+  quorum serve [--host <host>] [--port <port>] [--request-timeout-ms <milliseconds>]
 
 Options:
   --host <host>             Host interface to bind; defaults to 127.0.0.1
   --port <port>             Port to bind; defaults to 3000, use 0 for an ephemeral port
+  --request-timeout-ms <milliseconds>
+                            Abort requests that exceed this duration; defaults to 30000
   --cors-origin <origin>    Allow browser CORS requests from this origin; may be repeated
 
   Endpoints:

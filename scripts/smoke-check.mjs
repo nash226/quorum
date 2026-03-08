@@ -388,7 +388,7 @@ Employees receive 12 weeks of paid parental leave.
   assert.equal(apiFileInputResult.report.summary.contradicted, 1);
   assert.equal(apiFileInputResult.report.answerPath, join(repoRoot, "examples", "answers", "support-answer.md"));
 
-  const server = await startCliServer(["--port", "0"]);
+  const server = await startCliServer(["--port", "0", "--request-timeout-ms", "1500"]);
 
   try {
     const indexResponse = await fetch(server.url);
@@ -396,7 +396,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(indexResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(indexResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
-    assert.equal(indexResponse.headers.get("x-quorum-request-timeout-ms"), "30000");
+    assert.equal(indexResponse.headers.get("x-quorum-request-timeout-ms"), "1500");
     const indexPayload = await indexResponse.json();
     assert.equal(indexPayload.service, "quorum");
     assert.equal(indexPayload.version, "0.1.0");
