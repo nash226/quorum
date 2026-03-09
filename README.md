@@ -46,6 +46,7 @@ The current CLI can:
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
+- split independently capitalized clauses joined by comma conjunctions into separate claims
 - ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims
 - preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
 - compare each claim against approved source snippets
@@ -1387,7 +1388,7 @@ Near-term work:
 - evaluation harness for labeled verdict examples
 - evaluation text, Markdown, HTML, and CSV reports include run timestamps for audit handoff
 - richer batch verification exports and workflow hooks
-- better claim extraction for bullets, lists, and compound sentences
+- better claim extraction for bullets, lists, and compound sentences, including independently capitalized comma conjunctions
 - API surface for agent integrations
 
 See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and

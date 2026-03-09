@@ -63,6 +63,9 @@ function isThematicBreak(text: string): boolean {
 function splitCompoundClaim(sentence: string): string[] {
   return sentence
     .split(/;\s+(?=[A-Z0-9("'])/g)
+    .flatMap((part) =>
+      part.split(/,\s+(?:and|but|or)\s+(?=[A-Z])/g),
+    )
     .map((part) => part.trim())
     .filter(Boolean);
 }

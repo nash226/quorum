@@ -650,6 +650,27 @@ test("keeps lowercase semicolon continuations in the same claim", () => {
   ]);
 });
 
+test("splits independently capitalized comma-and conjunctions into claims", () => {
+  const claims = extractClaims(
+    "Customers can cancel monthly subscriptions from account billing settings, and Managers approve exceptions within five business days.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Customers can cancel monthly subscriptions from account billing settings",
+    "Managers approve exceptions within five business days.",
+  ]);
+});
+
+test("keeps lowercase comma conjunctions together when they may be continuations", () => {
+  const claims = extractClaims(
+    "Customers can cancel monthly subscriptions from account billing settings, and refund requests remain subject to the annual plan policy.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Customers can cancel monthly subscriptions from account billing settings, and refund requests remain subject to the annual plan policy.",
+  ]);
+});
+
 test("keeps wrapped parenthesized numeric markdown list items as single claims", () => {
   const claims = extractClaims(`Policy notes:
 
