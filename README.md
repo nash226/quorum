@@ -545,6 +545,11 @@ require a positive safe integer number of milliseconds, so invalid timeout
 configuration fails instead of silently weakening the request-boundary
 contract. The packaged smoke check starts the CLI server with a custom timeout
 and verifies that discovery headers expose the configured value.
+JSON request bodies are limited to 1 MiB by default; use
+`quorum serve --max-request-bytes <bytes>` or the `maxRequestBytes` option on
+`createApiServer`/`startApiServer` when API clients need to upload larger
+base64-encoded PDF or DOCX content. The effective limit is advertised through
+`X-Quorum-Max-Request-Bytes`, `/capabilities`, and the served OpenAPI document.
 All `/health`, `/healthz`, `/readyz`, and `/livez` probe responses include
 `Cache-Control: no-store` so a proxy or load balancer cannot reuse a stale
 healthy response during an outage; the OpenAPI contract documents that header

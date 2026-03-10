@@ -287,8 +287,9 @@ test("serve --help prints API usage without starting the server", async () => {
   assert.equal(result.stderr, "");
   assert.match(
     result.stdout,
-    /^Quorum serve\n\nUsage:\n  quorum serve \[--host <host>\] \[--port <port>\] \[--request-timeout-ms <milliseconds>\]/,
+    /^Quorum serve\n\nUsage:\n  quorum serve \[--host <host>\] \[--port <port>\] \[--max-request-bytes <bytes>\] \[--request-timeout-ms <milliseconds>\]/,
   );
+  assert.match(result.stdout, /--max-request-bytes <bytes>\s+Reject JSON bodies larger than this size; defaults to 1048576/);
   assert.match(result.stdout, /--request-timeout-ms <milliseconds>\s+Abort requests that exceed this duration; defaults to 30000/);
   assert.match(result.stdout, /GET  \/\s+Return API discovery metadata for local callers/);
   assert.match(result.stdout, /GET  \/capabilities\s+Return supported Quorum capabilities without endpoint listings/);
@@ -310,6 +311,13 @@ test("serve rejects non-positive request timeout values", async () => {
 
   assert.equal(result.code, 1);
   assert.match(result.stderr, /Invalid --request-timeout-ms value: 0/);
+});
+
+test("serve rejects non-positive request size values", async () => {
+  const result = await runCliAllowFailure(["serve", "--max-request-bytes", "0"]);
+
+  assert.equal(result.code, 1);
+  assert.match(result.stderr, /Invalid --max-request-bytes value: 0/);
 });
 
 test("openapi --help prints export usage without starting the server", async () => {
