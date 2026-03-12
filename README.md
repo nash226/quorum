@@ -500,6 +500,8 @@ npm run dev -- serve --port 3000
 See [docs/api-integration.md](docs/api-integration.md) for a focused
 copy-paste guide covering verification, claim previews, request correlation,
 and fail-gated HTTP responses.
+The guide also documents the discovery headers that expose the running service
+version, OpenAPI path, request limits, and request-correlation ID to clients.
 
 Available endpoints:
 
