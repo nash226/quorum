@@ -3357,6 +3357,7 @@ test("HTTP API accepts explicit source metadata in verify requests", async () =>
         answer: "Employees receive 12 weeks of paid parental leave.",
         sources: [
           {
+            id: "people-ops/hr-policy@2026-06-15",
             sourcePath: "policies/hr-policy.md",
             title: "People Ops Handbook",
             updatedAt: "2026-06-15",
@@ -3380,6 +3381,7 @@ Employees receive 12 weeks of paid parental leave.
         summary: Record<string, number>;
         sources: Array<{
           title: string;
+          id: string;
           updatedAt?: string;
           trustLevel: string;
         }>;
@@ -3388,6 +3390,7 @@ Employees receive 12 weeks of paid parental leave.
 
     assert.equal(result.report.summary.verified, 1);
     assert.equal(result.report.sources[0]?.title, "People Ops Handbook");
+    assert.equal(result.report.sources[0]?.id, "people-ops/hr-policy@2026-06-15");
     assert.equal(result.report.sources[0]?.updatedAt, "2026-06-15");
     assert.equal(result.report.sources[0]?.trustLevel, "high");
   } finally {

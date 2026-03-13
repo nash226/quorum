@@ -40,6 +40,7 @@ curl -sS http://127.0.0.1:3000/verify \
     "answer": "Employees receive 12 weeks of paid parental leave.",
     "answerLabel": "HR reviewer packet",
     "sources": [{
+      "id": "people-ops/hr-policy@2026-06-15",
       "sourcePath": "sources/hr-policy.md",
       "content": "---\ntitle: HR Policy\ntrustLevel: high\n---\nEmployees receive 12 weeks of paid parental leave."
     }],
@@ -53,6 +54,10 @@ The response contains the claim-level `report`, `shouldFail`, and
 HTTP `409`; the same result is still available in the JSON body. Every response
 also includes `X-Quorum-Request-Id`, which can be supplied by the caller for
 log correlation.
+
+Set `sources[].id` when the workflow already has a durable policy or document
+identifier. Quorum preserves that value in `report.sources` and claim evidence;
+when it is omitted, the response keeps the positional `source_1`-style fallback.
 
 ## Preview claims before verification
 
