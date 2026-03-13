@@ -73,6 +73,56 @@ The result preserves the answer context and returns an ordered `claims` array
 with stable IDs and normalized text. PDF and DOCX answers can be sent as
 `answerBase64` when `answerPath` ends in `.pdf` or `.docx`.
 
+## Upload binary answers and sources
+
+Agent workflows that already have document bytes in memory can send base64
+content instead of writing temporary files. Keep the matching file extension
+in `answerPath` or `sourcePath` so Quorum selects the PDF or DOCX extractor:
+
+```bash
+ANSWER_B64="$(base64 < answers/hr-answer.pdf | tr -d '\n')"
+SOURCE_B64="$(base64 < sources/hr-policy.pdf | tr -d '\n')"
+
+curl -sS http://127.0.0.1:3000/verify \
+  -H 'content-type: application/json' \
+  -d "{
+    \"answerBase64\": \"${ANSWER_B64}\",
+    \"answerPath\": \"answers/hr-answer.pdf\",
+    \"sources\": [{
+      \"sourcePath\": \"sources/hr-policy.pdf\",
+      \"contentBase64\": \"${SOURCE_B64}\",
+      \"title\": \"HR Policy PDF\",
+      \"trustLevel\": \"high\"
+    }]
+  }"
+```
+
+`answer` and `answerBase64` are mutually exclusive, as are `content` and
+`contentBase64` for each source. The default JSON request limit is 1 MiB;
+larger uploads require a matching `--max-request-bytes` server setting.
+
+## Request reviewer artifacts
+
+Verification, batch verification, reviewer import, and evaluation requests can
+embed reviewer-facing artifacts in the JSON response. Request only the formats
+the workflow needs with `includeArtifacts`, for example:
+
+```json
+{
+  "answer": "Employees receive 12 weeks of paid parental leave.",
+  "sources": [{
+    "sourcePath": "sources/hr-policy.md",
+    "content": "Employees receive 12 weeks of paid parental leave."
+  }],
+  "includeArtifacts": ["markdown", "review_csv", "summary_csv"]
+}
+```
+
+Use `summary_csv` for queue routing fields and `review_csv` when a human will
+make claim-level decisions. The `/evaluate` endpoint accepts fixture JSON in a
+`fixtures` array and can emit `summary_csv`, `domain_summary_csv`, and
+`aggregate_summary_csv` for benchmark reporting.
+
 ## Integration notes
 
 - All `POST` requests use `Content-Type: application/json`.
