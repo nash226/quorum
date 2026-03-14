@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bfcc03d` on 2026-07-14, feat: preserve stable source identifiers
+- Latest shipped change: `3c5621f` on 2026-07-14, feat: preserve evaluation source identifiers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -61,6 +61,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#387](https://github.com/nash226/quorum/pull/387) | feat: preserve evaluation source identifiers | `3c5621f` |
 | 2026-07-14 | [#386](https://github.com/nash226/quorum/pull/386) | feat: preserve stable source identifiers | `bfcc03d` |
 | 2026-07-14 | Direct push | docs: document binary HTTP workflow uploads | `2d26d77` |
 | 2026-07-14 | Direct push | test: add support escalation scorecard | `d3fdd6a` |
@@ -68,5 +69,4 @@
 | 2026-07-13 | [#382](https://github.com/nash226/quorum/pull/382) | docs: add HTTP API integration guide | `4385e6f` |
 | 2026-07-13 | [#381](https://github.com/nash226/quorum/pull/381) | test: cover HTTP semicolon claim previews | `ef48606` |
 | 2026-07-13 | Direct push | feat: configure API request body limits | `cf46420` |
-| 2026-07-13 | Direct push | feat: split independent comma clauses | `094af71` |
 
