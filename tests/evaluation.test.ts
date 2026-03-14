@@ -673,11 +673,11 @@ test("renders evaluation summary csv rows for each fixture", () => {
 
   assert.match(
     rendered,
-    /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,first_mismatch_evidence_title,first_mismatch_evidence_trust_level,first_mismatch_evidence_updated_at,first_mismatch_evidence_source_path,first_mismatch_evidence_score,first_mismatch_evidence_quote,/,
+    /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,source_ids,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,first_mismatch_evidence_title,first_mismatch_evidence_trust_level,first_mismatch_evidence_updated_at,first_mismatch_evidence_source_path,first_mismatch_evidence_source_id,first_mismatch_evidence_score,first_mismatch_evidence_quote,/,
   );
   assert.match(rendered, /Support policy example/);
   assert.match(rendered, /Support policy example,support,\/tmp\/fixtures\/support\.json/);
-  assert.match(rendered, /2026-07-05T10:20:00.000Z,Support policy example,support,\/tmp\/fixtures\/support\.json,\/tmp\/answers\/support\.md,Support reviewer packet,Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,yes,0,0,1\.000,no,none,,,,,,,,,,,1,0,0,0,1,0,0,0/);
+  assert.match(rendered, /2026-07-05T10:20:00.000Z,Support policy example,support,\/tmp\/fixtures\/support\.json,\/tmp\/answers\/support\.md,Support reviewer packet,Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,,yes,0,0,1\.000,no,none,,,,,,,,,,,,1,0,0,0,1,0,0,0/);
 });
 
 test("evaluation summary csv includes first mismatched claim details", () => {
@@ -755,7 +755,7 @@ test("evaluation summary csv includes first mismatched claim details", () => {
 
   assert.match(
     rendered,
-    /HR mismatch example,,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,HR Policy,high,2026-06-01,\/tmp\/sources\/hr-policy\.md,0\.857,Employees receive 12 weeks of paid parental leave\.,1,0,0,0,0,1,0,0/,
+    /HR mismatch example,,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,,[^,\n]+,,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,HR Policy,high,2026-06-01,\/tmp\/sources\/hr-policy\.md,source_1,0\.857,Employees receive 12 weeks of paid parental leave\.,1,0,0,0,0,1,0,0/,
   );
 });
 
