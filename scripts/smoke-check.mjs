@@ -265,7 +265,7 @@ try {
   const batchSummaryCsv = readFileSync(batchSummaryCsvPath, "utf8");
   assert.match(
     batchSummaryCsv,
-    /^generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths$/m,
+    /^generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids$/m,
   );
   const hrBatchSummaryRow = batchSummaryCsv
     .split("\n")
@@ -273,7 +273,7 @@ try {
   assert.ok(hrBatchSummaryRow);
   assert.match(
     hrBatchSummaryRow,
-    /,true,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,HR Benefits Policy,high,2026-05-31,examples\/sources\/hr-policy\.md,0\.857,Employees receive 12 weeks of paid parental leave\.,3,1,1,1,0,clear,,/,
+    /,true,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,HR Benefits Policy,high,2026-05-31,examples\/sources\/hr-policy\.md,source_1,0\.857,Employees receive 12 weeks of paid parental leave\.,3,1,1,1,0,clear,,/,
   );
 
   const openApiStdout = runCli(["openapi", "--out", openApiPath]);
@@ -854,11 +854,11 @@ HR reviewer packet,answers/hr.md,Employees receive 12 weeks of paid parental lea
     );
     assert.match(
       importReviewResult.artifacts.summary_csv,
-      /^generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,/,
+      /^generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,/,
     );
     assert.match(
       importReviewResult.artifacts.summary_csv,
-      /HR reviewer packet,answers\/hr\.md,Employees receive 12 weeks of paid parental leave\.,true,needs_review,Employees receive 12 weeks of paid parental leave\.,Matched approved policy,Need HR confirmation,HR Policy,high,2026-05-31,policies\/hr-policy\.md,1\.000,Employees receive 12 weeks of paid parental leave\./,
+      /HR reviewer packet,answers\/hr\.md,Employees receive 12 weeks of paid parental leave\.,true,needs_review,Employees receive 12 weeks of paid parental leave\.,Matched approved policy,Need HR confirmation,HR Policy,high,2026-05-31,policies\/hr-policy\.md,,1\.000,Employees receive 12 weeks of paid parental leave\./,
     );
 
     const evaluationFixtureContent = readFileSync(
