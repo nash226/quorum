@@ -142,7 +142,7 @@ test("renders a reviewer decision csv with answer fail-policy context and blank 
 
   assert.equal(
     lines[0],
-    "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_source_ids,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
@@ -167,7 +167,7 @@ test("renders a reviewer decision csv row for single answers with no extracted c
 
   assert.equal(
     lines[1],
-    "2026-06-28T00:00:00.000Z,empty,examples/answers/empty.md,Short.,clear,,false,,,,No claims were extracted from this answer.,,,,,,,",
+    "2026-06-28T00:00:00.000Z,empty,examples/answers/empty.md,Short.,clear,,false,,,,No claims were extracted from this answer.,,,,,,,,",
   );
 });
 
@@ -184,11 +184,11 @@ test("renders a single-answer summary csv with fail-policy and source context", 
 
   assert.equal(
     lines[0],
-    "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
+    "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids",
   );
   assert.equal(
     lines[1],
-    "2026-06-28T00:00:00.000Z,hr-answer,examples/answers/hr-answer.md,Employees receive 18 weeks of paid parental leave. Employees receive free catered lunch every day.,true,contradicted,Employees receive 18 weeks of paid parental leave.,A closely matching approved source uses different numeric terms.,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,0.857,Employees receive 12 weeks of paid parental leave.,2,0,1,1,0,matched,contradicted | unsupported,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
+    "2026-06-28T00:00:00.000Z,hr-answer,examples/answers/hr-answer.md,Employees receive 18 weeks of paid parental leave. Employees receive free catered lunch every day.,true,contradicted,Employees receive 18 weeks of paid parental leave.,A closely matching approved source uses different numeric terms.,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy,0.857,Employees receive 12 weeks of paid parental leave.,2,0,1,1,0,matched,contradicted | unsupported,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy",
   );
 });
 
@@ -200,7 +200,7 @@ test("renders a no-claim single-answer summary csv row with an explicit review s
 
   assert.equal(
     lines[1],
-    "2026-06-28T00:00:00.000Z,empty,examples/answers/empty.md,Short.,false,needs_review,,No claims were extracted from this answer.,,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
+    "2026-06-28T00:00:00.000Z,empty,examples/answers/empty.md,Short.,false,needs_review,,No claims were extracted from this answer.,,,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy",
   );
 });
 
@@ -586,7 +586,7 @@ test("renders a batch reviewer decision csv with answer path context", () => {
 
   assert.equal(
     lines[0],
-    "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_source_ids,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
@@ -671,7 +671,7 @@ test("renders a no-claim batch reviewer decision csv row with answer-level conte
 
   assert.equal(
     lines[1],
-    "2026-06-29T00:00:00.000Z,empty,examples/answers/empty.md,Short.,clear,,false,,,,No claims were extracted from this answer.,,,,,,,",
+    "2026-06-29T00:00:00.000Z,empty,examples/answers/empty.md,Short.,clear,,false,,,,No claims were extracted from this answer.,,,,,,,,",
   );
 });
 
@@ -712,15 +712,15 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
 
   assert.equal(
     lines[0],
-    "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
+    "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids",
   );
   assert.equal(
     lines[1],
-    "2026-06-29T00:00:00.000Z,support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,true,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
+    "2026-06-29T00:00:00.000Z,support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,true,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy",
   );
   assert.equal(
     lines[2],
-    "2026-06-29T00:00:00.000Z,hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,true,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,1.000,Employees receive 12 weeks of paid parental leave.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
+    "2026-06-29T00:00:00.000Z,hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,true,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy,1.000,Employees receive 12 weeks of paid parental leave.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy",
   );
 });
 
@@ -760,7 +760,7 @@ Managers approve travel within five business days, and international trips requi
 
   assert.equal(
     lines[1],
-    '2026-06-29T00:00:00.000Z,long-answer,examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",true,unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,,,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md',
+    '2026-06-29T00:00:00.000Z,long-answer,examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",true,unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,,,,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy',
   );
 });
 
@@ -845,6 +845,6 @@ test("renders no-claim batch summary csv rows with an explicit review signal", (
 
   assert.equal(
     lines[1],
-    "2026-06-29T00:00:00.000Z,empty,examples/answers/empty.md,Short.,false,needs_review,,No claims were extracted from this answer.,,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
+    "2026-06-29T00:00:00.000Z,empty,examples/answers/empty.md,Short.,false,needs_review,,No claims were extracted from this answer.,,,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy",
   );
 });
