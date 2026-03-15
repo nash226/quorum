@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d517f43` on 2026-07-14, feat: preserve source IDs in evaluation summaries
+- Latest shipped change: `ab2073a` on 2026-07-14, feat: preserve source IDs in reviewer CSVs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -34,8 +34,9 @@
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
-- write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path for reviewer handoff
+- write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path and stable source IDs for audit handoff
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
+- preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
 - import filled reviewer decision CSVs into a machine-readable summary
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
@@ -61,6 +62,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: preserve source IDs in reviewer CSVs | `ab2073a` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation summaries | `d517f43` |
 | 2026-07-14 | [#387](https://github.com/nash226/quorum/pull/387) | feat: preserve evaluation source identifiers | `3c5621f` |
 | 2026-07-14 | [#386](https://github.com/nash226/quorum/pull/386) | feat: preserve stable source identifiers | `bfcc03d` |
@@ -68,5 +70,4 @@
 | 2026-07-14 | Direct push | test: add support escalation scorecard | `d3fdd6a` |
 | 2026-07-14 | Direct push | docs: document HTTP discovery headers | `0b1bc9d` |
 | 2026-07-13 | [#382](https://github.com/nash226/quorum/pull/382) | docs: add HTTP API integration guide | `4385e6f` |
-| 2026-07-13 | [#381](https://github.com/nash226/quorum/pull/381) | test: cover HTTP semicolon claim previews | `ef48606` |
 
