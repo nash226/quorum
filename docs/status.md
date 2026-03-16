@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ab2073a` on 2026-07-14, feat: preserve source IDs in reviewer CSVs
+- Latest shipped change: `48f882b` on 2026-07-14, feat: export HTTP operation path constants
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -42,6 +42,7 @@
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
+- expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
@@ -62,6 +63,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#390](https://github.com/nash226/quorum/pull/390) | feat: export HTTP operation path constants | `48f882b` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in reviewer CSVs | `ab2073a` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation summaries | `d517f43` |
 | 2026-07-14 | [#387](https://github.com/nash226/quorum/pull/387) | feat: preserve evaluation source identifiers | `3c5621f` |
@@ -69,5 +71,4 @@
 | 2026-07-14 | Direct push | docs: document binary HTTP workflow uploads | `2d26d77` |
 | 2026-07-14 | Direct push | test: add support escalation scorecard | `d3fdd6a` |
 | 2026-07-14 | Direct push | docs: document HTTP discovery headers | `0b1bc9d` |
-| 2026-07-13 | [#382](https://github.com/nash226/quorum/pull/382) | docs: add HTTP API integration guide | `4385e6f` |
 
