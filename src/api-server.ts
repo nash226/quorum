@@ -226,6 +226,11 @@ export const READYZ_PATH = "/readyz";
 export const VERSION_PATH = "/version";
 export const OPENAPI_PATH = "/openapi.json";
 export const LIVEZ_PATH = "/livez";
+export const VERIFY_PATH = "/verify";
+export const EXTRACT_CLAIMS_PATH = "/extract-claims";
+export const VERIFY_BATCH_PATH = "/verify-batch";
+export const IMPORT_REVIEW_PATH = "/import-review";
+export const EVALUATE_PATH = "/evaluate";
 export const API_MAX_REQUEST_BYTES = 1024 * 1024;
 export const API_REQUEST_TIMEOUT_MS = 30_000;
 const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
@@ -323,42 +328,42 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     path: OPENAPI_PATH,
     description: "Return CORS preflight headers for OpenAPI schema clients.",
   },
-  { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
-  { method: "OPTIONS", path: "/verify", description: "Return CORS preflight headers for verify requests." },
+  { method: "POST", path: VERIFY_PATH, description: "Verify one answer from JSON request content." },
+  { method: "OPTIONS", path: VERIFY_PATH, description: "Return CORS preflight headers for verify requests." },
   {
     method: "POST",
-    path: "/verify-batch",
+    path: VERIFY_BATCH_PATH,
     description: "Verify multiple answers from JSON request content.",
   },
   {
     method: "OPTIONS",
-    path: "/verify-batch",
+    path: VERIFY_BATCH_PATH,
     description: "Return CORS preflight headers for batch verify requests.",
   },
   {
     method: "POST",
-    path: "/import-review",
+    path: IMPORT_REVIEW_PATH,
     description: "Import reviewer CSV content from JSON request content.",
   },
   {
     method: "OPTIONS",
-    path: "/import-review",
+    path: IMPORT_REVIEW_PATH,
     description: "Return CORS preflight headers for reviewer import requests.",
   },
   {
     method: "POST",
-    path: "/evaluate",
+    path: EVALUATE_PATH,
     description: "Evaluate fixture JSON content from request payloads.",
   },
   {
     method: "OPTIONS",
-    path: "/evaluate",
+    path: EVALUATE_PATH,
     description: "Return CORS preflight headers for evaluation requests.",
   },
-  { method: "POST", path: "/extract-claims", description: "Extract normalized claims from answer content." },
+  { method: "POST", path: EXTRACT_CLAIMS_PATH, description: "Extract normalized claims from answer content." },
   {
     method: "OPTIONS",
-    path: "/extract-claims",
+    path: EXTRACT_CLAIMS_PATH,
     description: "Return CORS preflight headers for claim extraction requests.",
   },
 ] as const;
@@ -1332,7 +1337,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === "/verify") {
+  if (url === VERIFY_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -1358,7 +1363,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === "/extract-claims") {
+  if (url === EXTRACT_CLAIMS_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -1379,7 +1384,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === "/verify-batch") {
+  if (url === VERIFY_BATCH_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -1403,7 +1408,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === "/import-review") {
+  if (url === IMPORT_REVIEW_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -1425,7 +1430,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === "/evaluate") {
+  if (url === EVALUATE_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -2393,7 +2398,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
         options: corsPreflightOperation("optionsOpenApi", "OpenAPI description preflight"),
       },
-      "/extract-claims": {
+      [EXTRACT_CLAIMS_PATH]: {
         options: corsPreflightOperation("optionsExtractClaims", "Claim extraction preflight"),
         post: {
           operationId: "postExtractClaims",
@@ -2464,7 +2469,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
       },
-      "/verify": {
+      [VERIFY_PATH]: {
         options: corsPreflightOperation("optionsVerify", "Verify preflight"),
         post: {
           operationId: "postVerify",
@@ -2571,7 +2576,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
       },
-      "/verify-batch": {
+      [VERIFY_BATCH_PATH]: {
         options: corsPreflightOperation("optionsVerifyBatch", "Batch verify preflight"),
         post: {
           operationId: "postVerifyBatch",
@@ -2687,7 +2692,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
       },
-      "/import-review": {
+      [IMPORT_REVIEW_PATH]: {
         options: corsPreflightOperation("optionsImportReview", "Reviewer import preflight"),
         post: {
           operationId: "postImportReview",
@@ -2777,7 +2782,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
       },
-      "/evaluate": {
+      [EVALUATE_PATH]: {
         options: corsPreflightOperation("optionsEvaluate", "Evaluation preflight"),
         post: {
           operationId: "postEvaluate",
