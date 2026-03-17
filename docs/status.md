@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `48f882b` on 2026-07-14, feat: export HTTP operation path constants
+- Latest shipped change: `9256104` on 2026-07-14, fix: describe report timestamps in OpenAPI
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -30,6 +30,7 @@
 - include the report generation timestamp in text output for audit-friendly handoff
 - accept `--generated-at <timestamp>` on report-producing CLI workflows when CI retries or snapshot tests need a stable audit timestamp
 - validate HTTP `generatedAt` values as timestamps before producing audit reports
+- describe generated report timestamps as `date-time` values in the OpenAPI contract for typed clients
 - validate approved-source `updatedAt` values as timestamps before using freshness metadata
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
@@ -63,6 +64,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: describe report timestamps in OpenAPI | `9256104` |
 | 2026-07-14 | [#390](https://github.com/nash226/quorum/pull/390) | feat: export HTTP operation path constants | `48f882b` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in reviewer CSVs | `ab2073a` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation summaries | `d517f43` |
@@ -70,5 +72,4 @@
 | 2026-07-14 | [#386](https://github.com/nash226/quorum/pull/386) | feat: preserve stable source identifiers | `bfcc03d` |
 | 2026-07-14 | Direct push | docs: document binary HTTP workflow uploads | `2d26d77` |
 | 2026-07-14 | Direct push | test: add support escalation scorecard | `d3fdd6a` |
-| 2026-07-14 | Direct push | docs: document HTTP discovery headers | `0b1bc9d` |
 
