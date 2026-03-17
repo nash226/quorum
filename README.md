@@ -61,6 +61,7 @@ The current CLI can:
 - validate HTTP `generatedAt` values as timestamps before producing audit reports
 - describe generated report timestamps as `date-time` values in the OpenAPI contract for typed clients
 - validate approved-source `updatedAt` values as timestamps before using freshness metadata
+- describe source freshness timestamps as `date-time` values in the OpenAPI contract for typed clients
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
