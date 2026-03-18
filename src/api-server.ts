@@ -232,7 +232,7 @@ export const VERIFY_BATCH_PATH = "/verify-batch";
 export const IMPORT_REVIEW_PATH = "/import-review";
 export const EVALUATE_PATH = "/evaluate";
 export const API_MAX_REQUEST_BYTES = 1024 * 1024;
-export const API_REQUEST_TIMEOUT_MS = 30_000;
+export const API_REQUEST_TIMEOUT_MS: number = 30_000;
 const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
 export const API_SERVICE_NAME = "quorum";
 export const API_VERSION = "0.1.0";
@@ -257,6 +257,7 @@ export const API_CAPABILITIES = {
   requestContentTypes: ["application/json"],
   binaryContentEncodings: ["base64"],
   maxRequestBytes: API_MAX_REQUEST_BYTES,
+  requestTimeoutMs: API_REQUEST_TIMEOUT_MS,
   sourceExtensions: [...SOURCE_EXTENSIONS],
   answerExtensions: [...ANSWER_EXTENSIONS],
   verdicts: CLAIM_VERDICTS,
@@ -268,8 +269,8 @@ export const API_CAPABILITIES = {
   extractClaims: true,
 } as const;
 
-function apiCapabilities(maxRequestBytes: number): ApiCapabilityMap {
-  return { ...API_CAPABILITIES, maxRequestBytes };
+function apiCapabilities(maxRequestBytes: number, requestTimeoutMs: number): ApiCapabilityMap {
+  return { ...API_CAPABILITIES, maxRequestBytes, requestTimeoutMs };
 }
 export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
@@ -1268,7 +1269,8 @@ async function handleApiRequest(
   applyRequestIdHeader(request, response);
   applyCorsHeaders(request, response, options.corsAllowedOrigins);
   const maxRequestBytes = resolveMaxRequestBytes(options.maxRequestBytes);
-  applyApiDiscoveryHeaders(response, maxRequestBytes, resolveRequestTimeoutMs(options.requestTimeoutMs));
+  const requestTimeoutMs = resolveRequestTimeoutMs(options.requestTimeoutMs);
+  applyApiDiscoveryHeaders(response, maxRequestBytes, requestTimeoutMs);
   const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
   const isHeadRequest = request.method === "HEAD";
 
@@ -1283,7 +1285,7 @@ async function handleApiRequest(
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
-      capabilities: apiCapabilities(maxRequestBytes),
+      capabilities: apiCapabilities(maxRequestBytes, requestTimeoutMs),
       endpoints: API_ENDPOINTS,
     };
     writeJson(response, 200, discoveryResponse, isHeadRequest);
@@ -1296,7 +1298,7 @@ async function handleApiRequest(
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
-      capabilities: apiCapabilities(maxRequestBytes),
+      capabilities: apiCapabilities(maxRequestBytes, requestTimeoutMs),
     };
     writeJson(response, 200, capabilitiesResponse, isHeadRequest);
     return;
@@ -2976,6 +2978,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               minimum: 1,
               description: "Maximum JSON request body size accepted by POST endpoints.",
             },
+            requestTimeoutMs: {
+              type: "integer",
+              minimum: 1,
+              description: "Maximum request duration enforced by the server in milliseconds.",
+            },
             sourceExtensions: {
               type: "array",
               items: { type: "string" },
@@ -3017,6 +3024,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "httpMethods",
             "requestContentTypes",
             "maxRequestBytes",
+            "requestTimeoutMs",
             "sourceExtensions",
             "answerExtensions",
             "verdicts",
