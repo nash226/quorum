@@ -70,6 +70,7 @@ The current CLI can:
   preserving the original answer path and stable source IDs for audit handoff
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
 - preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
+- preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
 - import filled reviewer decision CSVs into a machine-readable summary
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
