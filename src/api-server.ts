@@ -3526,12 +3526,14 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             totalExpectedClaims: { type: "integer", minimum: 0 },
             score: { type: ["number", "null"] },
             scoreLabel: { type: "string" },
+            expectedSummary: { $ref: "#/components/schemas/VerificationSummary" },
+            actualSummary: { $ref: "#/components/schemas/VerificationSummary" },
             domains: {
               type: "array",
               items: { $ref: "#/components/schemas/EvaluationDomainAggregateSummary" },
             },
           },
-          required: ["fixtureCount", "matchedClaims", "totalExpectedClaims", "score", "scoreLabel", "domains"],
+          required: ["fixtureCount", "matchedClaims", "totalExpectedClaims", "score", "scoreLabel", "expectedSummary", "actualSummary", "domains"],
         },
         EvaluationDomainAggregateSummary: {
           type: "object",
@@ -3543,6 +3545,8 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             totalExpectedClaims: { type: "integer", minimum: 0 },
             score: { type: ["number", "null"] },
             scoreLabel: { type: "string" },
+            expectedSummary: { $ref: "#/components/schemas/VerificationSummary" },
+            actualSummary: { $ref: "#/components/schemas/VerificationSummary" },
           },
           required: [
             "domain",
@@ -3552,6 +3556,8 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "totalExpectedClaims",
             "score",
             "scoreLabel",
+            "expectedSummary",
+            "actualSummary",
           ],
         },
         EvaluationBatchRunResult: {
