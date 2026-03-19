@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `de599cf` on 2026-07-14, feat: advertise API request timeout capability
+- Latest shipped change: `aecc409` on 2026-07-14, feat: preserve source IDs in evaluation reports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -40,6 +40,7 @@
 - write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path and stable source IDs for audit handoff
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
 - preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
+- preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
 - import filled reviewer decision CSVs into a machine-readable summary
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
@@ -67,6 +68,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: preserve source IDs in evaluation reports | `aecc409` |
 | 2026-07-14 | [#395](https://github.com/nash226/quorum/pull/395) | feat: advertise API request timeout capability | `de599cf` |
 | 2026-07-14 | Direct push | fix: keep OpenAPI freshness examples date-time compatible | `89caa0c` |
 | 2026-07-14 | Direct push | fix: describe source freshness timestamps in OpenAPI | `0c4c5aa` |
@@ -74,5 +76,4 @@
 | 2026-07-14 | [#390](https://github.com/nash226/quorum/pull/390) | feat: export HTTP operation path constants | `48f882b` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in reviewer CSVs | `ab2073a` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation summaries | `d517f43` |
-| 2026-07-14 | [#387](https://github.com/nash226/quorum/pull/387) | feat: preserve evaluation source identifiers | `3c5621f` |
 
