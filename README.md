@@ -97,7 +97,12 @@ documents:
 ```bash
 npm run dev -- extract-claims --answer examples/answers/hr-answer.md --json
 cat examples/answers/hr-answer.md | npm run dev -- extract-claims --answer -
+npm run dev -- extract-claims --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet"
 ```
+
+When a human is reviewing a claim preview, `--answer-label` adds the
+reviewer-facing label to the text output. JSON output remains the same claims
+array for scripts that already consume the preview command.
 
 ```bash
 npm run dev -- verify \

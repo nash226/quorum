@@ -418,6 +418,10 @@ async function runExtractClaims(args: string[]): Promise<void> {
     return;
   }
 
+  if (parsed.answerLabel) {
+    console.log(`Answer: ${parsed.answerLabel}`);
+  }
+
   for (const claim of claims) {
     console.log(`${claim.id}: ${claim.text}`);
   }
@@ -712,11 +716,13 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
 
 interface ExtractClaimsArgs {
   answerPath: string;
+  answerLabel?: string;
   json: boolean;
 }
 
 function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
   let answerPath = "";
+  let answerLabel: string | undefined;
   let json = false;
 
   for (let index = 0; index < args.length; index += 1) {
@@ -725,6 +731,9 @@ function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
 
     if (arg === "--answer" && next) {
       answerPath = next;
+      index += 1;
+    } else if (arg === "--answer-label" && next) {
+      answerLabel = next;
       index += 1;
     } else if (arg === "--json") {
       json = true;
@@ -737,7 +746,7 @@ function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
     throw new Error("Missing --answer <path|->");
   }
 
-  return { answerPath, json };
+  return { answerPath, answerLabel, json };
 }
 
 function parseServeArgs(args: string[]): ServeArgs {
@@ -1353,10 +1362,11 @@ Example:
     "extract-claims": `Quorum extract-claims
 
 Usage:
-  quorum extract-claims --answer <path|-> [--json]
+  quorum extract-claims --answer <path|-> [--answer-label <label>] [--json]
 
 Options:
   --answer <path|->          Answer file to inspect, or - to read from stdin
+  --answer-label <label>     Optional reviewer-facing label for text output
   --json                     Print claims as a JSON array
 
 Example:
