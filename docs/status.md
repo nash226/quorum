@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c9b90f0` on 2026-07-14, feat: expose verdict totals in evaluation rollups
+- Latest shipped change: `399e112` on 2026-07-14, docs: document API discovery probes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -69,6 +69,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#398](https://github.com/nash226/quorum/pull/398) | docs: document API discovery probes | `399e112` |
 | 2026-07-14 | Direct push | feat: expose verdict totals in evaluation rollups | `c9b90f0` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation reports | `aecc409` |
 | 2026-07-14 | [#395](https://github.com/nash226/quorum/pull/395) | feat: advertise API request timeout capability | `de599cf` |
@@ -76,5 +77,4 @@
 | 2026-07-14 | Direct push | fix: describe source freshness timestamps in OpenAPI | `0c4c5aa` |
 | 2026-07-14 | Direct push | fix: describe report timestamps in OpenAPI | `9256104` |
 | 2026-07-14 | [#390](https://github.com/nash226/quorum/pull/390) | feat: export HTTP operation path constants | `48f882b` |
-| 2026-07-14 | Direct push | feat: preserve source IDs in reviewer CSVs | `ab2073a` |
 
