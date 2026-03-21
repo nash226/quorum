@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `22beff0` on 2026-07-14, feat: label CLI claim previews
+- Latest shipped change: `d48d06c` on 2026-07-14, feat: preserve CLI source identifiers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -18,6 +18,7 @@
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - preserve caller-supplied source IDs in API evidence and reports for stable audit references
+- preserve caller-supplied source IDs for explicit CLI sources with `--source-id`, while directory sources keep positional fallback IDs
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
 - split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
@@ -69,6 +70,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: preserve CLI source identifiers | `d48d06c` |
 | 2026-07-14 | [#399](https://github.com/nash226/quorum/pull/399) | feat: label CLI claim previews | `22beff0` |
 | 2026-07-14 | [#398](https://github.com/nash226/quorum/pull/398) | docs: document API discovery probes | `399e112` |
 | 2026-07-14 | Direct push | feat: expose verdict totals in evaluation rollups | `c9b90f0` |
@@ -76,5 +78,4 @@
 | 2026-07-14 | [#395](https://github.com/nash226/quorum/pull/395) | feat: advertise API request timeout capability | `de599cf` |
 | 2026-07-14 | Direct push | fix: keep OpenAPI freshness examples date-time compatible | `89caa0c` |
 | 2026-07-14 | Direct push | fix: describe source freshness timestamps in OpenAPI | `0c4c5aa` |
-| 2026-07-14 | Direct push | fix: describe report timestamps in OpenAPI | `9256104` |
 
