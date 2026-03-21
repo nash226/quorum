@@ -24,6 +24,7 @@ import {
 export interface SourceLoadOptions {
   sourcePaths: string[];
   sourceDirs: string[];
+  sourceIdsByPath?: Record<string, string>;
   defaultTrustLevel?: SourceTrustLevel;
 }
 
@@ -224,6 +225,7 @@ export async function loadSourceDocuments(
     sourcePaths.map(async (sourcePath, index) => {
       const content = await readFile(sourcePath);
       return sourceDocumentFromFile(sourcePath, content, index, {
+        id: options.sourceIdsByPath?.[sourcePath],
         defaultTrustLevel: options.defaultTrustLevel,
       });
     }),
