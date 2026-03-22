@@ -219,6 +219,7 @@ export interface StartedApiServer {
   close(): Promise<void>;
 }
 
+export const API_ROOT_PATH = "/";
 export const CAPABILITIES_PATH = "/capabilities";
 export const HEALTH_PATH = "/health";
 export const HEALTHZ_PATH = "/healthz";
@@ -273,9 +274,9 @@ function apiCapabilities(maxRequestBytes: number, requestTimeoutMs: number): Api
   return { ...API_CAPABILITIES, maxRequestBytes, requestTimeoutMs };
 }
 export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
-  { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
-  { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
-  { method: "OPTIONS", path: "/", description: "Return CORS preflight headers for discovery clients." },
+  { method: "GET", path: API_ROOT_PATH, description: "Return API discovery metadata for local callers." },
+  { method: "HEAD", path: API_ROOT_PATH, description: "Return service discovery headers without a JSON body." },
+  { method: "OPTIONS", path: API_ROOT_PATH, description: "Return CORS preflight headers for discovery clients." },
   {
     method: "GET",
     path: CAPABILITIES_PATH,
@@ -1279,7 +1280,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && url === "/") {
+  if ((request.method === "GET" || isHeadRequest) && url === API_ROOT_PATH) {
     const discoveryResponse: ApiDiscoveryResponse = {
       requestId: requestId(response),
       service: API_SERVICE_NAME,
