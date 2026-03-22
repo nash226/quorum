@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bdd6787` on 2026-07-14, fix: advertise claim preview labels in top-level help
+- Latest shipped change: `61fba85` on 2026-07-14, fix: document binary encoding in OpenAPI
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -50,6 +50,7 @@
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
 - expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
+- publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
@@ -70,6 +71,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: document binary encoding in OpenAPI | `61fba85` |
 | 2026-07-14 | Direct push | fix: advertise claim preview labels in top-level help | `bdd6787` |
 | 2026-07-14 | Direct push | feat: preserve CLI source identifiers | `d48d06c` |
 | 2026-07-14 | [#399](https://github.com/nash226/quorum/pull/399) | feat: label CLI claim previews | `22beff0` |
@@ -77,5 +79,4 @@
 | 2026-07-14 | Direct push | feat: expose verdict totals in evaluation rollups | `c9b90f0` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation reports | `aecc409` |
 | 2026-07-14 | [#395](https://github.com/nash226/quorum/pull/395) | feat: advertise API request timeout capability | `de599cf` |
-| 2026-07-14 | Direct push | fix: keep OpenAPI freshness examples date-time compatible | `89caa0c` |
 
