@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d48d06c` on 2026-07-14, feat: preserve CLI source identifiers
+- Latest shipped change: `bdd6787` on 2026-07-14, fix: advertise claim preview labels in top-level help
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -70,6 +70,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: advertise claim preview labels in top-level help | `bdd6787` |
 | 2026-07-14 | Direct push | feat: preserve CLI source identifiers | `d48d06c` |
 | 2026-07-14 | [#399](https://github.com/nash226/quorum/pull/399) | feat: label CLI claim previews | `22beff0` |
 | 2026-07-14 | [#398](https://github.com/nash226/quorum/pull/398) | docs: document API discovery probes | `399e112` |
@@ -77,5 +78,4 @@
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation reports | `aecc409` |
 | 2026-07-14 | [#395](https://github.com/nash226/quorum/pull/395) | feat: advertise API request timeout capability | `de599cf` |
 | 2026-07-14 | Direct push | fix: keep OpenAPI freshness examples date-time compatible | `89caa0c` |
-| 2026-07-14 | Direct push | fix: describe source freshness timestamps in OpenAPI | `0c4c5aa` |
 
