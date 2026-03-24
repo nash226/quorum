@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `42f9b47` on 2026-07-14, fix: reflect runtime limits in OpenAPI examples
+- Latest shipped change: `f897dcf` on 2026-07-14, fix: write report artifacts atomically
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -39,6 +39,7 @@
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path and stable source IDs for audit handoff
+- write requested report artifacts atomically so queue watchers only observe complete files during reviewer handoff
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
 - preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
 - preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
@@ -73,6 +74,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: write report artifacts atomically | `f897dcf` |
 | 2026-07-14 | [#404](https://github.com/nash226/quorum/pull/404) | fix: reflect runtime limits in OpenAPI examples | `42f9b47` |
 | 2026-07-14 | Direct push | feat: export API discovery path constant | `52afc14` |
 | 2026-07-14 | Direct push | fix: document binary encoding in OpenAPI | `61fba85` |
@@ -80,5 +82,4 @@
 | 2026-07-14 | Direct push | feat: preserve CLI source identifiers | `d48d06c` |
 | 2026-07-14 | [#399](https://github.com/nash226/quorum/pull/399) | feat: label CLI claim previews | `22beff0` |
 | 2026-07-14 | [#398](https://github.com/nash226/quorum/pull/398) | docs: document API discovery probes | `399e112` |
-| 2026-07-14 | Direct push | feat: expose verdict totals in evaluation rollups | `c9b90f0` |
 
