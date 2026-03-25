@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9349650` on 2026-07-14, fix: reject duplicate reviewer claim rows
+- Latest shipped change: `d99d5da` on 2026-07-14, test: cover HTTP no-claim reviewer artifacts
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -75,6 +75,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | test: cover HTTP no-claim reviewer artifacts | `d99d5da` |
 | 2026-07-14 | Direct push | fix: reject duplicate reviewer claim rows | `9349650` |
 | 2026-07-14 | Direct push | fix: write report artifacts atomically | `f897dcf` |
 | 2026-07-14 | [#404](https://github.com/nash226/quorum/pull/404) | fix: reflect runtime limits in OpenAPI examples | `42f9b47` |
@@ -82,5 +83,4 @@
 | 2026-07-14 | Direct push | fix: document binary encoding in OpenAPI | `61fba85` |
 | 2026-07-14 | Direct push | fix: advertise claim preview labels in top-level help | `bdd6787` |
 | 2026-07-14 | Direct push | feat: preserve CLI source identifiers | `d48d06c` |
-| 2026-07-14 | [#399](https://github.com/nash226/quorum/pull/399) | feat: label CLI claim previews | `22beff0` |
 
