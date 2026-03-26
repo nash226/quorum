@@ -527,9 +527,9 @@ content for PDF and DOCX documents. Provide an `answerPath` ending in `.pdf`
 or `.docx` so Quorum selects the matching document extractor; text answers
 remain supported without a path.
 
-When a fixture includes `expectedClaimVerdicts`, keep that list length aligned
-with the total claims declared in `expectedSummary` so evaluation scorecards
-stay internally consistent.
+When a fixture includes `expectedClaimVerdicts`, keep both its list length and
+per-verdict counts aligned with `expectedSummary`; Quorum rejects contradictory
+fixtures before they can produce misleading evaluation scorecards.
 
 ## HTTP API
 
