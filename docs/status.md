@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d99d5da` on 2026-07-14, test: cover HTTP no-claim reviewer artifacts
+- Latest shipped change: `1591db8` on 2026-07-14, fix: validate evaluation verdict totals
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -75,6 +75,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#408](https://github.com/nash226/quorum/pull/408) | fix: validate evaluation verdict totals | `1591db8` |
 | 2026-07-14 | Direct push | test: cover HTTP no-claim reviewer artifacts | `d99d5da` |
 | 2026-07-14 | Direct push | fix: reject duplicate reviewer claim rows | `9349650` |
 | 2026-07-14 | Direct push | fix: write report artifacts atomically | `f897dcf` |
@@ -82,5 +83,4 @@
 | 2026-07-14 | Direct push | feat: export API discovery path constant | `52afc14` |
 | 2026-07-14 | Direct push | fix: document binary encoding in OpenAPI | `61fba85` |
 | 2026-07-14 | Direct push | fix: advertise claim preview labels in top-level help | `bdd6787` |
-| 2026-07-14 | Direct push | feat: preserve CLI source identifiers | `d48d06c` |
 
