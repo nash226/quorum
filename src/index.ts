@@ -50,6 +50,7 @@ export type {
   ApiCapabilityMap,
   ApiDiscoveryEndpoint,
   ApiDiscoveryResponse,
+  ApiErrorResponse,
   ApiHealthResponse,
   ApiVersionResponse,
   ApiImportReviewArtifact,
