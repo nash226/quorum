@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1591db8` on 2026-07-14, fix: validate evaluation verdict totals
+- Latest shipped change: `4ef36a6` on 2026-07-14, feat: export HTTP error response type
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -54,6 +54,7 @@
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
+- export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
@@ -75,6 +76,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: export HTTP error response type | `4ef36a6` |
 | 2026-07-14 | [#408](https://github.com/nash226/quorum/pull/408) | fix: validate evaluation verdict totals | `1591db8` |
 | 2026-07-14 | Direct push | test: cover HTTP no-claim reviewer artifacts | `d99d5da` |
 | 2026-07-14 | Direct push | fix: reject duplicate reviewer claim rows | `9349650` |
@@ -82,5 +84,4 @@
 | 2026-07-14 | [#404](https://github.com/nash226/quorum/pull/404) | fix: reflect runtime limits in OpenAPI examples | `42f9b47` |
 | 2026-07-14 | Direct push | feat: export API discovery path constant | `52afc14` |
 | 2026-07-14 | Direct push | fix: document binary encoding in OpenAPI | `61fba85` |
-| 2026-07-14 | Direct push | fix: advertise claim preview labels in top-level help | `bdd6787` |
 
