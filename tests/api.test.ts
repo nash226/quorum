@@ -2364,6 +2364,25 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
   assert.deepEqual(importResult.failVerdicts, ["unsupported"]);
 });
 
+test("HTTP API advertises the allowed method on POST-only route errors", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      headers: { "X-Quorum-Request-Id": "wrong-method-check" },
+    });
+
+    assert.equal(response.status, 405);
+    assert.equal(response.headers.get("allow"), "POST");
+    assert.deepEqual(await response.json(), {
+      error: "Method not allowed. Use POST.",
+      requestId: "wrong-method-check",
+    });
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves single-answer verification over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const generatedAt = "2026-07-07T19:15:00.000Z";
@@ -3135,6 +3154,15 @@ Refund requests receive an initial response within one business day.
       "Method not allowed. Use POST.",
     );
     assert.equal(verify405Example?.requestId, "workflow-trace-2026-07-10");
+    assert.equal(
+      (openApi.paths["/verify"]?.post?.responses?.["405"]?.headers?.Allow as { schema?: { const?: string } } | undefined)
+        ?.schema?.const,
+      "POST",
+    );
+    assert.equal(
+      openApi.paths["/verify"]?.post?.responses?.["405"]?.headers?.Allow?.description,
+      "HTTP method accepted by this endpoint.",
+    );
     assert.equal(
       openApi.paths["/verify"]?.post?.responses?.["415"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",

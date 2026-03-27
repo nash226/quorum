@@ -1933,6 +1933,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
   const errorResponse = (
     description: string,
     examples?: Record<string, { summary: string; value: { error: string } }>,
+    additionalHeaders?: Record<string, { schema: Record<string, unknown>; description: string }>,
   ) => ({
     description,
     content: {
@@ -1941,7 +1942,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         ...(examples ? { examples } : {}),
       },
     },
-    headers: apiResponseHeaders,
+    headers: { ...apiResponseHeaders, ...additionalHeaders },
   });
   const postErrorResponses = {
     "400": errorResponse("The JSON body was missing required fields or had invalid values.", {
@@ -1954,6 +1955,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       wrongMethod: {
         summary: "A GET request hit a POST-only route",
         value: OPENAPI_METHOD_NOT_ALLOWED_ERROR_EXAMPLE,
+      },
+    }, {
+      Allow: {
+        schema: { type: "string", const: "POST" },
+        description: "HTTP method accepted by this endpoint.",
       },
     }),
     "415": errorResponse("The request Content-Type was not application/json.", {
