@@ -310,14 +310,14 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
       headers: {
         origin: "http://localhost:4173",
         "access-control-request-method": "POST",
-        "access-control-request-headers": "content-type, x-quorum-request-id",
+        "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
       },
     });
 
     assert.equal(response.status, 204);
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
     assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
-    assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id");
+    assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
   } finally {
     await api.close();
   }
@@ -3549,7 +3549,7 @@ test("programmatic API answers CORS preflight requests", async () => {
       headers: {
         origin: "http://localhost:5173",
         "access-control-request-method": "POST",
-        "access-control-request-headers": "content-type, x-quorum-request-id",
+        "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
       },
     });
 
