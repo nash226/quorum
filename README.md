@@ -88,6 +88,7 @@ The current CLI can:
 - export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
 - serve the generated OpenAPI contract with an `ETag`, allowing integration clients to revalidate it with `If-None-Match`
+- allow browser clients to preflight `If-None-Match` when revalidating the OpenAPI contract with its `ETag`
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
@@ -624,6 +625,8 @@ declares that same `Cache-Control` header for successful, fail-gated, and error
 responses so generated clients can preserve the no-store behavior explicitly.
 The API test suite verifies this header across discovery, capability, version,
 OpenAPI, claim-preview, verification, and error responses.
+Browser clients can also preflight `If-None-Match`, so conditional OpenAPI
+revalidation works across the documented CORS integration path.
 The `/readyz` alias provides the same uncached readiness contract for Kubernetes
 probes and deployment systems that use the conventional readiness path.
 The `/livez` alias provides the same uncached health response for Kubernetes

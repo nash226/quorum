@@ -252,7 +252,7 @@ export const API_DISCOVERY_HEADERS = {
   requestTimeoutMs: "X-Quorum-Request-Timeout-Ms",
 } as const;
 export const API_REQUEST_ID_HEADER = "X-Quorum-Request-Id";
-export const API_CORS_ALLOWED_HEADERS = ["Content-Type", API_REQUEST_ID_HEADER].join(", ");
+export const API_CORS_ALLOWED_HEADERS = ["Content-Type", API_REQUEST_ID_HEADER, "If-None-Match"].join(", ");
 const EXPOSED_HEADERS = [
   ...Object.values(API_DISCOVERY_HEADERS),
   API_REQUEST_ID_HEADER,
