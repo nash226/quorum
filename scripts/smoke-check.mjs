@@ -433,7 +433,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
-    assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control, ETag");
     assert.equal(discoveryPreflightResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
 
     const oversizedRequestResponse = await fetch(`${server.url}/verify`, {
@@ -450,6 +450,8 @@ Employees receive 12 weeks of paid parental leave.
 
     const discoveryOpenApiResponse = await fetch(`${server.url}/openapi.json`);
     assert.equal(discoveryOpenApiResponse.status, 200);
+    assert.match(discoveryOpenApiResponse.headers.get("etag") ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(discoveryOpenApiResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control, ETag");
     const discoveryOpenApiPayload = await discoveryOpenApiResponse.json();
     assert.equal(discoveryOpenApiPayload.openapi, "3.1.0");
     assert.equal(discoveryOpenApiPayload.paths["/verify"].post.operationId, "postVerify");
@@ -465,7 +467,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-max-request-bytes"), "1500");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-request-timeout-ms"), "1500");
-    assert.equal(capabilitiesResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control");
+    assert.equal(capabilitiesResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control, ETag");
     const capabilitiesPayload = await capabilitiesResponse.json();
     assert.equal(capabilitiesPayload.service, "quorum");
     assert.equal(capabilitiesPayload.version, "0.1.0");

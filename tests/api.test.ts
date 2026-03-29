@@ -7,6 +7,7 @@ import test from "node:test";
 import {
   API_CAPABILITIES as SERVER_API_CAPABILITIES,
   API_CORS_ALLOWED_HEADERS as SERVER_API_CORS_ALLOWED_HEADERS,
+  API_CORS_EXPOSED_HEADERS as SERVER_API_CORS_EXPOSED_HEADERS,
   API_ENDPOINTS as SERVER_API_ENDPOINTS,
   API_MAX_REQUEST_BYTES as SERVER_API_MAX_REQUEST_BYTES,
   API_REQUEST_TIMEOUT_MS as SERVER_API_REQUEST_TIMEOUT_MS,
@@ -31,6 +32,7 @@ import {
   ANSWER_EXTENSIONS,
   API_CAPABILITIES,
   API_CORS_ALLOWED_HEADERS,
+  API_CORS_EXPOSED_HEADERS,
   API_ROOT_PATH,
   API_ENDPOINTS,
   API_MAX_REQUEST_BYTES,
@@ -165,6 +167,7 @@ test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(VERIFY_PATH, SERVER_VERIFY_PATH);
   assert.deepEqual(API_DISCOVERY_HEADERS, SERVER_API_DISCOVERY_HEADERS);
   assert.equal(API_CORS_ALLOWED_HEADERS, SERVER_API_CORS_ALLOWED_HEADERS);
+  assert.equal(API_CORS_EXPOSED_HEADERS, SERVER_API_CORS_EXPOSED_HEADERS);
   assert.equal(API_REQUEST_ID_HEADER, SERVER_API_REQUEST_ID_HEADER);
   assert.strictEqual(API_SERVICE_NAME, SERVER_API_SERVICE_NAME);
   assert.strictEqual(API_VERSION, SERVER_API_VERSION);
@@ -2396,6 +2399,7 @@ test("HTTP API supports conditional OpenAPI downloads with ETags", async () => {
     assert.equal(firstResponse.status, 200);
     assert.match(etag ?? "", /^\"[a-f0-9]{64}\"$/);
     assert.equal(firstResponse.headers.get("cache-control"), "public, max-age=0, must-revalidate");
+    assert.equal(firstResponse.headers.get("access-control-expose-headers"), API_CORS_EXPOSED_HEADERS);
     assert.ok((await firstResponse.text()).includes('"openapi": "3.1.0"'));
 
     const notModifiedResponse = await fetch(`${api.url}/openapi.json`, {
@@ -2453,7 +2457,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(indexResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(
       indexResponse.headers.get("access-control-expose-headers"),
-      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control",
+      API_CORS_EXPOSED_HEADERS,
     );
     assert.equal(indexResponse.headers.get("x-quorum-request-id"), "workflow-trace-2026-07-10");
     assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
@@ -3559,7 +3563,7 @@ test("programmatic API answers CORS preflight requests", async () => {
     assert.equal(response.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS);
     assert.equal(
       response.headers.get("access-control-expose-headers"),
-      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control",
+      API_CORS_EXPOSED_HEADERS,
     );
     assert.equal(response.headers.get("x-quorum-service"), "quorum");
     assert.equal(response.headers.get("x-quorum-version"), "0.1.0");
