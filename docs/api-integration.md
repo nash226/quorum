@@ -29,6 +29,8 @@ are 1 MiB per JSON request and 30 seconds per request; configure them with
 `--max-request-bytes` and `--request-timeout-ms` when starting the server.
 The same limits are available as `capabilities.maxRequestBytes` and
 `capabilities.requestTimeoutMs` in `GET /capabilities` and `GET /` responses.
+If a browser client uses the wrong method, it can read the exposed `Allow`
+header on the `405` response to discover the route's supported method.
 
 ## Discover and probe the service
 
