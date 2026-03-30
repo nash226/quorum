@@ -191,6 +191,7 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /quorum extract-claims .*--answer-label <label>.*--json/);
   assert.match(result.stdout, /quorum import-review .*--generated-at <timestamp>/);
   assert.match(result.stdout, /quorum evaluate .*--generated-at <timestamp>.*--min-score <0\.\.1>/);
+  assert.match(result.stdout, /quorum version \[--json\]/);
 });
 
 test("version reports the CLI and API contract version", async () => {
@@ -201,6 +202,23 @@ test("version reports the CLI and API contract version", async () => {
     assert.equal(result.stderr, "");
     assert.equal(result.stdout, "quorum 0.1.0\n");
   }
+});
+
+test("version --json reports a stable machine-readable contract", async () => {
+  for (const args of [["version", "--json"], ["--version", "--json"], ["-v", "--json"]]) {
+    const result = await runCliAllowFailure(args);
+
+    assert.equal(result.code, 0);
+    assert.equal(result.stderr, "");
+    assert.deepEqual(JSON.parse(result.stdout), { service: "quorum", version: "0.1.0" });
+  }
+});
+
+test("version rejects unsupported options", async () => {
+  const result = await runCliAllowFailure(["version", "--verbose"]);
+
+  assert.equal(result.code, 1);
+  assert.match(result.stderr, /^Usage: quorum version \[--json\]\n/);
 });
 
 test("extract-claims previews normalized claims as JSON", async () => {

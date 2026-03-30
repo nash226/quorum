@@ -92,6 +92,7 @@ The current CLI can:
 - expose the OpenAPI `ETag` through CORS so browser clients can cache and reuse the validator
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
+- emit the CLI and API contract version as stable JSON with `quorum version --json`
 
 ## Example
 

@@ -149,7 +149,15 @@ async function main(): Promise<void> {
   }
 
   if (command === "version" || command === "--version" || command === "-v") {
-    console.log(`quorum ${API_VERSION}`);
+    if (args.length > 1 || (args.length === 1 && args[0] !== "--json")) {
+      throw new Error("Usage: quorum version [--json]");
+    }
+
+    if (args[0] === "--json") {
+      console.log(JSON.stringify({ service: "quorum", version: API_VERSION }));
+    } else {
+      console.log(`quorum ${API_VERSION}`);
+    }
     return;
   }
 
@@ -1525,7 +1533,7 @@ Usage:
   quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--min-score <0..1>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
   quorum serve [--host <host>] [--port <port>]
   quorum openapi [--server-url <url>] [--out <path>]
-  quorum version
+  quorum version [--json]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
