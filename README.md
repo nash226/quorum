@@ -82,6 +82,7 @@ The current CLI can:
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
 - expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
+- export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients

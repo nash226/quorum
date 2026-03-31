@@ -241,7 +241,8 @@ export const IMPORT_REVIEW_PATH = "/import-review";
 export const EVALUATE_PATH = "/evaluate";
 export const API_MAX_REQUEST_BYTES = 1024 * 1024;
 export const API_REQUEST_TIMEOUT_MS: number = 30_000;
-const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
+export const API_ALLOWED_METHODS = ["GET", "HEAD", "POST", "OPTIONS"] as const;
+const ALLOWED_METHODS = API_ALLOWED_METHODS.join(", ");
 export const API_SERVICE_NAME = "quorum";
 export const API_VERSION = "0.1.0";
 export const API_DISCOVERY_HEADERS = {
@@ -263,7 +264,7 @@ export const API_CORS_EXPOSED_HEADERS = [...new Set([
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
-  httpMethods: ["GET", "HEAD", "POST", "OPTIONS"],
+  httpMethods: [...API_ALLOWED_METHODS],
   requestContentTypes: ["application/json"],
   binaryContentEncodings: ["base64"],
   maxRequestBytes: API_MAX_REQUEST_BYTES,
