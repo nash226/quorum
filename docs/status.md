@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `715913f` on 2026-07-14, test: smoke check machine-readable version output
+- Latest shipped change: `334841b` on 2026-07-14, fix: canonicalize CORS exposed headers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -81,6 +81,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: canonicalize CORS exposed headers | `334841b` |
 | 2026-07-14 | [#416](https://github.com/nash226/quorum/pull/416) | test: smoke check machine-readable version output | `715913f` |
 | 2026-07-14 | Direct push | feat: add machine-readable version output | `307988d` |
 | 2026-07-14 | [#414](https://github.com/nash226/quorum/pull/414) | fix: expose allowed methods to browsers | `ab00936` |
@@ -88,5 +89,4 @@
 | 2026-07-14 | [#412](https://github.com/nash226/quorum/pull/412) | fix: allow browser OpenAPI revalidation | `7db448c` |
 | 2026-07-14 | [#411](https://github.com/nash226/quorum/pull/411) | feat: cache OpenAPI contract with ETags | `6954211` |
 | 2026-07-14 | Direct push | fix: document POST method errors | `cbdd36d` |
-| 2026-07-14 | Direct push | feat: export HTTP error response type | `4ef36a6` |
 
