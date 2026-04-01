@@ -6,6 +6,7 @@ import { join, resolve } from "node:path";
 import test from "node:test";
 import {
   API_CAPABILITIES as SERVER_API_CAPABILITIES,
+  API_ALLOWED_METHODS as SERVER_API_ALLOWED_METHODS,
   API_CORS_ALLOWED_HEADERS as SERVER_API_CORS_ALLOWED_HEADERS,
   API_CORS_EXPOSED_HEADERS as SERVER_API_CORS_EXPOSED_HEADERS,
   API_ENDPOINTS as SERVER_API_ENDPOINTS,
@@ -2631,6 +2632,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           };
           ApiCapabilities: {
             required: string[];
+            properties: {
+              httpMethods: { items: { enum: string[] } };
+            };
           };
           ApiCapabilitiesResponse: {
             required: string[];
@@ -2640,6 +2644,11 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           };
           ApiIndexResponse: {
             required: string[];
+          };
+          ApiDiscoveryEndpoint: {
+            properties: {
+              method: { enum: string[] };
+            };
           };
           ApiVersionResponse: {
             required: string[];
@@ -3323,6 +3332,12 @@ Refund requests receive an initial response within one business day.
       "importReviewArtifacts",
       "evaluateArtifacts",
       "extractClaims",
+    ]);
+    assert.deepEqual(openApi.components.schemas.ApiDiscoveryEndpoint.properties.method.enum, [
+      ...SERVER_API_ALLOWED_METHODS,
+    ]);
+    assert.deepEqual(openApi.components.schemas.ApiCapabilities.properties.httpMethods.items.enum, [
+      ...SERVER_API_ALLOWED_METHODS,
     ]);
     assert.deepEqual(openApi.components.schemas.ApiHealthResponse.required, [
       "ok",
