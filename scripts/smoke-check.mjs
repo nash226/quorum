@@ -467,6 +467,9 @@ Employees receive 12 weeks of paid parental leave.
 
     const capabilitiesResponse = await fetch(`${server.url}/capabilities`);
     assert.equal(capabilitiesResponse.status, 200);
+    const capabilitiesEtag = capabilitiesResponse.headers.get("etag");
+    assert.match(capabilitiesEtag ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(capabilitiesResponse.headers.get("cache-control"), "public, max-age=0, must-revalidate");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
@@ -486,10 +489,18 @@ Employees receive 12 weeks of paid parental leave.
 
     const headCapabilitiesResponse = await fetch(`${server.url}/capabilities`, { method: "HEAD" });
     assert.equal(headCapabilitiesResponse.status, 200);
+    assert.equal(headCapabilitiesResponse.headers.get("etag"), capabilitiesEtag);
     assert.equal(headCapabilitiesResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(headCapabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(headCapabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(await headCapabilitiesResponse.text(), "");
+
+    const notModifiedCapabilitiesResponse = await fetch(`${server.url}/capabilities`, {
+      headers: { "if-none-match": capabilitiesEtag ?? "" },
+    });
+    assert.equal(notModifiedCapabilitiesResponse.status, 304);
+    assert.equal(notModifiedCapabilitiesResponse.headers.get("etag"), capabilitiesEtag);
+    assert.equal(await notModifiedCapabilitiesResponse.text(), "");
 
     const headHealthResponse = await fetch(`${server.url}/health`, { method: "HEAD" });
     assert.equal(headHealthResponse.status, 200);

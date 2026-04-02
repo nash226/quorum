@@ -96,6 +96,7 @@ The current CLI can:
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 - emit the CLI and API contract version as stable JSON with `quorum version --json`
 - revalidate the HTTP `/version` compatibility probe with a stable `ETag`
+- revalidate the HTTP `/capabilities` runtime contract with a stable `ETag`
 - verify the built CLI's machine-readable version output in the end-to-end smoke gate
 
 ## Example
