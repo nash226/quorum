@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `53a2aa5` on 2026-07-14, feat: make capabilities probe revalidatable
+- Latest shipped change: `62ce549` on 2026-07-14, feat: expose API capability header names
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -55,6 +55,7 @@
 - derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
+- expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
 - export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
@@ -85,6 +86,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: expose API capability header names | `62ce549` |
 | 2026-07-14 | Direct push | feat: make capabilities probe revalidatable | `53a2aa5` |
 | 2026-07-14 | Direct push | feat: make version probe revalidatable | `4b5efec` |
 | 2026-07-14 | Direct push | fix: keep OpenAPI methods canonical | `9f18d78` |
@@ -92,5 +94,4 @@
 | 2026-07-14 | Direct push | fix: canonicalize CORS exposed headers | `334841b` |
 | 2026-07-14 | [#416](https://github.com/nash226/quorum/pull/416) | test: smoke check machine-readable version output | `715913f` |
 | 2026-07-14 | Direct push | feat: add machine-readable version output | `307988d` |
-| 2026-07-14 | [#414](https://github.com/nash226/quorum/pull/414) | fix: expose allowed methods to browsers | `ab00936` |
 
