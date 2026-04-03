@@ -416,6 +416,17 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(indexPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
     assert.deepEqual(indexPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
     assert.deepEqual(indexPayload.capabilities.requestContentTypes, ["application/json"]);
+    assert.deepEqual(indexPayload.capabilities.headerNames, {
+      requestId: "X-Quorum-Request-Id",
+      service: "X-Quorum-Service",
+      version: "X-Quorum-Version",
+      openapiPath: "X-Quorum-OpenAPI-Path",
+      maxRequestBytes: "X-Quorum-Max-Request-Bytes",
+      requestTimeoutMs: "X-Quorum-Request-Timeout-Ms",
+      cacheControl: "Cache-Control",
+      etag: "ETag",
+      allow: "Allow",
+    });
     assert.deepEqual(indexPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(indexPayload.capabilities.trustLevels, ["low", "medium", "high"]);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "OPTIONS" && endpoint.path === "/verify"), true);

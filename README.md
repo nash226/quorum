@@ -86,6 +86,7 @@ The current CLI can:
 - derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
+- expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
 - export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
@@ -555,6 +556,9 @@ copy-paste guide covering verification, claim previews, request correlation,
 fail-gated HTTP responses, binary PDF/DOCX uploads, and reviewer artifacts.
 The guide also documents the discovery headers that expose the running service
 version, OpenAPI path, request limits, and request-correlation ID to clients.
+The machine-readable `/` and `/capabilities` responses additionally publish
+the canonical response-header names for correlation, caching, and method
+negotiation.
 It now includes the bootstrap flow for `/`, `/version`, `/readyz`, and `/livez`,
 including header-only `HEAD` probes for deployment clients.
 It now shows how agent workflows can send base64 answer and source bytes with
