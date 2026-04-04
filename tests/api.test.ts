@@ -8,6 +8,7 @@ import {
   API_CAPABILITIES as SERVER_API_CAPABILITIES,
   API_ALLOWED_METHODS as SERVER_API_ALLOWED_METHODS,
   API_CORS_ALLOWED_HEADERS as SERVER_API_CORS_ALLOWED_HEADERS,
+  API_CORS_MAX_AGE_SECONDS as SERVER_API_CORS_MAX_AGE_SECONDS,
   API_CORS_EXPOSED_HEADERS as SERVER_API_CORS_EXPOSED_HEADERS,
   API_ENDPOINTS as SERVER_API_ENDPOINTS,
   API_MAX_REQUEST_BYTES as SERVER_API_MAX_REQUEST_BYTES,
@@ -34,6 +35,7 @@ import {
   API_CAPABILITIES,
   API_CAPABILITY_HEADERS,
   API_CORS_ALLOWED_HEADERS,
+  API_CORS_MAX_AGE_SECONDS,
   API_CORS_EXPOSED_HEADERS,
   API_ROOT_PATH,
   API_ENDPOINTS,
@@ -145,6 +147,9 @@ test("API discovery exposes transport limits and supported methods", () => {
   assert.equal(API_CAPABILITY_HEADERS.requestId, "X-Quorum-Request-Id");
   assert.equal(API_CAPABILITY_HEADERS.etag, "ETag");
   assert.equal(API_CAPABILITY_HEADERS.allow, "Allow");
+  assert.equal(API_CAPABILITY_HEADERS.corsMaxAge, "Access-Control-Max-Age");
+  assert.equal(API_CORS_MAX_AGE_SECONDS, 600);
+  assert.equal(SERVER_API_CORS_MAX_AGE_SECONDS, API_CORS_MAX_AGE_SECONDS);
   assert.deepEqual(API_CAPABILITIES.requestContentTypes, ["application/json"]);
   assert.deepEqual(API_CAPABILITIES.binaryContentEncodings, ["base64"]);
   assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
@@ -333,6 +338,7 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
     assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
+    assert.equal(response.headers.get("access-control-max-age"), "600");
   } finally {
     await api.close();
   }
@@ -3618,6 +3624,7 @@ test("programmatic API answers CORS preflight requests", async () => {
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
     assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(response.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS);
+    assert.equal(response.headers.get("access-control-max-age"), "600");
     assert.equal(
       response.headers.get("access-control-expose-headers"),
       API_CORS_EXPOSED_HEADERS,
