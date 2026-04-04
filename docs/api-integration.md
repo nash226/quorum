@@ -198,7 +198,8 @@ npm run dev -- openapi --server-url http://127.0.0.1:3000 --out reports/openapi.
 ```
 
 The live `/openapi.json` response includes an `ETag` and supports conditional
-requests. Send the returned value as `If-None-Match` on later requests to get a
-`304 Not Modified` response when the contract and configured runtime limits have
-not changed. Browser clients can read the returned `ETag` and send that header
-after a CORS preflight because Quorum exposes `ETag` and allows `If-None-Match`.
+requests. Send the returned value as `If-None-Match` on later `GET` or `HEAD`
+requests to get a `304 Not Modified` response when the contract and configured
+runtime limits have not changed. Browser clients can read the returned `ETag`
+and send that header after a CORS preflight because Quorum exposes `ETag` and
+allows `If-None-Match`.
