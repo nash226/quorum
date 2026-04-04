@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9614349` on 2026-07-14, feat: make API discovery revalidatable
+- Latest shipped change: `703f987` on 2026-07-14, feat: cache browser CORS preflight results
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -61,6 +61,7 @@
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
 - serve the generated OpenAPI contract with an `ETag`, allowing integration clients to revalidate it with `If-None-Match`
 - allow browser clients to preflight `If-None-Match` when revalidating the OpenAPI contract with its `ETag`
+- cache browser CORS preflight results for ten minutes through `Access-Control-Max-Age`
 - expose the OpenAPI `ETag` through CORS so browser clients can cache and reuse the validator
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
@@ -87,6 +88,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#424](https://github.com/nash226/quorum/pull/424) | feat: cache browser CORS preflight results | `703f987` |
 | 2026-07-14 | Direct push | feat: make API discovery revalidatable | `9614349` |
 | 2026-07-14 | Direct push | feat: expose API capability header names | `62ce549` |
 | 2026-07-14 | Direct push | feat: make capabilities probe revalidatable | `53a2aa5` |
@@ -94,5 +96,4 @@
 | 2026-07-14 | Direct push | fix: keep OpenAPI methods canonical | `9f18d78` |
 | 2026-07-14 | [#418](https://github.com/nash226/quorum/pull/418) | feat: export supported HTTP methods | `9392a4a` |
 | 2026-07-14 | Direct push | fix: canonicalize CORS exposed headers | `334841b` |
-| 2026-07-14 | [#416](https://github.com/nash226/quorum/pull/416) | test: smoke check machine-readable version output | `715913f` |
 
