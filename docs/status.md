@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1c2a1ef` on 2026-07-14, feat: expose configured CORS origins
+- Latest shipped change: `ad4ae86` on 2026-07-14, fix: scope CORS preflight methods by route
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -91,6 +91,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#430](https://github.com/nash226/quorum/pull/430) | fix: scope CORS preflight methods by route | `ad4ae86` |
 | 2026-07-14 | Direct push | feat: expose configured CORS origins | `1c2a1ef` |
 | 2026-07-14 | Direct push | feat: expose browser CORS capabilities | `e7fb655` |
 | 2026-07-14 | Direct push | fix: strip unicode numbered claim markers | `93e4eb9` |
@@ -98,5 +99,4 @@
 | 2026-07-14 | [#425](https://github.com/nash226/quorum/pull/425) | fix: document OpenAPI revalidation headers | `5779021` |
 | 2026-07-14 | [#424](https://github.com/nash226/quorum/pull/424) | feat: cache browser CORS preflight results | `703f987` |
 | 2026-07-14 | Direct push | feat: make API discovery revalidatable | `9614349` |
-| 2026-07-14 | Direct push | feat: expose API capability header names | `62ce549` |
 
