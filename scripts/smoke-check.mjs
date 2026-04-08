@@ -466,7 +466,7 @@ Employees receive 12 weeks of paid parental leave.
     });
     assert.equal(discoveryPreflightResponse.status, 204);
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-origin"), "*");
-    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-methods"), "POST, OPTIONS");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-max-age"), "600");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control, ETag, Allow");
@@ -709,7 +709,7 @@ Employees receive 12 weeks of paid parental leave.
     });
     assert.equal(preflightResponse.status, 204);
     assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "*");
-    assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
+    assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "POST, OPTIONS");
     assert.equal(preflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
     assert.equal(preflightResponse.headers.get("access-control-max-age"), "600");
 

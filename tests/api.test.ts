@@ -342,7 +342,7 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
 
     assert.equal(response.status, 204);
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
-    assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
+    assert.equal(response.headers.get("access-control-allow-methods"), "POST, OPTIONS");
     assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
     assert.equal(response.headers.get("access-control-max-age"), "600");
   } finally {
@@ -3644,7 +3644,7 @@ test("programmatic API answers CORS preflight requests", async () => {
 
     assert.equal(response.status, 204);
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
-    assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
+    assert.equal(response.headers.get("access-control-allow-methods"), "POST, OPTIONS");
     assert.equal(response.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS);
     assert.equal(response.headers.get("access-control-max-age"), "600");
     assert.equal(

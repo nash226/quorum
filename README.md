@@ -603,6 +603,9 @@ Available endpoints:
 
 Every listed route also accepts `OPTIONS` and returns CORS preflight headers
 for browser-based local clients.
+Those preflight responses advertise the exact methods supported by the requested
+path, so browser and generated clients do not mistake a POST-only workflow for
+a GET or HEAD endpoint.
 The `quorum serve --help` endpoint guide includes both `/readyz` readiness
 entries, so Kubernetes deployment wiring is discoverable directly from the
 CLI as well as this README.

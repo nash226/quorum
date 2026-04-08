@@ -1311,12 +1311,12 @@ async function handleApiRequest(
   options: ApiServerOptions,
 ): Promise<void> {
   applyRequestIdHeader(request, response);
-  applyCorsHeaders(request, response, options.corsAllowedOrigins);
   const maxRequestBytes = resolveMaxRequestBytes(options.maxRequestBytes);
   const requestTimeoutMs = resolveRequestTimeoutMs(options.requestTimeoutMs);
   const corsAllowedOrigins = options.corsAllowedOrigins ?? API_CAPABILITIES.cors.allowedOrigins;
-  applyApiDiscoveryHeaders(response, maxRequestBytes, requestTimeoutMs);
   const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
+  applyCorsHeaders(request, response, options.corsAllowedOrigins, allowedMethodsForPath(url));
+  applyApiDiscoveryHeaders(response, maxRequestBytes, requestTimeoutMs);
   const isHeadRequest = request.method === "HEAD";
 
   if (request.method === "OPTIONS") {
@@ -3940,6 +3940,7 @@ function applyCorsHeaders(
   request: IncomingMessage,
   response: ServerResponse,
   allowedOrigins?: readonly string[],
+  allowedMethods: string = ALLOWED_METHODS,
 ): void {
   if (allowedOrigins === undefined) {
     response.setHeader("Access-Control-Allow-Origin", "*");
@@ -3953,13 +3954,21 @@ function applyCorsHeaders(
     response.setHeader("Vary", "Origin");
   }
 
-  response.setHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
+  response.setHeader("Access-Control-Allow-Methods", allowedMethods);
   response.setHeader("Access-Control-Allow-Headers", API_CORS_ALLOWED_HEADERS);
   response.setHeader("Access-Control-Expose-Headers", API_CORS_EXPOSED_HEADERS);
 
   if (request.method === "OPTIONS") {
     response.setHeader("Access-Control-Max-Age", API_CORS_MAX_AGE_SECONDS);
   }
+}
+
+function allowedMethodsForPath(path: string): string {
+  const methods = API_ENDPOINTS
+    .filter((endpoint) => endpoint.path === path)
+    .map((endpoint) => endpoint.method);
+
+  return methods.length > 0 ? methods.join(", ") : ALLOWED_METHODS;
 }
 
 function applyApiDiscoveryHeaders(
