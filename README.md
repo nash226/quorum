@@ -606,6 +606,9 @@ for browser-based local clients.
 Those preflight responses advertise the exact methods supported by the requested
 path, so browser and generated clients do not mistake a POST-only workflow for
 a GET or HEAD endpoint.
+The API contract test exercises that route-scoped preflight behavior across
+every discovered endpoint, including the shared request-header, exposed-header,
+and ten-minute cache policy.
 The `quorum serve --help` endpoint guide includes both `/readyz` readiness
 entries, so Kubernetes deployment wiring is discoverable directly from the
 CLI as well as this README.
