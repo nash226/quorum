@@ -400,6 +400,8 @@ Employees receive 12 weeks of paid parental leave.
     "1500",
     "--request-timeout-ms",
     "1500",
+    "--cors-origin",
+    "https://console.example.com",
   ]);
 
   try {
@@ -441,7 +443,7 @@ Employees receive 12 weeks of paid parental leave.
       corsMaxAge: "Access-Control-Max-Age",
     });
     assert.deepEqual(indexPayload.capabilities.cors, {
-      allowedOrigins: ["*"],
+      allowedOrigins: ["https://console.example.com"],
       allowedHeaders: ["Content-Type", "X-Quorum-Request-Id", "If-None-Match"],
       exposedHeaders: ["X-Quorum-Service", "X-Quorum-Version", "X-Quorum-OpenAPI-Path", "X-Quorum-Max-Request-Bytes", "X-Quorum-Request-Timeout-Ms", "X-Quorum-Request-Id", "Cache-Control", "ETag", "Allow"],
       maxAgeSeconds: 600,
@@ -459,13 +461,13 @@ Employees receive 12 weeks of paid parental leave.
     const discoveryPreflightResponse = await fetch(`${server.url}/verify`, {
       method: "OPTIONS",
       headers: {
-        origin: "https://smoke.example",
+        origin: "https://console.example.com",
         "access-control-request-method": "POST",
         "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
       },
     });
     assert.equal(discoveryPreflightResponse.status, 204);
-    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-origin"), "*");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-origin"), "https://console.example.com");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-methods"), "POST, OPTIONS");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-max-age"), "600");
@@ -511,12 +513,27 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(capabilitiesPayload.service, "quorum");
     assert.equal(capabilitiesPayload.version, "0.1.0");
     assert.equal(capabilitiesPayload.openapiPath, "/openapi.json");
+    assert.deepEqual(capabilitiesPayload.capabilities.cors.allowedOrigins, ["https://console.example.com"]);
     assert.deepEqual(capabilitiesPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
     assert.deepEqual(capabilitiesPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
     assert.deepEqual(capabilitiesPayload.capabilities.requestContentTypes, ["application/json"]);
     assert.deepEqual(capabilitiesPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(capabilitiesPayload.capabilities.trustLevels, ["low", "medium", "high"]);
     assert.equal("endpoints" in capabilitiesPayload, false);
+
+    const allowedCorsResponse = await fetch(`${server.url}/health`, {
+      headers: { origin: "https://console.example.com" },
+    });
+    assert.equal(allowedCorsResponse.status, 200);
+    assert.equal(allowedCorsResponse.headers.get("access-control-allow-origin"), "https://console.example.com");
+    assert.equal(allowedCorsResponse.headers.get("vary"), "Origin");
+
+    const deniedCorsResponse = await fetch(`${server.url}/health`, {
+      headers: { origin: "https://unapproved.example.com" },
+    });
+    assert.equal(deniedCorsResponse.status, 200);
+    assert.equal(deniedCorsResponse.headers.get("access-control-allow-origin"), null);
+    assert.equal(deniedCorsResponse.headers.get("vary"), "Origin");
 
     const headCapabilitiesResponse = await fetch(`${server.url}/capabilities`, { method: "HEAD" });
     assert.equal(headCapabilitiesResponse.status, 200);
@@ -687,13 +704,13 @@ Employees receive 12 weeks of paid parental leave.
     const extractClaimsPreflightResponse = await fetch(`${server.url}/extract-claims`, {
       method: "OPTIONS",
       headers: {
-        origin: "http://localhost:4173",
+        origin: "https://console.example.com",
         "access-control-request-method": "POST",
         "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
       },
     });
     assert.equal(extractClaimsPreflightResponse.status, 204);
-    assert.equal(extractClaimsPreflightResponse.headers.get("access-control-allow-origin"), "*");
+    assert.equal(extractClaimsPreflightResponse.headers.get("access-control-allow-origin"), "https://console.example.com");
     assert.equal(
       extractClaimsPreflightResponse.headers.get("access-control-allow-headers"),
       "Content-Type, X-Quorum-Request-Id, If-None-Match",
@@ -702,13 +719,13 @@ Employees receive 12 weeks of paid parental leave.
     const preflightResponse = await fetch(`${server.url}/verify`, {
       method: "OPTIONS",
       headers: {
-        origin: "http://localhost:4173",
+        origin: "https://console.example.com",
         "access-control-request-method": "POST",
         "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
       },
     });
     assert.equal(preflightResponse.status, 204);
-    assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "*");
+    assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "https://console.example.com");
     assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "POST, OPTIONS");
     assert.equal(preflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
     assert.equal(preflightResponse.headers.get("access-control-max-age"), "600");
