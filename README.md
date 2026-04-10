@@ -85,6 +85,7 @@ The current CLI can:
 - expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
 - export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
 - derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift
+- return structured `405` errors with route-specific `Allow` headers when a known API route receives an unsupported method
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
