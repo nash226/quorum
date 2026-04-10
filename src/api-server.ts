@@ -1324,6 +1324,12 @@ async function handleApiRequest(
     return;
   }
 
+  const routeMethods = routeMethodsForPath(url);
+  if (routeMethods !== undefined && !routeMethods.includes(request.method ?? "")) {
+    writeMethodNotAllowed(response, routeMethods.join(", "));
+    return;
+  }
+
   if ((request.method === "GET" || isHeadRequest) && url === API_ROOT_PATH) {
     const discoveryResponse: ApiDiscoveryResponse = {
       requestId: requestId(response),
@@ -3964,11 +3970,17 @@ function applyCorsHeaders(
 }
 
 function allowedMethodsForPath(path: string): string {
+  const methods = routeMethodsForPath(path);
+
+  return methods ? [...methods, "OPTIONS"].join(", ") : ALLOWED_METHODS;
+}
+
+function routeMethodsForPath(path: string): string[] | undefined {
   const methods = API_ENDPOINTS
-    .filter((endpoint) => endpoint.path === path)
+    .filter((endpoint) => endpoint.path === path && endpoint.method !== "OPTIONS")
     .map((endpoint) => endpoint.method);
 
-  return methods.length > 0 ? methods.join(", ") : ALLOWED_METHODS;
+  return methods.length > 0 ? methods : undefined;
 }
 
 function applyApiDiscoveryHeaders(
