@@ -3530,6 +3530,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           properties: {
             answerLabel: { type: "string" },
             answerPath: { type: "string" },
+            answerHasClaims: { type: "boolean" },
             report: { $ref: "#/components/schemas/VerificationReport" },
             shouldFail: { type: "boolean" },
             failVerdicts: {
@@ -3537,7 +3538,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               items: { $ref: "#/components/schemas/ClaimVerdict" },
             },
           },
-          required: ["answerLabel", "answerPath", "report", "shouldFail", "failVerdicts"],
+          required: ["answerLabel", "answerPath", "answerHasClaims", "report", "shouldFail", "failVerdicts"],
         },
         BatchVerificationSummary: {
           allOf: [
