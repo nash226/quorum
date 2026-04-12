@@ -294,6 +294,7 @@ test("HTTP API extracts normalized claims without loading sources", async () => 
       answerPath: "answers/hr-answer.md",
       answerLabel: "HR reviewer packet",
       answerPreview: "Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days.",
+      answerHasClaims: true,
       claims: [
         { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
         { id: "claim_2", text: "Managers approve travel within five business days." },
@@ -318,10 +319,34 @@ test("HTTP API keeps semicolon-separated policy clauses atomic", async () => {
     });
 
     assert.equal(response.status, 200);
-    assert.deepEqual((await response.json()).claims, [
+    const payload = await response.json();
+    assert.equal(payload.answerHasClaims, true);
+    assert.deepEqual(payload.claims, [
       { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave" },
       { id: "claim_2", text: "Healthcare coverage begins after 30 days of employment." },
     ]);
+  } finally {
+    await api.close();
+  }
+});
+
+test("HTTP API marks claim-less answer previews for queue routing", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/extract-claims`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ answer: "Thanks!" }),
+    });
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), {
+      requestId: response.headers.get("x-quorum-request-id"),
+      answerPreview: "Thanks!",
+      answerHasClaims: false,
+      claims: [],
+    });
   } finally {
     await api.close();
   }
@@ -521,6 +546,7 @@ test("HTTP API routes valid requests with query strings by pathname", async () =
     assert.deepEqual(await extractClaimsResponse.json(), {
       requestId: extractClaimsResponse.headers.get("x-quorum-request-id"),
       answerPreview: "Employees receive 12 weeks of leave.",
+      answerHasClaims: true,
       claims: [{ id: "claim_1", text: "Employees receive 12 weeks of leave." }],
     });
   } finally {
