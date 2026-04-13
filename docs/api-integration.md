@@ -128,9 +128,10 @@ curl -sS http://127.0.0.1:3000/extract-claims \
   }'
 ```
 
-The result preserves the answer context and returns an ordered `claims` array
-with stable IDs and normalized text. PDF and DOCX answers can be sent as
-`answerBase64` when `answerPath` ends in `.pdf` or `.docx`.
+The result preserves the answer context, returns an ordered `claims` array with
+stable IDs and normalized text, and includes `answerHasClaims` so queue clients
+can route empty drafts without recounting the claims. PDF and DOCX answers can
+be sent as `answerBase64` when `answerPath` ends in `.pdf` or `.docx`.
 
 ## Upload binary answers and sources
 
