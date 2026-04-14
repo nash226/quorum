@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2681cb8` on 2026-07-14, feat: expose claim routing in preview responses
+- Latest shipped change: `6d6422e` on 2026-07-14, feat: expose claim preview routing result
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -95,6 +95,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#437](https://github.com/nash226/quorum/pull/437) | feat: expose claim preview routing result | `6d6422e` |
 | 2026-07-14 | Direct push | feat: expose claim routing in preview responses | `2681cb8` |
 | 2026-07-14 | Direct push | feat: expose batch answer claim routing | `8f52bb6` |
 | 2026-07-14 | Direct push | fix: reject unknown route preflights | `6e29624` |
@@ -102,5 +103,4 @@
 | 2026-07-14 | Direct push | test: cover CLI CORS origin contract | `b639631` |
 | 2026-07-14 | [#431](https://github.com/nash226/quorum/pull/431) | test: cover route-scoped CORS preflights | `e042e10` |
 | 2026-07-14 | [#430](https://github.com/nash226/quorum/pull/430) | fix: scope CORS preflight methods by route | `ad4ae86` |
-| 2026-07-14 | Direct push | feat: expose configured CORS origins | `1c2a1ef` |
 
