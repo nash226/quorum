@@ -44,7 +44,7 @@ import {
 } from "./reviewer-decision-import.js";
 import { API_VERSION, createOpenApiDocument, startApiServer } from "./api-server.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
-import { extractClaims } from "./claim-extractor.js";
+import { extractClaimsResult } from "./claim-extractor.js";
 import { renderAnswerPreview, stripByteOrderMark } from "./text.js";
 import {
   importReviewerDecisionFile,
@@ -421,10 +421,19 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
 async function runExtractClaims(args: string[]): Promise<void> {
   const parsed = parseExtractClaimsArgs(args);
-  const claims = extractClaims(await readTextInput(parsed.answerPath));
+  const result = extractClaimsResult(await readTextInput(parsed.answerPath));
+
+  if (parsed.resultJsonOutPath) {
+    await writeReportFile(parsed.resultJsonOutPath, JSON.stringify(result, null, 2));
+  }
+
+  if (parsed.resultJson) {
+    console.log(JSON.stringify(result, null, 2));
+    return;
+  }
 
   if (parsed.json) {
-    console.log(JSON.stringify(claims, null, 2));
+    console.log(JSON.stringify(result.claims, null, 2));
     return;
   }
 
@@ -432,8 +441,12 @@ async function runExtractClaims(args: string[]): Promise<void> {
     console.log(`Answer: ${parsed.answerLabel}`);
   }
 
-  for (const claim of claims) {
+  for (const claim of result.claims) {
     console.log(`${claim.id}: ${claim.text}`);
+  }
+
+  if (parsed.resultJsonOutPath) {
+    console.log(`Claim preview result JSON written to ${parsed.resultJsonOutPath}`);
   }
 }
 
@@ -728,12 +741,16 @@ interface ExtractClaimsArgs {
   answerPath: string;
   answerLabel?: string;
   json: boolean;
+  resultJson: boolean;
+  resultJsonOutPath?: string;
 }
 
 function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
   let answerPath = "";
   let answerLabel: string | undefined;
   let json = false;
+  let resultJson = false;
+  let resultJsonOutPath: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -747,6 +764,11 @@ function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
       index += 1;
     } else if (arg === "--json") {
       json = true;
+    } else if (arg === "--result-json") {
+      resultJson = true;
+    } else if (arg === "--result-json-out" && next) {
+      resultJsonOutPath = next;
+      index += 1;
     } else {
       throw new Error(`Unknown or incomplete argument: ${arg}`);
     }
@@ -756,7 +778,7 @@ function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
     throw new Error("Missing --answer <path|->");
   }
 
-  return { answerPath, answerLabel, json };
+  return { answerPath, answerLabel, json, resultJson, resultJsonOutPath };
 }
 
 function parseServeArgs(args: string[]): ServeArgs {
@@ -1401,12 +1423,14 @@ Example:
     "extract-claims": `Quorum extract-claims
 
 Usage:
-  quorum extract-claims --answer <path|-> [--answer-label <label>] [--json]
+  quorum extract-claims --answer <path|-> [--answer-label <label>] [--json|--result-json] [--result-json-out <path>]
 
 Options:
   --answer <path|->          Answer file to inspect, or - to read from stdin
   --answer-label <label>     Optional reviewer-facing label for text output
   --json                     Print claims as a JSON array
+  --result-json              Print claims with the answerHasClaims routing flag
+  --result-json-out <path>   Write the routing-aware claim preview JSON to disk
 
 Example:
   npm run dev -- extract-claims --answer examples/answers/hr-answer.md --json
@@ -1528,7 +1552,7 @@ Example:
 Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum extract-claims --answer <path|-> [--answer-label <label>] [--json]
+  quorum extract-claims --answer <path|-> [--answer-label <label>] [--json|--result-json] [--result-json-out <path>]
   quorum import-review --review-csv <path|-> [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--min-score <0..1>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
   quorum serve [--host <host>] [--port <port>]

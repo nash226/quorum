@@ -188,7 +188,7 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /^Quorum\n\nUsage:/);
   assert.match(result.stdout, /quorum verify .*--generated-at <timestamp>.*--result-json-out <path>/);
   assert.match(result.stdout, /quorum verify-batch .*--generated-at <timestamp>.*--result-json-out <path>/);
-  assert.match(result.stdout, /quorum extract-claims .*--answer-label <label>.*--json/);
+  assert.match(result.stdout, /quorum extract-claims .*--answer-label <label>.*--result-json/);
   assert.match(result.stdout, /quorum import-review .*--generated-at <timestamp>/);
   assert.match(result.stdout, /quorum evaluate .*--generated-at <timestamp>.*--min-score <0\.\.1>/);
   assert.match(result.stdout, /quorum version \[--json\]/);
@@ -276,6 +276,38 @@ test("extract-claims keeps JSON output backward compatible when labeled", async 
 
   assert.equal(claims[0]?.id, "claim_1");
   assert.equal(claims.length, 3);
+});
+
+test("extract-claims result-json exposes the answer routing flag", async () => {
+  const stdout = await runCli([
+    "extract-claims",
+    "--answer",
+    "examples/answers/empty-answer.md",
+    "--result-json",
+  ]);
+
+  assert.deepEqual(JSON.parse(stdout), { answerHasClaims: false, claims: [] });
+});
+
+test("extract-claims result-json-out writes the routing-aware preview", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-claim-preview-result-"));
+  const resultPath = join(tempDir, "preview.json");
+
+  try {
+    const result = await runCliAllowFailure([
+      "extract-claims",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--result-json-out",
+      resultPath,
+    ]);
+
+    assert.equal(result.code, 0);
+    assert.match(result.stdout, /Claim preview result JSON written to/);
+    assert.equal(JSON.parse(await readFile(resultPath, "utf8")).answerHasClaims, true);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("verify --help prints command-specific usage without requiring sources", async () => {
