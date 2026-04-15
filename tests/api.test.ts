@@ -150,7 +150,7 @@ test("API discovery exposes transport limits and supported methods", () => {
   assert.equal(API_CAPABILITY_HEADERS.corsMaxAge, "Access-Control-Max-Age");
   assert.equal(API_CORS_MAX_AGE_SECONDS, 600);
   assert.equal(SERVER_API_CORS_MAX_AGE_SECONDS, API_CORS_MAX_AGE_SECONDS);
-  assert.deepEqual(API_CAPABILITIES.requestContentTypes, ["application/json"]);
+  assert.deepEqual(API_CAPABILITIES.requestContentTypes, ["application/json", "application/*+json"]);
   assert.deepEqual(API_CAPABILITIES.binaryContentEncodings, ["base64"]);
   assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
   assert.equal(API_CAPABILITIES.requestTimeoutMs, SERVER_API_REQUEST_TIMEOUT_MS);
@@ -3365,7 +3365,7 @@ Refund requests receive an initial response within one business day.
       | undefined;
     assert.equal(
       verify415Example?.error,
-      "Content-Type must be application/json.",
+      "Content-Type must be JSON.",
     );
     assert.equal(verify415Example?.requestId, "workflow-trace-2026-07-10");
     assert.equal(
@@ -4021,7 +4021,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(response.status, 415);
     assert.equal(response.headers.get("cache-control"), "no-store");
     const payload = (await response.json()) as { error: string; requestId: string };
-    assert.equal(payload.error, "Content-Type must be application/json.");
+    assert.equal(payload.error, "Content-Type must be JSON.");
     assert.equal(payload.requestId, "invalid-content-type-check");
     assert.equal(response.headers.get("x-quorum-request-id"), payload.requestId);
   } finally {

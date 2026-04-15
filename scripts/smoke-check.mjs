@@ -429,7 +429,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexPayload.openapiPath, "/openapi.json");
     assert.deepEqual(indexPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
     assert.deepEqual(indexPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
-    assert.deepEqual(indexPayload.capabilities.requestContentTypes, ["application/json"]);
+    assert.deepEqual(indexPayload.capabilities.requestContentTypes, ["application/json", "application/*+json"]);
     assert.deepEqual(indexPayload.capabilities.headerNames, {
       requestId: "X-Quorum-Request-Id",
       service: "X-Quorum-Service",
@@ -516,7 +516,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(capabilitiesPayload.capabilities.cors.allowedOrigins, ["https://console.example.com"]);
     assert.deepEqual(capabilitiesPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
     assert.deepEqual(capabilitiesPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
-    assert.deepEqual(capabilitiesPayload.capabilities.requestContentTypes, ["application/json"]);
+    assert.deepEqual(capabilitiesPayload.capabilities.requestContentTypes, ["application/json", "application/*+json"]);
     assert.deepEqual(capabilitiesPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(capabilitiesPayload.capabilities.trustLevels, ["low", "medium", "high"]);
     assert.equal("endpoints" in capabilitiesPayload, false);
@@ -834,7 +834,7 @@ Employees receive 12 weeks of paid parental leave.
     });
     assert.equal(invalidContentTypeResponse.status, 415);
     const invalidContentTypePayload = await invalidContentTypeResponse.json();
-    assert.equal(invalidContentTypePayload.error, "Content-Type must be application/json.");
+    assert.equal(invalidContentTypePayload.error, "Content-Type must be JSON.");
     assert.match(invalidContentTypePayload.requestId, /^[0-9a-f-]{36}$/);
 
     const batchVerifyResponse = await fetch(`${server.url}/verify-batch`, {

@@ -282,6 +282,7 @@ const API_CORS_ALLOWED_HEADER_NAMES = API_CORS_ALLOWED_HEADERS.split(", ");
 const API_CORS_EXPOSED_HEADER_NAMES = API_CORS_EXPOSED_HEADERS.split(", ");
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
+export const API_REQUEST_CONTENT_TYPES = ["application/json", "application/*+json"] as const;
 export const API_CAPABILITIES = {
   httpMethods: [...API_ALLOWED_METHODS],
   headerNames: API_CAPABILITY_HEADERS,
@@ -291,7 +292,7 @@ export const API_CAPABILITIES = {
     exposedHeaders: API_CORS_EXPOSED_HEADER_NAMES,
     maxAgeSeconds: API_CORS_MAX_AGE_SECONDS,
   },
-  requestContentTypes: ["application/json"],
+  requestContentTypes: [...API_REQUEST_CONTENT_TYPES],
   binaryContentEncodings: ["base64"],
   maxRequestBytes: API_MAX_REQUEST_BYTES,
   requestTimeoutMs: API_REQUEST_TIMEOUT_MS,
@@ -945,7 +946,7 @@ const OPENAPI_METHOD_NOT_ALLOWED_ERROR_EXAMPLE = {
   requestId: "workflow-trace-2026-07-10",
 } as const;
 const OPENAPI_UNSUPPORTED_MEDIA_TYPE_ERROR_EXAMPLE = {
-  error: "Content-Type must be application/json.",
+  error: "Content-Type must be JSON.",
   requestId: "workflow-trace-2026-07-10",
 } as const;
 const OPENAPI_INTERNAL_SERVER_ERROR_EXAMPLE = {
@@ -1594,7 +1595,7 @@ function requireJsonRequest(request: IncomingMessage): void {
   const contentType = request.headers["content-type"];
 
   if (typeof contentType !== "string" || !isJsonContentType(contentType)) {
-    throw requestError("Content-Type must be application/json.", 415);
+    throw requestError("Content-Type must be JSON.", 415);
   }
 }
 
@@ -2082,7 +2083,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         description: "HTTP method accepted by this endpoint.",
       },
     }),
-    "415": errorResponse("The request Content-Type was not application/json.", {
+    "415": errorResponse("The request Content-Type was not a supported JSON media type.", {
       invalidContentType: {
         summary: "The caller sent a non-JSON Content-Type header",
         value: OPENAPI_UNSUPPORTED_MEDIA_TYPE_ERROR_EXAMPLE,

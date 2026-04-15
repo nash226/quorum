@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { API_ALLOWED_METHODS, API_CAPABILITIES, extractClaims, type ApiErrorResponse } from "../src/index.js";
+import {
+  API_ALLOWED_METHODS,
+  API_CAPABILITIES,
+  API_REQUEST_CONTENT_TYPES,
+  extractClaims,
+  type ApiErrorResponse,
+} from "../src/index.js";
 
 test("public package entrypoint exports the claim extractor", () => {
   assert.deepEqual(
@@ -14,14 +20,19 @@ test("public package entrypoint exports the canonical HTTP method contract", () 
   assert.deepEqual(API_CAPABILITIES.httpMethods, [...API_ALLOWED_METHODS]);
 });
 
+test("public package entrypoint exports the canonical JSON media-type contract", () => {
+  assert.deepEqual(API_REQUEST_CONTENT_TYPES, ["application/json", "application/*+json"]);
+  assert.deepEqual(API_CAPABILITIES.requestContentTypes, [...API_REQUEST_CONTENT_TYPES]);
+});
+
 test("public package entrypoint exports the HTTP error response contract", () => {
   const error: ApiErrorResponse = {
-    error: "Content-Type must be application/json.",
+    error: "Content-Type must be JSON.",
     requestId: "request-123",
   };
 
   assert.deepEqual(error, {
-    error: "Content-Type must be application/json.",
+    error: "Content-Type must be JSON.",
     requestId: "request-123",
   });
 });
