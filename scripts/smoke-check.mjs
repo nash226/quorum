@@ -587,11 +587,26 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(openApiResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(openApiResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(openApiResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    const openApiEtag = openApiResponse.headers.get("etag");
+    assert.match(openApiEtag ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(openApiResponse.headers.get("cache-control"), "public, max-age=0, must-revalidate");
     const openApiPayload = await openApiResponse.json();
     assert.equal(openApiPayload.openapi, "3.1.0");
     assert.equal(openApiPayload.info.title, "Quorum Local API");
     assert.equal(openApiPayload.paths["/verify"].options.summary, "Verify preflight");
     assert.equal(openApiPayload.paths["/verify"].post.summary, "Verify one answer");
+
+    const headOpenApiResponse = await fetch(`${server.url}/openapi.json`, { method: "HEAD" });
+    assert.equal(headOpenApiResponse.status, 200);
+    assert.equal(headOpenApiResponse.headers.get("etag"), openApiEtag);
+    assert.equal(await headOpenApiResponse.text(), "");
+
+    const notModifiedOpenApiResponse = await fetch(`${server.url}/openapi.json`, {
+      headers: { "if-none-match": openApiEtag ?? "" },
+    });
+    assert.equal(notModifiedOpenApiResponse.status, 304);
+    assert.equal(notModifiedOpenApiResponse.headers.get("etag"), openApiEtag);
+    assert.equal(await notModifiedOpenApiResponse.text(), "");
 
     const healthResponse = await fetch(`${server.url}/health`);
     assert.equal(healthResponse.status, 200);
