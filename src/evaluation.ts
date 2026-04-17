@@ -42,6 +42,8 @@ export interface EvaluationScorecard {
   answerPath: string;
   answerLabel?: string;
   answerPreview: string;
+  /** Whether the evaluated answer produced at least one normalized claim. */
+  answerHasClaims?: boolean;
   sourceDirs: string[];
   sourcePaths: string[];
   report: VerificationReport;
@@ -266,6 +268,7 @@ export async function evaluateFixture(
     answerPath,
     answerLabel: report.answerLabel,
     answerPreview: report.answerPreview,
+    answerHasClaims: report.assessments.length > 0,
     sourceDirs,
     sourcePaths: resolvedSourcePaths,
     report,
@@ -487,6 +490,7 @@ export function renderEvaluationScorecard(scorecard: EvaluationScorecard): strin
     `Generated at: ${scorecard.report.generatedAt}`,
     `Answer: ${scorecard.answerPath}`,
     ...(scorecard.answerLabel ? [`Answer label: ${scorecard.answerLabel}`] : []),
+    `Answer has claims: ${scorecard.answerHasClaims ?? scorecard.claims.length > 0 ? "yes" : "no"}`,
     `Answer preview: ${scorecard.answerPreview || "No answer content provided."}`,
     ...(scorecard.sourceDirs.length > 0
       ? [`Source directories: ${scorecard.sourceDirs.join(", ")}`]
@@ -597,6 +601,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
       ...(scorecard.fixturePath ? [`- Fixture path: \`${scorecard.fixturePath}\``] : []),
       `- Answer path: \`${scorecard.answerPath}\``,
       ...(scorecard.answerLabel ? [`- Answer label: \`${scorecard.answerLabel}\``] : []),
+      `- Answer has claims: ${scorecard.answerHasClaims ?? scorecard.claims.length > 0 ? "yes" : "no"}`,
       `- Answer preview: ${scorecard.answerPreview || "No answer content provided."}`,
       ...(scorecard.sourceDirs.length > 0
         ? [`- Source directories: ${scorecard.sourceDirs.map((sourceDir) => `\`${sourceDir}\``).join(", ")}`]
@@ -711,6 +716,7 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
               : ""
           }
           <div><dt>Answer preview</dt><dd>${escapeHtml(scorecard.answerPreview || "No answer content provided.")}</dd></div>
+          <div><dt>Answer has claims</dt><dd>${scorecard.answerHasClaims ?? scorecard.claims.length > 0 ? "yes" : "no"}</dd></div>
           ${
             scorecard.sourceDirs.length > 0
               ? `<div><dt>Source directories</dt><dd>${scorecard.sourceDirs.map(escapeHtml).join("<br />")}</dd></div>`
@@ -1075,6 +1081,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       "answer_path",
       "answer_label",
       "answer_preview",
+      "answer_has_claims",
       "source_dirs",
       "source_paths",
       "source_ids",
@@ -1112,6 +1119,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       scorecard.answerPath,
       scorecard.answerLabel ?? "",
       scorecard.answerPreview,
+      (scorecard.answerHasClaims ?? scorecard.claims.length > 0) ? "yes" : "no",
       serializeDelimitedList(scorecard.sourceDirs),
       serializeDelimitedList(scorecard.sourcePaths),
       serializeDelimitedList(scorecard.report.sources.map((source) => source.id)),
