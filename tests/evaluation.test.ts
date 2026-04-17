@@ -659,8 +659,8 @@ test("renders evaluation text report totals and mismatch detection", () => {
   assert.match(rendered, /Matched claim verdicts: 0\/1/);
   assert.match(rendered, /Overall claim verdict score: 0%/);
   assert.match(rendered, /Domain rollups:/);
-  assert.match(rendered, /- hr: 1 fixture, 1 mismatch, 0\/1 matched \(0%\)/);
-  assert.match(rendered, /- support: 1 fixture, 0 mismatches, 0\/0 matched \(n\/a\)/);
+  assert.match(rendered, /- hr: 1 fixture, 0 with claims, 1 without claims, 1 mismatch, 0\/1 matched \(0%\)/);
+  assert.match(rendered, /- support: 1 fixture, 0 with claims, 1 without claims, 0 mismatches, 0\/0 matched \(n\/a\)/);
 });
 
 test("renders evaluation summary csv rows for each fixture", () => {
@@ -889,9 +889,9 @@ test("renders evaluation domain summary csv rows for each domain", () => {
   assert.equal(
     rendered,
     [
-      "generated_at,domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review",
-      "2026-07-05T10:20:00.000Z,hr,1,0,1,1,1.000,100%,1,0,0,0,1,0,0,0",
-      "2026-07-05T10:20:00.000Z,support,1,1,0,1,0.000,0%,1,0,0,0,0,1,0,0",
+      "generated_at,domain,fixture_count,mismatch_count,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review",
+      "2026-07-05T10:20:00.000Z,hr,1,0,0,1,1,1,1.000,100%,1,0,0,0,1,0,0,0",
+      "2026-07-05T10:20:00.000Z,support,1,1,0,1,0,1,0.000,0%,1,0,0,0,0,1,0,0",
       "",
     ].join("\n"),
   );
@@ -988,8 +988,8 @@ test("renders evaluation aggregate summary csv for the full benchmark run", () =
   assert.equal(
     rendered,
     [
-      "generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review",
-      "2026-07-05T10:20:00.000Z,2,1,1,2,0.500,50%,hr | support,1 | 1,0 | 1,1.000 | 0.000,100% | 0%,2,0,0,0,1,1,0,0",
+      "generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review",
+      "2026-07-05T10:20:00.000Z,2,0,2,1,1,2,0.500,50%,hr | support,1 | 1,0 | 1,0 | 0,1 | 1,1.000 | 0.000,100% | 0%,2,0,0,0,1,1,0,0",
       "",
     ].join("\n"),
   );
@@ -1062,7 +1062,7 @@ test("renders evaluation markdown report with fixture summaries", () => {
   assert.match(rendered, /- Matched claim verdicts: 1\/1/);
   assert.match(rendered, /- Overall claim verdict score: 100%/);
   assert.match(rendered, /### Domain Rollups/);
-  assert.match(rendered, /- `support`: 1 fixture, 0 mismatches, 1\/1 matched \(100%\)/);
+  assert.match(rendered, /- `support`: 1 fixture, 1 with claims, 0 without claims, 0 mismatches, 1\/1 matched \(100%\)/);
   assert.match(rendered, /### 1\. Support policy example/);
   assert.match(rendered, /- Fixture path: `\/tmp\/fixtures\/support\.json`/);
   assert.match(rendered, /- Answer label: `Support reviewer packet`/);
