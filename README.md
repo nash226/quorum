@@ -51,6 +51,7 @@ The current CLI can:
 - split the answer into atomic claims
 - split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
 - strip common Unicode numbered-list markers from exported policy answers
+- keep colon-terminated business claims such as `No refunds:` while still skipping recognized wrapper labels such as `Policy summary:`
 - ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims
 - preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
 - compare each claim against approved source snippets
