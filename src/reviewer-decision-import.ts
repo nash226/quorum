@@ -204,6 +204,7 @@ export function renderReviewerDecisionImportReport(
       ...(group.answerPath && group.answerPath !== group.label
         ? [`Answer file: ${renderMarkdownInline(group.answerPath)}`]
         : []),
+      `Answer has claims: ${hasImportedAnswerClaims(group) ? "yes" : "no"}`,
       ...(group.answerPreview
         ? [`Answer preview: ${renderMarkdownInline(group.answerPreview)}`]
         : []),
@@ -289,6 +290,7 @@ export function renderReviewerDecisionImportMarkdownReport(
       ...(group.answerPath && group.answerPath !== group.label
         ? [`- Answer file: ${renderMarkdownInline(group.answerPath)}`]
         : []),
+      `- Answer has claims: ${hasImportedAnswerClaims(group) ? "yes" : "no"}`,
       ...(group.answerPreview
         ? [`- Answer preview: ${renderMarkdownInline(group.answerPreview)}`, ""]
         : []),
@@ -474,6 +476,7 @@ export function renderReviewerDecisionImportHtmlReport(
                     ${group.answerPreview
                       ? `<p class="answer-group__preview">${escapeHtml(group.answerPreview)}</p>`
                       : ""}
+                    <p class="answer-group__preview">Answer has claims: ${hasImportedAnswerClaims(group) ? "yes" : "no"}</p>
                     ${group.originalAnswerFailPolicy
                       ? `<p class="answer-group__preview">Original answer fail policy: ${escapeHtml(
                           group.originalAnswerFailPolicy === "matched"
@@ -961,6 +964,10 @@ function createEmptyImportSummary(): ReviewerDecisionImportReport["summary"] {
     unsupported: 0,
     needs_review: 0,
   };
+}
+
+function hasImportedAnswerClaims(group: ReviewerDecisionGroup): boolean {
+  return group.answerHasClaims ?? group.claims.length > 0;
 }
 
 function selectPrimaryImportedClaim(
