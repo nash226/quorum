@@ -75,6 +75,7 @@ export interface BatchVerificationReport {
     contradicted: number;
     unsupported: number;
     needs_review: number;
+    answersWithClaims: number;
     answersWithoutClaims: number;
     answersWithFailures: number;
   };
