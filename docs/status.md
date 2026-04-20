@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `fe40b56` on 2026-07-14, feat: show imported claim routing signal
+- Latest shipped change: `9e5dc1f` on 2026-07-14, feat: expose batch claim routing totals
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -15,6 +15,7 @@
 - read an AI-generated answer from a PDF or DOCX file by extracting its readable text
 - batch verify multiple AI-generated answers from a directory
 - include a per-answer `answerHasClaims` flag in batch results so queue integrations can route empty drafts without recounting claims
+- include `answersWithClaims` and `answersWithoutClaims` in batch summaries so queue integrations can route claim-bearing and empty answers without recounting rows
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
@@ -102,6 +103,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: expose batch claim routing totals | `9e5dc1f` |
 | 2026-07-14 | Direct push | feat: show imported claim routing signal | `fe40b56` |
 | 2026-07-14 | Direct push | fix: preserve reviewer claim routing | `8d1bed1` |
 | 2026-07-14 | Direct push | fix: preserve colon-terminated business claims | `12c8153` |
@@ -109,5 +111,4 @@
 | 2026-07-14 | Direct push | feat: expose evaluation claim rollups | `8d1e1db` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim routing | `cd741be` |
 | 2026-07-14 | [#441](https://github.com/nash226/quorum/pull/441) | test: smoke-test OpenAPI cache revalidation | `1978db9` |
-| 2026-07-14 | [#440](https://github.com/nash226/quorum/pull/440) | fix: advertise supported JSON media types | `5cb342b` |
 
