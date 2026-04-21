@@ -581,6 +581,9 @@ npm run dev -- serve --port 3000
 See [docs/api-integration.md](docs/api-integration.md) for a focused
 copy-paste guide covering verification, claim previews, request correlation,
 fail-gated HTTP responses, binary PDF/DOCX uploads, and reviewer artifacts.
+The new [API deployment guide](docs/api-deployment.md) records the local API's
+authentication boundary, safe network placement, operational limits, and
+durable source-ID conventions for deployers.
 The guide also documents the discovery headers that expose the running service
 version, OpenAPI path, request limits, and request-correlation ID to clients.
 The machine-readable `/` and `/capabilities` responses additionally publish
