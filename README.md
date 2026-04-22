@@ -84,6 +84,7 @@ The current CLI can:
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
+- include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
 - show the imported `answer_has_claims` routing signal in text, Markdown, and HTML reviewer handoff reports
 - reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
 - render Markdown reviewer-import reports with safe, single-line answer and claim context

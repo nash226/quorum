@@ -29,6 +29,7 @@ waiting on plan language"
   assert.equal(report.answerGroups.length, 1);
   assert.equal(report.answerGroups[0]?.label, "Unspecified answer");
   assert.equal(report.answerGroups[0]?.answerHasClaims, true);
+  assert.equal(report.answerGroups[0]?.reviewStatus, "pending");
   assert.equal(report.answerGroups[0]?.summary.reviewedClaims, 2);
 
   assert.equal(report.claims[0]?.finalVerdict, "verified");
@@ -94,6 +95,7 @@ empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from th
   assert.equal(report.answerGroups[0]?.answerPath, "examples/answers/empty.md");
   assert.equal(report.answerGroups[0]?.answerHasClaims, false);
   assert.equal(report.answerGroups[0]?.summary.totalClaims, 0);
+  assert.equal(report.answerGroups[0]?.reviewStatus, "no_claims");
   assert.match(
     renderReviewerDecisionImportReport(report),
     /No claims were extracted from this answer\./,
@@ -120,7 +122,7 @@ empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from th
   );
   assert.match(
     renderReviewerDecisionImportSummaryCsv(report),
-    /empty,examples\/answers\/empty\.md,Short\.,false,needs_review,,No claims were extracted from this answer\.,,.*0,0,0,0,0,0,0,0,,,clear,/,
+    /empty,examples\/answers\/empty\.md,Short\.,false,no_claims,needs_review,,No claims were extracted from this answer\.,,.*0,0,0,0,0,0,0,0,,,clear,/,
   );
 });
 
@@ -321,14 +323,14 @@ examples/answers/support-answer.md,Refunds are available within 14 days of purch
   const lines = rendered.trim().split("\n");
   assert.equal(
     lines[0],
-    "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids",
+    "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,review_status,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids",
   );
   assert.equal(
     lines[1],
-    "2026-07-01T12:00:00.000Z,examples/answers/hr-answer.md,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,true,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,,,0.998,Employees receive 12 weeks of paid parental leave.,2,1,1,0,2,0,0,0,,,clear,,HR Policy,high,2026-05-31,,",
+    "2026-07-01T12:00:00.000Z,examples/answers/hr-answer.md,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,true,pending,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,,,0.998,Employees receive 12 weeks of paid parental leave.,2,1,1,0,2,0,0,0,,,clear,,HR Policy,high,2026-05-31,,",
   );
   assert.equal(
     lines[2],
-    "2026-07-01T12:00:00.000Z,examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,true,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,,,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,,,matched,needs_review,Support Playbook,medium,2026-06-01,,",
+    "2026-07-01T12:00:00.000Z,examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,true,reviewed,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,,,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,,,matched,needs_review,Support Playbook,medium,2026-06-01,,",
   );
 });

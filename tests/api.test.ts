@@ -4150,6 +4150,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
         summary: Record<string, number>;
         answerGroups: Array<{
           label: string;
+          reviewStatus: string;
         }>;
       };
     };
@@ -4167,6 +4168,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       needs_review: 1,
     });
     assert.equal(result.report.answerGroups[0]?.label, "HR reviewer packet");
+    assert.equal(result.report.answerGroups[0]?.reviewStatus, "reviewed");
   } finally {
     await api.close();
   }

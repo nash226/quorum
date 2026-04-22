@@ -132,6 +132,7 @@ export type {
   ReviewerDecisionGroup,
   ReviewerDecisionImportReport,
   ReviewerDecisionImportResult,
+  ReviewerQueueStatus,
 } from "./reviewer-decision-import.js";
 export {
   renderBatchTextReport,
