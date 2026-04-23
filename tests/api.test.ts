@@ -4148,6 +4148,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       failVerdicts: string[];
       report: {
         summary: Record<string, number>;
+        queueSummary: Record<string, number>;
         answerGroups: Array<{
           label: string;
           reviewStatus: string;
@@ -4166,6 +4167,12 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       contradicted: 0,
       unsupported: 0,
       needs_review: 1,
+    });
+    assert.deepEqual(result.report.queueSummary, {
+      totalAnswers: 1,
+      pendingAnswers: 0,
+      reviewedAnswers: 1,
+      noClaimsAnswers: 0,
     });
     assert.equal(result.report.answerGroups[0]?.label, "HR reviewer packet");
     assert.equal(result.report.answerGroups[0]?.reviewStatus, "reviewed");
