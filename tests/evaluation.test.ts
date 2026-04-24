@@ -216,6 +216,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/empty-answer.json"),
     resolve("examples/evaluations/hr/onboarding-policy.json"),
     resolve("examples/evaluations/hr/pdf-policy.json"),
+    resolve("examples/evaluations/hr/source-directory-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
     resolve("examples/evaluations/support/account-security-policy.json"),
     resolve("examples/evaluations/support/escalation-policy.json"),
@@ -253,7 +254,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 9);
+  assert.equal(scorecards.length, 10);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -261,6 +262,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Empty answer example",
       "HR onboarding policy example",
       "HR PDF policy example",
+      "HR source directory policy example",
       "Support policy example",
       "Support account policy example",
       "Support escalation ambiguity example",
@@ -283,10 +285,15 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 3);
+  assert.equal(scorecards.length, 4);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
-    ["HR policy example", "HR onboarding policy example", "HR PDF policy example"],
+    [
+      "HR policy example",
+      "HR onboarding policy example",
+      "HR PDF policy example",
+      "HR source directory policy example",
+    ],
   );
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "hr"));
 });
