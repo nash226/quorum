@@ -41,6 +41,9 @@ started with `--cors-origin`, the configured origin allowlist is published in
 the discovery and OpenAPI capability examples.
 The same limits are available as `capabilities.maxRequestBytes` and
 `capabilities.requestTimeoutMs` in `GET /capabilities` and `GET /` responses.
+Queue integrations can use `capabilities.reviewQueueStatuses` to route imported
+answers without hard-coding the allowed values: `pending`, `reviewed`, and
+`no_claims`.
 If a browser client uses the wrong method, it can read the exposed `Allow`
 header on the `405` response to discover the route's supported method.
 
