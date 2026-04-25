@@ -1,0 +1,65 @@
+# Reviewer Queue Workflow
+
+Quorum's reviewer handoff is a file-based workflow: verify answers into a
+claim-level CSV, let a reviewer fill in the decision columns, then import the
+completed CSV to produce queue-ready summaries.
+
+## 1. Create a review packet
+
+Run batch verification with the reviewer CSV and summary CSV artifacts enabled:
+
+```bash
+npm run dev -- verify-batch \
+  --answer-dir examples/answers \
+  --source-dir examples/sources \
+  --review-csv-out reports/reviewer-queue.csv \
+  --summary-csv-out reports/reviewer-queue-summary.csv
+```
+
+The reviewer CSV preserves the answer label and path, normalized answer
+preview, model verdict, evidence quote, source ID, and source freshness. The
+summary CSV is one row per answer and includes `answer_has_claims`,
+`review_status`, and claim-level totals for queue routing.
+
+## 2. Review claim rows
+
+A reviewer fills in `reviewer_verdict` and `reviewer_notes` for each claim.
+Leave `reviewer_verdict` empty when the claim still needs a decision. Answers
+with no extracted claims are represented by metadata rows with
+`answer_has_claims=false`; they are not silently treated as reviewed.
+
+## 3. Import the completed decisions
+
+Import the CSV to produce JSON, Markdown, HTML, and a queue summary CSV:
+
+```bash
+npm run dev -- import-review \
+  --review-csv reports/reviewer-queue.csv \
+  --result-json-out reports/reviewer-queue.json \
+  --markdown-out reports/reviewer-queue.md \
+  --html-out reports/reviewer-queue.html \
+  --summary-csv-out reports/reviewer-queue-final.csv
+```
+
+The imported JSON contains `queueSummary` with `totalAnswers`,
+`pendingAnswers`, `reviewedAnswers`, and `noClaimsAnswers`. Each answer group
+also has `review_status` (`pending`, `reviewed`, or `no_claims`) so a queue
+consumer can route rows without recounting claims. The HTML report presents
+the same totals for human review, while the CSV keeps stable answer and source
+context for downstream handoff.
+
+## Benchmark drift alongside reviewer work
+
+Run evaluation separately when the queue also needs benchmark drift context:
+
+```bash
+npm run dev -- evaluate \
+  --fixture-dir examples/evaluations \
+  --result-json-out reports/evaluation.json \
+  --aggregate-summary-csv-out reports/evaluation-summary.csv
+```
+
+The result JSON and aggregate summary expose `mismatchCount`; domain summaries
+include the same count so a queue or dashboard can flag drift without scanning
+every scorecard. Use `--fail-on-mismatch` in CI when any mismatch should block
+the workflow.
