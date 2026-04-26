@@ -86,6 +86,7 @@ The current CLI can:
 - ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
+- filter imported reviewer decisions by `pending`, `reviewed`, or `no_claims` queue status for targeted handoffs
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
 - include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
 - include a top-level `queueSummary` in reviewer-import JSON reports so queue consumers can route pending, reviewed, and claim-less answers without scanning every group
@@ -1449,6 +1450,9 @@ Options:
   routing flag, the primary final finding, reviewer/model rationale,
   primary evidence title plus trust/freshness/path/score/quote context,
   reviewed/pending status, reviewer overrides, and final verdict totals
+- `import-review --queue-status <pending|reviewed|no_claims>`: emit only answer
+  groups in one reviewer queue state, with filtered claims and totals for a
+  targeted handoff
 - `import-review --fail-on <verdict>`: exit with code `2` when that final
   reviewer-aware verdict appears after any overrides; may be repeated
 - `evaluate --fixture <path>`: run one evaluation fixture JSON file; may be

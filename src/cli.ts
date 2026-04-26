@@ -41,6 +41,8 @@ import {
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
   renderReviewerDecisionImportSummaryCsv,
+  filterReviewerDecisionImportReport,
+  parseReviewerQueueStatus,
 } from "./reviewer-decision-import.js";
 import { API_VERSION, createOpenApiDocument, startApiServer } from "./api-server.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
@@ -97,6 +99,7 @@ interface ImportReviewArgs {
   htmlOutPath?: string;
   summaryCsvOutPath?: string;
   generatedAt?: string;
+  queueStatus?: import("./reviewer-decision-import.js").ReviewerQueueStatus;
 }
 
 interface EvaluateArgs {
@@ -456,15 +459,18 @@ async function runImportReview(args: string[]): Promise<void> {
     reviewCsvPath: parsed.reviewCsvPath,
     generatedAt: parsed.generatedAt,
   });
-  const jsonReport = JSON.stringify(report, null, 2);
-  const markdownReport = renderReviewerDecisionImportMarkdownReport(report, parsed.failOn);
-  const htmlReport = renderReviewerDecisionImportHtmlReport(report, parsed.failOn);
-  const summaryCsv = renderReviewerDecisionImportSummaryCsv(report, parsed.failOn);
-  const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
+  const filteredReport = parsed.queueStatus
+    ? filterReviewerDecisionImportReport(report, parsed.queueStatus)
+    : report;
+  const jsonReport = JSON.stringify(filteredReport, null, 2);
+  const markdownReport = renderReviewerDecisionImportMarkdownReport(filteredReport, parsed.failOn);
+  const htmlReport = renderReviewerDecisionImportHtmlReport(filteredReport, parsed.failOn);
+  const summaryCsv = renderReviewerDecisionImportSummaryCsv(filteredReport, parsed.failOn);
+  const failVerdicts = matchingFailVerdicts(filteredReport, parsed.failOn);
   const shouldFail = failVerdicts.length > 0;
   const resultJson = JSON.stringify(
     {
-      report,
+      report: filteredReport,
       shouldFail,
       failVerdicts,
     },
@@ -508,7 +514,7 @@ async function runImportReview(args: string[]): Promise<void> {
     return;
   }
 
-  process.stdout.write(renderReviewerDecisionImportReport(report, parsed.failOn));
+  process.stdout.write(renderReviewerDecisionImportReport(filteredReport, parsed.failOn));
 
   if (parsed.outPath) {
     console.log(`Imported reviewer decisions written to ${parsed.outPath}`);
@@ -1062,6 +1068,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   let resultJsonOutPath: string | undefined;
   const failOn: ClaimVerdict[] = [];
   let generatedAt: string | undefined;
+  let queueStatus: ImportReviewArgs["queueStatus"];
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -1091,6 +1098,9 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     } else if (arg === "--generated-at" && next) {
       generatedAt = parseGeneratedAt(next);
       index += 1;
+    } else if (arg === "--queue-status" && next) {
+      queueStatus = parseReviewerQueueStatus(next);
+      index += 1;
     } else if (arg === "--json") {
       json = true;
     } else if (arg === "--result-json") {
@@ -1115,6 +1125,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     htmlOutPath,
     summaryCsvOutPath,
     generatedAt,
+    queueStatus,
   };
 }
 
@@ -1439,10 +1450,11 @@ Example:
     "import-review": `Quorum import-review
 
 Usage:
-  quorum import-review --review-csv <path|-> [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum import-review --review-csv <path|-> [--queue-status <status>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --review-csv <path|->      Reviewer decision CSV to import, or - to read from stdin
+  --queue-status <status>   Keep only pending, reviewed, or no_claims answer groups
   --generated-at <timestamp> Use this ISO timestamp in generated reports
   --json                     Print the full imported JSON report
   --result-json              Print the imported report with fail-policy metadata

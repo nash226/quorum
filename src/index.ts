@@ -122,6 +122,8 @@ export type {
 export {
   importReviewerDecisions,
   importReviewerDecisionsResult,
+  filterReviewerDecisionImportReport,
+  parseReviewerQueueStatus,
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
