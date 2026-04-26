@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2e00ee2` on 2026-07-14, feat: advertise reviewer queue statuses
+- Latest shipped change: `fae6d0c` on 2026-07-14, feat: expose evaluation mismatch rates
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -51,6 +51,7 @@
 - include `answersWithClaims` and `answersWithoutClaims` in evaluation aggregate and domain rollups so queue integrations can route empty benchmark answers without inspecting every scorecard
 - include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
 - include aggregate evaluation mismatch counts in the reusable JSON summary so queue and dashboard consumers can triage benchmark drift from one object
+- include aggregate and per-domain evaluation mismatch rates in JSON summaries and CSV/report surfaces so benchmark drift is comparable without client-side calculation
 - ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
@@ -110,6 +111,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: expose evaluation mismatch rates | `fae6d0c` |
 | 2026-07-14 | Direct push | feat: advertise reviewer queue statuses | `2e00ee2` |
 | 2026-07-14 | Direct push | docs: explain reviewer queue workflow | `ffef62a` |
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch count in summary | `f2a0b79` |
@@ -117,5 +119,4 @@
 | 2026-07-14 | Direct push | feat: show reviewer queue totals in html reports | `6fee78b` |
 | 2026-07-14 | [#452](https://github.com/nash226/quorum/pull/452) | feat: add reviewer queue summary | `1bf0c9c` |
 | 2026-07-14 | [#451](https://github.com/nash226/quorum/pull/451) | Expose queue-ready reviewer import status with tests and API documentation. | `0acba18` |
-| 2026-07-14 | Direct push | docs: add API deployment guidance | `81535f4` |
 
