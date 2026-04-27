@@ -3161,6 +3161,7 @@ Refund requests receive an initial response within one business day.
         ].join("\n"),
         generatedAt: "2026-07-07T19:22:00.000Z",
         failOn: ["needs_review"],
+        queueStatus: "reviewed",
         includeArtifacts: ["markdown", "summary_csv"],
         failOnStatus: true,
       },
@@ -4185,6 +4186,52 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     });
     assert.equal(result.report.answerGroups[0]?.label, "HR reviewer packet");
     assert.equal(result.report.answerGroups[0]?.reviewStatus, "reviewed");
+  } finally {
+    await api.close();
+  }
+});
+
+test("HTTP reviewer imports can filter answer groups by queue status", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/import-review`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        reviewCsvContent: [
+          "answer_label,answer_path,answer_preview,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "Pending answer,answers/pending.md,Pending.,true,claim_1,Pending policy claim.,needs_review,Needs review,HR Policy,Pending policy claim.,,",
+          "Reviewed answer,answers/reviewed.md,Reviewed.,true,claim_1,Reviewed policy claim.,verified,Matched,HR Policy,Reviewed policy claim.,verified,Approved",
+          "No claims answer,answers/empty.md,Empty.,false,,,,No claims were extracted from this answer.,,,",
+        ].join("\n"),
+        queueStatus: "pending",
+        failOn: ["needs_review"],
+        failOnStatus: true,
+      }),
+    });
+
+    assert.equal(response.status, 409);
+    const result = await response.json() as {
+      shouldFail: boolean;
+      failVerdicts: string[];
+      report: {
+        queueSummary: Record<string, number>;
+        answerGroups: Array<{ label: string; reviewStatus: string }>;
+      };
+    };
+
+    assert.equal(result.shouldFail, true);
+    assert.deepEqual(result.failVerdicts, ["needs_review"]);
+    assert.deepEqual(result.report.queueSummary, {
+      totalAnswers: 1,
+      pendingAnswers: 1,
+      reviewedAnswers: 0,
+      noClaimsAnswers: 0,
+    });
+    assert.deepEqual(result.report.answerGroups.map((group) => [group.label, group.reviewStatus]), [
+      ["Pending answer", "pending"],
+    ]);
   } finally {
     await api.close();
   }
