@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a2e023e` on 2026-07-14, test: smoke-test reviewer queue filtering
+- Latest shipped change: `dd33591` on 2026-07-14, feat: export reviewer queue summary csv
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -62,6 +62,7 @@
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
 - include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
 - include a top-level `queueSummary` in reviewer-import JSON reports so queue consumers can route pending, reviewed, and claim-less answers without scanning every group
+- export reviewer-import queue totals as a standalone `queue_summary_csv` artifact or `--queue-summary-csv-out` file so CSV-only handoffs do not need to parse JSON
 - show the same reviewer queue totals in polished HTML import reports so human handoffs expose pending, reviewed, and claim-less answers at a glance
 - show the imported `answer_has_claims` routing signal in text, Markdown, and HTML reviewer handoff reports
 - reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
@@ -115,6 +116,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: export reviewer queue summary csv | `dd33591` |
 | 2026-07-14 | Direct push | test: smoke-test reviewer queue filtering | `a2e023e` |
 | 2026-07-14 | Direct push | fix: scope reviewer queue filter to imports | `460bdcb` |
 | 2026-07-14 | Direct push | fix: advertise reviewer queue filter in OpenAPI | `b4ca101` |
@@ -122,5 +124,4 @@
 | 2026-07-14 | Direct push | feat: filter HTTP reviewer imports by queue status | `1e3a519` |
 | 2026-07-14 | Direct push | feat: filter reviewer imports by queue status | `03cbf03` |
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch rates | `fae6d0c` |
-| 2026-07-14 | Direct push | feat: advertise reviewer queue statuses | `2e00ee2` |
 
