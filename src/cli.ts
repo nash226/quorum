@@ -40,6 +40,7 @@ import {
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
+  renderReviewerDecisionImportQueueSummaryCsv,
   renderReviewerDecisionImportSummaryCsv,
   filterReviewerDecisionImportReport,
   parseReviewerQueueStatus,
@@ -98,6 +99,7 @@ interface ImportReviewArgs {
   markdownOutPath?: string;
   htmlOutPath?: string;
   summaryCsvOutPath?: string;
+  queueSummaryCsvOutPath?: string;
   generatedAt?: string;
   queueStatus?: import("./reviewer-decision-import.js").ReviewerQueueStatus;
 }
@@ -466,6 +468,7 @@ async function runImportReview(args: string[]): Promise<void> {
   const markdownReport = renderReviewerDecisionImportMarkdownReport(filteredReport, parsed.failOn);
   const htmlReport = renderReviewerDecisionImportHtmlReport(filteredReport, parsed.failOn);
   const summaryCsv = renderReviewerDecisionImportSummaryCsv(filteredReport, parsed.failOn);
+  const queueSummaryCsv = renderReviewerDecisionImportQueueSummaryCsv(filteredReport, parsed.failOn);
   const failVerdicts = matchingFailVerdicts(filteredReport, parsed.failOn);
   const shouldFail = failVerdicts.length > 0;
   const resultJson = JSON.stringify(
@@ -496,6 +499,10 @@ async function runImportReview(args: string[]): Promise<void> {
 
   if (parsed.summaryCsvOutPath) {
     await writeReportFile(parsed.summaryCsvOutPath, summaryCsv);
+  }
+
+  if (parsed.queueSummaryCsvOutPath) {
+    await writeReportFile(parsed.queueSummaryCsvOutPath, queueSummaryCsv);
   }
 
   if (parsed.resultJson) {
@@ -534,6 +541,10 @@ async function runImportReview(args: string[]): Promise<void> {
 
   if (parsed.summaryCsvOutPath) {
     console.log(`Reviewer decision summary CSV written to ${parsed.summaryCsvOutPath}`);
+  }
+
+  if (parsed.queueSummaryCsvOutPath) {
+    console.log(`Reviewer queue summary CSV written to ${parsed.queueSummaryCsvOutPath}`);
   }
 
   if (shouldFail) {
@@ -1063,6 +1074,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   let markdownOutPath: string | undefined;
   let htmlOutPath: string | undefined;
   let summaryCsvOutPath: string | undefined;
+  let queueSummaryCsvOutPath: string | undefined;
   let json = false;
   let resultJson = false;
   let resultJsonOutPath: string | undefined;
@@ -1091,6 +1103,9 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
       index += 1;
     } else if (arg === "--summary-csv-out" && next) {
       summaryCsvOutPath = next;
+      index += 1;
+    } else if (arg === "--queue-summary-csv-out" && next) {
+      queueSummaryCsvOutPath = next;
       index += 1;
     } else if (arg === "--fail-on" && next) {
       failOn.push(parseClaimVerdict(next));
@@ -1124,6 +1139,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     markdownOutPath,
     htmlOutPath,
     summaryCsvOutPath,
+    queueSummaryCsvOutPath,
     generatedAt,
     queueStatus,
   };
@@ -1450,7 +1466,7 @@ Example:
     "import-review": `Quorum import-review
 
 Usage:
-  quorum import-review --review-csv <path|-> [--queue-status <status>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum import-review --review-csv <path|-> [--queue-status <status>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--queue-summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --review-csv <path|->      Reviewer decision CSV to import, or - to read from stdin
@@ -1463,6 +1479,8 @@ Options:
   --markdown-out <path>      Write a Markdown import report
   --html-out <path>          Write a styled HTML import report
   --summary-csv-out <path>   Write a one-row-per-answer summary CSV
+  --queue-summary-csv-out <path>
+                            Write one CSV row with overall reviewer queue totals
   --fail-on <verdict>        Exit with code 2 when the verdict appears; may repeat
 
 Example:
