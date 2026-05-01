@@ -602,6 +602,54 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
 }
 
+export function renderBatchAggregateSummaryCsv(report: BatchVerificationReport): string {
+  const rows = [
+    [
+      "generated_at",
+      "answer_count",
+      "answers_with_claims",
+      "answers_without_claims",
+      "answers_with_failures",
+      "total_claims",
+      "verified",
+      "contradicted",
+      "unsupported",
+      "needs_review",
+      "source_count",
+      "source_titles",
+      "source_trust_levels",
+      "source_updated_at",
+      "source_paths",
+      "source_ids",
+    ],
+    [
+      report.generatedAt,
+      report.answerCount.toString(),
+      report.summary.answersWithClaims.toString(),
+      report.summary.answersWithoutClaims.toString(),
+      report.summary.answersWithFailures.toString(),
+      (
+        report.summary.verified
+        + report.summary.contradicted
+        + report.summary.unsupported
+        + report.summary.needs_review
+      ).toString(),
+      report.summary.verified.toString(),
+      report.summary.contradicted.toString(),
+      report.summary.unsupported.toString(),
+      report.summary.needs_review.toString(),
+      report.sourceCount.toString(),
+      report.sources.map((source) => source.title).join(" | "),
+      report.sources.map((source) => source.trustLevel).join(" | "),
+      report.sources.map((source) => source.updatedAt ?? "").join(" | "),
+      report.sources.map((source) => source.sourcePath ?? "").join(" | "),
+      report.sources.map((source) => source.id).join(" | "),
+    ],
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 export function renderHtmlReport(
   report: VerificationReport,
   failOn: ClaimVerdict[] = [],
