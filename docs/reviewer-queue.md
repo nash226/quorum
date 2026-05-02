@@ -77,3 +77,20 @@ The result JSON and aggregate summary expose `mismatchCount`; domain summaries
 include the same count so a queue or dashboard can flag drift without scanning
 every scorecard. Use `--fail-on-mismatch` in CI when any mismatch should block
 the workflow.
+
+## Create one queue overview
+
+Use `review-queue` when an operator or dashboard needs reviewer workload and
+benchmark drift in one machine-readable handoff:
+
+```bash
+npm run dev -- review-queue \
+  --review-csv reports/reviewer-queue.csv \
+  --fixture-dir examples/evaluations \
+  --json \
+  --out reports/reviewer-queue-overview.json \
+  --csv-out reports/reviewer-queue-overview.csv
+```
+
+The overview includes pending, reviewed, and no-claims answer totals, claim
+workload totals, and optional evaluation fixture, mismatch, and score metrics.
