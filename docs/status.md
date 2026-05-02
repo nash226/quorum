@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d192372` on 2026-07-14, feat: export batch aggregate summary csv
+- Latest shipped change: `310c43a` on 2026-07-14, feat: add reviewer queue overview command
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -118,6 +118,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: add reviewer queue overview command | `310c43a` |
 | 2026-07-14 | Direct push | feat: export batch aggregate summary csv | `d192372` |
 | 2026-07-14 | Direct push | fix: reject duplicate API source IDs | `0c4aca8` |
 | 2026-07-14 | Direct push | fix: split numeric compound claims | `03c8819` |
@@ -125,5 +126,4 @@
 | 2026-07-14 | Direct push | test: smoke-test reviewer queue filtering | `a2e023e` |
 | 2026-07-14 | Direct push | fix: scope reviewer queue filter to imports | `460bdcb` |
 | 2026-07-14 | Direct push | fix: advertise reviewer queue filter in OpenAPI | `b4ca101` |
-| 2026-07-14 | Direct push | docs: explain targeted reviewer queue handoffs | `b0b8cc4` |
 
