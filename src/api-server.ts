@@ -93,6 +93,35 @@ export type ApiEvaluateResponse = EvaluationBatchRunResult & {
   artifacts?: ApiEvaluateArtifacts;
 };
 
+export interface ApiReviewQueueRequest {
+  reviewCsvContent: string;
+  fixtures?: InMemoryEvaluationFixtureInput[];
+  domains?: string[];
+  generatedAt?: string;
+}
+
+export interface ApiReviewQueueResponse {
+  requestId: string;
+  generatedAt: string;
+  review: {
+    totalAnswers: number;
+    pendingAnswers: number;
+    reviewedAnswers: number;
+    noClaimsAnswers: number;
+    totalClaims: number;
+    pendingClaims: number;
+    reviewedClaims: number;
+  };
+  evaluation: {
+    fixtureCount: number;
+    mismatchCount: number;
+    mismatchRate: number | null;
+    score: number | null;
+    scoreLabel: string;
+    scoreThresholdPassed: boolean;
+  } | null;
+}
+
 export interface ApiSourceInput {
   sourcePath: string;
   content?: string;
@@ -246,6 +275,7 @@ export const VERIFY_PATH = "/verify";
 export const EXTRACT_CLAIMS_PATH = "/extract-claims";
 export const VERIFY_BATCH_PATH = "/verify-batch";
 export const IMPORT_REVIEW_PATH = "/import-review";
+export const REVIEW_QUEUE_PATH = "/review-queue";
 export const EVALUATE_PATH = "/evaluate";
 export const API_MAX_REQUEST_BYTES = 1024 * 1024;
 export const API_REQUEST_TIMEOUT_MS: number = 30_000;
@@ -404,6 +434,16 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     method: "OPTIONS",
     path: IMPORT_REVIEW_PATH,
     description: "Return CORS preflight headers for reviewer import requests.",
+  },
+  {
+    method: "POST",
+    path: REVIEW_QUEUE_PATH,
+    description: "Combine reviewer queue workload with optional benchmark drift metrics.",
+  },
+  {
+    method: "OPTIONS",
+    path: REVIEW_QUEUE_PATH,
+    description: "Return CORS preflight headers for reviewer queue overview requests.",
   },
   {
     method: "POST",
@@ -1552,6 +1592,49 @@ async function handleApiRequest(
     return;
   }
 
+  if (url === REVIEW_QUEUE_PATH) {
+    if (request.method !== "POST") {
+      writeMethodNotAllowed(response, "POST");
+      return;
+    }
+
+    requireJsonRequest(request);
+    const body = parseReviewQueueRequest(await readJsonBody(request, maxRequestBytes));
+    const reviewReport = importReviewerDecisionContentsResult({
+      reviewCsvContent: body.reviewCsvContent,
+      generatedAt: body.generatedAt,
+    }).report;
+    const evaluation = body.fixtures && body.fixtures.length > 0
+      ? await evaluateFixtureContentsResult({
+          fixtures: body.fixtures,
+          domains: body.domains,
+          generatedAt: body.generatedAt,
+        })
+      : undefined;
+    const result: ApiReviewQueueResponse = {
+      requestId: requestId(response),
+      generatedAt: reviewReport.generatedAt,
+      review: {
+        ...reviewReport.queueSummary,
+        totalClaims: reviewReport.summary.totalClaims,
+        pendingClaims: reviewReport.summary.pendingClaims,
+        reviewedClaims: reviewReport.summary.reviewedClaims,
+      },
+      evaluation: evaluation
+        ? {
+            fixtureCount: evaluation.summary.fixtureCount,
+            mismatchCount: evaluation.mismatchCount,
+            mismatchRate: evaluation.summary.mismatchRate,
+            score: evaluation.summary.score,
+            scoreLabel: evaluation.summary.scoreLabel,
+            scoreThresholdPassed: evaluation.scoreThresholdPassed ?? true,
+          }
+        : null,
+    };
+    writeJson(response, 200, result);
+    return;
+  }
+
   if (url === EVALUATE_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
@@ -1728,6 +1811,22 @@ function parseImportReviewRequest(value: unknown): {
       : parseReviewerQueueStatus(requireString(record.queueStatus, "queueStatus")),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, IMPORT_REVIEW_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
+  };
+}
+
+function parseReviewQueueRequest(value: unknown): ApiReviewQueueRequest {
+  const record = requireRecord(value, "Review queue request body");
+  const fixturesValue = record.fixtures;
+
+  if (fixturesValue !== undefined && (!Array.isArray(fixturesValue) || fixturesValue.length === 0)) {
+    throw requestError("fixtures must be a non-empty array when provided.");
+  }
+
+  return {
+    reviewCsvContent: requireString(record.reviewCsvContent, "reviewCsvContent"),
+    fixtures: fixturesValue?.map((fixture, index) => parseFixtureInput(fixture, index)),
+    domains: parseOptionalStringArray(record.domains, "domains"),
+    generatedAt: parseOptionalGeneratedAt(record.generatedAt),
   };
 }
 
@@ -3041,6 +3140,54 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
       },
+      [REVIEW_QUEUE_PATH]: {
+        options: corsPreflightOperation("optionsReviewQueue", "Reviewer queue overview preflight"),
+        post: {
+          operationId: "postReviewQueue",
+          summary: "Summarize reviewer queue and benchmark drift",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    reviewCsvContent: { type: "string" },
+                    generatedAt: { type: "string", format: "date-time" },
+                    domains: { type: "array", minItems: 1, items: { type: "string" } },
+                    fixtures: {
+                      type: "array",
+                      minItems: 1,
+                      items: {
+                        type: "object",
+                        properties: {
+                          fixturePath: { type: "string" },
+                          content: { type: "string" },
+                        },
+                        required: ["fixturePath", "content"],
+                      },
+                      description: "Optional evaluation fixtures used to add benchmark drift metrics.",
+                    },
+                  },
+                  required: ["reviewCsvContent"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Reviewer workload and optional benchmark drift summary.",
+              headers: apiResponseHeaders,
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiReviewQueueResponse" },
+                },
+              },
+            },
+            ...postErrorResponses,
+          },
+        },
+      },
       [EVALUATE_PATH]: {
         options: corsPreflightOperation("optionsEvaluate", "Evaluation preflight"),
         post: {
@@ -3790,6 +3937,44 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             },
           },
           required: ["requestId", "report", "shouldFail", "failVerdicts"],
+        },
+        ApiReviewQueueResponse: {
+          type: "object",
+          properties: {
+            requestId: { type: "string", minLength: 1, maxLength: 128 },
+            generatedAt: { type: "string", format: "date-time" },
+            review: {
+              type: "object",
+              properties: {
+                totalAnswers: { type: "integer", minimum: 0 },
+                pendingAnswers: { type: "integer", minimum: 0 },
+                reviewedAnswers: { type: "integer", minimum: 0 },
+                noClaimsAnswers: { type: "integer", minimum: 0 },
+                totalClaims: { type: "integer", minimum: 0 },
+                pendingClaims: { type: "integer", minimum: 0 },
+                reviewedClaims: { type: "integer", minimum: 0 },
+              },
+              required: ["totalAnswers", "pendingAnswers", "reviewedAnswers", "noClaimsAnswers", "totalClaims", "pendingClaims", "reviewedClaims"],
+            },
+            evaluation: {
+              oneOf: [
+                { type: "null" },
+                {
+                  type: "object",
+                  properties: {
+                    fixtureCount: { type: "integer", minimum: 0 },
+                    mismatchCount: { type: "integer", minimum: 0 },
+                    mismatchRate: { type: ["number", "null"], minimum: 0, maximum: 1 },
+                    score: { type: ["number", "null"], minimum: 0, maximum: 1 },
+                    scoreLabel: { type: "string" },
+                    scoreThresholdPassed: { type: "boolean" },
+                  },
+                  required: ["fixtureCount", "mismatchCount", "mismatchRate", "score", "scoreLabel", "scoreThresholdPassed"],
+                },
+              ],
+            },
+          },
+          required: ["requestId", "generatedAt", "review", "evaluation"],
         },
         EvaluationClaimScore: {
           type: "object",

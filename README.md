@@ -102,7 +102,7 @@ The current CLI can:
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
-- serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
+- serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, reviewer queue overview, and evaluation workflows
 - expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
 - export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
 - derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift
@@ -645,6 +645,11 @@ including header-only `HEAD` probes for deployment clients.
 It now shows how agent workflows can send base64 answer and source bytes with
 the required document extensions, and how to request queue-ready Markdown and
 CSV artifacts in the response.
+
+The `POST /review-queue` endpoint now combines imported reviewer workload with
+optional benchmark mismatch and score metrics, so queue integrations can request
+the same overview as the `review-queue` CLI command without parsing multiple
+reports.
 
 Available endpoints:
 
