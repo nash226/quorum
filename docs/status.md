@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5c83701` on 2026-07-14, feat: expose reviewer queue overview over HTTP
+- Latest shipped change: `bc360c9` on 2026-07-14, docs: refresh roadmap after queue foundation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -111,13 +111,14 @@
 
 ### Next In docs/roadmap.md
 
-- Add a reviewer queue surface for triaging imported decisions and benchmark drift.
-- Document deployment and integration patterns for the local API, including authentication boundaries and durable source identifiers.
+- Choose the durable queue backend and dashboard boundary for reviewer work queues and audit history.
+- Expand the HR and support fixture set as policy coverage grows.
 
 ## Recently Shipped
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#471](https://github.com/nash226/quorum/pull/471) | docs: refresh roadmap after queue foundation | `bc360c9` |
 | 2026-07-14 | Direct push | feat: expose reviewer queue overview over HTTP | `5c83701` |
 | 2026-07-14 | Direct push | feat: add reviewer queue overview command | `310c43a` |
 | 2026-07-14 | Direct push | feat: export batch aggregate summary csv | `d192372` |
@@ -125,5 +126,4 @@
 | 2026-07-14 | Direct push | fix: split numeric compound claims | `03c8819` |
 | 2026-07-14 | Direct push | feat: export reviewer queue summary csv | `dd33591` |
 | 2026-07-14 | Direct push | test: smoke-test reviewer queue filtering | `a2e023e` |
-| 2026-07-14 | Direct push | fix: scope reviewer queue filter to imports | `460bdcb` |
 
