@@ -1601,6 +1601,9 @@ provenance for audit handoff. The `review-queue` command and `POST
 benchmark-drift metrics in one JSON or CSV overview. See
 [docs/reviewer-queue.md](docs/reviewer-queue.md) for the end-to-end batch
 verification, review, import, and benchmark-drift workflow.
+The CLI overview also accepts `--queue-status pending`, `reviewed`, or
+`no_claims` to give a reviewer only the selected handoff state, with answer and
+claim totals recalculated for that slice.
 
 Near-term work:
 

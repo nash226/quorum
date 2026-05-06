@@ -129,6 +129,7 @@ interface ReviewQueueArgs {
   fixturePaths: string[];
   fixtureDirPaths: string[];
   domains: string[];
+  queueStatus?: import("./reviewer-decision-import.js").ReviewerQueueStatus;
   json: boolean;
   outPath?: string;
   csvOutPath?: string;
@@ -586,7 +587,10 @@ async function runImportReview(args: string[]): Promise<void> {
 
 async function runReviewQueue(args: string[]): Promise<void> {
   const parsed = parseReviewQueueArgs(args);
-  const reviewReport = await importReviewerDecisionFile({ reviewCsvPath: parsed.reviewCsvPath });
+  const importedReviewReport = await importReviewerDecisionFile({ reviewCsvPath: parsed.reviewCsvPath });
+  const reviewReport = parsed.queueStatus
+    ? filterReviewerDecisionImportReport(importedReviewReport, parsed.queueStatus)
+    : importedReviewReport;
   const evaluation = parsed.fixturePaths.length > 0 || parsed.fixtureDirPaths.length > 0
     ? await evaluateFixtureFilesResult({
         fixturePaths: parsed.fixturePaths,
@@ -637,6 +641,7 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
   const fixturePaths: string[] = [];
   const fixtureDirPaths: string[] = [];
   const domains: string[] = [];
+  let queueStatus: ReviewQueueArgs["queueStatus"];
   let json = false;
   let outPath: string | undefined;
   let csvOutPath: string | undefined;
@@ -648,6 +653,7 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
     else if (arg === "--fixture" && next) { fixturePaths.push(next); index += 1; }
     else if (arg === "--fixture-dir" && next) { fixtureDirPaths.push(next); index += 1; }
     else if (arg === "--domain" && next) { domains.push(next); index += 1; }
+    else if (arg === "--queue-status" && next) { queueStatus = parseReviewerQueueStatus(next); index += 1; }
     else if (arg === "--out" && next) { outPath = next; index += 1; }
     else if (arg === "--csv-out" && next) { csvOutPath = next; index += 1; }
     else if (arg === "--json") json = true;
@@ -658,7 +664,7 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
   if (fixturePaths.length === 0 && fixtureDirPaths.length === 0 && domains.length > 0) {
     throw new Error("Evaluation domains require --fixture or --fixture-dir.");
   }
-  return { reviewCsvPath, fixturePaths, fixtureDirPaths, domains, json, outPath, csvOutPath };
+  return { reviewCsvPath, fixturePaths, fixtureDirPaths, domains, queueStatus, json, outPath, csvOutPath };
 }
 
 function renderReviewQueueCsv(overview: {
@@ -1635,10 +1641,11 @@ Example:
     "review-queue": `Quorum review-queue
 
 Usage:
-  quorum review-queue --review-csv <path|-> [--fixture <path> | --fixture-dir <path>]... [--domain <name>]... [--json] [--out <path>] [--csv-out <path>]
+  quorum review-queue --review-csv <path|-> [--queue-status <status>] [--fixture <path> | --fixture-dir <path>]... [--domain <name>]... [--json] [--out <path>] [--csv-out <path>]
 
 Options:
   --review-csv <path|->      Completed reviewer decision CSV to summarize
+  --queue-status <status>   Keep only pending, reviewed, or no_claims answers
   --fixture <path>           Evaluation fixture; may be repeated
   --fixture-dir <path>       Directory of evaluation fixtures; may be repeated
   --domain <name>            Limit evaluation drift to a domain; may be repeated
