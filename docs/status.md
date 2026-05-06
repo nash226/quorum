@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9ff89ca` on 2026-07-14, test: add support SLA evaluation fixture
+- Latest shipped change: `db3445f` on 2026-07-14, test: add HR leave evaluation fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -55,6 +55,7 @@
 - include aggregate evaluation mismatch counts in the reusable JSON summary so queue and dashboard consumers can triage benchmark drift from one object
 - include aggregate and per-domain evaluation mismatch rates in JSON summaries and CSV/report surfaces so benchmark drift is comparable without client-side calculation
 - ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
+- ship an HR leave evaluation fixture that covers verified, contradicted, and unsupported policy claims
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
 - filter imported reviewer decisions by `pending`, `reviewed`, or `no_claims` queue status for targeted handoffs
@@ -118,6 +119,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#474](https://github.com/nash226/quorum/pull/474) | test: add HR leave evaluation fixture | `db3445f` |
 | 2026-07-14 | Direct push | test: add support SLA evaluation fixture | `9ff89ca` |
 | 2026-07-14 | Direct push | feat: filter reviewer queue overview by status | `95b3d89` |
 | 2026-07-14 | [#471](https://github.com/nash226/quorum/pull/471) | docs: refresh roadmap after queue foundation | `bc360c9` |
@@ -125,5 +127,4 @@
 | 2026-07-14 | Direct push | feat: add reviewer queue overview command | `310c43a` |
 | 2026-07-14 | Direct push | feat: export batch aggregate summary csv | `d192372` |
 | 2026-07-14 | Direct push | fix: reject duplicate API source IDs | `0c4aca8` |
-| 2026-07-14 | Direct push | fix: split numeric compound claims | `03c8819` |
 
