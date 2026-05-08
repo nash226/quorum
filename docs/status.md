@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `70f8b50` on 2026-07-14, test: add support password reset evaluation fixture
+- Latest shipped change: `bd9ba74` on 2026-07-14, feat: stabilize reviewer queue timestamps
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -73,6 +73,7 @@
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, reviewer queue overview, and evaluation workflows
+- accept `--generated-at <timestamp>` on reviewer queue overviews so JSON and CSV handoffs can share a stable audit timestamp across retries
 - expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
 - export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
 - derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift
@@ -119,6 +120,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: stabilize reviewer queue timestamps | `bd9ba74` |
 | 2026-07-14 | [#477](https://github.com/nash226/quorum/pull/477) | test: add support password reset evaluation fixture | `70f8b50` |
 | 2026-07-14 | Direct push | test: smoke test filtered reviewer queue cli | `331a22a` |
 | 2026-07-14 | Direct push | feat: filter reviewer queue cli by status | `27ab1fc` |
@@ -126,5 +128,4 @@
 | 2026-07-14 | Direct push | test: add support SLA evaluation fixture | `9ff89ca` |
 | 2026-07-14 | Direct push | feat: filter reviewer queue overview by status | `95b3d89` |
 | 2026-07-14 | [#471](https://github.com/nash226/quorum/pull/471) | docs: refresh roadmap after queue foundation | `bc360c9` |
-| 2026-07-14 | Direct push | feat: expose reviewer queue overview over HTTP | `5c83701` |
 
