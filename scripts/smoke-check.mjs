@@ -248,6 +248,7 @@ try {
   const batchReportPath = join(tempDir, "batch-report.json");
   const batchReviewCsvPath = join(tempDir, "batch-review.csv");
   const batchSummaryCsvPath = join(tempDir, "batch-summary.csv");
+  const queueOverviewCsvPath = join(tempDir, "queue-overview.csv");
   const openApiPath = join(tempDir, "openapi.json");
 
   const batchStdout = runCli([
@@ -279,6 +280,24 @@ try {
   assert.match(
     hrBatchSummaryRow,
     /,true,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,HR Benefits Policy,high,2026-05-31,examples\/sources\/hr-policy\.md,source_2,0\.857,Employees receive 12 weeks of paid parental leave\.,3,1,1,1,0,clear,,/,
+  );
+
+  const timestampedQueueOverview = JSON.parse(
+    runCli([
+      "review-queue",
+      "--review-csv",
+      batchReviewCsvPath,
+      "--generated-at",
+      "2026-07-15T04:00:00.000Z",
+      "--json",
+      "--csv-out",
+      queueOverviewCsvPath,
+    ]),
+  );
+  assert.equal(timestampedQueueOverview.generatedAt, "2026-07-15T04:00:00.000Z");
+  assert.match(
+    readFileSync(queueOverviewCsvPath, "utf8"),
+    /^"generated_at","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","10",/m,
   );
 
   const pendingQueueOverview = JSON.parse(
