@@ -1,0 +1,14 @@
+{
+  "name": "Support subscription cancellation policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-cancellation-answer.md",
+  "answerLabel": "Support cancellation reviewer packet",
+  "sourcePaths": ["../../sources/support-playbook.md"],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
