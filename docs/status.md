@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6138781` on 2026-07-15, test: expand HR professional development evaluation coverage
+- Latest shipped change: `362cf89` on 2026-07-15, test: expand support live chat evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -122,6 +122,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: expand support live chat evaluation coverage | `362cf89` |
 | 2026-07-15 | [#481](https://github.com/nash226/quorum/pull/481) | test: expand HR professional development evaluation coverage | `6138781` |
 | 2026-07-15 | Direct push | test: expand support cancellation evaluation coverage | `4cfadf7` |
 | 2026-07-15 | Direct push | test: smoke test reviewer queue timestamps | `2643c88` |
@@ -129,5 +130,4 @@
 | 2026-07-14 | [#477](https://github.com/nash226/quorum/pull/477) | test: add support password reset evaluation fixture | `70f8b50` |
 | 2026-07-14 | Direct push | test: smoke test filtered reviewer queue cli | `331a22a` |
 | 2026-07-14 | Direct push | feat: filter reviewer queue cli by status | `27ab1fc` |
-| 2026-07-14 | [#474](https://github.com/nash226/quorum/pull/474) | test: add HR leave evaluation fixture | `db3445f` |
 
