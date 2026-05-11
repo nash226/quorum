@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `362cf89` on 2026-07-15, test: expand support live chat evaluation coverage
+- Latest shipped change: `0fcc87c` on 2026-07-15, test: add HR compensation evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -57,6 +57,7 @@
 - include aggregate and per-domain evaluation mismatch rates in JSON summaries and CSV/report surfaces so benchmark drift is comparable without client-side calculation
 - ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
 - ship an HR leave evaluation fixture that covers verified, contradicted, and unsupported policy claims
+- ship an HR compensation-review evaluation fixture that covers verified, contradicted, and unsupported policy claims with inline approved-source metadata
 - ship an HR professional-development evaluation fixture that covers verified, contradicted, and unsupported policy claims with inline approved-source metadata
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
@@ -122,6 +123,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: add HR compensation evaluation coverage | `0fcc87c` |
 | 2026-07-15 | Direct push | test: expand support live chat evaluation coverage | `362cf89` |
 | 2026-07-15 | [#481](https://github.com/nash226/quorum/pull/481) | test: expand HR professional development evaluation coverage | `6138781` |
 | 2026-07-15 | Direct push | test: expand support cancellation evaluation coverage | `4cfadf7` |
@@ -129,5 +131,4 @@
 | 2026-07-14 | Direct push | feat: stabilize reviewer queue timestamps | `bd9ba74` |
 | 2026-07-14 | [#477](https://github.com/nash226/quorum/pull/477) | test: add support password reset evaluation fixture | `70f8b50` |
 | 2026-07-14 | Direct push | test: smoke test filtered reviewer queue cli | `331a22a` |
-| 2026-07-14 | Direct push | feat: filter reviewer queue cli by status | `27ab1fc` |
 
