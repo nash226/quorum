@@ -1,0 +1,173 @@
+# CLI Guide
+
+This guide contains the operational detail that used to make the repository
+README difficult to scan. It is the primary reference for local CLI workflows.
+
+## Verify one answer
+
+Verify an answer against one or more approved sources:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source examples/sources/hr-policy.md \
+  --out reports/hr-report.json \
+  --markdown-out reports/hr-report.md \
+  --html-out reports/hr-report.html \
+  --review-csv-out reports/hr-review.csv \
+  --summary-csv-out reports/hr-summary.csv
+```
+
+Supported answer and source files include Markdown, text, exported HTML, PDF,
+and DOCX. Use `--source-dir` for a directory of approved sources and
+`--default-trust-level high` when sources do not carry trust metadata.
+
+Use `--json` for the report-only machine-readable shape. Use `--result-json`
+or `--result-json-out <path>` when a workflow also needs `shouldFail` and
+`failVerdicts`.
+
+Answers can be streamed from stdin:
+
+```bash
+cat examples/answers/hr-answer.md | npm run dev -- verify \
+  --answer - --source-dir examples/sources --json
+```
+
+## Preview claims
+
+Preview normalized claims without loading sources:
+
+```bash
+npm run dev -- extract-claims \
+  --answer examples/answers/hr-answer.md \
+  --result-json
+```
+
+The default JSON output remains the claims array. `--result-json` adds the
+`answerHasClaims` routing flag, which lets queue integrations identify empty
+drafts without recounting claims. `--answer-label` adds a reviewer-facing
+label to human-readable output.
+
+## Batch verification
+
+Verify every answer in a directory and produce one reviewer handoff:
+
+```bash
+npm run dev -- verify-batch \
+  --answer-dir examples/answers \
+  --source-dir examples/sources \
+  --review-csv-out reports/reviewer-queue.csv \
+  --summary-csv-out reports/reviewer-queue-summary.csv
+```
+
+Batch summaries include per-answer verdict totals, source context, and
+`answer_has_claims`. Empty answers remain explicit queue rows instead of being
+silently discarded.
+
+## Import reviewer decisions
+
+After a reviewer fills in `reviewer_verdict` and `reviewer_notes`, import the
+CSV into machine-readable and human-facing artifacts:
+
+```bash
+npm run dev -- import-review \
+  --review-csv reports/reviewer-queue.csv \
+  --result-json-out reports/reviewer-queue.json \
+  --markdown-out reports/reviewer-queue.md \
+  --html-out reports/reviewer-queue.html \
+  --summary-csv-out reports/reviewer-queue-final.csv
+```
+
+Use `--queue-status pending`, `reviewed`, or `no_claims` for a targeted
+handoff. The filtered result recalculates answer groups, claims, queue totals,
+artifacts, and optional fail-policy results.
+
+Use `--queue-summary-csv-out <path>` when a downstream system accepts only a
+single CSV row of total, pending, reviewed, and no-claims queue totals.
+
+The full end-to-end handoff, including benchmark drift, is in
+[docs/reviewer-queue.md](reviewer-queue.md).
+
+## Evaluation fixtures
+
+Run the checked-in benchmark:
+
+```bash
+npm run dev -- evaluate \
+  --fixture-dir examples/evaluations \
+  --min-score 0.95 \
+  --fail-on-mismatch
+```
+
+Useful output options include:
+
+- `--json` or `--result-json-out <path>` for gate-aware scorecards.
+- `--markdown-out <path>` and `--html-out <path>` for review and demos.
+- `--summary-csv-out <path>` for one row per fixture.
+- `--domain-summary-csv-out <path>` for one row per domain.
+- `--aggregate-summary-csv-out <path>` for one overall benchmark row.
+- `--domain hr` or `--domain support` to run selected policy domains.
+
+Fixture context and the process for adding coverage live in
+[docs/evaluation-fixtures.md](evaluation-fixtures.md).
+
+## Source metadata and stable identity
+
+Source frontmatter can provide `title`, `updatedAt`, and `trustLevel`:
+
+```markdown
+---
+title: HR Benefits Policy
+updatedAt: 2026-06-15
+trustLevel: high
+---
+```
+
+When an upstream system already has durable document IDs, preserve them for
+audit references:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source examples/sources/hr-policy.md \
+  --source-id people-ops/hr-policy@2026-07-14 \
+  --json
+```
+
+The API requires unique `sources[].id` values. Explicit CLI sources accept
+`--source-id`; directory sources retain positional fallback IDs.
+
+Report-producing workflows accept `--generated-at <timestamp>` so retries can
+reuse one audit timestamp across JSON, text, Markdown, HTML, and CSV output.
+
+## Fail-policy gates
+
+Select risky verdicts with repeated `--fail-on` flags:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source-dir examples/sources \
+  --fail-on contradicted \
+  --fail-on unsupported
+```
+
+When a selected verdict appears, the CLI exits with status code `2`. The same
+decision is available as `shouldFail` and `failVerdicts` in result JSON.
+
+## Commands at a glance
+
+| Command | Purpose |
+| --- | --- |
+| `verify` | Verify one answer and render reports. |
+| `verify-batch` | Verify a directory of answers and create a reviewer CSV. |
+| `extract-claims` | Preview normalized claims before verification. |
+| `import-review` | Import reviewer decisions and create queue artifacts. |
+| `review-queue` | Combine reviewer workload with optional benchmark drift. |
+| `evaluate` | Run checked-in evaluation fixtures and scorecards. |
+| `serve` | Start the local HTTP API. |
+| `openapi` | Export the generated OpenAPI contract. |
+| `version` | Print the CLI and API contract version. |
+
+For HTTP usage, use [docs/api-integration.md](api-integration.md) rather than
+duplicating API payloads in this guide.
