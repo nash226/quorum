@@ -214,7 +214,7 @@ test("evaluates a shipped HR leave fixture across risk verdicts", async () => {
   assert.equal(scorecard.score, 1);
 });
 
-test("evaluates nested shipped fixture files for additional domain coverage", async () => {
+test("evaluates the HR onboarding fixture across routing verdicts", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/onboarding-policy.json"),
     generatedAt: "2026-07-05T10:05:30.000Z",
@@ -227,7 +227,20 @@ test("evaluates nested shipped fixture files for additional domain coverage", as
     scorecard.answerPreview,
     "Healthcare coverage begins after 30 days of employment. Remote employees may request ergonomic equipment reimbursemen...",
   );
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 2,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "verified",
+    "needs_review",
+  ]);
   assert.deepEqual(scorecard.sourceDirs, []);
+  assert.equal(scorecard.report.sources[0]?.title, "HR Benefits Policy");
+  assert.equal(scorecard.report.sources[0]?.id, "source_1");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.matchedClaims, 3);
   assert.equal(scorecard.totalExpectedClaims, 3);
