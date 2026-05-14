@@ -15,9 +15,9 @@ set covers:
 - explicit source IDs and inline source metadata
 - HR leave, onboarding, professional development, and compensation review
 - support account security, cancellation, escalation, live chat, password
-  reset, refunds, SLA, billing, and source-directory workflows
+  reset, refunds, data export, SLA, billing, and source-directory workflows
 
-The benchmark currently contains 18 fixtures. The generated
+The benchmark currently contains 19 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -97,6 +97,8 @@ specific product question:
   the first customer-support wedge across common high-risk answers.
 - Support refunds coverage isolates a time-bound annual-plan policy with
   verified, contradicted, and unsupported customer claims.
+- Support data-export coverage tests inline source metadata, durable source
+  identity, and conflicting customer policy claims.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.

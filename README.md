@@ -43,9 +43,9 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in benchmark includes HR onboarding and support refunds reviewer
-packets that prove policy claims, surface contradictions, and route uncertain
-or unsupported answers for review.
+The checked-in benchmark includes HR onboarding, support refunds, and support
+data-export reviewer packets that prove policy claims, surface contradictions,
+and route uncertain or unsupported answers for review.
 
 ## Documentation Map
 
