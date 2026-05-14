@@ -15,9 +15,9 @@ set covers:
 - explicit source IDs and inline source metadata
 - HR leave, onboarding, professional development, and compensation review
 - support account security, cancellation, escalation, live chat, password
-  reset, SLA, billing, and source-directory workflows
+  reset, refunds, SLA, billing, and source-directory workflows
 
-The benchmark currently contains 17 fixtures. The generated
+The benchmark currently contains 18 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -95,6 +95,8 @@ specific product question:
   preserving the same reviewer-facing verdict contract.
 - Support password-reset, cancellation, SLA, and live-chat coverage expands
   the first customer-support wedge across common high-risk answers.
+- Support refunds coverage isolates a time-bound annual-plan policy with
+  verified, contradicted, and unsupported customer claims.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.
