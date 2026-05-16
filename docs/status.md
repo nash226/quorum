@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cf7a2c2` on 2026-07-15, feat: label reviewer queue status
+- Latest shipped change: `3009b7c` on 2026-07-15, test: smoke test reviewer queue HTTP flow
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: smoke test reviewer queue HTTP flow | `3009b7c` |
 | 2026-07-15 | [#491](https://github.com/nash226/quorum/pull/491) | feat: label reviewer queue status | `cf7a2c2` |
 | 2026-07-15 | Direct push | test: add support priority evaluation coverage | `387841a` |
 | 2026-07-15 | Direct push | test: add support data export evaluation coverage | `88a7690` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | fix: source status capabilities from CLI guide | `9060d49` |
 | 2026-07-15 | Direct push | test: cover HR onboarding verdict routing | `2555350` |
 | 2026-07-15 | Direct push | docs: streamline README and separate workflow context | `d24dc5c` |
-| 2026-07-15 | [#484](https://github.com/nash226/quorum/pull/484) | test: cover support account security fixture | `69da488` |
 
