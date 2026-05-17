@@ -1,0 +1,24 @@
+{
+  "name": "HR leave carryover policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-leave-carryover-answer.md",
+  "answer": "Employees may carry over 10 days into the next calendar year.\nEmployees may carry over 20 days into the next calendar year.\nEmployees receive a monthly home-office stipend.\n",
+  "answerLabel": "HR leave carryover reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-leave-carryover-policy.md",
+      "id": "people-ops/hr-leave-carryover@2026-07-15",
+      "title": "HR Leave Carryover Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees may carry over 10 days into the next calendar year.\nEmployees may request a payout for unused vacation days at year end.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
