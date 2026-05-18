@@ -43,8 +43,8 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 22-fixture benchmark includes HR onboarding, leave-carryover,
-and benefits-enrollment,
+The checked-in 23-fixture benchmark includes HR onboarding, leave-carryover,
+benefits-enrollment, and remote-work,
 support refunds, data-export, and priority-support reviewer packets that prove
 policy claims, surface
 contradictions, and route uncertain or unsupported answers for review.
