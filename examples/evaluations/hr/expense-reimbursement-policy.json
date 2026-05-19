@@ -1,0 +1,24 @@
+{
+  "name": "HR expense reimbursement policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-expense-reimbursement-answer.md",
+  "answer": "Employees may submit eligible business expenses within 30 days.\nEmployees may submit eligible business expenses within 60 days.\nThe company provides a commuter shuttle.\n",
+  "answerLabel": "HR expense reimbursement reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-expense-reimbursement-policy.md",
+      "id": "people-ops/hr-expense-reimbursement@2026-07-15",
+      "title": "HR Expense Reimbursement Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees may submit eligible business expenses within 30 days.\nReceipts are required for reimbursement requests.\nPersonal home internet costs are not reimbursed.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
