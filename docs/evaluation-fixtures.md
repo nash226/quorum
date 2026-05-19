@@ -17,10 +17,11 @@ set covers:
   review, benefits enrollment, performance review, remote work, and expense
   reimbursement
 - support account security, cancellation, escalation, live chat, password
-  reset, refunds, data export, SLA, billing, and source-directory workflows
+  reset, refunds, data export, SLA, billing, service credits, and
+  source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 25 fixtures. The generated
+The benchmark currently contains 26 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -114,6 +115,9 @@ specific product question:
   an unsupported promotion promise.
 - HR expense-reimbursement coverage tests a submission-window contradiction
   alongside an unsupported commuter-shuttle promise.
+
+- Support service-credit coverage tests an outage request-window contradiction,
+  a matched credit-limit claim, and an unrelated unsupported claim.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.

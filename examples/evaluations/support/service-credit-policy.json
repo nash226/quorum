@@ -1,0 +1,24 @@
+{
+  "name": "Support service credit policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-service-credit-answer.md",
+  "answer": "Customers can request a service credit within 14 days of a qualifying outage.\nCustomers can receive up to two months of subscription credit for a qualifying outage.\nThe office closes on Fridays.\n",
+  "answerLabel": "Support service credit reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-service-credit-policy.md",
+      "id": "support/service-credit@2026-07-15",
+      "title": "Support Service Credit Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can request a service credit within 30 days of a qualifying outage.\nCustomers can receive up to one month of subscription credit for a qualifying outage.\nService credits are available only to customers on eligible plans.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["contradicted", "verified", "unsupported"]
+}
