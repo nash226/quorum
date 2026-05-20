@@ -26,6 +26,12 @@ test("preserves short claims instead of silently dropping them", () => {
   ]);
 });
 
+test("preserves short standalone policy statements", () => {
+  const claims = extractClaims("No refunds.\nN/A.");
+
+  assert.deepEqual(claims.map((claim) => claim.text), ["No refunds."]);
+});
+
 test("extracts clean claims from markdown list answers", () => {
   const claims = extractClaims(`# HR Policy Summary
 
