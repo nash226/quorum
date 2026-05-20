@@ -13,15 +13,15 @@ set covers:
 - Markdown, HTML, PDF, and source-directory ingestion
 - empty-answer queue routing
 - explicit source IDs and inline source metadata
-- HR leave, leave carryover, onboarding, professional development, compensation
-  review, benefits enrollment, performance review, remote work, and expense
-  reimbursement
+- HR leave, leave carryover, onboarding, parental leave, professional
+  development, compensation review, benefits enrollment, performance review,
+  remote work, and expense reimbursement
 - support account security, cancellation, escalation, live chat, password
   reset, refunds, data export, SLA, billing, service credits, and
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 26 fixtures. The generated
+The benchmark currently contains 27 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -115,6 +115,8 @@ specific product question:
   an unsupported promotion promise.
 - HR expense-reimbursement coverage tests a submission-window contradiction
   alongside an unsupported commuter-shuttle promise.
+- HR parental-leave coverage tests a paid-leave duration contradiction
+  alongside a verified duration and an unrelated unsupported office-hours claim.
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
