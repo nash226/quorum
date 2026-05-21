@@ -16,12 +16,12 @@ set covers:
 - HR leave, leave carryover, onboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   remote work, and expense reimbursement
-- support account security, cancellation, escalation, live chat, password
+- support account security, account suspension, cancellation, escalation, live chat, password
   reset, refunds, data export, SLA, billing, service credits, and
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 27 fixtures. The generated
+The benchmark currently contains 28 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -120,6 +120,8 @@ specific product question:
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
+- Support account-suspension coverage tests an appeal-window contradiction,
+  a verified abuse-reinstatement rule, and an unsupported waiver promise.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.
