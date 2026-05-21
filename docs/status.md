@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c399834` on 2026-07-15, fix: preserve short standalone policy claims
+- Latest shipped change: `e8eb66e` on 2026-07-15, test: add HR parental leave evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: add HR parental leave evaluation coverage | `e8eb66e` |
 | 2026-07-15 | [#499](https://github.com/nash226/quorum/pull/499) | fix: preserve short standalone policy claims | `c399834` |
 | 2026-07-15 | Direct push | test: add support service credit evaluation coverage | `49c7dd2` |
 | 2026-07-15 | Direct push | test: add HR expense reimbursement evaluation coverage | `3467aa3` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add HR remote work evaluation coverage | `1a54c30` |
 | 2026-07-15 | Direct push | test: add HR leave carryover evaluation coverage | `aa6f54a` |
 | 2026-07-15 | Direct push | test: add HR benefits evaluation coverage | `a2fb01d` |
-| 2026-07-15 | Direct push | test: smoke test reviewer queue HTTP flow | `3009b7c` |
 
