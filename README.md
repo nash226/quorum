@@ -66,6 +66,8 @@ The benchmark now also covers HR payroll-change timing, identity verification,
 and unsupported rejected-deposit promises.
 It now includes an HR bereavement-leave packet that verifies an immediate-family
 entitlement and related carryover claim while routing an unrelated stipend claim as unsupported.
+The benchmark now also covers support account recovery, verifying email-change
+and unlock controls while flagging an unsafe MFA-reset promise.
 
 ## Documentation Map
 

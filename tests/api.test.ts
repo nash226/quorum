@@ -2107,10 +2107,10 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
 
   assert.equal(batchResult.shouldFail, false);
   assert.equal(batchResult.mismatchCount, 0);
-  assert.equal(batchResult.summary.fixtureCount, 30);
+  assert.equal(batchResult.summary.fixtureCount, 31);
   assert.equal(batchResult.summary.mismatchCount, 0);
-  assert.equal(batchResult.summary.matchedClaims, 86);
-  assert.equal(batchResult.summary.totalExpectedClaims, 86);
+  assert.equal(batchResult.summary.matchedClaims, 89);
+  assert.equal(batchResult.summary.totalExpectedClaims, 89);
   assert.equal(batchResult.summary.score, 1);
   assert.equal(batchResult.summary.scoreLabel, "100%");
   assert.deepEqual(batchResult.summary.domains, [
@@ -2130,20 +2130,20 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
     },
     {
       domain: "support",
-      fixtureCount: 15,
+      fixtureCount: 16,
       mismatchCount: 0,
       mismatchRate: 0,
-      answersWithClaims: 14,
+      answersWithClaims: 15,
       answersWithoutClaims: 1,
-      matchedClaims: 41,
-      totalExpectedClaims: 41,
+      matchedClaims: 44,
+      totalExpectedClaims: 44,
       score: 1,
       scoreLabel: "100%",
-      expectedSummary: { verified: 16, contradicted: 13, unsupported: 11, needs_review: 1 },
-      actualSummary: { verified: 16, contradicted: 13, unsupported: 11, needs_review: 1 },
+      expectedSummary: { verified: 17, contradicted: 14, unsupported: 12, needs_review: 1 },
+      actualSummary: { verified: 17, contradicted: 14, unsupported: 12, needs_review: 1 },
     },
   ]);
-  assert.equal(batchResult.scorecards.length, 30);
+  assert.equal(batchResult.scorecards.length, 31);
   assert.equal(singleResult.hasMismatch, false);
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
   assert.equal(contentResult.hasMismatch, false);
@@ -5235,9 +5235,9 @@ test("programmatic API exports batch evaluation helpers", async () => {
 
   const rendered = renderEvaluationTextReport(scorecards);
 
-  assert.equal(scorecards.length, 30);
+  assert.equal(scorecards.length, 31);
   assert.equal(scorecards.some(hasEvaluationMismatch), false);
-  assert.match(rendered, /Fixtures: 30/);
+  assert.match(rendered, /Fixtures: 31/);
   assert.match(renderEvaluationHtmlReport(scorecards), /<!doctype html>/i);
   assert.match(renderEvaluationSummaryCsv(scorecards), /generated_at,fixture_name,domain,fixture_path,answer_path/);
 });
