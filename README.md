@@ -64,6 +64,8 @@ Claim extraction also retains short standalone policy statements such as
 `No refunds.` instead of dropping them when they appear outside a list.
 The benchmark now also covers HR payroll-change timing, identity verification,
 and unsupported rejected-deposit promises.
+It now includes an HR bereavement-leave packet that verifies an immediate-family
+entitlement and related carryover claim while routing an unrelated stipend claim as unsupported.
 
 ## Documentation Map
 
