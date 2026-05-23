@@ -1,0 +1,24 @@
+{
+  "name": "HR offboarding policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-offboarding-answer.md",
+  "answer": "Employees receive their final paycheck within 7 calendar days after separation.\nEmployee system access is disabled at the end of the employee's last working day.\nAll departing employees receive 12 weeks of severance pay.\n",
+  "answerLabel": "HR offboarding reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-offboarding-policy.md",
+      "id": "people-ops/hr-offboarding@2026-07-15",
+      "title": "HR Offboarding Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees receive their final paycheck within 7 calendar days after separation.\nEmployee system access is disabled at the end of the employee's last working day.\nSeverance pay is available only when specified in an individual separation agreement.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}
