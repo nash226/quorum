@@ -1,0 +1,14 @@
+{
+  "name": "Support plan change policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-plan-change-answer.md",
+  "answerLabel": "Support plan change reviewer packet",
+  "sourcePaths": ["../../sources/support-plan-change-policy.md"],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
