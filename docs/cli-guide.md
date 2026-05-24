@@ -107,6 +107,16 @@ Use `--queue-status pending`, `reviewed`, or `no_claims` for a targeted
 handoff. The filtered result recalculates answer groups, claims, queue totals,
 artifacts, and optional fail-policy results.
 
+For example, create a pending-only handoff with both machine-readable artifacts:
+
+```bash
+npm run dev -- import-review \
+  --review-csv reports/reviewer-queue.csv \
+  --queue-status pending \
+  --result-json-out reports/reviewer-queue-pending.json \
+  --summary-csv-out reports/reviewer-queue-pending.csv
+```
+
 Use `--queue-summary-csv-out <path>` when a downstream system accepts only a
 single CSV row of total, pending, reviewed, and no-claims queue totals.
 
