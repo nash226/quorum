@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5fbbfb8` on 2026-07-15, docs: document support plan coverage
+- Latest shipped change: `fc7e67c` on 2026-07-15, docs: expose targeted reviewer handoffs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | docs: expose targeted reviewer handoffs | `fc7e67c` |
 | 2026-07-15 | Direct push | docs: document support plan coverage | `5fbbfb8` |
 | 2026-07-15 | Direct push | test: add support plan change evaluation coverage | `8874f4b` |
 | 2026-07-15 | [#505](https://github.com/nash226/quorum/pull/505) | test: add HR offboarding evaluation coverage | `86af38d` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add HR bereavement leave evaluation coverage | `3cfb1fc` |
 | 2026-07-15 | [#502](https://github.com/nash226/quorum/pull/502) | test: add HR payroll change evaluation coverage | `38c4622` |
 | 2026-07-15 | [#501](https://github.com/nash226/quorum/pull/501) | test: add support account suspension evaluation coverage | `517b250` |
-| 2026-07-15 | Direct push | test: add HR parental leave evaluation coverage | `e8eb66e` |
 
