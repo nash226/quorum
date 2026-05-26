@@ -1,0 +1,24 @@
+{
+  "name": "Support incident communication policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-incident-communication-answer.md",
+  "answer": "During a confirmed service incident, support posts a status update every 60 minutes.\nDuring a confirmed service incident, support posts updates every 24 hours.\nEmployees may carry over 10 vacation days each year.\n",
+  "answerLabel": "Support incident communication reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-incident-communication-policy.md",
+      "id": "support/incident-communication@2026-07-15",
+      "title": "Support Incident Communication Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "During a confirmed service incident, support posts a status update every 60 minutes.\nDuring a confirmed service incident, customers may request incident-specific updates through support.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
