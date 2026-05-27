@@ -15,13 +15,13 @@ set covers:
 - explicit source IDs and inline source metadata
 - HR bereavement leave, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
-  remote work, and expense reimbursement
+  remote work, workplace accommodations, and expense reimbursement
 - support account recovery, account contact changes, account security, account suspension, billing-suspension appeals, cancellation, escalation, incident communication, live chat, password
   reset, refunds, data export, SLA, billing, service credits, and
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 36 fixtures. The generated
+The benchmark currently contains 37 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -123,6 +123,8 @@ specific product question:
   identity-verification evidence and an unsupported rejected-deposit promise.
 - HR offboarding coverage tests final-pay timing, last-day access deprovisioning,
   and an unsupported unconditional severance promise.
+- HR workplace-accommodation coverage tests the approved request channel, a
+  contradictory response-time promise, and an unsupported home-office stipend.
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
