@@ -21,7 +21,7 @@ set covers:
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 37 fixtures. The generated
+The benchmark currently contains 38 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -139,6 +139,8 @@ specific product question:
   automatic reinstatement promise.
 - Support incident-communication coverage tests a verified update cadence, a
   related cadence routed to review, and an unrelated unsupported claim.
+- HR time-off coverage tests a notice requirement, routes partially matched
+  notice and rollover claims for review, and flags an unsupported stipend.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.

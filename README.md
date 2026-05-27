@@ -86,6 +86,9 @@ update cadence while routing a conflicting cadence to review and an unrelated
 HR carryover claim as unsupported.
 It now also covers HR workplace accommodations, verifying the request channel
 while flagging a conflicting response-time promise and an unsupported stipend.
+The benchmark now also covers HR time-off requests, verifying the notice rule,
+routing conflicting notice and rollover claims for review, and catching an
+unsupported stipend claim.
 
 ## Documentation Map
 
