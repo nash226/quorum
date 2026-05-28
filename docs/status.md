@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `731a415` on 2026-07-15, test: add HR time-off evaluation coverage
+- Latest shipped change: `a336037` on 2026-07-15, test: expand support escalation evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: expand support escalation evaluation coverage | `a336037` |
 | 2026-07-15 | [#513](https://github.com/nash226/quorum/pull/513) | test: add HR time-off evaluation coverage | `731a415` |
 | 2026-07-15 | Direct push | test: add HR workplace accommodation evaluation coverage | `1597af9` |
 | 2026-07-15 | Direct push | test: add support account contact evaluation coverage | `a23dc74` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | [#509](https://github.com/nash226/quorum/pull/509) | test: cover billing suspension appeals | `b6e3ec2` |
 | 2026-07-15 | Direct push | docs: expose targeted reviewer handoffs | `fc7e67c` |
 | 2026-07-15 | Direct push | docs: document support plan coverage | `5fbbfb8` |
-| 2026-07-15 | Direct push | test: add support plan change evaluation coverage | `8874f4b` |
 
