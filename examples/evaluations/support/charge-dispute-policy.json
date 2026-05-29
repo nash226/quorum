@@ -1,0 +1,24 @@
+{
+  "name": "Support charge dispute policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-charge-dispute-answer.md",
+  "answer": "Customers may dispute a card charge within 60 days of the transaction.\nCustomers may dispute a card charge within 7 days of the transaction.\nSupport automatically reverses every disputed charge before review.\n",
+  "answerLabel": "Support charge dispute reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-charge-dispute-policy.md",
+      "id": "support/charge-dispute@2026-07-15",
+      "title": "Support Charge Dispute Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers may dispute a card charge within 60 days of the transaction.\nSupport reviews disputed charges before issuing any reversal.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "needs_review"]
+}
