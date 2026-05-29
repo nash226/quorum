@@ -1,0 +1,24 @@
+{
+  "name": "Support delivery delay policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-delivery-delay-answer.md",
+  "answer": "Support sends a shipping status update within 24 hours of a reported delivery delay.\nSupport resolves delayed shipments within 48 hours.\nCustomers receive an automatic replacement for every delayed shipment.\n",
+  "answerLabel": "Support delivery delay reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-delivery-delay-policy.md",
+      "id": "support/delivery-delay@2026-07-15",
+      "title": "Support Delivery Delay Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Support sends a shipping status update within 24 hours of a reported delivery delay.\nSupport resolves delayed shipments within 72 hours.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
