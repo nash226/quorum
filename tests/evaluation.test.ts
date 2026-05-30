@@ -855,6 +855,31 @@ test("evaluates a shipped inline support return fixture across eligibility claim
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped inline support address change fixture across order claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/address-change-policy.json"),
+    generatedAt: "2026-07-15T23:55:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support shipping address change policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support shipping address change reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/address-change@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline support account suspension fixture across policy claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/account-suspension-policy.json"),
@@ -1037,6 +1062,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/account-recovery-policy.json"),
     resolve("examples/evaluations/support/account-security-policy.json"),
     resolve("examples/evaluations/support/account-suspension-policy.json"),
+    resolve("examples/evaluations/support/address-change-policy.json"),
     resolve("examples/evaluations/support/billing-suspension-policy.json"),
     resolve("examples/evaluations/support/cancellation-policy.json"),
     resolve("examples/evaluations/support/charge-dispute-policy.json"),
@@ -1088,7 +1114,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 42);
+  assert.equal(scorecards.length, 43);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -1115,6 +1141,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support account recovery policy example",
       "Support account policy example",
       "Support account suspension policy example",
+      "Support shipping address change policy example",
       "Support billing suspension appeal policy example",
       "Support subscription cancellation policy example",
       "Support charge dispute policy example",

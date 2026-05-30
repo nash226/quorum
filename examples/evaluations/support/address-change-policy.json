@@ -1,0 +1,24 @@
+{
+  "name": "Support shipping address change policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-address-change-answer.md",
+  "answer": "Customers may change a shipping address before an order ships.\nCustomers may request a shipping address change within 48 hours of placing an order.\nSupport provides free pet insurance with every address change.\n",
+  "answerLabel": "Support shipping address change reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-address-change-policy.md",
+      "id": "support/address-change@2026-07-15",
+      "title": "Support Shipping Address Change Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers may change a shipping address before an order ships through account order settings.\nCustomers must request a shipping address change within 2 hours of placing an order.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
