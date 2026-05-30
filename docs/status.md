@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `419c111` on 2026-07-15, test: add support delivery delay evaluation coverage
+- Latest shipped change: `1d38be1` on 2026-07-15, test: add support return evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: add support return evaluation coverage | `1d38be1` |
 | 2026-07-15 | Direct push | test: add support delivery delay evaluation coverage | `419c111` |
 | 2026-07-15 | [#516](https://github.com/nash226/quorum/pull/516) | test: add support charge dispute evaluation coverage | `916ccea` |
 | 2026-07-15 | Direct push | test: add support data retention evaluation coverage | `b2f4dc1` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | [#513](https://github.com/nash226/quorum/pull/513) | test: add HR time-off evaluation coverage | `731a415` |
 | 2026-07-15 | Direct push | test: add HR workplace accommodation evaluation coverage | `1597af9` |
 | 2026-07-15 | Direct push | test: add support account contact evaluation coverage | `a23dc74` |
-| 2026-07-15 | [#510](https://github.com/nash226/quorum/pull/510) | test: add support incident communication evaluation | `edf9d47` |
 
