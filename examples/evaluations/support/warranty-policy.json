@@ -1,0 +1,24 @@
+{
+  "name": "Support warranty policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-warranty-answer.md",
+  "answer": "Customers may submit warranty claims within 12 months of purchase.\nCustomers may submit warranty claims within 24 months of purchase.\nSupport automatically replaces every item without reviewing damage.\n",
+  "answerLabel": "Support warranty reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-warranty-policy.md",
+      "id": "support/warranty@2026-07-15",
+      "title": "Support Warranty Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers may submit warranty claims within 12 months of purchase.\nSupport reviews warranty eligibility before approving a replacement.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
