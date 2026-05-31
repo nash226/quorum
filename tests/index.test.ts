@@ -5,6 +5,7 @@ import {
   API_CAPABILITIES,
   API_REQUEST_CONTENT_TYPES,
   extractClaims,
+  verifyAnswerContentsResult,
   type ApiErrorResponse,
 } from "../src/index.js";
 
@@ -13,6 +14,31 @@ test("public package entrypoint exports the claim extractor", () => {
     extractClaims(`# Policy\n\n- Employees receive 12 weeks of paid parental leave.`),
     [{ id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." }],
   );
+});
+
+test("public package entrypoint exports in-memory verification for Node workflows", async () => {
+  const result = await verifyAnswerContentsResult({
+    answer: "Refunds are available for 30 days from the purchase date.",
+    answerLabel: "support-agent draft",
+    sources: [{
+      sourcePath: "policies/refunds.md",
+      content: "Refunds are available for 30 days from the purchase date.",
+      id: "support/refunds@2026-07-15",
+      title: "Refund Policy",
+      trustLevel: "high",
+    }],
+    failOn: ["contradicted", "unsupported"],
+  });
+
+  assert.equal(result.report.answerLabel, "support-agent draft");
+  assert.deepEqual(result.report.summary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
+  });
+  assert.equal(result.shouldFail, false);
+  assert.deepEqual(result.failVerdicts, []);
 });
 
 test("public package entrypoint exports the canonical HTTP method contract", () => {
