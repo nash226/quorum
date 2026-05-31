@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a9d1464` on 2026-07-15, test: add support address change evaluation coverage
+- Latest shipped change: `3e3a43a` on 2026-07-15, test: add support warranty evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | [#520](https://github.com/nash226/quorum/pull/520) | test: add support warranty evaluation coverage | `3e3a43a` |
 | 2026-07-15 | Direct push | test: add support address change evaluation coverage | `a9d1464` |
 | 2026-07-15 | Direct push | test: add support return evaluation coverage | `1d38be1` |
 | 2026-07-15 | Direct push | test: add support delivery delay evaluation coverage | `419c111` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add support data retention evaluation coverage | `b2f4dc1` |
 | 2026-07-15 | Direct push | test: expand support escalation evaluation coverage | `a336037` |
 | 2026-07-15 | [#513](https://github.com/nash226/quorum/pull/513) | test: add HR time-off evaluation coverage | `731a415` |
-| 2026-07-15 | Direct push | test: add HR workplace accommodation evaluation coverage | `1597af9` |
 
