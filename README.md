@@ -59,6 +59,8 @@ handoff with the CLI or `/review-queue` API, and the filtered totals remain
 auditable in the generated JSON and CSV artifacts.
 The benchmark now also covers support service-credit windows, limits, and
 unsupported automatic-credit promises.
+It now also covers order tracking, distinguishing a verified tracking control,
+a conflicting delivery guarantee, and an unsupported automatic shipping refund.
 It now includes a focused HR parental-leave packet that verifies leave duration,
 detects a conflicting duration, and routes an unrelated unsupported office-hours claim.
 It also covers support account-suspension appeals, distinguishing a conflicting

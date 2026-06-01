@@ -1,0 +1,24 @@
+{
+  "name": "Support order tracking policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-order-tracking-answer.md",
+  "answer": "Customers can view tracking updates in order history.\nSupport guarantees delivery within 1 business day.\nSupport automatically refunds shipping when tracking is delayed.\n",
+  "answerLabel": "Support order tracking reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-order-tracking-policy.md",
+      "id": "support/order-tracking@2026-07-16",
+      "title": "Support Order Tracking Policy",
+      "updatedAt": "2026-07-16",
+      "trustLevel": "high",
+      "content": "Customers can view tracking updates in order history.\nDelivery is guaranteed within 7 business days.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
