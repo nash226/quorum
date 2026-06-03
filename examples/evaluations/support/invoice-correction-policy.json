@@ -1,0 +1,24 @@
+{
+  "name": "Support invoice correction policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-invoice-correction-answer.md",
+  "answer": "Customers should report invoice errors within 60 days of the invoice date.\nCustomers should report invoice errors within 90 days of the invoice date.\nInvoice errors are automatically refunded without review.\n",
+  "answerLabel": "Support invoice correction reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-invoice-correction-policy.md",
+      "id": "support/invoice-correction@2026-07-15",
+      "title": "Support Invoice Correction Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers should report invoice errors within 60 days of the invoice date.\nSupport reviews the account before correcting an invoice.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
