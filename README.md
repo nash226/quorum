@@ -115,6 +115,9 @@ Support invoice-correction coverage now verifies the reporting window, catches
 a conflicting deadline, and flags an unsupported automatic-refund promise.
 Support subscription-pause coverage now verifies the renewal window, catches a
 conflicting pause deadline, and flags an unsupported automatic-refund promise.
+Support payment-method coverage now verifies the pre-invoice update control,
+catches a conflicting post-invoice deadline, and flags an unsupported
+automatic-refund promise.
 
 ## Documentation Map
 

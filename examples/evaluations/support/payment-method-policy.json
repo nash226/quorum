@@ -1,0 +1,24 @@
+{
+  "name": "Support payment method policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-payment-method-answer.md",
+  "answer": "Customers can change the payment method for a subscription within 7 days before the next invoice is issued.\nCustomers can change the payment method for a subscription within 30 days before the next invoice is issued.\nSupport automatically refunds any invoice when the payment method changes.\n",
+  "answerLabel": "Support payment method reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-payment-method-policy.md",
+      "id": "support/payment-method@2026-07-15",
+      "title": "Support Payment Method Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can change the payment method for a subscription within 7 days before the next invoice is issued.\nPayment method changes require account-owner verification.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
