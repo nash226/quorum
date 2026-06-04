@@ -1,0 +1,24 @@
+{
+  "name": "Support billing address policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-billing-address-answer.md",
+  "answer": "Customers must verify the account owner before support changes the billing address.\nSupport changes the billing address after 1 hour of identity verification.\nCustomers receive a free password manager after a billing address change.\n",
+  "answerLabel": "Support billing address reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-billing-address-policy.md",
+      "id": "support/billing-address@2026-07-15",
+      "title": "Support Billing Address Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers must verify the account owner before support changes the billing address.\nSupport changes the billing address only after 24 hours of identity verification.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
