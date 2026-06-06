@@ -1,0 +1,24 @@
+{
+  "name": "Support account closure policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-account-closure-answer.md",
+  "answer": "Customers can request account closure by confirming ownership through support.\nSupport closes every account within 1 hour of the request.\nClosed accounts are automatically reactivated after 30 days.\n",
+  "answerLabel": "Support account closure reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-account-closure-policy.md",
+      "id": "support/account-closure@2026-07-15",
+      "title": "Support Account Closure Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can request account closure by confirming ownership through support.\nSupport completes account closure requests within 5 business days.\nClosed accounts are not automatically reactivated; customers must contact support to reopen an account when eligible.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 2
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "needs_review"]
+}
