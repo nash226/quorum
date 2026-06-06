@@ -224,6 +224,31 @@ test("evaluates a shipped support contact change fixture across account controls
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support account closure fixture across lifecycle claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/account-closure-policy.json"),
+    generatedAt: "2026-07-15T23:55:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support account closure policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support account closure reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 2,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "needs_review",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/account-closure@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped support cancellation fixture across risk verdicts", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/cancellation-policy.json"),
@@ -1283,6 +1308,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/hr/time-off-policy.json"),
     resolve("examples/evaluations/hr/workplace-accommodation-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
+    resolve("examples/evaluations/support/account-closure-policy.json"),
     resolve("examples/evaluations/support/account-recovery-policy.json"),
     resolve("examples/evaluations/support/account-security-policy.json"),
     resolve("examples/evaluations/support/account-suspension-policy.json"),
@@ -1347,7 +1373,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 52);
+  assert.equal(scorecards.length, 53);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -1371,6 +1397,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "HR time-off request policy example",
       "HR workplace accommodation policy example",
       "Support policy example",
+      "Support account closure policy example",
       "Support account recovery policy example",
       "Support account policy example",
       "Support account suspension policy example",
