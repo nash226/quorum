@@ -43,7 +43,7 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 53-fixture benchmark includes HR onboarding, leave-carryover,
+The checked-in 54-fixture benchmark includes HR onboarding, leave-carryover,
 benefits-enrollment, remote-work, performance-review, and
 expense-reimbursement,
 support refunds, data-export, and priority-support reviewer packets that prove
@@ -128,7 +128,9 @@ routes uncertain cancellation and refund promises to review. This brings the
 checked-in HR and support benchmark to 51 fixtures.
 Support tax-exemption coverage now verifies certificate submission and review
 timing while flagging an unsupported enterprise-upgrade promise. The benchmark
-now contains 52 fixtures.
+previously reached 52 fixtures.
+Support usage-limits coverage now verifies a standard request limit, routes a
+too-broad increase claim to review, and flags an unsupported automatic increase.
 
 ## Documentation Map
 
