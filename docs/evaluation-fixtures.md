@@ -23,7 +23,7 @@ set covers:
   usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 55 fixtures. The generated
+The benchmark currently contains 56 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -180,6 +180,8 @@ specific product question:
 - Support subscription-renewal coverage verifies the self-service renewal
   window, catches a conflicting post-expiration claim, and flags an unsupported
   automatic-renewal promise.
+- Support account-merge coverage verifies ownership of both accounts, catches
+  a conflicting merge claim, and flags an unsupported password-manager promise.
 - HR time-off coverage tests a notice requirement, routes partially matched
   notice and rollover claims for review, and flags an unsupported stipend.
 
