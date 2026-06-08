@@ -1365,6 +1365,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
       resolve("examples/evaluations/support/sla-policy.json"),
     resolve("examples/evaluations/support/source-directory-policy.json"),
     resolve("examples/evaluations/support/subscription-pause-policy.json"),
+    resolve("examples/evaluations/support/subscription-renewal-policy.json"),
     resolve("examples/evaluations/support/tax-exemption-policy.json"),
     resolve("examples/evaluations/support/usage-limits-policy.json"),
     resolve("examples/evaluations/support/warranty-policy.json"),
@@ -1400,7 +1401,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 54);
+    assert.equal(scorecards.length, 55);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -1455,6 +1456,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support SLA policy example",
       "Support source directory example",
       "Support subscription pause policy example",
+      "Support subscription renewal policy example",
       "Support tax exemption policy example",
       "Support usage limits policy example",
       "Support warranty policy example",
