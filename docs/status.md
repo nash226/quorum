@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `684b0c6` on 2026-07-15, test: add support shipping protection evaluation coverage
+- Latest shipped change: `b0d0643` on 2026-07-15, test: cover authentication device claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,12 +48,12 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
-| 2026-07-15 | [#535](https://github.com/nash226/quorum/pull/535) | test: add support shipping protection evaluation coverage | `684b0c6` |
-| 2026-07-15 | Direct push | test: add support account merge evaluation coverage | `571a513` |
-| 2026-07-15 | [#533](https://github.com/nash226/quorum/pull/533) | test: add support subscription renewal evaluation coverage | `5faedd0` |
-| 2026-07-15 | Direct push | test: add support usage limits evaluation coverage | `de4e9ec` |
-| 2026-07-15 | [#531](https://github.com/nash226/quorum/pull/531) | test: add support account closure evaluation coverage | `e2f1606` |
-| 2026-07-15 | Direct push | test: add support tax exemption evaluation coverage | `c85ad82` |
-| 2026-07-15 | Direct push | test: add support order cancellation evaluation coverage | `12db314` |
-| 2026-07-15 | Direct push | test: add support billing address evaluation coverage | `8104013` |
+| 2026-07-15 | Direct push | test: cover authentication device claims | `b0d0643` |
+| 2026-07-15 | [#535](https://github.com/nash226/quorum/pull/535) | test: add support shipping protection evaluation coverage | `2d040df` |
+| 2026-07-15 | Direct push | test: add support account merge evaluation coverage | `36db98e` |
+| 2026-07-15 | [#533](https://github.com/nash226/quorum/pull/533) | test: add support subscription renewal evaluation coverage | `d0631e8` |
+| 2026-07-15 | Direct push | test: add support usage limits evaluation coverage | `ca0fa04` |
+| 2026-07-15 | [#531](https://github.com/nash226/quorum/pull/531) | test: add support account closure evaluation coverage | `5ab3cda` |
+| 2026-07-15 | Direct push | test: add support tax exemption evaluation coverage | `8fc5d62` |
+| 2026-07-15 | Direct push | test: add support order cancellation evaluation coverage | `66c493d` |
 
