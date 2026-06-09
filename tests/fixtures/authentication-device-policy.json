@@ -1,0 +1,24 @@
+{
+  "name": "Support authentication device policy example",
+  "domain": "support",
+  "answerPath": "./authentication-device-answer.md",
+  "answerLabel": "Support authentication device reviewer packet",
+  "answer": "Customers must approve a new sign-in device from their verified email address.\nSupport can provide a free hardware security key to every customer.\n",
+  "sources": [
+    {
+      "sourcePath": "./authentication-device-policy.md",
+      "id": "support/authentication-device@2026-07-15",
+      "title": "Support Authentication Device Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers must approve a new sign-in device from their verified email address.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "unsupported"]
+}
