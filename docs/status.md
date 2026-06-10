@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b0d0643` on 2026-07-15, test: cover authentication device claims
+- Latest shipped change: `0310aea` on 2026-07-15, test: cover support live chat html evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: cover support live chat html evaluation | `0310aea` |
 | 2026-07-15 | Direct push | test: cover authentication device claims | `b0d0643` |
 | 2026-07-15 | [#535](https://github.com/nash226/quorum/pull/535) | test: add support shipping protection evaluation coverage | `2d040df` |
 | 2026-07-15 | Direct push | test: add support account merge evaluation coverage | `36db98e` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add support usage limits evaluation coverage | `ca0fa04` |
 | 2026-07-15 | [#531](https://github.com/nash226/quorum/pull/531) | test: add support account closure evaluation coverage | `5ab3cda` |
 | 2026-07-15 | Direct push | test: add support tax exemption evaluation coverage | `8fc5d62` |
-| 2026-07-15 | Direct push | test: add support order cancellation evaluation coverage | `66c493d` |
 
