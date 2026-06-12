@@ -762,7 +762,7 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
       /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
     assert.match(summaryCsv, /^[^,\n]+,hr,18,0,0\.000,18,0,55,55,1\.000,100%,22,12,15,6,22,12,15,6$/m);
-    assert.match(summaryCsv, /^[^,\n]+,support,40,0,0\.000,39,1,118,118,1\.000,100%,43,30,33,12,43,30,33,12$/m);
+    assert.match(summaryCsv, /^[^,\n]+,support,41,0,0\.000,40,1,121,121,1\.000,100%,44,30,34,13,44,30,34,13$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -787,7 +787,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /,58,57,1,0,0\.000,173,173,1\.000,100%,hr \| support,18 \| 40,0 \| 0,0\.000 \| 0\.000,18 \| 39,0 \| 1,1\.000 \| 1\.000,100% \| 100%,65,42,48,18,65,42,48,18/);
+    assert.match(summaryCsv, /,59,58,1,0,0\.000,176,176,1\.000,100%,hr \| support,18 \| 41,0 \| 0,0\.000 \| 0\.000,18 \| 40,0 \| 1,1\.000 \| 1\.000,100% \| 100%,66,42,49,19,66,42,49,19/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
