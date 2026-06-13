@@ -90,8 +90,8 @@ test("evaluates a shipped support escalation fixture across routing verdicts", a
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
     "verified",
-    "needs_review",
     "unsupported",
+    "needs_review",
   ]);
   assert.equal(scorecard.report.sources[0]?.id, "support/escalation@2026-07-15");
   assert.equal(scorecard.summaryMatches, true);
@@ -1502,12 +1502,12 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/hr/time-off-policy.json"),
     resolve("examples/evaluations/hr/workplace-accommodation-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
+    resolve("examples/evaluations/support/accessibility-policy.json"),
     resolve("examples/evaluations/support/account-closure-policy.json"),
     resolve("examples/evaluations/support/account-merge-policy.json"),
     resolve("examples/evaluations/support/account-recovery-policy.json"),
     resolve("examples/evaluations/support/account-security-policy.json"),
     resolve("examples/evaluations/support/account-suspension-policy.json"),
-    resolve("examples/evaluations/support/accessibility-policy.json"),
     resolve("examples/evaluations/support/address-change-policy.json"),
     resolve("examples/evaluations/support/billing-address-policy.json"),
     resolve("examples/evaluations/support/billing-suspension-policy.json"),
