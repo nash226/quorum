@@ -141,7 +141,25 @@ Useful output options include:
 - `--summary-csv-out <path>` for one row per fixture.
 - `--domain-summary-csv-out <path>` for one row per domain.
 - `--aggregate-summary-csv-out <path>` for one overall benchmark row.
-- `--domain hr` or `--domain support` to run selected policy domains.
+- `--domain hr` or `--domain support` to run selected policy domains. Repeat
+  the flag to include more than one domain.
+
+When a domain filter is supplied, Quorum excludes fixtures from other domains
+before calculating scorecards, mismatch counts, and aggregate totals. This is
+useful when a team owns only one policy area and wants a focused gate:
+
+```bash
+npm run dev -- evaluate \
+  --fixture-dir examples/evaluations \
+  --domain support \
+  --min-score 0.95 \
+  --fail-on-mismatch \
+  --aggregate-summary-csv-out reports/support-evaluation.csv
+```
+
+The resulting aggregate CSV describes the selected support fixtures only; it
+does not represent the full HR-and-support benchmark. Omit `--domain` for the
+repository-wide gate used by CI.
 
 Fixture context and the process for adding coverage live in
 [docs/evaluation-fixtures.md](evaluation-fixtures.md).

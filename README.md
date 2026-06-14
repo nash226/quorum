@@ -45,6 +45,10 @@ the packed smoke check posts reviewer artifacts to `/review-queue` to verify
 queue totals and benchmark drift together. The CLI and HTTP API support targeted
 `pending`, `reviewed`, and `no_claims` handoffs with auditable filtered totals.
 
+Evaluation runs can now be scoped to one or more policy domains with repeated
+`--domain` flags; filtered scorecards and aggregate CSVs describe only the
+selected fixtures, while the CI command remains the repository-wide gate.
+
 ## Documentation Map
 
 - [CLI guide](docs/cli-guide.md): local verification, reports, imports, and evaluation.
