@@ -1,0 +1,24 @@
+{
+  "name": "Support payment failure policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-payment-method-answer.md",
+  "answer": "Customers can retry a declined card from the billing settings page.\nA payment failure automatically retries until the charge succeeds.\nSupport can update a customer's card without verification.\n",
+  "answerLabel": "Support payment failure reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-payment-failure-policy.md",
+      "id": "support/payment-failure@2026-07-15",
+      "title": "Support Payment Failure Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can retry a declined card from the billing settings page.\nPayment failures receive one retry after 24 hours; further retries require customer action.\nCard changes require account verification.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 2,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "unsupported", "unsupported"]
+}
