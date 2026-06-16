@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `70ba0b4` on 2026-07-15, test: cover support payment failure evaluation
+- Latest shipped change: `ac3d7c0` on 2026-07-15, test: add authentication device benchmark coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: add authentication device benchmark coverage | `ac3d7c0` |
 | 2026-07-15 | Direct push | test: cover support payment failure evaluation | `70ba0b4` |
 | 2026-07-15 | Direct push | test: cover support account merge evaluation | `79e8187` |
 | 2026-07-15 | [#549](https://github.com/nash226/quorum/pull/549) | test: cover HR medical leave evaluation | `c196255` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: cover support refund status evaluation | `b086888` |
 | 2026-07-15 | Direct push | test: cover support accessibility requests | `ba16134` |
 | 2026-07-15 | Direct push | test: cover support plan changes | `6fc1aad` |
-| 2026-07-15 | [#542](https://github.com/nash226/quorum/pull/542) | docs: correct README benchmark coverage | `10c5a09` |
 
