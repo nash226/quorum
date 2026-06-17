@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bdb2f3c` on 2026-07-15, test: smoke check reviewed queue handoffs
+- Latest shipped change: `e60746e` on 2026-07-15, test: cover HR dependent benefits evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: cover HR dependent benefits evaluation | `e60746e` |
 | 2026-07-15 | Direct push | test: smoke check reviewed queue handoffs | `bdb2f3c` |
 | 2026-07-15 | Direct push | test: add authentication device benchmark coverage | `ac3d7c0` |
 | 2026-07-15 | Direct push | test: cover support payment failure evaluation | `70ba0b4` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | [#549](https://github.com/nash226/quorum/pull/549) | test: cover HR medical leave evaluation | `c196255` |
 | 2026-07-15 | Direct push | docs: explain evaluation domain filtering | `ba06ae1` |
 | 2026-07-15 | Direct push | test: cover support refund status evaluation | `b086888` |
-| 2026-07-15 | Direct push | test: cover support accessibility requests | `ba16134` |
 
