@@ -340,6 +340,34 @@ try {
     reviewedClaims: 0,
   });
 
+  const reviewedQueueCsvPath = join(tempDir, "reviewed-queue.csv");
+  writeFileSync(
+    reviewedQueueCsvPath,
+    [
+      "answer_label,answer_path,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "Reviewed packet,answers/reviewed.md,true,claim_1,Refunds are available.,verified,Supported.,Support Policy,Refunds are available.,verified,Approved",
+    ].join("\n") + "\n",
+  );
+  const reviewedQueueOverview = JSON.parse(
+    runCli([
+      "review-queue",
+      "--review-csv",
+      reviewedQueueCsvPath,
+      "--queue-status",
+      "reviewed",
+      "--json",
+    ]),
+  );
+  assert.deepEqual(reviewedQueueOverview.review, {
+    totalAnswers: 1,
+    pendingAnswers: 0,
+    reviewedAnswers: 1,
+    noClaimsAnswers: 0,
+    totalClaims: 1,
+    pendingClaims: 0,
+    reviewedClaims: 1,
+  });
+
   const openApiStdout = runCli(["openapi", "--out", openApiPath]);
   const openApiDocument = readJson(openApiPath);
   assert.match(openApiStdout, /OpenAPI document written to/);
