@@ -1,0 +1,16 @@
+{
+  "name": "Support service outage policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-service-outage-answer.md",
+  "answerLabel": "Support service outage reviewer packet",
+  "sources": [{
+    "sourcePath": "../../sources/support-service-outage-policy.md",
+    "id": "support/service-outage@2026-07-15",
+    "title": "Support Service Outage Policy",
+    "updatedAt": "2026-07-15",
+    "trustLevel": "high",
+    "content": "Customers receive status updates every 2 hours during a service outage.\nSupport does not guarantee refunds for every outage; credits depend on the incident and customer plan.\nThe support team can confirm the current incident status.\n"
+  }],
+  "expectedSummary": { "verified": 1, "contradicted": 1, "unsupported": 0, "needs_review": 1 },
+  "expectedClaimVerdicts": ["contradicted", "needs_review", "verified"]
+}

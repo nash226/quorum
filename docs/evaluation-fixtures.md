@@ -135,6 +135,8 @@ specific product question:
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
+- Support service-outage coverage tests an incident update cadence contradiction,
+  an unsupported blanket-refund promise, and a matched status-confirmation claim.
 - Support account-suspension coverage tests an appeal-window contradiction,
   a verified abuse-reinstatement rule, and an unsupported waiver promise.
 - Support account-recovery coverage tests an email-change control, an unlock
