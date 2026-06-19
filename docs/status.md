@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c85a2dc` on 2026-07-15, test: cover support service outage evaluation
+- Latest shipped change: `850bc61` on 2026-07-15, docs: align benchmark fixture counts
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | docs: align benchmark fixture counts | `850bc61` |
 | 2026-07-15 | Direct push | test: cover support service outage evaluation | `c85a2dc` |
 | 2026-07-15 | Direct push | feat: expose import handoff timestamps | `3acf6e8` |
 | 2026-07-15 | Direct push | test: cover HR dependent benefits evaluation | `e60746e` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add authentication device benchmark coverage | `ac3d7c0` |
 | 2026-07-15 | Direct push | test: cover support payment failure evaluation | `70ba0b4` |
 | 2026-07-15 | Direct push | test: cover support account merge evaluation | `79e8187` |
-| 2026-07-15 | [#549](https://github.com/nash226/quorum/pull/549) | test: cover HR medical leave evaluation | `c196255` |
 
