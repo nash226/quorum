@@ -3824,9 +3824,10 @@ test("review-queue scopes workload to a queue status", async () => {
         pendingAnswers: 27,
       reviewedAnswers: 0,
       noClaimsAnswers: 0,
-        totalClaims: 80,
-        pendingClaims: 80,
+      totalClaims: 80,
+      pendingClaims: 80,
       reviewedClaims: 0,
+      verdicts: { verified: 24, contradicted: 16, unsupported: 20, needs_review: 20 },
     });
     assert.equal(pendingOverview.queueStatus, "pending");
 
@@ -3849,6 +3850,7 @@ test("review-queue scopes workload to a queue status", async () => {
       totalClaims: 0,
       pendingClaims: 0,
       reviewedClaims: 0,
+      verdicts: { verified: 0, contradicted: 0, unsupported: 0, needs_review: 0 },
     });
   } finally {
     await rm(tempDir, { recursive: true, force: true });

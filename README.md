@@ -62,6 +62,9 @@ the packed smoke check posts reviewer artifacts to `/review-queue` to verify
 queue totals and benchmark drift together, including pending, reviewed, and
 no-claims handoffs. The CLI and HTTP API support targeted
 `pending`, `reviewed`, and `no_claims` handoffs with auditable filtered totals.
+Queue overviews also expose final `verified`, `contradicted`, `unsupported`,
+and `needs_review` claim counts so dashboard consumers can prioritize review
+work without recounting individual claims.
 Imported reviewer Markdown and HTML handoffs now display the same `generatedAt`
 timestamp already carried by JSON and queue-summary CSV artifacts, making
 multi-format review packets easier to reconcile.
