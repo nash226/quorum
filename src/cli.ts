@@ -637,6 +637,7 @@ async function runReviewQueue(args: string[]): Promise<void> {
   }
 
   console.log(`Reviewer queue: ${overview.review.totalAnswers} answers (${overview.review.pendingAnswers} pending, ${overview.review.reviewedAnswers} reviewed, ${overview.review.noClaimsAnswers} no claims)`);
+  console.log(`Final verdicts: ${overview.review.verdicts.verified} verified, ${overview.review.verdicts.contradicted} contradicted, ${overview.review.verdicts.unsupported} unsupported, ${overview.review.verdicts.needs_review} needs review`);
   if (overview.evaluation) {
     console.log(`Benchmark drift: ${overview.evaluation.mismatchCount}/${overview.evaluation.fixtureCount} mismatches (${overview.evaluation.mismatchRate === null ? "n/a" : `${Math.round(overview.evaluation.mismatchRate * 100)}%`})`);
   }
