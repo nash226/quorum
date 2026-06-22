@@ -1,0 +1,24 @@
+{
+  "name": "HR relocation policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-relocation-answer.md",
+  "answer": "Employees may request relocation support before moving.\nEmployees receive up to $5,000 for an approved relocation.\nEmployees receive a guaranteed home-sale reimbursement.\n",
+  "answerLabel": "HR relocation reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-relocation-policy.md",
+      "id": "people-ops/hr-relocation@2026-07-16",
+      "title": "HR Relocation Policy",
+      "updatedAt": "2026-07-16",
+      "trustLevel": "high",
+      "content": "Employees may request relocation support before moving.\nApproved relocations are reimbursed up to $3,000 after receipts are submitted.\nRelocation support requires manager and People Operations approval.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
