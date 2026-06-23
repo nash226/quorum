@@ -76,6 +76,9 @@ work without recounting individual claims. The human-readable
 reviewer workload and benchmark drift.
 The same queue command can scope benchmark drift to one or more policy
 domains, keeping a focused reviewer handoff from mixing HR and support totals.
+The HTTP `/review-queue` response now also echoes the applied domain scope (or
+an empty array when unfiltered), so queue and dashboard consumers can audit
+which benchmark slice their totals represent.
 Imported reviewer Markdown and HTML handoffs now display the same `generatedAt`
 timestamp already carried by JSON and queue-summary CSV artifacts, making
 multi-format review packets easier to reconcile.

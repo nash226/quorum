@@ -4315,6 +4315,7 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
           "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
           "HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched,HR Policy,Employees receive 12 weeks of paid parental leave.,,",
         ].join("\n"),
+        domains: ["hr"],
         fixtures: [{ fixturePath: "examples/evaluations/hr-policy.json", content: fixtureContent }],
       }),
     });
@@ -4324,6 +4325,7 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
     assert.equal(result.requestId, response.headers.get("x-quorum-request-id"));
     assert.equal(result.generatedAt, generatedAt);
     assert.equal(result.queueStatus, null);
+    assert.deepEqual(result.domains, ["hr"]);
     assert.deepEqual(result.review, {
       totalAnswers: 1,
       pendingAnswers: 1,
@@ -4362,6 +4364,7 @@ test("programmatic API filters reviewer queue overview by queue status", async (
     assert.equal(response.status, 200);
     const result = await response.json() as ApiReviewQueueResponse;
     assert.equal(result.queueStatus, "pending");
+    assert.deepEqual(result.domains, []);
     assert.deepEqual(result.review, {
       totalAnswers: 1,
       pendingAnswers: 1,
