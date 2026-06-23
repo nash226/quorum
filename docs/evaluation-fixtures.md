@@ -15,7 +15,7 @@ set covers:
 - explicit source IDs and inline source metadata
 - HR bereavement leave, dependent benefits, medical leave, relocation, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
-  remote work, workplace accommodations, and expense reimbursement
+  remote work, workplace accommodations, expense reimbursement, and tuition reimbursement
 - support account closure, account recovery, account contact changes, account security, account suspension, billing address changes, billing-suspension appeals, cancellation, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, payment method
   changes, replacement, and tax exemption
@@ -23,7 +23,7 @@ set covers:
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 67 fixtures. The generated
+The benchmark currently contains 68 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
