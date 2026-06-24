@@ -1,0 +1,16 @@
+{
+  "name": "HR travel reimbursement policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-travel-reimbursement-answer.md",
+  "answerLabel": "HR travel reimbursement reviewer packet",
+  "sources": [{
+    "sourcePath": "hr-travel-reimbursement-policy.md",
+    "id": "people-ops/hr-travel-reimbursement@2026-07-16",
+    "title": "HR Travel Reimbursement Policy",
+    "updatedAt": "2026-07-16",
+    "trustLevel": "high",
+    "content": "Employees may claim up to $2,000 for approved business travel each calendar year.\nTravel expenses must be submitted within 30 days after returning from a trip.\nBusiness-class flights require executive approval and are not automatically reimbursed."
+  }],
+  "expectedSummary": { "verified": 1, "contradicted": 1, "unsupported": 0, "needs_review": 1 },
+  "expectedClaimVerdicts": ["verified", "contradicted", "needs_review"]
+}
