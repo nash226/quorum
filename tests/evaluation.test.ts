@@ -1934,6 +1934,7 @@ test("filters evaluation fixture files by domain", async () => {
       "HR source directory policy example",
       "HR time-off request policy example",
       "HR tuition reimbursement policy example",
+      "HR travel reimbursement policy example",
       "HR workplace accommodation policy example",
     ],
   );
