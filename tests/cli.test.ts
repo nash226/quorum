@@ -710,7 +710,7 @@ test("evaluate filters shipped example fixtures by domain", async () => {
   assert.match(stdout, /Evaluation Fixture: HR onboarding policy example/);
   assert.match(stdout, /Evaluation Fixture: HR PDF policy example/);
   assert.doesNotMatch(stdout, /Evaluation Fixture: Support policy example/);
-  assert.match(stdout, /Fixtures: 23/);
+  assert.match(stdout, /Fixtures: 24/);
 });
 
 test("evaluate writes a one-row-per-fixture summary csv", async () => {
@@ -787,7 +787,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /,69,68,1,0,0\.000,204,205,1\.000,100%,hr \| support,24 \| 45,0 \| 0,0\.000 \| 0\.000,24 \| 44,0 \| 1,1\.000 \| 1\.000,100% \| 100%,80,47,57,23,80,47,57,23/);
+    assert.match(summaryCsv, /,69,68,1,0,0\.000,205,205,1\.000,100%,hr \| support,24 \| 45,0 \| 0,0\.000 \| 0\.000,24 \| 44,0 \| 1,1\.000 \| 1\.000,100% \| 100%,78,47,57,23,78,47,57,23/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -3745,8 +3745,8 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       evaluation: { fixtureCount: number; mismatchCount: number };
     };
 
-    assert.equal(overview.review.totalAnswers, 30);
-    assert.equal(overview.review.pendingAnswers, 29);
+    assert.equal(overview.review.totalAnswers, 31);
+    assert.equal(overview.review.pendingAnswers, 30);
     assert.equal(overview.queueStatus, null);
     assert.equal(overview.evaluation.fixtureCount, 69);
     assert.equal(overview.evaluation.mismatchCount, 0);
@@ -3759,8 +3759,8 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       "--fixture-dir",
       "examples/evaluations",
     ]);
-    assert.match(text, /Reviewer queue: 30 answers \(29 pending, 0 reviewed, 1 no claims\)/);
-    assert.match(text, /Final verdicts: 24 verified, 16 contradicted, 22 unsupported, 24 needs review/);
+    assert.match(text, /Reviewer queue: 31 answers \(30 pending, 0 reviewed, 1 no claims\)/);
+    assert.match(text, /Final verdicts: 24 verified, 16 contradicted, 24 unsupported, 25 needs review/);
     assert.match(text, /Benchmark drift: 0\/69 mismatches \(0%\)/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -3897,7 +3897,7 @@ test("review-queue scopes benchmark drift to selected domains", async () => {
       evaluation: { fixtureCount: number; domains: Array<{ domain: string; fixtureCount: number; mismatchCount: number }> };
     };
 
-    assert.equal(overview.evaluation.fixtureCount, 23);
+    assert.equal(overview.evaluation.fixtureCount, 24);
     assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 24, mismatchCount: 0 }]);
   } finally {
     await rm(tempDir, { recursive: true, force: true });

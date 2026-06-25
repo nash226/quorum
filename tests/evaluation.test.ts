@@ -120,8 +120,8 @@ test("evaluates a shipped HR tuition reimbursement fixture across policy claims"
   });
   assert.equal(scorecard.fixtureName, "HR tuition reimbursement policy example");
   assert.equal(scorecard.answerLabel, "HR tuition reimbursement reviewer packet");
-  assert.deepEqual(scorecard.actualSummary, { verified: 1, contradicted: 1, unsupported: 0, needs_review: 1 });
-  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "contradicted", "needs_review"]);
+  assert.deepEqual(scorecard.actualSummary, { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "contradicted", "unsupported"]);
   assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-tuition-reimbursement@2026-07-16");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
@@ -134,8 +134,8 @@ test("evaluates a shipped HR travel reimbursement fixture across policy claims",
   });
   assert.equal(scorecard.fixtureName, "HR travel reimbursement policy example");
   assert.equal(scorecard.answerLabel, "HR travel reimbursement reviewer packet");
-  assert.deepEqual(scorecard.actualSummary, { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 });
-  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "contradicted", "unsupported"]);
+  assert.deepEqual(scorecard.actualSummary, { verified: 1, contradicted: 1, unsupported: 0, needs_review: 1 });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "contradicted", "needs_review"]);
   assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-travel-reimbursement@2026-07-16");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
@@ -1908,7 +1908,7 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 23);
+  assert.equal(scorecards.length, 24);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
