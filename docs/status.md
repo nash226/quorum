@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bb19e90` on 2026-07-15, test: cover HR tuition reimbursement evaluation
+- Latest shipped change: `90984c0` on 2026-07-15, test: cover HR travel reimbursement evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | [#571](https://github.com/nash226/quorum/pull/571) | test: cover HR travel reimbursement evaluation | `90984c0` |
 | 2026-07-15 | [#569](https://github.com/nash226/quorum/pull/569) | test: cover HR tuition reimbursement evaluation | `bb19e90` |
 | 2026-07-15 | Direct push | feat: expose review queue domain scope | `b56185a` |
 | 2026-07-15 | Direct push | fix: expose queue benchmark domain totals | `1308196` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | feat: add HR jury duty evaluation coverage | `875cbff` |
 | 2026-07-15 | Direct push | feat: show verdict counts in queue summary | `2d69b07` |
 | 2026-07-15 | Direct push | feat: expose verdict counts in queue overviews | `afc06a8` |
-| 2026-07-15 | Direct push | test: keep README benchmark inventory accurate | `2d5e915` |
 
