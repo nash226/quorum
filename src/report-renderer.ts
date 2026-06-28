@@ -53,6 +53,33 @@ export function renderMarkdownReport(report: VerificationReport): string {
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
+export function renderReviewerDecisionCsv(report: VerificationReport): string {
+  const rows = [
+    [
+      "claim_id",
+      "claim_text",
+      "model_verdict",
+      "model_reason",
+      "evidence_titles",
+      "evidence_quotes",
+      "reviewer_verdict",
+      "reviewer_notes",
+    ],
+    ...report.assessments.map((assessment) => [
+      assessment.claim.id,
+      assessment.claim.text,
+      assessment.verdict,
+      assessment.reason,
+      assessment.evidence.map((evidence) => evidence.documentTitle).join(" | "),
+      assessment.evidence.map((evidence) => evidence.quote).join(" | "),
+      "",
+      "",
+    ]),
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 function renderTextAssessment(assessment: ClaimAssessment): string[] {
   const lines = [
     `${assessment.verdict.toUpperCase()}  ${assessment.claim.text}`,
@@ -105,4 +132,12 @@ function trimTrailingBlankLines(lines: string[]): string[] {
   }
 
   return lines.slice(0, end);
+}
+
+function escapeCsvValue(value: string): string {
+  if (/[",\n]/.test(value)) {
+    return `"${value.replace(/"/g, "\"\"")}"`;
+  }
+
+  return value;
 }

@@ -13,7 +13,7 @@ front of enterprise agent workflows.
 
 - Accept PDFs and exported knowledge base pages.
 - Add configurable source trust levels.
-- Track reviewer decisions against each claim.
+- Import reviewer decisions from filled claim-level exports.
 - Support batch verification for multiple answers.
 
 ## Later

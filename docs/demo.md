@@ -9,7 +9,7 @@ HR policy verification:
 
 ```bash
 npm install
-npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --fail-on contradicted --fail-on unsupported
+npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
 ```
 
 Customer-support playbook verification:
@@ -32,7 +32,7 @@ window, one verified support-response claim, and one unsupported onboarding
 claim.
 
 The CLI prints a human-readable report and writes machine-readable JSON reports
-under `reports/`. Because the samples contain risky claims, the demo commands
+plus a reviewer-decision CSV under `reports/`. Because the samples contain risky claims, the demo commands
 exit with status code `2` when `--fail-on` is enabled.
 
 Quorum also accepts exported HTML knowledge base pages via `--source` or
