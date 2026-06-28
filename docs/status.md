@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0583999` on 2026-06-28, feat: add markdown reviewer reports
+- Latest shipped change: `ca29802` on 2026-06-28, feat: add reviewer decision csv export
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -42,6 +42,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-28 | [#14](https://github.com/nash226/quorum/pull/14) | feat: add reviewer decision csv export | `ca29802` |
 | 2026-06-28 | Direct push | feat: add markdown reviewer reports | `0583999` |
 | 2026-06-28 | [#12](https://github.com/nash226/quorum/pull/12) | Add auto-updated status page | `6af38ec` |
 | 2026-06-28 | [#11](https://github.com/nash226/quorum/pull/11) | feat: add source trust levels | `ade7490` |
@@ -49,5 +50,4 @@
 | 2026-06-28 | [#9](https://github.com/nash226/quorum/pull/9) | docs: polish project readme | `b59e8e7` |
 | 2026-06-28 | [#8](https://github.com/nash226/quorum/pull/8) | Add HTML knowledge base source ingestion | `9bdb326` |
 | 2026-06-28 | [#7](https://github.com/nash226/quorum/pull/7) | docs: add human decision queue | `d7e0925` |
-| 2026-06-28 | [#6](https://github.com/nash226/quorum/pull/6) | docs: add ci status badge | `a9dce9c` |
 
