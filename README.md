@@ -37,6 +37,11 @@ updatedAt: 2026-05-31
 ---
 ```
 
+Supported source inputs today:
+
+- Markdown and plain text policy documents
+- exported HTML knowledge base pages
+
 ## Quick Start
 
 ```bash
@@ -58,7 +63,7 @@ sources.
 
 Future versions should add:
 
-- source ingestion for PDFs and knowledge bases
+- source ingestion for PDFs
 - reviewer approval workflows
 - audit reports
 - API and dashboard surfaces

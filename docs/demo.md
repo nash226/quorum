@@ -35,6 +35,10 @@ The CLI prints a human-readable report and writes machine-readable JSON reports
 under `reports/`. Because the samples contain risky claims, the demo commands
 exit with status code `2` when `--fail-on` is enabled.
 
+Quorum also accepts exported HTML knowledge base pages via `--source` or
+`--source-dir`, which lets teams verify answers against help-center exports
+without first converting those pages to Markdown.
+
 ## Why This Matters
 
 The report is intentionally claim-level instead of answer-level. A business
