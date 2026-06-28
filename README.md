@@ -36,6 +36,7 @@ The current CLI can:
 - print a human-readable report
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
+- write a reviewer decision CSV that teams can fill in claim by claim
 - fail a CI job when selected risky verdicts appear
 
 ## Example
@@ -45,7 +46,8 @@ npm run dev -- verify \
   --answer examples/answers/hr-answer.md \
   --source-dir examples/sources \
   --out reports/hr-report.json \
-  --markdown-out reports/hr-report.md
+  --markdown-out reports/hr-report.md \
+  --review-csv-out reports/hr-review.csv
 ```
 
 Example output:
@@ -82,7 +84,7 @@ cd quorum
 npm install
 npm test
 npm run build
-npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md
+npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --review-csv-out reports/hr-review.csv
 ```
 
 ## Source Metadata
@@ -106,7 +108,7 @@ to `medium`.
 ## CLI Usage
 
 ```text
-quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--fail-on <verdict>]
+quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
 ```
 
 Options:
@@ -117,6 +119,7 @@ Options:
 - `--json`: print the full JSON report
 - `--out <path>`: write the JSON report to disk
 - `--markdown-out <path>`: write a reviewer-friendly Markdown report to disk
+- `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
   repeated
 
@@ -160,7 +163,7 @@ approved sources.
 Near-term work:
 
 - evaluation harness for labeled verdict examples
-- Markdown or HTML reviewer reports
+- reviewer decision import or workflow automation on top of CSV exports
 - batch verification
 - better claim extraction for bullets, lists, and compound sentences
 - API surface for agent integrations
