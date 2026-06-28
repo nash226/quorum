@@ -159,7 +159,9 @@ function printReport(report: ReturnType<typeof verifyAnswer>): void {
     console.log(`Reason: ${assessment.reason}`);
 
     for (const evidence of assessment.evidence) {
-      console.log(`Evidence (${evidence.documentTitle}, score ${evidence.score}):`);
+      console.log(
+        `Evidence (${evidence.documentTitle}, ${evidence.documentTrustLevel} trust, score ${evidence.score}):`,
+      );
       console.log(`  ${evidence.quote}`);
     }
 
