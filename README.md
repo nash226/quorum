@@ -36,6 +36,7 @@ The current CLI can:
 - print a human-readable report
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
+- write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim
 - fail a CI job when selected risky verdicts appear
 
@@ -47,6 +48,7 @@ npm run dev -- verify \
   --source-dir examples/sources \
   --out reports/hr-report.json \
   --markdown-out reports/hr-report.md \
+  --html-out reports/hr-report.html \
   --review-csv-out reports/hr-review.csv
 ```
 
@@ -84,7 +86,7 @@ cd quorum
 npm install
 npm test
 npm run build
-npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --review-csv-out reports/hr-review.csv
+npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv
 ```
 
 ## Source Metadata
@@ -108,7 +110,7 @@ to `medium`.
 ## CLI Usage
 
 ```text
-quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
 ```
 
 Options:
@@ -119,6 +121,7 @@ Options:
 - `--json`: print the full JSON report
 - `--out <path>`: write the JSON report to disk
 - `--markdown-out <path>`: write a reviewer-friendly Markdown report to disk
+- `--html-out <path>`: write a styled HTML reviewer report to disk
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
   repeated
@@ -138,6 +141,7 @@ src/
   claim-extractor.ts   answer-to-claim extraction
   claim-verifier.ts    evidence matching and verdict logic
   cli.ts               command-line interface
+  report-renderer.ts   text, markdown, HTML, and CSV report rendering
   report-policy.ts     fail-on verdict policy
   source-loader.ts     source metadata and HTML loading
 tests/                 unit and fixture coverage
