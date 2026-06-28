@@ -4,6 +4,7 @@ import type {
   ClaimVerdict,
   EvidenceSnippet,
   SourceDocument,
+  SourceTrustLevel,
   VerificationReport,
 } from "./domain.js";
 import {
@@ -43,7 +44,12 @@ export function verifyAnswer(
   return {
     generatedAt,
     answer,
-    sources: sources.map(({ id, title, updatedAt }) => ({ id, title, updatedAt })),
+    sources: sources.map(({ id, title, updatedAt, trustLevel }) => ({
+      id,
+      title,
+      updatedAt,
+      trustLevel,
+    })),
     assessments,
     summary: summarize(assessments),
   };
@@ -107,13 +113,14 @@ function findBestEvidence(
     splitIntoSentences(source.content).map((sentence) => ({
       documentId: source.id,
       documentTitle: source.title,
+      documentTrustLevel: source.trustLevel,
       quote: sentence,
       score: overlapScore(claimText, sentence),
       numberUnits: extractNumberUnits(sentence),
     })),
   );
 
-  return candidates.sort((a, b) => b.score - a.score)[0];
+  return candidates.sort(compareEvidenceCandidates)[0];
 }
 
 function extractNumberUnits(text: string): string[] {
@@ -156,6 +163,34 @@ function isContainedClaim(claimText: string, evidenceText: string): boolean {
   return evidence.includes(claim) || claim.includes(evidence);
 }
 
+function compareEvidenceCandidates(left: CandidateEvidence, right: CandidateEvidence): number {
+  const scoreDelta = right.score - left.score;
+
+  if (Math.abs(scoreDelta) > 0.05) {
+    return scoreDelta;
+  }
+
+  const trustDelta =
+    trustLevelRank(right.documentTrustLevel) - trustLevelRank(left.documentTrustLevel);
+
+  if (trustDelta !== 0) {
+    return trustDelta;
+  }
+
+  return scoreDelta;
+}
+
+function trustLevelRank(trustLevel: SourceTrustLevel): number {
+  switch (trustLevel) {
+    case "high":
+      return 3;
+    case "medium":
+      return 2;
+    case "low":
+      return 1;
+  }
+}
+
 function summarize(assessments: ClaimAssessment[]): Record<ClaimVerdict, number> {
   const summary: Record<ClaimVerdict, number> = {
     verified: 0,
@@ -175,6 +210,7 @@ function stripInternalFields(candidate: CandidateEvidence): EvidenceSnippet {
   return {
     documentId: candidate.documentId,
     documentTitle: candidate.documentTitle,
+    documentTrustLevel: candidate.documentTrustLevel,
     quote: candidate.quote,
     score: Number(candidate.score.toFixed(3)),
   };

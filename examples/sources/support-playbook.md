@@ -1,6 +1,7 @@
 ---
 title: Customer Support Playbook
 updatedAt: 2026-06-15
+trustLevel: high
 ---
 
 # Customer Support Playbook
