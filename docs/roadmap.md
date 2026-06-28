@@ -16,7 +16,6 @@ front of enterprise agent workflows.
 - Add configurable source trust levels.
 - Track reviewer decisions against each claim.
 - Support batch verification for multiple answers.
-- Emit CI-friendly exit codes for blocked deploys.
 
 ## Later
 
