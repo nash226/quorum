@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ca29802` on 2026-06-28, feat: add reviewer decision csv export
+- Latest shipped change: `63b6d8e` on 2026-06-28, Add HTML reviewer reports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -20,6 +20,7 @@
 - print a human-readable report
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
+- write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim
 - fail a CI job when selected risky verdicts appear
 
@@ -42,6 +43,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-28 | [#15](https://github.com/nash226/quorum/pull/15) | Add HTML reviewer reports | `63b6d8e` |
 | 2026-06-28 | [#14](https://github.com/nash226/quorum/pull/14) | feat: add reviewer decision csv export | `ca29802` |
 | 2026-06-28 | Direct push | feat: add markdown reviewer reports | `0583999` |
 | 2026-06-28 | [#12](https://github.com/nash226/quorum/pull/12) | Add auto-updated status page | `6af38ec` |
@@ -49,5 +51,4 @@
 | 2026-06-28 | [#10](https://github.com/nash226/quorum/pull/10) | fix: clean markdown list claims | `b62f172` |
 | 2026-06-28 | [#9](https://github.com/nash226/quorum/pull/9) | docs: polish project readme | `b59e8e7` |
 | 2026-06-28 | [#8](https://github.com/nash226/quorum/pull/8) | Add HTML knowledge base source ingestion | `9bdb326` |
-| 2026-06-28 | [#7](https://github.com/nash226/quorum/pull/7) | docs: add human decision queue | `d7e0925` |
 
