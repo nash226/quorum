@@ -38,6 +38,7 @@ async function main(): Promise<void> {
 
   const report = verifyAnswer(answer, sources);
   const jsonReport = JSON.stringify(report, null, 2);
+  const shouldFail = shouldFailReport(report, parsed.failOn);
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
@@ -45,6 +46,9 @@ async function main(): Promise<void> {
 
   if (parsed.json) {
     console.log(jsonReport);
+    if (shouldFail) {
+      process.exitCode = 2;
+    }
     return;
   }
 
@@ -54,7 +58,7 @@ async function main(): Promise<void> {
     console.log(`Report written to ${parsed.outPath}`);
   }
 
-  if (shouldFailReport(report, parsed.failOn)) {
+  if (shouldFail) {
     process.exitCode = 2;
   }
 }
