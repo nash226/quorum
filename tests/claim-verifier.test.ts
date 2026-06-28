@@ -6,6 +6,7 @@ import type { SourceDocument } from "../src/domain.js";
 const hrPolicy: SourceDocument = {
   id: "hr_policy",
   title: "HR Policy",
+  trustLevel: "high",
   content: `
 Employees receive 12 weeks of paid parental leave.
 Full-time employees receive 20 days of paid vacation each calendar year.
@@ -16,6 +17,7 @@ Healthcare coverage begins after 30 days of employment.
 const supportPolicy: SourceDocument = {
   id: "support_policy",
   title: "Support Policy",
+  trustLevel: "medium",
   content: `
 Customers can cancel monthly subscriptions from account billing settings.
 Enterprise support requests receive a first response within four business hours.
@@ -31,6 +33,31 @@ test("verifies claims that match approved sources", () => {
 
   assert.equal(report.summary.verified, 1);
   assert.equal(report.assessments[0]?.verdict, "verified");
+});
+
+test("prefers higher-trust sources when evidence strength is similar", () => {
+  const highTrustPolicy: SourceDocument = {
+    id: "high_trust",
+    title: "Canonical Refund Policy",
+    trustLevel: "high",
+    content: "Customers can request refunds within 30 calendar days of purchase.",
+  };
+  const lowTrustPolicy: SourceDocument = {
+    id: "low_trust",
+    title: "Legacy Refund FAQ",
+    trustLevel: "low",
+    content: "Customers can request refunds within 30 days after purchase.",
+  };
+
+  const report = verifyAnswer("Customers can request refunds within 30 days of purchase.", [
+    lowTrustPolicy,
+    highTrustPolicy,
+  ]);
+
+  assert.equal(report.assessments[0]?.evidence[0]?.documentId, "high_trust");
+  assert.equal(report.assessments[0]?.evidence[0]?.documentTrustLevel, "high");
+  assert.equal(report.sources[0]?.trustLevel, "low");
+  assert.equal(report.sources[1]?.trustLevel, "high");
 });
 
 test("flags numeric contradictions against approved sources", () => {

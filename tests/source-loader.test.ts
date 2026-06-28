@@ -8,6 +8,7 @@ test("builds source documents from file names when metadata is absent", () => {
   assert.equal(source.id, "source_1");
   assert.equal(source.title, "hr-policy.md");
   assert.equal(source.updatedAt, undefined);
+  assert.equal(source.trustLevel, "medium");
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
@@ -15,6 +16,7 @@ test("parses supported frontmatter metadata and strips it from content", () => {
   const parsed = parseSource("docs/hr-policy.md", `---
 title: HR Benefits Policy
 updatedAt: 2026-05-31
+trustLevel: high
 owner: People Ops
 ---
 # HR Policy
@@ -25,6 +27,7 @@ Employees get 12 weeks.
   assert.deepEqual(parsed.metadata, {
     title: "HR Benefits Policy",
     updatedAt: "2026-05-31",
+    trustLevel: "high",
   });
   assert.match(parsed.body, /^# HR Policy/);
   assert.doesNotMatch(parsed.body, /People Ops/);
@@ -54,6 +57,7 @@ test("extracts readable text and title from exported html sources", () => {
   );
 
   assert.equal(source.title, "Refund Policy");
+  assert.equal(source.trustLevel, "medium");
   assert.match(source.content, /Refund Policy/);
   assert.match(source.content, /Customers can request refunds within 30 days\./);
   assert.match(source.content, /- Annual plans require support approval\./);
@@ -68,5 +72,6 @@ test("falls back to the html file name when the page has no title", () => {
   );
 
   assert.equal(source.title, "escalations");
+  assert.equal(source.trustLevel, "medium");
   assert.equal(source.content, "Escalate priority incidents immediately.");
 });

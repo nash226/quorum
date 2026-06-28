@@ -1,6 +1,7 @@
 ---
 title: HR Benefits Policy
 updatedAt: 2026-05-31
+trustLevel: high
 ---
 
 # HR Policy
