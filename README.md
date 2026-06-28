@@ -1,5 +1,7 @@
 # Quorum
 
+[![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
+
 Quorum is a business-facing evidence layer for enterprise AI agents.
 
 It checks AI-generated business claims against approved company sources before
