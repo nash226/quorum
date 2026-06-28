@@ -1,6 +1,6 @@
 # Market Research
 
-ClaimGuard targets enterprise teams deploying AI agents and AI-assisted business
+Quorum targets enterprise teams deploying AI agents and AI-assisted business
 workflows where hallucinated answers can create customer, employee, compliance,
 or operational risk.
 
@@ -31,7 +31,7 @@ or operational risk.
 
 ## Initial Wedge
 
-ClaimGuard should avoid competing head-on with broad observability or governance
+Quorum should avoid competing head-on with broad observability or governance
 platforms. The wedge is a narrow business workflow:
 
 > Verify AI-generated HR and customer-support policy claims against approved

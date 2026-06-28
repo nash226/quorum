@@ -2,8 +2,8 @@
 
 ## Purpose
 
-This repository builds ClaimGuard: a business-facing evidence layer for
-enterprise AI agents. The product checks AI-generated business claims against
+This repository builds Quorum: a business-facing evidence layer for enterprise
+AI agents. The product checks AI-generated business claims against
 approved company sources before those claims reach customers, employees, or
 downstream systems.
 
@@ -62,7 +62,7 @@ Before considering a task done:
 
 ## Project Direction
 
-ClaimGuard helps enterprise teams reduce hallucination risk in AI agents and
+Quorum helps enterprise teams reduce hallucination risk in AI agents and
 AI-assisted workflows.
 
 Initial product surface:
