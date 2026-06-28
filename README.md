@@ -26,6 +26,15 @@ It returns a claim-by-claim evidence report:
 - `contradicted`
 - `needs_review`
 
+Source files may include optional frontmatter metadata:
+
+```markdown
+---
+title: HR Benefits Policy
+updatedAt: 2026-05-31
+---
+```
+
 ## Quick Start
 
 ```bash
