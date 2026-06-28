@@ -2,31 +2,88 @@
 
 [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
-Quorum is a business-facing evidence layer for enterprise AI agents.
+Quorum is an evidence gate for enterprise AI agents.
 
 It checks AI-generated business claims against approved company sources before
-those claims reach customers, employees, or downstream systems.
+those claims reach customers, employees, tickets, workflows, or downstream
+systems.
 
-## Why This Exists
+## Why Quorum Exists
 
-Enterprise AI is moving from experiments to production agents, but hallucination
-controls are still uneven. The first version of Quorum focuses on a narrow,
-high-value problem: detecting unsupported or contradicted claims in answers that
-should be grounded in company policy or knowledge documents.
+Enterprise teams are moving from AI experiments to agents that answer policy,
+support, HR, product, and operations questions. Those answers often sound
+confident even when they drift from approved company knowledge.
 
-## MVP
+Quorum focuses on a narrow but high-value problem:
 
-The initial CLI takes:
+> Given an AI-generated answer and approved source documents, identify which
+> claims are supported, contradicted, unsupported, or need human review.
 
-- an AI-generated answer
-- one or more approved source documents
+The goal is not to replace reviewers. The goal is to give reviewers a clear,
+auditable evidence report before an agent response becomes a business action.
 
-It returns a claim-by-claim evidence report:
+## What It Does
 
-- `verified`
-- `unsupported`
-- `contradicted`
-- `needs_review`
+The current CLI can:
+
+- read an AI-generated answer from a Markdown or text file
+- read one or more approved Markdown, text, or exported HTML source documents
+- load source metadata such as `title` and `updatedAt`
+- split the answer into atomic claims
+- compare each claim against approved source snippets
+- label each claim as `verified`, `contradicted`, `unsupported`, or
+  `needs_review`
+- print a human-readable report
+- write a JSON report for workflow automation
+- fail a CI job when selected risky verdicts appear
+
+## Example
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source-dir examples/sources \
+  --out reports/hr-report.json
+```
+
+Example output:
+
+```text
+Quorum Verification Report
+
+Sources: HR Benefits Policy, Customer Support Playbook
+Summary: 1 verified, 1 contradicted, 1 unsupported, 0 needs review
+
+CONTRADICTED  Employees receive 18 weeks of paid parental leave.
+Reason: A closely matching approved source uses different numeric terms.
+Evidence (HR Benefits Policy, score 0.857):
+  Employees receive 12 weeks of paid parental leave.
+```
+
+For CI-style blocking:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source-dir examples/sources \
+  --fail-on contradicted \
+  --fail-on unsupported
+```
+
+When a selected verdict is present, Quorum exits with status code `2`.
+
+## Quick Start
+
+```bash
+git clone https://github.com/nash226/quorum.git
+cd quorum
+npm install
+npm test
+npm run build
+npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json
+```
+
+## Source Metadata
 
 Source files may include optional frontmatter metadata:
 
@@ -37,34 +94,85 @@ updatedAt: 2026-05-31
 ---
 ```
 
-Supported source inputs today:
+Quorum includes this metadata in reports so reviewers can see which approved
+source supported or contradicted each claim.
 
-- Markdown and plain text policy documents
-- exported HTML knowledge base pages
+## CLI Usage
 
-## Quick Start
-
-```bash
-npm install
-npm test
-npm run build
-npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json
+```text
+quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--fail-on <verdict>]
 ```
 
-For a guided walkthrough, see [docs/demo.md](docs/demo.md). For planned
-increments, see [docs/roadmap.md](docs/roadmap.md). For human sign-off during
-automation runs, see [docs/decision-queue.md](docs/decision-queue.md).
+Options:
+
+- `--answer <path>`: AI-generated answer to verify
+- `--source <path>`: approved source document; may be repeated
+- `--source-dir <path>`: directory of approved source documents
+- `--json`: print the full JSON report
+- `--out <path>`: write the JSON report to disk
+- `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
+  repeated
+
+Supported source extensions today:
+
+- `.md`
+- `.markdown`
+- `.txt`
+- `.html`
+- `.htm`
+
+## Project Structure
+
+```text
+src/
+  claim-extractor.ts   answer-to-claim extraction
+  claim-verifier.ts    evidence matching and verdict logic
+  cli.ts               command-line interface
+  report-policy.ts     fail-on verdict policy
+  source-loader.ts     source metadata and HTML loading
+tests/                 unit and fixture coverage
+examples/              HR and support demo inputs
+docs/                  product notes, demo, roadmap, decision queue
+```
+
+## Development
+
+```bash
+npm test
+npm run build
+```
+
+The CI workflow runs both commands on pushes and pull requests.
 
 ## Product Direction
 
 The first wedge is HR and customer-support policy verification. These workflows
-are document-grounded, high-volume, and risky when AI answers drift from approved
-sources.
+are document-grounded, high-volume, and risky when AI answers drift from
+approved sources.
 
-Future versions should add:
+Near-term work:
 
-- source ingestion for PDFs
-- reviewer approval workflows
-- audit reports
-- API and dashboard surfaces
-- integrations with enterprise agent platforms
+- evaluation harness for labeled verdict examples
+- Markdown or HTML reviewer reports
+- batch verification
+- better claim extraction for bullets, lists, and compound sentences
+- API surface for agent integrations
+
+See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
+[docs/product-brief.md](docs/product-brief.md) for the product brief.
+
+## Human Decision Queue
+
+Automation uses GitHub issues labeled `needs-human-decision` when it needs
+product judgment, credentials, paid services, or other human sign-off.
+
+Review the queue here:
+
+https://github.com/nash226/quorum/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-human-decision
+
+See [docs/decision-queue.md](docs/decision-queue.md) for the workflow.
+
+## Status
+
+Quorum is an early MVP. It is intentionally small, deterministic, and easy to
+inspect while the product direction is still being validated.
