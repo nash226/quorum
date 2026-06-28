@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ade7490` on 2026-06-28, feat: add source trust levels
+- Latest shipped change: `6af38ec` on 2026-06-28, Add auto-updated status page
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -40,6 +40,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-28 | [#12](https://github.com/nash226/quorum/pull/12) | Add auto-updated status page | `6af38ec` |
 | 2026-06-28 | [#11](https://github.com/nash226/quorum/pull/11) | feat: add source trust levels | `ade7490` |
 | 2026-06-28 | [#10](https://github.com/nash226/quorum/pull/10) | fix: clean markdown list claims | `b62f172` |
 | 2026-06-28 | [#9](https://github.com/nash226/quorum/pull/9) | docs: polish project readme | `b59e8e7` |
@@ -47,5 +48,4 @@
 | 2026-06-28 | [#7](https://github.com/nash226/quorum/pull/7) | docs: add human decision queue | `d7e0925` |
 | 2026-06-28 | [#6](https://github.com/nash226/quorum/pull/6) | docs: add ci status badge | `a9dce9c` |
 | 2026-06-28 | [#5](https://github.com/nash226/quorum/pull/5) | test: add support workflow fixture | `b96f4fd` |
-| 2026-06-28 | [#4](https://github.com/nash226/quorum/pull/4) | feat: add fail-on verdict policy | `72e8ee6` |
 
