@@ -1,0 +1,49 @@
+name: Human decision
+description: Queue a product, strategy, credential, or risk decision for Nazeer.
+title: "Decision: "
+labels:
+  - needs-human-decision
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this when automation or an agent needs a human choice before it can safely proceed.
+  - type: textarea
+    id: decision
+    attributes:
+      label: Decision needed
+      description: State the exact question that needs a human answer.
+      placeholder: Should Quorum prioritize API mode or reviewer workflows next?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Summarize the relevant background, links, and current state.
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options
+      description: List the realistic choices, including the recommended default when there is one.
+      placeholder: |
+        1. API mode - unlocks integrations first.
+        2. Reviewer workflow - improves demo and auditability first.
+    validations:
+      required: true
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Recommendation
+      description: Explain the default recommendation and tradeoff.
+    validations:
+      required: true
+  - type: textarea
+    id: unblocked_by
+    attributes:
+      label: What unblocks the work?
+      description: Describe the exact answer, credential, approval, or external action needed.
+    validations:
+      required: true
