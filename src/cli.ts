@@ -2,6 +2,8 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, extname, join } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
+import type { ClaimVerdict } from "./domain.js";
+import { parseClaimVerdict, shouldFailReport } from "./report-policy.js";
 import { sourceDocumentFromFile } from "./source-loader.js";
 
 interface VerifyArgs {
@@ -9,6 +11,7 @@ interface VerifyArgs {
   sourcePaths: string[];
   sourceDirs: string[];
   json: boolean;
+  failOn: ClaimVerdict[];
   outPath?: string;
 }
 
@@ -50,6 +53,10 @@ async function main(): Promise<void> {
   if (parsed.outPath) {
     console.log(`Report written to ${parsed.outPath}`);
   }
+
+  if (shouldFailReport(report, parsed.failOn)) {
+    process.exitCode = 2;
+  }
 }
 
 function parseVerifyArgs(args: string[]): VerifyArgs {
@@ -58,6 +65,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
   let answerPath = "";
   let outPath: string | undefined;
   let json = false;
+  const failOn: ClaimVerdict[] = [];
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -75,6 +83,9 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
     } else if (arg === "--out" && next) {
       outPath = next;
       index += 1;
+    } else if (arg === "--fail-on" && next) {
+      failOn.push(parseClaimVerdict(next));
+      index += 1;
     } else if (arg === "--json") {
       json = true;
     } else {
@@ -90,7 +101,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
     throw new Error("Provide at least one --source <path> or --source-dir <path>");
   }
 
-  return { answerPath, sourcePaths, sourceDirs, json, outPath };
+  return { answerPath, sourcePaths, sourceDirs, json, failOn, outPath };
 }
 
 async function resolveSourcePaths(
@@ -156,10 +167,10 @@ function printHelp(): void {
   console.log(`Quorum
 
 Usage:
-  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>]
+  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--fail-on <verdict>]
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json
+  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --fail-on contradicted --fail-on unsupported
 `);
 }
 
