@@ -1,0 +1,37 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { extractClaims } from "../src/claim-extractor.js";
+
+test("extracts clean claims from markdown list answers", () => {
+  const claims = extractClaims(`# HR Policy Summary
+
+1. Employees receive 12 weeks of paid parental leave
+2. Healthcare coverage begins after 30 days of employment
+- Contractors do not receive paid vacation
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave",
+      "Healthcare coverage begins after 30 days of employment",
+      "Contractors do not receive paid vacation",
+    ],
+  );
+});
+
+test("ignores quote, checkbox, and heading markdown prefixes", () => {
+  const claims = extractClaims(`## Support Notes
+
+> Customers can request refunds within 30 days.
+- [x] Enterprise support requests receive a first response within four business hours.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Customers can request refunds within 30 days.",
+      "Enterprise support requests receive a first response within four business hours.",
+    ],
+  );
+});
