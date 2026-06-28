@@ -1,14 +1,17 @@
 #!/usr/bin/env node
-import { readFile } from "node:fs/promises";
-import { basename } from "node:path";
+import { readdir, readFile } from "node:fs/promises";
+import { basename, extname, join } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import type { SourceDocument } from "./domain.js";
 
 interface VerifyArgs {
   answerPath: string;
   sourcePaths: string[];
+  sourceDirs: string[];
   json: boolean;
 }
+
+const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -21,8 +24,9 @@ async function main(): Promise<void> {
 
   const parsed = parseVerifyArgs(args);
   const answer = await readFile(parsed.answerPath, "utf8");
+  const sourcePaths = await resolveSourcePaths(parsed.sourcePaths, parsed.sourceDirs);
   const sources = await Promise.all(
-    parsed.sourcePaths.map(async (sourcePath, index): Promise<SourceDocument> => {
+    sourcePaths.map(async (sourcePath, index): Promise<SourceDocument> => {
       const content = await readFile(sourcePath, "utf8");
       return {
         id: `source_${index + 1}`,
@@ -44,6 +48,7 @@ async function main(): Promise<void> {
 
 function parseVerifyArgs(args: string[]): VerifyArgs {
   const sourcePaths: string[] = [];
+  const sourceDirs: string[] = [];
   let answerPath = "";
   let json = false;
 
@@ -57,6 +62,9 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
     } else if (arg === "--source" && next) {
       sourcePaths.push(next);
       index += 1;
+    } else if (arg === "--source-dir" && next) {
+      sourceDirs.push(next);
+      index += 1;
     } else if (arg === "--json") {
       json = true;
     } else {
@@ -68,11 +76,43 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
     throw new Error("Missing --answer <path>");
   }
 
-  if (sourcePaths.length === 0) {
-    throw new Error("Provide at least one --source <path>");
+  if (sourcePaths.length === 0 && sourceDirs.length === 0) {
+    throw new Error("Provide at least one --source <path> or --source-dir <path>");
   }
 
-  return { answerPath, sourcePaths, json };
+  return { answerPath, sourcePaths, sourceDirs, json };
+}
+
+async function resolveSourcePaths(
+  sourcePaths: string[],
+  sourceDirs: string[],
+): Promise<string[]> {
+  const directoryFiles = (
+    await Promise.all(sourceDirs.map((sourceDir) => listSourceFiles(sourceDir)))
+  ).flat();
+
+  return Array.from(new Set([...sourcePaths, ...directoryFiles])).sort();
+}
+
+async function listSourceFiles(sourceDir: string): Promise<string[]> {
+  const entries = await readdir(sourceDir, { withFileTypes: true });
+  const files = await Promise.all(
+    entries.map(async (entry): Promise<string[]> => {
+      const path = join(sourceDir, entry.name);
+
+      if (entry.isDirectory()) {
+        return listSourceFiles(path);
+      }
+
+      if (entry.isFile() && SOURCE_EXTENSIONS.has(extname(entry.name).toLowerCase())) {
+        return [path];
+      }
+
+      return [];
+    }),
+  );
+
+  return files.flat();
 }
 
 function printReport(report: ReturnType<typeof verifyAnswer>): void {
@@ -101,10 +141,10 @@ function printHelp(): void {
   console.log(`Quorum
 
 Usage:
-  quorum verify --answer <path> --source <path> [--source <path>] [--json]
+  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json]
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source examples/sources/hr-policy.md
+  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources
 `);
 }
 
