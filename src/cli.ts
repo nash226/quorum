@@ -5,6 +5,7 @@ import { verifyAnswer } from "./claim-verifier.js";
 import type { ClaimVerdict } from "./domain.js";
 import { parseClaimVerdict, shouldFailReport } from "./report-policy.js";
 import {
+  renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
   renderTextReport,
@@ -19,6 +20,7 @@ interface VerifyArgs {
   failOn: ClaimVerdict[];
   outPath?: string;
   markdownOutPath?: string;
+  htmlOutPath?: string;
   reviewCsvOutPath?: string;
 }
 
@@ -45,6 +47,7 @@ async function main(): Promise<void> {
 
   const report = verifyAnswer(answer, sources);
   const jsonReport = JSON.stringify(report, null, 2);
+  const htmlReport = renderHtmlReport(report);
   const markdownReport = renderMarkdownReport(report);
   const reviewerDecisionCsv = renderReviewerDecisionCsv(report);
   const shouldFail = shouldFailReport(report, parsed.failOn);
@@ -55,6 +58,10 @@ async function main(): Promise<void> {
 
   if (parsed.markdownOutPath) {
     await writeReportFile(parsed.markdownOutPath, markdownReport);
+  }
+
+  if (parsed.htmlOutPath) {
+    await writeReportFile(parsed.htmlOutPath, htmlReport);
   }
 
   if (parsed.reviewCsvOutPath) {
@@ -79,6 +86,10 @@ async function main(): Promise<void> {
     console.log(`Markdown report written to ${parsed.markdownOutPath}`);
   }
 
+  if (parsed.htmlOutPath) {
+    console.log(`HTML report written to ${parsed.htmlOutPath}`);
+  }
+
   if (parsed.reviewCsvOutPath) {
     console.log(`Reviewer decision CSV written to ${parsed.reviewCsvOutPath}`);
   }
@@ -94,6 +105,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
   let answerPath = "";
   let outPath: string | undefined;
   let markdownOutPath: string | undefined;
+  let htmlOutPath: string | undefined;
   let reviewCsvOutPath: string | undefined;
   let json = false;
   const failOn: ClaimVerdict[] = [];
@@ -116,6 +128,9 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
       index += 1;
     } else if (arg === "--markdown-out" && next) {
       markdownOutPath = next;
+      index += 1;
+    } else if (arg === "--html-out" && next) {
+      htmlOutPath = next;
       index += 1;
     } else if (arg === "--review-csv-out" && next) {
       reviewCsvOutPath = next;
@@ -146,6 +161,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
     failOn,
     outPath,
     markdownOutPath,
+    htmlOutPath,
     reviewCsvOutPath,
   };
 }
@@ -195,10 +211,10 @@ function printHelp(): void {
   console.log(`Quorum
 
 Usage:
-  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
+  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
 `);
 }
 
