@@ -7,7 +7,6 @@ front of enterprise agent workflows.
 
 - Keep the CLI reliable and easy to run.
 - Improve claim extraction without hiding uncertainty.
-- Add examples for HR and customer-support workflows.
 - Make reports useful for a human reviewer.
 
 ## Next
