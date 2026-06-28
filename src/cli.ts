@@ -15,7 +15,7 @@ interface VerifyArgs {
   outPath?: string;
 }
 
-const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
+const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
