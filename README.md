@@ -38,6 +38,10 @@ the current coverage inventory and extension workflow.
 Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot accurate.
 
+The packed smoke check also verifies that tax-exemption answers appear in the
+benchmark report, covering certificate submission, review timing, and an
+unsupported enterprise-upgrade promise.
+
 The benchmark inventory is currently reconciled at 69 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
 
