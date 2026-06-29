@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `63b6d8e` on 2026-06-28, Add HTML reviewer reports
+- Latest shipped change: `5f554c6` on 2026-06-28, feat: import reviewer decision csvs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -43,6 +43,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-28 | [#16](https://github.com/nash226/quorum/pull/16) | feat: import reviewer decision csvs | `5f554c6` |
 | 2026-06-28 | [#15](https://github.com/nash226/quorum/pull/15) | Add HTML reviewer reports | `63b6d8e` |
 | 2026-06-28 | [#14](https://github.com/nash226/quorum/pull/14) | feat: add reviewer decision csv export | `ca29802` |
 | 2026-06-28 | Direct push | feat: add markdown reviewer reports | `0583999` |
@@ -50,5 +51,4 @@
 | 2026-06-28 | [#11](https://github.com/nash226/quorum/pull/11) | feat: add source trust levels | `ade7490` |
 | 2026-06-28 | [#10](https://github.com/nash226/quorum/pull/10) | fix: clean markdown list claims | `b62f172` |
 | 2026-06-28 | [#9](https://github.com/nash226/quorum/pull/9) | docs: polish project readme | `b59e8e7` |
-| 2026-06-28 | [#8](https://github.com/nash226/quorum/pull/8) | Add HTML knowledge base source ingestion | `9bdb326` |
 
