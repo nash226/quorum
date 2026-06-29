@@ -756,7 +756,8 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
     const markdownReport = await readFile(markdownOutPath, "utf8");
     assert.match(markdownReport, /# Quorum Reviewer Decision Import/);
     assert.match(markdownReport, /- Total claims: 2/);
-    assert.match(markdownReport, /- Answer path: `examples\/answers\/hr-answer\.md`/);
+    assert.match(markdownReport, /## Answer Groups/);
+    assert.match(markdownReport, /### examples\/answers\/hr-answer\.md/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
