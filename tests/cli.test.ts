@@ -119,6 +119,8 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     const answerDir = join(tempDir, "answers");
     const sourceDir = join(tempDir, "sources");
     const batchOutPath = join(tempDir, "reports", "batch-report.json");
+    const batchMarkdownOutPath = join(tempDir, "reports", "batch-report.md");
+    const batchHtmlOutPath = join(tempDir, "reports", "batch-report.html");
 
     await Promise.all([
       mkdir(answerDir, { recursive: true }),
@@ -148,6 +150,10 @@ test("verify-batch returns an aggregate report for each answer file", async () =
       sourceDir,
       "--out",
       batchOutPath,
+      "--markdown-out",
+      batchMarkdownOutPath,
+      "--html-out",
+      batchHtmlOutPath,
       "--json",
     ]);
 
@@ -170,6 +176,8 @@ test("verify-batch returns an aggregate report for each answer file", async () =
 
     const savedReport = JSON.parse(await readFile(batchOutPath, "utf8")) as typeof report;
     assert.equal(savedReport.answerCount, 2);
+    assert.match(await readFile(batchMarkdownOutPath, "utf8"), /# Quorum Batch Verification Report/);
+    assert.match(await readFile(batchHtmlOutPath, "utf8"), /<title>Quorum Batch Verification Report<\/title>/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -218,7 +226,7 @@ test("verify-batch exits non-zero when a fail-on verdict appears in any answer",
   }
 });
 
-test("verify-batch rejects single-answer output flags", async () => {
+test("verify-batch rejects single-answer review csv output flags", async () => {
   await assert.rejects(
     runCli([
       "verify-batch",
@@ -226,10 +234,10 @@ test("verify-batch rejects single-answer output flags", async () => {
       "examples/answers",
       "--source-dir",
       "examples/sources",
-      "--markdown-out",
-      "reports/batch.md",
+      "--review-csv-out",
+      "reports/batch.csv",
     ]),
-    /Unknown or incomplete argument: --markdown-out/,
+    /Unknown or incomplete argument: --review-csv-out/,
   );
 });
 

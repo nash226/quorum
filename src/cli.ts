@@ -3,6 +3,8 @@ import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, extname, join } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import type {
+  BatchVerificationReport,
+  BatchVerificationResult,
   ClaimVerdict,
   SourceDocument,
   SourceTrustLevel,
@@ -10,6 +12,8 @@ import type {
 } from "./domain.js";
 import { parseClaimVerdict, shouldFailReport } from "./report-policy.js";
 import {
+  renderBatchHtmlReport,
+  renderBatchMarkdownReport,
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
@@ -40,6 +44,8 @@ interface VerifySingleArgs extends VerifyArgs {
 interface VerifyBatchArgs extends VerifyArgs {
   answerDirPath: string;
   outPath?: string;
+  markdownOutPath?: string;
+  htmlOutPath?: string;
 }
 
 interface ImportReviewArgs {
@@ -50,26 +56,6 @@ interface ImportReviewArgs {
 
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
 const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
-
-interface BatchVerificationResult {
-  answerPath: string;
-  report: VerificationReport;
-  shouldFail: boolean;
-}
-
-interface BatchVerificationReport {
-  generatedAt: string;
-  sourceCount: number;
-  answerCount: number;
-  answers: BatchVerificationResult[];
-  summary: {
-    verified: number;
-    contradicted: number;
-    unsupported: number;
-    needs_review: number;
-    answersWithFailures: number;
-  };
-}
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -177,9 +163,19 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   const batchReport = summarizeBatchVerification(answers, sources.length);
   const jsonReport = JSON.stringify(batchReport, null, 2);
+  const markdownReport = renderBatchMarkdownReport(batchReport);
+  const htmlReport = renderBatchHtmlReport(batchReport);
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
+  }
+
+  if (parsed.markdownOutPath) {
+    await writeReportFile(parsed.markdownOutPath, markdownReport);
+  }
+
+  if (parsed.htmlOutPath) {
+    await writeReportFile(parsed.htmlOutPath, htmlReport);
   }
 
   const shouldFail = batchReport.summary.answersWithFailures > 0;
@@ -196,6 +192,14 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   if (parsed.outPath) {
     console.log(`Batch report written to ${parsed.outPath}`);
+  }
+
+  if (parsed.markdownOutPath) {
+    console.log(`Batch markdown report written to ${parsed.markdownOutPath}`);
+  }
+
+  if (parsed.htmlOutPath) {
+    console.log(`Batch HTML report written to ${parsed.htmlOutPath}`);
   }
 
   if (shouldFail) {
@@ -276,9 +280,16 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
 }
 
 function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
-  const parsed = parseSharedVerifyArgs(args, new Set(["--answer-dir", "--out"]));
+  const parsed = parseSharedVerifyArgs(args, new Set([
+    "--answer-dir",
+    "--out",
+    "--markdown-out",
+    "--html-out",
+  ]));
   let answerDirPath = "";
   let outPath: string | undefined;
+  let markdownOutPath: string | undefined;
+  let htmlOutPath: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -289,6 +300,12 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
       index += 1;
     } else if (arg === "--out" && next) {
       outPath = next;
+      index += 1;
+    } else if (arg === "--markdown-out" && next) {
+      markdownOutPath = next;
+      index += 1;
+    } else if (arg === "--html-out" && next) {
+      htmlOutPath = next;
       index += 1;
     }
   }
@@ -301,6 +318,8 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     ...parsed,
     answerDirPath,
     outPath,
+    markdownOutPath,
+    htmlOutPath,
   };
 }
 
@@ -528,12 +547,12 @@ function printHelp(): void {
 
 Usage:
   quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
-  quorum verify-batch --answer-dir <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--fail-on <verdict>]
+  quorum verify-batch --answer-dir <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path> [--json] [--out <path>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
-  npm run dev -- verify-batch --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --fail-on contradicted
+  npm run dev -- verify-batch --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --fail-on contradicted
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json
 `);
 }
