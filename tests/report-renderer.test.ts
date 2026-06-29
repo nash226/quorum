@@ -6,6 +6,7 @@ import {
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
+  renderBatchSummaryCsv,
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
@@ -261,4 +262,41 @@ test("renders a batch reviewer decision csv with answer path context", () => {
     /^examples\/answers\/support-answer\.md,claim_1,Employees receive free catered lunch every day\.,unsupported,/,
   );
   assert.match(lines[2] ?? "", /,,$/);
+});
+
+test("renders a batch summary csv with per-answer verdict totals", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sourceCount: 1,
+    answerCount: 2,
+    answers: [
+      {
+        answerPath: "examples/answers/hr-answer.md",
+        report: verifyAnswer("Employees receive 12 weeks of paid parental leave.", [hrPolicy]),
+        shouldFail: false,
+      },
+      {
+        answerPath: "examples/answers/support-answer.md",
+        report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
+        shouldFail: true,
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 1,
+      needs_review: 0,
+      answersWithFailures: 1,
+    },
+  };
+
+  const rendered = renderBatchSummaryCsv(batchReport);
+  const lines = rendered.trim().split("\n");
+
+  assert.equal(
+    lines[0],
+    "answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy",
+  );
+  assert.equal(lines[1], "examples/answers/hr-answer.md,1,1,0,0,0,clear");
+  assert.equal(lines[2], "examples/answers/support-answer.md,1,0,0,1,0,matched");
 });
