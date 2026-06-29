@@ -120,6 +120,37 @@ export function renderReviewerDecisionCsv(report: VerificationReport): string {
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
 }
 
+export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport): string {
+  const rows = [
+    [
+      "answer_path",
+      "claim_id",
+      "claim_text",
+      "model_verdict",
+      "model_reason",
+      "evidence_titles",
+      "evidence_quotes",
+      "reviewer_verdict",
+      "reviewer_notes",
+    ],
+    ...report.answers.flatMap((answer) =>
+      answer.report.assessments.map((assessment) => [
+        answer.answerPath,
+        assessment.claim.id,
+        assessment.claim.text,
+        assessment.verdict,
+        assessment.reason,
+        assessment.evidence.map((evidence) => evidence.documentTitle).join(" | "),
+        assessment.evidence.map((evidence) => evidence.quote).join(" | "),
+        "",
+        "",
+      ]),
+    ),
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 export function renderHtmlReport(report: VerificationReport): string {
   return renderReviewConsoleHtmlReport(report);
 }

@@ -14,6 +14,7 @@ import { parseClaimVerdict, shouldFailReport } from "./report-policy.js";
 import {
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
+  renderBatchReviewerDecisionCsv,
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
@@ -46,6 +47,7 @@ interface VerifyBatchArgs extends VerifyArgs {
   outPath?: string;
   markdownOutPath?: string;
   htmlOutPath?: string;
+  reviewCsvOutPath?: string;
 }
 
 interface ImportReviewArgs {
@@ -165,6 +167,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
   const jsonReport = JSON.stringify(batchReport, null, 2);
   const markdownReport = renderBatchMarkdownReport(batchReport);
   const htmlReport = renderBatchHtmlReport(batchReport);
+  const reviewerDecisionCsv = renderBatchReviewerDecisionCsv(batchReport);
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
@@ -176,6 +179,10 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   if (parsed.htmlOutPath) {
     await writeReportFile(parsed.htmlOutPath, htmlReport);
+  }
+
+  if (parsed.reviewCsvOutPath) {
+    await writeReportFile(parsed.reviewCsvOutPath, reviewerDecisionCsv);
   }
 
   const shouldFail = batchReport.summary.answersWithFailures > 0;
@@ -200,6 +207,10 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   if (parsed.htmlOutPath) {
     console.log(`Batch HTML report written to ${parsed.htmlOutPath}`);
+  }
+
+  if (parsed.reviewCsvOutPath) {
+    console.log(`Batch reviewer decision CSV written to ${parsed.reviewCsvOutPath}`);
   }
 
   if (shouldFail) {
@@ -285,11 +296,13 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     "--out",
     "--markdown-out",
     "--html-out",
+    "--review-csv-out",
   ]));
   let answerDirPath = "";
   let outPath: string | undefined;
   let markdownOutPath: string | undefined;
   let htmlOutPath: string | undefined;
+  let reviewCsvOutPath: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -307,6 +320,9 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     } else if (arg === "--html-out" && next) {
       htmlOutPath = next;
       index += 1;
+    } else if (arg === "--review-csv-out" && next) {
+      reviewCsvOutPath = next;
+      index += 1;
     }
   }
 
@@ -320,6 +336,7 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     outPath,
     markdownOutPath,
     htmlOutPath,
+    reviewCsvOutPath,
   };
 }
 
