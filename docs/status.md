@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `aee8052` on 2026-06-29, feat: add batch review report exports
+- Latest shipped change: `525f02b` on 2026-06-29, Render HTML report as review console
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -44,6 +44,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-29 | [#21](https://github.com/nash226/quorum/pull/21) | Render HTML report as review console | `525f02b` |
 | 2026-06-29 | Direct push | feat: add batch review report exports | `aee8052` |
 | 2026-06-28 | [#19](https://github.com/nash226/quorum/pull/19) | feat: add batch verification cli | `a2af573` |
 | 2026-06-28 | [#18](https://github.com/nash226/quorum/pull/18) | feat: add PDF source support | `671ad4b` |
@@ -51,5 +52,4 @@
 | 2026-06-28 | [#16](https://github.com/nash226/quorum/pull/16) | feat: import reviewer decision csvs | `5f554c6` |
 | 2026-06-28 | [#15](https://github.com/nash226/quorum/pull/15) | Add HTML reviewer reports | `63b6d8e` |
 | 2026-06-28 | [#14](https://github.com/nash226/quorum/pull/14) | feat: add reviewer decision csv export | `ca29802` |
-| 2026-06-28 | Direct push | feat: add markdown reviewer reports | `0583999` |
 
