@@ -156,8 +156,12 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /- Answers matching fail policy: 1/);
   assert.match(rendered, /### 1\. examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /- Fail policy: clear/);
+  assert.match(rendered, /#### Claim Assessments/);
+  assert.match(rendered, /##### 1\. Employees receive 12 weeks of paid parental leave\./);
+  assert.match(rendered, /- Verdict: `verified`/);
   assert.match(rendered, /### 2\. examples\/answers\/support-answer\.md/);
   assert.match(rendered, /- Fail policy: matched/);
+  assert.match(rendered, /No approved source snippet matched strongly enough\./);
 });
 
 test("renders an HTML batch report with escaped answer paths and fail status", () => {
@@ -189,6 +193,9 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /Fail policy matched/);
   assert.match(rendered, /&lt;queued&gt;\/support-answer\.md/);
   assert.doesNotMatch(rendered, /<queued>\/support-answer\.md/);
+  assert.match(rendered, /Employees receive free catered lunch every day\./);
+  assert.match(rendered, /No approved source snippet matched strongly enough\./);
+  assert.match(rendered, /claim-pill claim-pill--unsupported/);
 });
 
 test("renders explicit empty states for batch answers with no extracted claims", () => {

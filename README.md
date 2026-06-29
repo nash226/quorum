@@ -123,7 +123,9 @@ npm run dev -- verify-batch \
 
 When `--answer` is repeated, Quorum keeps those explicit paths in the same
 order in the batch report and reviewer CSV, then appends any additional files
-found through `--answer-dir`.
+found through `--answer-dir`. Batch Markdown and HTML reports also include each
+answer's claim-level verdicts and top evidence so reviewers can inspect risky
+answers without jumping straight to JSON.
 
 ## Quick Start
 
