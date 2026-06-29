@@ -10,6 +10,10 @@ import {
   renderReviewerDecisionCsv,
   renderTextReport,
 } from "./report-renderer.js";
+import {
+  importReviewerDecisions,
+  renderReviewerDecisionImportReport,
+} from "./reviewer-decision-import.js";
 import { sourceDocumentFromFile } from "./source-loader.js";
 
 interface VerifyArgs {
@@ -24,17 +28,36 @@ interface VerifyArgs {
   reviewCsvOutPath?: string;
 }
 
+interface ImportReviewArgs {
+  reviewCsvPath: string;
+  json: boolean;
+  outPath?: string;
+}
+
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
 
-  if (command !== "verify") {
-    printHelp();
-    process.exitCode = command ? 1 : 0;
+  if (command === "verify") {
+    await runVerify(args);
     return;
   }
 
+  if (command === "import-review") {
+    await runImportReview(args);
+    return;
+  }
+
+  if (command !== undefined) {
+    printHelp();
+    process.exitCode = 1;
+  } else {
+    printHelp();
+  }
+}
+
+async function runVerify(args: string[]): Promise<void> {
   const parsed = parseVerifyArgs(args);
   const answer = await readFile(parsed.answerPath, "utf8");
   const sourcePaths = await resolveSourcePaths(parsed.sourcePaths, parsed.sourceDirs);
@@ -96,6 +119,28 @@ async function main(): Promise<void> {
 
   if (shouldFail) {
     process.exitCode = 2;
+  }
+}
+
+async function runImportReview(args: string[]): Promise<void> {
+  const parsed = parseImportReviewArgs(args);
+  const csvContent = await readFile(parsed.reviewCsvPath, "utf8");
+  const report = importReviewerDecisions(csvContent);
+  const jsonReport = JSON.stringify(report, null, 2);
+
+  if (parsed.outPath) {
+    await writeReportFile(parsed.outPath, jsonReport);
+  }
+
+  if (parsed.json) {
+    console.log(jsonReport);
+    return;
+  }
+
+  process.stdout.write(renderReviewerDecisionImportReport(report));
+
+  if (parsed.outPath) {
+    console.log(`Imported reviewer decisions written to ${parsed.outPath}`);
   }
 }
 
@@ -166,6 +211,39 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
   };
 }
 
+function parseImportReviewArgs(args: string[]): ImportReviewArgs {
+  let reviewCsvPath = "";
+  let outPath: string | undefined;
+  let json = false;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    const next = args[index + 1];
+
+    if (arg === "--review-csv" && next) {
+      reviewCsvPath = next;
+      index += 1;
+    } else if (arg === "--out" && next) {
+      outPath = next;
+      index += 1;
+    } else if (arg === "--json") {
+      json = true;
+    } else {
+      throw new Error(`Unknown or incomplete argument: ${arg}`);
+    }
+  }
+
+  if (!reviewCsvPath) {
+    throw new Error("Missing --review-csv <path>");
+  }
+
+  return {
+    reviewCsvPath,
+    json,
+    outPath,
+  };
+}
+
 async function resolveSourcePaths(
   sourcePaths: string[],
   sourceDirs: string[],
@@ -212,9 +290,11 @@ function printHelp(): void {
 
 Usage:
   quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+  quorum import-review --review-csv <path> [--json] [--out <path>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
+  npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json
 `);
 }
 
