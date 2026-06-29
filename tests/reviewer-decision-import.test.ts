@@ -72,8 +72,9 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
   assert.match(rendered, /Quorum Reviewer Decision Import/);
   assert.match(rendered, /Claims: 2 total, 1 reviewed, 1 pending/);
   assert.match(rendered, /Overrides: 0/);
+  assert.match(rendered, /Answer Groups/);
+  assert.match(rendered, /Answer: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /VERIFIED  Employees receive 12 weeks/);
-  assert.match(rendered, /Answer path: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /Reviewer verdict: pending reviewer decision/);
 });
 
@@ -86,9 +87,10 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
 
   assert.match(rendered, /^# Quorum Reviewer Decision Import/m);
   assert.match(rendered, /- Total claims: 2/);
-  assert.match(rendered, /### 1\. Employees receive 12 weeks/);
+  assert.match(rendered, /## Answer Groups/);
+  assert.match(rendered, /### examples\/answers\/hr-answer\.md/);
+  assert.match(rendered, /#### 1\. Employees receive 12 weeks/);
   assert.match(rendered, /- Reviewer verdict: verified/);
-  assert.match(rendered, /- Answer path: `examples\/answers\/hr-answer\.md`/);
   assert.match(rendered, /- Reviewer verdict: pending reviewer decision/);
 });
 
@@ -103,7 +105,9 @@ examples/answers/support-answer.md,claim_2,<Flag this answer for legal review.>,
   assert.match(rendered, /<title>Quorum Reviewer Decision Import<\/title>/);
   assert.match(rendered, /Imported reviewer decisions, final verdicts/);
   assert.match(rendered, /<span>Total claims<\/span><strong>2<\/strong>/);
+  assert.match(rendered, /Answer file/);
   assert.match(rendered, /<code>examples\/answers\/hr-answer\.md<\/code>/);
+  assert.match(rendered, /1 claims<\/span>/);
   assert.match(rendered, /Needs counsel review before publish/);
   assert.match(rendered, /&lt;Flag this answer for legal review\.\&gt;/);
   assert.doesNotMatch(rendered, /<Flag this answer for legal review\.>/);
