@@ -1,4 +1,8 @@
-import type { ClaimAssessment, VerificationReport } from "./domain.js";
+import type {
+  BatchVerificationReport,
+  ClaimAssessment,
+  VerificationReport,
+} from "./domain.js";
 
 export function renderTextReport(report: VerificationReport): string {
   const lines = [
@@ -48,6 +52,42 @@ export function renderMarkdownReport(report: VerificationReport): string {
 
   report.assessments.forEach((assessment, index) => {
     lines.push(...renderMarkdownAssessment(assessment, index + 1), "");
+  });
+
+  return `${trimTrailingBlankLines(lines).join("\n")}\n`;
+}
+
+export function renderBatchMarkdownReport(report: BatchVerificationReport): string {
+  const lines = [
+    "# Quorum Batch Verification Report",
+    "",
+    `Generated: ${report.generatedAt}`,
+    "",
+    "## Summary",
+    "",
+    `- Answers reviewed: ${report.answerCount}`,
+    `- Sources reviewed: ${report.sourceCount}`,
+    `- Verified: ${report.summary.verified}`,
+    `- Contradicted: ${report.summary.contradicted}`,
+    `- Unsupported: ${report.summary.unsupported}`,
+    `- Needs review: ${report.summary.needs_review}`,
+    `- Answers matching fail policy: ${report.summary.answersWithFailures}`,
+    "",
+    "## Answer Reports",
+    "",
+  ];
+
+  report.answers.forEach((answer, index) => {
+    lines.push(
+      `### ${index + 1}. ${answer.answerPath}`,
+      "",
+      `- Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
+      `- Verified: ${answer.report.summary.verified}`,
+      `- Contradicted: ${answer.report.summary.contradicted}`,
+      `- Unsupported: ${answer.report.summary.unsupported}`,
+      `- Needs review: ${answer.report.summary.needs_review}`,
+      "",
+    );
   });
 
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
@@ -628,6 +668,337 @@ export function renderHtmlReport(report: VerificationReport): string {
   </body>
 </html>
 `;
+}
+
+export function renderBatchHtmlReport(report: BatchVerificationReport): string {
+  const summaryCards = ([
+    ["Answers", report.answerCount, "answers"],
+    ["Verified", report.summary.verified, "verified"],
+    ["Contradicted", report.summary.contradicted, "contradicted"],
+    ["Unsupported", report.summary.unsupported, "unsupported"],
+    ["Needs Review", report.summary.needs_review, "needs_review"],
+  ] as const)
+    .map(
+      ([label, value, tone]) => `
+        <section class="summary-card summary-card--${tone}">
+          <span class="summary-card__label">${escapeHtml(label)}</span>
+          <strong class="summary-card__value">${value}</strong>
+        </section>`,
+    )
+    .join("");
+
+  const answerCards = report.answers
+    .map((answer, index) => {
+      const statusClass = answer.shouldFail ? "status--matched" : "status--clear";
+
+      return `
+        <article class="answer-card">
+          <div class="answer-card__header">
+            <div>
+              <span class="answer-card__index">Answer ${index + 1}</span>
+              <h2>${escapeHtml(answer.answerPath)}</h2>
+            </div>
+            <span class="status-pill ${statusClass}">${answer.shouldFail ? "Fail policy matched" : "Fail policy clear"}</span>
+          </div>
+          <dl class="answer-card__summary">
+            <div><dt>Verified</dt><dd>${answer.report.summary.verified}</dd></div>
+            <div><dt>Contradicted</dt><dd>${answer.report.summary.contradicted}</dd></div>
+            <div><dt>Unsupported</dt><dd>${answer.report.summary.unsupported}</dd></div>
+            <div><dt>Needs review</dt><dd>${answer.report.summary.needs_review}</dd></div>
+          </dl>
+        </article>`;
+    })
+    .join("");
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quorum Batch Verification Report</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #f4f1ea;
+        --panel: rgba(255, 252, 247, 0.92);
+        --panel-strong: #fffdf9;
+        --ink: #1f2933;
+        --muted: #66727f;
+        --line: rgba(31, 41, 51, 0.12);
+        --shadow: 0 20px 50px rgba(74, 57, 39, 0.12);
+        --verified: #1f7a4f;
+        --verified-soft: #e6f5ec;
+        --contradicted: #9f3a2c;
+        --contradicted-soft: #fbe9e5;
+        --unsupported: #8a6116;
+        --unsupported-soft: #fbf1dc;
+        --needs-review: #255a8f;
+        --needs-review-soft: #e8f1fb;
+        --answers: #5a4a2e;
+        --answers-soft: #f2e6cf;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(179, 146, 92, 0.18), transparent 28%),
+          radial-gradient(circle at top right, rgba(53, 95, 140, 0.12), transparent 24%),
+          linear-gradient(180deg, #f7f4ee 0%, #f1eee7 100%);
+      }
+
+      .shell {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 24px 72px;
+      }
+
+      .hero {
+        padding: 32px;
+        border: 1px solid rgba(88, 67, 44, 0.1);
+        border-radius: 28px;
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(248, 243, 234, 0.88)),
+          #fff;
+        box-shadow: var(--shadow);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(31, 41, 51, 0.06);
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      h1 {
+        margin-top: 18px;
+        font-size: clamp(2.3rem, 4vw, 3.7rem);
+        line-height: 0.96;
+      }
+
+      .hero p {
+        max-width: 64ch;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .hero__meta {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .hero__meta-card,
+      .answer-card {
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      .hero__meta-card span,
+      .answer-card__index,
+      .answer-card__summary dt {
+        display: block;
+        color: var(--muted);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .hero__meta-card strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
+      .summary-grid,
+      .answers-grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        margin-top: 28px;
+      }
+
+      .answers-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        margin-top: 24px;
+      }
+
+      .summary-card {
+        padding: 20px;
+        border-radius: 22px;
+        border: 1px solid transparent;
+        background: var(--panel-strong);
+      }
+
+      .summary-card__label {
+        display: block;
+        color: var(--muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .summary-card__value {
+        display: block;
+        margin-top: 10px;
+        font-size: 2.3rem;
+        line-height: 1;
+      }
+
+      .summary-card--answers {
+        border-color: rgba(90, 74, 46, 0.18);
+        background: var(--answers-soft);
+      }
+
+      .summary-card--verified {
+        border-color: rgba(31, 122, 79, 0.18);
+        background: var(--verified-soft);
+      }
+
+      .summary-card--contradicted {
+        border-color: rgba(159, 58, 44, 0.18);
+        background: var(--contradicted-soft);
+      }
+
+      .summary-card--unsupported {
+        border-color: rgba(138, 97, 22, 0.18);
+        background: var(--unsupported-soft);
+      }
+
+      .summary-card--needs_review {
+        border-color: rgba(37, 90, 143, 0.18);
+        background: var(--needs-review-soft);
+      }
+
+      .answers-section {
+        margin-top: 32px;
+      }
+
+      .answer-card__header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .answer-card h2 {
+        margin-top: 8px;
+        font-size: 1.25rem;
+        word-break: break-word;
+      }
+
+      .status-pill {
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .status--clear {
+        background: var(--verified-soft);
+        color: var(--verified);
+      }
+
+      .status--matched {
+        background: var(--contradicted-soft);
+        color: var(--contradicted);
+      }
+
+      .answer-card__summary {
+        margin: 20px 0 0;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .answer-card__summary div {
+        padding: 14px;
+        border-radius: 16px;
+        background: #f7f4ee;
+      }
+
+      .answer-card__summary dd {
+        margin: 6px 0 0;
+        font-size: 1.35rem;
+        font-weight: 700;
+      }
+
+      @media (max-width: 720px) {
+        .shell {
+          padding-inline: 16px;
+        }
+
+        .hero,
+        .answer-card {
+          padding: 22px;
+        }
+
+        .answer-card__header {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <span class="eyebrow">Quorum batch review</span>
+        <h1>Batch verification report for review queues</h1>
+        <p>
+          This report aggregates multiple AI-generated answers against the same approved
+          source set so reviewers can spot risky answers quickly before downstream use.
+        </p>
+        <div class="hero__meta">
+          <section class="hero__meta-card">
+            <span>Generated</span>
+            <strong>${escapeHtml(report.generatedAt)}</strong>
+          </section>
+          <section class="hero__meta-card">
+            <span>Approved sources</span>
+            <strong>${report.sourceCount} documents</strong>
+          </section>
+          <section class="hero__meta-card">
+            <span>Fail policy matches</span>
+            <strong>${report.summary.answersWithFailures} answers</strong>
+          </section>
+        </div>
+        <div class="summary-grid">
+          ${summaryCards}
+        </div>
+      </section>
+      <section class="answers-section">
+        <div class="answers-grid">
+          ${answerCards}
+        </div>
+      </section>
+    </main>
+  </body>
+</html>`;
 }
 
 function renderTextAssessment(assessment: ClaimAssessment): string[] {

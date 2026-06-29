@@ -41,3 +41,23 @@ export interface VerificationReport {
   assessments: ClaimAssessment[];
   summary: Record<ClaimVerdict, number>;
 }
+
+export interface BatchVerificationResult {
+  answerPath: string;
+  report: VerificationReport;
+  shouldFail: boolean;
+}
+
+export interface BatchVerificationReport {
+  generatedAt: string;
+  sourceCount: number;
+  answerCount: number;
+  answers: BatchVerificationResult[];
+  summary: {
+    verified: number;
+    contradicted: number;
+    unsupported: number;
+    needs_review: number;
+    answersWithFailures: number;
+  };
+}
