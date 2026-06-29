@@ -18,7 +18,7 @@ export function renderTextReport(report: VerificationReport): string {
   }
 
   for (const assessment of report.assessments) {
-    lines.push(...renderTextAssessment(assessment), "");
+    lines.push(...renderTextAssessmentLines(assessment), "");
   }
 
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
@@ -1311,7 +1311,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
 </html>`;
 }
 
-function renderTextAssessment(assessment: ClaimAssessment): string[] {
+export function renderTextAssessmentLines(assessment: ClaimAssessment): string[] {
   const lines = [
     `${assessment.verdict.toUpperCase()}  ${assessment.claim.text}`,
     `Reason: ${assessment.reason}`,

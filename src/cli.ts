@@ -19,6 +19,7 @@ import {
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
+  renderTextAssessmentLines,
   renderTextReport,
 } from "./report-renderer.js";
 import {
@@ -595,11 +596,25 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
       answer.answerPath,
       `  Summary: ${answer.report.summary.verified} verified, ${answer.report.summary.contradicted} contradicted, ${answer.report.summary.unsupported} unsupported, ${answer.report.summary.needs_review} needs review`,
       `  Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
-      "",
     );
+
+    if (answer.report.assessments.length === 0) {
+      lines.push("  No claims were extracted from this answer.", "");
+      continue;
+    }
+
+    lines.push("");
+
+    for (const assessment of answer.report.assessments) {
+      lines.push(...indentLines(renderTextAssessmentLines(assessment), "  "), "");
+    }
   }
 
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
+}
+
+function indentLines(lines: string[], prefix: string): string[] {
+  return lines.map((line) => (line.length === 0 ? line : `${prefix}${line}`));
 }
 
 async function writeReportFile(
