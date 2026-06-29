@@ -24,7 +24,7 @@ function normalizeAnswer(answer: string): string {
       continue;
     }
 
-    if (isListIntro(line, lines, index)) {
+    if (isIntroLabel(line, lines, index)) {
       previousLineCanContinue = false;
       continue;
     }
@@ -67,7 +67,7 @@ function isHeading(line: string): boolean {
   return /^#{1,6}\s+/.test(line);
 }
 
-function isListIntro(
+function isIntroLabel(
   line: string,
   lines: string[],
   currentIndex: number,
@@ -83,7 +83,7 @@ function isListIntro(
       continue;
     }
 
-    return hasMarkdownClaimPrefix(nextLine);
+    return true;
   }
 
   return false;
@@ -108,7 +108,7 @@ function canContinuePlainLine(
     if (
       isHeading(nextLine) ||
       hasMarkdownClaimPrefix(nextLine) ||
-      isListIntro(nextLine, lines, index)
+      isIntroLabel(nextLine, lines, index)
     ) {
       return false;
     }
