@@ -96,9 +96,11 @@ test("renders a professional HTML reviewer report with escaped content", () => {
   const rendered = renderHtmlReport(report);
 
   assert.match(rendered, /<!doctype html>/i);
-  assert.match(rendered, /<title>Quorum Verification Report<\/title>/);
-  assert.match(rendered, /Verification report for reviewer sign-off/);
-  assert.match(rendered, /<span class="badge badge--contradicted">contradicted<\/span>/);
+  assert.match(rendered, /<title>Quorum Review Console<\/title>/);
+  assert.match(rendered, /Claim review queue/);
+  assert.match(rendered, /Evidence detail/);
+  assert.match(rendered, /Reviewer decision/);
+  assert.match(rendered, /<span class="pill pill--contradicted">contradicted<\/span>/);
   assert.match(rendered, /HR Policy<\/strong>/);
   assert.match(rendered, /high trust/);
   assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
