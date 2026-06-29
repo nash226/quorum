@@ -51,8 +51,8 @@ Employees receive 12 weeks of paid parental leave.
     };
 
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "Metadata Source", trustLevel: "low" },
-      { id: "source_2", title: "plain-source.md", trustLevel: "high" },
+      { id: "source_1", title: "plain-source.md", trustLevel: "high" },
+      { id: "source_2", title: "Metadata Source", trustLevel: "low" },
     ]);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -258,6 +258,80 @@ test("verify-batch accepts repeated answer files alongside answer directories", 
       nestedAnswerPath,
     ]);
     assert.equal(report.summary.verified, 2);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify preserves explicit source order ahead of directory-discovered files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-source-order-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+    const firstSourcePath = join(tempDir, "first.md");
+    const secondSourcePath = join(tempDir, "second.md");
+    const directorySourcePath = join(sourceDir, "directory.md");
+
+    await Promise.all([
+      mkdir(sourceDir, { recursive: true }),
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        firstSourcePath,
+        `---
+title: First Source
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+        "utf8",
+      ),
+      writeFile(
+        secondSourcePath,
+        `---
+title: Second Source
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+        "utf8",
+      ),
+      writeFile(
+        directorySourcePath,
+        `---
+title: Directory Source
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      secondSourcePath,
+      "--source-dir",
+      sourceDir,
+      "--source",
+      firstSourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ id: string; title: string; trustLevel: string }>;
+      assessments: Array<{
+        evidence: Array<{ documentId: string; documentTitle: string }>;
+      }>;
+    };
+
+    assert.deepEqual(report.sources, [
+      { id: "source_1", title: "Second Source", trustLevel: "medium" },
+      { id: "source_2", title: "First Source", trustLevel: "medium" },
+      { id: "source_3", title: "Directory Source", trustLevel: "medium" },
+    ]);
+    assert.equal(report.assessments[0]?.evidence[0]?.documentId, "source_1");
+    assert.equal(report.assessments[0]?.evidence[0]?.documentTitle, "Second Source");
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
