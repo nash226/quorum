@@ -43,6 +43,13 @@ export interface ReviewerDecisionImportReport {
   } & Record<ClaimVerdict, number>;
 }
 
+interface ReviewerDecisionGroup {
+  answerPath?: string;
+  label: string;
+  claims: ImportedReviewerDecision[];
+  summary: ReviewerDecisionImportReport["summary"];
+}
+
 export function importReviewerDecisions(
   csvContent: string,
 ): ReviewerDecisionImportReport {
@@ -91,6 +98,7 @@ export function importReviewerDecisions(
 export function renderReviewerDecisionImportReport(
   report: ReviewerDecisionImportReport,
 ): string {
+  const groups = groupImportedClaims(report.claims);
   const lines = [
     "Quorum Reviewer Decision Import",
     "",
@@ -99,28 +107,34 @@ export function renderReviewerDecisionImportReport(
     `Overrides: ${report.summary.overriddenClaims}`,
   ];
 
-  if (report.claims.length > 0) {
-    lines.push("", "Claim Decisions", "");
+  if (groups.length > 0) {
+    lines.push("", "Answer Groups", "");
   }
 
-  for (const claim of report.claims) {
-    const reviewState = claim.reviewerVerdict
-      ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
-      : "pending reviewer decision";
+  for (const group of groups) {
+    lines.push(
+      `Answer: ${group.label}`,
+      `Claims: ${group.summary.totalClaims} total, ${group.summary.reviewedClaims} reviewed, ${group.summary.pendingClaims} pending`,
+      `Final verdicts: ${group.summary.verified} verified, ${group.summary.contradicted} contradicted, ${group.summary.unsupported} unsupported, ${group.summary.needs_review} needs review`,
+      `Overrides: ${group.summary.overriddenClaims}`,
+      "",
+    );
 
-    lines.push(`${claim.finalVerdict.toUpperCase()}  ${claim.claimText}`);
+    for (const claim of group.claims) {
+      const reviewState = claim.reviewerVerdict
+        ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
+        : "pending reviewer decision";
 
-    if (claim.answerPath) {
-      lines.push(`Answer path: ${claim.answerPath}`);
+      lines.push(`${claim.finalVerdict.toUpperCase()}  ${claim.claimText}`);
+
+      lines.push(`Model verdict: ${claim.modelVerdict}`, `Reviewer verdict: ${reviewState}`);
+
+      if (claim.reviewerNotes) {
+        lines.push(`Reviewer notes: ${claim.reviewerNotes}`);
+      }
+
+      lines.push("");
     }
-
-    lines.push(`Model verdict: ${claim.modelVerdict}`, `Reviewer verdict: ${reviewState}`);
-
-    if (claim.reviewerNotes) {
-      lines.push(`Reviewer notes: ${claim.reviewerNotes}`);
-    }
-
-    lines.push("");
   }
 
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
@@ -129,6 +143,7 @@ export function renderReviewerDecisionImportReport(
 export function renderReviewerDecisionImportMarkdownReport(
   report: ReviewerDecisionImportReport,
 ): string {
+  const groups = groupImportedClaims(report.claims);
   const lines = [
     "# Quorum Reviewer Decision Import",
     "",
@@ -144,40 +159,50 @@ export function renderReviewerDecisionImportMarkdownReport(
     `- Needs review: ${report.summary.needs_review}`,
   ];
 
-  if (report.claims.length === 0) {
+  if (groups.length === 0) {
     return `${lines.join("\n")}\n`;
   }
 
-  lines.push("", "## Claim Decisions", "");
+  lines.push("", "## Answer Groups", "");
 
-  report.claims.forEach((claim, index) => {
-    const reviewerVerdict = claim.reviewerVerdict
-      ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
-      : "pending reviewer decision";
-
+  groups.forEach((group) => {
     lines.push(
-      `### ${index + 1}. ${claim.claimText}`,
+      `### ${group.label}`,
       "",
-      `- Final verdict: ${claim.finalVerdict}`,
-      `- Model verdict: ${claim.modelVerdict}`,
-      `- Reviewer verdict: ${reviewerVerdict}`,
+      `- Total claims: ${group.summary.totalClaims}`,
+      `- Reviewed claims: ${group.summary.reviewedClaims}`,
+      `- Pending claims: ${group.summary.pendingClaims}`,
+      `- Reviewer overrides: ${group.summary.overriddenClaims}`,
+      `- Verified: ${group.summary.verified}`,
+      `- Contradicted: ${group.summary.contradicted}`,
+      `- Unsupported: ${group.summary.unsupported}`,
+      `- Needs review: ${group.summary.needs_review}`,
+      "",
     );
 
-    if (claim.answerPath) {
-      lines.push(`- Answer path: \`${claim.answerPath}\``);
-    }
+    group.claims.forEach((claim, index) => {
+      const reviewerVerdict = claim.reviewerVerdict
+        ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
+        : "pending reviewer decision";
 
-    if (claim.reviewerNotes) {
-      lines.push(`- Reviewer notes: ${claim.reviewerNotes}`);
-    }
-
-    if (claim.evidenceTitles.length > 0) {
       lines.push(
-        `- Evidence titles: ${claim.evidenceTitles.join(", ")}`,
+        `#### ${index + 1}. ${claim.claimText}`,
+        "",
+        `- Final verdict: ${claim.finalVerdict}`,
+        `- Model verdict: ${claim.modelVerdict}`,
+        `- Reviewer verdict: ${reviewerVerdict}`,
       );
-    }
 
-    lines.push(`- Model reason: ${claim.modelReason}`, "");
+      if (claim.reviewerNotes) {
+        lines.push(`- Reviewer notes: ${claim.reviewerNotes}`);
+      }
+
+      if (claim.evidenceTitles.length > 0) {
+        lines.push(`- Evidence titles: ${claim.evidenceTitles.join(", ")}`);
+      }
+
+      lines.push(`- Model reason: ${claim.modelReason}`, "");
+    });
   });
 
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
@@ -186,69 +211,44 @@ export function renderReviewerDecisionImportMarkdownReport(
 export function renderReviewerDecisionImportHtmlReport(
   report: ReviewerDecisionImportReport,
 ): string {
-  const claimCards =
-    report.claims.length === 0
+  const groups = groupImportedClaims(report.claims);
+  const groupCards =
+    groups.length === 0
       ? `
           <section class="empty-state">
             <h2>No claims imported</h2>
             <p>This reviewer decision CSV did not include any claim rows.</p>
           </section>`
-      : report.claims
-          .map((claim, index) => {
-            const reviewerVerdict = claim.reviewerVerdict
-              ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
-              : "pending reviewer decision";
-            const evidenceTitles =
-              claim.evidenceTitles.length > 0 ? claim.evidenceTitles.join(", ") : "None";
-            const evidenceQuotes =
-              claim.evidenceQuotes.length > 0
-                ? claim.evidenceQuotes.map((quote) => `<li>${escapeHtml(quote)}</li>`).join("")
-                : "<li>No evidence quote captured.</li>";
+      : groups
+          .map((group) => {
+            const claimCards = group.claims
+              .map((claim, index) => renderClaimCard(claim, index + 1))
+              .join("\n");
 
             return `
-              <article class="claim-card">
-                <div class="claim-card__header">
+              <section class="answer-group">
+                <div class="answer-group__header">
                   <div>
-                    <p class="eyebrow">Claim ${index + 1}</p>
-                    <h2>${escapeHtml(claim.claimText)}</h2>
+                    <p class="eyebrow">Answer file</p>
+                    <h2><code>${escapeHtml(group.label)}</code></h2>
                   </div>
-                  <span class="verdict-pill verdict-pill--${escapeHtml(claim.finalVerdict.replace("_", "-"))}">
-                    ${escapeHtml(claim.finalVerdict)}
-                  </span>
+                  <div class="answer-group__meta">
+                    <span>${group.summary.totalClaims} claims</span>
+                    <span>${group.summary.reviewedClaims} reviewed</span>
+                    <span>${group.summary.pendingClaims} pending</span>
+                  </div>
                 </div>
-                <dl class="claim-meta">
-                  <div>
-                    <dt>Model verdict</dt>
-                    <dd>${escapeHtml(claim.modelVerdict)}</dd>
-                  </div>
-                  <div>
-                    <dt>Reviewer verdict</dt>
-                    <dd>${escapeHtml(reviewerVerdict)}</dd>
-                  </div>
-                  <div>
-                    <dt>Evidence titles</dt>
-                    <dd>${escapeHtml(evidenceTitles)}</dd>
-                  </div>
-                  ${
-                    claim.answerPath
-                      ? `<div><dt>Answer path</dt><dd><code>${escapeHtml(claim.answerPath)}</code></dd></div>`
-                      : ""
-                  }
-                </dl>
-                <div class="claim-section">
-                  <h3>Model reason</h3>
-                  <p>${escapeHtml(claim.modelReason)}</p>
+                <div class="answer-group__stats">
+                  <article class="group-stat"><span>Verified</span><strong>${group.summary.verified}</strong></article>
+                  <article class="group-stat"><span>Contradicted</span><strong>${group.summary.contradicted}</strong></article>
+                  <article class="group-stat"><span>Unsupported</span><strong>${group.summary.unsupported}</strong></article>
+                  <article class="group-stat"><span>Needs review</span><strong>${group.summary.needs_review}</strong></article>
+                  <article class="group-stat"><span>Overrides</span><strong>${group.summary.overriddenClaims}</strong></article>
                 </div>
-                ${
-                  claim.reviewerNotes
-                    ? `<div class="claim-section"><h3>Reviewer notes</h3><p>${escapeHtml(claim.reviewerNotes)}</p></div>`
-                    : ""
-                }
-                <div class="claim-section">
-                  <h3>Evidence quotes</h3>
-                  <ul>${evidenceQuotes}</ul>
+                <div class="claim-list">
+                  ${claimCards}
                 </div>
-              </article>`
+              </section>`
               .trim();
           })
           .join("\n");
@@ -328,6 +328,7 @@ export function renderReviewerDecisionImportHtmlReport(
       }
 
       .summary-card,
+      .answer-group,
       .claim-card,
       .empty-state {
         border: 1px solid var(--line);
@@ -354,9 +355,57 @@ export function renderReviewerDecisionImportHtmlReport(
         font-size: 32px;
       }
 
+      .answer-groups,
       .claim-list {
         display: grid;
         gap: 18px;
+      }
+
+      .answer-group {
+        padding: 22px;
+      }
+
+      .answer-group__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 16px;
+      }
+
+      .answer-group__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .answer-group__stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+        margin: 18px 0 0;
+      }
+
+      .group-stat {
+        padding: 14px;
+        border: 1px solid rgba(31, 41, 51, 0.08);
+        border-radius: 16px;
+        background: var(--paper-strong);
+      }
+
+      .group-stat span {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .group-stat strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 24px;
       }
 
       .claim-card {
@@ -466,13 +515,122 @@ export function renderReviewerDecisionImportHtmlReport(
           <article class="summary-card"><span>Needs review</span><strong>${report.summary.needs_review}</strong></article>
         </div>
       </section>
-      <section class="claim-list">
-        ${claimCards}
+      <section class="answer-groups">
+        ${groupCards}
       </section>
     </main>
   </body>
 </html>
 `;
+}
+
+function renderClaimCard(claim: ImportedReviewerDecision, index: number): string {
+  const reviewerVerdict = claim.reviewerVerdict
+    ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
+    : "pending reviewer decision";
+  const evidenceTitles =
+    claim.evidenceTitles.length > 0 ? claim.evidenceTitles.join(", ") : "None";
+  const evidenceQuotes =
+    claim.evidenceQuotes.length > 0
+      ? claim.evidenceQuotes.map((quote) => `<li>${escapeHtml(quote)}</li>`).join("")
+      : "<li>No evidence quote captured.</li>";
+
+  return `
+    <article class="claim-card">
+      <div class="claim-card__header">
+        <div>
+          <p class="eyebrow">Claim ${index}</p>
+          <h3>${escapeHtml(claim.claimText)}</h3>
+        </div>
+        <span class="verdict-pill verdict-pill--${escapeHtml(claim.finalVerdict.replace("_", "-"))}">
+          ${escapeHtml(claim.finalVerdict)}
+        </span>
+      </div>
+      <dl class="claim-meta">
+        <div>
+          <dt>Model verdict</dt>
+          <dd>${escapeHtml(claim.modelVerdict)}</dd>
+        </div>
+        <div>
+          <dt>Reviewer verdict</dt>
+          <dd>${escapeHtml(reviewerVerdict)}</dd>
+        </div>
+        <div>
+          <dt>Evidence titles</dt>
+          <dd>${escapeHtml(evidenceTitles)}</dd>
+        </div>
+      </dl>
+      <div class="claim-section">
+        <h4>Model reason</h4>
+        <p>${escapeHtml(claim.modelReason)}</p>
+      </div>
+      ${
+        claim.reviewerNotes
+          ? `<div class="claim-section"><h4>Reviewer notes</h4><p>${escapeHtml(claim.reviewerNotes)}</p></div>`
+          : ""
+      }
+      <div class="claim-section">
+        <h4>Evidence quotes</h4>
+        <ul>${evidenceQuotes}</ul>
+      </div>
+    </article>`
+    .trim();
+}
+
+function groupImportedClaims(claims: ImportedReviewerDecision[]): ReviewerDecisionGroup[] {
+  const groups: ReviewerDecisionGroup[] = [];
+
+  for (const claim of claims) {
+    const group = groups.find((entry) => entry.answerPath === claim.answerPath);
+
+    if (group) {
+      group.claims.push(claim);
+      accumulateClaimSummary(group.summary, claim);
+      continue;
+    }
+
+    const summary = createEmptyImportSummary();
+    accumulateClaimSummary(summary, claim);
+    groups.push({
+      answerPath: claim.answerPath,
+      label: claim.answerPath ?? "Unspecified answer",
+      claims: [claim],
+      summary,
+    });
+  }
+
+  return groups;
+}
+
+function createEmptyImportSummary(): ReviewerDecisionImportReport["summary"] {
+  return {
+    totalClaims: 0,
+    reviewedClaims: 0,
+    pendingClaims: 0,
+    overriddenClaims: 0,
+    verified: 0,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
+  };
+}
+
+function accumulateClaimSummary(
+  summary: ReviewerDecisionImportReport["summary"],
+  claim: ImportedReviewerDecision,
+): void {
+  summary.totalClaims += 1;
+  summary[claim.finalVerdict] += 1;
+
+  if (claim.reviewerVerdict) {
+    summary.reviewedClaims += 1;
+  } else {
+    summary.pendingClaims += 1;
+  }
+
+  if (claim.overridden) {
+    summary.overriddenClaims += 1;
+  }
 }
 
 function importDecisionRow(
