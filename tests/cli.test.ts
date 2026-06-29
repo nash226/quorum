@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
 import test from "node:test";
+import { createSimplePdf } from "./pdf-test-helpers.js";
 
 test("verify applies the default trust override only to sources without metadata", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-"));
@@ -71,6 +72,44 @@ test("verify rejects unsupported default trust overrides", async () => {
     ]),
     /Unsupported trust level: critical/,
   );
+});
+
+test("verify accepts pdf sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.pdf");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        createSimplePdf("Employees receive 12 weeks of paid parental leave."),
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ id: string; title: string; trustLevel: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(report.sources, [
+      { id: "source_1", title: "hr-policy", trustLevel: "medium" },
+    ]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 async function runCli(args: string[]): Promise<string> {
