@@ -50,6 +50,8 @@ npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr
 
 The import summary preserves the model verdict, the reviewer verdict when one
 is present, whether the reviewer overrode the model, and any reviewer notes.
+When the CSV came from `verify-batch --review-csv-out`, the import also keeps
+the original `answer_path` for each reviewed claim.
 
 Quorum also accepts exported HTML knowledge base pages via `--source` or
 `--source-dir`, which lets teams verify answers against help-center exports
