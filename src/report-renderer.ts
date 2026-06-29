@@ -13,6 +13,10 @@ export function renderTextReport(report: VerificationReport): string {
     "",
   ];
 
+  if (report.assessments.length === 0) {
+    lines.push("No claims were extracted from this answer.", "");
+  }
+
   for (const assessment of report.assessments) {
     lines.push(...renderTextAssessment(assessment), "");
   }
@@ -49,6 +53,10 @@ export function renderMarkdownReport(report: VerificationReport): string {
     "## Claim Assessments",
     "",
   ];
+
+  if (report.assessments.length === 0) {
+    lines.push("No claims were extracted from this answer.", "");
+  }
 
   report.assessments.forEach((assessment, index) => {
     lines.push(...renderMarkdownAssessment(assessment, index + 1), "");
@@ -88,6 +96,10 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
       `- Needs review: ${answer.report.summary.needs_review}`,
       "",
     );
+
+    if (answer.report.assessments.length === 0) {
+      lines.push("No claims were extracted from this answer.", "");
+    }
   });
 
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
@@ -158,11 +170,17 @@ export function renderHtmlReport(report: VerificationReport): string {
 function renderReviewConsoleHtmlReport(report: VerificationReport): string {
   const selectedAssessment = selectPrimaryAssessment(report.assessments);
   const averageScore = averageEvidenceScore(report.assessments);
-  const assessmentRows = report.assessments
-    .map((assessment) =>
-      renderReviewConsoleAssessmentRow(assessment, assessment === selectedAssessment),
-    )
-    .join("");
+  const assessmentRows =
+    report.assessments.length === 0
+      ? renderReviewConsoleEmptyStateRow()
+      : report.assessments
+          .map((assessment) =>
+            renderReviewConsoleAssessmentRow(
+              assessment,
+              assessment === selectedAssessment,
+            ),
+          )
+          .join("");
   const sourceItems = report.sources
     .map((source) => {
       const metadata = [`${source.trustLevel} trust`];
@@ -509,6 +527,11 @@ function renderReviewConsoleHtmlReport(report: VerificationReport): string {
         background: #fbfcfe;
       }
 
+      .empty-row td {
+        color: var(--muted);
+        font-style: italic;
+      }
+
       .claim-text {
         max-width: 470px;
         font-weight: 650;
@@ -831,6 +854,10 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
   const answerCards = report.answers
     .map((answer, index) => {
       const statusClass = answer.shouldFail ? "status--matched" : "status--clear";
+      const emptyState =
+        answer.report.assessments.length === 0
+          ? `<p class="answer-card__empty">No claims were extracted from this answer.</p>`
+          : "";
 
       return `
         <article class="answer-card">
@@ -847,6 +874,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
             <div><dt>Unsupported</dt><dd>${answer.report.summary.unsupported}</dd></div>
             <div><dt>Needs review</dt><dd>${answer.report.summary.needs_review}</dd></div>
           </dl>
+          ${emptyState}
         </article>`;
     })
     .join("");
@@ -1089,6 +1117,12 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
         font-weight: 700;
       }
 
+      .answer-card__empty {
+        margin-top: 16px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
       @media (max-width: 720px) {
         .shell {
           padding-inline: 16px;
@@ -1251,6 +1285,13 @@ function renderReviewConsoleAssessmentRow(
                       <td>${sourceMatch}</td>
                       <td>${escapeHtml(ownerForAssessment(assessment))}</td>
                       <td><strong>${escapeHtml(slaForAssessment(assessment))}</strong></td>
+                    </tr>`;
+}
+
+function renderReviewConsoleEmptyStateRow(): string {
+  return `
+                    <tr class="empty-row">
+                      <td colspan="5">No claims were extracted from this answer.</td>
                     </tr>`;
 }
 

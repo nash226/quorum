@@ -109,6 +109,19 @@ test("renders a professional HTML reviewer report with escaped content", () => {
   assert.doesNotMatch(rendered, /<Flag this answer for legal review\.>/);
 });
 
+test("renders explicit empty states when no claims are extracted from a single answer", () => {
+  const report = verifyAnswer("Short.\n", [hrPolicy], "2026-06-28T00:00:00.000Z");
+
+  const text = renderTextReport(report);
+  const markdown = renderMarkdownReport(report);
+  const html = renderHtmlReport(report);
+
+  assert.match(text, /No claims were extracted from this answer\./);
+  assert.match(markdown, /## Claim Assessments\n\nNo claims were extracted from this answer\./);
+  assert.match(html, /No claims were extracted from this answer\./);
+  assert.match(html, /<tr class="empty-row">/);
+});
+
 test("renders a markdown batch report with per-answer summaries", () => {
   const batchReport: BatchVerificationReport = {
     generatedAt: "2026-06-29T00:00:00.000Z",
@@ -175,6 +188,34 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /Fail policy matched/);
   assert.match(rendered, /&lt;queued&gt;\/support-answer\.md/);
   assert.doesNotMatch(rendered, /<queued>\/support-answer\.md/);
+});
+
+test("renders explicit empty states for batch answers with no extracted claims", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sourceCount: 1,
+    answerCount: 1,
+    answers: [
+      {
+        answerPath: "examples/answers/empty.md",
+        report: verifyAnswer("Short.\n", [hrPolicy]),
+        shouldFail: false,
+      },
+    ],
+    summary: {
+      verified: 0,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithFailures: 0,
+    },
+  };
+
+  const markdown = renderBatchMarkdownReport(batchReport);
+  const html = renderBatchHtmlReport(batchReport);
+
+  assert.match(markdown, /No claims were extracted from this answer\./);
+  assert.match(html, /No claims were extracted from this answer\./);
 });
 
 test("renders a batch reviewer decision csv with answer path context", () => {
