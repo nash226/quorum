@@ -12,6 +12,8 @@ const REQUIRED_HEADERS = [
   "reviewer_notes",
 ] as const;
 const OPTIONAL_ANSWER_PATH_HEADER = "answer_path";
+const OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER = "evidence_trust_levels";
+const OPTIONAL_EVIDENCE_SCORES_HEADER = "evidence_scores";
 
 type ReviewerDecisionHeader = (typeof REQUIRED_HEADERS)[number];
 
@@ -22,6 +24,8 @@ export interface ImportedReviewerDecision {
   modelVerdict: ClaimVerdict;
   modelReason: string;
   evidenceTitles: string[];
+  evidenceTrustLevels: string[];
+  evidenceScores: string[];
   evidenceQuotes: string[];
   reviewerVerdict?: ClaimVerdict;
   reviewerNotes?: string;
@@ -125,7 +129,11 @@ export function renderReviewerDecisionImportReport(
 function importDecisionRow(
   row: string[],
   rowNumber: number,
-  columnIndex: Record<ReviewerDecisionHeader, number> & { answerPath?: number },
+  columnIndex: Record<ReviewerDecisionHeader, number> & {
+    answerPath?: number;
+    evidenceTrustLevels?: number;
+    evidenceScores?: number;
+  },
 ): ImportedReviewerDecision {
   const answerPath = readOptionalValue(row, columnIndex.answerPath ?? -1) || undefined;
   const claimId = readRequiredValue(row, rowNumber, columnIndex.claim_id, "claim_id");
@@ -154,6 +162,10 @@ function importDecisionRow(
       "model_reason",
     ),
     evidenceTitles: splitEvidenceList(readOptionalValue(row, columnIndex.evidence_titles)),
+    evidenceTrustLevels: splitEvidenceList(
+      readOptionalValue(row, columnIndex.evidenceTrustLevels ?? -1),
+    ),
+    evidenceScores: splitEvidenceList(readOptionalValue(row, columnIndex.evidenceScores ?? -1)),
     evidenceQuotes: splitEvidenceList(readOptionalValue(row, columnIndex.evidence_quotes)),
     reviewerVerdict,
     reviewerNotes,
@@ -174,7 +186,11 @@ function assertHeaders(headers: string[]): void {
 
 function createColumnIndex(
   headers: string[],
-): Record<ReviewerDecisionHeader, number> & { answerPath?: number } {
+): Record<ReviewerDecisionHeader, number> & {
+  answerPath?: number;
+  evidenceTrustLevels?: number;
+  evidenceScores?: number;
+} {
   const requiredColumnIndex = REQUIRED_HEADERS.reduce(
     (accumulator, header) => ({
       ...accumulator,
@@ -184,14 +200,16 @@ function createColumnIndex(
   );
 
   const answerPathIndex = headers.indexOf(OPTIONAL_ANSWER_PATH_HEADER);
-
-  if (answerPathIndex === -1) {
-    return requiredColumnIndex;
-  }
+  const evidenceTrustLevelsIndex = headers.indexOf(OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER);
+  const evidenceScoresIndex = headers.indexOf(OPTIONAL_EVIDENCE_SCORES_HEADER);
 
   return {
     ...requiredColumnIndex,
-    answerPath: answerPathIndex,
+    ...(answerPathIndex === -1 ? {} : { answerPath: answerPathIndex }),
+    ...(evidenceTrustLevelsIndex === -1
+      ? {}
+      : { evidenceTrustLevels: evidenceTrustLevelsIndex }),
+    ...(evidenceScoresIndex === -1 ? {} : { evidenceScores: evidenceScoresIndex }),
   };
 }
 
