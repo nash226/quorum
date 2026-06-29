@@ -41,6 +41,7 @@ The current CLI can:
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim
+- write a one-row-per-answer batch summary CSV for queueing and workflow automation
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 
@@ -105,6 +106,7 @@ npm run dev -- verify-batch \
   --markdown-out reports/batch-report.md \
   --html-out reports/batch-report.html \
   --review-csv-out reports/batch-review.csv \
+  --summary-csv-out reports/batch-summary.csv \
   --fail-on contradicted
 ```
 
@@ -186,6 +188,7 @@ Options:
 - `verify-batch --markdown-out <path>`: write a batch summary in Markdown for review queues
 - `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers
+- `verify-batch --summary-csv-out <path>`: write one CSV row per answer with verdict totals and fail-policy status
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
   repeated
