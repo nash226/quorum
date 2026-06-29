@@ -35,3 +35,21 @@ test("ignores quote, checkbox, and heading markdown prefixes", () => {
     ],
   );
 });
+
+test("keeps wrapped markdown list items as single claims", () => {
+  const claims = extractClaims(`# Policy Notes
+
+1. Employees receive 12 weeks of paid parental leave
+for full-time staff only.
+- Enterprise support requests receive a first response
+within four business hours.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+      "Enterprise support requests receive a first response within four business hours.",
+    ],
+  );
+});
