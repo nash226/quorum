@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
@@ -110,6 +110,127 @@ test("verify accepts pdf sources", async () => {
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
+});
+
+test("verify-batch returns an aggregate report for each answer file", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const batchOutPath = join(tempDir, "reports", "batch-report.json");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(join(answerDir, "hr.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(answerDir, "support.txt"), "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "support-playbook.md"),
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--out",
+      batchOutPath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      sourceCount: number;
+      answers: Array<{ answerPath: string; shouldFail: boolean; report: { summary: Record<string, number> } }>;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerCount, 2);
+    assert.equal(report.sourceCount, 2);
+    assert.equal(report.answers.length, 2);
+    assert.deepEqual(
+      report.answers.map((answer) => answer.answerPath).sort(),
+      [join(answerDir, "hr.md"), join(answerDir, "support.txt")],
+    );
+    assert.equal(report.summary.verified, 2);
+    assert.equal(report.summary.answersWithFailures, 0);
+
+    const savedReport = JSON.parse(await readFile(batchOutPath, "utf8")) as typeof report;
+    assert.equal(savedReport.answerCount, 2);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch exits non-zero when a fail-on verdict appears in any answer", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-fail-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(
+        join(answerDir, "hr.md"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    await assert.rejects(
+      runCli([
+        "verify-batch",
+        "--answer-dir",
+        answerDir,
+        "--source-dir",
+        sourceDir,
+        "--fail-on",
+        "contradicted",
+        "--json",
+      ]),
+      /CLI exited with code 2/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch rejects single-answer output flags", async () => {
+  await assert.rejects(
+    runCli([
+      "verify-batch",
+      "--answer-dir",
+      "examples/answers",
+      "--source-dir",
+      "examples/sources",
+      "--markdown-out",
+      "reports/batch.md",
+    ]),
+    /Unknown or incomplete argument: --markdown-out/,
+  );
 });
 
 async function runCli(args: string[]): Promise<string> {

@@ -27,6 +27,7 @@ auditable evidence report before an agent response becomes a business action.
 The current CLI can:
 
 - read an AI-generated answer from a Markdown or text file
+- batch verify multiple AI-generated answers from a directory
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, or PDF source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
@@ -90,6 +91,16 @@ npm run dev -- import-review \
   --out reports/hr-review-import.json
 ```
 
+To verify a directory of answers against the same approved source set:
+
+```bash
+npm run dev -- verify-batch \
+  --answer-dir examples/answers \
+  --source-dir examples/sources \
+  --out reports/batch-report.json \
+  --fail-on contradicted
+```
+
 ## Quick Start
 
 ```bash
@@ -133,6 +144,7 @@ npm run dev -- verify \
 
 ```text
 quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+quorum verify-batch --answer-dir <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path> [--json] [--out <path>]
 ```
 
@@ -141,6 +153,7 @@ Options:
 - `--answer <path>`: AI-generated answer to verify
 - `--source <path>`: approved source document; may be repeated
 - `--source-dir <path>`: directory of approved source documents
+- `--answer-dir <path>`: directory of AI-generated answers for batch verification
 - `--default-trust-level <level>`: use `high`, `medium`, or `low` for sources
   that do not define `trustLevel` metadata
 - `--json`: print the full JSON report
@@ -197,7 +210,7 @@ approved sources.
 Near-term work:
 
 - evaluation harness for labeled verdict examples
-- batch verification
+- richer batch verification exports and workflow hooks
 - better claim extraction for bullets, lists, and compound sentences
 - API surface for agent integrations
 
