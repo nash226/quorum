@@ -46,6 +46,7 @@ export interface BatchVerificationResult {
   answerPath: string;
   report: VerificationReport;
   shouldFail: boolean;
+  failVerdicts: ClaimVerdict[];
 }
 
 export interface BatchVerificationReport {

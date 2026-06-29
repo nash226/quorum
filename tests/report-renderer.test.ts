@@ -135,11 +135,13 @@ test("renders a markdown batch report with per-answer summaries", () => {
         answerPath: "examples/answers/hr-answer.md",
         report: verifyAnswer("Employees receive 12 weeks of paid parental leave.", [hrPolicy]),
         shouldFail: false,
+        failVerdicts: [],
       },
       {
         answerPath: "examples/answers/support-answer.md",
         report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
         shouldFail: true,
+        failVerdicts: ["unsupported"],
       },
     ],
     summary: {
@@ -158,11 +160,13 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /- Answers matching fail policy: 1/);
   assert.match(rendered, /### 1\. examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /- Fail policy: clear/);
+  assert.match(rendered, /- Fail verdicts: none/);
   assert.match(rendered, /#### Claim Assessments/);
   assert.match(rendered, /##### 1\. Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Verdict: `verified`/);
   assert.match(rendered, /### 2\. examples\/answers\/support-answer\.md/);
   assert.match(rendered, /- Fail policy: matched/);
+  assert.match(rendered, /- Fail verdicts: unsupported/);
   assert.match(rendered, /No approved source snippet matched strongly enough\./);
 });
 
@@ -176,6 +180,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
         answerPath: "<queued>/support-answer.md",
         report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
         shouldFail: true,
+        failVerdicts: ["unsupported"],
       },
     ],
     summary: {
@@ -193,6 +198,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /<title>Quorum Batch Verification Report<\/title>/);
   assert.match(rendered, /Batch verification report for review queues/);
   assert.match(rendered, /Fail policy matched/);
+  assert.match(rendered, /<dt>Fail verdicts<\/dt><dd>unsupported<\/dd>/);
   assert.match(rendered, /&lt;queued&gt;\/support-answer\.md/);
   assert.doesNotMatch(rendered, /<queued>\/support-answer\.md/);
   assert.match(rendered, /Employees receive free catered lunch every day\./);
@@ -210,6 +216,7 @@ test("renders explicit empty states for batch answers with no extracted claims",
         answerPath: "examples/answers/empty.md",
         report: verifyAnswer("Short.\n", [hrPolicy]),
         shouldFail: false,
+        failVerdicts: [],
       },
     ],
     summary: {
@@ -238,11 +245,13 @@ test("renders a batch reviewer decision csv with answer path context", () => {
         answerPath: "examples/answers/hr-answer.md",
         report: verifyAnswer("Employees receive 18 weeks of paid parental leave.", [hrPolicy]),
         shouldFail: true,
+        failVerdicts: ["contradicted"],
       },
       {
         answerPath: "examples/answers/support-answer.md",
         report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
         shouldFail: true,
+        failVerdicts: ["unsupported"],
       },
     ],
     summary: {
@@ -285,11 +294,13 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
         answerPath: "examples/answers/hr-answer.md",
         report: verifyAnswer("Employees receive 12 weeks of paid parental leave.", [hrPolicy]),
         shouldFail: false,
+        failVerdicts: [],
       },
       {
         answerPath: "examples/answers/support-answer.md",
         report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
         shouldFail: true,
+        failVerdicts: ["unsupported"],
       },
     ],
     summary: {
@@ -306,8 +317,8 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
 
   assert.equal(
     lines[0],
-    "answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy",
+    "answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts",
   );
-  assert.equal(lines[1], "examples/answers/hr-answer.md,1,1,0,0,0,clear");
-  assert.equal(lines[2], "examples/answers/support-answer.md,1,0,0,1,0,matched");
+  assert.equal(lines[1], "examples/answers/hr-answer.md,1,1,0,0,0,clear,");
+  assert.equal(lines[2], "examples/answers/support-answer.md,1,0,0,1,0,matched,unsupported");
 });

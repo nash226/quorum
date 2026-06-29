@@ -166,7 +166,12 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     const report = JSON.parse(stdout) as {
       answerCount: number;
       sourceCount: number;
-      answers: Array<{ answerPath: string; shouldFail: boolean; report: { summary: Record<string, number> } }>;
+      answers: Array<{
+        answerPath: string;
+        shouldFail: boolean;
+        failVerdicts: string[];
+        report: { summary: Record<string, number> };
+      }>;
       summary: Record<string, number>;
     };
 
@@ -177,6 +182,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
       report.answers.map((answer) => answer.answerPath).sort(),
       [join(answerDir, "hr.md"), join(answerDir, "support.txt")],
     );
+    assert.deepEqual(report.answers.map((answer) => answer.failVerdicts), [[], []]);
     assert.equal(report.summary.verified, 2);
     assert.equal(report.summary.answersWithFailures, 0);
 
@@ -190,7 +196,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     );
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy/,
+      /answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -360,6 +366,65 @@ test("verify-batch exits non-zero when a fail-on verdict appears in any answer",
   }
 });
 
+test("verify-batch reports matching fail verdicts in json and summary csv output", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-fail-verdicts-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const batchSummaryCsvOutPath = join(tempDir, "reports", "batch-summary.csv");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(
+        join(answerDir, "hr.md"),
+        "Employees receive 18 weeks of paid parental leave.\nEmployees receive free catered lunch every day.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const result = await runCliAllowFailure([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--summary-csv-out",
+      batchSummaryCsvOutPath,
+      "--fail-on",
+      "contradicted",
+      "--fail-on",
+      "unsupported",
+      "--json",
+    ]);
+
+    assert.equal(result.code, 2);
+
+    const report = JSON.parse(result.stdout) as {
+      answers: Array<{ shouldFail: boolean; failVerdicts: string[] }>;
+    };
+
+    assert.equal(report.answers[0]?.shouldFail, true);
+    assert.deepEqual(report.answers[0]?.failVerdicts, ["contradicted", "unsupported"]);
+
+    assert.match(
+      await readFile(batchSummaryCsvOutPath, "utf8"),
+      /matched,contradicted \| unsupported/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch prints claim-level details in the default text output", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-text-"));
 
@@ -396,6 +461,7 @@ test("verify-batch prints claim-level details in the default text output", async
     assert.match(stdout, /Quorum Batch Verification Report/);
     assert.match(stdout, /Summary: 0 verified, 1 contradicted, 1 unsupported, 0 needs review/);
     assert.match(stdout, /Fail policy: clear/);
+    assert.match(stdout, /Fail verdicts: none/);
     assert.match(stdout, /CONTRADICTED  Employees receive 18 weeks of paid parental leave\./);
     assert.match(stdout, /UNSUPPORTED  Employees receive free catered lunch every day\./);
     assert.match(stdout, /Evidence \(hr-policy\.md, medium trust, score /);
@@ -576,6 +642,18 @@ examples/answers/support-answer.md,claim_2,<Flag this answer for legal review.>,
 });
 
 async function runCli(args: string[]): Promise<string> {
+  const result = await runCliAllowFailure(args);
+
+  if (result.code === 0) {
+    return result.stdout;
+  }
+
+  throw new Error(result.stderr.trim() || `CLI exited with code ${result.code}`);
+}
+
+async function runCliAllowFailure(
+  args: string[],
+): Promise<{ code: number; stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", ...args], {
       cwd: process.cwd(),
@@ -595,12 +673,11 @@ async function runCli(args: string[]): Promise<string> {
 
     child.on("error", reject);
     child.on("close", (code) => {
-      if (code === 0) {
-        resolve(stdout);
-        return;
-      }
-
-      reject(new Error(stderr.trim() || `CLI exited with code ${code}`));
+      resolve({
+        code: code ?? 1,
+        stdout,
+        stderr,
+      });
     });
   });
 }

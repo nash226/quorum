@@ -23,3 +23,10 @@ export function shouldFailReport(
 ): boolean {
   return failOn.some((verdict) => report.summary[verdict] > 0);
 }
+
+export function matchingFailVerdicts(
+  report: Pick<VerificationReport, "summary">,
+  failOn: ClaimVerdict[],
+): ClaimVerdict[] {
+  return failOn.filter((verdict) => report.summary[verdict] > 0);
+}
