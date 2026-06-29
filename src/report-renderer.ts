@@ -99,7 +99,20 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
 
     if (answer.report.assessments.length === 0) {
       lines.push("No claims were extracted from this answer.", "");
+      return;
     }
+
+    lines.push("#### Claim Assessments", "");
+    answer.report.assessments.forEach((assessment, assessmentIndex) => {
+      lines.push(
+        ...renderMarkdownAssessment(assessment, assessmentIndex + 1).map((line) =>
+          line.startsWith("### ")
+            ? line.replace("### ", "##### ")
+            : line,
+        ),
+        "",
+      );
+    });
   });
 
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
@@ -879,10 +892,31 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
   const answerCards = report.answers
     .map((answer, index) => {
       const statusClass = answer.shouldFail ? "status--matched" : "status--clear";
-      const emptyState =
+      const assessmentMarkup =
         answer.report.assessments.length === 0
           ? `<p class="answer-card__empty">No claims were extracted from this answer.</p>`
-          : "";
+          : `
+            <div class="answer-card__claims">
+              ${answer.report.assessments
+                .map((assessment) => {
+                  const evidence = assessment.evidence[0];
+                  const evidenceMarkup = evidence
+                    ? `<p class="claim-item__evidence"><strong>${escapeHtml(evidence.documentTitle)}</strong>: ${escapeHtml(evidence.quote)}</p>`
+                    : `<p class="claim-item__evidence claim-item__evidence--empty">No approved source snippet matched strongly enough.</p>`;
+
+                  return `
+                    <article class="claim-item">
+                      <div class="claim-item__header">
+                        <span class="claim-pill claim-pill--${assessment.verdict}">${escapeHtml(formatVerdictLabel(assessment.verdict))}</span>
+                        <span class="claim-item__score">${evidence ? `score ${evidence.score}` : "no evidence"}</span>
+                      </div>
+                      <h3>${escapeHtml(assessment.claim.text)}</h3>
+                      <p class="claim-item__reason">${escapeHtml(assessment.reason)}</p>
+                      ${evidenceMarkup}
+                    </article>`;
+                })
+                .join("")}
+            </div>`;
 
       return `
         <article class="answer-card">
@@ -899,7 +933,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
             <div><dt>Unsupported</dt><dd>${answer.report.summary.unsupported}</dd></div>
             <div><dt>Needs review</dt><dd>${answer.report.summary.needs_review}</dd></div>
           </dl>
-          ${emptyState}
+          ${assessmentMarkup}
         </article>`;
     })
     .join("");
@@ -1148,6 +1182,82 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
         font-size: 0.95rem;
       }
 
+      .answer-card__claims {
+        margin-top: 18px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .claim-item {
+        padding: 16px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .claim-item__header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .claim-pill {
+        display: inline-flex;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .claim-pill--verified {
+        background: var(--verified-soft);
+        color: var(--verified);
+      }
+
+      .claim-pill--contradicted {
+        background: var(--contradicted-soft);
+        color: var(--contradicted);
+      }
+
+      .claim-pill--unsupported {
+        background: var(--unsupported-soft);
+        color: var(--unsupported);
+      }
+
+      .claim-pill--needs_review {
+        background: var(--needs-review-soft);
+        color: var(--needs-review);
+      }
+
+      .claim-item__score {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .claim-item h3 {
+        margin-top: 12px;
+        font-size: 1.05rem;
+        line-height: 1.45;
+      }
+
+      .claim-item__reason,
+      .claim-item__evidence {
+        margin: 10px 0 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .claim-item__evidence strong {
+        color: var(--ink);
+      }
+
+      .claim-item__evidence--empty {
+        font-style: italic;
+      }
+
       @media (max-width: 720px) {
         .shell {
           padding-inline: 16px;
@@ -1261,6 +1371,10 @@ function escapeCsvValue(value: string): string {
   }
 
   return value;
+}
+
+function formatVerdictLabel(verdict: string): string {
+  return verdict.replace("_", " ");
 }
 
 function selectPrimaryAssessment(
