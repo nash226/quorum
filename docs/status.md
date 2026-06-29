@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `24bbbdf` on 2026-06-29, fix: skip plain-text claim intro labels
+- Latest shipped change: `1993fbc` on 2026-06-29, feat: preserve single-answer report provenance
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -24,7 +24,7 @@
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
-- write a reviewer decision CSV that teams can fill in claim by claim
+- write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path for reviewer handoff
 - write a one-row-per-answer batch summary CSV for queueing and workflow automation
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-29 | [#39](https://github.com/nash226/quorum/pull/39) | feat: preserve single-answer report provenance | `1993fbc` |
 | 2026-06-29 | [#38](https://github.com/nash226/quorum/pull/38) | fix: skip plain-text claim intro labels | `24bbbdf` |
 | 2026-06-29 | [#37](https://github.com/nash226/quorum/pull/37) | fix: preserve explicit source order | `e928458` |
 | 2026-06-29 | [#36](https://github.com/nash226/quorum/pull/36) | feat: surface batch fail verdict details | `cf7b7bf` |
@@ -52,5 +53,4 @@
 | 2026-06-29 | [#34](https://github.com/nash226/quorum/pull/34) | feat: add import review markdown export | `0ff7751` |
 | 2026-06-29 | [#33](https://github.com/nash226/quorum/pull/33) | feat: add evidence context to review csv exports | `99589ee` |
 | 2026-06-29 | [#32](https://github.com/nash226/quorum/pull/32) | feat: expand batch text review output | `46a4ecb` |
-| 2026-06-29 | [#31](https://github.com/nash226/quorum/pull/31) | feat: add claim details to batch reports | `787297e` |
 
