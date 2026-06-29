@@ -190,6 +190,66 @@ test("verify-batch returns an aggregate report for each answer file", async () =
   }
 });
 
+test("verify-batch accepts repeated answer files alongside answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-mixed-inputs-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const nestedAnswerDir = join(answerDir, "nested");
+    const sourceDir = join(tempDir, "sources");
+    const directAnswerPath = join(tempDir, "priority-answer.md");
+    const nestedAnswerPath = join(nestedAnswerDir, "support.txt");
+
+    await Promise.all([
+      mkdir(nestedAnswerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(directAnswerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(nestedAnswerPath, "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "support-playbook.md"),
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer",
+      directAnswerPath,
+      "--answer-dir",
+      answerDir,
+      "--answer",
+      nestedAnswerPath,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      answers: Array<{ answerPath: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerCount, 2);
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [
+      nestedAnswerPath,
+      directAnswerPath,
+    ]);
+    assert.equal(report.summary.verified, 2);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch exits non-zero when a fail-on verdict appears in any answer", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-fail-"));
 

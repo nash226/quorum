@@ -108,6 +108,17 @@ npm run dev -- verify-batch \
   --fail-on contradicted
 ```
 
+`verify-batch` also accepts repeated `--answer` paths, so teams can review a
+curated set of files without moving them into a single directory first:
+
+```bash
+npm run dev -- verify-batch \
+  --answer examples/answers/hr-answer.md \
+  --answer examples/answers/support-answer.md \
+  --source-dir examples/sources \
+  --review-csv-out reports/selected-review.csv
+```
+
 ## Quick Start
 
 ```bash
@@ -151,7 +162,7 @@ npm run dev -- verify \
 
 ```text
 quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
-quorum verify-batch --answer-dir <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path> [--json] [--out <path>]
 ```
 
@@ -160,6 +171,7 @@ Options:
 - `--answer <path>`: AI-generated answer to verify
 - `--source <path>`: approved source document; may be repeated
 - `--source-dir <path>`: directory of approved source documents
+- `--answer <path>`: answer file to include in a batch run; may be repeated
 - `--answer-dir <path>`: directory of AI-generated answers for batch verification
 - `--default-trust-level <level>`: use `high`, `medium`, or `low` for sources
   that do not define `trustLevel` metadata
