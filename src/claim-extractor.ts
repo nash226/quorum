@@ -31,6 +31,8 @@ function normalizeAnswer(answer: string): string {
 
     const explicitClaimPrefix = hasMarkdownClaimPrefix(line);
     const normalizedLine = stripMarkdownClaimPrefix(line);
+    const currentLineCanContinue =
+      explicitClaimPrefix || canContinuePlainLine(normalizedLine, lines, index);
 
     if (
       !explicitClaimPrefix &&
@@ -38,11 +40,12 @@ function normalizeAnswer(answer: string): string {
       normalizedLines.length > 0
     ) {
       normalizedLines[normalizedLines.length - 1] += ` ${normalizedLine}`;
+      previousLineCanContinue = currentLineCanContinue;
       continue;
     }
 
     normalizedLines.push(normalizedLine);
-    previousLineCanContinue = explicitClaimPrefix;
+    previousLineCanContinue = currentLineCanContinue;
   }
 
   return normalizedLines.join("\n");
@@ -81,6 +84,36 @@ function isListIntro(
     }
 
     return hasMarkdownClaimPrefix(nextLine);
+  }
+
+  return false;
+}
+
+function canContinuePlainLine(
+  line: string,
+  lines: string[],
+  currentIndex: number,
+): boolean {
+  if (/[.!?]$/.test(line)) {
+    return false;
+  }
+
+  for (let index = currentIndex + 1; index < lines.length; index += 1) {
+    const nextLine = (lines[index] ?? "").trim();
+
+    if (nextLine.length === 0) {
+      return false;
+    }
+
+    if (
+      isHeading(nextLine) ||
+      hasMarkdownClaimPrefix(nextLine) ||
+      isListIntro(nextLine, lines, index)
+    ) {
+      return false;
+    }
+
+    return /^[a-z0-9("'[]/.test(nextLine);
   }
 
   return false;
