@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a950947` on 2026-06-29, Preserve wrapped markdown claim items
+- Latest shipped change: `be63ee5` on 2026-06-29, Skip markdown list intro labels during claim extraction
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -44,6 +44,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-29 | [#24](https://github.com/nash226/quorum/pull/24) | Skip markdown list intro labels during claim extraction | `be63ee5` |
 | 2026-06-29 | [#23](https://github.com/nash226/quorum/pull/23) | Preserve wrapped markdown claim items | `a950947` |
 | 2026-06-29 | [#22](https://github.com/nash226/quorum/pull/22) | add batch reviewer csv export | `a556182` |
 | 2026-06-29 | [#21](https://github.com/nash226/quorum/pull/21) | Render HTML report as review console | `525f02b` |
@@ -51,5 +52,4 @@
 | 2026-06-28 | [#19](https://github.com/nash226/quorum/pull/19) | feat: add batch verification cli | `a2af573` |
 | 2026-06-28 | [#18](https://github.com/nash226/quorum/pull/18) | feat: add PDF source support | `671ad4b` |
 | 2026-06-28 | [#17](https://github.com/nash226/quorum/pull/17) | feat: add source trust overrides | `33a1d81` |
-| 2026-06-28 | [#16](https://github.com/nash226/quorum/pull/16) | feat: import reviewer decision csvs | `5f554c6` |
 
