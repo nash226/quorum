@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cf7b7bf` on 2026-06-29, feat: surface batch fail verdict details
+- Latest shipped change: `e928458` on 2026-06-29, fix: preserve explicit source order
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-29 | [#37](https://github.com/nash226/quorum/pull/37) | fix: preserve explicit source order | `e928458` |
 | 2026-06-29 | [#36](https://github.com/nash226/quorum/pull/36) | feat: surface batch fail verdict details | `cf7b7bf` |
 | 2026-06-29 | Direct push | feat: add import review html export | `ef17e9e` |
 | 2026-06-29 | [#34](https://github.com/nash226/quorum/pull/34) | feat: add import review markdown export | `0ff7751` |
@@ -52,5 +53,4 @@
 | 2026-06-29 | [#32](https://github.com/nash226/quorum/pull/32) | feat: expand batch text review output | `46a4ecb` |
 | 2026-06-29 | [#31](https://github.com/nash226/quorum/pull/31) | feat: add claim details to batch reports | `787297e` |
 | 2026-06-29 | [#30](https://github.com/nash226/quorum/pull/30) | feat: add batch summary csv export | `b95920b` |
-| 2026-06-29 | [#29](https://github.com/nash226/quorum/pull/29) | fix: preserve explicit batch answer order | `a329f7a` |
 
