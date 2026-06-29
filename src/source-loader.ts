@@ -12,10 +12,15 @@ interface ParsedSource {
   body: string;
 }
 
+interface SourceDocumentOptions {
+  defaultTrustLevel?: SourceTrustLevel;
+}
+
 export function sourceDocumentFromFile(
   sourcePath: string,
   content: string,
   index: number,
+  options: SourceDocumentOptions = {},
 ): SourceDocument {
   const parsed = parseSource(sourcePath, content);
 
@@ -23,7 +28,7 @@ export function sourceDocumentFromFile(
     id: `source_${index + 1}`,
     title: parsed.metadata.title ?? stripHtmlExtension(basename(sourcePath)),
     updatedAt: parsed.metadata.updatedAt,
-    trustLevel: parsed.metadata.trustLevel ?? "medium",
+    trustLevel: parsed.metadata.trustLevel ?? options.defaultTrustLevel ?? "medium",
     content: parsed.body,
   };
 }
@@ -64,7 +69,7 @@ function parseFrontmatter(frontmatter: string): SourceMetadata {
     } else if ((key === "updatedAt" || key === "updated_at") && value) {
       metadata.updatedAt = value;
     } else if ((key === "trustLevel" || key === "trust_level") && value) {
-      metadata.trustLevel = parseTrustLevel(value);
+      metadata.trustLevel = tryParseTrustLevel(value);
     }
   }
 
@@ -75,7 +80,17 @@ function stripQuotes(value: string): string {
   return value.replace(/^["']|["']$/g, "");
 }
 
-function parseTrustLevel(value: string): SourceTrustLevel | undefined {
+export function parseSourceTrustLevel(value: string): SourceTrustLevel {
+  const trustLevel = tryParseTrustLevel(value);
+
+  if (!trustLevel) {
+    throw new Error(`Unsupported trust level: ${value}`);
+  }
+
+  return trustLevel;
+}
+
+function tryParseTrustLevel(value: string): SourceTrustLevel | undefined {
   switch (value.toLowerCase()) {
     case "high":
     case "medium":
