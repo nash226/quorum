@@ -5,6 +5,7 @@ import type { BatchVerificationReport, SourceDocument } from "../src/domain.js";
 import {
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
+  renderBatchReviewerDecisionCsv,
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
@@ -174,4 +175,49 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /Fail policy matched/);
   assert.match(rendered, /&lt;queued&gt;\/support-answer\.md/);
   assert.doesNotMatch(rendered, /<queued>\/support-answer\.md/);
+});
+
+test("renders a batch reviewer decision csv with answer path context", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sourceCount: 1,
+    answerCount: 2,
+    answers: [
+      {
+        answerPath: "examples/answers/hr-answer.md",
+        report: verifyAnswer("Employees receive 18 weeks of paid parental leave.", [hrPolicy]),
+        shouldFail: true,
+      },
+      {
+        answerPath: "examples/answers/support-answer.md",
+        report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
+        shouldFail: true,
+      },
+    ],
+    summary: {
+      verified: 0,
+      contradicted: 1,
+      unsupported: 1,
+      needs_review: 0,
+      answersWithFailures: 2,
+    },
+  };
+
+  const rendered = renderBatchReviewerDecisionCsv(batchReport);
+  const lines = rendered.trim().split("\n");
+
+  assert.equal(
+    lines[0],
+    "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+  );
+  assert.match(
+    lines[1] ?? "",
+    /^examples\/answers\/hr-answer\.md,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
+  );
+  assert.match(lines[1] ?? "", /HR Policy/);
+  assert.match(
+    lines[2] ?? "",
+    /^examples\/answers\/support-answer\.md,claim_1,Employees receive free catered lunch every day\.,unsupported,/,
+  );
+  assert.match(lines[2] ?? "", /,,$/);
 });
