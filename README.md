@@ -119,6 +119,10 @@ npm run dev -- verify-batch \
   --review-csv-out reports/selected-review.csv
 ```
 
+When `--answer` is repeated, Quorum keeps those explicit paths in the same
+order in the batch report and reviewer CSV, then appends any additional files
+found through `--answer-dir`.
+
 ## Quick Start
 
 ```bash
