@@ -2,7 +2,7 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, extname, join } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
-import type { ClaimVerdict } from "./domain.js";
+import type { ClaimVerdict, SourceTrustLevel } from "./domain.js";
 import { parseClaimVerdict, shouldFailReport } from "./report-policy.js";
 import {
   renderHtmlReport,
@@ -14,12 +14,13 @@ import {
   importReviewerDecisions,
   renderReviewerDecisionImportReport,
 } from "./reviewer-decision-import.js";
-import { sourceDocumentFromFile } from "./source-loader.js";
+import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
 
 interface VerifyArgs {
   answerPath: string;
   sourcePaths: string[];
   sourceDirs: string[];
+  defaultTrustLevel?: SourceTrustLevel;
   json: boolean;
   failOn: ClaimVerdict[];
   outPath?: string;
@@ -64,7 +65,9 @@ async function runVerify(args: string[]): Promise<void> {
   const sources = await Promise.all(
     sourcePaths.map(async (sourcePath, index) => {
       const content = await readFile(sourcePath, "utf8");
-      return sourceDocumentFromFile(sourcePath, content, index);
+      return sourceDocumentFromFile(sourcePath, content, index, {
+        defaultTrustLevel: parsed.defaultTrustLevel,
+      });
     }),
   );
 
@@ -148,6 +151,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
   const sourcePaths: string[] = [];
   const sourceDirs: string[] = [];
   let answerPath = "";
+  let defaultTrustLevel: SourceTrustLevel | undefined;
   let outPath: string | undefined;
   let markdownOutPath: string | undefined;
   let htmlOutPath: string | undefined;
@@ -167,6 +171,9 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
       index += 1;
     } else if (arg === "--source-dir" && next) {
       sourceDirs.push(next);
+      index += 1;
+    } else if (arg === "--default-trust-level" && next) {
+      defaultTrustLevel = parseSourceTrustLevel(next);
       index += 1;
     } else if (arg === "--out" && next) {
       outPath = next;
@@ -202,6 +209,7 @@ function parseVerifyArgs(args: string[]): VerifyArgs {
     answerPath,
     sourcePaths,
     sourceDirs,
+    defaultTrustLevel,
     json,
     failOn,
     outPath,
@@ -289,11 +297,11 @@ function printHelp(): void {
   console.log(`Quorum
 
 Usage:
-  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path> [--json] [--out <path>]
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
+  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json
 `);
 }
