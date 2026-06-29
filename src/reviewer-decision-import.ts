@@ -11,10 +11,12 @@ const REQUIRED_HEADERS = [
   "reviewer_verdict",
   "reviewer_notes",
 ] as const;
+const OPTIONAL_ANSWER_PATH_HEADER = "answer_path";
 
 type ReviewerDecisionHeader = (typeof REQUIRED_HEADERS)[number];
 
 export interface ImportedReviewerDecision {
+  answerPath?: string;
   claimId: string;
   claimText: string;
   modelVerdict: ClaimVerdict;
@@ -102,11 +104,13 @@ export function renderReviewerDecisionImportReport(
       ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
       : "pending reviewer decision";
 
-    lines.push(
-      `${claim.finalVerdict.toUpperCase()}  ${claim.claimText}`,
-      `Model verdict: ${claim.modelVerdict}`,
-      `Reviewer verdict: ${reviewState}`,
-    );
+    lines.push(`${claim.finalVerdict.toUpperCase()}  ${claim.claimText}`);
+
+    if (claim.answerPath) {
+      lines.push(`Answer path: ${claim.answerPath}`);
+    }
+
+    lines.push(`Model verdict: ${claim.modelVerdict}`, `Reviewer verdict: ${reviewState}`);
 
     if (claim.reviewerNotes) {
       lines.push(`Reviewer notes: ${claim.reviewerNotes}`);
@@ -121,8 +125,9 @@ export function renderReviewerDecisionImportReport(
 function importDecisionRow(
   row: string[],
   rowNumber: number,
-  columnIndex: Record<ReviewerDecisionHeader, number>,
+  columnIndex: Record<ReviewerDecisionHeader, number> & { answerPath?: number },
 ): ImportedReviewerDecision {
+  const answerPath = readOptionalValue(row, columnIndex.answerPath ?? -1) || undefined;
   const claimId = readRequiredValue(row, rowNumber, columnIndex.claim_id, "claim_id");
   const claimText = readRequiredValue(row, rowNumber, columnIndex.claim_text, "claim_text");
   const modelVerdict = parseVerdict(
@@ -138,6 +143,7 @@ function importDecisionRow(
   const finalVerdict = reviewerVerdict ?? modelVerdict;
 
   return {
+    answerPath,
     claimId,
     claimText,
     modelVerdict,
@@ -168,14 +174,25 @@ function assertHeaders(headers: string[]): void {
 
 function createColumnIndex(
   headers: string[],
-): Record<ReviewerDecisionHeader, number> {
-  return REQUIRED_HEADERS.reduce(
+): Record<ReviewerDecisionHeader, number> & { answerPath?: number } {
+  const requiredColumnIndex = REQUIRED_HEADERS.reduce(
     (accumulator, header) => ({
       ...accumulator,
       [header]: headers.indexOf(header),
     }),
     {} as Record<ReviewerDecisionHeader, number>,
   );
+
+  const answerPathIndex = headers.indexOf(OPTIONAL_ANSWER_PATH_HEADER);
+
+  if (answerPathIndex === -1) {
+    return requiredColumnIndex;
+  }
+
+  return {
+    ...requiredColumnIndex,
+    answerPath: answerPathIndex,
+  };
 }
 
 function readRequiredValue(
