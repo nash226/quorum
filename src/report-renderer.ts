@@ -163,6 +163,31 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
 }
 
+export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
+  const rows = [
+    [
+      "answer_path",
+      "total_claims",
+      "verified",
+      "contradicted",
+      "unsupported",
+      "needs_review",
+      "fail_policy",
+    ],
+    ...report.answers.map((answer) => [
+      answer.answerPath,
+      answer.report.assessments.length.toString(),
+      answer.report.summary.verified.toString(),
+      answer.report.summary.contradicted.toString(),
+      answer.report.summary.unsupported.toString(),
+      answer.report.summary.needs_review.toString(),
+      answer.shouldFail ? "matched" : "clear",
+    ]),
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 export function renderHtmlReport(report: VerificationReport): string {
   return renderReviewConsoleHtmlReport(report);
 }

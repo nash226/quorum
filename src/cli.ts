@@ -15,6 +15,7 @@ import {
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
+  renderBatchSummaryCsv,
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
@@ -49,6 +50,7 @@ interface VerifyBatchArgs extends VerifyArgs {
   markdownOutPath?: string;
   htmlOutPath?: string;
   reviewCsvOutPath?: string;
+  summaryCsvOutPath?: string;
 }
 
 interface ImportReviewArgs {
@@ -170,6 +172,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
   const markdownReport = renderBatchMarkdownReport(batchReport);
   const htmlReport = renderBatchHtmlReport(batchReport);
   const reviewerDecisionCsv = renderBatchReviewerDecisionCsv(batchReport);
+  const summaryCsv = renderBatchSummaryCsv(batchReport);
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
@@ -185,6 +188,10 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   if (parsed.reviewCsvOutPath) {
     await writeReportFile(parsed.reviewCsvOutPath, reviewerDecisionCsv);
+  }
+
+  if (parsed.summaryCsvOutPath) {
+    await writeReportFile(parsed.summaryCsvOutPath, summaryCsv);
   }
 
   const shouldFail = batchReport.summary.answersWithFailures > 0;
@@ -213,6 +220,10 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   if (parsed.reviewCsvOutPath) {
     console.log(`Batch reviewer decision CSV written to ${parsed.reviewCsvOutPath}`);
+  }
+
+  if (parsed.summaryCsvOutPath) {
+    console.log(`Batch summary CSV written to ${parsed.summaryCsvOutPath}`);
   }
 
   if (shouldFail) {
@@ -300,6 +311,7 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     "--markdown-out",
     "--html-out",
     "--review-csv-out",
+    "--summary-csv-out",
   ]));
   const answerPaths: string[] = [];
   const answerDirPaths: string[] = [];
@@ -307,6 +319,7 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
   let markdownOutPath: string | undefined;
   let htmlOutPath: string | undefined;
   let reviewCsvOutPath: string | undefined;
+  let summaryCsvOutPath: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -330,6 +343,9 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     } else if (arg === "--review-csv-out" && next) {
       reviewCsvOutPath = next;
       index += 1;
+    } else if (arg === "--summary-csv-out" && next) {
+      summaryCsvOutPath = next;
+      index += 1;
     }
   }
 
@@ -345,6 +361,7 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     markdownOutPath,
     htmlOutPath,
     reviewCsvOutPath,
+    summaryCsvOutPath,
   };
 }
 
@@ -599,12 +616,12 @@ function printHelp(): void {
 
 Usage:
   quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
-  quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+  quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path> [--json] [--out <path>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
-  npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --fail-on contradicted
+  npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json
 `);
 }

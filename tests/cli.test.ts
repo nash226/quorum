@@ -122,6 +122,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     const batchMarkdownOutPath = join(tempDir, "reports", "batch-report.md");
     const batchHtmlOutPath = join(tempDir, "reports", "batch-report.html");
     const batchReviewCsvOutPath = join(tempDir, "reports", "batch-review.csv");
+    const batchSummaryCsvOutPath = join(tempDir, "reports", "batch-summary.csv");
 
     await Promise.all([
       mkdir(answerDir, { recursive: true }),
@@ -157,6 +158,8 @@ test("verify-batch returns an aggregate report for each answer file", async () =
       batchHtmlOutPath,
       "--review-csv-out",
       batchReviewCsvOutPath,
+      "--summary-csv-out",
+      batchSummaryCsvOutPath,
       "--json",
     ]);
 
@@ -184,6 +187,10 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.match(
       await readFile(batchReviewCsvOutPath, "utf8"),
       /answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes/,
+    );
+    assert.match(
+      await readFile(batchSummaryCsvOutPath, "utf8"),
+      /answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
