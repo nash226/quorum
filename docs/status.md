@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `33a1d81` on 2026-06-28, feat: add source trust overrides
+- Latest shipped change: `671ad4b` on 2026-06-28, feat: add PDF source support
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -43,6 +43,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-28 | [#18](https://github.com/nash226/quorum/pull/18) | feat: add PDF source support | `671ad4b` |
 | 2026-06-28 | [#17](https://github.com/nash226/quorum/pull/17) | feat: add source trust overrides | `33a1d81` |
 | 2026-06-28 | [#16](https://github.com/nash226/quorum/pull/16) | feat: import reviewer decision csvs | `5f554c6` |
 | 2026-06-28 | [#15](https://github.com/nash226/quorum/pull/15) | Add HTML reviewer reports | `63b6d8e` |
@@ -50,5 +51,4 @@
 | 2026-06-28 | Direct push | feat: add markdown reviewer reports | `0583999` |
 | 2026-06-28 | [#12](https://github.com/nash226/quorum/pull/12) | Add auto-updated status page | `6af38ec` |
 | 2026-06-28 | [#11](https://github.com/nash226/quorum/pull/11) | feat: add source trust levels | `ade7490` |
-| 2026-06-28 | [#10](https://github.com/nash226/quorum/pull/10) | fix: clean markdown list claims | `b62f172` |
 
