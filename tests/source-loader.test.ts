@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { createSimplePdf } from "./pdf-test-helpers.js";
 import { parseSource, sourceDocumentFromFile } from "../src/source-loader.js";
 
-test("builds source documents from file names when metadata is absent", () => {
-  const source = sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0);
+test("builds source documents from file names when metadata is absent", async () => {
+  const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0);
 
   assert.equal(source.id, "source_1");
   assert.equal(source.title, "hr-policy.md");
@@ -12,8 +13,8 @@ test("builds source documents from file names when metadata is absent", () => {
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
-test("applies the default trust override when metadata is absent", () => {
-  const source = sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
+test("applies the default trust override when metadata is absent", async () => {
+  const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
     defaultTrustLevel: "high",
   });
 
@@ -41,8 +42,8 @@ Employees get 12 weeks.
   assert.doesNotMatch(parsed.body, /People Ops/);
 });
 
-test("keeps frontmatter trust levels ahead of the default override", () => {
-  const source = sourceDocumentFromFile(
+test("keeps frontmatter trust levels ahead of the default override", async () => {
+  const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",
     `---
 title: HR Benefits Policy
@@ -57,8 +58,8 @@ Employees get 12 weeks.
   assert.equal(source.trustLevel, "low");
 });
 
-test("extracts readable text and title from exported html sources", () => {
-  const source = sourceDocumentFromFile(
+test("extracts readable text and title from exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",
     `<!doctype html>
 <html>
@@ -88,8 +89,8 @@ test("extracts readable text and title from exported html sources", () => {
   assert.doesNotMatch(source.content, /analytics|display: none/);
 });
 
-test("falls back to the html file name when the page has no title", () => {
-  const source = sourceDocumentFromFile(
+test("falls back to the html file name when the page has no title", async () => {
+  const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.htm",
     "<html><body><p>Escalate priority incidents immediately.</p></body></html>",
     2,
@@ -98,4 +99,17 @@ test("falls back to the html file name when the page has no title", () => {
   assert.equal(source.title, "escalations");
   assert.equal(source.trustLevel, "medium");
   assert.equal(source.content, "Escalate priority incidents immediately.");
+});
+
+test("extracts readable text from pdf sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.pdf",
+    createSimplePdf("Employees receive 12 weeks of paid parental leave."),
+    0,
+    { defaultTrustLevel: "high" },
+  );
+
+  assert.equal(source.title, "hr-policy");
+  assert.equal(source.trustLevel, "high");
+  assert.match(source.content, /Employees receive 12 weeks of paid parental leave\./);
 });

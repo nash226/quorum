@@ -7,10 +7,10 @@ import { sourceDocumentFromFile } from "../src/source-loader.js";
 async function verifyExample(answerPath: string, sourcePath: string) {
   const [answer, sourceContent] = await Promise.all([
     readFile(answerPath, "utf8"),
-    readFile(sourcePath, "utf8"),
+    readFile(sourcePath),
   ]);
 
-  return verifyAnswer(answer, [sourceDocumentFromFile(sourcePath, sourceContent, 0)]);
+  return verifyAnswer(answer, [await sourceDocumentFromFile(sourcePath, sourceContent, 0)]);
 }
 
 test("HR example produces one verified, contradicted, and unsupported claim", async () => {
