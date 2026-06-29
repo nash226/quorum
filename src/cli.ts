@@ -10,7 +10,11 @@ import type {
   SourceTrustLevel,
   VerificationReport,
 } from "./domain.js";
-import { parseClaimVerdict, shouldFailReport } from "./report-policy.js";
+import {
+  matchingFailVerdicts,
+  parseClaimVerdict,
+  shouldFailReport,
+} from "./report-policy.js";
 import {
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
@@ -163,11 +167,13 @@ async function runVerifyBatch(args: string[]): Promise<void> {
   const answers = await Promise.all(
     answerPaths.map(async (answerPath) => {
       const report = await verifySingleAnswer(answerPath, sources);
+      const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
 
       return {
         answerPath,
         report,
-        shouldFail: shouldFailReport(report, parsed.failOn),
+        shouldFail: failVerdicts.length > 0,
+        failVerdicts,
       };
     }),
   );
@@ -628,6 +634,7 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
       answer.answerPath,
       `  Summary: ${answer.report.summary.verified} verified, ${answer.report.summary.contradicted} contradicted, ${answer.report.summary.unsupported} unsupported, ${answer.report.summary.needs_review} needs review`,
       `  Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
+      `  Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
     );
 
     if (answer.report.assessments.length === 0) {

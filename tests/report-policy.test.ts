@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { parseClaimVerdict, shouldFailReport } from "../src/report-policy.js";
+import {
+  matchingFailVerdicts,
+  parseClaimVerdict,
+  shouldFailReport,
+} from "../src/report-policy.js";
 import type { ClaimVerdict, VerificationReport } from "../src/domain.js";
 
 const report = {
@@ -26,4 +30,6 @@ test("fails reports when selected verdicts are present", () => {
 
   assert.equal(shouldFailReport(report, failOn), true);
   assert.equal(shouldFailReport(report, ["contradicted"]), false);
+  assert.deepEqual(matchingFailVerdicts(report, failOn), ["unsupported"]);
+  assert.deepEqual(matchingFailVerdicts(report, ["contradicted"]), []);
 });
