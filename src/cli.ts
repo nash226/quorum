@@ -24,6 +24,7 @@ import {
 } from "./report-renderer.js";
 import {
   importReviewerDecisions,
+  renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
@@ -58,6 +59,7 @@ interface ImportReviewArgs {
   reviewCsvPath: string;
   json: boolean;
   outPath?: string;
+  markdownOutPath?: string;
 }
 
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
@@ -237,9 +239,14 @@ async function runImportReview(args: string[]): Promise<void> {
   const csvContent = await readFile(parsed.reviewCsvPath, "utf8");
   const report = importReviewerDecisions(csvContent);
   const jsonReport = JSON.stringify(report, null, 2);
+  const markdownReport = renderReviewerDecisionImportMarkdownReport(report);
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
+  }
+
+  if (parsed.markdownOutPath) {
+    await writeReportFile(parsed.markdownOutPath, markdownReport);
   }
 
   if (parsed.json) {
@@ -251,6 +258,10 @@ async function runImportReview(args: string[]): Promise<void> {
 
   if (parsed.outPath) {
     console.log(`Imported reviewer decisions written to ${parsed.outPath}`);
+  }
+
+  if (parsed.markdownOutPath) {
+    console.log(`Reviewer decision Markdown report written to ${parsed.markdownOutPath}`);
   }
 }
 
@@ -417,6 +428,7 @@ function parseSharedVerifyArgs(
 function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   let reviewCsvPath = "";
   let outPath: string | undefined;
+  let markdownOutPath: string | undefined;
   let json = false;
 
   for (let index = 0; index < args.length; index += 1) {
@@ -428,6 +440,9 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
       index += 1;
     } else if (arg === "--out" && next) {
       outPath = next;
+      index += 1;
+    } else if (arg === "--markdown-out" && next) {
+      markdownOutPath = next;
       index += 1;
     } else if (arg === "--json") {
       json = true;
@@ -444,6 +459,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     reviewCsvPath,
     json,
     outPath,
+    markdownOutPath,
   };
 }
 
@@ -632,12 +648,12 @@ function printHelp(): void {
 Usage:
   quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum import-review --review-csv <path> [--json] [--out <path>]
+  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
-  npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json
+  npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md
 `);
 }
 
