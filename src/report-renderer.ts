@@ -8,6 +8,7 @@ export function renderTextReport(report: VerificationReport): string {
   const lines = [
     "Quorum Verification Report",
     "",
+    ...(report.answerPath ? [`Answer: ${report.answerPath}`] : []),
     `Sources: ${report.sources.map((source) => source.title).join(", ")}`,
     `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
     "",
@@ -32,6 +33,7 @@ export function renderMarkdownReport(report: VerificationReport): string {
     "",
     "## Summary",
     "",
+    ...(report.answerPath ? [`- Answer path: \`${report.answerPath}\``] : []),
     `- Sources reviewed: ${report.sources.length}`,
     `- Verified: ${report.summary.verified}`,
     `- Contradicted: ${report.summary.contradicted}`,
@@ -122,6 +124,7 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
 export function renderReviewerDecisionCsv(report: VerificationReport): string {
   const rows = [
     [
+      "answer_path",
       "claim_id",
       "claim_text",
       "model_verdict",
@@ -134,6 +137,7 @@ export function renderReviewerDecisionCsv(report: VerificationReport): string {
       "reviewer_notes",
     ],
     ...report.assessments.map((assessment) => [
+      report.answerPath ?? "",
       assessment.claim.id,
       assessment.claim.text,
       assessment.verdict,
@@ -245,6 +249,13 @@ function renderReviewConsoleHtmlReport(report: VerificationReport): string {
                 </li>`;
     })
     .join("");
+  const answerPathField = report.answerPath
+    ? `
+                <div class="field">
+                  <span>Answer path</span>
+                  <strong>${escapeHtml(report.answerPath)}</strong>
+                </div>`
+    : "";
 
   return `<!doctype html>
 <html lang="en">
@@ -865,6 +876,7 @@ function renderReviewConsoleHtmlReport(report: VerificationReport): string {
               <section class="drawer-body answer-panel">
                 <h2>Submitted answer</h2>
                 <p class="subtitle">Original model output under review.</p>
+                ${report.answerPath ? `<div class="field-grid">${answerPathField}</div>` : ""}
                 <div class="field answer-text">${escapeHtml(report.answer)}</div>
               </section>
               <section class="drawer-body">
