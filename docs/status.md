@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b95920b` on 2026-06-29, feat: add batch summary csv export
+- Latest shipped change: `787297e` on 2026-06-29, feat: add claim details to batch reports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-29 | [#31](https://github.com/nash226/quorum/pull/31) | feat: add claim details to batch reports | `787297e` |
 | 2026-06-29 | [#30](https://github.com/nash226/quorum/pull/30) | feat: add batch summary csv export | `b95920b` |
 | 2026-06-29 | [#29](https://github.com/nash226/quorum/pull/29) | fix: preserve explicit batch answer order | `a329f7a` |
 | 2026-06-29 | [#28](https://github.com/nash226/quorum/pull/28) | Show empty claim states in reports | `30e33cb` |
@@ -52,5 +53,4 @@
 | 2026-06-29 | [#26](https://github.com/nash226/quorum/pull/26) | Preserve batch review answer paths | `01b6743` |
 | 2026-06-29 | [#25](https://github.com/nash226/quorum/pull/25) | Preserve wrapped plain-text claims | `ab2d9ec` |
 | 2026-06-29 | [#24](https://github.com/nash226/quorum/pull/24) | Skip markdown list intro labels during claim extraction | `be63ee5` |
-| 2026-06-29 | [#23](https://github.com/nash226/quorum/pull/23) | Preserve wrapped markdown claim items | `a950947` |
 
