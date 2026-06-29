@@ -97,6 +97,11 @@ separate `/import-review` and `/evaluate` responses.
 Add `queueStatus` when the overview should describe only one handoff state:
 `pending`, `reviewed`, or `no_claims`. The filter scopes the answer and claim
 totals while leaving optional evaluation metrics unchanged.
+Add `domains` when benchmark drift should be limited to selected policy
+domains, for example `"domains": ["support"]`. The response echoes the
+applied domain scope and recalculates evaluation totals from the matching
+fixtures. If no supplied fixture matches a requested domain, the endpoint
+returns a validation error instead of silently producing an empty benchmark.
 
 ## Discover and probe the service
 
