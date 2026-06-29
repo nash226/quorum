@@ -33,6 +33,12 @@ claim.
 
 The CLI prints a human-readable report and writes machine-readable JSON reports
 plus a styled HTML reviewer report and reviewer-decision CSV under `reports/`.
+
+For multi-answer workflows, Quorum can also export batch review summaries:
+
+```bash
+npm run dev -- verify-batch --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --fail-on contradicted
+```
 Because the samples contain risky claims, the demo commands exit with status
 code `2` when `--fail-on` is enabled.
 
