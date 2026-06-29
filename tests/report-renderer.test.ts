@@ -30,11 +30,13 @@ test("renders the text report used by the CLI", () => {
     "Full-time employees receive 20 days of paid vacation each calendar year.",
     [hrPolicy],
     "2026-06-28T00:00:00.000Z",
+    "examples/answers/hr-answer.md",
   );
 
   const rendered = renderTextReport(report);
 
   assert.match(rendered, /Quorum Verification Report/);
+  assert.match(rendered, /Answer: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /Sources: HR Policy/);
   assert.match(rendered, /VERIFIED  Full-time employees receive 20 days/);
   assert.match(rendered, /Evidence \(HR Policy, high trust, score /);
@@ -45,6 +47,7 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
     "Employees receive 18 weeks of paid parental leave.\nEmployees receive free catered lunch every day.",
     [hrPolicy],
     "2026-06-28T00:00:00.000Z",
+    "examples/answers/hr-answer.md",
   );
 
   const rendered = renderMarkdownReport(report);
@@ -52,6 +55,7 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
   assert.match(rendered, /# Quorum Verification Report/);
   assert.match(rendered, /Generated: 2026-06-28T00:00:00.000Z/);
   assert.match(rendered, /- Verified: 0/);
+  assert.match(rendered, /- Answer path: `examples\/answers\/hr-answer\.md`/);
   assert.match(rendered, /- Contradicted: 1/);
   assert.match(rendered, /- Unsupported: 1/);
   assert.match(rendered, /## Sources/);
@@ -67,6 +71,7 @@ test("renders a reviewer decision csv with claim context and blank reviewer fiel
     "Employees receive 18 weeks of paid parental leave.\nEmployees receive free catered lunch every day.",
     [hrPolicy],
     "2026-06-28T00:00:00.000Z",
+    "examples/answers/hr-answer.md",
   );
 
   const rendered = renderReviewerDecisionCsv(report);
@@ -74,18 +79,18 @@ test("renders a reviewer decision csv with claim context and blank reviewer fiel
 
   assert.equal(
     lines[0],
-    "claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
-    /^claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
+    /^examples\/answers\/hr-answer\.md,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
   );
   assert.match(lines[1] ?? "", /HR Policy/);
   assert.match(lines[1] ?? "", /high/);
   assert.match(lines[1] ?? "", /0\.\d{3}/);
   assert.match(
     lines[2] ?? "",
-    /^claim_2,Employees receive free catered lunch every day\.,unsupported,/,
+    /^examples\/answers\/hr-answer\.md,claim_2,Employees receive free catered lunch every day\.,unsupported,/,
   );
   assert.match(lines[2] ?? "", /,,$/);
 });
@@ -95,6 +100,7 @@ test("renders a professional HTML reviewer report with escaped content", () => {
     "Employees receive 18 weeks of paid parental leave.\n<Flag this answer for legal review.>",
     [hrPolicy],
     "2026-06-28T00:00:00.000Z",
+    "examples/answers/hr-answer.md",
   );
 
   const rendered = renderHtmlReport(report);
@@ -104,6 +110,8 @@ test("renders a professional HTML reviewer report with escaped content", () => {
   assert.match(rendered, /Claim review queue/);
   assert.match(rendered, /Evidence detail/);
   assert.match(rendered, /Reviewer decision/);
+  assert.match(rendered, /Answer path/);
+  assert.match(rendered, /examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /<span class="pill pill--contradicted">contradicted<\/span>/);
   assert.match(rendered, /HR Policy<\/strong>/);
   assert.match(rendered, /high trust/);
