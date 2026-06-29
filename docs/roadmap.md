@@ -11,7 +11,6 @@ front of enterprise agent workflows.
 
 ## Next
 
-- Accept PDFs as approved sources.
 - Support batch verification for multiple answers.
 
 ## Later

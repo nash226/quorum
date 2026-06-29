@@ -35,7 +35,7 @@ interface ImportReviewArgs {
   outPath?: string;
 }
 
-const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
+const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -64,7 +64,7 @@ async function runVerify(args: string[]): Promise<void> {
   const sourcePaths = await resolveSourcePaths(parsed.sourcePaths, parsed.sourceDirs);
   const sources = await Promise.all(
     sourcePaths.map(async (sourcePath, index) => {
-      const content = await readFile(sourcePath, "utf8");
+      const content = await readFile(sourcePath);
       return sourceDocumentFromFile(sourcePath, content, index, {
         defaultTrustLevel: parsed.defaultTrustLevel,
       });
