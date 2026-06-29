@@ -36,6 +36,7 @@ export function verifyAnswer(
   answer: string,
   sources: SourceDocument[],
   generatedAt = new Date().toISOString(),
+  answerPath?: string,
 ): VerificationReport {
   const assessments = extractClaims(answer).map((claim) =>
     assessClaim(claim.id, claim.text, sources),
@@ -43,6 +44,7 @@ export function verifyAnswer(
 
   return {
     generatedAt,
+    answerPath,
     answer,
     sources: sources.map(({ id, title, updatedAt, trustLevel }) => ({
       id,
