@@ -126,6 +126,63 @@ export function renderReviewerDecisionImportReport(
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
+export function renderReviewerDecisionImportMarkdownReport(
+  report: ReviewerDecisionImportReport,
+): string {
+  const lines = [
+    "# Quorum Reviewer Decision Import",
+    "",
+    "## Summary",
+    "",
+    `- Total claims: ${report.summary.totalClaims}`,
+    `- Reviewed claims: ${report.summary.reviewedClaims}`,
+    `- Pending claims: ${report.summary.pendingClaims}`,
+    `- Reviewer overrides: ${report.summary.overriddenClaims}`,
+    `- Verified: ${report.summary.verified}`,
+    `- Contradicted: ${report.summary.contradicted}`,
+    `- Unsupported: ${report.summary.unsupported}`,
+    `- Needs review: ${report.summary.needs_review}`,
+  ];
+
+  if (report.claims.length === 0) {
+    return `${lines.join("\n")}\n`;
+  }
+
+  lines.push("", "## Claim Decisions", "");
+
+  report.claims.forEach((claim, index) => {
+    const reviewerVerdict = claim.reviewerVerdict
+      ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
+      : "pending reviewer decision";
+
+    lines.push(
+      `### ${index + 1}. ${claim.claimText}`,
+      "",
+      `- Final verdict: ${claim.finalVerdict}`,
+      `- Model verdict: ${claim.modelVerdict}`,
+      `- Reviewer verdict: ${reviewerVerdict}`,
+    );
+
+    if (claim.answerPath) {
+      lines.push(`- Answer path: \`${claim.answerPath}\``);
+    }
+
+    if (claim.reviewerNotes) {
+      lines.push(`- Reviewer notes: ${claim.reviewerNotes}`);
+    }
+
+    if (claim.evidenceTitles.length > 0) {
+      lines.push(
+        `- Evidence titles: ${claim.evidenceTitles.join(", ")}`,
+      );
+    }
+
+    lines.push(`- Model reason: ${claim.modelReason}`, "");
+  });
+
+  return `${trimTrailingBlankLines(lines).join("\n")}\n`;
+}
+
 function importDecisionRow(
   row: string[],
   rowNumber: number,
@@ -305,7 +362,7 @@ function parseCsv(content: string): string[][] {
 function trimTrailingBlankLines(lines: string[]): string[] {
   const trimmed = [...lines];
 
-  while (trimmed.at(-1) === "") {
+  while (trimmed.length > 0 && trimmed[trimmed.length - 1] === "") {
     trimmed.pop();
   }
 
