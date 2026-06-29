@@ -448,7 +448,7 @@ async function resolveAnswerPaths(
     await Promise.all(answerDirs.map((answerDir) => listAnswerFiles(answerDir)))
   ).flat();
 
-  return Array.from(new Set([...answerPaths, ...directoryFiles])).sort();
+  return dedupePathsInOrder([...answerPaths, ...directoryFiles]);
 }
 
 async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
@@ -501,7 +501,23 @@ async function listFilesWithExtensions(
     }),
   );
 
-  return files.flat();
+  return files.flat().sort();
+}
+
+function dedupePathsInOrder(paths: string[]): string[] {
+  const seen = new Set<string>();
+  const uniquePaths: string[] = [];
+
+  for (const path of paths) {
+    if (seen.has(path)) {
+      continue;
+    }
+
+    seen.add(path);
+    uniquePaths.push(path);
+  }
+
+  return uniquePaths;
 }
 
 function trimTrailingBlankLines(lines: string[]): string[] {
