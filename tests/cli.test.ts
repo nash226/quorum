@@ -538,6 +538,43 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
   }
 });
 
+test("import-review writes an html summary report", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-import-html-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "reports", "review.csv");
+    const htmlOutPath = join(tempDir, "reports", "review-import.html");
+
+    await mkdir(join(tempDir, "reports"), { recursive: true });
+    await writeFile(
+      reviewCsvPath,
+      `answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+examples/answers/support-answer.md,claim_2,<Flag this answer for legal review.>,unsupported,No approved source contains enough overlapping policy language.,"","","","","","Needs counsel review before publish"`,
+      "utf8",
+    );
+
+    const stdout = await runCli([
+      "import-review",
+      "--review-csv",
+      reviewCsvPath,
+      "--html-out",
+      htmlOutPath,
+    ]);
+
+    assert.match(stdout, /Reviewer decision HTML report written to/);
+
+    const htmlReport = await readFile(htmlOutPath, "utf8");
+    assert.match(htmlReport, /<!doctype html>/i);
+    assert.match(htmlReport, /<title>Quorum Reviewer Decision Import<\/title>/);
+    assert.match(htmlReport, /<code>examples\/answers\/hr-answer\.md<\/code>/);
+    assert.match(htmlReport, /Needs counsel review before publish/);
+    assert.match(htmlReport, /&lt;Flag this answer for legal review\.\&gt;/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 async function runCli(args: string[]): Promise<string> {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", ...args], {
