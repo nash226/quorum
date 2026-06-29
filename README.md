@@ -29,6 +29,7 @@ The current CLI can:
 - read an AI-generated answer from a Markdown or text file
 - read one or more approved Markdown, text, or exported HTML source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
+- override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
 - compare each claim against approved source snippets
 - label each claim as `verified`, `contradicted`, `unsupported`, or
@@ -47,6 +48,7 @@ The current CLI can:
 npm run dev -- verify \
   --answer examples/answers/hr-answer.md \
   --source-dir examples/sources \
+  --default-trust-level high \
   --out reports/hr-report.json \
   --markdown-out reports/hr-report.md \
   --html-out reports/hr-report.html \
@@ -116,10 +118,20 @@ source supported or contradicted each claim. `trustLevel` accepts `high`,
 multiple passages are similarly relevant. Sources without a trust level default
 to `medium`.
 
+When approved sources do not yet include frontmatter, the CLI can override that
+default during verification:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source-dir examples/sources \
+  --default-trust-level high
+```
+
 ## CLI Usage
 
 ```text
-quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path> [--json] [--out <path>]
 ```
 
@@ -128,6 +140,8 @@ Options:
 - `--answer <path>`: AI-generated answer to verify
 - `--source <path>`: approved source document; may be repeated
 - `--source-dir <path>`: directory of approved source documents
+- `--default-trust-level <level>`: use `high`, `medium`, or `low` for sources
+  that do not define `trustLevel` metadata
 - `--json`: print the full JSON report
 - `--out <path>`: write the JSON report to disk
 - `--markdown-out <path>`: write a reviewer-friendly Markdown report to disk

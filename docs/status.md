@@ -14,6 +14,7 @@
 - read an AI-generated answer from a Markdown or text file
 - read one or more approved Markdown, text, or exported HTML source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
+- override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
 - compare each claim against approved source snippets
 - label each claim as `verified`, `contradicted`, `unsupported`, or `needs_review`
@@ -36,7 +37,6 @@
 ### Next In docs/roadmap.md
 
 - Accept PDFs as approved sources.
-- Add CLI-level trust overrides for sources without metadata.
 - Support batch verification for multiple answers.
 
 ## Recently Shipped
