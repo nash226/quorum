@@ -78,6 +78,8 @@ It now also covers service-outage answers, including update-cadence drift,
 blanket-refund promises, and incident-status confirmation.
 Shipping address-change answers are also regression-tested for the pre-shipment
 control, conflicting timing windows, and unsupported insurance promises.
+The packed smoke check also verifies warranty answers for the 12-month claim window,
+conflicting 24-month eligibility, and unsupported automatic replacement promises.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
