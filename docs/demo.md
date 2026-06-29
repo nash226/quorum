@@ -46,6 +46,9 @@ accepts repeated `--answer` paths:
 ```bash
 npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer examples/answers/support-answer.md --source-dir examples/sources --review-csv-out reports/selected-review.csv
 ```
+Quorum keeps repeated `--answer` paths in that explicit order in the batch
+report and reviewer CSV, then appends any extra files discovered through
+`--answer-dir`.
 Because the samples contain risky claims, the demo commands exit with status
 code `2` when `--fail-on` is enabled.
 

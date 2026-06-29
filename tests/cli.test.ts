@@ -241,10 +241,70 @@ test("verify-batch accepts repeated answer files alongside answer directories", 
 
     assert.equal(report.answerCount, 2);
     assert.deepEqual(report.answers.map((answer) => answer.answerPath), [
-      nestedAnswerPath,
       directAnswerPath,
+      nestedAnswerPath,
     ]);
     assert.equal(report.summary.verified, 2);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch preserves explicit answer order ahead of directory-discovered files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-order-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const secondAnswerPath = join(tempDir, "second.md");
+    const firstAnswerPath = join(tempDir, "first.md");
+    const directoryAnswerPath = join(answerDir, "directory.md");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(firstAnswerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(secondAnswerPath, "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(directoryAnswerPath, "Healthcare coverage begins after 30 days of employment.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\nHealthcare coverage begins after 30 days of employment.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "support-playbook.md"),
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer",
+      secondAnswerPath,
+      "--answer",
+      firstAnswerPath,
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answers: Array<{ answerPath: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [
+      secondAnswerPath,
+      firstAnswerPath,
+      directoryAnswerPath,
+    ]);
+    assert.equal(report.summary.verified, 3);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
