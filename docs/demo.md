@@ -36,6 +36,15 @@ plus a styled HTML reviewer report and reviewer-decision CSV under `reports/`.
 Because the samples contain risky claims, the demo commands exit with status
 code `2` when `--fail-on` is enabled.
 
+After a reviewer fills in the exported CSV, import it back into Quorum with:
+
+```bash
+npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json
+```
+
+The import summary preserves the model verdict, the reviewer verdict when one
+is present, whether the reviewer overrode the model, and any reviewer notes.
+
 Quorum also accepts exported HTML knowledge base pages via `--source` or
 `--source-dir`, which lets teams verify answers against help-center exports
 without first converting those pages to Markdown.

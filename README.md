@@ -38,6 +38,7 @@ The current CLI can:
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim
+- import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 
 ## Example
@@ -78,6 +79,14 @@ npm run dev -- verify \
 
 When a selected verdict is present, Quorum exits with status code `2`.
 
+To import a filled reviewer decision CSV:
+
+```bash
+npm run dev -- import-review \
+  --review-csv reports/hr-review.csv \
+  --out reports/hr-review-import.json
+```
+
 ## Quick Start
 
 ```bash
@@ -111,6 +120,7 @@ to `medium`.
 
 ```text
 quorum verify --answer <path> (--source <path> | --source-dir <path>) [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+quorum import-review --review-csv <path> [--json] [--out <path>]
 ```
 
 Options:
@@ -125,6 +135,10 @@ Options:
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
   repeated
+- `import-review --review-csv <path>`: import a filled reviewer decision CSV and
+  summarize final verdicts plus reviewer overrides
+- `import-review --out <path>`: write the imported reviewer decision summary as
+  JSON
 
 Supported source extensions today:
 
@@ -167,7 +181,6 @@ approved sources.
 Near-term work:
 
 - evaluation harness for labeled verdict examples
-- reviewer decision import or workflow automation on top of CSV exports
 - batch verification
 - better claim extraction for bullets, lists, and compound sentences
 - API surface for agent integrations
