@@ -289,7 +289,9 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     const savedReport = JSON.parse(await readFile(batchOutPath, "utf8")) as typeof report;
     assert.equal(savedReport.answerCount, 2);
     assert.match(await readFile(batchMarkdownOutPath, "utf8"), /# Quorum Batch Verification Report/);
+    assert.match(await readFile(batchMarkdownOutPath, "utf8"), /- Answer preview: Employees receive 12 weeks of paid parental leave\./);
     assert.match(await readFile(batchHtmlOutPath, "utf8"), /<title>Quorum Batch Verification Report<\/title>/);
+    assert.match(await readFile(batchHtmlOutPath, "utf8"), /Answer preview/);
     assert.match(
       await readFile(batchReviewCsvOutPath, "utf8"),
       /answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
