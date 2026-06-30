@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e02df66` on 2026-06-30, fix: parse roman numeral claim lists
+- Latest shipped change: `652193f` on 2026-06-30, docs: add README demo video
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-30 | [#47](https://github.com/nash226/quorum/pull/47) | docs: add README demo video | `652193f` |
 | 2026-06-30 | [#46](https://github.com/nash226/quorum/pull/46) | fix: parse roman numeral claim lists | `e02df66` |
 | 2026-06-30 | [#45](https://github.com/nash226/quorum/pull/45) | feat: surface source metadata in text reports | `15fc401` |
 | 2026-06-29 | [#44](https://github.com/nash226/quorum/pull/44) | fix: normalize fallback source titles | `12fd244` |
@@ -52,5 +53,4 @@
 | 2026-06-29 | [#42](https://github.com/nash226/quorum/pull/42) | feat: surface batch report source metadata | `022b3a1` |
 | 2026-06-29 | [#41](https://github.com/nash226/quorum/pull/41) | fix: handle lettered claim lists | `014791c` |
 | 2026-06-29 | [#40](https://github.com/nash226/quorum/pull/40) | feat: group import-review output by answer | `c36a2e3` |
-| 2026-06-29 | [#39](https://github.com/nash226/quorum/pull/39) | feat: preserve single-answer report provenance | `1993fbc` |
 
