@@ -9,7 +9,8 @@ export function renderTextReport(report: VerificationReport): string {
     "Quorum Verification Report",
     "",
     ...(report.answerPath ? [`Answer: ${report.answerPath}`] : []),
-    `Sources: ${report.sources.map((source) => source.title).join(", ")}`,
+    "Sources:",
+    ...report.sources.map((source) => `- ${renderTextSourceLabel(source)}`),
     `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
     "",
   ];
@@ -1415,6 +1416,20 @@ export function renderTextAssessmentLines(assessment: ClaimAssessment): string[]
   }
 
   return lines;
+}
+
+function renderTextSourceLabel(source: {
+  title: string;
+  trustLevel: string;
+  updatedAt?: string;
+}): string {
+  const metadata = [`${source.trustLevel} trust`];
+
+  if (source.updatedAt) {
+    metadata.push(`updated ${source.updatedAt}`);
+  }
+
+  return `${source.title} (${metadata.join(", ")})`;
 }
 
 function renderMarkdownAssessment(

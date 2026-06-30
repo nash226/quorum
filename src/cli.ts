@@ -586,6 +586,20 @@ function trimTrailingBlankLines(lines: string[]): string[] {
   return trimmed;
 }
 
+function renderTextSourceLabel(source: {
+  title: string;
+  trustLevel: string;
+  updatedAt?: string;
+}): string {
+  const metadata = [`${source.trustLevel} trust`];
+
+  if (source.updatedAt) {
+    metadata.push(`updated ${source.updatedAt}`);
+  }
+
+  return `${source.title} (${metadata.join(", ")})`;
+}
+
 function summarizeBatchVerification(
   answers: BatchVerificationResult[],
   sources: SourceDocument[],
@@ -629,7 +643,8 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
     "Quorum Batch Verification Report",
     "",
     `Answers: ${report.answerCount}`,
-    `Sources: ${report.sources.map((source) => source.title).join(", ")}`,
+    "Sources:",
+    ...report.sources.map((source) => `- ${renderTextSourceLabel(source)}`),
     `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
     `Answers matching fail policy: ${report.summary.answersWithFailures}`,
     "",
