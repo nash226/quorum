@@ -105,6 +105,8 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
   ];
 
   report.answers.forEach((answer, index) => {
+    const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+
     lines.push(
       `### ${index + 1}. ${answer.answerPath}`,
       "",
@@ -114,6 +116,14 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
       `- Contradicted: ${answer.report.summary.contradicted}`,
       `- Unsupported: ${answer.report.summary.unsupported}`,
       `- Needs review: ${answer.report.summary.needs_review}`,
+      `- Primary finding: ${primaryAssessment ? formatVerdictLabel(primaryAssessment.verdict) : "none"}`,
+      ...(primaryAssessment
+        ? [
+            `- Primary claim: ${primaryAssessment.claim.text}`,
+            `- Primary reason: ${primaryAssessment.reason}`,
+            `- Primary evidence: ${primaryAssessment.evidence[0]?.documentTitle ?? "No approved source snippet matched strongly enough."}`,
+          ]
+        : []),
       "",
       "#### Submitted Answer",
       "",
@@ -975,6 +985,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
   const answerCards = report.answers
     .map((answer, index) => {
       const statusClass = answer.shouldFail ? "status--matched" : "status--clear";
+      const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
       const assessmentMarkup =
         answer.report.assessments.length === 0
           ? `<p class="answer-card__empty">No claims were extracted from this answer.</p>`
@@ -1000,6 +1011,25 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
                 })
                 .join("")}
             </div>`;
+      const primaryFindingMarkup = primaryAssessment
+        ? `
+          <section class="answer-card__primary-finding">
+            <span class="answer-card__section-label">Primary finding</span>
+            <div class="primary-finding-card primary-finding-card--${primaryAssessment.verdict}">
+              <div class="primary-finding-card__header">
+                <span class="claim-pill claim-pill--${primaryAssessment.verdict}">${escapeHtml(formatVerdictLabel(primaryAssessment.verdict))}</span>
+                <span class="claim-item__score">${primaryAssessment.evidence[0] ? `score ${primaryAssessment.evidence[0].score}` : "no evidence"}</span>
+              </div>
+              <h3>${escapeHtml(primaryAssessment.claim.text)}</h3>
+              <p class="claim-item__reason">${escapeHtml(primaryAssessment.reason)}</p>
+              <p class="claim-item__evidence${primaryAssessment.evidence[0] ? "" : " claim-item__evidence--empty"}">${
+                primaryAssessment.evidence[0]
+                  ? `<strong>${escapeHtml(primaryAssessment.evidence[0].documentTitle)}</strong>: ${escapeHtml(primaryAssessment.evidence[0].quote)}`
+                  : "No approved source snippet matched strongly enough."
+              }</p>
+            </div>
+          </section>`
+        : "";
 
       return `
         <article class="answer-card">
@@ -1012,11 +1042,13 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
           </div>
           <dl class="answer-card__summary">
             <div><dt>Fail verdicts</dt><dd>${answer.failVerdicts.length > 0 ? escapeHtml(answer.failVerdicts.join(", ")) : "none"}</dd></div>
+            <div><dt>Primary finding</dt><dd>${primaryAssessment ? escapeHtml(formatVerdictLabel(primaryAssessment.verdict)) : "none"}</dd></div>
             <div><dt>Verified</dt><dd>${answer.report.summary.verified}</dd></div>
             <div><dt>Contradicted</dt><dd>${answer.report.summary.contradicted}</dd></div>
             <div><dt>Unsupported</dt><dd>${answer.report.summary.unsupported}</dd></div>
             <div><dt>Needs review</dt><dd>${answer.report.summary.needs_review}</dd></div>
           </dl>
+          ${primaryFindingMarkup}
           <section class="answer-card__submitted-answer">
             <span class="answer-card__section-label">Submitted answer</span>
             <pre>${escapeHtml(answer.report.answer)}</pre>
@@ -1309,6 +1341,45 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
 
       .answer-card__submitted-answer {
         margin-top: 18px;
+      }
+
+      .answer-card__primary-finding {
+        margin-top: 18px;
+      }
+
+      .primary-finding-card {
+        margin-top: 10px;
+        padding: 16px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.82);
+      }
+
+      .primary-finding-card--verified {
+        border-color: rgba(31, 122, 79, 0.18);
+        background: var(--verified-soft);
+      }
+
+      .primary-finding-card--contradicted {
+        border-color: rgba(159, 58, 44, 0.18);
+        background: var(--contradicted-soft);
+      }
+
+      .primary-finding-card--unsupported {
+        border-color: rgba(138, 97, 22, 0.18);
+        background: var(--unsupported-soft);
+      }
+
+      .primary-finding-card--needs_review {
+        border-color: rgba(37, 90, 143, 0.18);
+        background: var(--needs-review-soft);
+      }
+
+      .primary-finding-card__header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
       }
 
       .answer-card__submitted-answer pre {

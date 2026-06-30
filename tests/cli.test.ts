@@ -735,6 +735,9 @@ test("verify-batch prints claim-level details in the default text output", async
     assert.match(stdout, /Summary: 0 verified, 1 contradicted, 1 unsupported, 0 needs review/);
     assert.match(stdout, /Fail policy: clear/);
     assert.match(stdout, /Fail verdicts: none/);
+    assert.match(stdout, /Primary finding: contradicted/);
+    assert.match(stdout, /Primary claim: Employees receive 18 weeks of paid parental leave\./);
+    assert.match(stdout, /Primary evidence: hr-policy/);
     assert.match(stdout, /CONTRADICTED  Employees receive 18 weeks of paid parental leave\./);
     assert.match(stdout, /UNSUPPORTED  Employees receive free catered lunch every day\./);
     assert.match(stdout, /Evidence \(hr-policy, medium trust, score /);
