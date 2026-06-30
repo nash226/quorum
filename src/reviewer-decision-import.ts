@@ -133,6 +133,12 @@ export function renderReviewerDecisionImportReport(
         lines.push(`Reviewer notes: ${claim.reviewerNotes}`);
       }
 
+      const evidenceLines = renderImportedEvidenceLines(claim);
+      if (evidenceLines.length > 0) {
+        lines.push("Evidence:");
+        lines.push(...evidenceLines.map((line) => `- ${line}`));
+      }
+
       lines.push("");
     }
   }
@@ -198,7 +204,8 @@ export function renderReviewerDecisionImportMarkdownReport(
       }
 
       if (claim.evidenceTitles.length > 0) {
-        lines.push(`- Evidence titles: ${claim.evidenceTitles.join(", ")}`);
+        lines.push("- Evidence:");
+        lines.push(...renderImportedEvidenceLines(claim).map((line) => `  - ${line}`));
       }
 
       lines.push(`- Model reason: ${claim.modelReason}`, "");
@@ -528,12 +535,9 @@ function renderClaimCard(claim: ImportedReviewerDecision, index: number): string
   const reviewerVerdict = claim.reviewerVerdict
     ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
     : "pending reviewer decision";
+  const evidenceItems = renderImportedEvidenceItems(claim);
   const evidenceTitles =
     claim.evidenceTitles.length > 0 ? claim.evidenceTitles.join(", ") : "None";
-  const evidenceQuotes =
-    claim.evidenceQuotes.length > 0
-      ? claim.evidenceQuotes.map((quote) => `<li>${escapeHtml(quote)}</li>`).join("")
-      : "<li>No evidence quote captured.</li>";
 
   return `
     <article class="claim-card">
@@ -570,11 +574,73 @@ function renderClaimCard(claim: ImportedReviewerDecision, index: number): string
           : ""
       }
       <div class="claim-section">
-        <h4>Evidence quotes</h4>
-        <ul>${evidenceQuotes}</ul>
+        <h4>Evidence context</h4>
+        <ul>${evidenceItems}</ul>
       </div>
     </article>`
     .trim();
+}
+
+function renderImportedEvidenceItems(claim: ImportedReviewerDecision): string {
+  const evidence = collectImportedEvidence(claim);
+
+  if (evidence.length === 0) {
+    return "<li>No evidence details captured.</li>";
+  }
+
+  return evidence
+    .map((item) => {
+      const metadata = [
+        item.title,
+        ...(item.trustLevel ? [`${item.trustLevel} trust`] : []),
+        ...(item.score ? [`score ${item.score}`] : []),
+      ];
+      const quote = item.quote ? `: ${escapeHtml(item.quote)}` : "";
+      return `<li><strong>${escapeHtml(metadata.join(" - "))}</strong>${quote}</li>`;
+    })
+    .join("");
+}
+
+function renderImportedEvidenceLines(claim: ImportedReviewerDecision): string[] {
+  return collectImportedEvidence(claim).map((item) => {
+    const metadata = [
+      item.title,
+      ...(item.trustLevel ? [`${item.trustLevel} trust`] : []),
+      ...(item.score ? [`score ${item.score}`] : []),
+    ];
+
+    return item.quote ? `${metadata.join(", ")}: ${item.quote}` : metadata.join(", ");
+  });
+}
+
+function collectImportedEvidence(claim: ImportedReviewerDecision): Array<{
+  title: string;
+  trustLevel?: string;
+  score?: string;
+  quote?: string;
+}> {
+  const length = Math.max(
+    claim.evidenceTitles.length,
+    claim.evidenceTrustLevels.length,
+    claim.evidenceScores.length,
+    claim.evidenceQuotes.length,
+  );
+  const evidence = [];
+
+  for (let index = 0; index < length; index += 1) {
+    const title = claim.evidenceTitles[index];
+    const trustLevel = claim.evidenceTrustLevels[index];
+    const score = claim.evidenceScores[index];
+    const quote = claim.evidenceQuotes[index];
+
+    if (!title && !trustLevel && !score && !quote) {
+      continue;
+    }
+
+    evidence.push({ title: title || "Untitled evidence", trustLevel, score, quote });
+  }
+
+  return evidence;
 }
 
 function groupImportedClaims(claims: ImportedReviewerDecision[]): ReviewerDecisionGroup[] {
