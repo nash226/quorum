@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
@@ -437,6 +437,56 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("verify dedupes repeated source files that use different path spellings", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-source-dedupe-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+    const sourcePath = join(sourceDir, "shared.md");
+    const explicitSourcePath = `${sourceDir}/./shared.md`;
+
+    await mkdir(sourceDir, { recursive: true });
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        `---
+title: Shared Source
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      explicitSourcePath,
+      "--source-dir",
+      resolve(sourceDir),
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ id: string; title: string; trustLevel: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.sources.length, 1);
+    assert.deepEqual(report.sources, [
+      { id: "source_1", title: "Shared Source", trustLevel: "medium" },
+    ]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch preserves explicit answer order ahead of directory-discovered files", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-order-"));
 
@@ -492,6 +542,54 @@ test("verify-batch preserves explicit answer order ahead of directory-discovered
       directoryAnswerPath,
     ]);
     assert.equal(report.summary.verified, 3);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch dedupes repeated answer files that use different path spellings", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-answer-dedupe-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(answerDir, "shared.md");
+    const explicitAnswerPath = `${answerDir}/./shared.md`;
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer",
+      explicitAnswerPath,
+      "--answer-dir",
+      resolve(answerDir),
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      answers: Array<{ answerPath: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [explicitAnswerPath]);
+    assert.equal(report.summary.verified, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
