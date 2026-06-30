@@ -356,15 +356,15 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
 
   assert.equal(
     lines[0],
-    "answer_path,answer_preview,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+    "answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
   );
   assert.equal(
     lines[1],
-    "examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
+    "examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
   );
   assert.equal(
     lines[2],
-    "examples/answers/support-answer.md,Employees receive free catered lunch every day.,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
+    "examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
   );
 });
 
@@ -402,6 +402,6 @@ Managers approve travel within five business days, and international trips requi
 
   assert.equal(
     lines[1],
-    'examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",2,1,0,1,0,clear,,HR Policy,high,2026-05-31',
+    'examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31',
   );
 });
