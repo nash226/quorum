@@ -3,6 +3,7 @@ import type {
   ClaimAssessment,
   VerificationReport,
 } from "./domain.js";
+import { renderAnswerPreview } from "./text.js";
 
 export function renderTextReport(report: VerificationReport): string {
   const lines = [
@@ -1621,16 +1622,6 @@ function escapeCsvValue(value: string): string {
   }
 
   return value;
-}
-
-function renderAnswerPreview(answer: string): string {
-  const normalized = answer.replace(/\s+/g, " ").trim();
-
-  if (normalized.length <= 120) {
-    return normalized;
-  }
-
-  return `${normalized.slice(0, 117).trimEnd()}...`;
 }
 
 function formatVerdictLabel(verdict: string): string {
