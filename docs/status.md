@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a4970d2` on 2026-06-30, fix: handle dash bullet claim lists
+- Latest shipped change: `8dfe6ba` on 2026-06-30, fix: keep indented wrapped list claims together
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-30 | Direct push | fix: keep indented wrapped list claims together | `8dfe6ba` |
 | 2026-06-30 | [#52](https://github.com/nash226/quorum/pull/52) | fix: handle dash bullet claim lists | `a4970d2` |
 | 2026-06-30 | [#51](https://github.com/nash226/quorum/pull/51) | fix: normalize unicode bullet claims | `a876dad` |
 | 2026-06-30 | [#50](https://github.com/nash226/quorum/pull/50) | fix: handle parenthesized numeric claim lists | `7e568fc` |
@@ -52,5 +53,4 @@
 | 2026-06-30 | [#48](https://github.com/nash226/quorum/pull/48) | docs: remove README status section | `798702f` |
 | 2026-06-30 | [#47](https://github.com/nash226/quorum/pull/47) | docs: add README demo video | `652193f` |
 | 2026-06-30 | [#46](https://github.com/nash226/quorum/pull/46) | fix: parse roman numeral claim lists | `e02df66` |
-| 2026-06-30 | [#45](https://github.com/nash226/quorum/pull/45) | feat: surface source metadata in text reports | `15fc401` |
 
