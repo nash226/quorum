@@ -342,8 +342,14 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
 
   assert.equal(
     lines[0],
-    "answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts",
+    "answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
   );
-  assert.equal(lines[1], "examples/answers/hr-answer.md,1,1,0,0,0,clear,");
-  assert.equal(lines[2], "examples/answers/support-answer.md,1,0,0,1,0,matched,unsupported");
+  assert.equal(
+    lines[1],
+    "examples/answers/hr-answer.md,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
+  );
+  assert.equal(
+    lines[2],
+    "examples/answers/support-answer.md,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
+  );
 });

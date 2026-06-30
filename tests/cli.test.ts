@@ -245,7 +245,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     );
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts/,
+      /answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -541,7 +541,7 @@ test("verify-batch reports matching fail verdicts in json and summary csv output
 
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /matched,contradicted \| unsupported/,
+      /matched,contradicted \| unsupported,hr-policy\.md,medium,/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
