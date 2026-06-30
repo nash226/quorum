@@ -126,6 +126,40 @@ within four business hours.
   );
 });
 
+test("extracts clean claims from parenthesized numeric markdown list answers", () => {
+  const claims = extractClaims(`Policy notes:
+
+(1) Employees receive 12 weeks of paid parental leave
+(2) Healthcare coverage begins after 30 days of employment
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave",
+      "Healthcare coverage begins after 30 days of employment",
+    ],
+  );
+});
+
+test("keeps wrapped parenthesized numeric markdown list items as single claims", () => {
+  const claims = extractClaims(`Policy notes:
+
+(1) Employees receive 12 weeks of paid parental leave
+for full-time staff only.
+(2) Enterprise support requests receive a first response
+within four business hours.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+      "Enterprise support requests receive a first response within four business hours.",
+    ],
+  );
+});
+
 test("skips markdown list intro lines that only label the bullets", () => {
   const claims = extractClaims(`Policy summary:
 
