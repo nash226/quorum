@@ -105,11 +105,34 @@ test("extracts readable text and title from exported html sources", async () => 
   assert.doesNotMatch(source.content, /analytics|display: none/);
 });
 
+test("decodes numeric html entities from exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Benefits &#8212; US</title>
+  </head>
+  <body>
+    <main>
+      <p>Employees receive medical coverage after 30 days&#46;</p>
+      <p>People Ops&#x2019; policy applies to full-time staff.</p>
+    </main>
+  </body>
+</html>`,
+    2,
+  );
+
+  assert.equal(source.title, "Benefits — US");
+  assert.match(source.content, /Employees receive medical coverage after 30 days\./);
+  assert.match(source.content, /People Ops’ policy applies to full-time staff\./);
+});
+
 test("falls back to the html file name when the page has no title", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.htm",
     "<html><body><p>Escalate priority incidents immediately.</p></body></html>",
-    2,
+    3,
   );
 
   assert.equal(source.title, "escalations");
