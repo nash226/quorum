@@ -209,6 +209,15 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
   const rows = [
     [
       "answer_path",
+      "answer_preview",
+      "primary_verdict",
+      "primary_claim",
+      "primary_reason",
+      "primary_evidence_title",
+      "primary_evidence_trust_level",
+      "primary_evidence_updated_at",
+      "primary_evidence_score",
+      "primary_evidence_quote",
       "total_claims",
       "verified",
       "contradicted",
@@ -220,19 +229,36 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       "source_trust_levels",
       "source_updated_at",
     ],
-    ...report.answers.map((answer) => [
-      answer.answerPath,
-      answer.report.assessments.length.toString(),
-      answer.report.summary.verified.toString(),
-      answer.report.summary.contradicted.toString(),
-      answer.report.summary.unsupported.toString(),
-      answer.report.summary.needs_review.toString(),
-      answer.shouldFail ? "matched" : "clear",
-      answer.failVerdicts.join(" | "),
-      sourceTitles,
-      sourceTrustLevels,
-      sourceUpdatedAt,
-    ]),
+    ...report.answers.map((answer) => {
+      const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+      const primaryEvidence = primaryAssessment?.evidence[0];
+      const primaryEvidenceUpdatedAt = primaryEvidence
+        ? report.sources.find((source) => source.id === primaryEvidence.documentId)?.updatedAt ?? ""
+        : "";
+
+      return [
+        answer.answerPath,
+        renderAnswerPreview(answer.report.answer),
+        primaryAssessment?.verdict ?? "",
+        primaryAssessment?.claim.text ?? "",
+        primaryAssessment?.reason ?? "",
+        primaryEvidence?.documentTitle ?? "",
+        primaryEvidence?.documentTrustLevel ?? "",
+        primaryEvidenceUpdatedAt,
+        primaryEvidence ? primaryEvidence.score.toFixed(3) : "",
+        primaryEvidence?.quote ?? "",
+        answer.report.assessments.length.toString(),
+        answer.report.summary.verified.toString(),
+        answer.report.summary.contradicted.toString(),
+        answer.report.summary.unsupported.toString(),
+        answer.report.summary.needs_review.toString(),
+        answer.shouldFail ? "matched" : "clear",
+        answer.failVerdicts.join(" | "),
+        sourceTitles,
+        sourceTrustLevels,
+        sourceUpdatedAt,
+      ];
+    }),
   ];
 
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
@@ -1637,6 +1663,16 @@ function slaForAssessment(assessment: ClaimAssessment): string {
   }
 
   return "Closed";
+}
+
+function renderAnswerPreview(answer: string): string {
+  const normalized = answer.replace(/\s+/g, " ").trim();
+
+  if (normalized.length <= 120) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, 117).trimEnd()}...`;
 }
 
 function reviewIcon(): string {

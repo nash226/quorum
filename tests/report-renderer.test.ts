@@ -342,14 +342,52 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
 
   assert.equal(
     lines[0],
-    "answer_path,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+    "answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
   );
-  assert.equal(
-    lines[1],
-    "examples/answers/hr-answer.md,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
+  assert.match(
+    lines[1] ?? "",
+    /^examples\/answers\/hr-answer\.md,Employees receive 12 weeks of paid parental leave\.,verified,Employees receive 12 weeks of paid parental leave\.,The claim is strongly supported by an approved source\.,HR Policy,high,2026-05-31,[01]\.\d{3},Employees receive 12 weeks of paid parental leave\.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31$/,
   );
   assert.equal(
     lines[2],
-    "examples/answers/support-answer.md,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
+    "examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
+  );
+});
+
+test("renders a normalized truncated answer preview in batch summary csv rows", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
+    sourceCount: 1,
+    answerCount: 1,
+    answers: [
+      {
+        answerPath: "examples/answers/long-answer.md",
+        report: verifyAnswer(
+          `Employees receive 12 weeks of paid parental leave.
+
+Managers approve travel within five business days, and international trips require finance review before booking.
+`,
+          [hrPolicy],
+        ),
+        shouldFail: false,
+        failVerdicts: [],
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 1,
+      needs_review: 0,
+      answersWithFailures: 0,
+    },
+  };
+
+  const rendered = renderBatchSummaryCsv(batchReport);
+  const lines = rendered.trim().split("\n");
+
+  assert.match(
+    lines[1] ?? "",
+    /^examples\/answers\/long-answer\.md,"Employees receive 12 weeks of paid parental leave\. Managers approve travel within five business days, and internation\.\.\.",unsupported,"Managers approve travel within five business days, and international trips require finance review before booking\.",No approved source contains enough overlapping policy language\.,,,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31$/,
   );
 });
