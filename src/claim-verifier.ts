@@ -116,6 +116,7 @@ function findBestEvidence(
       documentId: source.id,
       documentTitle: source.title,
       documentTrustLevel: source.trustLevel,
+      documentUpdatedAt: source.updatedAt,
       quote: sentence,
       score: overlapScore(claimText, sentence),
       numberUnits: extractNumberUnits(sentence),
@@ -213,6 +214,7 @@ function stripInternalFields(candidate: CandidateEvidence): EvidenceSnippet {
     documentId: candidate.documentId,
     documentTitle: candidate.documentTitle,
     documentTrustLevel: candidate.documentTrustLevel,
+    documentUpdatedAt: candidate.documentUpdatedAt,
     quote: candidate.quote,
     score: Number(candidate.score.toFixed(3)),
   };

@@ -205,6 +205,7 @@ Options:
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers
 - `verify-batch --summary-csv-out <path>`: write one CSV row per answer with verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes, including evidence titles, trust levels, scores, and quotes
+- reviewer CSV exports also include `evidence_updated_at` so spreadsheet reviewers can see source freshness beside each claim
 - single-answer and batch reviewer CSV exports include `answer_path` so review imports keep answer provenance
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
   repeated

@@ -13,6 +13,7 @@ const REQUIRED_HEADERS = [
 ] as const;
 const OPTIONAL_ANSWER_PATH_HEADER = "answer_path";
 const OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER = "evidence_trust_levels";
+const OPTIONAL_EVIDENCE_UPDATED_AT_HEADER = "evidence_updated_at";
 const OPTIONAL_EVIDENCE_SCORES_HEADER = "evidence_scores";
 
 type ReviewerDecisionHeader = (typeof REQUIRED_HEADERS)[number];
@@ -25,6 +26,7 @@ export interface ImportedReviewerDecision {
   modelReason: string;
   evidenceTitles: string[];
   evidenceTrustLevels: string[];
+  evidenceUpdatedAt: string[];
   evidenceScores: string[];
   evidenceQuotes: string[];
   reviewerVerdict?: ClaimVerdict;
@@ -593,6 +595,7 @@ function renderImportedEvidenceItems(claim: ImportedReviewerDecision): string {
       const metadata = [
         item.title,
         ...(item.trustLevel ? [`${item.trustLevel} trust`] : []),
+        ...(item.updatedAt ? [`updated ${item.updatedAt}`] : []),
         ...(item.score ? [`score ${item.score}`] : []),
       ];
       const quote = item.quote ? `: ${escapeHtml(item.quote)}` : "";
@@ -606,6 +609,7 @@ function renderImportedEvidenceLines(claim: ImportedReviewerDecision): string[] 
     const metadata = [
       item.title,
       ...(item.trustLevel ? [`${item.trustLevel} trust`] : []),
+      ...(item.updatedAt ? [`updated ${item.updatedAt}`] : []),
       ...(item.score ? [`score ${item.score}`] : []),
     ];
 
@@ -616,12 +620,14 @@ function renderImportedEvidenceLines(claim: ImportedReviewerDecision): string[] 
 function collectImportedEvidence(claim: ImportedReviewerDecision): Array<{
   title: string;
   trustLevel?: string;
+  updatedAt?: string;
   score?: string;
   quote?: string;
 }> {
   const length = Math.max(
     claim.evidenceTitles.length,
     claim.evidenceTrustLevels.length,
+    claim.evidenceUpdatedAt.length,
     claim.evidenceScores.length,
     claim.evidenceQuotes.length,
   );
@@ -630,14 +636,15 @@ function collectImportedEvidence(claim: ImportedReviewerDecision): Array<{
   for (let index = 0; index < length; index += 1) {
     const title = claim.evidenceTitles[index];
     const trustLevel = claim.evidenceTrustLevels[index];
+    const updatedAt = claim.evidenceUpdatedAt[index];
     const score = claim.evidenceScores[index];
     const quote = claim.evidenceQuotes[index];
 
-    if (!title && !trustLevel && !score && !quote) {
+    if (!title && !trustLevel && !updatedAt && !score && !quote) {
       continue;
     }
 
-    evidence.push({ title: title || "Untitled evidence", trustLevel, score, quote });
+    evidence.push({ title: title || "Untitled evidence", trustLevel, updatedAt, score, quote });
   }
 
   return evidence;
@@ -705,6 +712,7 @@ function importDecisionRow(
   columnIndex: Record<ReviewerDecisionHeader, number> & {
     answerPath?: number;
     evidenceTrustLevels?: number;
+    evidenceUpdatedAt?: number;
     evidenceScores?: number;
   },
 ): ImportedReviewerDecision {
@@ -738,6 +746,9 @@ function importDecisionRow(
     evidenceTrustLevels: splitEvidenceList(
       readOptionalValue(row, columnIndex.evidenceTrustLevels ?? -1),
     ),
+    evidenceUpdatedAt: splitEvidenceList(
+      readOptionalValue(row, columnIndex.evidenceUpdatedAt ?? -1),
+    ),
     evidenceScores: splitEvidenceList(readOptionalValue(row, columnIndex.evidenceScores ?? -1)),
     evidenceQuotes: splitEvidenceList(readOptionalValue(row, columnIndex.evidence_quotes)),
     reviewerVerdict,
@@ -762,6 +773,7 @@ function createColumnIndex(
 ): Record<ReviewerDecisionHeader, number> & {
   answerPath?: number;
   evidenceTrustLevels?: number;
+  evidenceUpdatedAt?: number;
   evidenceScores?: number;
 } {
   const requiredColumnIndex = REQUIRED_HEADERS.reduce(
@@ -774,6 +786,7 @@ function createColumnIndex(
 
   const answerPathIndex = headers.indexOf(OPTIONAL_ANSWER_PATH_HEADER);
   const evidenceTrustLevelsIndex = headers.indexOf(OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER);
+  const evidenceUpdatedAtIndex = headers.indexOf(OPTIONAL_EVIDENCE_UPDATED_AT_HEADER);
   const evidenceScoresIndex = headers.indexOf(OPTIONAL_EVIDENCE_SCORES_HEADER);
 
   return {
@@ -782,6 +795,7 @@ function createColumnIndex(
     ...(evidenceTrustLevelsIndex === -1
       ? {}
       : { evidenceTrustLevels: evidenceTrustLevelsIndex }),
+    ...(evidenceUpdatedAtIndex === -1 ? {} : { evidenceUpdatedAt: evidenceUpdatedAtIndex }),
     ...(evidenceScoresIndex === -1 ? {} : { evidenceScores: evidenceScoresIndex }),
   };
 }
