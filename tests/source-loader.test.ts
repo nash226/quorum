@@ -128,6 +128,35 @@ test("decodes numeric html entities from exported html sources", async () => {
   assert.match(source.content, /People Ops’ policy applies to full-time staff\./);
 });
 
+test("decodes common named html entities from exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/escalations.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Support &amp; Escalations &mdash; North America</title>
+  </head>
+  <body>
+    <main>
+      <p>Customers&rsquo; refund requests require manager review after 30 days.</p>
+      <p>Priority incidents need a response within four hours &ndash; including weekends.</p>
+    </main>
+  </body>
+</html>`,
+    4,
+  );
+
+  assert.equal(source.title, "Support & Escalations — North America");
+  assert.match(
+    source.content,
+    /Customers’ refund requests require manager review after 30 days\./,
+  );
+  assert.match(
+    source.content,
+    /Priority incidents need a response within four hours – including weekends\./,
+  );
+});
+
 test("falls back to the html file name when the page has no title", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.htm",
