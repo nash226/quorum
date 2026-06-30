@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `18aefec` on 2026-06-30, fix: correct html needs review summary
+- Latest shipped change: `bbe3f77` on 2026-06-30, feat: include evidence freshness in reviewer csv exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-30 | [#59](https://github.com/nash226/quorum/pull/59) | feat: include evidence freshness in reviewer csv exports | `bbe3f77` |
 | 2026-06-30 | [#58](https://github.com/nash226/quorum/pull/58) | fix: correct html needs review summary | `18aefec` |
 | 2026-06-30 | Direct push | feat: keep imported evidence context in review reports | `68f5886` |
 | 2026-06-30 | [#56](https://github.com/nash226/quorum/pull/56) | fix: dedupe normalized cli paths | `a7fa335` |
@@ -52,5 +53,4 @@
 | 2026-06-30 | Direct push | fix: decode numeric html entities | `833555b` |
 | 2026-06-30 | Direct push | fix: keep indented wrapped list claims together | `8dfe6ba` |
 | 2026-06-30 | [#52](https://github.com/nash226/quorum/pull/52) | fix: handle dash bullet claim lists | `a4970d2` |
-| 2026-06-30 | [#51](https://github.com/nash226/quorum/pull/51) | fix: normalize unicode bullet claims | `a876dad` |
 
