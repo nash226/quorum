@@ -56,11 +56,14 @@ function stripMarkdownClaimPrefix(line: string): string {
     .replace(/^>\s*/, "")
     .replace(/^[-*+]\s+/, "")
     .replace(/^\d+[.)]\s+/, "")
+    .replace(/^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/, "")
     .replace(/^\[[ xX]\]\s+/, "");
 }
 
 function hasMarkdownClaimPrefix(line: string): boolean {
-  return /^>\s*|^[-*+]\s+|^\d+[.)]\s+|^\[[ xX]\]\s+/.test(line);
+  return /^>\s*|^[-*+]\s+|^\d+[.)]\s+|^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+|^\[[ xX]\]\s+/.test(
+    line,
+  );
 }
 
 function isHeading(line: string): boolean {
