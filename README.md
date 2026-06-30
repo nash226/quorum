@@ -279,8 +279,3 @@ Review the queue here:
 https://github.com/nash226/quorum/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-human-decision
 
 See [docs/decision-queue.md](docs/decision-queue.md) for the workflow.
-
-## Status
-
-Quorum is an early MVP. It is intentionally small, deterministic, and easy to
-inspect while the product direction is still being validated.
