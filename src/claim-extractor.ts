@@ -1,6 +1,11 @@
 import type { AtomicClaim } from "./domain.js";
 import { splitIntoSentences } from "./text.js";
 
+const UPPERCASE_ROMAN_NUMERAL_PREFIX = /^([IVXLCDM]{2,})[.)]\s+/;
+const PARENTHESIZED_ROMAN_NUMERAL_PREFIX = /^\(([IVXLCDMivxlcdm]{2,})\)\s+/;
+const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
+const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(normalizeAnswer(answer))
     .filter((sentence) => sentence.length >= 12)
@@ -52,22 +57,64 @@ function normalizeAnswer(answer: string): string {
 }
 
 function stripMarkdownClaimPrefix(line: string): string {
-  return line
-    .replace(/^>\s*/, "")
-    .replace(/^[-*+]\s+/, "")
-    .replace(/^\d+[.)]\s+/, "")
-    .replace(/^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/, "")
-    .replace(/^\[[ xX]\]\s+/, "");
+  let normalized = line;
+  let previous = "";
+
+  while (normalized !== previous) {
+    previous = normalized;
+    normalized = stripOneMarkdownClaimPrefix(normalized);
+  }
+
+  return normalized;
 }
 
 function hasMarkdownClaimPrefix(line: string): boolean {
-  return /^>\s*|^[-*+]\s+|^\d+[.)]\s+|^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+|^\[[ xX]\]\s+/.test(
-    line,
-  );
+  return stripOneMarkdownClaimPrefix(line) !== line;
 }
 
 function isHeading(line: string): boolean {
   return /^#{1,6}\s+/.test(line);
+}
+
+function stripOneMarkdownClaimPrefix(line: string): string {
+  const directPrefixes = [
+    /^>\s*/,
+    /^[-*+]\s+/,
+    /^\d+[.)]\s+/,
+    /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
+    /^\[[ xX]\]\s+/,
+  ];
+
+  for (const prefix of directPrefixes) {
+    const stripped = line.replace(prefix, "");
+    if (stripped !== line) {
+      return stripped;
+    }
+  }
+
+  return stripRomanNumeralPrefix(line);
+}
+
+function stripRomanNumeralPrefix(line: string): string {
+  const matchers = [
+    UPPERCASE_ROMAN_NUMERAL_PREFIX,
+    PARENTHESIZED_ROMAN_NUMERAL_PREFIX,
+    LOWERCASE_ROMAN_NUMERAL_PREFIX,
+  ];
+
+  for (const matcher of matchers) {
+    const match = line.match(matcher);
+
+    if (match?.[1] && isRomanNumeral(match[1])) {
+      return line.slice(match[0].length);
+    }
+  }
+
+  return line;
+}
+
+function isRomanNumeral(value: string): boolean {
+  return VALID_ROMAN_NUMERAL.test(value.toUpperCase());
 }
 
 function isIntroLabel(
