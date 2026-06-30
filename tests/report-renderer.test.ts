@@ -124,6 +124,9 @@ test("renders a professional HTML reviewer report with escaped content", () => {
   assert.match(rendered, /<span class="pill pill--contradicted">contradicted<\/span>/);
   assert.match(rendered, /HR Policy<\/strong>/);
   assert.match(rendered, /high trust/);
+  assert.match(rendered, /<span>Contradicted claims<\/span><strong>1<\/strong>/);
+  assert.match(rendered, /<span>Unsupported claims<\/span><strong>1<\/strong>/);
+  assert.match(rendered, /<span>Needs review<\/span><strong>0<\/strong>/);
   assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /&lt;Flag this answer for legal review\.&gt;/);
   assert.doesNotMatch(rendered, /<Flag this answer for legal review\.>/);

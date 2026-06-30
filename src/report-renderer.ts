@@ -862,7 +862,7 @@ function renderReviewConsoleHtmlReport(report: VerificationReport): string {
             <div class="stat"><span>Contradicted claims</span><strong>${report.summary.contradicted}</strong></div>
             <div class="stat"><span>Unsupported claims</span><strong>${report.summary.unsupported}</strong></div>
             <div class="stat"><span>Avg evidence score</span><strong>${averageScore}</strong></div>
-            <div class="stat"><span>Needs reviewer</span><strong>${report.summary.contradicted + report.summary.unsupported + report.summary.needs_review}</strong></div>
+            <div class="stat"><span>Needs review</span><strong>${report.summary.needs_review}</strong></div>
           </section>
 
           <section class="layout">
