@@ -69,3 +69,13 @@ export function overlapScore(left: string, right: string): number {
 export function normalizeForContainment(text: string): string {
   return tokenize(text).join(" ");
 }
+
+export function renderAnswerPreview(answer: string): string {
+  const normalized = answer.replace(/\s+/g, " ").trim();
+
+  if (normalized.length <= 120) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, 117).trimEnd()}...`;
+}

@@ -34,6 +34,7 @@ import {
   renderReviewerDecisionImportReport,
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
+import { renderAnswerPreview } from "./text.js";
 
 interface VerifyArgs {
   sourcePaths: string[];
@@ -665,6 +666,7 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
       `  Summary: ${answer.report.summary.verified} verified, ${answer.report.summary.contradicted} contradicted, ${answer.report.summary.unsupported} unsupported, ${answer.report.summary.needs_review} needs review`,
       `  Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
       `  Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
+      `  Answer preview: ${renderAnswerPreview(answer.report.answer) || "No answer content provided."}`,
       `  Primary finding: ${primaryAssessment ? formatVerdictLabel(primaryAssessment.verdict) : "none"}`,
     );
 
