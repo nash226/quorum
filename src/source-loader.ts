@@ -167,6 +167,24 @@ function stripTags(content: string): string {
 }
 
 function decodeHtmlEntities(content: string): string {
+  const namedEntities = new Map<string, string>([
+    ["nbsp", " "],
+    ["amp", "&"],
+    ["quot", '"'],
+    ["apos", "'"],
+    ["lt", "<"],
+    ["gt", ">"],
+    ["rsquo", "’"],
+    ["lsquo", "‘"],
+    ["rdquo", "”"],
+    ["ldquo", "“"],
+    ["mdash", "—"],
+    ["ndash", "–"],
+    ["hellip", "…"],
+    ["middot", "·"],
+    ["bull", "•"],
+  ]);
+
   return content
     .replace(/&#(?:x([0-9a-fA-F]+)|([0-9]+));/g, (_match, hex, decimal) => {
       const numericValue =
@@ -184,12 +202,11 @@ function decodeHtmlEntities(content: string): string {
         return _match;
       }
     })
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;|&apos;/gi, "'")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">");
+    .replace(/&#39;/gi, "'")
+    .replace(/&([a-z][a-z0-9]+);/gi, (match, entityName) => {
+      const decoded = namedEntities.get(entityName.toLowerCase());
+      return decoded ?? match;
+    });
 }
 
 async function pdfSourceDocumentFromFile(

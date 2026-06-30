@@ -112,6 +112,57 @@ test("verify accepts pdf sources", async () => {
   }
 });
 
+test("verify matches claims against html sources with named entities", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-entities-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "refund-policy.html");
+
+    await Promise.all([
+      writeFile(
+        answerPath,
+        "Customers' refund requests require manager review after 30 days.\n",
+        "utf8",
+      ),
+      writeFile(
+        sourcePath,
+        `<!doctype html>
+<html>
+  <head>
+    <title>Refunds &amp; Exceptions</title>
+  </head>
+  <body>
+    <main>
+      <p>Customers&rsquo; refund requests require manager review after 30 days.</p>
+    </main>
+  </body>
+</html>`,
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      summary: Record<string, number>;
+      sources: Array<{ title: string }>;
+    };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["Refunds & Exceptions"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify records the answer path in JSON and reviewer csv outputs", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-review-"));
 
