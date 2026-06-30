@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `014791c` on 2026-06-29, fix: handle lettered claim lists
+- Latest shipped change: `022b3a1` on 2026-06-29, feat: surface batch report source metadata
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-29 | [#42](https://github.com/nash226/quorum/pull/42) | feat: surface batch report source metadata | `022b3a1` |
 | 2026-06-29 | [#41](https://github.com/nash226/quorum/pull/41) | fix: handle lettered claim lists | `014791c` |
 | 2026-06-29 | [#40](https://github.com/nash226/quorum/pull/40) | feat: group import-review output by answer | `c36a2e3` |
 | 2026-06-29 | [#39](https://github.com/nash226/quorum/pull/39) | feat: preserve single-answer report provenance | `1993fbc` |
@@ -52,5 +53,4 @@
 | 2026-06-29 | [#37](https://github.com/nash226/quorum/pull/37) | fix: preserve explicit source order | `e928458` |
 | 2026-06-29 | [#36](https://github.com/nash226/quorum/pull/36) | feat: surface batch fail verdict details | `cf7b7bf` |
 | 2026-06-29 | Direct push | feat: add import review html export | `ef17e9e` |
-| 2026-06-29 | [#34](https://github.com/nash226/quorum/pull/34) | feat: add import review markdown export | `0ff7751` |
 
