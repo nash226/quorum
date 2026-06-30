@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, extname, join } from "node:path";
+import { dirname, extname, join, resolve } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import type {
   BatchVerificationReport,
@@ -565,15 +565,21 @@ function dedupePathsInOrder(paths: string[]): string[] {
   const uniquePaths: string[] = [];
 
   for (const path of paths) {
-    if (seen.has(path)) {
+    const normalizedPath = normalizePathForDedupe(path);
+
+    if (seen.has(normalizedPath)) {
       continue;
     }
 
-    seen.add(path);
+    seen.add(normalizedPath);
     uniquePaths.push(path);
   }
 
   return uniquePaths;
+}
+
+function normalizePathForDedupe(path: string): string {
+  return resolve(path);
 }
 
 function trimTrailingBlankLines(lines: string[]): string[] {
