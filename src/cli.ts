@@ -5,6 +5,7 @@ import { verifyAnswer } from "./claim-verifier.js";
 import type {
   BatchVerificationReport,
   BatchVerificationResult,
+  ClaimAssessment,
   ClaimVerdict,
   SourceDocument,
   SourceTrustLevel,
@@ -657,12 +658,23 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
   ];
 
   for (const answer of report.answers) {
+    const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+
     lines.push(
       answer.answerPath,
       `  Summary: ${answer.report.summary.verified} verified, ${answer.report.summary.contradicted} contradicted, ${answer.report.summary.unsupported} unsupported, ${answer.report.summary.needs_review} needs review`,
       `  Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
       `  Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
+      `  Primary finding: ${primaryAssessment ? formatVerdictLabel(primaryAssessment.verdict) : "none"}`,
     );
+
+    if (primaryAssessment) {
+      lines.push(
+        `  Primary claim: ${primaryAssessment.claim.text}`,
+        `  Primary reason: ${primaryAssessment.reason}`,
+        `  Primary evidence: ${primaryAssessment.evidence[0]?.documentTitle ?? "No approved source snippet matched strongly enough."}`,
+      );
+    }
 
     if (answer.report.assessments.length === 0) {
       lines.push("  No claims were extracted from this answer.", "");
@@ -681,6 +693,25 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
 
 function indentLines(lines: string[], prefix: string): string[] {
   return lines.map((line) => (line.length === 0 ? line : `${prefix}${line}`));
+}
+
+function formatVerdictLabel(verdict: ClaimVerdict): string {
+  return verdict.replace("_", " ");
+}
+
+function selectPrimaryAssessment(
+  assessments: ClaimAssessment[],
+): ClaimAssessment | undefined {
+  const priority: Record<ClaimAssessment["verdict"], number> = {
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 2,
+    verified: 3,
+  };
+
+  return [...assessments].sort(
+    (left, right) => priority[left.verdict] - priority[right.verdict],
+  )[0];
 }
 
 async function writeReportFile(

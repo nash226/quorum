@@ -190,6 +190,9 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /### 1\. examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /- Fail policy: clear/);
   assert.match(rendered, /- Fail verdicts: none/);
+  assert.match(rendered, /- Primary finding: verified/);
+  assert.match(rendered, /- Primary claim: Employees receive 12 weeks of paid parental leave\./);
+  assert.match(rendered, /- Primary evidence: HR Policy/);
   assert.match(rendered, /#### Submitted Answer/);
   assert.match(rendered, /> Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /#### Claim Assessments/);
@@ -232,6 +235,8 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /Batch verification report for review queues/);
   assert.match(rendered, /HR Policy<\/strong><span>high trust - updated 2026-05-31<\/span>/);
   assert.match(rendered, /Fail policy matched/);
+  assert.match(rendered, /<dt>Primary finding<\/dt><dd>unsupported<\/dd>/);
+  assert.match(rendered, /<span class="answer-card__section-label">Primary finding<\/span>/);
   assert.match(rendered, /<dt>Fail verdicts<\/dt><dd>unsupported<\/dd>/);
   assert.match(rendered, /Submitted answer/);
   assert.match(rendered, /Employees receive free catered lunch every day\./);
