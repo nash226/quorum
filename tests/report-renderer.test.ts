@@ -25,6 +25,15 @@ Healthcare coverage begins after 30 days of employment.
 `,
 };
 
+const batchSources = [
+  {
+    id: hrPolicy.id,
+    title: hrPolicy.title,
+    trustLevel: hrPolicy.trustLevel,
+    updatedAt: hrPolicy.updatedAt,
+  },
+];
+
 test("renders the text report used by the CLI", () => {
   const report = verifyAnswer(
     "Full-time employees receive 20 days of paid vacation each calendar year.",
@@ -136,6 +145,7 @@ test("renders explicit empty states when no claims are extracted from a single a
 test("renders a markdown batch report with per-answer summaries", () => {
   const batchReport: BatchVerificationReport = {
     generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
     sourceCount: 1,
     answerCount: 2,
     answers: [
@@ -166,6 +176,8 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /# Quorum Batch Verification Report/);
   assert.match(rendered, /- Answers reviewed: 2/);
   assert.match(rendered, /- Answers matching fail policy: 1/);
+  assert.match(rendered, /## Sources/);
+  assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31\)/);
   assert.match(rendered, /### 1\. examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /- Fail policy: clear/);
   assert.match(rendered, /- Fail verdicts: none/);
@@ -181,7 +193,8 @@ test("renders a markdown batch report with per-answer summaries", () => {
 test("renders an HTML batch report with escaped answer paths and fail status", () => {
   const batchReport: BatchVerificationReport = {
     generatedAt: "2026-06-29T00:00:00.000Z",
-    sourceCount: 2,
+    sources: batchSources,
+    sourceCount: 1,
     answerCount: 1,
     answers: [
       {
@@ -205,6 +218,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /<!doctype html>/i);
   assert.match(rendered, /<title>Quorum Batch Verification Report<\/title>/);
   assert.match(rendered, /Batch verification report for review queues/);
+  assert.match(rendered, /HR Policy<\/strong><span>high trust - updated 2026-05-31<\/span>/);
   assert.match(rendered, /Fail policy matched/);
   assert.match(rendered, /<dt>Fail verdicts<\/dt><dd>unsupported<\/dd>/);
   assert.match(rendered, /&lt;queued&gt;\/support-answer\.md/);
@@ -217,6 +231,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
 test("renders explicit empty states for batch answers with no extracted claims", () => {
   const batchReport: BatchVerificationReport = {
     generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
     sourceCount: 1,
     answerCount: 1,
     answers: [
@@ -246,6 +261,7 @@ test("renders explicit empty states for batch answers with no extracted claims",
 test("renders a batch reviewer decision csv with answer path context", () => {
   const batchReport: BatchVerificationReport = {
     generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
     sourceCount: 1,
     answerCount: 2,
     answers: [
@@ -295,6 +311,7 @@ test("renders a batch reviewer decision csv with answer path context", () => {
 test("renders a batch summary csv with per-answer verdict totals", () => {
   const batchReport: BatchVerificationReport = {
     generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
     sourceCount: 1,
     answerCount: 2,
     answers: [

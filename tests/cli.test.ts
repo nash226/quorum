@@ -210,6 +210,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     const report = JSON.parse(stdout) as {
       answerCount: number;
       sourceCount: number;
+      sources: Array<{ id: string; title: string; trustLevel: string }>;
       answers: Array<{
         answerPath: string;
         shouldFail: boolean;
@@ -221,6 +222,10 @@ test("verify-batch returns an aggregate report for each answer file", async () =
 
     assert.equal(report.answerCount, 2);
     assert.equal(report.sourceCount, 2);
+    assert.deepEqual(report.sources, [
+      { id: "source_1", title: "hr-policy.md", trustLevel: "medium" },
+      { id: "source_2", title: "support-playbook.md", trustLevel: "medium" },
+    ]);
     assert.equal(report.answers.length, 2);
     assert.deepEqual(
       report.answers.map((answer) => answer.answerPath).sort(),
@@ -577,6 +582,7 @@ test("verify-batch prints claim-level details in the default text output", async
     ]);
 
     assert.match(stdout, /Quorum Batch Verification Report/);
+    assert.match(stdout, /Sources: hr-policy\.md/);
     assert.match(stdout, /Summary: 0 verified, 1 contradicted, 1 unsupported, 0 needs review/);
     assert.match(stdout, /Fail policy: clear/);
     assert.match(stdout, /Fail verdicts: none/);
