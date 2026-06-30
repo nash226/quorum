@@ -7,6 +7,7 @@ const hrPolicy: SourceDocument = {
   id: "hr_policy",
   title: "HR Policy",
   trustLevel: "high",
+  updatedAt: "2026-05-31",
   content: `
 Employees receive 12 weeks of paid parental leave.
 Full-time employees receive 20 days of paid vacation each calendar year.
@@ -56,6 +57,7 @@ test("prefers higher-trust sources when evidence strength is similar", () => {
 
   assert.equal(report.assessments[0]?.evidence[0]?.documentId, "high_trust");
   assert.equal(report.assessments[0]?.evidence[0]?.documentTrustLevel, "high");
+  assert.equal(report.assessments[0]?.evidence[0]?.documentUpdatedAt, undefined);
   assert.equal(report.sources[0]?.trustLevel, "low");
   assert.equal(report.sources[1]?.trustLevel, "high");
 });
@@ -68,6 +70,7 @@ test("flags numeric contradictions against approved sources", () => {
   assert.equal(report.summary.contradicted, 1);
   assert.equal(report.assessments[0]?.verdict, "contradicted");
   assert.match(report.assessments[0]?.evidence[0]?.quote ?? "", /12 weeks/);
+  assert.equal(report.assessments[0]?.evidence[0]?.documentUpdatedAt, "2026-05-31");
 });
 
 test("marks unrelated claims as unsupported", () => {
