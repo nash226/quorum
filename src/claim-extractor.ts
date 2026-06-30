@@ -6,6 +6,7 @@ const PARENTHESIZED_ROMAN_NUMERAL_PREFIX = /^\(([IVXLCDMivxlcdm]{2,})\)\s+/;
 const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
 const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 const UNICODE_BULLET_PREFIX = /^(?:[\u2022\u2023\u25E6\u2043\u2219])\s+/;
+const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(normalizeAnswer(answer))
@@ -82,6 +83,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     /^>\s*/,
     /^[-*+]\s+/,
     UNICODE_BULLET_PREFIX,
+    DASH_BULLET_PREFIX,
     /^\d+[.)]\s+/,
     /^\(\d+\)\s+/,
     /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
