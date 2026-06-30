@@ -8,6 +8,14 @@ It checks AI-generated business claims against approved company sources before
 those claims reach customers, employees, tickets, workflows, or downstream
 systems.
 
+## Demo Video
+
+<a href="docs/assets/quorum-demo.mp4">
+  <img src="docs/assets/quorum-demo-poster.png" alt="Watch the Quorum demo video" width="100%">
+</a>
+
+[Watch or download the Quorum demo video](docs/assets/quorum-demo.mp4)
+
 ## Why Quorum Exists
 
 Enterprise teams are moving from AI experiments to agents that answer policy,
