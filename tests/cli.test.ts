@@ -582,7 +582,7 @@ test("verify-batch prints claim-level details in the default text output", async
     ]);
 
     assert.match(stdout, /Quorum Batch Verification Report/);
-    assert.match(stdout, /Sources: hr-policy/);
+    assert.match(stdout, /Sources:\n- hr-policy \(medium trust\)/);
     assert.match(stdout, /Summary: 0 verified, 1 contradicted, 1 unsupported, 0 needs review/);
     assert.match(stdout, /Fail policy: clear/);
     assert.match(stdout, /Fail verdicts: none/);
