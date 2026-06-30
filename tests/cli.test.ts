@@ -51,7 +51,7 @@ Employees receive 12 weeks of paid parental leave.
     };
 
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "plain-source.md", trustLevel: "high" },
+      { id: "source_1", title: "plain-source", trustLevel: "high" },
       { id: "source_2", title: "Metadata Source", trustLevel: "low" },
     ]);
   } finally {
@@ -223,8 +223,8 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.equal(report.answerCount, 2);
     assert.equal(report.sourceCount, 2);
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "hr-policy.md", trustLevel: "medium" },
-      { id: "source_2", title: "support-playbook.md", trustLevel: "medium" },
+      { id: "source_1", title: "hr-policy", trustLevel: "medium" },
+      { id: "source_2", title: "support-playbook", trustLevel: "medium" },
     ]);
     assert.equal(report.answers.length, 2);
     assert.deepEqual(
@@ -541,7 +541,7 @@ test("verify-batch reports matching fail verdicts in json and summary csv output
 
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /matched,contradicted \| unsupported,hr-policy\.md,medium,/,
+      /matched,contradicted \| unsupported,hr-policy,medium,/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -582,13 +582,13 @@ test("verify-batch prints claim-level details in the default text output", async
     ]);
 
     assert.match(stdout, /Quorum Batch Verification Report/);
-    assert.match(stdout, /Sources: hr-policy\.md/);
+    assert.match(stdout, /Sources: hr-policy/);
     assert.match(stdout, /Summary: 0 verified, 1 contradicted, 1 unsupported, 0 needs review/);
     assert.match(stdout, /Fail policy: clear/);
     assert.match(stdout, /Fail verdicts: none/);
     assert.match(stdout, /CONTRADICTED  Employees receive 18 weeks of paid parental leave\./);
     assert.match(stdout, /UNSUPPORTED  Employees receive free catered lunch every day\./);
-    assert.match(stdout, /Evidence \(hr-policy\.md, medium trust, score /);
+    assert.match(stdout, /Evidence \(hr-policy, medium trust, score /);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

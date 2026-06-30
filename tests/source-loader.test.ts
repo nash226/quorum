@@ -7,10 +7,26 @@ test("builds source documents from file names when metadata is absent", async ()
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0);
 
   assert.equal(source.id, "source_1");
-  assert.equal(source.title, "hr-policy.md");
+  assert.equal(source.title, "hr-policy");
   assert.equal(source.updatedAt, undefined);
   assert.equal(source.trustLevel, "medium");
   assert.equal(source.content, "Employees get 12 weeks.");
+});
+
+test("strips supported text extensions from fallback source titles", async () => {
+  const markdownSource = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.markdown",
+    "Employees get 12 weeks.",
+    0,
+  );
+  const textSource = await sourceDocumentFromFile(
+    "docs/policies/escalation-guide.txt",
+    "Escalate incidents within one hour.",
+    1,
+  );
+
+  assert.equal(markdownSource.title, "leave-policy");
+  assert.equal(textSource.title, "escalation-guide");
 });
 
 test("applies the default trust override when metadata is absent", async () => {
