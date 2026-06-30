@@ -54,6 +54,24 @@ within four business hours.
   );
 });
 
+test("keeps indented uppercase markdown list continuations with the same claim", () => {
+  const claims = extractClaims(`# Policy Notes
+
+1. Employees receive 12 weeks of paid parental leave
+   For full-time staff only.
+- Enterprise support requests receive a first response
+  Within four business hours.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave For full-time staff only.",
+      "Enterprise support requests receive a first response Within four business hours.",
+    ],
+  );
+});
+
 test("extracts clean claims from lettered markdown list answers", () => {
   const claims = extractClaims(`Policy notes:
 
