@@ -69,6 +69,11 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
   assert.match(rendered, /- Unsupported: 1/);
   assert.match(rendered, /## Sources/);
   assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31\)/);
+  assert.match(rendered, /## Submitted Answer/);
+  assert.match(
+    rendered,
+    /> Employees receive 18 weeks of paid parental leave\.\n> Employees receive free catered lunch every day\./,
+  );
   assert.match(rendered, /### 1\. Employees receive 18 weeks of paid parental leave\./);
   assert.match(rendered, /- Verdict: `contradicted`/);
   assert.match(rendered, /> Employees receive 12 weeks of paid parental leave\./);
@@ -185,12 +190,15 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /### 1\. examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /- Fail policy: clear/);
   assert.match(rendered, /- Fail verdicts: none/);
+  assert.match(rendered, /#### Submitted Answer/);
+  assert.match(rendered, /> Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /#### Claim Assessments/);
   assert.match(rendered, /##### 1\. Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Verdict: `verified`/);
   assert.match(rendered, /### 2\. examples\/answers\/support-answer\.md/);
   assert.match(rendered, /- Fail policy: matched/);
   assert.match(rendered, /- Fail verdicts: unsupported/);
+  assert.match(rendered, /> Employees receive free catered lunch every day\./);
   assert.match(rendered, /No approved source snippet matched strongly enough\./);
 });
 
@@ -225,9 +233,10 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /HR Policy<\/strong><span>high trust - updated 2026-05-31<\/span>/);
   assert.match(rendered, /Fail policy matched/);
   assert.match(rendered, /<dt>Fail verdicts<\/dt><dd>unsupported<\/dd>/);
+  assert.match(rendered, /Submitted answer/);
+  assert.match(rendered, /Employees receive free catered lunch every day\./);
   assert.match(rendered, /&lt;queued&gt;\/support-answer\.md/);
   assert.doesNotMatch(rendered, /<queued>\/support-answer\.md/);
-  assert.match(rendered, /Employees receive free catered lunch every day\./);
   assert.match(rendered, /No approved source snippet matched strongly enough\./);
   assert.match(rendered, /claim-pill claim-pill--unsupported/);
 });

@@ -53,6 +53,10 @@ export function renderMarkdownReport(report: VerificationReport): string {
       return `- **${source.title}** (${metadata.join(", ")})`;
     }),
     "",
+    "## Submitted Answer",
+    "",
+    ...renderMarkdownBlockquote(report.answer),
+    "",
     "## Claim Assessments",
     "",
   ];
@@ -110,6 +114,10 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
       `- Contradicted: ${answer.report.summary.contradicted}`,
       `- Unsupported: ${answer.report.summary.unsupported}`,
       `- Needs review: ${answer.report.summary.needs_review}`,
+      "",
+      "#### Submitted Answer",
+      "",
+      ...renderMarkdownBlockquote(answer.report.answer),
       "",
     );
 
@@ -995,6 +1003,10 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
             <div><dt>Unsupported</dt><dd>${answer.report.summary.unsupported}</dd></div>
             <div><dt>Needs review</dt><dd>${answer.report.summary.needs_review}</dd></div>
           </dl>
+          <section class="answer-card__submitted-answer">
+            <span class="answer-card__section-label">Submitted answer</span>
+            <pre>${escapeHtml(answer.report.answer)}</pre>
+          </section>
           ${assessmentMarkup}
         </article>`;
     })
@@ -1106,7 +1118,8 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
 
       .hero__meta-card span,
       .answer-card__index,
-      .answer-card__summary dt {
+      .answer-card__summary dt,
+      .answer-card__section-label {
         display: block;
         color: var(--muted);
         font-size: 0.78rem;
@@ -1278,6 +1291,22 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
         margin-top: 18px;
         display: grid;
         gap: 12px;
+      }
+
+      .answer-card__submitted-answer {
+        margin-top: 18px;
+      }
+
+      .answer-card__submitted-answer pre {
+        margin: 10px 0 0;
+        padding: 16px 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(90, 74, 46, 0.12);
+        background: rgba(242, 235, 223, 0.72);
+        color: var(--ink);
+        font: 500 0.94rem/1.65 "SFMono-Regular", "SF Mono", "Consolas", monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
 
       .claim-item {
@@ -1462,6 +1491,13 @@ function renderMarkdownAssessment(
   }
 
   return lines;
+}
+
+function renderMarkdownBlockquote(value: string): string[] {
+  return value
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .map((line) => `> ${line}`);
 }
 
 function trimTrailingBlankLines(lines: string[]): string[] {
