@@ -81,6 +81,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     /^>\s*/,
     /^[-*+]\s+/,
     /^\d+[.)]\s+/,
+    /^\(\d+\)\s+/,
     /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
     /^\[[ xX]\]\s+/,
   ];
