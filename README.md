@@ -183,7 +183,7 @@ npm run dev -- verify \
 
 ```text
 quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
-quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>]
 ```
 
@@ -203,7 +203,7 @@ Options:
 - `verify-batch --markdown-out <path>`: write a batch summary in Markdown for review queues
 - `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers
-- `verify-batch --summary-csv-out <path>`: write one CSV row per answer with verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
+- `verify-batch --summary-csv-out <path>`: write one CSV row per answer with an `answer_preview`, the highest-priority claim finding, primary evidence title, trust level, freshness, score, quote, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes, including evidence titles, trust levels, scores, and quotes
 - single-answer and batch reviewer CSV exports include `answer_path` so review imports keep answer provenance
 - `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
