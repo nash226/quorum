@@ -112,6 +112,7 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
       "",
       `- Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
       `- Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
+      `- Answer preview: ${renderAnswerPreview(answer.report.answer) || "No answer content provided."}`,
       `- Verified: ${answer.report.summary.verified}`,
       `- Contradicted: ${answer.report.summary.contradicted}`,
       `- Unsupported: ${answer.report.summary.unsupported}`,
@@ -986,6 +987,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
     .map((answer, index) => {
       const statusClass = answer.shouldFail ? "status--matched" : "status--clear";
       const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+      const answerPreview = renderAnswerPreview(answer.report.answer) || "No answer content provided.";
       const assessmentMarkup =
         answer.report.assessments.length === 0
           ? `<p class="answer-card__empty">No claims were extracted from this answer.</p>`
@@ -1049,6 +1051,10 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
             <div><dt>Needs review</dt><dd>${answer.report.summary.needs_review}</dd></div>
           </dl>
           ${primaryFindingMarkup}
+          <section class="answer-card__preview">
+            <span class="answer-card__section-label">Answer preview</span>
+            <p>${escapeHtml(answerPreview)}</p>
+          </section>
           <section class="answer-card__submitted-answer">
             <span class="answer-card__section-label">Submitted answer</span>
             <pre>${escapeHtml(answer.report.answer)}</pre>
@@ -1345,6 +1351,20 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
 
       .answer-card__primary-finding {
         margin-top: 18px;
+      }
+
+      .answer-card__preview {
+        margin-top: 18px;
+      }
+
+      .answer-card__preview p {
+        margin: 10px 0 0;
+        padding: 16px 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(90, 74, 46, 0.12);
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--ink);
+        line-height: 1.6;
       }
 
       .primary-finding-card {
