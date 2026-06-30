@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5f4c7bf` on 2026-06-30, feat: include submitted answer in reviewer exports
+- Latest shipped change: `475958b` on 2026-06-30, feat: add batch summary answer previews
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-06-30 | [#61](https://github.com/nash226/quorum/pull/61) | feat: add batch summary answer previews | `475958b` |
 | 2026-06-30 | [#60](https://github.com/nash226/quorum/pull/60) | feat: include submitted answer in reviewer exports | `5f4c7bf` |
 | 2026-06-30 | [#59](https://github.com/nash226/quorum/pull/59) | feat: include evidence freshness in reviewer csv exports | `bbe3f77` |
 | 2026-06-30 | [#58](https://github.com/nash226/quorum/pull/58) | fix: correct html needs review summary | `18aefec` |
@@ -52,5 +53,4 @@
 | 2026-06-30 | [#56](https://github.com/nash226/quorum/pull/56) | fix: dedupe normalized cli paths | `a7fa335` |
 | 2026-06-30 | [#55](https://github.com/nash226/quorum/pull/55) | fix: decode named html entities | `12f0aa6` |
 | 2026-06-30 | Direct push | fix: decode numeric html entities | `833555b` |
-| 2026-06-30 | Direct push | fix: keep indented wrapped list claims together | `8dfe6ba` |
 
