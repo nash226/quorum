@@ -75,6 +75,11 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
   assert.match(rendered, /Answer Groups/);
   assert.match(rendered, /Answer: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /VERIFIED  Employees receive 12 weeks/);
+  assert.match(rendered, /Evidence:/);
+  assert.match(
+    rendered,
+    /HR Policy, high trust, score 0\.998: Employees receive 12 weeks of paid parental leave\./,
+  );
   assert.match(rendered, /Reviewer verdict: pending reviewer decision/);
 });
 
@@ -90,6 +95,11 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
   assert.match(rendered, /## Answer Groups/);
   assert.match(rendered, /### examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /#### 1\. Employees receive 12 weeks/);
+  assert.match(rendered, /- Evidence:/);
+  assert.match(
+    rendered,
+    /  - HR Policy, high trust, score 0\.998: Employees receive 12 weeks of paid parental leave\./,
+  );
   assert.match(rendered, /- Reviewer verdict: verified/);
   assert.match(rendered, /- Reviewer verdict: pending reviewer decision/);
 });
@@ -108,6 +118,9 @@ examples/answers/support-answer.md,claim_2,<Flag this answer for legal review.>,
   assert.match(rendered, /Answer file/);
   assert.match(rendered, /<code>examples\/answers\/hr-answer\.md<\/code>/);
   assert.match(rendered, /1 claims<\/span>/);
+  assert.match(rendered, /Evidence context/);
+  assert.match(rendered, /<strong>HR Policy - high trust - score 0\.998<\/strong>/);
+  assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /Needs counsel review before publish/);
   assert.match(rendered, /&lt;Flag this answer for legal review\.\&gt;/);
   assert.doesNotMatch(rendered, /<Flag this answer for legal review\.>/);
