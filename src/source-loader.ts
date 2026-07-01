@@ -286,12 +286,18 @@ async function pdfSourceDocumentFromFile(
   });
 
   try {
+    const infoResult = await parser.getInfo();
     const result = await parser.getText();
+    const pdfInfo = readPdfInfo(infoResult.info);
+    const title = readPdfInfoString(pdfInfo, ["Title"]);
+    const updatedAt = normalizePdfDate(
+      readPdfInfoString(pdfInfo, ["ModDate", "CreationDate"]),
+    );
 
     return {
       id: `source_${index + 1}`,
-      title: sourceTitleFromPath(sourcePath),
-      updatedAt: undefined,
+      title: title || sourceTitleFromPath(sourcePath),
+      updatedAt,
       trustLevel: options.defaultTrustLevel ?? "medium",
       content: normalizePdfText(result.text),
     };
@@ -311,4 +317,67 @@ function normalizePdfText(content: string): string {
     .replace(/\n{3,}/g, "\n\n")
     .replace(/[ \t]{2,}/g, " ")
     .trim();
+}
+
+function readPdfInfo(info: unknown): Record<string, unknown> {
+  return info && typeof info === "object" ? (info as Record<string, unknown>) : {};
+}
+
+function readPdfInfoString(
+  info: Record<string, unknown>,
+  keys: string[],
+): string | undefined {
+  for (const key of keys) {
+    const value = info[key];
+
+    if (typeof value === "string" && value.trim().length > 0) {
+      return value.trim();
+    }
+  }
+
+  return undefined;
+}
+
+function normalizePdfDate(value: string | undefined): string | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const normalized = value.trim();
+  const match = normalized.match(
+    /^D:(\d{4})(\d{2})?(\d{2})?(\d{2})?(\d{2})?(\d{2})?(Z|[+-]\d{2}'?\d{2}'?)?$/,
+  );
+
+  if (!match) {
+    return normalized;
+  }
+
+  const [, year, month, day, hour, minute, second, timezone] = match;
+
+  if (!month) {
+    return year;
+  }
+
+  if (!day) {
+    return `${year}-${month}`;
+  }
+
+  const date = `${year}-${month}-${day}`;
+
+  if (!hour || !minute || !second) {
+    return date;
+  }
+
+  const time = `${hour}:${minute}:${second}`;
+
+  if (!timezone) {
+    return `${date}T${time}`;
+  }
+
+  if (timezone === "Z") {
+    return `${date}T${time}Z`;
+  }
+
+  const normalizedTimezone = timezone.replace(/'(\d{2})'?$/, ":$1");
+  return `${date}T${time}${normalizedTimezone}`;
 }
