@@ -40,6 +40,7 @@ export interface ImportedReviewerDecision {
 
 export interface ReviewerDecisionImportReport {
   claims: ImportedReviewerDecision[];
+  answerGroups: ReviewerDecisionGroup[];
   summary: {
     totalClaims: number;
     reviewedClaims: number;
@@ -48,7 +49,7 @@ export interface ReviewerDecisionImportReport {
   } & Record<ClaimVerdict, number>;
 }
 
-interface ReviewerDecisionGroup {
+export interface ReviewerDecisionGroup {
   answerPath?: string;
   answerPreview?: string;
   label: string;
@@ -98,13 +99,16 @@ export function importReviewerDecisions(
     }
   }
 
-  return { claims, summary };
+  return {
+    claims,
+    answerGroups: groupImportedClaims(claims),
+    summary,
+  };
 }
 
 export function renderReviewerDecisionImportReport(
   report: ReviewerDecisionImportReport,
 ): string {
-  const groups = groupImportedClaims(report.claims);
   const lines = [
     "Quorum Reviewer Decision Import",
     "",
@@ -113,11 +117,11 @@ export function renderReviewerDecisionImportReport(
     `Overrides: ${report.summary.overriddenClaims}`,
   ];
 
-  if (groups.length > 0) {
+  if (report.answerGroups.length > 0) {
     lines.push("", "Answer Groups", "");
   }
 
-  for (const group of groups) {
+  for (const group of report.answerGroups) {
     lines.push(
       `Answer: ${group.label}`,
       ...(group.answerPreview ? [`Answer preview: ${group.answerPreview}`] : []),
@@ -156,7 +160,6 @@ export function renderReviewerDecisionImportReport(
 export function renderReviewerDecisionImportMarkdownReport(
   report: ReviewerDecisionImportReport,
 ): string {
-  const groups = groupImportedClaims(report.claims);
   const lines = [
     "# Quorum Reviewer Decision Import",
     "",
@@ -172,13 +175,13 @@ export function renderReviewerDecisionImportMarkdownReport(
     `- Needs review: ${report.summary.needs_review}`,
   ];
 
-  if (groups.length === 0) {
+  if (report.answerGroups.length === 0) {
     return `${lines.join("\n")}\n`;
   }
 
   lines.push("", "## Answer Groups", "");
 
-  groups.forEach((group) => {
+  report.answerGroups.forEach((group) => {
     lines.push(
       `### ${group.label}`,
       "",
@@ -226,15 +229,14 @@ export function renderReviewerDecisionImportMarkdownReport(
 export function renderReviewerDecisionImportHtmlReport(
   report: ReviewerDecisionImportReport,
 ): string {
-  const groups = groupImportedClaims(report.claims);
   const groupCards =
-    groups.length === 0
+    report.answerGroups.length === 0
       ? `
           <section class="empty-state">
             <h2>No claims imported</h2>
             <p>This reviewer decision CSV did not include any claim rows.</p>
           </section>`
-      : groups
+      : report.answerGroups
           .map((group) => {
             const claimCards = group.claims
               .map((claim, index) => renderClaimCard(claim, index + 1))

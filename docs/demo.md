@@ -71,6 +71,8 @@ is present, whether the reviewer overrode the model, and any reviewer notes.
 When the CSV came from `verify-batch --review-csv-out`, the import also keeps
 the original `answer_path` and `answer_preview` for each reviewed claim so
 batch handoffs stay grouped by answer file with recognizable reviewer context.
+The JSON import artifact also includes answer-level `answerGroups` summaries so
+queue tooling can route follow-up work one answer at a time.
 
 Quorum also accepts exported HTML knowledge base pages via `--source` or
 `--source-dir`, which lets teams verify answers against help-center exports
