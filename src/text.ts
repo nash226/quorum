@@ -1,3 +1,5 @@
+import { basename, extname } from "node:path";
+
 const STOPWORDS = new Set([
   "a",
   "an",
@@ -78,4 +80,9 @@ export function renderAnswerPreview(answer: string): string {
   }
 
   return `${normalized.slice(0, 117).trimEnd()}...`;
+}
+
+export function renderAnswerLabel(answerPath: string): string {
+  const extension = extname(answerPath);
+  return basename(answerPath, extension);
 }
