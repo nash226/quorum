@@ -433,11 +433,11 @@ test("renders a batch reviewer decision csv with answer path context", () => {
 
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
-    /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\.,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
+    /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\.,matched,contradicted,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
   );
   assert.match(lines[1] ?? "", /HR Policy/);
   assert.match(lines[1] ?? "", /high/);
@@ -445,7 +445,7 @@ test("renders a batch reviewer decision csv with answer path context", () => {
   assert.match(lines[1] ?? "", /0\.\d{3}/);
   assert.match(
     lines[2] ?? "",
-    /^support-answer,examples\/answers\/support-answer\.md,Employees receive free catered lunch every day\.,claim_1,Employees receive free catered lunch every day\.,unsupported,/,
+    /^support-answer,examples\/answers\/support-answer\.md,Employees receive free catered lunch every day\.,matched,unsupported,claim_1,Employees receive free catered lunch every day\.,unsupported,/,
   );
   assert.match(lines[2] ?? "", /,,$/);
 });
