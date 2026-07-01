@@ -892,10 +892,14 @@ test("import-review preserves answer paths from batch reviewer decision csv file
 
     const report = JSON.parse(stdout) as {
       claims: Array<{ answerPath?: string }>;
+      answerGroups: Array<{ label: string; summary: { totalClaims: number } }>;
     };
 
     assert.equal(report.claims[0]?.answerPath, "examples/answers/hr-answer.md");
     assert.equal(report.claims[report.claims.length - 1]?.answerPath, "examples/answers/support-answer.md");
+    assert.equal(report.answerGroups[0]?.label, "examples/answers/hr-answer.md");
+    assert.equal(report.answerGroups[0]?.summary.totalClaims, 3);
+    assert.equal(report.answerGroups[1]?.label, "examples/answers/support-answer.md");
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
