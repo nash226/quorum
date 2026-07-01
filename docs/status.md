@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `52bfd88` on 2026-07-01, fix: preserve pipes in reviewer csv evidence
+- Latest shipped change: `c9f2cc9` on 2026-07-01, feat: group imported reviewer decisions by answer
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-01 | [#78](https://github.com/nash226/quorum/pull/78) | feat: group imported reviewer decisions by answer | `c9f2cc9` |
 | 2026-07-01 | [#77](https://github.com/nash226/quorum/pull/77) | fix: preserve pipes in reviewer csv evidence | `52bfd88` |
 | 2026-07-01 | [#76](https://github.com/nash226/quorum/pull/76) | feat: add batch summary evidence metadata | `2df1683` |
 | 2026-07-01 | [#75](https://github.com/nash226/quorum/pull/75) | feat: normalize inline markdown in claims | `6b2fcbf` |
@@ -52,5 +53,4 @@
 | 2026-07-01 | [#73](https://github.com/nash226/quorum/pull/73) | fix status refresh remote default branch | `858812b` |
 | 2026-06-30 | [#72](https://github.com/nash226/quorum/pull/72) | feat: read pdf source metadata | `01f483c` |
 | 2026-06-30 | [#71](https://github.com/nash226/quorum/pull/71) | docs: clarify batch review handoff | `9ea55be` |
-| 2026-06-30 | Direct push | feat: extract html source metadata | `3c8ad95` |
 
