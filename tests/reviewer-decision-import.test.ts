@@ -204,19 +204,20 @@ examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.
 examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_2,Healthcare coverage begins after 30 days of employment.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.991,Healthcare coverage begins after 30 days of employment.,,
 examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,claim_3,Refunds are available within 14 days of purchase.,contradicted,A closely matching approved source uses different numeric terms.,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,needs_review,Escalate to support ops
 `),
+    ["needs_review", "unsupported"],
   );
 
   const lines = rendered.trim().split("\n");
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review",
+    "answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts",
   );
   assert.equal(
     lines[1],
-    "examples/answers/hr-answer.md,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,2,1,1,0,2,0,0,0",
+    "examples/answers/hr-answer.md,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,2,1,1,0,2,0,0,0,clear,",
   );
   assert.equal(
     lines[2],
-    "examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1",
+    "examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,matched,needs_review",
   );
 });
