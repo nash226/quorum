@@ -1,9 +1,11 @@
 import type {
   BatchVerificationReport,
   ClaimAssessment,
+  ClaimVerdict,
   VerificationReport,
 } from "./domain.js";
 import { serializeDelimitedList } from "./csv-list.js";
+import { matchingFailVerdicts } from "./report-policy.js";
 import { renderAnswerPreview } from "./text.js";
 
 export function renderTextReport(report: VerificationReport): string {
@@ -156,11 +158,17 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
-export function renderReviewerDecisionCsv(report: VerificationReport): string {
+export function renderReviewerDecisionCsv(
+  report: VerificationReport,
+  failOn: ClaimVerdict[] = [],
+): string {
+  const failVerdicts = matchingFailVerdicts(report, failOn);
   const rows = [
     [
       "answer_path",
       "answer_preview",
+      "answer_fail_policy",
+      "answer_fail_verdicts",
       "claim_id",
       "claim_text",
       "model_verdict",
@@ -176,6 +184,8 @@ export function renderReviewerDecisionCsv(report: VerificationReport): string {
     ...report.assessments.map((assessment) => [
       report.answerPath ?? "",
       renderAnswerPreview(report.answer),
+      failVerdicts.length > 0 ? "matched" : "clear",
+      failVerdicts.join(" | "),
       assessment.claim.id,
       assessment.claim.text,
       assessment.verdict,
