@@ -3,6 +3,7 @@ import type {
   ClaimAssessment,
   VerificationReport,
 } from "./domain.js";
+import { serializeDelimitedList } from "./csv-list.js";
 import { renderAnswerPreview } from "./text.js";
 
 export function renderTextReport(report: VerificationReport): string {
@@ -178,11 +179,21 @@ export function renderReviewerDecisionCsv(report: VerificationReport): string {
       assessment.claim.text,
       assessment.verdict,
       assessment.reason,
-      assessment.evidence.map((evidence) => evidence.documentTitle).join(" | "),
-      assessment.evidence.map((evidence) => evidence.documentTrustLevel).join(" | "),
-      assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? "").join(" | "),
-      assessment.evidence.map((evidence) => evidence.score.toFixed(3)).join(" | "),
-      assessment.evidence.map((evidence) => evidence.quote).join(" | "),
+      serializeDelimitedList(
+        assessment.evidence.map((evidence) => evidence.documentTitle),
+      ),
+      serializeDelimitedList(
+        assessment.evidence.map((evidence) => evidence.documentTrustLevel),
+      ),
+      serializeDelimitedList(
+        assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? ""),
+      ),
+      serializeDelimitedList(
+        assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
+      ),
+      serializeDelimitedList(
+        assessment.evidence.map((evidence) => evidence.quote),
+      ),
       "",
       "",
     ]),
@@ -216,11 +227,21 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
         assessment.claim.text,
         assessment.verdict,
         assessment.reason,
-        assessment.evidence.map((evidence) => evidence.documentTitle).join(" | "),
-        assessment.evidence.map((evidence) => evidence.documentTrustLevel).join(" | "),
-        assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? "").join(" | "),
-        assessment.evidence.map((evidence) => evidence.score.toFixed(3)).join(" | "),
-        assessment.evidence.map((evidence) => evidence.quote).join(" | "),
+        serializeDelimitedList(
+          assessment.evidence.map((evidence) => evidence.documentTitle),
+        ),
+        serializeDelimitedList(
+          assessment.evidence.map((evidence) => evidence.documentTrustLevel),
+        ),
+        serializeDelimitedList(
+          assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? ""),
+        ),
+        serializeDelimitedList(
+          assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
+        ),
+        serializeDelimitedList(
+          assessment.evidence.map((evidence) => evidence.quote),
+        ),
         "",
         "",
       ]),

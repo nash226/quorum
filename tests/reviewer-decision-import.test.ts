@@ -58,6 +58,20 @@ examples/answers/support-answer.md,Refunds are available within 14 days of purch
   assert.equal(report.claims[1]?.reviewerVerdict, "needs_review");
 });
 
+test("imports escaped evidence delimiters without corrupting reviewer csv context", () => {
+  const report = importReviewerDecisions(`answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+examples/answers/support-answer.md,Refunds are available within 30 days standard purchases.,claim_1,Refunds are available within 30 days standard purchases.,verified,The claim is strongly supported by an approved source.,Support \\| Policy,high,2026-06-01,0.998,Refunds are available within 30 days \\| standard purchases.,,
+`);
+
+  assert.deepEqual(report.claims[0]?.evidenceTitles, ["Support | Policy"]);
+  assert.deepEqual(report.claims[0]?.evidenceTrustLevels, ["high"]);
+  assert.deepEqual(report.claims[0]?.evidenceUpdatedAt, ["2026-06-01"]);
+  assert.deepEqual(report.claims[0]?.evidenceScores, ["0.998"]);
+  assert.deepEqual(report.claims[0]?.evidenceQuotes, [
+    "Refunds are available within 30 days | standard purchases.",
+  ]);
+});
+
 test("groups preview-only imports separately when answer paths are missing", () => {
   const report = importReviewerDecisions(`answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
 Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,Employees receive 12 weeks of paid parental leave.,,

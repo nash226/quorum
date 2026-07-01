@@ -12,6 +12,7 @@ import {
   renderReviewerDecisionCsv,
   renderTextReport,
 } from "../src/report-renderer.js";
+import { importReviewerDecisions } from "../src/reviewer-decision-import.js";
 
 const hrPolicy: SourceDocument = {
   id: "hr_policy",
@@ -109,6 +110,32 @@ test("renders a reviewer decision csv with claim context and blank reviewer fiel
     /^examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,claim_2,Employees receive free catered lunch every day\.,unsupported,/,
   );
   assert.match(lines[2] ?? "", /,,$/);
+});
+
+test("reviewer decision csv round-trips literal pipes in evidence fields", () => {
+  const pipePolicy: SourceDocument = {
+    id: "support_policy",
+    title: "Support | Policy",
+    trustLevel: "high",
+    updatedAt: "2026-06-01",
+    content: "Refunds are available within 30 days | standard purchases.",
+  };
+  const report = verifyAnswer(
+    "Refunds are available within 30 days standard purchases.",
+    [pipePolicy],
+    "2026-06-28T00:00:00.000Z",
+    "examples/answers/support-answer.md",
+  );
+
+  const rendered = renderReviewerDecisionCsv(report);
+  const imported = importReviewerDecisions(rendered);
+
+  assert.match(rendered, /Support \\| Policy/);
+  assert.match(rendered, /30 days \\| standard purchases/);
+  assert.deepEqual(imported.claims[0]?.evidenceTitles, ["Support | Policy"]);
+  assert.deepEqual(imported.claims[0]?.evidenceQuotes, [
+    "Refunds are available within 30 days | standard purchases.",
+  ]);
 });
 
 test("renders a professional HTML reviewer report with escaped content", () => {
@@ -249,6 +276,58 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.doesNotMatch(rendered, /<queued>\/support-answer\.md/);
   assert.match(rendered, /No approved source snippet matched strongly enough\./);
   assert.match(rendered, /claim-pill claim-pill--unsupported/);
+});
+
+test("batch reviewer decision csv round-trips literal pipes in evidence fields", () => {
+  const pipePolicy: SourceDocument = {
+    id: "support_policy",
+    title: "Support | Policy",
+    trustLevel: "medium",
+    updatedAt: "2026-06-01",
+    content: "Refunds are available within 30 days | standard purchases.",
+  };
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: [
+      {
+        id: pipePolicy.id,
+        title: pipePolicy.title,
+        trustLevel: pipePolicy.trustLevel,
+        updatedAt: pipePolicy.updatedAt,
+      },
+    ],
+    sourceCount: 1,
+    answerCount: 1,
+    answers: [
+      {
+        answerPath: "examples/answers/support-answer.md",
+        report: verifyAnswer(
+          "Refunds are available within 30 days standard purchases.",
+          [pipePolicy],
+          "2026-06-29T00:00:00.000Z",
+          "examples/answers/support-answer.md",
+        ),
+        shouldFail: false,
+        failVerdicts: [],
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithFailures: 0,
+    },
+  };
+
+  const rendered = renderBatchReviewerDecisionCsv(batchReport);
+  const imported = importReviewerDecisions(rendered);
+
+  assert.match(rendered, /Support \\| Policy/);
+  assert.deepEqual(imported.claims[0]?.evidenceTitles, ["Support | Policy"]);
+  assert.deepEqual(imported.claims[0]?.evidenceQuotes, [
+    "Refunds are available within 30 days | standard purchases.",
+  ]);
 });
 
 test("renders evidence freshness metadata in batch html claims", () => {
