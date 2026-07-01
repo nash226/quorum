@@ -175,6 +175,9 @@ metadata such as `<meta property="article:modified_time">` or
 `<meta name="quorum-trust-level" content="high">` when teams want to preserve a
 review trust level alongside the HTML export.
 
+For PDF source documents, Quorum also reads embedded document info such as the
+PDF `Title` and modification date when those fields are present.
+
 When approved sources do not yet include frontmatter, the CLI can override that
 default during verification:
 

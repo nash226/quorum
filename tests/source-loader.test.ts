@@ -208,3 +208,19 @@ test("extracts readable text from pdf sources", async () => {
   assert.equal(source.trustLevel, "high");
   assert.match(source.content, /Employees receive 12 weeks of paid parental leave\./);
 });
+
+test("extracts embedded pdf title and modification metadata when present", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.pdf",
+    createSimplePdf("Employees receive 12 weeks of paid parental leave.", {
+      title: "HR Benefits Policy PDF",
+      modDate: "D:20260615093000-04'00'",
+    }),
+    1,
+  );
+
+  assert.equal(source.title, "HR Benefits Policy PDF");
+  assert.equal(source.updatedAt, "2026-06-15T09:30:00-04:00");
+  assert.equal(source.trustLevel, "medium");
+  assert.match(source.content, /Employees receive 12 weeks of paid parental leave\./);
+});
