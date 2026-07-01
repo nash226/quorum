@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6b2fcbf` on 2026-07-01, feat: normalize inline markdown in claims
+- Latest shipped change: `2df1683` on 2026-07-01, feat: add batch summary evidence metadata
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-01 | [#76](https://github.com/nash226/quorum/pull/76) | feat: add batch summary evidence metadata | `2df1683` |
 | 2026-07-01 | [#75](https://github.com/nash226/quorum/pull/75) | feat: normalize inline markdown in claims | `6b2fcbf` |
 | 2026-07-01 | [#74](https://github.com/nash226/quorum/pull/74) | feat: surface evidence freshness in reports | `0c9d8ee` |
 | 2026-07-01 | [#73](https://github.com/nash226/quorum/pull/73) | fix status refresh remote default branch | `858812b` |
@@ -52,5 +53,4 @@
 | 2026-06-30 | [#71](https://github.com/nash226/quorum/pull/71) | docs: clarify batch review handoff | `9ea55be` |
 | 2026-06-30 | Direct push | feat: extract html source metadata | `3c8ad95` |
 | 2026-06-30 | [#69](https://github.com/nash226/quorum/pull/69) | feat: preserve answer previews in review imports | `b6504c6` |
-| 2026-06-30 | [#68](https://github.com/nash226/quorum/pull/68) | feat: add answer previews to reviewer csv exports | `73e3419` |
 
