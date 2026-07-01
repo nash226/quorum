@@ -109,7 +109,7 @@ async function runVerify(args: string[]): Promise<void> {
   const jsonReport = JSON.stringify(report, null, 2);
   const htmlReport = renderHtmlReport(report);
   const markdownReport = renderMarkdownReport(report);
-  const reviewerDecisionCsv = renderReviewerDecisionCsv(report);
+  const reviewerDecisionCsv = renderReviewerDecisionCsv(report, parsed.failOn);
   const shouldFail = shouldFailReport(report, parsed.failOn);
 
   if (parsed.outPath) {
