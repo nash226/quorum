@@ -81,6 +81,8 @@ test("extracts readable text and title from exported html sources", async () => 
 <html>
   <head>
     <title>Refund Policy</title>
+    <meta property="article:modified_time" content="2026-06-15" />
+    <meta name="quorum-trust-level" content="high" />
     <style>.hidden { display: none; }</style>
   </head>
   <body>
@@ -98,11 +100,36 @@ test("extracts readable text and title from exported html sources", async () => 
   );
 
   assert.equal(source.title, "Refund Policy");
-  assert.equal(source.trustLevel, "medium");
+  assert.equal(source.updatedAt, "2026-06-15");
+  assert.equal(source.trustLevel, "high");
   assert.match(source.content, /Refund Policy/);
   assert.match(source.content, /Customers can request refunds within 30 days\./);
   assert.match(source.content, /- Annual plans require support approval\./);
   assert.doesNotMatch(source.content, /analytics|display: none/);
+});
+
+test("falls back to html metadata when the page title is absent", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/escalations.html",
+    `<!doctype html>
+<html>
+  <head>
+    <meta property="og:title" content="Escalations Overview" />
+    <meta name="last-modified" content="2026-06-20" />
+  </head>
+  <body>
+    <main>
+      <p>Escalate priority incidents immediately.</p>
+    </main>
+  </body>
+</html>`,
+    2,
+  );
+
+  assert.equal(source.title, "Escalations Overview");
+  assert.equal(source.updatedAt, "2026-06-20");
+  assert.equal(source.trustLevel, "medium");
+  assert.equal(source.content, "Escalate priority incidents immediately.");
 });
 
 test("decodes numeric html entities from exported html sources", async () => {
