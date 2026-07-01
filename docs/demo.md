@@ -37,8 +37,15 @@ plus a styled HTML reviewer report and reviewer-decision CSV under `reports/`.
 For multi-answer workflows, Quorum can also export batch review summaries:
 
 ```bash
-npm run dev -- verify-batch --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --fail-on contradicted
+npm run dev -- verify-batch --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
 ```
+
+The same batch run can now produce two reviewer-facing queue artifacts:
+
+- `reports/batch-summary.csv`: one row per answer with the `answer_preview`,
+  primary finding, fail-policy status, and source metadata for queue routing.
+- `reports/batch-review.csv`: one row per claim with evidence quotes, trust
+  levels, scores, and reviewer-decision columns for detailed review.
 
 When a team wants to review only a selected subset, the same command also
 accepts repeated `--answer` paths:
@@ -61,7 +68,8 @@ npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr
 The import summary preserves the model verdict, the reviewer verdict when one
 is present, whether the reviewer overrode the model, and any reviewer notes.
 When the CSV came from `verify-batch --review-csv-out`, the import also keeps
-the original `answer_path` for each reviewed claim.
+the original `answer_path` and `answer_preview` for each reviewed claim so
+batch handoffs stay grouped by answer file with recognizable reviewer context.
 
 Quorum also accepts exported HTML knowledge base pages via `--source` or
 `--source-dir`, which lets teams verify answers against help-center exports
