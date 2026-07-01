@@ -102,3 +102,18 @@ test("selects the strongest evidence across multiple sources", () => {
   assert.equal(report.assessments[0]?.verdict, "verified");
   assert.equal(report.assessments[0]?.evidence[0]?.documentId, "support_policy");
 });
+
+test("verifies claims from answers with inline markdown formatting", () => {
+  const report = verifyAnswer(
+    "- **Employees receive** `12 weeks` of paid parental leave.\n",
+    [hrPolicy],
+    "2026-06-28T00:00:00.000Z",
+  );
+
+  assert.equal(report.summary.verified, 1);
+  assert.equal(
+    report.assessments[0]?.claim.text,
+    "Employees receive 12 weeks of paid parental leave.",
+  );
+  assert.equal(report.assessments[0]?.verdict, "verified");
+});

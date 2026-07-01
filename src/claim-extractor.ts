@@ -9,7 +9,7 @@ const UNICODE_BULLET_PREFIX = /^(?:[\u2022\u2023\u25E6\u2043\u2219])\s+/;
 const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
 
 export function extractClaims(answer: string): AtomicClaim[] {
-  return splitIntoSentences(normalizeAnswer(answer))
+  return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
     .filter((sentence) => sentence.length >= 12)
     .map((text, index) => ({
       id: `claim_${index + 1}`,
@@ -200,4 +200,14 @@ function shouldMergeWithPreviousLine(
 
 function isIndentedContinuation(line: string): boolean {
   return /^\s+/.test(line);
+}
+
+function stripInlineMarkdown(answer: string): string {
+  return answer
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/~~(\S(?:[\s\S]*?\S)?)~~/g, "$1")
+    .replace(/(\*\*|__)(\S(?:[\s\S]*?\S)?)\1/g, "$2")
+    .replace(/(\*|_)(\S(?:[\s\S]*?\S)?)\1/g, "$2");
 }
