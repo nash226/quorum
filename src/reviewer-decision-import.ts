@@ -111,13 +111,16 @@ export function importReviewerDecisions(
 
 export function renderReviewerDecisionImportReport(
   report: ReviewerDecisionImportReport,
+  failOn: ClaimVerdict[] = [],
 ): string {
+  const failVerdicts = matchingFailVerdicts(report, failOn);
   const lines = [
     "Quorum Reviewer Decision Import",
     "",
     `Claims: ${report.summary.totalClaims} total, ${report.summary.reviewedClaims} reviewed, ${report.summary.pendingClaims} pending`,
     `Final verdicts: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
     `Overrides: ${report.summary.overriddenClaims}`,
+    `Fail policy: ${failVerdicts.length > 0 ? `matched (${failVerdicts.join(", ")})` : "clear"}`,
   ];
 
   if (report.answerGroups.length > 0) {
@@ -125,6 +128,7 @@ export function renderReviewerDecisionImportReport(
   }
 
   for (const group of report.answerGroups) {
+    const groupFailVerdicts = matchingFailVerdicts(group, failOn);
     lines.push(
       `Answer: ${group.label}`,
       ...(group.answerPath && group.answerPath !== group.label
@@ -134,6 +138,7 @@ export function renderReviewerDecisionImportReport(
       `Claims: ${group.summary.totalClaims} total, ${group.summary.reviewedClaims} reviewed, ${group.summary.pendingClaims} pending`,
       `Final verdicts: ${group.summary.verified} verified, ${group.summary.contradicted} contradicted, ${group.summary.unsupported} unsupported, ${group.summary.needs_review} needs review`,
       `Overrides: ${group.summary.overriddenClaims}`,
+      `Fail policy: ${groupFailVerdicts.length > 0 ? `matched (${groupFailVerdicts.join(", ")})` : "clear"}`,
       "",
     );
 
@@ -165,7 +170,9 @@ export function renderReviewerDecisionImportReport(
 
 export function renderReviewerDecisionImportMarkdownReport(
   report: ReviewerDecisionImportReport,
+  failOn: ClaimVerdict[] = [],
 ): string {
+  const failVerdicts = matchingFailVerdicts(report, failOn);
   const lines = [
     "# Quorum Reviewer Decision Import",
     "",
@@ -179,6 +186,7 @@ export function renderReviewerDecisionImportMarkdownReport(
     `- Contradicted: ${report.summary.contradicted}`,
     `- Unsupported: ${report.summary.unsupported}`,
     `- Needs review: ${report.summary.needs_review}`,
+    `- Fail policy: ${failVerdicts.length > 0 ? `matched (${failVerdicts.join(", ")})` : "clear"}`,
   ];
 
   if (report.answerGroups.length === 0) {
@@ -188,6 +196,7 @@ export function renderReviewerDecisionImportMarkdownReport(
   lines.push("", "## Answer Groups", "");
 
   report.answerGroups.forEach((group) => {
+    const groupFailVerdicts = matchingFailVerdicts(group, failOn);
     lines.push(
       `### ${group.label}`,
       "",
@@ -203,6 +212,7 @@ export function renderReviewerDecisionImportMarkdownReport(
       `- Contradicted: ${group.summary.contradicted}`,
       `- Unsupported: ${group.summary.unsupported}`,
       `- Needs review: ${group.summary.needs_review}`,
+      `- Fail policy: ${groupFailVerdicts.length > 0 ? `matched (${groupFailVerdicts.join(", ")})` : "clear"}`,
       "",
     );
 
@@ -300,7 +310,9 @@ export function renderReviewerDecisionImportSummaryCsv(
 
 export function renderReviewerDecisionImportHtmlReport(
   report: ReviewerDecisionImportReport,
+  failOn: ClaimVerdict[] = [],
 ): string {
+  const failVerdicts = matchingFailVerdicts(report, failOn);
   const groupCards =
     report.answerGroups.length === 0
       ? `
@@ -310,6 +322,7 @@ export function renderReviewerDecisionImportHtmlReport(
           </section>`
       : report.answerGroups
           .map((group) => {
+            const groupFailVerdicts = matchingFailVerdicts(group, failOn);
             const claimCards = group.claims
               .map((claim, index) => renderClaimCard(claim, index + 1))
               .join("\n");
@@ -333,6 +346,7 @@ export function renderReviewerDecisionImportHtmlReport(
                     <span>${group.summary.totalClaims} claims</span>
                     <span>${group.summary.reviewedClaims} reviewed</span>
                     <span>${group.summary.pendingClaims} pending</span>
+                    <span>Fail policy ${groupFailVerdicts.length > 0 ? `matched (${escapeHtml(groupFailVerdicts.join(", "))})` : "clear"}</span>
                   </div>
                 </div>
                 <div class="answer-group__stats">
@@ -622,6 +636,7 @@ export function renderReviewerDecisionImportHtmlReport(
           <article class="summary-card"><span>Contradicted</span><strong>${report.summary.contradicted}</strong></article>
           <article class="summary-card"><span>Unsupported</span><strong>${report.summary.unsupported}</strong></article>
           <article class="summary-card"><span>Needs review</span><strong>${report.summary.needs_review}</strong></article>
+          <article class="summary-card"><span>Fail policy</span><strong>${failVerdicts.length > 0 ? `matched (${escapeHtml(failVerdicts.join(", "))})` : "clear"}</strong></article>
         </div>
       </section>
       <section class="answer-groups">

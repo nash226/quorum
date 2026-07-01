@@ -139,14 +139,19 @@ test("renders a reviewer decision import summary for humans", () => {
     importReviewerDecisions(`answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
 hr-answer,examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
 support-answer,examples/answers/support-answer.md,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,,"","",`),
+    ["unsupported"],
   );
 
   assert.match(rendered, /Quorum Reviewer Decision Import/);
   assert.match(rendered, /Claims: 2 total, 1 reviewed, 1 pending/);
   assert.match(rendered, /Overrides: 0/);
+  assert.match(rendered, /Fail policy: matched \(unsupported\)/);
   assert.match(rendered, /Answer Groups/);
   assert.match(rendered, /Answer: hr-answer/);
   assert.match(rendered, /Answer file: examples\/answers\/hr-answer\.md/);
+  assert.match(rendered, /Answer: support-answer/);
+  assert.match(rendered, /Fail policy: clear/);
+  assert.match(rendered, /Fail policy: matched \(unsupported\)/);
   assert.match(rendered, /VERIFIED  Employees receive 12 weeks/);
   assert.match(rendered, /Evidence:/);
   assert.match(
@@ -161,14 +166,19 @@ test("renders a reviewer decision import markdown report", () => {
     importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
 hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
 support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,,"","",`),
+    ["unsupported"],
   );
 
   assert.match(rendered, /^# Quorum Reviewer Decision Import/m);
   assert.match(rendered, /- Total claims: 2/);
+  assert.match(rendered, /- Fail policy: matched \(unsupported\)/);
   assert.match(rendered, /## Answer Groups/);
   assert.match(rendered, /### hr-answer/);
   assert.match(rendered, /- Answer file: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /- Answer preview: Employees receive 12 weeks of paid parental leave\./);
+  assert.match(rendered, /### support-answer/);
+  assert.match(rendered, /- Fail policy: clear/);
+  assert.match(rendered, /- Fail policy: matched \(unsupported\)/);
   assert.match(rendered, /#### 1\. Employees receive 12 weeks/);
   assert.match(rendered, /- Evidence:/);
   assert.match(
@@ -184,17 +194,21 @@ test("renders a reviewer decision import html report", () => {
     importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
 hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
 support-answer,examples/answers/support-answer.md,<Flag this answer for legal review.>,claim_2,<Flag this answer for legal review.>,unsupported,No approved source contains enough overlapping policy language.,"","","","","","","Needs counsel review before publish"`),
+    ["unsupported"],
   );
 
   assert.match(rendered, /<!doctype html>/i);
   assert.match(rendered, /<title>Quorum Reviewer Decision Import<\/title>/);
   assert.match(rendered, /Imported reviewer decisions, final verdicts/);
   assert.match(rendered, /<span>Total claims<\/span><strong>2<\/strong>/);
+  assert.match(rendered, /<span>Fail policy<\/span><strong>matched \(unsupported\)<\/strong>/);
   assert.match(rendered, /Answer file/);
   assert.match(rendered, /<h2><code>hr-answer<\/code><\/h2>/);
   assert.match(rendered, /<p class="answer-group__path"><code>examples\/answers\/hr-answer\.md<\/code><\/p>/);
   assert.match(rendered, /<p class="answer-group__preview">Employees receive 12 weeks of paid parental leave\.<\/p>/);
   assert.match(rendered, /1 claims<\/span>/);
+  assert.match(rendered, /Fail policy clear/);
+  assert.match(rendered, /Fail policy matched \(unsupported\)/);
   assert.match(rendered, /Evidence context/);
   assert.match(rendered, /<strong>HR Policy - high trust - updated 2026-05-31 - score 0\.998<\/strong>/);
   assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
