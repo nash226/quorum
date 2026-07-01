@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `56c3f2d` on 2026-07-01, disambiguate batch answer labels
+- Latest shipped change: `514a034` on 2026-07-01, add import-review summary fail policy columns
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-01 | [#85](https://github.com/nash226/quorum/pull/85) | add import-review summary fail policy columns | `514a034` |
 | 2026-07-01 | [#84](https://github.com/nash226/quorum/pull/84) | disambiguate batch answer labels | `56c3f2d` |
 | 2026-07-01 | [#83](https://github.com/nash226/quorum/pull/83) | add batch answer labels | `538e334` |
 | 2026-07-01 | [#82](https://github.com/nash226/quorum/pull/82) | feat: add import review summary evidence context | `3a0c590` |
@@ -52,5 +53,4 @@
 | 2026-07-01 | Direct push | feat: add import review fail policy | `08f5382` |
 | 2026-07-01 | [#79](https://github.com/nash226/quorum/pull/79) | feat: add import review summary csv | `860a949` |
 | 2026-07-01 | [#78](https://github.com/nash226/quorum/pull/78) | feat: group imported reviewer decisions by answer | `c9f2cc9` |
-| 2026-07-01 | [#77](https://github.com/nash226/quorum/pull/77) | fix: preserve pipes in reviewer csv evidence | `52bfd88` |
 
