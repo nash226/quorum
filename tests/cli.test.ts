@@ -199,12 +199,12 @@ test("verify records the answer path in JSON and reviewer csv outputs", async ()
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,clear,,claim_1,`,
+        `^answer,${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,clear,,claim_1,`,
       ),
     );
   } finally {
@@ -248,12 +248,12 @@ test("verify writes reviewer csv fail-policy columns for single answers", async 
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,matched,contradicted,claim_1,`,
+        `^answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,matched,contradicted,claim_1,`,
       ),
     );
   } finally {
@@ -1098,9 +1098,10 @@ test("import-review preserves answer paths from single-answer reviewer csv files
     ]);
 
     const report = JSON.parse(stdout) as {
-      claims: Array<{ answerPath?: string }>;
+      claims: Array<{ answerLabel?: string; answerPath?: string }>;
     };
 
+    assert.equal(report.claims[0]?.answerLabel, "answer");
     assert.equal(report.claims[0]?.answerPath, answerPath);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
