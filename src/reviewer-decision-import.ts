@@ -234,6 +234,10 @@ export function renderReviewerDecisionImportSummaryCsv(
       "answer_label",
       "answer_path",
       "answer_preview",
+      "primary_final_verdict",
+      "primary_claim",
+      "primary_model_reason",
+      "primary_reviewer_notes",
       "total_claims",
       "reviewed_claims",
       "pending_claims",
@@ -243,19 +247,27 @@ export function renderReviewerDecisionImportSummaryCsv(
       "unsupported",
       "needs_review",
     ],
-    ...report.answerGroups.map((group) => [
-      group.label,
-      group.answerPath ?? "",
-      group.answerPreview ?? "",
-      group.summary.totalClaims.toString(),
-      group.summary.reviewedClaims.toString(),
-      group.summary.pendingClaims.toString(),
-      group.summary.overriddenClaims.toString(),
-      group.summary.verified.toString(),
-      group.summary.contradicted.toString(),
-      group.summary.unsupported.toString(),
-      group.summary.needs_review.toString(),
-    ]),
+    ...report.answerGroups.map((group) => {
+      const primaryClaim = selectPrimaryImportedClaim(group.claims);
+
+      return [
+        group.label,
+        group.answerPath ?? "",
+        group.answerPreview ?? "",
+        primaryClaim?.finalVerdict ?? "",
+        primaryClaim?.claimText ?? "",
+        primaryClaim?.modelReason ?? "",
+        primaryClaim?.reviewerNotes ?? "",
+        group.summary.totalClaims.toString(),
+        group.summary.reviewedClaims.toString(),
+        group.summary.pendingClaims.toString(),
+        group.summary.overriddenClaims.toString(),
+        group.summary.verified.toString(),
+        group.summary.contradicted.toString(),
+        group.summary.unsupported.toString(),
+        group.summary.needs_review.toString(),
+      ];
+    }),
   ];
 
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
@@ -742,6 +754,27 @@ function createEmptyImportSummary(): ReviewerDecisionImportReport["summary"] {
     unsupported: 0,
     needs_review: 0,
   };
+}
+
+function selectPrimaryImportedClaim(
+  claims: ImportedReviewerDecision[],
+): ImportedReviewerDecision | undefined {
+  const priority: Record<ClaimVerdict, number> = {
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 2,
+    verified: 3,
+  };
+
+  return claims.reduce<ImportedReviewerDecision | undefined>((selected, claim) => {
+    if (!selected) {
+      return claim;
+    }
+
+    return priority[claim.finalVerdict] < priority[selected.finalVerdict]
+      ? claim
+      : selected;
+  }, undefined);
 }
 
 function accumulateClaimSummary(
