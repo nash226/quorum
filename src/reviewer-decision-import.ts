@@ -226,6 +226,41 @@ export function renderReviewerDecisionImportMarkdownReport(
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
+export function renderReviewerDecisionImportSummaryCsv(
+  report: ReviewerDecisionImportReport,
+): string {
+  const rows = [
+    [
+      "answer_label",
+      "answer_path",
+      "answer_preview",
+      "total_claims",
+      "reviewed_claims",
+      "pending_claims",
+      "overridden_claims",
+      "verified",
+      "contradicted",
+      "unsupported",
+      "needs_review",
+    ],
+    ...report.answerGroups.map((group) => [
+      group.label,
+      group.answerPath ?? "",
+      group.answerPreview ?? "",
+      group.summary.totalClaims.toString(),
+      group.summary.reviewedClaims.toString(),
+      group.summary.pendingClaims.toString(),
+      group.summary.overriddenClaims.toString(),
+      group.summary.verified.toString(),
+      group.summary.contradicted.toString(),
+      group.summary.unsupported.toString(),
+      group.summary.needs_review.toString(),
+    ]),
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 export function renderReviewerDecisionImportHtmlReport(
   report: ReviewerDecisionImportReport,
 ): string {
@@ -928,4 +963,16 @@ function escapeHtml(value: string): string {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function escapeCsvValue(value: string): string {
+  if (value.includes('"')) {
+    return `"${value.replaceAll('"', '""')}"`;
+  }
+
+  if (value.includes(",") || value.includes("\n")) {
+    return `"${value}"`;
+  }
+
+  return value;
 }

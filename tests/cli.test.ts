@@ -1018,6 +1018,52 @@ examples/answers/support-answer.md,claim_2,<Flag this answer for legal review.>,
   }
 });
 
+test("import-review writes a summary csv report", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-import-summary-csv-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "reports", "review.csv");
+    const summaryCsvOutPath = join(tempDir, "reports", "review-import-summary.csv");
+
+    await mkdir(join(tempDir, "reports"), { recursive: true });
+    await writeFile(
+      reviewCsvPath,
+      `answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved
+examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,claim_2,Refunds are available within 14 days of purchase.,contradicted,A closely matching approved source uses different numeric terms.,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,needs_review,Escalate to support ops
+`,
+      "utf8",
+    );
+
+    const stdout = await runCli([
+      "import-review",
+      "--review-csv",
+      reviewCsvPath,
+      "--summary-csv-out",
+      summaryCsvOutPath,
+    ]);
+
+    assert.match(stdout, /Reviewer decision summary CSV written to/);
+
+    const summaryCsv = await readFile(summaryCsvOutPath, "utf8");
+    const lines = summaryCsv.trim().split("\n");
+    assert.equal(
+      lines[0],
+      "answer_label,answer_path,answer_preview,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review",
+    );
+    assert.equal(
+      lines[1],
+      "examples/answers/hr-answer.md,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,1,1,0,0,1,0,0,0",
+    );
+    assert.equal(
+      lines[2],
+      "examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,1,1,0,1,0,0,0,1",
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 async function runCli(args: string[]): Promise<string> {
   const result = await runCliAllowFailure(args);
 
