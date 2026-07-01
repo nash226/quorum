@@ -2,7 +2,12 @@ function escapePdfText(value: string): string {
   return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 }
 
-export function createSimplePdf(text: string): Buffer {
+interface SimplePdfOptions {
+  title?: string;
+  modDate?: string;
+}
+
+export function createSimplePdf(text: string, options: SimplePdfOptions = {}): Buffer {
   const stream = `BT
 /F1 12 Tf
 72 100 Td
@@ -16,6 +21,18 @@ ET`;
     `<< /Length ${Buffer.byteLength(stream, "utf8")} >>\nstream\n${stream}\nendstream`,
     "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
   ];
+  let infoObjectNumber: number | undefined;
+
+  if (options.title || options.modDate) {
+    infoObjectNumber = objects.length + 1;
+    const infoEntries = [
+      options.title ? `/Title (${escapePdfText(options.title)})` : "",
+      options.modDate ? `/ModDate (${escapePdfText(options.modDate)})` : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    objects.push(`<< ${infoEntries} >>`);
+  }
 
   let pdf = "%PDF-1.4\n";
   const offsets: number[] = [0];
@@ -37,7 +54,7 @@ ET`;
   }
 
   pdf += `trailer
-<< /Size ${objects.length + 1} /Root 1 0 R >>
+<< /Size ${objects.length + 1} /Root 1 0 R${infoObjectNumber ? ` /Info ${infoObjectNumber} 0 R` : ""} >>
 startxref
 ${xrefOffset}
 %%EOF
