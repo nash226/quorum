@@ -1078,19 +1078,23 @@ support-answer,examples/answers/support-answer.md,claim_2,Employees receive free
       "utf8",
     );
 
-    const stdout = await runCli([
+    const result = await runCliAllowFailure([
       "import-review",
       "--review-csv",
       reviewCsvPath,
       "--markdown-out",
       markdownOutPath,
+      "--fail-on",
+      "unsupported",
     ]);
 
-    assert.match(stdout, /Reviewer decision Markdown report written to/);
+    assert.equal(result.code, 2);
+    assert.match(result.stdout, /Reviewer decision Markdown report written to/);
 
     const markdownReport = await readFile(markdownOutPath, "utf8");
     assert.match(markdownReport, /# Quorum Reviewer Decision Import/);
     assert.match(markdownReport, /- Total claims: 2/);
+    assert.match(markdownReport, /- Fail policy: matched \(unsupported\)/);
     assert.match(markdownReport, /## Answer Groups/);
     assert.match(markdownReport, /### hr-answer/);
     assert.match(markdownReport, /- Answer file: examples\/answers\/hr-answer\.md/);
@@ -1115,19 +1119,23 @@ support-answer,examples/answers/support-answer.md,claim_2,<Flag this answer for 
       "utf8",
     );
 
-    const stdout = await runCli([
+    const result = await runCliAllowFailure([
       "import-review",
       "--review-csv",
       reviewCsvPath,
       "--html-out",
       htmlOutPath,
+      "--fail-on",
+      "unsupported",
     ]);
 
-    assert.match(stdout, /Reviewer decision HTML report written to/);
+    assert.equal(result.code, 2);
+    assert.match(result.stdout, /Reviewer decision HTML report written to/);
 
     const htmlReport = await readFile(htmlOutPath, "utf8");
     assert.match(htmlReport, /<!doctype html>/i);
     assert.match(htmlReport, /<title>Quorum Reviewer Decision Import<\/title>/);
+    assert.match(htmlReport, /<span>Fail policy<\/span><strong>matched \(unsupported\)<\/strong>/);
     assert.match(htmlReport, /<h2><code>hr-answer<\/code><\/h2>/);
     assert.match(htmlReport, /<p class="answer-group__path"><code>examples\/answers\/hr-answer\.md<\/code><\/p>/);
     assert.match(htmlReport, /Needs counsel review before publish/);
