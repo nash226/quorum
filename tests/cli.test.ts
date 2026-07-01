@@ -375,6 +375,62 @@ test("verify-batch accepts repeated answer files alongside answer directories", 
   }
 });
 
+test("verify-batch disambiguates duplicate answer labels across directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-duplicate-labels-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const hrDir = join(answerDir, "hr");
+    const supportDir = join(answerDir, "support");
+    const sourceDir = join(tempDir, "sources");
+
+    await Promise.all([
+      mkdir(hrDir, { recursive: true }),
+      mkdir(supportDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(join(hrDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(supportDir, "policy.md"), "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "support-policy.md"),
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answers: Array<{ answerLabel: string; answerPath: string }>;
+    };
+
+    assert.deepEqual(
+      report.answers.map((answer) => answer.answerLabel),
+      ["hr/policy", "support/policy"],
+    );
+    assert.deepEqual(
+      report.answers.map((answer) => answer.answerPath),
+      [join(hrDir, "policy.md"), join(supportDir, "policy.md")],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify preserves explicit source order ahead of directory-discovered files", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-source-order-"));
 
