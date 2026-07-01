@@ -42,9 +42,9 @@ npm run dev -- verify-batch --answer-dir examples/answers --source-dir examples/
 
 The same batch run can now produce two reviewer-facing queue artifacts:
 
-- `reports/batch-summary.csv`: one row per answer with the `answer_preview`,
-  primary finding, fail-policy status, primary evidence trust/freshness, and
-  source metadata for queue routing.
+- `reports/batch-summary.csv`: one row per answer with an `answer_label`,
+  `answer_preview`, primary finding, fail-policy status, primary evidence
+  trust/freshness, and source metadata for queue routing.
 - `reports/batch-review.csv`: one row per claim with evidence quotes, trust
   levels, scores, and reviewer-decision columns for detailed review.
 
