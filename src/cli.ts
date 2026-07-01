@@ -256,7 +256,7 @@ async function runImportReview(args: string[]): Promise<void> {
   const jsonReport = JSON.stringify(report, null, 2);
   const markdownReport = renderReviewerDecisionImportMarkdownReport(report);
   const htmlReport = renderReviewerDecisionImportHtmlReport(report);
-  const summaryCsv = renderReviewerDecisionImportSummaryCsv(report);
+  const summaryCsv = renderReviewerDecisionImportSummaryCsv(report, parsed.failOn);
   const shouldFail = shouldFailReport(report, parsed.failOn);
 
   if (parsed.outPath) {
