@@ -189,7 +189,7 @@ npm run dev -- verify \
 
 ```text
 quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
-quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>]
 ```
 
@@ -210,6 +210,7 @@ Options:
 - `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers
 - `verify-batch --summary-csv-out <path>`: write one CSV row per answer with an `answer_preview`, the highest-priority claim finding and evidence title, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
+- teams can use `--summary-csv-out` for queue-level routing while keeping `--review-csv-out` for claim-by-claim reviewer decisions on the same batch run
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes, including the original `answer_preview` plus evidence titles, trust levels, scores, and quotes
 - reviewer CSV exports also include `evidence_updated_at` so spreadsheet reviewers can see source freshness beside each claim
 - single-answer and batch reviewer CSV exports include both `answer_path` and `answer_preview` so review imports keep answer provenance and quick reviewer context
