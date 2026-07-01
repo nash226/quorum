@@ -110,8 +110,9 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
     const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
 
     lines.push(
-      `### ${index + 1}. ${answer.answerPath}`,
+      `### ${index + 1}. ${answer.answerLabel}`,
       "",
+      `- Answer path: \`${answer.answerPath}\``,
       `- Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
       `- Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
       `- Answer preview: ${renderAnswerPreview(answer.report.answer) || "No answer content provided."}`,
@@ -205,6 +206,7 @@ export function renderReviewerDecisionCsv(report: VerificationReport): string {
 export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport): string {
   const rows = [
     [
+      "answer_label",
       "answer_path",
       "answer_preview",
       "claim_id",
@@ -221,6 +223,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
     ],
     ...report.answers.flatMap((answer) =>
       answer.report.assessments.map((assessment) => [
+        answer.answerLabel,
         answer.answerPath,
         renderAnswerPreview(answer.report.answer),
         assessment.claim.id,
@@ -257,6 +260,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
   const sourceUpdatedAt = report.sources.map((source) => source.updatedAt ?? "").join(" | ");
   const rows = [
     [
+      "answer_label",
       "answer_path",
       "answer_preview",
       "primary_verdict",
@@ -280,6 +284,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
 
       return [
+        answer.answerLabel,
         answer.answerPath,
         renderAnswerPreview(answer.report.answer),
         primaryAssessment?.verdict ?? "",
@@ -1070,7 +1075,8 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
           <div class="answer-card__header">
             <div>
               <span class="answer-card__index">Answer ${index + 1}</span>
-              <h2>${escapeHtml(answer.answerPath)}</h2>
+              <h2>${escapeHtml(answer.answerLabel)}</h2>
+              <p class="answer-card__path"><code>${escapeHtml(answer.answerPath)}</code></p>
             </div>
             <span class="status-pill ${statusClass}">${answer.shouldFail ? "Fail policy matched" : "Fail policy clear"}</span>
           </div>

@@ -188,12 +188,14 @@ test("renders a markdown batch report with per-answer summaries", () => {
     answerCount: 2,
     answers: [
       {
+        answerLabel: "hr-answer",
         answerPath: "examples/answers/hr-answer.md",
         report: verifyAnswer("Employees receive 12 weeks of paid parental leave.", [hrPolicy]),
         shouldFail: false,
         failVerdicts: [],
       },
       {
+        answerLabel: "support-answer",
         answerPath: "examples/answers/support-answer.md",
         report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
         shouldFail: true,
@@ -216,7 +218,8 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /- Answers matching fail policy: 1/);
   assert.match(rendered, /## Sources/);
   assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31\)/);
-  assert.match(rendered, /### 1\. examples\/answers\/hr-answer\.md/);
+  assert.match(rendered, /### 1\. hr-answer/);
+  assert.match(rendered, /- Answer path: `examples\/answers\/hr-answer\.md`/);
   assert.match(rendered, /- Fail policy: clear/);
   assert.match(rendered, /- Fail verdicts: none/);
   assert.match(rendered, /- Answer preview: Employees receive 12 weeks of paid parental leave\./);
@@ -229,7 +232,7 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /#### Claim Assessments/);
   assert.match(rendered, /##### 1\. Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Verdict: `verified`/);
-  assert.match(rendered, /### 2\. examples\/answers\/support-answer\.md/);
+  assert.match(rendered, /### 2\. support-answer/);
   assert.match(rendered, /- Fail policy: matched/);
   assert.match(rendered, /- Fail verdicts: unsupported/);
   assert.match(rendered, /> Employees receive free catered lunch every day\./);
@@ -244,6 +247,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
     answerCount: 1,
     answers: [
       {
+        answerLabel: "support-answer",
         answerPath: "<queued>/support-answer.md",
         report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
         shouldFail: true,
@@ -272,6 +276,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /<dt>Fail verdicts<\/dt><dd>unsupported<\/dd>/);
   assert.match(rendered, /Submitted answer/);
   assert.match(rendered, /Employees receive free catered lunch every day\./);
+  assert.match(rendered, /<h2>support-answer<\/h2>/);
   assert.match(rendered, /&lt;queued&gt;\/support-answer\.md/);
   assert.doesNotMatch(rendered, /<queued>\/support-answer\.md/);
   assert.match(rendered, /No approved source snippet matched strongly enough\./);
@@ -300,6 +305,7 @@ test("batch reviewer decision csv round-trips literal pipes in evidence fields",
     answerCount: 1,
     answers: [
       {
+        answerLabel: "support-answer",
         answerPath: "examples/answers/support-answer.md",
         report: verifyAnswer(
           "Refunds are available within 30 days standard purchases.",
@@ -338,6 +344,7 @@ test("renders evidence freshness metadata in batch html claims", () => {
     answerCount: 1,
     answers: [
       {
+        answerLabel: "hr-answer",
         answerPath: "examples/answers/hr-answer.md",
         report: verifyAnswer("Employees receive 18 weeks of paid parental leave.", [hrPolicy]),
         shouldFail: true,
@@ -367,6 +374,7 @@ test("renders explicit empty states for batch answers with no extracted claims",
     answerCount: 1,
     answers: [
       {
+        answerLabel: "empty",
         answerPath: "examples/answers/empty.md",
         report: verifyAnswer("Short.\n", [hrPolicy]),
         shouldFail: false,
@@ -397,12 +405,14 @@ test("renders a batch reviewer decision csv with answer path context", () => {
     answerCount: 2,
     answers: [
       {
+        answerLabel: "hr-answer",
         answerPath: "examples/answers/hr-answer.md",
         report: verifyAnswer("Employees receive 18 weeks of paid parental leave.", [hrPolicy]),
         shouldFail: true,
         failVerdicts: ["contradicted"],
       },
       {
+        answerLabel: "support-answer",
         answerPath: "examples/answers/support-answer.md",
         report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
         shouldFail: true,
@@ -423,11 +433,11 @@ test("renders a batch reviewer decision csv with answer path context", () => {
 
   assert.equal(
     lines[0],
-    "answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
-    /^examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\.,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
+    /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\.,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
   );
   assert.match(lines[1] ?? "", /HR Policy/);
   assert.match(lines[1] ?? "", /high/);
@@ -435,7 +445,7 @@ test("renders a batch reviewer decision csv with answer path context", () => {
   assert.match(lines[1] ?? "", /0\.\d{3}/);
   assert.match(
     lines[2] ?? "",
-    /^examples\/answers\/support-answer\.md,Employees receive free catered lunch every day\.,claim_1,Employees receive free catered lunch every day\.,unsupported,/,
+    /^support-answer,examples\/answers\/support-answer\.md,Employees receive free catered lunch every day\.,claim_1,Employees receive free catered lunch every day\.,unsupported,/,
   );
   assert.match(lines[2] ?? "", /,,$/);
 });
@@ -448,12 +458,14 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
     answerCount: 2,
     answers: [
       {
+        answerLabel: "hr-answer",
         answerPath: "examples/answers/hr-answer.md",
         report: verifyAnswer("Employees receive 12 weeks of paid parental leave.", [hrPolicy]),
         shouldFail: false,
         failVerdicts: [],
       },
       {
+        answerLabel: "support-answer",
         answerPath: "examples/answers/support-answer.md",
         report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
         shouldFail: true,
@@ -474,15 +486,15 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
 
   assert.equal(
     lines[0],
-    "answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
   );
   assert.equal(
     lines[1],
-    "examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
+    "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
   );
   assert.equal(
     lines[2],
-    "examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
+    "support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
   );
 });
 
@@ -494,6 +506,7 @@ test("renders a normalized truncated answer preview in batch summary csv rows", 
     answerCount: 1,
     answers: [
       {
+        answerLabel: "long-answer",
         answerPath: "examples/answers/long-answer.md",
         report: verifyAnswer(
           `Employees receive 12 weeks of paid parental leave.
@@ -520,6 +533,6 @@ Managers approve travel within five business days, and international trips requi
 
   assert.equal(
     lines[1],
-    'examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31',
+    'long-answer,examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31',
   );
 });
