@@ -8,7 +8,11 @@ import { serializeDelimitedList } from "./csv-list.js";
 import { matchingFailVerdicts } from "./report-policy.js";
 import { renderAnswerPreview } from "./text.js";
 
-export function renderTextReport(report: VerificationReport): string {
+export function renderTextReport(
+  report: VerificationReport,
+  failOn: ClaimVerdict[] = [],
+): string {
+  const failVerdicts = matchingFailVerdicts(report, failOn);
   const lines = [
     "Quorum Verification Report",
     "",
@@ -16,6 +20,8 @@ export function renderTextReport(report: VerificationReport): string {
     "Sources:",
     ...report.sources.map((source) => `- ${renderTextSourceLabel(source)}`),
     `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
+    `Fail policy: ${failVerdicts.length > 0 ? "matched" : "clear"}`,
+    `Fail verdicts: ${failVerdicts.length > 0 ? failVerdicts.join(", ") : "none"}`,
     "",
   ];
 
@@ -30,7 +36,11 @@ export function renderTextReport(report: VerificationReport): string {
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
-export function renderMarkdownReport(report: VerificationReport): string {
+export function renderMarkdownReport(
+  report: VerificationReport,
+  failOn: ClaimVerdict[] = [],
+): string {
+  const failVerdicts = matchingFailVerdicts(report, failOn);
   const lines = [
     "# Quorum Verification Report",
     "",
@@ -44,6 +54,7 @@ export function renderMarkdownReport(report: VerificationReport): string {
     `- Contradicted: ${report.summary.contradicted}`,
     `- Unsupported: ${report.summary.unsupported}`,
     `- Needs review: ${report.summary.needs_review}`,
+    `- Fail policy: ${failVerdicts.length > 0 ? `matched (${failVerdicts.join(", ")})` : "clear"}`,
     "",
     "## Sources",
     "",
@@ -324,13 +335,20 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
 }
 
-export function renderHtmlReport(report: VerificationReport): string {
-  return renderReviewConsoleHtmlReport(report);
+export function renderHtmlReport(
+  report: VerificationReport,
+  failOn: ClaimVerdict[] = [],
+): string {
+  return renderReviewConsoleHtmlReport(report, failOn);
 }
 
-function renderReviewConsoleHtmlReport(report: VerificationReport): string {
+function renderReviewConsoleHtmlReport(
+  report: VerificationReport,
+  failOn: ClaimVerdict[],
+): string {
   const selectedAssessment = selectPrimaryAssessment(report.assessments);
   const averageScore = averageEvidenceScore(report.assessments);
+  const failVerdicts = matchingFailVerdicts(report, failOn);
   const assessmentRows =
     report.assessments.length === 0
       ? renderReviewConsoleEmptyStateRow()
@@ -364,6 +382,11 @@ function renderReviewConsoleHtmlReport(report: VerificationReport): string {
                   <strong>${escapeHtml(report.answerPath)}</strong>
                 </div>`
     : "";
+  const failPolicyField = `
+                <div class="field">
+                  <span>Fail policy</span>
+                  <strong>${failVerdicts.length > 0 ? `matched (${escapeHtml(failVerdicts.join(", "))})` : "clear"}</strong>
+                </div>`;
 
   return `<!doctype html>
 <html lang="en">
@@ -984,7 +1007,7 @@ function renderReviewConsoleHtmlReport(report: VerificationReport): string {
               <section class="drawer-body answer-panel">
                 <h2>Submitted answer</h2>
                 <p class="subtitle">Original model output under review.</p>
-                ${report.answerPath ? `<div class="field-grid">${answerPathField}</div>` : ""}
+                <div class="field-grid">${answerPathField}${failPolicyField}</div>
                 <div class="field answer-text">${escapeHtml(report.answer)}</div>
               </section>
               <section class="drawer-body">

@@ -82,6 +82,24 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
   assert.match(rendered, /- Evidence: No approved source snippet matched strongly enough\./);
 });
 
+test("renders single-answer fail policy context in text, markdown, and html reports", () => {
+  const report = verifyAnswer(
+    "Employees receive 18 weeks of paid parental leave.\nEmployees receive free catered lunch every day.",
+    [hrPolicy],
+    "2026-06-28T00:00:00.000Z",
+    "examples/answers/hr-answer.md",
+  );
+
+  const text = renderTextReport(report, ["contradicted", "unsupported"]);
+  const markdown = renderMarkdownReport(report, ["contradicted", "unsupported"]);
+  const html = renderHtmlReport(report, ["contradicted", "unsupported"]);
+
+  assert.match(text, /Fail policy: matched/);
+  assert.match(text, /Fail verdicts: contradicted, unsupported/);
+  assert.match(markdown, /- Fail policy: matched \(contradicted, unsupported\)/);
+  assert.match(html, /<span>Fail policy<\/span>\s*<strong>matched \(contradicted, unsupported\)<\/strong>/);
+});
+
 test("renders a reviewer decision csv with answer fail-policy context and blank reviewer fields", () => {
   const report = verifyAnswer(
     "Employees receive 18 weeks of paid parental leave.\nEmployees receive free catered lunch every day.",
@@ -146,7 +164,7 @@ test("renders a professional HTML reviewer report with escaped content", () => {
     "examples/answers/hr-answer.md",
   );
 
-  const rendered = renderHtmlReport(report);
+  const rendered = renderHtmlReport(report, ["contradicted"]);
 
   assert.match(rendered, /<!doctype html>/i);
   assert.match(rendered, /<title>Quorum Review Console<\/title>/);
@@ -162,6 +180,7 @@ test("renders a professional HTML reviewer report with escaped content", () => {
   assert.match(rendered, /<span>Contradicted claims<\/span><strong>1<\/strong>/);
   assert.match(rendered, /<span>Unsupported claims<\/span><strong>1<\/strong>/);
   assert.match(rendered, /<span>Needs review<\/span><strong>0<\/strong>/);
+  assert.match(rendered, /<span>Fail policy<\/span>\s*<strong>matched \(contradicted\)<\/strong>/);
   assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /&lt;Flag this answer for legal review\.&gt;/);
   assert.doesNotMatch(rendered, /<Flag this answer for legal review\.>/);
