@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `860a949` on 2026-07-01, feat: add import review summary csv
+- Latest shipped change: `08f5382` on 2026-07-01, feat: add import review fail policy
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-01 | Direct push | feat: add import review fail policy | `08f5382` |
 | 2026-07-01 | [#79](https://github.com/nash226/quorum/pull/79) | feat: add import review summary csv | `860a949` |
 | 2026-07-01 | [#78](https://github.com/nash226/quorum/pull/78) | feat: group imported reviewer decisions by answer | `c9f2cc9` |
 | 2026-07-01 | [#77](https://github.com/nash226/quorum/pull/77) | fix: preserve pipes in reviewer csv evidence | `52bfd88` |
@@ -52,5 +53,4 @@
 | 2026-07-01 | [#75](https://github.com/nash226/quorum/pull/75) | feat: normalize inline markdown in claims | `6b2fcbf` |
 | 2026-07-01 | [#74](https://github.com/nash226/quorum/pull/74) | feat: surface evidence freshness in reports | `0c9d8ee` |
 | 2026-07-01 | [#73](https://github.com/nash226/quorum/pull/73) | fix status refresh remote default branch | `858812b` |
-| 2026-06-30 | [#72](https://github.com/nash226/quorum/pull/72) | feat: read pdf source metadata | `01f483c` |
 
