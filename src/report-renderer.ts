@@ -121,6 +121,9 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
 
   report.answers.forEach((answer, index) => {
     const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+    const primaryFindingVerdict = primaryAssessment?.verdict ?? "needs_review";
+    const primaryFindingReason =
+      primaryAssessment?.reason ?? "No claims were extracted from this answer.";
 
     lines.push(
       `### ${index + 1}. ${answer.answerLabel}`,
@@ -133,11 +136,11 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
       `- Contradicted: ${answer.report.summary.contradicted}`,
       `- Unsupported: ${answer.report.summary.unsupported}`,
       `- Needs review: ${answer.report.summary.needs_review}`,
-      `- Primary finding: ${primaryAssessment ? formatVerdictLabel(primaryAssessment.verdict) : "none"}`,
+      `- Primary finding: ${formatVerdictLabel(primaryFindingVerdict)}`,
+      `- Primary reason: ${primaryFindingReason}`,
       ...(primaryAssessment
         ? [
             `- Primary claim: ${primaryAssessment.claim.text}`,
-            `- Primary reason: ${primaryAssessment.reason}`,
             `- Primary evidence: ${primaryAssessment.evidence[0]?.documentTitle ?? "No approved source snippet matched strongly enough."}`,
           ]
         : []),
@@ -309,14 +312,17 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
     ],
     ...report.answers.map((answer) => {
       const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+      const primaryFindingVerdict = primaryAssessment?.verdict ?? "needs_review";
+      const primaryFindingReason =
+        primaryAssessment?.reason ?? "No claims were extracted from this answer.";
 
       return [
         answer.answerLabel,
         answer.answerPath,
         renderAnswerPreview(answer.report.answer),
-        primaryAssessment?.verdict ?? "",
+        primaryFindingVerdict,
         primaryAssessment?.claim.text ?? "",
-        primaryAssessment?.reason ?? "",
+        primaryFindingReason,
         primaryAssessment?.evidence[0]?.documentTitle ?? "",
         primaryAssessment?.evidence[0]?.documentTrustLevel ?? "",
         primaryAssessment?.evidence[0]?.documentUpdatedAt ?? "",
@@ -1061,6 +1067,9 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
     .map((answer, index) => {
       const statusClass = answer.shouldFail ? "status--matched" : "status--clear";
       const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
+      const primaryFindingVerdict = primaryAssessment?.verdict ?? "needs_review";
+      const primaryFindingReason =
+        primaryAssessment?.reason ?? "No claims were extracted from this answer.";
       const answerPreview = renderAnswerPreview(answer.report.answer) || "No answer content provided.";
       const assessmentMarkup =
         answer.report.assessments.length === 0
@@ -1107,7 +1116,18 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
               }
             </div>
           </section>`
-        : "";
+        : `
+          <section class="answer-card__primary-finding">
+            <span class="answer-card__section-label">Primary finding</span>
+            <div class="primary-finding-card primary-finding-card--needs_review">
+              <div class="primary-finding-card__header">
+                <span class="claim-pill claim-pill--needs_review">${escapeHtml(formatVerdictLabel(primaryFindingVerdict))}</span>
+                <span class="claim-item__score">no claims</span>
+              </div>
+              <h3>Review required</h3>
+              <p class="claim-item__reason">${escapeHtml(primaryFindingReason)}</p>
+            </div>
+          </section>`;
 
       return `
         <article class="answer-card">
@@ -1121,7 +1141,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
           </div>
           <dl class="answer-card__summary">
             <div><dt>Fail verdicts</dt><dd>${answer.failVerdicts.length > 0 ? escapeHtml(answer.failVerdicts.join(", ")) : "none"}</dd></div>
-            <div><dt>Primary finding</dt><dd>${primaryAssessment ? escapeHtml(formatVerdictLabel(primaryAssessment.verdict)) : "none"}</dd></div>
+            <div><dt>Primary finding</dt><dd>${escapeHtml(formatVerdictLabel(primaryFindingVerdict))}</dd></div>
             <div><dt>Verified</dt><dd>${answer.report.summary.verified}</dd></div>
             <div><dt>Contradicted</dt><dd>${answer.report.summary.contradicted}</dd></div>
             <div><dt>Unsupported</dt><dd>${answer.report.summary.unsupported}</dd></div>
