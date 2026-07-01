@@ -134,13 +134,79 @@ function sourceTitleFromPath(sourcePath: string): string {
 function parseHtmlSource(content: string): ParsedSource {
   const normalized = content.replace(/\r\n/g, "\n");
   const titleMatch = normalized.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const title =
+    (titleMatch ? decodeHtmlEntities(stripTags(titleMatch[1] ?? "")).trim() : "") ||
+    findHtmlMetaContent(normalized, {
+      property: ["og:title"],
+      name: ["twitter:title", "title"],
+    });
+  const updatedAt = findHtmlMetaContent(normalized, {
+    property: ["article:modified_time", "og:updated_time"],
+    name: ["last-modified", "last_modified", "updated_at", "updatedAt", "date.modified"],
+  });
+  const trustLevel = tryParseTrustLevel(
+    findHtmlMetaContent(normalized, {
+      property: ["quorum:trustLevel", "quorum:trust_level"],
+      name: ["quorum-trust-level", "quorum:trustLevel", "trustLevel", "trust_level"],
+    }) ?? "",
+  );
 
   return {
     metadata: {
-      title: titleMatch ? decodeHtmlEntities(stripTags(titleMatch[1] ?? "")).trim() : undefined,
+      title: title || undefined,
+      updatedAt: updatedAt || undefined,
+      trustLevel,
     },
     body: normalizeHtmlText(normalized),
   };
+}
+
+function findHtmlMetaContent(
+  content: string,
+  matchers: {
+    property?: string[];
+    name?: string[];
+  },
+): string | undefined {
+  const propertyMatchers = new Set(matchers.property?.map((value) => value.toLowerCase()) ?? []);
+  const nameMatchers = new Set(matchers.name?.map((value) => value.toLowerCase()) ?? []);
+  const metaTags = content.match(/<meta\b[^>]*>/gi) ?? [];
+
+  for (const tag of metaTags) {
+    const attributes = parseHtmlAttributes(tag);
+    const contentValue = attributes.content;
+
+    if (!contentValue) {
+      continue;
+    }
+
+    const property = attributes.property?.toLowerCase();
+    if (property && propertyMatchers.has(property)) {
+      return decodeHtmlEntities(contentValue).trim();
+    }
+
+    const name = attributes.name?.toLowerCase();
+    if (name && nameMatchers.has(name)) {
+      return decodeHtmlEntities(contentValue).trim();
+    }
+  }
+
+  return undefined;
+}
+
+function parseHtmlAttributes(tag: string): Record<string, string> {
+  const attributes: Record<string, string> = {};
+
+  for (const match of tag.matchAll(/([A-Za-z_:][-A-Za-z0-9_:.]*)\s*=\s*("([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/g)) {
+    const key = match[1]?.toLowerCase();
+    const value = match[3] ?? match[4] ?? match[5] ?? "";
+
+    if (key) {
+      attributes[key] = value;
+    }
+  }
+
+  return attributes;
 }
 
 function normalizeHtmlText(content: string): string {
