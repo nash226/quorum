@@ -236,7 +236,8 @@ Options:
 - `import-review --html-out <path>`: write the imported reviewer decision
   summary as a polished HTML handoff for review meetings and approvals
 - `import-review --summary-csv-out <path>`: write one CSV row per imported
-  answer group with the primary final finding, model reason, reviewer notes,
+  answer group with the primary final finding, reviewer/model rationale,
+  primary evidence title plus trust/freshness/score/quote context,
   reviewed/pending status, reviewer overrides, and final verdict totals
 - `import-review --fail-on <verdict>`: exit with code `2` when that final
   reviewer-aware verdict appears after any overrides; may be repeated
