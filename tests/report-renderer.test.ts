@@ -414,7 +414,11 @@ test("renders explicit empty states for batch answers with no extracted claims",
   const html = renderBatchHtmlReport(batchReport);
 
   assert.match(markdown, /No claims were extracted from this answer\./);
+  assert.match(markdown, /- Primary finding: needs review/);
+  assert.match(markdown, /- Primary reason: No claims were extracted from this answer\./);
   assert.match(html, /No claims were extracted from this answer\./);
+  assert.match(html, /<dt>Primary finding<\/dt><dd>needs review<\/dd>/);
+  assert.match(html, /Review required/);
 });
 
 test("renders a batch reviewer decision csv with answer path context", () => {
@@ -554,5 +558,38 @@ Managers approve travel within five business days, and international trips requi
   assert.equal(
     lines[1],
     'long-answer,examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31',
+  );
+});
+
+test("renders no-claim batch summary csv rows with an explicit review signal", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
+    sourceCount: 1,
+    answerCount: 1,
+    answers: [
+      {
+        answerLabel: "empty",
+        answerPath: "examples/answers/empty.md",
+        report: verifyAnswer("Short.\n", [hrPolicy]),
+        shouldFail: false,
+        failVerdicts: [],
+      },
+    ],
+    summary: {
+      verified: 0,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithFailures: 0,
+    },
+  };
+
+  const rendered = renderBatchSummaryCsv(batchReport);
+  const lines = rendered.trim().split("\n");
+
+  assert.equal(
+    lines[1],
+    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31",
   );
 });
