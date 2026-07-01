@@ -66,6 +66,7 @@ interface VerifyBatchArgs extends VerifyArgs {
 interface ImportReviewArgs {
   reviewCsvPath: string;
   json: boolean;
+  failOn: ClaimVerdict[];
   outPath?: string;
   markdownOutPath?: string;
   htmlOutPath?: string;
@@ -254,6 +255,7 @@ async function runImportReview(args: string[]): Promise<void> {
   const markdownReport = renderReviewerDecisionImportMarkdownReport(report);
   const htmlReport = renderReviewerDecisionImportHtmlReport(report);
   const summaryCsv = renderReviewerDecisionImportSummaryCsv(report);
+  const shouldFail = shouldFailReport(report, parsed.failOn);
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
@@ -273,6 +275,9 @@ async function runImportReview(args: string[]): Promise<void> {
 
   if (parsed.json) {
     console.log(jsonReport);
+    if (shouldFail) {
+      process.exitCode = 2;
+    }
     return;
   }
 
@@ -292,6 +297,10 @@ async function runImportReview(args: string[]): Promise<void> {
 
   if (parsed.summaryCsvOutPath) {
     console.log(`Reviewer decision summary CSV written to ${parsed.summaryCsvOutPath}`);
+  }
+
+  if (shouldFail) {
+    process.exitCode = 2;
   }
 }
 
@@ -462,6 +471,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   let htmlOutPath: string | undefined;
   let summaryCsvOutPath: string | undefined;
   let json = false;
+  const failOn: ClaimVerdict[] = [];
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -482,6 +492,9 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     } else if (arg === "--summary-csv-out" && next) {
       summaryCsvOutPath = next;
       index += 1;
+    } else if (arg === "--fail-on" && next) {
+      failOn.push(parseClaimVerdict(next));
+      index += 1;
     } else if (arg === "--json") {
       json = true;
     } else {
@@ -496,6 +509,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   return {
     reviewCsvPath,
     json,
+    failOn,
     outPath,
     markdownOutPath,
     htmlOutPath,
@@ -747,12 +761,12 @@ function printHelp(): void {
 Usage:
   quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>]
+  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
-  npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv
+  npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
 `);
 }
 

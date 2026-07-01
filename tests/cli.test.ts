@@ -1064,6 +1064,48 @@ examples/answers/support-answer.md,Refunds are available within 14 days of purch
   }
 });
 
+test("import-review exits non-zero when a final reviewer-aware verdict matches fail-on", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-import-fail-on-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "reports", "review.csv");
+
+    await mkdir(join(tempDir, "reports"), { recursive: true });
+    await writeFile(
+      reviewCsvPath,
+      `answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,contradicted,A closely matching approved source uses different numeric terms.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,verified,Approved after policy check
+examples/answers/support-answer.md,claim_2,Employees receive free catered lunch every day.,unsupported,No approved source contains enough overlapping policy language.,,,,,,,
+`,
+      "utf8",
+    );
+
+    const result = await runCliAllowFailure([
+      "import-review",
+      "--review-csv",
+      reviewCsvPath,
+      "--json",
+      "--fail-on",
+      "unsupported",
+      "--fail-on",
+      "contradicted",
+    ]);
+
+    assert.equal(result.code, 2);
+    assert.equal(result.stderr, "");
+
+    const report = JSON.parse(result.stdout) as {
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.summary.unsupported, 1);
+    assert.equal(report.summary.contradicted, 0);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 async function runCli(args: string[]): Promise<string> {
   const result = await runCliAllowFailure(args);
 
