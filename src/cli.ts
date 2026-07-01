@@ -35,7 +35,7 @@ import {
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
-import { renderAnswerLabel, renderAnswerPreview } from "./text.js";
+import { renderAnswerLabels, renderAnswerPreview } from "./text.js";
 
 interface VerifyArgs {
   sourcePaths: string[];
@@ -169,13 +169,14 @@ async function runVerifyBatch(args: string[]): Promise<void> {
     throw new Error(`No answer files found in ${locations}`);
   }
 
+  const answerLabels = renderAnswerLabels(answerPaths);
   const answers = await Promise.all(
-    answerPaths.map(async (answerPath) => {
+    answerPaths.map(async (answerPath, index) => {
       const report = await verifySingleAnswer(answerPath, sources);
       const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
 
       return {
-        answerLabel: renderAnswerLabel(answerPath),
+        answerLabel: answerLabels[index] ?? answerPath,
         answerPath,
         report,
         shouldFail: failVerdicts.length > 0,
