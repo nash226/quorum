@@ -1096,29 +1096,32 @@ examples/answers/support-answer.md,Refunds are available within 14 days of purch
       "utf8",
     );
 
-    const stdout = await runCli([
+    const result = await runCliAllowFailure([
       "import-review",
       "--review-csv",
       reviewCsvPath,
       "--summary-csv-out",
       summaryCsvOutPath,
+      "--fail-on",
+      "needs_review",
     ]);
 
-    assert.match(stdout, /Reviewer decision summary CSV written to/);
+    assert.equal(result.code, 2);
+    assert.match(result.stdout, /Reviewer decision summary CSV written to/);
 
     const summaryCsv = await readFile(summaryCsvOutPath, "utf8");
     const lines = summaryCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review",
+      "answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts",
     );
     assert.equal(
       lines[1],
-      "examples/answers/hr-answer.md,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,1,1,0,0,1,0,0,0",
+      "examples/answers/hr-answer.md,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,1,1,0,0,1,0,0,0,clear,",
     );
     assert.equal(
       lines[2],
-      "examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1",
+      "examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,matched,needs_review",
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
