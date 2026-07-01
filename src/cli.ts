@@ -254,8 +254,8 @@ async function runImportReview(args: string[]): Promise<void> {
   const csvContent = await readFile(parsed.reviewCsvPath, "utf8");
   const report = importReviewerDecisions(csvContent);
   const jsonReport = JSON.stringify(report, null, 2);
-  const markdownReport = renderReviewerDecisionImportMarkdownReport(report);
-  const htmlReport = renderReviewerDecisionImportHtmlReport(report);
+  const markdownReport = renderReviewerDecisionImportMarkdownReport(report, parsed.failOn);
+  const htmlReport = renderReviewerDecisionImportHtmlReport(report, parsed.failOn);
   const summaryCsv = renderReviewerDecisionImportSummaryCsv(report, parsed.failOn);
   const shouldFail = shouldFailReport(report, parsed.failOn);
 
@@ -283,7 +283,7 @@ async function runImportReview(args: string[]): Promise<void> {
     return;
   }
 
-  process.stdout.write(renderReviewerDecisionImportReport(report));
+  process.stdout.write(renderReviewerDecisionImportReport(report, parsed.failOn));
 
   if (parsed.outPath) {
     console.log(`Imported reviewer decisions written to ${parsed.outPath}`);
