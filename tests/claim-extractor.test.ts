@@ -319,3 +319,21 @@ Healthcare coverage begins after 30 days of employment
     ],
   );
 });
+
+test("strips inline markdown formatting from extracted claims", () => {
+  const claims = extractClaims(`Policy summary:
+
+- **Parental leave:** Employees receive \`12 weeks\` of paid parental leave.
+- Review the [support playbook](https://example.com/support) before escalating tickets.
+- ~~Legacy note~~ Current onboarding steps apply to full-time staff.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Parental leave: Employees receive 12 weeks of paid parental leave.",
+      "Review the support playbook before escalating tickets.",
+      "Legacy note Current onboarding steps apply to full-time staff.",
+    ],
+  );
+});
