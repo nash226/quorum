@@ -1002,7 +1002,8 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
                 .map((assessment) => {
                   const evidence = assessment.evidence[0];
                   const evidenceMarkup = evidence
-                    ? `<p class="claim-item__evidence"><strong>${escapeHtml(evidence.documentTitle)}</strong>: ${escapeHtml(evidence.quote)}</p>`
+                    ? `<p class="claim-item__evidence-meta"><strong>${escapeHtml(evidence.documentTitle)}</strong> · ${escapeHtml(renderEvidenceMetadata(evidence))}</p>
+                       <p class="claim-item__evidence">${escapeHtml(evidence.quote)}</p>`
                     : `<p class="claim-item__evidence claim-item__evidence--empty">No approved source snippet matched strongly enough.</p>`;
 
                   return `
@@ -1029,11 +1030,12 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
               </div>
               <h3>${escapeHtml(primaryAssessment.claim.text)}</h3>
               <p class="claim-item__reason">${escapeHtml(primaryAssessment.reason)}</p>
-              <p class="claim-item__evidence${primaryAssessment.evidence[0] ? "" : " claim-item__evidence--empty"}">${
+              ${
                 primaryAssessment.evidence[0]
-                  ? `<strong>${escapeHtml(primaryAssessment.evidence[0].documentTitle)}</strong>: ${escapeHtml(primaryAssessment.evidence[0].quote)}`
-                  : "No approved source snippet matched strongly enough."
-              }</p>
+                  ? `<p class="claim-item__evidence-meta"><strong>${escapeHtml(primaryAssessment.evidence[0].documentTitle)}</strong> · ${escapeHtml(renderEvidenceMetadata(primaryAssessment.evidence[0]))}</p>
+                     <p class="claim-item__evidence">${escapeHtml(primaryAssessment.evidence[0].quote)}</p>`
+                  : `<p class="claim-item__evidence claim-item__evidence--empty">No approved source snippet matched strongly enough.</p>`
+              }
             </div>
           </section>`
         : "";
@@ -1475,13 +1477,18 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
       }
 
       .claim-item__reason,
+      .claim-item__evidence-meta,
       .claim-item__evidence {
         margin: 10px 0 0;
         color: var(--muted);
         line-height: 1.55;
       }
 
-      .claim-item__evidence strong {
+      .claim-item__evidence-meta {
+        font-size: 0.82rem;
+      }
+
+      .claim-item__evidence-meta strong {
         color: var(--ink);
       }
 
@@ -1553,7 +1560,7 @@ export function renderTextAssessmentLines(assessment: ClaimAssessment): string[]
 
   for (const evidence of assessment.evidence) {
     lines.push(
-      `Evidence (${evidence.documentTitle}, ${evidence.documentTrustLevel} trust, score ${evidence.score}):`,
+      `Evidence (${renderEvidenceLabel(evidence)}):`,
       `  ${evidence.quote}`,
     );
   }
@@ -1595,7 +1602,7 @@ function renderMarkdownAssessment(
 
   for (const evidence of assessment.evidence) {
     lines.push(
-      `  - **${evidence.documentTitle}** (${evidence.documentTrustLevel} trust, score ${evidence.score})`,
+      `  - **${evidence.documentTitle}** (${renderEvidenceMetadata(evidence)})`,
       `    > ${evidence.quote}`,
     );
   }
@@ -1660,13 +1667,37 @@ function averageEvidenceScore(assessments: ClaimAssessment[]): string {
   return average.toFixed(2);
 }
 
+function renderEvidenceMetadata(evidence: {
+  documentTrustLevel: string;
+  documentUpdatedAt?: string;
+  score: number;
+}): string {
+  const metadata = [`${evidence.documentTrustLevel} trust`];
+
+  if (evidence.documentUpdatedAt) {
+    metadata.push(`updated ${evidence.documentUpdatedAt}`);
+  }
+
+  metadata.push(`score ${evidence.score}`);
+  return metadata.join(", ");
+}
+
+function renderEvidenceLabel(evidence: {
+  documentTitle: string;
+  documentTrustLevel: string;
+  documentUpdatedAt?: string;
+  score: number;
+}): string {
+  return `${evidence.documentTitle}, ${renderEvidenceMetadata(evidence)}`;
+}
+
 function renderReviewConsoleAssessmentRow(
   assessment: ClaimAssessment,
   selected: boolean,
 ): string {
   const primaryEvidence = assessment.evidence[0];
   const sourceMatch = primaryEvidence
-    ? `<strong>${escapeHtml(primaryEvidence.documentTitle)}</strong><div class="small">${escapeHtml(primaryEvidence.documentTrustLevel)} trust - score ${primaryEvidence.score}</div>`
+    ? `<strong>${escapeHtml(primaryEvidence.documentTitle)}</strong><div class="small">${escapeHtml(renderEvidenceMetadata(primaryEvidence))}</div>`
     : `<span class="small">No approved snippet</span>`;
 
   return `
@@ -1715,6 +1746,7 @@ function renderReviewConsoleEvidencePanel(
   const trustLevel = primaryEvidence?.documentTrustLevel ?? "n/a";
   const score = primaryEvidence?.score.toString() ?? "n/a";
   const sourceTitle = primaryEvidence?.documentTitle ?? "No source attached";
+  const updatedAt = primaryEvidence?.documentUpdatedAt ?? "n/a";
   const recommendedDecision = decisionForAssessment(assessment);
 
   return `
@@ -1730,6 +1762,7 @@ function renderReviewConsoleEvidencePanel(
                   <div class="field"><span>Trust level</span><strong>${escapeHtml(trustLevel)}</strong></div>
                   <div class="field"><span>Evidence score</span><strong>${escapeHtml(score)}</strong></div>
                   <div class="field"><span>Source</span><strong>${escapeHtml(sourceTitle)}</strong></div>
+                  <div class="field"><span>Updated</span><strong>${escapeHtml(updatedAt)}</strong></div>
                   <div class="field"><span>Claim ID</span><strong>${escapeHtml(assessment.claim.id)}</strong></div>
                 </div>
                 <div class="decision-box">
