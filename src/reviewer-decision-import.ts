@@ -12,6 +12,7 @@ const REQUIRED_HEADERS = [
   "reviewer_verdict",
   "reviewer_notes",
 ] as const;
+const OPTIONAL_ANSWER_LABEL_HEADER = "answer_label";
 const OPTIONAL_ANSWER_PATH_HEADER = "answer_path";
 const OPTIONAL_ANSWER_PREVIEW_HEADER = "answer_preview";
 const OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER = "evidence_trust_levels";
@@ -21,6 +22,7 @@ const OPTIONAL_EVIDENCE_SCORES_HEADER = "evidence_scores";
 type ReviewerDecisionHeader = (typeof REQUIRED_HEADERS)[number];
 
 export interface ImportedReviewerDecision {
+  answerLabel?: string;
   answerPath?: string;
   answerPreview?: string;
   claimId: string;
@@ -50,6 +52,7 @@ export interface ReviewerDecisionImportReport {
 }
 
 export interface ReviewerDecisionGroup {
+  answerLabel?: string;
   answerPath?: string;
   answerPreview?: string;
   label: string;
@@ -124,6 +127,9 @@ export function renderReviewerDecisionImportReport(
   for (const group of report.answerGroups) {
     lines.push(
       `Answer: ${group.label}`,
+      ...(group.answerPath && group.answerPath !== group.label
+        ? [`Answer file: ${group.answerPath}`]
+        : []),
       ...(group.answerPreview ? [`Answer preview: ${group.answerPreview}`] : []),
       `Claims: ${group.summary.totalClaims} total, ${group.summary.reviewedClaims} reviewed, ${group.summary.pendingClaims} pending`,
       `Final verdicts: ${group.summary.verified} verified, ${group.summary.contradicted} contradicted, ${group.summary.unsupported} unsupported, ${group.summary.needs_review} needs review`,
@@ -185,6 +191,9 @@ export function renderReviewerDecisionImportMarkdownReport(
     lines.push(
       `### ${group.label}`,
       "",
+      ...(group.answerPath && group.answerPath !== group.label
+        ? [`- Answer file: ${group.answerPath}`]
+        : []),
       ...(group.answerPreview ? [`- Answer preview: ${group.answerPreview}`, ""] : []),
       `- Total claims: ${group.summary.totalClaims}`,
       `- Reviewed claims: ${group.summary.reviewedClaims}`,
@@ -311,6 +320,11 @@ export function renderReviewerDecisionImportHtmlReport(
                   <div>
                     <p class="eyebrow">Answer file</p>
                     <h2><code>${escapeHtml(group.label)}</code></h2>
+                    ${
+                      group.answerPath && group.answerPath !== group.label
+                        ? `<p class="answer-group__path"><code>${escapeHtml(group.answerPath)}</code></p>`
+                        : ""
+                    }
                     ${group.answerPreview
                       ? `<p class="answer-group__preview">${escapeHtml(group.answerPreview)}</p>`
                       : ""}
@@ -468,6 +482,11 @@ export function renderReviewerDecisionImportHtmlReport(
         color: #314150;
         line-height: 1.5;
         max-width: 72ch;
+      }
+
+      .answer-group__path {
+        margin: 10px 0 0;
+        color: var(--muted);
       }
 
       .answer-group__stats {
@@ -736,7 +755,9 @@ function groupImportedClaims(claims: ImportedReviewerDecision[]): ReviewerDecisi
 
   for (const claim of claims) {
     const group = groups.find((entry) =>
-      entry.answerPath === claim.answerPath && entry.answerPreview === claim.answerPreview,
+      entry.answerLabel === claim.answerLabel &&
+      entry.answerPath === claim.answerPath &&
+      entry.answerPreview === claim.answerPreview,
     );
 
     if (group) {
@@ -748,9 +769,10 @@ function groupImportedClaims(claims: ImportedReviewerDecision[]): ReviewerDecisi
     const summary = createEmptyImportSummary();
     accumulateClaimSummary(summary, claim);
     groups.push({
+      answerLabel: claim.answerLabel,
       answerPath: claim.answerPath,
       answerPreview: claim.answerPreview,
-      label: claim.answerPath ?? claim.answerPreview ?? "Unspecified answer",
+      label: claim.answerLabel ?? claim.answerPath ?? claim.answerPreview ?? "Unspecified answer",
       claims: [claim],
       summary,
     });
@@ -815,6 +837,7 @@ function importDecisionRow(
   row: string[],
   rowNumber: number,
   columnIndex: Record<ReviewerDecisionHeader, number> & {
+    answerLabel?: number;
     answerPath?: number;
     answerPreview?: number;
     evidenceTrustLevels?: number;
@@ -822,6 +845,7 @@ function importDecisionRow(
     evidenceScores?: number;
   },
 ): ImportedReviewerDecision {
+  const answerLabel = readOptionalValue(row, columnIndex.answerLabel ?? -1) || undefined;
   const answerPath = readOptionalValue(row, columnIndex.answerPath ?? -1) || undefined;
   const answerPreview = readOptionalValue(row, columnIndex.answerPreview ?? -1) || undefined;
   const claimId = readRequiredValue(row, rowNumber, columnIndex.claim_id, "claim_id");
@@ -839,6 +863,7 @@ function importDecisionRow(
   const finalVerdict = reviewerVerdict ?? modelVerdict;
 
   return {
+    answerLabel,
     answerPath,
     answerPreview,
     claimId,
@@ -881,6 +906,7 @@ function assertHeaders(headers: string[]): void {
 function createColumnIndex(
   headers: string[],
 ): Record<ReviewerDecisionHeader, number> & {
+  answerLabel?: number;
   answerPath?: number;
   answerPreview?: number;
   evidenceTrustLevels?: number;
@@ -896,6 +922,7 @@ function createColumnIndex(
   );
 
   const answerPathIndex = headers.indexOf(OPTIONAL_ANSWER_PATH_HEADER);
+  const answerLabelIndex = headers.indexOf(OPTIONAL_ANSWER_LABEL_HEADER);
   const answerPreviewIndex = headers.indexOf(OPTIONAL_ANSWER_PREVIEW_HEADER);
   const evidenceTrustLevelsIndex = headers.indexOf(OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER);
   const evidenceUpdatedAtIndex = headers.indexOf(OPTIONAL_EVIDENCE_UPDATED_AT_HEADER);
@@ -903,6 +930,7 @@ function createColumnIndex(
 
   return {
     ...requiredColumnIndex,
+    ...(answerLabelIndex === -1 ? {} : { answerLabel: answerLabelIndex }),
     ...(answerPathIndex === -1 ? {} : { answerPath: answerPathIndex }),
     ...(answerPreviewIndex === -1 ? {} : { answerPreview: answerPreviewIndex }),
     ...(evidenceTrustLevelsIndex === -1
