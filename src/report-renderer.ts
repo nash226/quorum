@@ -6,7 +6,7 @@ import type {
 } from "./domain.js";
 import { serializeDelimitedList } from "./csv-list.js";
 import { matchingFailVerdicts } from "./report-policy.js";
-import { renderAnswerPreview } from "./text.js";
+import { renderAnswerLabel, renderAnswerPreview } from "./text.js";
 
 export function renderTextReport(
   report: VerificationReport,
@@ -176,6 +176,7 @@ export function renderReviewerDecisionCsv(
   const failVerdicts = matchingFailVerdicts(report, failOn);
   const rows = [
     [
+      "answer_label",
       "answer_path",
       "answer_preview",
       "answer_fail_policy",
@@ -193,6 +194,7 @@ export function renderReviewerDecisionCsv(
       "reviewer_notes",
     ],
     ...report.assessments.map((assessment) => [
+      report.answerPath ? renderAnswerLabel(report.answerPath) : "",
       report.answerPath ?? "",
       renderAnswerPreview(report.answer),
       failVerdicts.length > 0 ? "matched" : "clear",
