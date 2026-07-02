@@ -204,15 +204,23 @@ async function runVerifyBatch(args: string[]): Promise<void> {
     throw new Error(`No answer files found in ${locations}`);
   }
 
-  const answerLabels = renderAnswerLabels(answerPaths);
+  const stdinAnswer = answerPaths.includes("-") ? await readAnswer("-") : undefined;
+  const normalizedAnswerPaths = answerPaths.map((answerPath) =>
+    answerPath === "-" ? STDIN_ANSWER_PATH : answerPath,
+  );
+  const answerLabels = renderAnswerLabels(normalizedAnswerPaths);
   const answers = await Promise.all(
     answerPaths.map(async (answerPath, index) => {
-      const report = await verifySingleAnswer(answerPath, sources);
+      const normalizedAnswerPath = normalizedAnswerPaths[index] ?? answerPath;
+      const report =
+        answerPath === "-" && stdinAnswer !== undefined
+          ? verifyAnswer(stdinAnswer, sources, undefined, STDIN_ANSWER_PATH)
+          : await verifySingleAnswer(answerPath, sources);
       const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
 
       return {
-        answerLabel: answerLabels[index] ?? answerPath,
-        answerPath,
+        answerLabel: answerLabels[index] ?? normalizedAnswerPath,
+        answerPath: normalizedAnswerPath,
         report,
         shouldFail: failVerdicts.length > 0,
         failVerdicts,
@@ -673,6 +681,10 @@ function dedupePathsInOrder(paths: string[]): string[] {
 }
 
 function normalizePathForDedupe(path: string): string {
+  if (path === "-") {
+    return STDIN_ANSWER_PATH;
+  }
+
   return resolve(path);
 }
 
@@ -850,10 +862,10 @@ Example:
     "verify-batch": `Quorum verify-batch
 
 Usage:
-  quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
-  --answer <path>            Answer file to include; may be repeated
+  --answer <path|->          Answer file to include, or - to read one answer from stdin; may be repeated
   --answer-dir <path>        Directory of answer files to include
   --source <path>            Approved source document; may be repeated
   --source-dir <path>        Directory of approved source documents
@@ -869,6 +881,7 @@ Options:
 
 Example:
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
+  cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
 `,
     "import-review": `Quorum import-review
 
@@ -898,13 +911,14 @@ Example:
 
 Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
   cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --source-dir examples/sources --json
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
+  cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
 `);
 }
