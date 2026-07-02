@@ -208,6 +208,22 @@ test("extracts clean claims from parenthesized numeric markdown list answers", (
   );
 });
 
+test("extracts clean claims from numeric colon list answers", () => {
+  const claims = extractClaims(`Policy notes:
+
+1: Employees receive 12 weeks of paid parental leave
+2: Healthcare coverage begins after 30 days of employment
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave",
+      "Healthcare coverage begins after 30 days of employment",
+    ],
+  );
+});
+
 test("extracts clean claims from inline enumerated answers", () => {
   const claims = extractClaims(
     "1) Employees receive 12 weeks of paid parental leave. 2) Managers approve travel within five business days. • Finance reviews international trips before booking. (a) Legal approves contract exceptions.",
@@ -254,6 +270,24 @@ test("keeps wrapped parenthesized numeric markdown list items as single claims",
 (1) Employees receive 12 weeks of paid parental leave
 for full-time staff only.
 (2) Enterprise support requests receive a first response
+within four business hours.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+      "Enterprise support requests receive a first response within four business hours.",
+    ],
+  );
+});
+
+test("keeps wrapped numeric colon list items as single claims", () => {
+  const claims = extractClaims(`Policy notes:
+
+1: Employees receive 12 weeks of paid parental leave
+for full-time staff only.
+2: Enterprise support requests receive a first response
 within four business hours.
 `);
 
