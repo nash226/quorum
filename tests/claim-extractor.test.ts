@@ -66,6 +66,34 @@ test("ignores quote, checkbox, and heading markdown prefixes", () => {
   );
 });
 
+test("keeps wrapped blockquote lines as a single claim", () => {
+  const claims = extractClaims(`## Support Notes
+
+> Customers can request refunds within 30 days
+> for billing disputes only.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Customers can request refunds within 30 days for billing disputes only.",
+  ]);
+});
+
+test("does not merge separate quoted claims that start on a new uppercase line", () => {
+  const claims = extractClaims(`## Support Notes
+
+> Customers can request refunds within 30 days.
+> Billing managers approve exceptions within two business days.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Customers can request refunds within 30 days.",
+      "Billing managers approve exceptions within two business days.",
+    ],
+  );
+});
+
 test("keeps wrapped markdown list items as single claims", () => {
   const claims = extractClaims(`# Policy Notes
 

@@ -56,10 +56,15 @@ function normalizeAnswer(answer: string): string {
       canContinuePlainLine(normalizedLine, lines, index, belongsToMarkdownClaim);
 
     if (
-      !explicitClaimPrefix &&
       previousLineCanContinue &&
       normalizedLines.length > 0 &&
-      shouldMergeWithPreviousLine(line, rawLine, previousLineBelongsToMarkdownClaim)
+      shouldMergeWithPreviousLine(
+        line,
+        rawLine,
+        normalizedLine,
+        explicitClaimPrefix,
+        previousLineBelongsToMarkdownClaim,
+      )
     ) {
       normalizedLines[normalizedLines.length - 1] += ` ${normalizedLine}`;
       previousLineCanContinue = currentLineCanContinue;
@@ -223,12 +228,30 @@ function canContinuePlainLine(
 function shouldMergeWithPreviousLine(
   line: string,
   rawLine: string,
+  normalizedLine: string,
+  explicitClaimPrefix: boolean,
   previousLineBelongsToMarkdownClaim: boolean,
 ): boolean {
+  if (explicitClaimPrefix) {
+    return isQuotedContinuationLine(normalizedLine, rawLine);
+  }
+
   return (
     /^[a-z0-9("'[]/.test(line) ||
     (previousLineBelongsToMarkdownClaim && isIndentedContinuation(rawLine))
   );
+}
+
+function isQuotedContinuationLine(normalizedLine: string, rawLine: string): boolean {
+  if (!/^>\s*/.test(rawLine.trimStart())) {
+    return false;
+  }
+
+  if (hasMarkdownClaimPrefix(normalizedLine)) {
+    return false;
+  }
+
+  return /^[a-z0-9("'[]/.test(normalizedLine);
 }
 
 function isIndentedContinuation(line: string): boolean {
