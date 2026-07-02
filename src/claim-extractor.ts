@@ -36,7 +36,7 @@ function normalizeAnswer(answer: string): string {
     const rawLine = lines[index] ?? "";
     const line = rawLine.trim();
 
-    if (line.length === 0 || isHeading(line)) {
+    if (line.length === 0 || isHeading(line) || isSetextHeading(line, lines, index)) {
       previousLineCanContinue = false;
       continue;
     }
@@ -93,6 +93,28 @@ function hasMarkdownClaimPrefix(line: string): boolean {
 
 function isHeading(line: string): boolean {
   return /^#{1,6}\s+/.test(line);
+}
+
+function isSetextHeading(line: string, lines: string[], currentIndex: number): boolean {
+  if (isSetextHeadingUnderline(line)) {
+    return true;
+  }
+
+  for (let index = currentIndex + 1; index < lines.length; index += 1) {
+    const nextLine = (lines[index] ?? "").trim();
+
+    if (nextLine.length === 0) {
+      return false;
+    }
+
+    return isSetextHeadingUnderline(nextLine);
+  }
+
+  return false;
+}
+
+function isSetextHeadingUnderline(line: string): boolean {
+  return /^(?:={2,}|-{2,})$/.test(line);
 }
 
 function stripOneMarkdownClaimPrefix(line: string): string {
