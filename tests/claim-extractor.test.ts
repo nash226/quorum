@@ -240,6 +240,20 @@ test("extracts clean claims from inline enumerated answers", () => {
   );
 });
 
+test("extracts clean claims from inline numeric-colon answers", () => {
+  const claims = extractClaims(
+    "1: Employees receive 12 weeks of paid parental leave. 2: Managers approve travel within five business days.",
+  );
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve travel within five business days.",
+    ],
+  );
+});
+
 test("splits semicolon-delimited policy clauses into separate claims", () => {
   const claims = extractClaims(
     "Employees receive 12 weeks of paid parental leave; Healthcare coverage begins after 30 days of employment.",
