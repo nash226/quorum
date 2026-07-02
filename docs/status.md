@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b39192f` on 2026-07-02, feat: enrich summary csv evidence context
+- Latest shipped change: `2f7fc09` on 2026-07-02, support stdin reviewer imports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-02 | [#105](https://github.com/nash226/quorum/pull/105) | support stdin reviewer imports | `2f7fc09` |
 | 2026-07-02 | [#104](https://github.com/nash226/quorum/pull/104) | feat: enrich summary csv evidence context | `b39192f` |
 | 2026-07-02 | [#103](https://github.com/nash226/quorum/pull/103) | fix: preserve no-claim batch primary finding | `d1fc0d9` |
 | 2026-07-02 | [#102](https://github.com/nash226/quorum/pull/102) | fix: read html updated dates from time tags | `1c85e3d` |
@@ -52,5 +53,4 @@
 | 2026-07-02 | [#100](https://github.com/nash226/quorum/pull/100) | normalize inline enumerated claims | `a21b97c` |
 | 2026-07-02 | [#99](https://github.com/nash226/quorum/pull/99) | infer html source titles from headings | `aec4946` |
 | 2026-07-02 | [#98](https://github.com/nash226/quorum/pull/98) | add single verify summary csv | `ea2dd2a` |
-| 2026-07-02 | [#97](https://github.com/nash226/quorum/pull/97) | add command-specific help | `647b787` |
 
