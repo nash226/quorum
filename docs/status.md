@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `53f0775` on 2026-07-01, handle lowercase roman claim lists
+- Latest shipped change: `647b787` on 2026-07-02, add command-specific help
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-02 | [#97](https://github.com/nash226/quorum/pull/97) | add command-specific help | `647b787` |
 | 2026-07-01 | [#96](https://github.com/nash226/quorum/pull/96) | handle lowercase roman claim lists | `53f0775` |
 | 2026-07-01 | Direct push | test: avoid batch review fixture race | `2d3247f` |
 | 2026-07-01 | [#94](https://github.com/nash226/quorum/pull/94) | preserve empty reviewer csv answers | `21360b1` |
@@ -52,5 +53,4 @@
 | 2026-07-01 | [#92](https://github.com/nash226/quorum/pull/92) | flag empty batch answers for review | `518d6a3` |
 | 2026-07-01 | [#91](https://github.com/nash226/quorum/pull/91) | label single review csv answers | `ca9bde4` |
 | 2026-07-01 | [#90](https://github.com/nash226/quorum/pull/90) | show single-answer fail policy in reports | `e3ec7a0` |
-| 2026-07-01 | [#89](https://github.com/nash226/quorum/pull/89) | show import-review fail policy in reports | `27be1d2` |
 
