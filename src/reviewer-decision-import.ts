@@ -15,9 +15,11 @@ const REQUIRED_HEADERS = [
 const OPTIONAL_ANSWER_LABEL_HEADER = "answer_label";
 const OPTIONAL_ANSWER_PATH_HEADER = "answer_path";
 const OPTIONAL_ANSWER_PREVIEW_HEADER = "answer_preview";
+const OPTIONAL_ANSWER_HAS_CLAIMS_HEADER = "answer_has_claims";
 const OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER = "evidence_trust_levels";
 const OPTIONAL_EVIDENCE_UPDATED_AT_HEADER = "evidence_updated_at";
 const OPTIONAL_EVIDENCE_SCORES_HEADER = "evidence_scores";
+const NO_CLAIMS_REVIEW_REASON = "No claims were extracted from this answer.";
 
 type ReviewerDecisionHeader = (typeof REQUIRED_HEADERS)[number];
 
@@ -57,7 +59,15 @@ export interface ReviewerDecisionGroup {
   answerPreview?: string;
   label: string;
   claims: ImportedReviewerDecision[];
+  emptyStateReason?: string;
   summary: ReviewerDecisionImportReport["summary"];
+}
+
+interface ImportedAnswerGroupSeed {
+  answerLabel?: string;
+  answerPath?: string;
+  answerPreview?: string;
+  emptyStateReason?: string;
 }
 
 export function importReviewerDecisions(
@@ -72,10 +82,21 @@ export function importReviewerDecisions(
   const headers = rows[0] ?? [];
   assertHeaders(headers);
   const columnIndex = createColumnIndex(headers);
-  const claims = rows
+  const claims: ImportedReviewerDecision[] = [];
+  const answerGroupSeeds: ImportedAnswerGroupSeed[] = [];
+
+  rows
     .slice(1)
     .filter((row) => row.some((value) => value.trim().length > 0))
-    .map((row, rowIndex) => importDecisionRow(row, rowIndex + 2, columnIndex));
+    .forEach((row, rowIndex) => {
+      const importedRow = importDecisionRow(row, rowIndex + 2, columnIndex);
+
+      if ("claimId" in importedRow) {
+        claims.push(importedRow);
+      } else {
+        answerGroupSeeds.push(importedRow);
+      }
+    });
 
   const summary: ReviewerDecisionImportReport["summary"] = {
     totalClaims: claims.length,
@@ -104,7 +125,7 @@ export function importReviewerDecisions(
 
   return {
     claims,
-    answerGroups: groupImportedClaims(claims),
+    answerGroups: groupImportedClaims(claims, answerGroupSeeds),
     summary,
   };
 }
@@ -141,6 +162,11 @@ export function renderReviewerDecisionImportReport(
       `Fail policy: ${groupFailVerdicts.length > 0 ? `matched (${groupFailVerdicts.join(", ")})` : "clear"}`,
       "",
     );
+
+    if (group.claims.length === 0) {
+      lines.push(group.emptyStateReason ?? NO_CLAIMS_REVIEW_REASON, "");
+      continue;
+    }
 
     for (const claim of group.claims) {
       const reviewState = claim.reviewerVerdict
@@ -216,6 +242,11 @@ export function renderReviewerDecisionImportMarkdownReport(
       "",
     );
 
+    if (group.claims.length === 0) {
+      lines.push(group.emptyStateReason ?? NO_CLAIMS_REVIEW_REASON, "");
+      return;
+    }
+
     group.claims.forEach((claim, index) => {
       const reviewerVerdict = claim.reviewerVerdict
         ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
@@ -282,9 +313,9 @@ export function renderReviewerDecisionImportSummaryCsv(
         group.label,
         group.answerPath ?? "",
         group.answerPreview ?? "",
-        primaryClaim?.finalVerdict ?? "",
+        primaryClaim?.finalVerdict ?? (group.claims.length === 0 ? "needs_review" : ""),
         primaryClaim?.claimText ?? "",
-        primaryClaim?.modelReason ?? "",
+        primaryClaim?.modelReason ?? (group.claims.length === 0 ? group.emptyStateReason ?? NO_CLAIMS_REVIEW_REASON : ""),
         primaryClaim?.reviewerNotes ?? "",
         primaryClaim?.evidenceTitles[0] ?? "",
         primaryClaim?.evidenceTrustLevels[0] ?? "",
@@ -326,6 +357,10 @@ export function renderReviewerDecisionImportHtmlReport(
             const claimCards = group.claims
               .map((claim, index) => renderClaimCard(claim, index + 1))
               .join("\n");
+            const claimListContent =
+              group.claims.length > 0
+                ? claimCards
+                : `<article class="claim-card"><div class="claim-section"><h4>Review note</h4><p>${escapeHtml(group.emptyStateReason ?? NO_CLAIMS_REVIEW_REASON)}</p></div></article>`;
 
             return `
               <section class="answer-group">
@@ -357,7 +392,7 @@ export function renderReviewerDecisionImportHtmlReport(
                   <article class="group-stat"><span>Overrides</span><strong>${group.summary.overriddenClaims}</strong></article>
                 </div>
                 <div class="claim-list">
-                  ${claimCards}
+                  ${claimListContent}
                 </div>
               </section>`
               .trim();
@@ -765,35 +800,24 @@ function collectImportedEvidence(claim: ImportedReviewerDecision): Array<{
   return evidence;
 }
 
-function groupImportedClaims(claims: ImportedReviewerDecision[]): ReviewerDecisionGroup[] {
-  const groups: ReviewerDecisionGroup[] = [];
+function groupImportedClaims(
+  claims: ImportedReviewerDecision[],
+  seeds: ImportedAnswerGroupSeed[] = [],
+): ReviewerDecisionGroup[] {
+  const groups = new Map<string, ReviewerDecisionGroup>();
 
-  for (const claim of claims) {
-    const group = groups.find((entry) =>
-      entry.answerLabel === claim.answerLabel &&
-      entry.answerPath === claim.answerPath &&
-      entry.answerPreview === claim.answerPreview,
-    );
-
-    if (group) {
-      group.claims.push(claim);
-      accumulateClaimSummary(group.summary, claim);
-      continue;
-    }
-
-    const summary = createEmptyImportSummary();
-    accumulateClaimSummary(summary, claim);
-    groups.push({
-      answerLabel: claim.answerLabel,
-      answerPath: claim.answerPath,
-      answerPreview: claim.answerPreview,
-      label: claim.answerLabel ?? claim.answerPath ?? claim.answerPreview ?? "Unspecified answer",
-      claims: [claim],
-      summary,
-    });
+  for (const seed of seeds) {
+    getOrCreateImportedGroup(groups, seed).emptyStateReason =
+      seed.emptyStateReason ?? NO_CLAIMS_REVIEW_REASON;
   }
 
-  return groups;
+  for (const claim of claims) {
+    const group = getOrCreateImportedGroup(groups, claim);
+    group.claims.push(claim);
+    accumulateClaimSummary(group.summary, claim);
+  }
+
+  return [...groups.values()];
 }
 
 function createEmptyImportSummary(): ReviewerDecisionImportReport["summary"] {
@@ -855,14 +879,31 @@ function importDecisionRow(
     answerLabel?: number;
     answerPath?: number;
     answerPreview?: number;
+    answerHasClaims?: number;
     evidenceTrustLevels?: number;
     evidenceUpdatedAt?: number;
     evidenceScores?: number;
   },
-): ImportedReviewerDecision {
+): ImportedReviewerDecision | ImportedAnswerGroupSeed {
   const answerLabel = readOptionalValue(row, columnIndex.answerLabel ?? -1) || undefined;
   const answerPath = readOptionalValue(row, columnIndex.answerPath ?? -1) || undefined;
   const answerPreview = readOptionalValue(row, columnIndex.answerPreview ?? -1) || undefined;
+  const answerHasClaims = parseOptionalBoolean(
+    readOptionalValue(row, columnIndex.answerHasClaims ?? -1),
+    rowNumber,
+    OPTIONAL_ANSWER_HAS_CLAIMS_HEADER,
+  );
+
+  if (answerHasClaims === false) {
+    return {
+      answerLabel,
+      answerPath,
+      answerPreview,
+      emptyStateReason:
+        readOptionalValue(row, columnIndex.model_reason) || NO_CLAIMS_REVIEW_REASON,
+    };
+  }
+
   const claimId = readRequiredValue(row, rowNumber, columnIndex.claim_id, "claim_id");
   const claimText = readRequiredValue(row, rowNumber, columnIndex.claim_text, "claim_text");
   const modelVerdict = parseVerdict(
@@ -918,12 +959,66 @@ function assertHeaders(headers: string[]): void {
   }
 }
 
+function getOrCreateImportedGroup(
+  groups: Map<string, ReviewerDecisionGroup>,
+  value: ImportedReviewerDecision | ImportedAnswerGroupSeed,
+): ReviewerDecisionGroup {
+  const key = [
+    value.answerLabel ?? "",
+    value.answerPath ?? "",
+    value.answerPreview ?? "",
+  ].join("\u0000");
+  const existing = groups.get(key);
+
+  if (existing) {
+    return existing;
+  }
+
+  const group: ReviewerDecisionGroup = {
+    answerLabel: value.answerLabel,
+    answerPath: value.answerPath,
+    answerPreview: value.answerPreview,
+    label: value.answerLabel ?? value.answerPath ?? value.answerPreview ?? "Unspecified answer",
+    claims: [],
+    emptyStateReason:
+      "emptyStateReason" in value ? value.emptyStateReason : undefined,
+    summary: createEmptyImportSummary(),
+  };
+  groups.set(key, group);
+  return group;
+}
+
+function parseOptionalBoolean(
+  value: string,
+  rowNumber: number,
+  columnName: string,
+): boolean | undefined {
+  const normalized = value.trim().toLowerCase();
+
+  if (!normalized) {
+    return undefined;
+  }
+
+  if (normalized === "true") {
+    return true;
+  }
+
+  if (normalized === "false") {
+    return false;
+  }
+
+  throw new Error(
+    `Invalid ${columnName} value on row ${rowNumber}: expected true or false, received "${value}"`,
+  );
+}
+
 function createColumnIndex(
   headers: string[],
 ): Record<ReviewerDecisionHeader, number> & {
   answerLabel?: number;
   answerPath?: number;
   answerPreview?: number;
+  answerHasClaims?: number;
   evidenceTrustLevels?: number;
   evidenceUpdatedAt?: number;
   evidenceScores?: number;
@@ -939,6 +1034,7 @@ function createColumnIndex(
   const answerPathIndex = headers.indexOf(OPTIONAL_ANSWER_PATH_HEADER);
   const answerLabelIndex = headers.indexOf(OPTIONAL_ANSWER_LABEL_HEADER);
   const answerPreviewIndex = headers.indexOf(OPTIONAL_ANSWER_PREVIEW_HEADER);
+  const answerHasClaimsIndex = headers.indexOf(OPTIONAL_ANSWER_HAS_CLAIMS_HEADER);
   const evidenceTrustLevelsIndex = headers.indexOf(OPTIONAL_EVIDENCE_TRUST_LEVELS_HEADER);
   const evidenceUpdatedAtIndex = headers.indexOf(OPTIONAL_EVIDENCE_UPDATED_AT_HEADER);
   const evidenceScoresIndex = headers.indexOf(OPTIONAL_EVIDENCE_SCORES_HEADER);
@@ -948,6 +1044,7 @@ function createColumnIndex(
     ...(answerLabelIndex === -1 ? {} : { answerLabel: answerLabelIndex }),
     ...(answerPathIndex === -1 ? {} : { answerPath: answerPathIndex }),
     ...(answerPreviewIndex === -1 ? {} : { answerPreview: answerPreviewIndex }),
+    ...(answerHasClaimsIndex === -1 ? {} : { answerHasClaims: answerHasClaimsIndex }),
     ...(evidenceTrustLevelsIndex === -1
       ? {}
       : { evidenceTrustLevels: evidenceTrustLevelsIndex }),
