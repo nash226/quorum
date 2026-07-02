@@ -76,31 +76,54 @@ interface ImportReviewArgs {
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
 const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
 const STDIN_ANSWER_PATH = "<stdin>";
+const HELP_FLAGS = new Set(["--help", "-h"]);
+type CommandName = "verify" | "verify-batch" | "import-review";
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
 
+  if (command === undefined) {
+    printHelp();
+    return;
+  }
+
+  if (command === "help" || isHelpFlag(command)) {
+    printHelp();
+    return;
+  }
+
   if (command === "verify") {
+    if (args.some(isHelpFlag)) {
+      printHelp("verify");
+      return;
+    }
+
     await runVerify(args);
     return;
   }
 
   if (command === "verify-batch") {
+    if (args.some(isHelpFlag)) {
+      printHelp("verify-batch");
+      return;
+    }
+
     await runVerifyBatch(args);
     return;
   }
 
   if (command === "import-review") {
+    if (args.some(isHelpFlag)) {
+      printHelp("import-review");
+      return;
+    }
+
     await runImportReview(args);
     return;
   }
 
-  if (command !== undefined) {
-    printHelp();
-    process.exitCode = 1;
-  } else {
-    printHelp();
-  }
+  printHelp();
+  process.exitCode = 1;
 }
 
 async function runVerify(args: string[]): Promise<void> {
@@ -778,7 +801,81 @@ async function writeReportFile(
   await writeFile(outPath, output, "utf8");
 }
 
-function printHelp(): void {
+function isHelpFlag(value: string): boolean {
+  return HELP_FLAGS.has(value);
+}
+
+function printHelp(command?: CommandName): void {
+  const helpTextByCommand: Record<CommandName, string> = {
+    verify: `Quorum verify
+
+Usage:
+  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+
+Options:
+  --answer <path|->          Answer file to verify, or - to read from stdin
+  --source <path>            Approved source document; may be repeated
+  --source-dir <path>        Directory of approved source documents
+  --default-trust-level <level>
+                             Override trust level for sources without metadata
+  --json                     Print the full JSON report
+  --out <path>               Write the JSON report to disk
+  --markdown-out <path>      Write a reviewer-friendly Markdown report
+  --html-out <path>          Write a styled HTML report
+  --review-csv-out <path>    Write a reviewer decision CSV
+  --fail-on <verdict>        Exit with code 2 when the verdict appears; may repeat
+
+Example:
+  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
+  cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --source-dir examples/sources --json
+`,
+    "verify-batch": `Quorum verify-batch
+
+Usage:
+  quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+
+Options:
+  --answer <path>            Answer file to include; may be repeated
+  --answer-dir <path>        Directory of answer files to include
+  --source <path>            Approved source document; may be repeated
+  --source-dir <path>        Directory of approved source documents
+  --default-trust-level <level>
+                             Override trust level for sources without metadata
+  --json                     Print the full JSON batch report
+  --out <path>               Write the JSON batch report to disk
+  --markdown-out <path>      Write a Markdown batch report
+  --html-out <path>          Write a styled HTML batch report
+  --review-csv-out <path>    Write a reviewer decision CSV
+  --summary-csv-out <path>   Write a one-row-per-answer summary CSV
+  --fail-on <verdict>        Exit with code 2 when the verdict appears; may repeat
+
+Example:
+  npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
+`,
+    "import-review": `Quorum import-review
+
+Usage:
+  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+
+Options:
+  --review-csv <path>        Reviewer decision CSV to import
+  --json                     Print the full imported JSON report
+  --out <path>               Write the imported JSON report to disk
+  --markdown-out <path>      Write a Markdown import report
+  --html-out <path>          Write a styled HTML import report
+  --summary-csv-out <path>   Write a one-row-per-answer summary CSV
+  --fail-on <verdict>        Exit with code 2 when the verdict appears; may repeat
+
+Example:
+  npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
+`,
+  };
+
+  if (command) {
+    console.log(helpTextByCommand[command]);
+    return;
+  }
+
   console.log(`Quorum
 
 Usage:
