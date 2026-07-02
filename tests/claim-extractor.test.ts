@@ -20,6 +20,36 @@ test("extracts clean claims from markdown list answers", () => {
   );
 });
 
+test("skips setext markdown headings before list claims", () => {
+  const claims = extractClaims(`HR Policy Summary
+=================
+
+1. Employees receive 12 weeks of paid parental leave
+2. Healthcare coverage begins after 30 days of employment
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave",
+      "Healthcare coverage begins after 30 days of employment",
+    ],
+  );
+});
+
+test("skips setext markdown headings before wrapped plain-text claims", () => {
+  const claims = extractClaims(`Support Notes
+-------------
+
+Employees receive 12 weeks of paid parental leave
+for full-time staff only.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+  ]);
+});
+
 test("ignores quote, checkbox, and heading markdown prefixes", () => {
   const claims = extractClaims(`## Support Notes
 
