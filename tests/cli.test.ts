@@ -299,6 +299,44 @@ test("verify reads the answer from stdin when --answer - is used", async () => {
   }
 });
 
+test("verify treats no-claim answers as fail-policy matches for needs_review", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-needs-review-"));
+
+  try {
+    const answerPath = join(tempDir, "empty.md");
+    const sourcePath = join(tempDir, "hr-policy.md");
+    const reviewCsvOutPath = join(tempDir, "reports", "review.csv");
+
+    await Promise.all([
+      writeFile(answerPath, "Short.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const result = await runCliAllowFailure([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--review-csv-out",
+      reviewCsvOutPath,
+      "--fail-on",
+      "needs_review",
+      "--json",
+    ]);
+
+    assert.equal(result.code, 2);
+
+    const lines = (await readFile(reviewCsvOutPath, "utf8")).trim().split("\n");
+    assert.equal(
+      lines[1],
+      `empty,${answerPath},Short.,matched,needs_review,false,,,,No claims were extracted from this answer.,,,,,,,`,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify writes reviewer csv fail-policy columns for single answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-review-fail-policy-"));
 
@@ -1220,6 +1258,60 @@ test("verify-batch prints an explicit empty state in the default text output", a
   }
 });
 
+test("verify-batch treats no-claim answers as fail-policy matches for needs_review", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-empty-needs-review-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const summaryCsvOutPath = join(tempDir, "reports", "batch-summary.csv");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(join(answerDir, "empty.md"), "Short.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const result = await runCliAllowFailure([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--summary-csv-out",
+      summaryCsvOutPath,
+      "--fail-on",
+      "needs_review",
+      "--json",
+    ]);
+
+    assert.equal(result.code, 2);
+
+    const report = JSON.parse(result.stdout) as {
+      summary: { answersWithFailures: number };
+      answers: Array<{ shouldFail: boolean; failVerdicts: string[] }>;
+    };
+
+    assert.equal(report.summary.answersWithFailures, 1);
+    assert.equal(report.answers[0]?.shouldFail, true);
+    assert.deepEqual(report.answers[0]?.failVerdicts, ["needs_review"]);
+    assert.match(
+      await readFile(summaryCsvOutPath, "utf8"),
+      /empty,.*empty\.md,Short\.,needs_review,,No claims were extracted from this answer\.,,,,,,0,0,0,0,0,matched,needs_review,hr-policy,medium,/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch writes a combined reviewer decision csv", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-review-csv-"));
 
@@ -1593,6 +1685,42 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
     assert.equal(report.summary.verified, 1);
     assert.equal(report.summary.unsupported, 1);
     assert.equal(report.summary.contradicted, 0);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("import-review treats no-claim metadata rows as fail-policy matches for needs_review", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-import-empty-needs-review-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "reports", "review.csv");
+    const summaryCsvOutPath = join(tempDir, "reports", "review-import-summary.csv");
+
+    await mkdir(join(tempDir, "reports"), { recursive: true });
+    await writeFile(
+      reviewCsvPath,
+      `answer_label,answer_path,answer_preview,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from this answer.,,,,
+`,
+      "utf8",
+    );
+
+    const result = await runCliAllowFailure([
+      "import-review",
+      "--review-csv",
+      reviewCsvPath,
+      "--summary-csv-out",
+      summaryCsvOutPath,
+      "--fail-on",
+      "needs_review",
+    ]);
+
+    assert.equal(result.code, 2);
+    assert.match(
+      await readFile(summaryCsvOutPath, "utf8"),
+      /empty,examples\/answers\/empty\.md,Short\.,needs_review,,No claims were extracted from this answer\.,,.*0,0,0,0,0,0,0,0,matched,needs_review/,
+    );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
