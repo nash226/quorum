@@ -18,15 +18,49 @@ export function parseClaimVerdict(value: string): ClaimVerdict {
 }
 
 export function shouldFailReport(
-  report: Pick<VerificationReport, "summary">,
+  report: FailPolicyReport,
   failOn: ClaimVerdict[],
 ): boolean {
-  return failOn.some((verdict) => report.summary[verdict] > 0);
+  return matchingFailVerdicts(report, failOn).length > 0;
 }
 
 export function matchingFailVerdicts(
-  report: Pick<VerificationReport, "summary">,
+  report: FailPolicyReport,
   failOn: ClaimVerdict[],
 ): ClaimVerdict[] {
-  return failOn.filter((verdict) => report.summary[verdict] > 0);
+  return failOn.filter((verdict) => {
+    if (verdict === "needs_review" && hasImplicitNeedsReview(report)) {
+      return true;
+    }
+
+    return report.summary[verdict] > 0;
+  });
+}
+
+type FailPolicyReport = Pick<VerificationReport, "summary"> & {
+  assessments?: unknown[];
+  claims?: unknown[];
+  answerGroups?: Array<{ claims?: unknown[] }>;
+};
+
+function hasImplicitNeedsReview(report: FailPolicyReport): boolean {
+  if (report.summary.needs_review > 0) {
+    return false;
+  }
+
+  if ("assessments" in report && Array.isArray(report.assessments)) {
+    return report.assessments.length === 0;
+  }
+
+  if ("claims" in report && Array.isArray(report.claims)) {
+    return report.claims.length === 0;
+  }
+
+  if ("answerGroups" in report && Array.isArray(report.answerGroups)) {
+    return report.answerGroups.some(
+      (group) => Array.isArray(group.claims) && group.claims.length === 0,
+    );
+  }
+
+  return false;
 }
