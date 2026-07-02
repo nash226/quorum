@@ -11,11 +11,19 @@ const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
+    .flatMap(splitCompoundClaim)
     .filter((sentence) => sentence.length >= 12)
     .map((text, index) => ({
       id: `claim_${index + 1}`,
       text,
     }));
+}
+
+function splitCompoundClaim(sentence: string): string[] {
+  return sentence
+    .split(/;\s+(?=[A-Z0-9("'])/g)
+    .map((part) => part.trim())
+    .filter(Boolean);
 }
 
 function normalizeAnswer(answer: string): string {
