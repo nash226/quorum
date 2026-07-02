@@ -50,7 +50,7 @@ The current CLI can:
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim
   while preserving the original answer path for reviewer handoff
-- write a one-row-per-answer batch summary CSV for queueing and workflow automation
+- write one-row summary CSVs for single-answer and batch verification workflows
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 
@@ -64,7 +64,8 @@ npm run dev -- verify \
   --out reports/hr-report.json \
   --markdown-out reports/hr-report.md \
   --html-out reports/hr-report.html \
-  --review-csv-out reports/hr-review.csv
+  --review-csv-out reports/hr-review.csv \
+  --summary-csv-out reports/hr-summary.csv
 ```
 
 Example output:
@@ -202,7 +203,7 @@ npm run dev -- verify \
 ## CLI Usage
 
 ```text
-quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 ```
@@ -220,6 +221,7 @@ Options:
 - `--out <path>`: write the JSON report to disk
 - `--markdown-out <path>`: write a reviewer-friendly Markdown report to disk
 - `--html-out <path>`: write a styled HTML reviewer report to disk
+- `verify --summary-csv-out <path>`: write one CSV row for the submitted answer with its `answer_label`, preview, primary finding, primary evidence trust/freshness context, verdict totals, fail-policy status, and reviewed source metadata
 - `verify-batch --markdown-out <path>`: write a batch summary in Markdown for review queues
 - `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers, including an `answer_label` column for faster spreadsheet triage alongside the original `answer_path`

@@ -10,6 +10,7 @@ import {
   renderHtmlReport,
   renderMarkdownReport,
   renderReviewerDecisionCsv,
+  renderSummaryCsv,
   renderTextReport,
 } from "../src/report-renderer.js";
 import { importReviewerDecisions } from "../src/reviewer-decision-import.js";
@@ -139,6 +140,39 @@ test("renders a reviewer decision csv row for single answers with no extracted c
   assert.equal(
     lines[1],
     "empty,examples/answers/empty.md,Short.,clear,,false,,,,No claims were extracted from this answer.,,,,,,,",
+  );
+});
+
+test("renders a single-answer summary csv with fail-policy and source context", () => {
+  const report = verifyAnswer(
+    "Employees receive 18 weeks of paid parental leave.\nEmployees receive free catered lunch every day.",
+    [hrPolicy],
+    "2026-06-28T00:00:00.000Z",
+    "examples/answers/hr-answer.md",
+  );
+
+  const rendered = renderSummaryCsv(report, ["contradicted", "unsupported"]);
+  const lines = rendered.trim().split("\n");
+
+  assert.equal(
+    lines[0],
+    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+  );
+  assert.equal(
+    lines[1],
+    "hr-answer,examples/answers/hr-answer.md,Employees receive 18 weeks of paid parental leave. Employees receive free catered lunch every day.,contradicted,Employees receive 18 weeks of paid parental leave.,A closely matching approved source uses different numeric terms.,HR Policy,high,2026-05-31,2,0,1,1,0,matched,contradicted | unsupported,HR Policy,high,2026-05-31",
+  );
+});
+
+test("renders a no-claim single-answer summary csv row with an explicit review signal", () => {
+  const report = verifyAnswer("Short.\n", [hrPolicy], "2026-06-28T00:00:00.000Z", "examples/answers/empty.md");
+
+  const rendered = renderSummaryCsv(report);
+  const lines = rendered.trim().split("\n");
+
+  assert.equal(
+    lines[1],
+    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31",
   );
 });
 
