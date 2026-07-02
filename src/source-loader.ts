@@ -145,7 +145,7 @@ function parseHtmlSource(content: string): ParsedSource {
   const updatedAt = findHtmlMetaContent(normalized, {
     property: ["article:modified_time", "og:updated_time"],
     name: ["last-modified", "last_modified", "updated_at", "updatedAt", "date.modified"],
-  });
+  }) || findHtmlTimeDate(normalized);
   const trustLevel = tryParseTrustLevel(
     findHtmlMetaContent(normalized, {
       property: ["quorum:trustLevel", "quorum:trust_level"],
@@ -190,6 +190,21 @@ function findHtmlMetaContent(
     const name = attributes.name?.toLowerCase();
     if (name && nameMatchers.has(name)) {
       return decodeHtmlEntities(contentValue).trim();
+    }
+  }
+
+  return undefined;
+}
+
+function findHtmlTimeDate(content: string): string | undefined {
+  const timeTags = content.match(/<time\b[^>]*>[\s\S]*?<\/time>/gi) ?? [];
+
+  for (const tag of timeTags) {
+    const attributes = parseHtmlAttributes(tag);
+    const datetimeValue = attributes.datetime?.trim();
+
+    if (datetimeValue) {
+      return decodeHtmlEntities(datetimeValue);
     }
   }
 
