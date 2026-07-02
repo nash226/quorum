@@ -89,6 +89,7 @@ test("verify --help prints command-specific usage without requiring sources", as
   assert.equal(result.stderr, "");
   assert.match(result.stdout, /^Quorum verify\n\nUsage:\n  quorum verify --answer <path\|->/);
   assert.match(result.stdout, /--review-csv-out <path>\s+Write a reviewer decision CSV/);
+  assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row summary CSV for this answer/);
 });
 
 test("verify-batch -h prints batch usage without requiring answers", async () => {
@@ -339,6 +340,52 @@ test("verify writes reviewer csv fail-policy columns for single answers", async 
       lines[1] ?? "",
       new RegExp(
         `^answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,matched,contradicted,true,claim_1,`,
+      ),
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify writes a summary csv for single answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-summary-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.md");
+    const summaryCsvOutPath = join(tempDir, "reports", "summary.csv");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 18 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const result = await runCliAllowFailure([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--summary-csv-out",
+      summaryCsvOutPath,
+      "--fail-on",
+      "contradicted",
+    ]);
+
+    assert.equal(result.code, 2);
+    assert.equal(result.stderr, "");
+    assert.match(result.stdout, new RegExp(`Summary CSV written to ${escapeRegExp(summaryCsvOutPath)}`));
+
+    const summaryCsv = await readFile(summaryCsvOutPath, "utf8");
+    const lines = summaryCsv.trim().split("\n");
+    assert.equal(
+      lines[0],
+      "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+    );
+    assert.match(
+      lines[1] ?? "",
+      new RegExp(
+        `^answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,contradicted,Employees receive 18 weeks of paid parental leave\\.,A closely matching approved source uses different numeric terms\\.,hr-policy,medium,,1,0,1,0,0,matched,contradicted,hr-policy,medium,$`,
       ),
     );
   } finally {
