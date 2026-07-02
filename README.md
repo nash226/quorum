@@ -204,7 +204,7 @@ npm run dev -- verify \
 
 ```text
 quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 ```
 
@@ -213,7 +213,7 @@ Options:
 - `--answer <path>`: AI-generated answer to verify
 - `--source <path>`: approved source document; may be repeated
 - `--source-dir <path>`: directory of approved source documents
-- `--answer <path>`: answer file to include in a batch run; may be repeated
+- `--answer <path|->`: answer file to include in a batch run, or `-` to read one answer from stdin; may be repeated
 - `--answer-dir <path>`: directory of AI-generated answers for batch verification
 - `--default-trust-level <level>`: use `high`, `medium`, or `low` for sources
   that do not define `trustLevel` metadata
@@ -226,6 +226,7 @@ Options:
 - `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers, including an `answer_label` column for faster spreadsheet triage alongside the original `answer_path`
 - `verify-batch --summary-csv-out <path>`: write one CSV row per answer with an `answer_label`, `answer_preview`, the highest-priority claim finding, primary evidence title plus trust/freshness metadata, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
+- `verify-batch --answer -`: pipe one generated answer into a batch run while still mixing in file-based answers for queue-style review
 - teams can use `--summary-csv-out` for queue-level routing while keeping `--review-csv-out` for claim-by-claim reviewer decisions on the same batch run
 - `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes, including a reviewer-friendly `answer_label`, the original `answer_preview`, answer-level fail-policy status and fail verdicts, and evidence titles, trust levels, scores, and quotes
 - reviewer CSV exports now include `answer_has_claims` so empty answers still survive spreadsheet review and `import-review` handoffs
