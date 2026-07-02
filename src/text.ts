@@ -97,6 +97,10 @@ export function renderAnswerPreview(answer: string): string {
 }
 
 export function renderAnswerLabel(answerPath: string): string {
+  if (answerPath === "-" || answerPath === "<stdin>") {
+    return "<stdin>";
+  }
+
   const extension = extname(answerPath);
   return basename(answerPath, extension);
 }
