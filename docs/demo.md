@@ -12,6 +12,13 @@ npm install
 npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported
 ```
 
+The same single-answer flow also accepts stdin, which is useful when another
+tool already produced the answer text:
+
+```bash
+cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --source-dir examples/sources --json
+```
+
 Customer-support playbook verification:
 
 ```bash
