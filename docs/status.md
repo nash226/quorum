@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `647b787` on 2026-07-02, add command-specific help
+- Latest shipped change: `ea2dd2a` on 2026-07-02, add single verify summary csv
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -25,7 +25,7 @@
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path for reviewer handoff
-- write a one-row-per-answer batch summary CSV for queueing and workflow automation
+- write one-row summary CSVs for single-answer and batch verification workflows
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-02 | [#98](https://github.com/nash226/quorum/pull/98) | add single verify summary csv | `ea2dd2a` |
 | 2026-07-02 | [#97](https://github.com/nash226/quorum/pull/97) | add command-specific help | `647b787` |
 | 2026-07-01 | [#96](https://github.com/nash226/quorum/pull/96) | handle lowercase roman claim lists | `53f0775` |
 | 2026-07-01 | Direct push | test: avoid batch review fixture race | `2d3247f` |
@@ -52,5 +53,4 @@
 | 2026-07-01 | [#93](https://github.com/nash226/quorum/pull/93) | support stdin answers in verify | `6446db4` |
 | 2026-07-01 | [#92](https://github.com/nash226/quorum/pull/92) | flag empty batch answers for review | `518d6a3` |
 | 2026-07-01 | [#91](https://github.com/nash226/quorum/pull/91) | label single review csv answers | `ca9bde4` |
-| 2026-07-01 | [#90](https://github.com/nash226/quorum/pull/90) | show single-answer fail policy in reports | `e3ec7a0` |
 
