@@ -130,6 +130,32 @@ test("keeps indented uppercase markdown list continuations with the same claim",
   );
 });
 
+test("ignores indented markdown code blocks between claims", () => {
+  const claims = extractClaims(`Deployment notes:
+
+    npm run deploy --force
+    quorum verify --answer draft.md --source-dir sources
+
+Employees receive 12 weeks of paid parental leave.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+  ]);
+});
+
+test("keeps indented markdown list continuations even when they use four spaces", () => {
+  const claims = extractClaims(`# Policy Notes
+
+1. Employees receive 12 weeks of paid parental leave
+    for full-time staff only.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+  ]);
+});
+
 test("extracts clean claims from lettered markdown list answers", () => {
   const claims = extractClaims(`Policy notes:
 
