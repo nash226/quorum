@@ -29,12 +29,26 @@ const STOPWORDS = new Set([
   "to",
   "with",
 ]);
+const UPPERCASE_ROMAN_NUMERAL_PREFIX = /^([IVXLCDM]{2,})[.)]\s+/;
+const LOWERCASE_ROMAN_NUMERAL_DOT_PREFIX = /^([ivxlcdm]{2,})\.\s+/;
+const PARENTHESIZED_ROMAN_NUMERAL_PREFIX = /^\(([IVXLCDMivxlcdm]{2,})\)\s+/;
+const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
+const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+const LIST_PREFIX_PATTERNS = [
+  /^[-*+]\s+/,
+  /^(?:[\u2022\u2023\u25E6\u2043\u2219])\s+/,
+  /^(?:[\u2013\u2014])\s+/,
+  /^\d+[.)]\s+/,
+  /^\(\d+\)\s+/,
+  /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
+  /^\[[ xX]\]\s+/,
+];
 
 export function splitIntoSentences(text: string): string[] {
   return text
     .replace(/\r/g, "")
     .split(/\n+|(?<=[.!?])\s+/g)
-    .map((part) => part.replace(/^[-*]\s+/, "").trim())
+    .map((part) => stripLeadingClaimMarker(part).trim())
     .filter(Boolean);
 }
 
@@ -159,4 +173,51 @@ function collectDuplicateLabelIndexes(labels: string[]): Set<number> {
   }
 
   return duplicates;
+}
+
+function stripLeadingClaimMarker(text: string): string {
+  let normalized = text.trim();
+  let previous = "";
+
+  while (normalized !== previous) {
+    previous = normalized;
+    normalized = stripOneLeadingClaimMarker(normalized).trimStart();
+  }
+
+  return normalized;
+}
+
+function stripOneLeadingClaimMarker(text: string): string {
+  for (const pattern of LIST_PREFIX_PATTERNS) {
+    const stripped = text.replace(pattern, "");
+
+    if (stripped !== text) {
+      return stripped;
+    }
+  }
+
+  return stripRomanNumeralPrefix(text);
+}
+
+function stripRomanNumeralPrefix(text: string): string {
+  const matchers = [
+    UPPERCASE_ROMAN_NUMERAL_PREFIX,
+    LOWERCASE_ROMAN_NUMERAL_DOT_PREFIX,
+    PARENTHESIZED_ROMAN_NUMERAL_PREFIX,
+    LOWERCASE_ROMAN_NUMERAL_PREFIX,
+  ];
+
+  for (const matcher of matchers) {
+    const match = text.match(matcher);
+
+    if (match?.[1] && isRomanNumeral(match[1])) {
+      return text.slice(match[0].length);
+    }
+  }
+
+  return text;
+}
+
+function isRomanNumeral(value: string): boolean {
+  return VALID_ROMAN_NUMERAL.test(value.toUpperCase());
 }
