@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `daae353` on 2026-07-02, fix: support inline numeric-colon claims
+- Latest shipped change: `045f2dd` on 2026-07-02, fix: preserve quoted claim continuations
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-02 | [#113](https://github.com/nash226/quorum/pull/113) | fix: preserve quoted claim continuations | `045f2dd` |
 | 2026-07-02 | [#112](https://github.com/nash226/quorum/pull/112) | fix: support inline numeric-colon claims | `daae353` |
 | 2026-07-02 | [#111](https://github.com/nash226/quorum/pull/111) | fix: support numeric-colon claim lists | `a49ab73` |
 | 2026-07-02 | [#110](https://github.com/nash226/quorum/pull/110) | ignore setext headings during claim extraction | `639a14e` |
@@ -52,5 +53,4 @@
 | 2026-07-02 | [#108](https://github.com/nash226/quorum/pull/108) | highlight primary finding in markdown reports | `52ae76d` |
 | 2026-07-02 | [#107](https://github.com/nash226/quorum/pull/107) | read HTML updated dates from http-equiv metadata | `582ebb3` |
 | 2026-07-02 | [#106](https://github.com/nash226/quorum/pull/106) | fail empty answers on needs review | `4a3337e` |
-| 2026-07-02 | [#105](https://github.com/nash226/quorum/pull/105) | support stdin reviewer imports | `2f7fc09` |
 
