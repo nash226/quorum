@@ -482,6 +482,30 @@ test("evaluates a shipped support account closure fixture across lifecycle claim
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support data retention fixture across deletion claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/data-retention-policy.json"),
+    generatedAt: "2026-07-16T08:00:00.000Z",
+  });
+  assert.equal(scorecard.fixtureName, "Support data retention policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support data retention reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/data-retention@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped support usage limits fixture across rate claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/usage-limits-policy.json"),
