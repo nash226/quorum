@@ -43,6 +43,10 @@ export function renderMarkdownReport(
   failOn: ClaimVerdict[] = [],
 ): string {
   const failVerdicts = matchingFailVerdicts(report, failOn);
+  const primaryAssessment = selectPrimaryAssessment(report.assessments);
+  const primaryFindingVerdict = primaryAssessment?.verdict ?? "needs_review";
+  const primaryFindingReason =
+    primaryAssessment?.reason ?? "No claims were extracted from this answer.";
   const lines = [
     "# Quorum Verification Report",
     "",
@@ -73,6 +77,17 @@ export function renderMarkdownReport(
     "## Submitted Answer",
     "",
     ...renderMarkdownBlockquote(report.answer),
+    "",
+    "## Primary Finding",
+    "",
+    `- Verdict: \`${primaryFindingVerdict}\``,
+    `- Reason: ${primaryFindingReason}`,
+    ...(primaryAssessment
+      ? [
+          `- Claim: ${primaryAssessment.claim.text}`,
+          `- Evidence: ${renderMarkdownPrimaryEvidenceLabel(primaryAssessment.evidence[0] ?? null)}`,
+        ]
+      : []),
     "",
     "## Claim Assessments",
     "",
@@ -1890,6 +1905,19 @@ function renderEvidenceLabel(evidence: {
   score: number;
 }): string {
   return `${evidence.documentTitle}, ${renderEvidenceMetadata(evidence)}`;
+}
+
+function renderMarkdownPrimaryEvidenceLabel(evidence: {
+  documentTitle: string;
+  documentTrustLevel: string;
+  documentUpdatedAt?: string;
+  score: number;
+} | null): string {
+  if (!evidence) {
+    return "No approved source snippet matched strongly enough.";
+  }
+
+  return `**${evidence.documentTitle}** (${renderEvidenceMetadata(evidence)})`;
 }
 
 function renderReviewConsoleAssessmentRow(
