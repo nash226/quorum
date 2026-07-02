@@ -2,6 +2,7 @@ import type { AtomicClaim } from "./domain.js";
 import { splitIntoSentences } from "./text.js";
 
 const UPPERCASE_ROMAN_NUMERAL_PREFIX = /^([IVXLCDM]{2,})[.)]\s+/;
+const LOWERCASE_ROMAN_NUMERAL_DOT_PREFIX = /^([ivxlcdm]{2,})\.\s+/;
 const PARENTHESIZED_ROMAN_NUMERAL_PREFIX = /^\(([IVXLCDMivxlcdm]{2,})\)\s+/;
 const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
 const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
@@ -111,6 +112,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
 function stripRomanNumeralPrefix(line: string): string {
   const matchers = [
     UPPERCASE_ROMAN_NUMERAL_PREFIX,
+    LOWERCASE_ROMAN_NUMERAL_DOT_PREFIX,
     PARENTHESIZED_ROMAN_NUMERAL_PREFIX,
     LOWERCASE_ROMAN_NUMERAL_PREFIX,
   ];
