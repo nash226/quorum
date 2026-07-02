@@ -484,6 +484,24 @@ Healthcare coverage begins after 30 days of employment
   );
 });
 
+test("ignores fenced code blocks in markdown answers", () => {
+  const claims = extractClaims(`Policy summary:
+
+\`\`\`json
+{
+  "refundWindowDays": 30,
+  "requiresManagerApproval": true
+}
+\`\`\`
+
+Customers can request refunds within 30 days.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Customers can request refunds within 30 days.",
+  ]);
+});
+
 test("strips inline markdown formatting from extracted claims", () => {
   const claims = extractClaims(`Policy summary:
 

@@ -31,10 +31,29 @@ function normalizeAnswer(answer: string): string {
   const normalizedLines: string[] = [];
   let previousLineCanContinue = false;
   let previousLineBelongsToMarkdownClaim: boolean = false;
+  let activeFenceCharacter: "`" | "~" | undefined;
 
   for (let index = 0; index < lines.length; index += 1) {
     const rawLine = lines[index] ?? "";
     const line = rawLine.trim();
+
+    if (activeFenceCharacter) {
+      if (isClosingFence(line, activeFenceCharacter)) {
+        activeFenceCharacter = undefined;
+      }
+
+      previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
+      continue;
+    }
+
+    const openingFenceCharacter = getOpeningFenceCharacter(line);
+    if (openingFenceCharacter) {
+      activeFenceCharacter = openingFenceCharacter;
+      previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
+      continue;
+    }
 
     if (line.length === 0 || isHeading(line) || isSetextHeading(line, lines, index)) {
       previousLineCanContinue = false;
@@ -98,6 +117,26 @@ function hasMarkdownClaimPrefix(line: string): boolean {
 
 function isHeading(line: string): boolean {
   return /^#{1,6}\s+/.test(line);
+}
+
+function getOpeningFenceCharacter(line: string): "`" | "~" | undefined {
+  if (/^`{3,}[^`]*$/.test(line)) {
+    return "`";
+  }
+
+  if (/^~{3,}[^~]*$/.test(line)) {
+    return "~";
+  }
+
+  return undefined;
+}
+
+function isClosingFence(line: string, fenceCharacter: "`" | "~"): boolean {
+  if (fenceCharacter === "`") {
+    return /^`{3,}\s*$/.test(line);
+  }
+
+  return /^~{3,}\s*$/.test(line);
 }
 
 function isSetextHeading(line: string, lines: string[], currentIndex: number): boolean {
