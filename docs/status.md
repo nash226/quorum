@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `001fe64` on 2026-07-02, support stdin answers in verify-batch
+- Latest shipped change: `1c85e3d` on 2026-07-02, fix: read html updated dates from time tags
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-02 | [#102](https://github.com/nash226/quorum/pull/102) | fix: read html updated dates from time tags | `1c85e3d` |
 | 2026-07-02 | [#101](https://github.com/nash226/quorum/pull/101) | support stdin answers in verify-batch | `001fe64` |
 | 2026-07-02 | [#100](https://github.com/nash226/quorum/pull/100) | normalize inline enumerated claims | `a21b97c` |
 | 2026-07-02 | [#99](https://github.com/nash226/quorum/pull/99) | infer html source titles from headings | `aec4946` |
@@ -52,5 +53,4 @@
 | 2026-07-02 | [#97](https://github.com/nash226/quorum/pull/97) | add command-specific help | `647b787` |
 | 2026-07-01 | [#96](https://github.com/nash226/quorum/pull/96) | handle lowercase roman claim lists | `53f0775` |
 | 2026-07-01 | Direct push | test: avoid batch review fixture race | `2d3247f` |
-| 2026-07-01 | [#94](https://github.com/nash226/quorum/pull/94) | preserve empty reviewer csv answers | `21360b1` |
 
