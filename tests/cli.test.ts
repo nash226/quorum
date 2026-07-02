@@ -212,6 +212,50 @@ test("verify records the answer path in JSON and reviewer csv outputs", async ()
   }
 });
 
+test("verify reads the answer from stdin when --answer - is used", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-stdin-answer-"));
+
+  try {
+    const sourcePath = join(tempDir, "hr-policy.md");
+    const reviewCsvOutPath = join(tempDir, "reports", "review.csv");
+
+    await writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+
+    const stdout = await runCli(
+      [
+        "verify",
+        "--answer",
+        "-",
+        "--source",
+        sourcePath,
+        "--review-csv-out",
+        reviewCsvOutPath,
+        "--json",
+      ],
+      {
+        stdin: "Employees receive 12 weeks of paid parental leave.\n",
+      },
+    );
+
+    const report = JSON.parse(stdout) as {
+      answerPath?: string;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerPath, "<stdin>");
+    assert.equal(report.summary.verified, 1);
+
+    const reviewCsv = await readFile(reviewCsvOutPath, "utf8");
+    const lines = reviewCsv.trim().split("\n");
+    assert.match(
+      lines[1] ?? "",
+      /^<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,claim_1,/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify writes reviewer csv fail-policy columns for single answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-review-fail-policy-"));
 
@@ -1282,8 +1326,11 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
   }
 });
 
-async function runCli(args: string[]): Promise<string> {
-  const result = await runCliAllowFailure(args);
+async function runCli(
+  args: string[],
+  options?: { stdin?: string },
+): Promise<string> {
+  const result = await runCliAllowFailure(args, options);
 
   if (result.code === 0) {
     return result.stdout;
@@ -1298,11 +1345,12 @@ function escapeRegExp(value: string): string {
 
 async function runCliAllowFailure(
   args: string[],
+  options?: { stdin?: string },
 ): Promise<{ code: number; stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", ...args], {
       cwd: process.cwd(),
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: ["pipe", "pipe", "pipe"],
     });
 
     let stdout = "";
@@ -1315,6 +1363,12 @@ async function runCliAllowFailure(
     child.stderr.on("data", (chunk: Buffer | string) => {
       stderr += chunk.toString();
     });
+
+    if (options?.stdin !== undefined) {
+      child.stdin.end(options.stdin);
+    } else {
+      child.stdin.end();
+    }
 
     child.on("error", reject);
     child.on("close", (code) => {
