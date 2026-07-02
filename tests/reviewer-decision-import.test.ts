@@ -68,6 +68,34 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
   assert.equal(report.claims[1]?.reviewerVerdict, "needs_review");
 });
 
+test("imports reviewer csv metadata rows for answers with no extracted claims", () => {
+  const report = importReviewerDecisions(`answer_label,answer_path,answer_preview,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from this answer.,,,,
+`);
+
+  assert.equal(report.claims.length, 0);
+  assert.equal(report.answerGroups.length, 1);
+  assert.equal(report.answerGroups[0]?.label, "empty");
+  assert.equal(report.answerGroups[0]?.answerPath, "examples/answers/empty.md");
+  assert.equal(report.answerGroups[0]?.summary.totalClaims, 0);
+  assert.match(
+    renderReviewerDecisionImportReport(report),
+    /No claims were extracted from this answer\./,
+  );
+  assert.match(
+    renderReviewerDecisionImportMarkdownReport(report),
+    /No claims were extracted from this answer\./,
+  );
+  assert.match(
+    renderReviewerDecisionImportHtmlReport(report),
+    /Review note/,
+  );
+  assert.match(
+    renderReviewerDecisionImportSummaryCsv(report),
+    /empty,examples\/answers\/empty\.md,Short\.,needs_review,,No claims were extracted from this answer\.,,.*0,0,0,0,0,0,0,0,clear,/,
+  );
+});
+
 test("imports escaped evidence delimiters without corrupting reviewer csv context", () => {
   const report = importReviewerDecisions(`answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
 examples/answers/support-answer.md,Refunds are available within 30 days standard purchases.,claim_1,Refunds are available within 30 days standard purchases.,verified,The claim is strongly supported by an approved source.,Support \\| Policy,high,2026-06-01,0.998,Refunds are available within 30 days \\| standard purchases.,,
