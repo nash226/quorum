@@ -1078,6 +1078,9 @@ test("verify-batch preserves no-claim answers through reviewer csv export and im
     await Promise.all([
       mkdir(answerDir, { recursive: true }),
       mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
       writeFile(join(answerDir, "empty.md"), "Short.\n", "utf8"),
       writeFile(
         join(sourceDir, "policy.md"),
