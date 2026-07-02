@@ -111,9 +111,10 @@ test("import-review --help prints import usage without requiring a csv path", as
   assert.equal(result.stderr, "");
   assert.match(
     result.stdout,
-    /^Quorum import-review\n\nUsage:\n  quorum import-review --review-csv <path>/,
+    /^Quorum import-review\n\nUsage:\n  quorum import-review --review-csv <path\|->/,
   );
   assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row-per-answer summary CSV/);
+  assert.match(result.stdout, /--review-csv <path\|->\s+Reviewer decision CSV to import, or - to read from stdin/);
 });
 
 test("verify accepts pdf sources", async () => {
@@ -1534,6 +1535,25 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
+});
+
+test("import-review reads reviewer csv input from stdin", async () => {
+  const stdout = await runCli(
+    ["import-review", "--review-csv", "-", "--json"],
+    { stdin: `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+hr-answer,examples/answers/hr-answer.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,Employees receive 12 weeks of paid parental leave.,,
+` },
+  );
+
+  const report = JSON.parse(stdout) as {
+    claims: Array<{ answerPath?: string; finalVerdict: string }>;
+    summary: Record<string, number>;
+  };
+
+  assert.equal(report.claims[0]?.answerPath, "examples/answers/hr-answer.md");
+  assert.equal(report.claims[0]?.finalVerdict, "verified");
+  assert.equal(report.summary.totalClaims, 1);
+  assert.equal(report.summary.verified, 1);
 });
 
 test("import-review exits non-zero when a final reviewer-aware verdict matches fail-on", async () => {
