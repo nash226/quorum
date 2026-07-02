@@ -8,6 +8,8 @@ import { serializeDelimitedList } from "./csv-list.js";
 import { matchingFailVerdicts } from "./report-policy.js";
 import { renderAnswerLabel, renderAnswerPreview } from "./text.js";
 
+const NO_CLAIMS_REVIEW_REASON = "No claims were extracted from this answer.";
+
 export function renderTextReport(
   report: VerificationReport,
   failOn: ClaimVerdict[] = [],
@@ -184,6 +186,7 @@ export function renderReviewerDecisionCsv(
       "answer_preview",
       "answer_fail_policy",
       "answer_fail_verdicts",
+      "answer_has_claims",
       "claim_id",
       "claim_text",
       "model_verdict",
@@ -196,34 +199,55 @@ export function renderReviewerDecisionCsv(
       "reviewer_verdict",
       "reviewer_notes",
     ],
-    ...report.assessments.map((assessment) => [
-      report.answerPath ? renderAnswerLabel(report.answerPath) : "",
-      report.answerPath ?? "",
-      renderAnswerPreview(report.answer),
-      failVerdicts.length > 0 ? "matched" : "clear",
-      failVerdicts.join(" | "),
-      assessment.claim.id,
-      assessment.claim.text,
-      assessment.verdict,
-      assessment.reason,
-      serializeDelimitedList(
-        assessment.evidence.map((evidence) => evidence.documentTitle),
-      ),
-      serializeDelimitedList(
-        assessment.evidence.map((evidence) => evidence.documentTrustLevel),
-      ),
-      serializeDelimitedList(
-        assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? ""),
-      ),
-      serializeDelimitedList(
-        assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
-      ),
-      serializeDelimitedList(
-        assessment.evidence.map((evidence) => evidence.quote),
-      ),
-      "",
-      "",
-    ]),
+    ...(report.assessments.length > 0
+      ? report.assessments.map((assessment) => [
+          report.answerPath ? renderAnswerLabel(report.answerPath) : "",
+          report.answerPath ?? "",
+          renderAnswerPreview(report.answer),
+          failVerdicts.length > 0 ? "matched" : "clear",
+          failVerdicts.join(" | "),
+          "true",
+          assessment.claim.id,
+          assessment.claim.text,
+          assessment.verdict,
+          assessment.reason,
+          serializeDelimitedList(
+            assessment.evidence.map((evidence) => evidence.documentTitle),
+          ),
+          serializeDelimitedList(
+            assessment.evidence.map((evidence) => evidence.documentTrustLevel),
+          ),
+          serializeDelimitedList(
+            assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? ""),
+          ),
+          serializeDelimitedList(
+            assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
+          ),
+          serializeDelimitedList(
+            assessment.evidence.map((evidence) => evidence.quote),
+          ),
+          "",
+          "",
+        ])
+      : [[
+          report.answerPath ? renderAnswerLabel(report.answerPath) : "",
+          report.answerPath ?? "",
+          renderAnswerPreview(report.answer),
+          failVerdicts.length > 0 ? "matched" : "clear",
+          failVerdicts.join(" | "),
+          "false",
+          "",
+          "",
+          "",
+          NO_CLAIMS_REVIEW_REASON,
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+        ]]),
   ];
 
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
@@ -237,6 +261,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
       "answer_preview",
       "answer_fail_policy",
       "answer_fail_verdicts",
+      "answer_has_claims",
       "claim_id",
       "claim_text",
       "model_verdict",
@@ -250,34 +275,55 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
       "reviewer_notes",
     ],
     ...report.answers.flatMap((answer) =>
-      answer.report.assessments.map((assessment) => [
-        answer.answerLabel,
-        answer.answerPath,
-        renderAnswerPreview(answer.report.answer),
-        answer.shouldFail ? "matched" : "clear",
-        answer.failVerdicts.join(" | "),
-        assessment.claim.id,
-        assessment.claim.text,
-        assessment.verdict,
-        assessment.reason,
-        serializeDelimitedList(
-          assessment.evidence.map((evidence) => evidence.documentTitle),
-        ),
-        serializeDelimitedList(
-          assessment.evidence.map((evidence) => evidence.documentTrustLevel),
-        ),
-        serializeDelimitedList(
-          assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? ""),
-        ),
-        serializeDelimitedList(
-          assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
-        ),
-        serializeDelimitedList(
-          assessment.evidence.map((evidence) => evidence.quote),
-        ),
-        "",
-        "",
-      ]),
+      answer.report.assessments.length > 0
+        ? answer.report.assessments.map((assessment) => [
+            answer.answerLabel,
+            answer.answerPath,
+            renderAnswerPreview(answer.report.answer),
+            answer.shouldFail ? "matched" : "clear",
+            answer.failVerdicts.join(" | "),
+            "true",
+            assessment.claim.id,
+            assessment.claim.text,
+            assessment.verdict,
+            assessment.reason,
+            serializeDelimitedList(
+              assessment.evidence.map((evidence) => evidence.documentTitle),
+            ),
+            serializeDelimitedList(
+              assessment.evidence.map((evidence) => evidence.documentTrustLevel),
+            ),
+            serializeDelimitedList(
+              assessment.evidence.map((evidence) => evidence.documentUpdatedAt ?? ""),
+            ),
+            serializeDelimitedList(
+              assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
+            ),
+            serializeDelimitedList(
+              assessment.evidence.map((evidence) => evidence.quote),
+            ),
+            "",
+            "",
+          ])
+        : [[
+            answer.answerLabel,
+            answer.answerPath,
+            renderAnswerPreview(answer.report.answer),
+            answer.shouldFail ? "matched" : "clear",
+            answer.failVerdicts.join(" | "),
+            "false",
+            "",
+            "",
+            "",
+            NO_CLAIMS_REVIEW_REASON,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+          ]],
     ),
   ];
 

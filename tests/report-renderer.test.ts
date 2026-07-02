@@ -113,11 +113,11 @@ test("renders a reviewer decision csv with answer fail-policy context and blank 
 
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
-    /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,matched,contradicted \| unsupported,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
+    /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,matched,contradicted \| unsupported,true,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
   );
   assert.match(lines[1] ?? "", /HR Policy/);
   assert.match(lines[1] ?? "", /high/);
@@ -125,9 +125,21 @@ test("renders a reviewer decision csv with answer fail-policy context and blank 
   assert.match(lines[1] ?? "", /0\.\d{3}/);
   assert.match(
     lines[2] ?? "",
-    /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,matched,contradicted \| unsupported,claim_2,Employees receive free catered lunch every day\.,unsupported,/,
+    /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,matched,contradicted \| unsupported,true,claim_2,Employees receive free catered lunch every day\.,unsupported,/,
   );
   assert.match(lines[2] ?? "", /,,$/);
+});
+
+test("renders a reviewer decision csv row for single answers with no extracted claims", () => {
+  const report = verifyAnswer("Short.\n", [hrPolicy], "2026-06-28T00:00:00.000Z", "examples/answers/empty.md");
+
+  const rendered = renderReviewerDecisionCsv(report);
+  const lines = rendered.trim().split("\n");
+
+  assert.equal(
+    lines[1],
+    "empty,examples/answers/empty.md,Short.,clear,,false,,,,No claims were extracted from this answer.,,,,,,,",
+  );
 });
 
 test("reviewer decision csv round-trips literal pipes in evidence fields", () => {
@@ -457,11 +469,11 @@ test("renders a batch reviewer decision csv with answer path context", () => {
 
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
-    /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\.,matched,contradicted,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
+    /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\.,matched,contradicted,true,claim_1,Employees receive 18 weeks of paid parental leave\.,contradicted,/,
   );
   assert.match(lines[1] ?? "", /HR Policy/);
   assert.match(lines[1] ?? "", /high/);
@@ -469,9 +481,42 @@ test("renders a batch reviewer decision csv with answer path context", () => {
   assert.match(lines[1] ?? "", /0\.\d{3}/);
   assert.match(
     lines[2] ?? "",
-    /^support-answer,examples\/answers\/support-answer\.md,Employees receive free catered lunch every day\.,matched,unsupported,claim_1,Employees receive free catered lunch every day\.,unsupported,/,
+    /^support-answer,examples\/answers\/support-answer\.md,Employees receive free catered lunch every day\.,matched,unsupported,true,claim_1,Employees receive free catered lunch every day\.,unsupported,/,
   );
   assert.match(lines[2] ?? "", /,,$/);
+});
+
+test("renders a no-claim batch reviewer decision csv row with answer-level context", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
+    sourceCount: 1,
+    answerCount: 1,
+    answers: [
+      {
+        answerLabel: "empty",
+        answerPath: "examples/answers/empty.md",
+        report: verifyAnswer("Short.\n", [hrPolicy]),
+        shouldFail: false,
+        failVerdicts: [],
+      },
+    ],
+    summary: {
+      verified: 0,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithFailures: 0,
+    },
+  };
+
+  const rendered = renderBatchReviewerDecisionCsv(batchReport);
+  const lines = rendered.trim().split("\n");
+
+  assert.equal(
+    lines[1],
+    "empty,examples/answers/empty.md,Short.,clear,,false,,,,No claims were extracted from this answer.,,,,,,,",
+  );
 });
 
 test("renders a batch summary csv with per-answer verdict totals", () => {
