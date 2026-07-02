@@ -330,6 +330,63 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
 }
 
+export function renderSummaryCsv(
+  report: VerificationReport,
+  failOn: ClaimVerdict[] = [],
+): string {
+  const failVerdicts = matchingFailVerdicts(report, failOn);
+  const primaryAssessment = selectPrimaryAssessment(report.assessments);
+  const primaryFindingVerdict = primaryAssessment?.verdict ?? "needs_review";
+  const primaryFindingReason =
+    primaryAssessment?.reason ?? "No claims were extracted from this answer.";
+  const rows = [
+    [
+      "answer_label",
+      "answer_path",
+      "answer_preview",
+      "primary_verdict",
+      "primary_claim",
+      "primary_reason",
+      "primary_evidence_title",
+      "primary_evidence_trust_level",
+      "primary_evidence_updated_at",
+      "total_claims",
+      "verified",
+      "contradicted",
+      "unsupported",
+      "needs_review",
+      "fail_policy",
+      "fail_verdicts",
+      "source_titles",
+      "source_trust_levels",
+      "source_updated_at",
+    ],
+    [
+      report.answerPath ? renderAnswerLabel(report.answerPath) : "",
+      report.answerPath ?? "",
+      renderAnswerPreview(report.answer),
+      primaryFindingVerdict,
+      primaryAssessment?.claim.text ?? "",
+      primaryFindingReason,
+      primaryAssessment?.evidence[0]?.documentTitle ?? "",
+      primaryAssessment?.evidence[0]?.documentTrustLevel ?? "",
+      primaryAssessment?.evidence[0]?.documentUpdatedAt ?? "",
+      report.assessments.length.toString(),
+      report.summary.verified.toString(),
+      report.summary.contradicted.toString(),
+      report.summary.unsupported.toString(),
+      report.summary.needs_review.toString(),
+      failVerdicts.length > 0 ? "matched" : "clear",
+      failVerdicts.join(" | "),
+      report.sources.map((source) => source.title).join(" | "),
+      report.sources.map((source) => source.trustLevel).join(" | "),
+      report.sources.map((source) => source.updatedAt ?? "").join(" | "),
+    ],
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
   const sourceTitles = report.sources.map((source) => source.title).join(" | ");
   const sourceTrustLevels = report.sources.map((source) => source.trustLevel).join(" | ");
