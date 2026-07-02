@@ -132,6 +132,30 @@ test("falls back to html metadata when the page title is absent", async () => {
   assert.equal(source.content, "Escalate priority incidents immediately.");
 });
 
+test("reads html title and updated date metadata from name attributes when exports omit property", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/escalations.html",
+    `<!doctype html>
+<html>
+  <head>
+    <meta name="og:title" content="Escalations Overview" />
+    <meta name="article:modified_time" content="2026-06-21T08:15:00Z" />
+  </head>
+  <body>
+    <main>
+      <p>Escalate priority incidents immediately.</p>
+    </main>
+  </body>
+</html>`,
+    3,
+  );
+
+  assert.equal(source.title, "Escalations Overview");
+  assert.equal(source.updatedAt, "2026-06-21T08:15:00Z");
+  assert.equal(source.trustLevel, "medium");
+  assert.equal(source.content, "Escalate priority incidents immediately.");
+});
+
 test("falls back to the first html heading when title metadata is absent", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/vacation-policy.html",
@@ -144,7 +168,7 @@ test("falls back to the first html heading when title metadata is absent", async
     </main>
   </body>
 </html>`,
-    3,
+    4,
   );
 
   assert.equal(source.title, "Vacation Policy");
@@ -170,7 +194,7 @@ test("falls back to a time datetime attribute when html update metadata is absen
     </main>
   </body>
 </html>`,
-    4,
+    5,
   );
 
   assert.equal(source.title, "Benefits Policy");
@@ -195,7 +219,7 @@ test("reads html updated dates from http-equiv metadata", async () => {
     </main>
   </body>
 </html>`,
-    5,
+    6,
   );
 
   assert.equal(source.title, "Benefits Policy");
@@ -219,7 +243,7 @@ test("decodes numeric html entities from exported html sources", async () => {
     </main>
   </body>
 </html>`,
-    6,
+    7,
   );
 
   assert.equal(source.title, "Benefits — US");
@@ -242,7 +266,7 @@ test("decodes common named html entities from exported html sources", async () =
     </main>
   </body>
 </html>`,
-    7,
+    8,
   );
 
   assert.equal(source.title, "Support & Escalations — North America");
@@ -260,7 +284,7 @@ test("falls back to the html file name when the page has no title", async () => 
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.htm",
     "<html><body><p>Escalate priority incidents immediately.</p></body></html>",
-    7,
+    9,
   );
 
   assert.equal(source.title, "escalations");
