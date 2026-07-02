@@ -50,7 +50,7 @@ The current CLI can:
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim
   while preserving the original answer path for reviewer handoff
-- write one-row summary CSVs for single-answer and batch verification workflows
+- write one-row summary CSVs for single-answer and batch verification workflows, including the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 

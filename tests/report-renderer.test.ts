@@ -156,11 +156,11 @@ test("renders a single-answer summary csv with fail-policy and source context", 
 
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
   );
   assert.equal(
     lines[1],
-    "hr-answer,examples/answers/hr-answer.md,Employees receive 18 weeks of paid parental leave. Employees receive free catered lunch every day.,contradicted,Employees receive 18 weeks of paid parental leave.,A closely matching approved source uses different numeric terms.,HR Policy,high,2026-05-31,2,0,1,1,0,matched,contradicted | unsupported,HR Policy,high,2026-05-31",
+    "hr-answer,examples/answers/hr-answer.md,Employees receive 18 weeks of paid parental leave. Employees receive free catered lunch every day.,contradicted,Employees receive 18 weeks of paid parental leave.,A closely matching approved source uses different numeric terms.,HR Policy,high,2026-05-31,0.857,Employees receive 12 weeks of paid parental leave.,2,0,1,1,0,matched,contradicted | unsupported,HR Policy,high,2026-05-31",
   );
 });
 
@@ -172,7 +172,7 @@ test("renders a no-claim single-answer summary csv row with an explicit review s
 
   assert.equal(
     lines[1],
-    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31",
+    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31",
   );
 });
 
@@ -589,15 +589,15 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
 
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
   );
   assert.equal(
     lines[1],
-    "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
+    "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,1.000,Employees receive 12 weeks of paid parental leave.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
   );
   assert.equal(
     lines[2],
-    "support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
+    "support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
   );
 });
 
@@ -636,7 +636,7 @@ Managers approve travel within five business days, and international trips requi
 
   assert.equal(
     lines[1],
-    'long-answer,examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31',
+    'long-answer,examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31',
   );
 });
 
@@ -669,6 +669,6 @@ test("renders no-claim batch summary csv rows with an explicit review signal", (
 
   assert.equal(
     lines[1],
-    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31",
+    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31",
   );
 });
