@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `518d6a3` on 2026-07-01, flag empty batch answers for review
+- Latest shipped change: `6446db4` on 2026-07-01, support stdin answers in verify
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-01 | [#93](https://github.com/nash226/quorum/pull/93) | support stdin answers in verify | `6446db4` |
 | 2026-07-01 | [#92](https://github.com/nash226/quorum/pull/92) | flag empty batch answers for review | `518d6a3` |
 | 2026-07-01 | [#91](https://github.com/nash226/quorum/pull/91) | label single review csv answers | `ca9bde4` |
 | 2026-07-01 | [#90](https://github.com/nash226/quorum/pull/90) | show single-answer fail policy in reports | `e3ec7a0` |
@@ -52,5 +53,4 @@
 | 2026-07-01 | [#88](https://github.com/nash226/quorum/pull/88) | add single review fail policy csv context | `0b8826e` |
 | 2026-07-01 | [#87](https://github.com/nash226/quorum/pull/87) | preserve answer labels in review imports | `deca5cd` |
 | 2026-07-01 | [#86](https://github.com/nash226/quorum/pull/86) | add batch review csv fail policy context | `06f0c7d` |
-| 2026-07-01 | [#85](https://github.com/nash226/quorum/pull/85) | add import-review summary fail policy columns | `514a034` |
 
