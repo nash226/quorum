@@ -294,7 +294,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
 async function runImportReview(args: string[]): Promise<void> {
   const parsed = parseImportReviewArgs(args);
-  const csvContent = await readFile(parsed.reviewCsvPath, "utf8");
+  const csvContent = await readTextInput(parsed.reviewCsvPath);
   const report = importReviewerDecisions(csvContent);
   const jsonReport = JSON.stringify(report, null, 2);
   const markdownReport = renderReviewerDecisionImportMarkdownReport(report, parsed.failOn);
@@ -649,10 +649,18 @@ async function listFilesWithExtensions(
 }
 
 async function readAnswer(answerPath: string): Promise<string> {
-  if (answerPath !== "-") {
-    return readFile(answerPath, "utf8");
+  return readTextInput(answerPath);
+}
+
+async function readTextInput(inputPath: string): Promise<string> {
+  if (inputPath !== "-") {
+    return readFile(inputPath, "utf8");
   }
 
+  return readStdin();
+}
+
+async function readStdin(): Promise<string> {
   const chunks: Buffer[] = [];
 
   for await (const chunk of process.stdin) {
@@ -891,10 +899,10 @@ Example:
     "import-review": `Quorum import-review
 
 Usage:
-  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
-  --review-csv <path>        Reviewer decision CSV to import
+  --review-csv <path|->      Reviewer decision CSV to import, or - to read from stdin
   --json                     Print the full imported JSON report
   --out <path>               Write the imported JSON report to disk
   --markdown-out <path>      Write a Markdown import report
@@ -904,6 +912,7 @@ Options:
 
 Example:
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
+  cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
 `,
   };
 
@@ -917,7 +926,7 @@ Example:
 Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
@@ -925,6 +934,7 @@ Example:
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
   cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
+  cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
 `);
 }
 
