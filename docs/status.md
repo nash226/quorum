@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ea2dd2a` on 2026-07-02, add single verify summary csv
+- Latest shipped change: `aec4946` on 2026-07-02, infer html source titles from headings
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-02 | [#99](https://github.com/nash226/quorum/pull/99) | infer html source titles from headings | `aec4946` |
 | 2026-07-02 | [#98](https://github.com/nash226/quorum/pull/98) | add single verify summary csv | `ea2dd2a` |
 | 2026-07-02 | [#97](https://github.com/nash226/quorum/pull/97) | add command-specific help | `647b787` |
 | 2026-07-01 | [#96](https://github.com/nash226/quorum/pull/96) | handle lowercase roman claim lists | `53f0775` |
@@ -52,5 +53,4 @@
 | 2026-07-01 | [#94](https://github.com/nash226/quorum/pull/94) | preserve empty reviewer csv answers | `21360b1` |
 | 2026-07-01 | [#93](https://github.com/nash226/quorum/pull/93) | support stdin answers in verify | `6446db4` |
 | 2026-07-01 | [#92](https://github.com/nash226/quorum/pull/92) | flag empty batch answers for review | `518d6a3` |
-| 2026-07-01 | [#91](https://github.com/nash226/quorum/pull/91) | label single review csv answers | `ca9bde4` |
 
