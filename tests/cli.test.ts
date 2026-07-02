@@ -1210,6 +1210,8 @@ test("verify-batch prints an explicit empty state in the default text output", a
       sourceDir,
     ]);
 
+    assert.match(stdout, /Primary finding: needs review/);
+    assert.match(stdout, /Primary reason: No claims were extracted from this answer\./);
     assert.match(stdout, /No claims were extracted from this answer\./);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
