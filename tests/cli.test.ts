@@ -74,6 +74,47 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("top-level help exits cleanly", async () => {
+  const result = await runCliAllowFailure(["--help"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /^Quorum\n\nUsage:/);
+});
+
+test("verify --help prints command-specific usage without requiring sources", async () => {
+  const result = await runCliAllowFailure(["verify", "--help"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /^Quorum verify\n\nUsage:\n  quorum verify --answer <path\|->/);
+  assert.match(result.stdout, /--review-csv-out <path>\s+Write a reviewer decision CSV/);
+});
+
+test("verify-batch -h prints batch usage without requiring answers", async () => {
+  const result = await runCliAllowFailure(["verify-batch", "-h"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(
+    result.stdout,
+    /^Quorum verify-batch\n\nUsage:\n  quorum verify-batch \(\--answer <path> \| --answer-dir <path>\)\.\.\./,
+  );
+  assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row-per-answer summary CSV/);
+});
+
+test("import-review --help prints import usage without requiring a csv path", async () => {
+  const result = await runCliAllowFailure(["import-review", "--help"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(
+    result.stdout,
+    /^Quorum import-review\n\nUsage:\n  quorum import-review --review-csv <path>/,
+  );
+  assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row-per-answer summary CSV/);
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 
