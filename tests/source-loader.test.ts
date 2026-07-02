@@ -180,6 +180,30 @@ test("falls back to a time datetime attribute when html update metadata is absen
   assert.match(source.content, /Employees receive medical coverage after 30 days\./);
 });
 
+test("reads html updated dates from http-equiv metadata", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Benefits Policy</title>
+    <meta http-equiv="last-modified" content="2026-06-19T09:45:00Z" />
+  </head>
+  <body>
+    <main>
+      <p>Employees receive medical coverage after 30 days.</p>
+    </main>
+  </body>
+</html>`,
+    5,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-06-19T09:45:00Z");
+  assert.equal(source.trustLevel, "medium");
+  assert.match(source.content, /Employees receive medical coverage after 30 days\./);
+});
+
 test("decodes numeric html entities from exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/benefits.html",
@@ -195,7 +219,7 @@ test("decodes numeric html entities from exported html sources", async () => {
     </main>
   </body>
 </html>`,
-    5,
+    6,
   );
 
   assert.equal(source.title, "Benefits — US");
@@ -218,7 +242,7 @@ test("decodes common named html entities from exported html sources", async () =
     </main>
   </body>
 </html>`,
-    6,
+    7,
   );
 
   assert.equal(source.title, "Support & Escalations — North America");
