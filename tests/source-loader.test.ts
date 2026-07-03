@@ -108,6 +108,35 @@ test("extracts readable text and title from exported html sources", async () => 
   assert.doesNotMatch(source.content, /analytics|display: none/);
 });
 
+test("ignores html navigation and control chrome in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/kb">Knowledge base home</a>
+      <a href="/refunds">Refund policy overview</a>
+    </nav>
+    <main>
+      <p>Customers can request refunds within 30 days.</p>
+      <button type="button">Copy answer</button>
+      <p>Annual plans require support approval.</p>
+    </main>
+  </body>
+</html>`,
+    2,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /Annual plans require support approval\./);
+  assert.doesNotMatch(source.content, /Knowledge base home|Refund policy overview|Copy answer/);
+});
+
 test("falls back to html metadata when the page title is absent", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.html",
