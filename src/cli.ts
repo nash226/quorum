@@ -25,6 +25,7 @@ import {
   renderMarkdownReport,
   renderReviewerDecisionCsv,
   renderSummaryCsv,
+  renderTextPrimaryEvidenceLabel,
   renderTextAssessmentLines,
   renderTextReport,
 } from "./report-renderer.js";
@@ -809,7 +810,7 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
     if (primaryAssessment) {
       lines.push(
         `  Primary claim: ${primaryAssessment.claim.text}`,
-        `  Primary evidence: ${primaryAssessment.evidence[0]?.documentTitle ?? "No approved source snippet matched strongly enough."}`,
+        `  Primary evidence: ${renderTextPrimaryEvidenceLabel(primaryAssessment.evidence[0] ?? null)}`,
       );
     }
 
