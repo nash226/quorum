@@ -282,6 +282,7 @@ test("renders a markdown batch report with per-answer summaries", () => {
       contradicted: 0,
       unsupported: 1,
       needs_review: 0,
+      answersWithoutClaims: 0,
       answersWithFailures: 1,
     },
   };
@@ -290,6 +291,7 @@ test("renders a markdown batch report with per-answer summaries", () => {
 
   assert.match(rendered, /# Quorum Batch Verification Report/);
   assert.match(rendered, /- Answers reviewed: 2/);
+  assert.match(rendered, /- Answers with no extracted claims: 0/);
   assert.match(rendered, /- Answers matching fail policy: 1/);
   assert.match(rendered, /## Sources/);
   assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31\)/);
@@ -334,6 +336,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
       contradicted: 0,
       unsupported: 1,
       needs_review: 0,
+      answersWithoutClaims: 0,
       answersWithFailures: 1,
     },
   };
@@ -344,6 +347,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /<title>Quorum Batch Verification Report<\/title>/);
   assert.match(rendered, /Batch verification report for review queues/);
   assert.match(rendered, /HR Policy<\/strong><span>high trust - updated 2026-05-31<\/span>/);
+  assert.match(rendered, /No extracted claims<\/span>\s*<strong>0 answers<\/strong>/);
   assert.match(rendered, /Fail policy matched/);
   assert.match(rendered, /<dt>Primary finding<\/dt><dd>unsupported<\/dd>/);
   assert.match(rendered, /<span class="answer-card__section-label">Primary finding<\/span>/);
@@ -397,6 +401,7 @@ test("batch reviewer decision csv round-trips literal pipes in evidence fields",
       contradicted: 0,
       unsupported: 0,
       needs_review: 0,
+      answersWithoutClaims: 0,
       answersWithFailures: 0,
     },
   };
@@ -431,6 +436,7 @@ test("renders evidence freshness metadata in batch html claims", () => {
       contradicted: 1,
       unsupported: 0,
       needs_review: 0,
+      answersWithoutClaims: 0,
       answersWithFailures: 1,
     },
   };
@@ -461,6 +467,7 @@ test("renders explicit empty states for batch answers with no extracted claims",
       contradicted: 0,
       unsupported: 0,
       needs_review: 0,
+      answersWithoutClaims: 1,
       answersWithFailures: 0,
     },
   };
@@ -469,9 +476,11 @@ test("renders explicit empty states for batch answers with no extracted claims",
   const html = renderBatchHtmlReport(batchReport);
 
   assert.match(markdown, /No claims were extracted from this answer\./);
+  assert.match(markdown, /- Answers with no extracted claims: 1/);
   assert.match(markdown, /- Primary finding: needs review/);
   assert.match(markdown, /- Primary reason: No claims were extracted from this answer\./);
   assert.match(html, /No claims were extracted from this answer\./);
+  assert.match(html, /No extracted claims<\/span>\s*<strong>1 answers<\/strong>/);
   assert.match(html, /<dt>Primary finding<\/dt><dd>needs review<\/dd>/);
   assert.match(html, /Review required/);
 });
@@ -503,6 +512,7 @@ test("renders a batch reviewer decision csv with answer path context", () => {
       contradicted: 1,
       unsupported: 1,
       needs_review: 0,
+      answersWithoutClaims: 0,
       answersWithFailures: 2,
     },
   };
@@ -549,6 +559,7 @@ test("renders a no-claim batch reviewer decision csv row with answer-level conte
       contradicted: 0,
       unsupported: 0,
       needs_review: 0,
+      answersWithoutClaims: 1,
       answersWithFailures: 0,
     },
   };
@@ -589,6 +600,7 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
       contradicted: 0,
       unsupported: 1,
       needs_review: 0,
+      answersWithoutClaims: 0,
       answersWithFailures: 1,
     },
   };
@@ -636,6 +648,7 @@ Managers approve travel within five business days, and international trips requi
       contradicted: 0,
       unsupported: 1,
       needs_review: 0,
+      answersWithoutClaims: 0,
       answersWithFailures: 0,
     },
   };
@@ -669,6 +682,7 @@ test("renders no-claim batch summary csv rows with an explicit review signal", (
       contradicted: 0,
       unsupported: 0,
       needs_review: 0,
+      answersWithoutClaims: 1,
       answersWithFailures: 0,
     },
   };
