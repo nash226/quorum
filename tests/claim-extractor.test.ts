@@ -132,6 +132,22 @@ test("extracts markdown tables without trailing pipe punctuation noise", () => {
   );
 });
 
+test("keeps escaped pipes inside markdown table cells", () => {
+  const claims = extractClaims(`| Policy | Details |
+| --- | --- |
+| Support tiers | Enterprise support covers billing \\| technical issues. |
+| Leave policy | Employees receive 12 weeks for full-time \\| part-time staff. |
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Support tiers: Enterprise support covers billing | technical issues.",
+      "Leave policy: Employees receive 12 weeks for full-time | part-time staff.",
+    ],
+  );
+});
+
 test("keeps wrapped blockquote lines as a single claim", () => {
   const claims = extractClaims(`## Support Notes
 
