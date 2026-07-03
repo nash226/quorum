@@ -11,6 +11,8 @@ const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
 const DEFINITION_LIST_PREFIX = /^:\s+/;
 const MARKDOWN_TABLE_SEPARATOR_CELL = /^:?-{3,}:?$/;
 const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
+const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
+const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
@@ -36,10 +38,16 @@ function normalizeAnswer(answer: string): string {
   let previousLineBelongsToMarkdownClaim: boolean = false;
   let activeFenceCharacter: "`" | "~" | undefined;
   let insideIndentedCodeBlock = false;
+  let insideMarkdownDefinition = false;
+  let insideHtmlComment = false;
 
   for (let index = 0; index < lines.length; index += 1) {
     const rawLine = lines[index] ?? "";
-    const line = rawLine.trim();
+    const lineWithoutComments = stripHtmlComments(rawLine, {
+      insideHtmlComment,
+    });
+    insideHtmlComment = lineWithoutComments.insideHtmlComment;
+    const line = lineWithoutComments.line.trim();
 
     if (insideIndentedCodeBlock) {
       if (line.length === 0) {
@@ -49,6 +57,16 @@ function normalizeAnswer(answer: string): string {
       previousLineCanContinue = false;
       previousLineBelongsToMarkdownClaim = false;
       continue;
+    }
+
+    if (insideMarkdownDefinition) {
+      if (line.length === 0 || isIndentedContinuation(lineWithoutComments.line)) {
+        previousLineCanContinue = false;
+        previousLineBelongsToMarkdownClaim = false;
+        continue;
+      }
+
+      insideMarkdownDefinition = false;
     }
 
     if (activeFenceCharacter) {
@@ -76,13 +94,26 @@ function normalizeAnswer(answer: string): string {
       continue;
     }
 
+    if (line.length === 0) {
+      previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
+      continue;
+    }
+
+    if (isMarkdownDefinition(line)) {
+      insideMarkdownDefinition = true;
+      previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
+      continue;
+    }
+
     if (
-      line.length === 0 ||
       isHeading(line) ||
       isSetextHeading(line, lines, index) ||
       isDefinitionListTerm(line, lines, index)
     ) {
       previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
       continue;
     }
 
@@ -364,6 +395,53 @@ function isQuotedContinuationLine(normalizedLine: string, rawLine: string): bool
 
 function isIndentedContinuation(line: string): boolean {
   return /^\s+/.test(line);
+}
+
+function isMarkdownDefinition(line: string): boolean {
+  return (
+    MARKDOWN_REFERENCE_DEFINITION_PREFIX.test(line) ||
+    MARKDOWN_FOOTNOTE_DEFINITION_PREFIX.test(line)
+  );
+}
+
+function stripHtmlComments(
+  line: string,
+  state: { insideHtmlComment: boolean },
+): { line: string; insideHtmlComment: boolean } {
+  let remaining = line;
+  let normalized = "";
+  let insideComment = state.insideHtmlComment;
+
+  while (remaining.length > 0) {
+    if (insideComment) {
+      const commentEndIndex = remaining.indexOf("-->");
+      if (commentEndIndex === -1) {
+        return {
+          line: normalized,
+          insideHtmlComment: true,
+        };
+      }
+
+      remaining = remaining.slice(commentEndIndex + 3);
+      insideComment = false;
+      continue;
+    }
+
+    const commentStartIndex = remaining.indexOf("<!--");
+    if (commentStartIndex === -1) {
+      normalized += remaining;
+      break;
+    }
+
+    normalized += remaining.slice(0, commentStartIndex);
+    remaining = remaining.slice(commentStartIndex + 4);
+    insideComment = true;
+  }
+
+  return {
+    line: normalized,
+    insideHtmlComment: insideComment,
+  };
 }
 
 function stripInlineMarkdown(answer: string): string {
