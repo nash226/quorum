@@ -139,7 +139,7 @@ function parseHtmlSource(content: string): ParsedSource {
     (titleMatch ? decodeHtmlEntities(stripTags(titleMatch[1] ?? "")).trim() : "") ||
     findHtmlMetaContent(normalized, {
       property: ["og:title"],
-      name: ["og:title", "twitter:title", "title"],
+      name: ["og:title", "twitter:title", "title", "dc.title", "dcterms.title"],
     }) ||
     (headingMatch ? decodeHtmlEntities(stripTags(headingMatch[1] ?? "")).trim() : "");
   const updatedAt = findHtmlMetaContent(normalized, {
@@ -152,6 +152,8 @@ function parseHtmlSource(content: string): ParsedSource {
       "updated_at",
       "updatedAt",
       "date.modified",
+      "dc.date.modified",
+      "dcterms.modified",
     ],
     httpEquiv: ["last-modified"],
   }) || findHtmlTimeDate(normalized);
