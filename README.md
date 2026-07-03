@@ -191,7 +191,9 @@ For exported HTML knowledge-base pages, Quorum also picks up common publish-time
 metadata such as `<meta property="article:modified_time">` or
 `<meta name="last-modified">`, `<meta http-equiv="last-modified">`, and common
 Dublin Core fields such as `<meta name="dc.title">` or
-`<meta name="dcterms.modified">`. It also accepts
+`<meta name="dcterms.modified">`. It also reads common Schema.org-style
+metadata such as `<meta itemprop="headline">` and
+`<meta itemprop="dateModified">`. Quorum also accepts
 `<meta name="quorum-trust-level" content="high">` when teams want to preserve a
 review trust level alongside the HTML export.
 

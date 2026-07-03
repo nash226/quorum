@@ -140,6 +140,7 @@ function parseHtmlSource(content: string): ParsedSource {
     findHtmlMetaContent(normalized, {
       property: ["og:title"],
       name: ["og:title", "twitter:title", "title", "dc.title", "dcterms.title"],
+      itemprop: ["headline", "name"],
     }) ||
     (headingMatch ? decodeHtmlEntities(stripTags(headingMatch[1] ?? "")).trim() : "");
   const updatedAt = findHtmlMetaContent(normalized, {
@@ -156,6 +157,7 @@ function parseHtmlSource(content: string): ParsedSource {
       "dcterms.modified",
     ],
     httpEquiv: ["last-modified"],
+    itemprop: ["datemodified"],
   }) || findHtmlTimeDate(normalized);
   const trustLevel = tryParseTrustLevel(
     findHtmlMetaContent(normalized, {
@@ -180,6 +182,7 @@ function findHtmlMetaContent(
     property?: string[];
     name?: string[];
     httpEquiv?: string[];
+    itemprop?: string[];
   },
 ): string | undefined {
   const propertyMatchers = new Set(matchers.property?.map((value) => value.toLowerCase()) ?? []);
@@ -187,6 +190,7 @@ function findHtmlMetaContent(
   const httpEquivMatchers = new Set(
     matchers.httpEquiv?.map((value) => value.toLowerCase()) ?? [],
   );
+  const itempropMatchers = new Set(matchers.itemprop?.map((value) => value.toLowerCase()) ?? []);
   const metaTags = content.match(/<meta\b[^>]*>/gi) ?? [];
 
   for (const tag of metaTags) {
@@ -209,6 +213,11 @@ function findHtmlMetaContent(
 
     const httpEquiv = attributes["http-equiv"]?.toLowerCase();
     if (httpEquiv && httpEquivMatchers.has(httpEquiv)) {
+      return decodeHtmlEntities(contentValue).trim();
+    }
+
+    const itemprop = attributes.itemprop?.toLowerCase();
+    if (itemprop && itempropMatchers.has(itemprop)) {
       return decodeHtmlEntities(contentValue).trim();
     }
   }
