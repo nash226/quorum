@@ -709,3 +709,50 @@ Employees receive 12 weeks of paid parental leave.
     "Employees receive 12 weeks of paid parental leave.",
   ]);
 });
+
+test("ignores yaml frontmatter before answer claims", () => {
+  const claims = extractClaims(`---
+title: HR answer draft
+owner: People Ops
+---
+Employees receive 12 weeks of paid parental leave.
+Healthcare coverage begins after 30 days of employment.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Healthcare coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
+test("ignores toml frontmatter before answer claims", () => {
+  const claims = extractClaims(`+++
+title = "HR answer draft"
+owner = "People Ops"
++++
+Employees receive 12 weeks of paid parental leave.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+  ]);
+});
+
+test("keeps leading thematic breaks when they are not frontmatter", () => {
+  const claims = extractClaims(`---
+
+Employees receive 12 weeks of paid parental leave.
+Healthcare coverage begins after 30 days of employment.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Healthcare coverage begins after 30 days of employment.",
+    ],
+  );
+});

@@ -40,6 +40,8 @@ function normalizeAnswer(answer: string): string {
   let insideIndentedCodeBlock = false;
   let insideMarkdownDefinition = false;
   let insideHtmlComment = false;
+  let activeFrontmatterDelimiter: "---" | "+++" | undefined;
+  let seenBodyContent = false;
 
   for (let index = 0; index < lines.length; index += 1) {
     const rawLine = lines[index] ?? "";
@@ -48,6 +50,16 @@ function normalizeAnswer(answer: string): string {
     });
     insideHtmlComment = lineWithoutComments.insideHtmlComment;
     const line = lineWithoutComments.line.trim();
+
+    if (activeFrontmatterDelimiter) {
+      if (line === activeFrontmatterDelimiter) {
+        activeFrontmatterDelimiter = undefined;
+      }
+
+      previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
+      continue;
+    }
 
     if (insideIndentedCodeBlock) {
       if (line.length === 0) {
@@ -95,6 +107,19 @@ function normalizeAnswer(answer: string): string {
     }
 
     if (line.length === 0) {
+      previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
+      continue;
+    }
+
+    const frontmatterDelimiter = getFrontmatterOpeningDelimiter(
+      line,
+      lines,
+      index,
+      seenBodyContent,
+    );
+    if (frontmatterDelimiter) {
+      activeFrontmatterDelimiter = frontmatterDelimiter;
       previousLineCanContinue = false;
       previousLineBelongsToMarkdownClaim = false;
       continue;
@@ -161,6 +186,7 @@ function normalizeAnswer(answer: string): string {
     }
 
     normalizedLines.push(normalizedLine);
+    seenBodyContent = true;
     previousLineCanContinue = currentLineCanContinue;
     previousLineBelongsToMarkdownClaim = belongsToMarkdownClaim;
   }
@@ -424,6 +450,59 @@ function isMarkdownDefinition(line: string): boolean {
     MARKDOWN_REFERENCE_DEFINITION_PREFIX.test(line) ||
     MARKDOWN_FOOTNOTE_DEFINITION_PREFIX.test(line)
   );
+}
+
+function getFrontmatterOpeningDelimiter(
+  line: string,
+  lines: string[],
+  currentIndex: number,
+  seenBodyContent: boolean,
+): "---" | "+++" | undefined {
+  if (seenBodyContent || (line !== "---" && line !== "+++")) {
+    return undefined;
+  }
+
+  if (!findFrontmatterClosingIndex(line, lines, currentIndex)) {
+    return undefined;
+  }
+
+  return hasFrontmatterContent(lines, currentIndex, line) ? line : undefined;
+}
+
+function findFrontmatterClosingIndex(
+  delimiter: "---" | "+++",
+  lines: string[],
+  currentIndex: number,
+): number | undefined {
+  for (let index = currentIndex + 1; index < lines.length; index += 1) {
+    if ((lines[index] ?? "").trim() === delimiter) {
+      return index;
+    }
+  }
+
+  return undefined;
+}
+
+function hasFrontmatterContent(
+  lines: string[],
+  currentIndex: number,
+  delimiter: "---" | "+++",
+): boolean {
+  const closingIndex = findFrontmatterClosingIndex(delimiter, lines, currentIndex);
+  if (closingIndex === undefined) {
+    return false;
+  }
+
+  for (let index = currentIndex + 1; index < closingIndex; index += 1) {
+    const line = (lines[index] ?? "").trim();
+    if (line.length === 0) {
+      continue;
+    }
+
+    return /^[A-Za-z0-9_.-]+\s*[:=]/.test(line);
+  }
+
+  return false;
 }
 
 function stripHtmlComments(
