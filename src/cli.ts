@@ -593,6 +593,11 @@ async function resolveAnswerPaths(
 async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
   const sourcePaths = await resolveSourcePaths(args.sourcePaths, args.sourceDirs);
 
+  if (sourcePaths.length === 0) {
+    const locations = [...args.sourcePaths, ...args.sourceDirs].join(", ");
+    throw new Error(`No approved source files found in ${locations}`);
+  }
+
   return Promise.all(
     sourcePaths.map(async (sourcePath, index) => {
       const content = await readFile(sourcePath);
