@@ -549,6 +549,8 @@ function stripInlineMarkdown(answer: string): string {
   return answer
     .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/\[([^\]]+)\]\[[^\]]*\]/g, "$1")
+    .replace(/\[\^([^\]]+)\]/g, "")
     .replace(/`([^`]+)`/g, "$1")
     .replace(/~~(\S(?:[\s\S]*?\S)?)~~/g, "$1")
     .replace(/(\*\*|__)(\S(?:[\s\S]*?\S)?)\1/g, "$2")
