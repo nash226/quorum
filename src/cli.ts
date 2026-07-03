@@ -77,7 +77,7 @@ interface ImportReviewArgs {
 }
 
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
-const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
+const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
 const STDIN_ANSWER_PATH = "<stdin>";
 const HELP_FLAGS = new Set(["--help", "-h"]);
 type CommandName = "verify" | "verify-batch" | "import-review";

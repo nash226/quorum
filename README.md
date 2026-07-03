@@ -34,7 +34,7 @@ auditable evidence report before an agent response becomes a business action.
 
 The current CLI can:
 
-- read an AI-generated answer from a Markdown or text file
+- read an AI-generated answer from a Markdown, text, or exported HTML file
 - batch verify multiple AI-generated answers from a directory
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, or PDF source documents
@@ -220,10 +220,10 @@ quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-o
 
 Options:
 
-- `--answer <path>`: AI-generated answer to verify
+- `--answer <path>`: AI-generated answer to verify, including Markdown, text, or exported HTML
 - `--source <path>`: approved source document; may be repeated
 - `--source-dir <path>`: directory of approved source documents
-- `--answer <path|->`: answer file to include in a batch run, or `-` to read one answer from stdin once; file paths may be repeated
+- `--answer <path|->`: answer file to include in a batch run, or `-` to read one answer from stdin once; Markdown, text, and exported HTML paths may be repeated
 - `--answer-dir <path>`: directory of AI-generated answers for batch verification
 - `--review-csv <path|->`: reviewer decision CSV to import, or `-` to read from stdin
 - `--default-trust-level <level>`: use `high`, `medium`, or `low` for sources
