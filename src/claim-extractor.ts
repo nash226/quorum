@@ -9,6 +9,7 @@ const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,
 const UNICODE_BULLET_PREFIX = /^(?:[\u2022\u2023\u25E6\u2043\u2219])\s+/;
 const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
 const DEFINITION_LIST_PREFIX = /^:\s+/;
+const MARKDOWN_TABLE_SEPARATOR_CELL = /^:?-{3,}:?$/;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
@@ -86,6 +87,18 @@ function normalizeAnswer(answer: string): string {
 
     if (isIntroLabel(line, lines, index)) {
       previousLineCanContinue = false;
+      continue;
+    }
+
+    const tableRowCells = parseMarkdownTableCells(line);
+    if (tableRowCells) {
+      const tableRowClaim = normalizeMarkdownTableRow(tableRowCells, lines, index);
+      if (tableRowClaim) {
+        normalizedLines.push(tableRowClaim);
+      }
+
+      previousLineCanContinue = false;
+      previousLineBelongsToMarkdownClaim = false;
       continue;
     }
 
@@ -359,4 +372,61 @@ function stripInlineMarkdown(answer: string): string {
     .replace(/~~(\S(?:[\s\S]*?\S)?)~~/g, "$1")
     .replace(/(\*\*|__)(\S(?:[\s\S]*?\S)?)\1/g, "$2")
     .replace(/(\*|_)(\S(?:[\s\S]*?\S)?)\1/g, "$2");
+}
+
+function normalizeMarkdownTableRow(
+  cells: string[],
+  lines: string[],
+  currentIndex: number,
+): string | undefined {
+  if (isMarkdownTableSeparatorRow(cells) || isMarkdownTableHeaderRow(lines, currentIndex)) {
+    return undefined;
+  }
+
+  const [firstCell, ...otherCells] = cells;
+  if (!firstCell) {
+    return otherCells.join("; ");
+  }
+
+  if (otherCells.length === 0) {
+    return firstCell;
+  }
+
+  return `${firstCell}: ${otherCells.join("; ")}`;
+}
+
+function parseMarkdownTableCells(line: string): string[] | undefined {
+  if (!line.includes("|")) {
+    return undefined;
+  }
+
+  const segments = line.split("|");
+  if (segments.length < 3) {
+    return undefined;
+  }
+
+  const hasOuterPipes = line.startsWith("|") || line.endsWith("|");
+  const relevantSegments = hasOuterPipes ? segments.slice(1, -1) : segments;
+  const cells = relevantSegments.map((cell) => cell.trim()).filter(Boolean);
+
+  return cells.length >= 2 ? cells : undefined;
+}
+
+function isMarkdownTableSeparatorRow(cells: string[]): boolean {
+  return cells.every((cell) => MARKDOWN_TABLE_SEPARATOR_CELL.test(cell));
+}
+
+function isMarkdownTableHeaderRow(lines: string[], currentIndex: number): boolean {
+  for (let index = currentIndex + 1; index < lines.length; index += 1) {
+    const nextLine = (lines[index] ?? "").trim();
+
+    if (nextLine.length === 0) {
+      return false;
+    }
+
+    const nextCells = parseMarkdownTableCells(nextLine);
+    return nextCells ? isMarkdownTableSeparatorRow(nextCells) : false;
+  }
+
+  return false;
 }

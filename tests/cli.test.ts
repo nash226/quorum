@@ -206,6 +206,64 @@ test("verify matches claims against html sources with named entities", async () 
   }
 });
 
+test("verify matches claims extracted from markdown table answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-table-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.md");
+
+    await Promise.all([
+      writeFile(
+        answerPath,
+        `| Policy | Details |
+| --- | --- |
+| Parental leave | Employees receive 12 weeks of paid parental leave. |
+| Healthcare | Coverage begins after 30 days of employment. |
+`,
+        "utf8",
+      ),
+      writeFile(
+        sourcePath,
+        `Employees receive 12 weeks of paid parental leave.
+Coverage begins after 30 days of employment.
+`,
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      summary: Record<string, number>;
+      assessments: Array<{ claim: { text: string }; verdict: string }>;
+    };
+
+    assert.deepEqual(report.summary, {
+      verified: 2,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+    assert.deepEqual(
+      report.assessments.map((assessment) => assessment.claim.text),
+      [
+        "Parental leave: Employees receive 12 weeks of paid parental leave.",
+        "Healthcare: Coverage begins after 30 days of employment.",
+      ],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify records the answer path in JSON and reviewer csv outputs", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-review-"));
 
