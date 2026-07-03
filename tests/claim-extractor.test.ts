@@ -656,3 +656,41 @@ test("strips inline markdown formatting from extracted claims", () => {
     ],
   );
 });
+
+test("ignores html comments between claims", () => {
+  const claims = extractClaims(`Employees receive 12 weeks of paid parental leave.
+<!-- internal note: verify regional exceptions before publishing -->
+Healthcare coverage begins after 30 days of employment.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Healthcare coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
+test("ignores markdown reference definitions before claims", () => {
+  const claims = extractClaims(`[policy]: https://example.com/policy "Approved policy"
+[guide]: https://example.com/guide
+Employees receive 12 weeks of paid parental leave.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+  ]);
+});
+
+test("ignores markdown footnote definitions and their continuations", () => {
+  const claims = extractClaims(`[^1]: Internal reviewer note.
+  Continue the internal-only context here.
+
+Employees receive 12 weeks of paid parental leave.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+  ]);
+});
