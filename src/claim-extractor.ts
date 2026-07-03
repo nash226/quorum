@@ -13,6 +13,14 @@ const MARKDOWN_TABLE_SEPARATOR_CELL = /^:?-{3,}:?$/;
 const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
 const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
 const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
+const HTML_ANSWER_MARKUP_PATTERN =
+  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|script|style)\b/i;
+const HTML_BLOCK_BREAK_TAGS =
+  /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/details|\/h[1-6])\b[^>]*>/gi;
+const HTML_BLOCK_TAGS =
+  /<\/?(p|div|ul|ol|section|article|main|header|footer|aside|body|html|details|blockquote)\b[^>]*>/gi;
+const HTML_INLINE_TAGS =
+  /<\/?(?:summary|li|span|br|h[1-6])\b[^>]*>/gi;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
@@ -32,7 +40,7 @@ function splitCompoundClaim(sentence: string): string[] {
 }
 
 function normalizeAnswer(answer: string): string {
-  const lines = answer.replace(/\r/g, "").split("\n");
+  const lines = normalizeHtmlAnswerMarkup(answer).replace(/\r/g, "").split("\n");
   const normalizedLines: string[] = [];
   let previousLineCanContinue = false;
   let previousLineBelongsToMarkdownClaim: boolean = false;
@@ -192,6 +200,30 @@ function normalizeAnswer(answer: string): string {
   }
 
   return normalizedLines.join("\n");
+}
+
+function normalizeHtmlAnswerMarkup(answer: string): string {
+  if (!HTML_ANSWER_MARKUP_PATTERN.test(answer)) {
+    return answer;
+  }
+
+  return decodeHtmlEntities(
+    answer
+      .replace(/<!doctype[^>]*>/gi, " ")
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+      .replace(
+        /<summary\b[^>]*>([\s\S]*?)<\/summary>/gi,
+        (_match, summaryContent: string) => `${summaryContent.trim()}:\n`,
+      )
+      .replace(/<li\b[^>]*>/gi, "- ")
+      .replace(HTML_BLOCK_BREAK_TAGS, "\n")
+      .replace(HTML_BLOCK_TAGS, "\n")
+      .replace(HTML_INLINE_TAGS, " "),
+  )
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/[ \t]{2,}/g, " ");
 }
 
 function stripMarkdownClaimPrefix(line: string): string {
@@ -555,6 +587,49 @@ function stripInlineMarkdown(answer: string): string {
     .replace(/~~(\S(?:[\s\S]*?\S)?)~~/g, "$1")
     .replace(/(\*\*|__)(\S(?:[\s\S]*?\S)?)\1/g, "$2")
     .replace(/(\*|_)(\S(?:[\s\S]*?\S)?)\1/g, "$2");
+}
+
+function decodeHtmlEntities(content: string): string {
+  const namedEntities = new Map<string, string>([
+    ["nbsp", " "],
+    ["amp", "&"],
+    ["quot", '"'],
+    ["apos", "'"],
+    ["lt", "<"],
+    ["gt", ">"],
+    ["rsquo", "’"],
+    ["lsquo", "‘"],
+    ["rdquo", "”"],
+    ["ldquo", "“"],
+    ["mdash", "—"],
+    ["ndash", "–"],
+    ["hellip", "…"],
+    ["middot", "·"],
+    ["bull", "•"],
+  ]);
+
+  return content
+    .replace(/&#(?:x([0-9a-fA-F]+)|([0-9]+));/g, (match, hex, decimal) => {
+      const numericValue =
+        typeof hex === "string" && hex.length > 0
+          ? Number.parseInt(hex, 16)
+          : Number.parseInt(decimal ?? "", 10);
+
+      if (!Number.isInteger(numericValue) || numericValue <= 0 || numericValue > 0x10ffff) {
+        return match;
+      }
+
+      try {
+        return String.fromCodePoint(numericValue);
+      } catch {
+        return match;
+      }
+    })
+    .replace(/&#39;/gi, "'")
+    .replace(/&([a-z][a-z0-9]+);/gi, (match, entityName) => {
+      const decoded = namedEntities.get(entityName.toLowerCase());
+      return decoded ?? match;
+    });
 }
 
 function normalizeMarkdownTableRow(
