@@ -791,6 +791,28 @@ test("extracts clean claims from html answer markup", () => {
   );
 });
 
+test("ignores html code blocks between claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <p>Customers can request refunds within 30 days.</p>
+    <pre><code>{
+  "refundWindowDays": 30,
+  "requiresManagerApprovalAfterDays": true
+}</code></pre>
+    <p>Annual plans require support approval.</p>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Customers can request refunds within 30 days.",
+      "Annual plans require support approval.",
+    ],
+  );
+});
+
 test("ignores html heading text before html list claims", () => {
   const claims = extractClaims(`<!doctype html>
 <html>
