@@ -21,6 +21,7 @@ const HTML_BLOCK_TAGS =
   /<\/?(p|div|ul|ol|section|article|main|header|footer|aside|body|html|details|blockquote)\b[^>]*>/gi;
 const HTML_INLINE_TAGS =
   /<\/?(?:summary|li|span|br|h[1-6])\b[^>]*>/gi;
+const REMAINING_HTML_TAGS = /<\/?[^>\n]+>/g;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
@@ -224,8 +225,10 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
       .replace(HTML_BLOCK_TAGS, "\n")
       .replace(HTML_INLINE_TAGS, " "),
   )
+    .replace(REMAINING_HTML_TAGS, " ")
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
+    .replace(/\s+([,.;:!?])/g, "$1")
     .replace(/[ \t]{2,}/g, " ");
 }
 
