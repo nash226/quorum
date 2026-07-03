@@ -808,6 +808,44 @@ test("verify-batch reads one answer from stdin alongside explicit files", async 
   }
 });
 
+test("verify-batch rejects repeated stdin answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-duplicate-stdin-"));
+
+  try {
+    const sourcePath = join(tempDir, "source.md");
+    await writeFile(
+      sourcePath,
+      "Employees receive 12 weeks of paid parental leave.\n",
+      "utf8",
+    );
+
+    const result = await runCliAllowFailure(
+      [
+        "verify-batch",
+        "--answer",
+        "-",
+        "--answer",
+        "-",
+        "--source",
+        sourcePath,
+        "--json",
+      ],
+      {
+        stdin: "Employees receive 12 weeks of paid parental leave.\n",
+      },
+    );
+
+    assert.equal(result.code, 1);
+    assert.equal(result.stdout, "");
+    assert.match(
+      result.stderr,
+      /Only one --answer - is allowed because stdin can only be consumed once\./,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch rejects empty resolved source sets", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-empty-sources-"));
 
