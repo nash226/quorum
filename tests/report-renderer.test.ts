@@ -302,7 +302,7 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /- Answer preview: Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Primary finding: verified/);
   assert.match(rendered, /- Primary claim: Employees receive 12 weeks of paid parental leave\./);
-  assert.match(rendered, /- Primary evidence: HR Policy/);
+  assert.match(rendered, /- Primary evidence: \*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
   assert.match(rendered, /\*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
   assert.match(rendered, /#### Submitted Answer/);
   assert.match(rendered, /> Employees receive 12 weeks of paid parental leave\./);
