@@ -899,6 +899,31 @@ test("ignores html head metadata before html answer claims", () => {
   );
 });
 
+test("ignores html navigation and control chrome before extracting claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <nav>
+      <a href="/kb">Knowledge base home</a>
+      <a href="/refunds">Refund policy overview</a>
+    </nav>
+    <main>
+      <p>Customers can request refunds within 30 days.</p>
+      <button type="button">Copy answer</button>
+      <p>Annual plans require support approval.</p>
+    </main>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Customers can request refunds within 30 days.",
+      "Annual plans require support approval.",
+    ],
+  );
+});
+
 test("strips inline-only html fragments before extracting claims", () => {
   const claims = extractClaims(`
 <a href="/policy">Employees receive 12 weeks of paid parental leave.</a>
