@@ -66,6 +66,40 @@ test("ignores quote, checkbox, and heading markdown prefixes", () => {
   );
 });
 
+test("extracts clean claims from markdown definition lists", () => {
+  const claims = extractClaims(`Leave policy
+: Employees receive 12 weeks of paid parental leave.
+: Managers approve exceptions within five business days.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve exceptions within five business days.",
+    ],
+  );
+});
+
+test("keeps wrapped markdown definition list items as single claims", () => {
+  const claims = extractClaims(`Leave policy
+: Employees receive 12 weeks of paid parental leave
+  for full-time staff only.
+
+Support policy
+: Enterprise support requests receive a first response
+  within four business hours.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+      "Enterprise support requests receive a first response within four business hours.",
+    ],
+  );
+});
+
 test("keeps wrapped blockquote lines as a single claim", () => {
   const claims = extractClaims(`## Support Notes
 
