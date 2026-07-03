@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a48d534` on 2026-07-03, support escaped pipes in markdown tables
+- Latest shipped change: `0f4cb62` on 2026-07-03, ignore markdown metadata lines in claim extraction
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-03 | [#127](https://github.com/nash226/quorum/pull/127) | ignore markdown metadata lines in claim extraction | `0f4cb62` |
 | 2026-07-03 | [#126](https://github.com/nash226/quorum/pull/126) | support escaped pipes in markdown tables | `a48d534` |
 | 2026-07-03 | [#125](https://github.com/nash226/quorum/pull/125) | support markdown callout claims | `4bc5816` |
 | 2026-07-03 | [#124](https://github.com/nash226/quorum/pull/124) | support markdown table claims | `b28e4b6` |
@@ -52,5 +53,4 @@
 | 2026-07-03 | [#122](https://github.com/nash226/quorum/pull/122) | enrich batch primary evidence summaries | `4083694` |
 | 2026-07-03 | [#121](https://github.com/nash226/quorum/pull/121) | reject repeated batch stdin answers | `ff33c19` |
 | 2026-07-02 | [#120](https://github.com/nash226/quorum/pull/120) | feat: surface no-claim counts in batch summaries | `11b34ba` |
-| 2026-07-02 | [#119](https://github.com/nash226/quorum/pull/119) | support html itemprop metadata | `edd8555` |
 
