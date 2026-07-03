@@ -791,6 +791,24 @@ test("extracts clean claims from html answer markup", () => {
   );
 });
 
+test("strips inline html formatting and links from html answer claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <p>Employees receive <a href="/policy">12 weeks of paid parental leave</a> for full-time staff.</p>
+    <p><strong>Managers</strong> approve exceptions within <em>five business days</em>.</p>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave for full-time staff.",
+      "Managers approve exceptions within five business days.",
+    ],
+  );
+});
+
 test("keeps leading thematic breaks when they are not frontmatter", () => {
   const claims = extractClaims(`---
 
