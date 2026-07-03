@@ -97,6 +97,8 @@ unsupported automatic replacement promise.
 The support benchmark also directly regression-tests data-retention answers,
 covering the approved deletion path, a conflicting completion window, and an
 unsupported recovery promise.
+The packed smoke check also verifies that this data-retention evaluation is
+present in the generated benchmark report.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
