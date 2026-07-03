@@ -877,6 +877,23 @@ test("strips inline html formatting and links from html answer claims", () => {
   );
 });
 
+test("strips inline-only html fragments before extracting claims", () => {
+  const claims = extractClaims(`
+<a href="/policy">Employees receive 12 weeks of paid parental leave.</a>
+<strong>Managers approve exceptions within five business days.</strong>
+<em>Healthcare coverage begins after 30 days of employment.</em>
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve exceptions within five business days.",
+      "Healthcare coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
 test("keeps leading thematic breaks when they are not frontmatter", () => {
   const claims = extractClaims(`---
 
