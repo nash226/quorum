@@ -299,6 +299,32 @@ test("verify reads the answer from stdin when --answer - is used", async () => {
   }
 });
 
+test("verify rejects empty resolved source sets", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-sources-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const emptySourceDir = join(tempDir, "empty-sources");
+
+    await mkdir(emptySourceDir, { recursive: true });
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+
+    await assert.rejects(
+      runCli([
+        "verify",
+        "--answer",
+        answerPath,
+        "--source-dir",
+        emptySourceDir,
+        "--json",
+      ]),
+      /No approved source files found in/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify ignores indented markdown code blocks in the answer", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-indented-code-"));
 
@@ -775,6 +801,32 @@ test("verify-batch reads one answer from stdin alongside explicit files", async 
       new RegExp(
         `^support-answer,${escapeRegExp(fileAnswerPath)},Refunds are available within 30 days of purchase\\.,clear,,true,claim_1,`,
       ),
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch rejects empty resolved source sets", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-empty-sources-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const emptySourceDir = join(tempDir, "empty-sources");
+
+    await mkdir(emptySourceDir, { recursive: true });
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+
+    await assert.rejects(
+      runCli([
+        "verify-batch",
+        "--answer",
+        answerPath,
+        "--source-dir",
+        emptySourceDir,
+        "--json",
+      ]),
+      /No approved source files found in/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
