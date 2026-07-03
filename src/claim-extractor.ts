@@ -402,7 +402,7 @@ function parseMarkdownTableCells(line: string): string[] | undefined {
     return undefined;
   }
 
-  const segments = line.split("|");
+  const segments = splitMarkdownTableSegments(line);
   if (segments.length < 3) {
     return undefined;
   }
@@ -412,6 +412,33 @@ function parseMarkdownTableCells(line: string): string[] | undefined {
   const cells = relevantSegments.map((cell) => cell.trim()).filter(Boolean);
 
   return cells.length >= 2 ? cells : undefined;
+}
+
+function splitMarkdownTableSegments(line: string): string[] {
+  const segments: string[] = [];
+  let current = "";
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    const nextCharacter = line[index + 1];
+
+    if (character === "\\" && (nextCharacter === "\\" || nextCharacter === "|")) {
+      current += nextCharacter;
+      index += 1;
+      continue;
+    }
+
+    if (character === "|") {
+      segments.push(current);
+      current = "";
+      continue;
+    }
+
+    current += character;
+  }
+
+  segments.push(current);
+  return segments;
 }
 
 function isMarkdownTableSeparatorRow(cells: string[]): boolean {
