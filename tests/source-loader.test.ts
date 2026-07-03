@@ -330,6 +330,37 @@ test("extracts readable text from html table sources", async () => {
   assert.match(source.content, /Healthcare: Coverage begins after 30 days of employment\./);
 });
 
+test("extracts readable text from html description list sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Benefits Policy</title>
+  </head>
+  <body>
+    <dl>
+      <dt>Parental leave</dt>
+      <dd>Employees receive 12 weeks of paid parental leave.</dd>
+      <dt>Healthcare</dt>
+      <dd>Coverage begins after 30 days of employment.</dd>
+      <dd>Part-time staff receive prorated coverage.</dd>
+    </dl>
+  </body>
+</html>`,
+    10,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.match(source.content, /Benefits Policy/);
+  assert.match(
+    source.content,
+    /Parental leave: Employees receive 12 weeks of paid parental leave\./,
+  );
+  assert.match(source.content, /Healthcare: Coverage begins after 30 days of employment\./);
+  assert.match(source.content, /Healthcare: Part-time staff receive prorated coverage\./);
+});
+
 test("reads html updated dates from http-equiv metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/benefits.html",
@@ -345,7 +376,7 @@ test("reads html updated dates from http-equiv metadata", async () => {
     </main>
   </body>
 </html>`,
-    9,
+    11,
   );
 
   assert.equal(source.title, "Benefits Policy");
@@ -369,7 +400,7 @@ test("decodes numeric html entities from exported html sources", async () => {
     </main>
   </body>
 </html>`,
-    10,
+    12,
   );
 
   assert.equal(source.title, "Benefits — US");
@@ -392,7 +423,7 @@ test("decodes common named html entities from exported html sources", async () =
     </main>
   </body>
 </html>`,
-    11,
+    13,
   );
 
   assert.equal(source.title, "Support & Escalations — North America");
@@ -410,7 +441,7 @@ test("falls back to the html file name when the page has no title", async () => 
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.htm",
     "<html><body><p>Escalate priority incidents immediately.</p></body></html>",
-    11,
+    14,
   );
 
   assert.equal(source.title, "escalations");
