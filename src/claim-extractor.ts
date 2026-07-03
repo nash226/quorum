@@ -22,6 +22,7 @@ const HTML_BLOCK_TAGS =
 const HTML_INLINE_TAGS =
   /<\/?(?:summary|li|span|br|h[1-6])\b[^>]*>/gi;
 const REMAINING_HTML_TAGS = /<\/?[^>\n]+>/g;
+const HTML_HEADING_PATTERN = /<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi;
 
 export function extractClaims(answer: string): AtomicClaim[] {
   return splitIntoSentences(stripInlineMarkdown(normalizeAnswer(answer)))
@@ -213,6 +214,11 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
       .replace(/<!doctype[^>]*>/gi, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+      .replace(HTML_HEADING_PATTERN, (_match, depth: string, headingContent: string) => {
+        const headingLevel = Number.parseInt(depth, 10);
+        const prefix = "#".repeat(Number.isNaN(headingLevel) ? 1 : headingLevel);
+        return `\n${prefix} ${headingContent.trim()}\n`;
+      })
       .replace(/<table\b[^>]*>[\s\S]*?<\/table>/gi, (tableMarkup: string) =>
         normalizeHtmlTableMarkup(tableMarkup),
       )
