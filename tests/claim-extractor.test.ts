@@ -172,6 +172,30 @@ test("extracts clean claims from html table answers", () => {
   );
 });
 
+test("extracts clean claims from html description list answers", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <dl>
+      <dt>Parental leave</dt>
+      <dd>Employees receive 12 weeks of paid parental leave.</dd>
+      <dt>Healthcare</dt>
+      <dd>Coverage begins after 30 days of employment.</dd>
+      <dd>Part-time staff receive prorated coverage.</dd>
+    </dl>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Parental leave: Employees receive 12 weeks of paid parental leave.",
+      "Healthcare: Coverage begins after 30 days of employment.",
+      "Healthcare: Part-time staff receive prorated coverage.",
+    ],
+  );
+});
+
 test("keeps escaped pipes inside markdown table cells", () => {
   const claims = extractClaims(`| Policy | Details |
 | --- | --- |
