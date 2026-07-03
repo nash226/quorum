@@ -322,6 +322,84 @@ Coverage begins after 30 days of employment.
   }
 });
 
+test("verify matches claims extracted from html table answers against html table sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-table-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.html");
+    const sourcePath = join(tempDir, "hr-policy.html");
+
+    await Promise.all([
+      writeFile(
+        answerPath,
+        `<!doctype html>
+<html>
+  <body>
+    <table>
+      <thead>
+        <tr><th>Policy</th><th>Details</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Parental leave</td><td>Employees receive 12 weeks of paid parental leave.</td></tr>
+        <tr><td>Healthcare</td><td>Coverage begins after 30 days of employment.</td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>`,
+        "utf8",
+      ),
+      writeFile(
+        sourcePath,
+        `<!doctype html>
+<html>
+  <body>
+    <table>
+      <thead>
+        <tr><th>Policy</th><th>Details</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Parental leave</td><td>Employees receive 12 weeks of paid parental leave.</td></tr>
+        <tr><td>Healthcare</td><td>Coverage begins after 30 days of employment.</td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>`,
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      summary: Record<string, number>;
+      assessments: Array<{ claim: { text: string } }>;
+    };
+
+    assert.deepEqual(report.summary, {
+      verified: 2,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+    assert.deepEqual(
+      report.assessments.map((assessment) => assessment.claim.text),
+      [
+        "Parental leave: Employees receive 12 weeks of paid parental leave.",
+        "Healthcare: Coverage begins after 30 days of employment.",
+      ],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify records the answer path in JSON and reviewer csv outputs", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-review-"));
 
