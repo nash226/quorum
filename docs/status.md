@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `39e8f90` on 2026-07-03, ignore answer frontmatter claims
+- Latest shipped change: `b7380dc` on 2026-07-03, strip reference links from extracted claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-03 | [#130](https://github.com/nash226/quorum/pull/130) | strip reference links from extracted claims | `b7380dc` |
 | 2026-07-03 | [#129](https://github.com/nash226/quorum/pull/129) | ignore answer frontmatter claims | `39e8f90` |
 | 2026-07-03 | [#128](https://github.com/nash226/quorum/pull/128) | preserve claims before markdown separators | `42017c2` |
 | 2026-07-03 | [#127](https://github.com/nash226/quorum/pull/127) | ignore markdown metadata lines in claim extraction | `0f4cb62` |
@@ -52,5 +53,4 @@
 | 2026-07-03 | [#125](https://github.com/nash226/quorum/pull/125) | support markdown callout claims | `4bc5816` |
 | 2026-07-03 | [#124](https://github.com/nash226/quorum/pull/124) | support markdown table claims | `b28e4b6` |
 | 2026-07-03 | [#123](https://github.com/nash226/quorum/pull/123) | support markdown definition list claims | `0920e08` |
-| 2026-07-03 | [#122](https://github.com/nash226/quorum/pull/122) | enrich batch primary evidence summaries | `4083694` |
 
