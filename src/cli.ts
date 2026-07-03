@@ -455,6 +455,12 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     throw new Error("Provide at least one --answer <path> or --answer-dir <path>");
   }
 
+  const stdinAnswerCount = answerPaths.filter((answerPath) => answerPath === "-").length;
+
+  if (stdinAnswerCount > 1) {
+    throw new Error("Only one --answer - is allowed because stdin can only be consumed once.");
+  }
+
   return {
     ...parsed,
     answerPaths,
@@ -889,7 +895,7 @@ Usage:
   quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
-  --answer <path|->          Answer file to include, or - to read one answer from stdin; may be repeated
+  --answer <path|->          Answer file to include, or - to read one answer from stdin once
   --answer-dir <path>        Directory of answer files to include
   --source <path>            Approved source document; may be repeated
   --source-dir <path>        Directory of approved source documents

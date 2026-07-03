@@ -223,7 +223,7 @@ Options:
 - `--answer <path>`: AI-generated answer to verify
 - `--source <path>`: approved source document; may be repeated
 - `--source-dir <path>`: directory of approved source documents
-- `--answer <path|->`: answer file to include in a batch run, or `-` to read one answer from stdin; may be repeated
+- `--answer <path|->`: answer file to include in a batch run, or `-` to read one answer from stdin once; file paths may be repeated
 - `--answer-dir <path>`: directory of AI-generated answers for batch verification
 - `--review-csv <path|->`: reviewer decision CSV to import, or `-` to read from stdin
 - `--default-trust-level <level>`: use `high`, `medium`, or `low` for sources
