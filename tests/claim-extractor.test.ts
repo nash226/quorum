@@ -743,6 +743,29 @@ Employees receive 12 weeks of paid parental leave.
   ]);
 });
 
+test("extracts clean claims from html answer markup", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <details>
+      <summary>Policy summary</summary>
+      <ul>
+        <li>Employees receive 12 weeks of paid parental leave.</li>
+        <li>Customers&rsquo; refund requests require manager review after 30 days.</li>
+      </ul>
+    </details>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Customers’ refund requests require manager review after 30 days.",
+    ],
+  );
+});
+
 test("keeps leading thematic breaks when they are not frontmatter", () => {
   const claims = extractClaims(`---
 
