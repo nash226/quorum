@@ -791,6 +791,28 @@ test("extracts clean claims from html answer markup", () => {
   );
 });
 
+test("ignores html heading text before html list claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <h1>HR Policy Summary</h1>
+    <h2>Leave</h2>
+    <ul>
+      <li>Employees receive 12 weeks of paid parental leave.</li>
+      <li>Healthcare coverage begins after 30 days of employment.</li>
+    </ul>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Healthcare coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
 test("strips inline html formatting and links from html answer claims", () => {
   const claims = extractClaims(`<!doctype html>
 <html>
