@@ -14,7 +14,7 @@ const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
 const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
 const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
 const HTML_ANSWER_MARKUP_PATTERN =
-  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|thead|tbody|tfoot|tr|td|th|script|style)\b/i;
+  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|thead|tbody|tfoot|tr|td|th|dl|dt|dd|script|style)\b/i;
 const HTML_BLOCK_BREAK_TAGS =
   /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/details|\/h[1-6])\b[^>]*>/gi;
 const HTML_BLOCK_TAGS =
@@ -220,6 +220,9 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
         const prefix = "#".repeat(Number.isNaN(headingLevel) ? 1 : headingLevel);
         return `\n${prefix} ${headingContent.trim()}\n`;
       })
+      .replace(/<dl\b[^>]*>[\s\S]*?<\/dl>/gi, (descriptionListMarkup: string) =>
+        normalizeHtmlDescriptionListMarkup(descriptionListMarkup),
+      )
       .replace(/<table\b[^>]*>[\s\S]*?<\/table>/gi, (tableMarkup: string) =>
         normalizeHtmlTableMarkup(tableMarkup),
       )
@@ -245,6 +248,38 @@ function normalizeHtmlTableMarkup(tableMarkup: string): string {
     .filter((row): row is string => Boolean(row));
 
   return rows.join("\n");
+}
+
+function normalizeHtmlDescriptionListMarkup(descriptionListMarkup: string): string {
+  const items = Array.from(
+    descriptionListMarkup.matchAll(/<(dt|dd)\b[^>]*>([\s\S]*?)<\/\1>/gi),
+  ).map((match) => ({
+    kind: (match[1] ?? "").toLowerCase(),
+    text: normalizeHtmlTableCell(match[2] ?? ""),
+  }));
+
+  const lines: string[] = [];
+  let activeTerm: string | undefined;
+
+  for (const item of items) {
+    if (item.text.length === 0) {
+      continue;
+    }
+
+    if (item.kind === "dt") {
+      activeTerm = item.text;
+      continue;
+    }
+
+    if (activeTerm) {
+      lines.push(`${activeTerm}: ${item.text}`);
+      continue;
+    }
+
+    lines.push(item.text);
+  }
+
+  return lines.join("\n");
 }
 
 function normalizeHtmlTableRow(rowMarkup: string): string | undefined {
