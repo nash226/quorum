@@ -15,6 +15,8 @@ const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
 const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
 const HTML_ANSWER_MARKUP_PATTERN =
   /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|thead|tbody|tfoot|tr|td|th|dl|dt|dd|a|strong|em|b|i|code|script|style)\b/i;
+const HTML_PAGE_CHROME_PATTERN =
+  /<(nav|form|button|select|textarea|template|noscript|svg)\b[^>]*>[\s\S]*?<\/\1>/gi;
 const HTML_BLOCK_BREAK_TAGS =
   /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/details|\/h[1-6])\b[^>]*>/gi;
 const HTML_BLOCK_TAGS =
@@ -213,6 +215,7 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
     answer
       .replace(/<!doctype[^>]*>/gi, " ")
       .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, " ")
+      .replace(HTML_PAGE_CHROME_PATTERN, " ")
       .replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
