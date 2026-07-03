@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `fd6198f` on 2026-07-03, support html description lists
+- Latest shipped change: `c698fff` on 2026-07-03, normalize inline html answer fragments
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-03 | [#137](https://github.com/nash226/quorum/pull/137) | normalize inline html answer fragments | `c698fff` |
 | 2026-07-03 | [#136](https://github.com/nash226/quorum/pull/136) | support html description lists | `fd6198f` |
 | 2026-07-03 | [#135](https://github.com/nash226/quorum/pull/135) | ignore html preformatted answer blocks | `935aab2` |
 | 2026-07-03 | [#134](https://github.com/nash226/quorum/pull/134) | ignore html heading claims | `0244680` |
@@ -52,5 +53,4 @@
 | 2026-07-03 | [#132](https://github.com/nash226/quorum/pull/132) | support html table claims | `506e812` |
 | 2026-07-03 | [#131](https://github.com/nash226/quorum/pull/131) | feat: support html answer inputs | `ec09416` |
 | 2026-07-03 | [#130](https://github.com/nash226/quorum/pull/130) | strip reference links from extracted claims | `b7380dc` |
-| 2026-07-03 | [#129](https://github.com/nash226/quorum/pull/129) | ignore answer frontmatter claims | `39e8f90` |
 
