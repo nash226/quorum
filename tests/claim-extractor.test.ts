@@ -144,6 +144,35 @@ test("keeps wrapped blockquote lines as a single claim", () => {
   ]);
 });
 
+test("ignores standalone markdown callout labels before quoted claims", () => {
+  const claims = extractClaims(`## Support Notes
+
+> [!NOTE]
+> Customers can request refunds within 30 days.
+> Billing managers approve exceptions within two business days.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Customers can request refunds within 30 days.",
+      "Billing managers approve exceptions within two business days.",
+    ],
+  );
+});
+
+test("strips inline markdown callout labels from claim content", () => {
+  const claims = extractClaims(`## Policy Notes
+
+> [!WARNING] Employees receive 12 weeks of paid parental leave
+> for full-time staff only.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+  ]);
+});
+
 test("does not merge separate quoted claims that start on a new uppercase line", () => {
   const claims = extractClaims(`## Support Notes
 
