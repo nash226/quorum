@@ -924,6 +924,35 @@ test("ignores html navigation and control chrome before extracting claims", () =
   );
 });
 
+test("ignores html header, footer, and aside chrome before extracting claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <header>
+      <p>Internal draft for review only.</p>
+    </header>
+    <aside>
+      <p>Search knowledge base</p>
+    </aside>
+    <main>
+      <p>Employees receive 12 weeks of paid parental leave.</p>
+      <p>Annual plans require support approval.</p>
+    </main>
+    <footer>
+      <p>Last updated by knowledge bot.</p>
+    </footer>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Annual plans require support approval.",
+    ],
+  );
+});
+
 test("strips inline-only html fragments before extracting claims", () => {
   const claims = extractClaims(`
 <a href="/policy">Employees receive 12 weeks of paid parental leave.</a>
