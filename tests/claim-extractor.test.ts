@@ -147,6 +147,31 @@ test("extracts markdown tables without trailing pipe punctuation noise", () => {
   );
 });
 
+test("extracts clean claims from html table answers", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <table>
+      <thead>
+        <tr><th>Policy</th><th>Details</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Parental leave</td><td>Employees receive 12 weeks of paid parental leave.</td></tr>
+        <tr><td>Healthcare</td><td>Coverage begins after 30 days of employment.</td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Parental leave: Employees receive 12 weeks of paid parental leave.",
+      "Healthcare: Coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
 test("keeps escaped pipes inside markdown table cells", () => {
   const claims = extractClaims(`| Policy | Details |
 | --- | --- |
