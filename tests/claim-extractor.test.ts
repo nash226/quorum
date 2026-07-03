@@ -50,6 +50,21 @@ for full-time staff only.
   ]);
 });
 
+test("keeps claims that appear before markdown thematic breaks", () => {
+  const claims = extractClaims(`Employees receive 12 weeks of paid parental leave.
+---
+Healthcare coverage begins after 30 days of employment.
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Healthcare coverage begins after 30 days of employment.",
+    ],
+  );
+});
+
 test("ignores quote, checkbox, and heading markdown prefixes", () => {
   const claims = extractClaims(`## Support Notes
 
