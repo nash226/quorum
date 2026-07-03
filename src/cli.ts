@@ -734,6 +734,7 @@ function summarizeBatchVerification(
     contradicted: 0,
     unsupported: 0,
     needs_review: 0,
+    answersWithoutClaims: 0,
     answersWithFailures: 0,
   };
 
@@ -742,6 +743,10 @@ function summarizeBatchVerification(
     summary.contradicted += answer.report.summary.contradicted;
     summary.unsupported += answer.report.summary.unsupported;
     summary.needs_review += answer.report.summary.needs_review;
+
+    if (answer.report.assessments.length === 0) {
+      summary.answersWithoutClaims += 1;
+    }
 
     if (answer.shouldFail) {
       summary.answersWithFailures += 1;
@@ -772,6 +777,7 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
     "Sources:",
     ...report.sources.map((source) => `- ${renderTextSourceLabel(source)}`),
     `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
+    `Answers with no extracted claims: ${report.summary.answersWithoutClaims}`,
     `Answers matching fail policy: ${report.summary.answersWithFailures}`,
     "",
   ];
