@@ -213,14 +213,16 @@ async function runVerifyBatch(args: string[]): Promise<void> {
   const answers = await Promise.all(
     answerPaths.map(async (answerPath, index) => {
       const normalizedAnswerPath = normalizedAnswerPaths[index] ?? answerPath;
+      const answerLabel = answerLabels[index] ?? normalizedAnswerPath;
       const report =
         answerPath === "-" && stdinAnswer !== undefined
           ? verifyAnswer(stdinAnswer, sources, undefined, STDIN_ANSWER_PATH)
           : await verifySingleAnswer(answerPath, sources);
+      report.answerLabel = answerLabel;
       const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
 
       return {
-        answerLabel: answerLabels[index] ?? normalizedAnswerPath,
+        answerLabel,
         answerPath: normalizedAnswerPath,
         report,
         shouldFail: failVerdicts.length > 0,
