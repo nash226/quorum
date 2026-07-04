@@ -124,11 +124,14 @@ with the same command, and Quorum preserves each claim's `answer_path` so
 reviewers can trace decisions back to the original answer file. Markdown, HTML,
 and text import outputs preserve the exported `answer_label` while still
 showing the original `answer_path`, so batch review handoffs stay organized by
-the reviewer-facing label without losing file-level traceability. The JSON
-import output now includes an
+the reviewer-facing label without losing file-level traceability. When the
+reviewer CSV includes `answer_fail_policy` and `answer_fail_verdicts`, import
+reports also preserve that original answer-level risk signal alongside the
+reviewer-aware final verdicts. The JSON import output now includes an
 `answerGroups` array with per-answer summaries and grouped claims for workflow
 automation. `--summary-csv-out` writes one row per imported answer group with
-reviewed, pending, overridden, and final verdict counts for queue routing.
+reviewed, pending, overridden, final verdict counts, and the original exported
+answer-level fail-policy context for queue routing.
 `import-review --fail-on` evaluates those final verdicts after reviewer
 overrides, so teams can block publication on unresolved reviewed outcomes, and
 the text, Markdown, and HTML import reports surface whether each answer matched
