@@ -10,6 +10,8 @@ import type {
 import {
   normalizeForContainment,
   overlapScore,
+  renderAnswerLabel,
+  renderAnswerPreview,
   splitIntoSentences,
 } from "./text.js";
 
@@ -45,6 +47,8 @@ export function verifyAnswer(
   return {
     generatedAt,
     answerPath,
+    answerLabel: answerPath ? renderAnswerLabel(answerPath) : undefined,
+    answerPreview: renderAnswerPreview(answer),
     answer,
     sources: sources.map(({ id, title, updatedAt, trustLevel }) => ({
       id,

@@ -230,6 +230,9 @@ Options:
   that do not define `trustLevel` metadata
 - `--json`: print the full JSON report
 - `--out <path>`: write the JSON report to disk
+- single-answer JSON reports include `answerPath`, `answerLabel`, and
+  `answerPreview` so downstream automation gets the same reviewer context as
+  CSV exports
 - `--markdown-out <path>`: write a reviewer-friendly Markdown report to disk
 - `--html-out <path>`: write a styled HTML reviewer report to disk
 - `verify --summary-csv-out <path>`: write one CSV row for the submitted answer with its `answer_label`, preview, primary finding, primary evidence trust/freshness context, verdict totals, fail-policy status, and reviewed source metadata
