@@ -58,6 +58,25 @@ Employees get 12 weeks.
   assert.doesNotMatch(parsed.body, /People Ops/);
 });
 
+test("parses toml-style source frontmatter delimited by plus signs", () => {
+  const parsed = parseSource("docs/hr-policy.md", `+++
+title: HR Benefits Policy
+updated_at: 2026-05-31
+trust_level: high
++++
+# HR Policy
+
+Employees get 12 weeks.
+`);
+
+  assert.deepEqual(parsed.metadata, {
+    title: "HR Benefits Policy",
+    updatedAt: "2026-05-31",
+    trustLevel: "high",
+  });
+  assert.match(parsed.body, /^# HR Policy/);
+});
+
 test("keeps frontmatter trust levels ahead of the default override", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",

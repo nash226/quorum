@@ -66,16 +66,44 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
   }
 
   const normalized = content.replace(/\r\n/g, "\n");
-  const match = normalized.match(/^---\n([\s\S]*?)\n---\n?/);
+  const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
-  if (!match) {
+  if (!frontmatterDelimiter) {
     return { metadata: {}, body: normalizeMarkdownSourceTables(normalized) };
   }
 
+  const frontmatterBoundary = `\n${frontmatterDelimiter}`;
+  const frontmatterEndIndex = normalized.indexOf(frontmatterBoundary, frontmatterDelimiter.length + 1);
+
+  if (frontmatterEndIndex === -1) {
+    return { metadata: {}, body: normalizeMarkdownSourceTables(normalized) };
+  }
+
+  const frontmatter = normalized.slice(
+    frontmatterDelimiter.length + 1,
+    frontmatterEndIndex,
+  );
+  const bodyStartIndex =
+    frontmatterEndIndex +
+    frontmatterBoundary.length +
+    (normalized[frontmatterEndIndex + frontmatterBoundary.length] === "\n" ? 1 : 0);
+
   return {
-    metadata: parseFrontmatter(match[1] ?? ""),
-    body: normalizeMarkdownSourceTables(normalized.slice(match[0].length)),
+    metadata: parseFrontmatter(frontmatter),
+    body: normalizeMarkdownSourceTables(normalized.slice(bodyStartIndex)),
   };
+}
+
+function getFrontmatterDelimiter(content: string): "---" | "+++" | undefined {
+  if (content.startsWith("---\n")) {
+    return "---";
+  }
+
+  if (content.startsWith("+++\n")) {
+    return "+++";
+  }
+
+  return undefined;
 }
 
 function parseFrontmatter(frontmatter: string): SourceMetadata {
