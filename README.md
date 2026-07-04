@@ -68,6 +68,13 @@ npm run dev -- verify \
   --summary-csv-out reports/hr-summary.csv
 ```
 
+Or stream the answer directly into Quorum when another tool already produced the
+text:
+
+```bash
+cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --source-dir examples/sources --json
+```
+
 Example output:
 
 ```text
@@ -215,14 +222,15 @@ npm run dev -- verify \
 ## CLI Usage
 
 ```text
-quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 ```
 
 Options:
 
-- `--answer <path>`: AI-generated answer to verify, including Markdown, text, or exported HTML
+- `--answer <path|->`: AI-generated answer to verify, including Markdown, text,
+  or exported HTML, or `-` to read the answer from stdin
 - `--source <path>`: approved source document; may be repeated
 - `--source-dir <path>`: directory of approved source documents
 - `--answer <path|->`: answer file to include in a batch run, or `-` to read one answer from stdin once; Markdown, text, and exported HTML paths may be repeated
