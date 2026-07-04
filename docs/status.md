@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d49c6e3` on 2026-07-04, ignore hidden html answer chrome
+- Latest shipped change: `9994e0b` on 2026-07-04, normalize markdown table sources
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-04 | [#151](https://github.com/nash226/quorum/pull/151) | normalize markdown table sources | `9994e0b` |
 | 2026-07-04 | [#150](https://github.com/nash226/quorum/pull/150) | ignore hidden html answer chrome | `d49c6e3` |
 | 2026-07-04 | [#149](https://github.com/nash226/quorum/pull/149) | ignore hidden html source chrome | `2a81db7` |
 | 2026-07-04 | [#148](https://github.com/nash226/quorum/pull/148) | ignore html source chrome | `a216f8f` |
@@ -52,5 +53,4 @@
 | 2026-07-04 | [#146](https://github.com/nash226/quorum/pull/146) | fix: ignore html source comments | `0922a64` |
 | 2026-07-04 | [#145](https://github.com/nash226/quorum/pull/145) | fix: ignore html dialog chrome | `5cc4161` |
 | 2026-07-03 | [#144](https://github.com/nash226/quorum/pull/144) | prefer fresher evidence when scores tie | `478e6ef` |
-| 2026-07-03 | [#143](https://github.com/nash226/quorum/pull/143) | add answer context to single json reports | `2d5415b` |
 
