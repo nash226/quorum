@@ -99,6 +99,9 @@ covering the approved deletion path, a conflicting completion window, and an
 unsupported recovery promise.
 The packed smoke check also verifies that this data-retention evaluation is
 present in the generated benchmark report.
+The packed smoke check also verifies that account-suspension answers remain in
+the benchmark report, covering appeal eligibility, an abuse-related
+reinstatement contradiction, and an unsupported reinstatement promise.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
