@@ -573,6 +573,30 @@ test("extracts readable text from html description list sources", async () => {
   assert.match(source.content, /Healthcare: Part-time staff receive prorated coverage\./);
 });
 
+test("extracts readable text from markdown table sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.md",
+    `| Policy | Details |
+| --- | --- |
+| Parental leave | Employees receive 12 weeks of paid parental leave. |
+| Healthcare | Coverage begins after 30 days of employment.<br>Part-time staff receive prorated coverage. |
+| Support tiers | Enterprise support covers billing \\| technical issues. |
+`,
+    11,
+  );
+
+  assert.equal(source.title, "benefits");
+  assert.equal(
+    source.content,
+    [
+      "Parental leave: Employees receive 12 weeks of paid parental leave.",
+      "Healthcare: Coverage begins after 30 days of employment. Part-time staff receive prorated coverage.",
+      "Support tiers: Enterprise support covers billing | technical issues.",
+      "",
+    ].join("\n"),
+  );
+});
+
 test("reads html updated dates from http-equiv metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/benefits.html",
