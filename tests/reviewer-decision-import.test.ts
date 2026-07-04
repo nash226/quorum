@@ -45,9 +45,9 @@ waiting on plan language"
 });
 
 test("imports batch reviewer decisions with answer path context", () => {
-  const report = importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
-hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,,
-support-answer,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,claim_2,Refunds are available within 14 days of purchase.,contradicted,A closely matching approved source uses different numeric terms.,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,needs_review,Escalate to support ops
+  const report = importReviewerDecisions(`answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,matched,unsupported,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,,
+support-answer,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,clear,,claim_2,Refunds are available within 14 days of purchase.,contradicted,A closely matching approved source uses different numeric terms.,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,needs_review,Escalate to support ops
 `);
 
   assert.equal(report.claims[0]?.answerLabel, "hr-answer");
@@ -56,9 +56,13 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
     report.claims[0]?.answerPreview,
     "Employees receive 12 weeks of paid parental leave.",
   );
+  assert.equal(report.claims[0]?.originalAnswerFailPolicy, "matched");
+  assert.deepEqual(report.claims[0]?.originalAnswerFailVerdicts, ["unsupported"]);
   assert.equal(report.answerGroups.length, 2);
   assert.equal(report.answerGroups[0]?.label, "hr-answer");
   assert.equal(report.answerGroups[0]?.answerPath, "examples/answers/hr-answer.md");
+  assert.equal(report.answerGroups[0]?.originalAnswerFailPolicy, "matched");
+  assert.deepEqual(report.answerGroups[0]?.originalAnswerFailVerdicts, ["unsupported"]);
   assert.equal(report.answerGroups[0]?.summary.pendingClaims, 1);
   assert.equal(report.answerGroups[1]?.summary.needs_review, 1);
   assert.equal(report.claims[1]?.answerPath, "examples/answers/support-answer.md");
@@ -102,7 +106,7 @@ empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from th
   );
   assert.match(
     renderReviewerDecisionImportSummaryCsv(report),
-    /empty,examples\/answers\/empty\.md,Short\.,needs_review,,No claims were extracted from this answer\.,,.*0,0,0,0,0,0,0,0,clear,/,
+    /empty,examples\/answers\/empty\.md,Short\.,needs_review,,No claims were extracted from this answer\.,,.*0,0,0,0,0,0,0,0,,,clear,/,
   );
 });
 
@@ -268,14 +272,14 @@ examples/answers/support-answer.md,Refunds are available within 14 days of purch
   const lines = rendered.trim().split("\n");
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts",
+    "answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts",
   );
   assert.equal(
     lines[1],
-    "examples/answers/hr-answer.md,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,2,1,1,0,2,0,0,0,clear,",
+    "examples/answers/hr-answer.md,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,2,1,1,0,2,0,0,0,,,clear,",
   );
   assert.equal(
     lines[2],
-    "examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,matched,needs_review",
+    "examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,,,matched,needs_review",
   );
 });
