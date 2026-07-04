@@ -980,6 +980,30 @@ test("ignores html navigation and control chrome before extracting claims", () =
   );
 });
 
+test("ignores html dialog chrome before extracting claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <dialog open>
+      <p>Copy answer to clipboard before publishing.</p>
+      <button type="button">Copy answer</button>
+    </dialog>
+    <main>
+      <p>Employees receive 12 weeks of paid parental leave.</p>
+      <p>Managers approve exceptions within five business days.</p>
+    </main>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve exceptions within five business days.",
+    ],
+  );
+});
+
 test("ignores html header, footer, and aside chrome before extracting claims", () => {
   const claims = extractClaims(`<!doctype html>
 <html>
