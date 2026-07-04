@@ -1402,7 +1402,11 @@ test("verify-batch disambiguates duplicate answer labels across directories", as
     ]);
 
     const report = JSON.parse(stdout) as {
-      answers: Array<{ answerLabel: string; answerPath: string }>;
+      answers: Array<{
+        answerLabel: string;
+        answerPath: string;
+        report: { answerLabel?: string; answerPath?: string };
+      }>;
     };
 
     assert.deepEqual(
@@ -1412,6 +1416,10 @@ test("verify-batch disambiguates duplicate answer labels across directories", as
     assert.deepEqual(
       report.answers.map((answer) => answer.answerPath),
       [join(hrDir, "policy.md"), join(supportDir, "policy.md")],
+    );
+    assert.deepEqual(
+      report.answers.map((answer) => answer.report.answerLabel),
+      ["hr/policy", "support/policy"],
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
