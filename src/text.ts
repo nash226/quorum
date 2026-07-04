@@ -34,6 +34,11 @@ const LOWERCASE_ROMAN_NUMERAL_DOT_PREFIX = /^([ivxlcdm]{2,})\.\s+/;
 const PARENTHESIZED_ROMAN_NUMERAL_PREFIX = /^\(([IVXLCDMivxlcdm]{2,})\)\s+/;
 const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
 const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+const HTML_PREVIEW_MARKUP_PATTERN =
+  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code)\b/i;
+const HTML_PREVIEW_BLOCK_BREAK_TAGS =
+  /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/figure|\/figcaption|\/h[1-6]|\/tr|\/td|\/th|\/dt|\/dd)\b[^>]*>/gi;
+const HTML_PREVIEW_STRIP_TAGS = /<\/?[^>\n]+>/g;
 const LIST_PREFIX_PATTERNS = [
   /^[-*+]\s+/,
   /^(?:[\u2022\u2023\u25E6\u2043\u2219])\s+/,
@@ -92,7 +97,7 @@ export function normalizeForContainment(text: string): string {
 }
 
 export function renderAnswerPreview(answer: string): string {
-  const normalized = answer.replace(/\s+/g, " ").trim();
+  const normalized = normalizeAnswerPreviewText(answer).replace(/\s+/g, " ").trim();
 
   if (normalized.length <= 120) {
     return normalized;
@@ -229,4 +234,31 @@ function stripRomanNumeralPrefix(text: string): string {
 
 function isRomanNumeral(value: string): boolean {
   return VALID_ROMAN_NUMERAL.test(value.toUpperCase());
+}
+
+function normalizeAnswerPreviewText(answer: string): string {
+  if (!HTML_PREVIEW_MARKUP_PATTERN.test(answer)) {
+    return answer;
+  }
+
+  return decodeHtmlEntities(
+    answer
+      .replace(/<!doctype[^>]*>/gi, " ")
+      .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, " ")
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+      .replace(/<!--[\s\S]*?-->/g, " ")
+      .replace(HTML_PREVIEW_BLOCK_BREAK_TAGS, " ")
+      .replace(HTML_PREVIEW_STRIP_TAGS, " "),
+  );
+}
+
+function decodeHtmlEntities(text: string): string {
+  return text
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'");
 }
