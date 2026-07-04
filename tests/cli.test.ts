@@ -585,6 +585,57 @@ test("verify rejects empty resolved source sets", async () => {
   }
 });
 
+test("verify ignores hidden source files and hidden source subdirectories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-hidden-sources-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+    const hiddenSourceDir = join(sourceDir, ".archive");
+
+    await mkdir(hiddenSourceDir, { recursive: true });
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, ".draft-policy.md"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(hiddenSourceDir, "old-policy.md"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ title: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["policy"]);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.summary.contradicted, 0);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify ignores indented markdown code blocks in the answer", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-indented-code-"));
 
@@ -1127,6 +1178,78 @@ test("verify-batch rejects empty resolved source sets", async () => {
       ]),
       /No approved source files found in/,
     );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch ignores hidden answer files and hidden answer subdirectories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-hidden-answers-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const hiddenAnswerDir = join(answerDir, ".staging");
+    const sourceDir = join(tempDir, "sources");
+
+    await Promise.all([
+      mkdir(hiddenAnswerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(
+        join(answerDir, "published.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(answerDir, ".draft.md"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(hiddenAnswerDir, "old.md"),
+        "Employees receive free catered lunch every day.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      answers: Array<{ answerLabel: string; answerPath: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.deepEqual(
+      report.answers.map((answer) => ({
+        answerLabel: answer.answerLabel,
+        answerPath: answer.answerPath,
+      })),
+      [
+        {
+          answerLabel: "published",
+          answerPath: join(answerDir, "published.md"),
+        },
+      ],
+    );
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.summary.contradicted, 0);
+    assert.equal(report.summary.unsupported, 0);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
