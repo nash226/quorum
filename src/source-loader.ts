@@ -261,6 +261,7 @@ function parseHtmlAttributes(tag: string): Record<string, string> {
 function normalizeHtmlText(content: string): string {
   return decodeHtmlEntities(
     content
+      .replace(/<!--[\s\S]*?-->/g, " ")
       .replace(HTML_PAGE_CHROME_PATTERN, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
