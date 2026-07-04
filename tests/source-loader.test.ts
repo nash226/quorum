@@ -137,6 +137,39 @@ test("ignores html navigation and control chrome in exported html sources", asyn
   assert.doesNotMatch(source.content, /Knowledge base home|Refund policy overview|Copy answer/);
 });
 
+test("ignores html header, footer, and aside chrome in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <header>
+      <p>Knowledge base home</p>
+    </header>
+    <aside>
+      <p>Related articles</p>
+    </aside>
+    <main>
+      <p>Customers can request refunds within 30 days.</p>
+      <p>Annual plans require support approval.</p>
+    </main>
+    <footer>
+      <p>Contact support</p>
+    </footer>
+  </body>
+</html>`,
+    3,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /Annual plans require support approval\./);
+  assert.doesNotMatch(source.content, /Knowledge base home|Related articles|Contact support/);
+});
+
 test("ignores html dialog chrome in exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",
@@ -156,7 +189,7 @@ test("ignores html dialog chrome in exported html sources", async () => {
     </main>
   </body>
 </html>`,
-    3,
+    4,
   );
 
   assert.equal(source.title, "Refund Policy");
@@ -181,7 +214,7 @@ test("ignores html comments in exported html sources", async () => {
     </main>
   </body>
 </html>`,
-    4,
+    5,
   );
 
   assert.equal(source.title, "Refund Policy");
@@ -210,7 +243,7 @@ test("preserves html details summaries as readable source section labels", async
     </main>
   </body>
 </html>`,
-    5,
+    6,
   );
 
   assert.equal(source.title, "Refund Policy");
@@ -242,7 +275,7 @@ test("preserves html figure and table captions in exported html sources", async 
     </main>
   </body>
 </html>`,
-    3,
+    7,
   );
 
   assert.equal(source.title, "Support Policies");
