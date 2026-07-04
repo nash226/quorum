@@ -102,6 +102,8 @@ present in the generated benchmark report.
 The packed smoke check also verifies that account-suspension answers remain in
 the benchmark report, covering appeal eligibility, an abuse-related
 reinstatement contradiction, and an unsupported reinstatement promise.
+It also verifies charge-dispute answers, covering the approved dispute window,
+a documentation conflict, and an unsupported automatic-credit promise.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
