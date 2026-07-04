@@ -14,15 +14,15 @@ const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
 const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
 const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
 const HTML_ANSWER_MARKUP_PATTERN =
-  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|thead|tbody|tfoot|tr|td|th|dl|dt|dd|a|strong|em|b|i|code|script|style)\b/i;
+  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code|script|style)\b/i;
 const HTML_PAGE_CHROME_PATTERN =
   /<(nav|form|button|select|textarea|template|noscript|svg|header|footer|aside)\b[^>]*>[\s\S]*?<\/\1>/gi;
 const HTML_BLOCK_BREAK_TAGS =
-  /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/details|\/h[1-6])\b[^>]*>/gi;
+  /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/details|\/figure|\/figcaption|\/h[1-6])\b[^>]*>/gi;
 const HTML_BLOCK_TAGS =
-  /<\/?(p|div|ul|ol|section|article|main|header|footer|aside|body|html|details|blockquote)\b[^>]*>/gi;
+  /<\/?(p|div|ul|ol|section|article|main|header|footer|aside|body|html|details|blockquote|figure)\b[^>]*>/gi;
 const HTML_INLINE_TAGS =
-  /<\/?(?:summary|li|span|br|h[1-6])\b[^>]*>/gi;
+  /<\/?(?:summary|li|span|br|h[1-6]|figcaption)\b[^>]*>/gi;
 const REMAINING_HTML_TAGS = /<\/?[^>\n]+>/g;
 const HTML_HEADING_PATTERN = /<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi;
 
@@ -247,11 +247,17 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
 }
 
 function normalizeHtmlTableMarkup(tableMarkup: string): string {
+  const captionMatch = tableMarkup.match(/<caption\b[^>]*>([\s\S]*?)<\/caption>/i);
   const rows = Array.from(tableMarkup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi))
     .map((match) => normalizeHtmlTableRow(match[1] ?? ""))
     .filter((row): row is string => Boolean(row));
 
-  return rows.join("\n");
+  const lines = [
+    captionMatch ? normalizeHtmlTableCell(captionMatch[1] ?? "") : undefined,
+    ...rows,
+  ].filter((line): line is string => Boolean(line));
+
+  return lines.join("\n");
 }
 
 function normalizeHtmlDescriptionListMarkup(descriptionListMarkup: string): string {

@@ -270,9 +270,9 @@ function normalizeHtmlText(content: string): string {
       .replace(/<table\b[^>]*>[\s\S]*?<\/table>/gi, (tableMarkup: string) =>
         normalizeHtmlTableMarkup(tableMarkup),
       )
-      .replace(/<(br|\/p|\/div|\/li|\/section|\/article|\/h[1-6])\b[^>]*>/gi, "\n")
+      .replace(/<(br|\/p|\/div|\/li|\/section|\/article|\/figure|\/figcaption|\/h[1-6])\b[^>]*>/gi, "\n")
       .replace(/<li\b[^>]*>/gi, "- ")
-      .replace(/<\/?(p|div|ul|ol|section|article|main|header|footer|aside|body|html)\b[^>]*>/gi, "\n")
+      .replace(/<\/?(p|div|ul|ol|section|article|main|header|footer|aside|body|html|figure|figcaption)\b[^>]*>/gi, "\n")
       .replace(/<[^>]+>/g, " "),
   )
     .split("\n")
@@ -285,11 +285,17 @@ function normalizeHtmlText(content: string): string {
 }
 
 function normalizeHtmlTableMarkup(tableMarkup: string): string {
+  const captionMatch = tableMarkup.match(/<caption\b[^>]*>([\s\S]*?)<\/caption>/i);
   const rows = Array.from(tableMarkup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi))
     .map((match) => normalizeHtmlTableRow(match[1] ?? ""))
     .filter((row): row is string => Boolean(row));
 
-  return rows.join("\n");
+  const lines = [
+    captionMatch ? normalizeHtmlTableCell(captionMatch[1] ?? "") : undefined,
+    ...rows,
+  ].filter((line): line is string => Boolean(line));
+
+  return lines.join("\n");
 }
 
 function normalizeHtmlDescriptionListMarkup(descriptionListMarkup: string): string {
