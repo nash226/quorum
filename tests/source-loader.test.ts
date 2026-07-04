@@ -144,6 +144,54 @@ test("extracts readable text and title from exported html sources", async () => 
   assert.doesNotMatch(source.content, /analytics|display: none/);
 });
 
+test("normalizes one-column markdown tables in sources", () => {
+  const parsed = parseSource(
+    "docs/hr-policy.md",
+    `| Policy |
+| --- |
+| Employees receive 12 weeks of paid parental leave. |
+| Managers approve exceptions within five business days. |
+`,
+  );
+
+  assert.equal(
+    parsed.body,
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve exceptions within five business days.",
+      "",
+    ].join("\n"),
+  );
+});
+
+test("normalizes one-column html tables in sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr><th>Policy</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Customers can request refunds within 30 days.</td></tr>
+        <tr><td>Annual plans require support approval.</td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>`,
+    2,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /Annual plans require support approval\./);
+});
+
 test("ignores html navigation and control chrome in exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",
