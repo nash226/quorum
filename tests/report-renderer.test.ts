@@ -295,7 +295,12 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /- Answers matching fail policy: 1/);
   assert.match(rendered, /## Sources/);
   assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31\)/);
-  assert.match(rendered, /### 1\. hr-answer/);
+  assert.match(rendered, /### 1\. support-answer/);
+  assert.match(rendered, /- Fail policy: matched/);
+  assert.match(rendered, /- Fail verdicts: unsupported/);
+  assert.match(rendered, /> Employees receive free catered lunch every day\./);
+  assert.match(rendered, /No approved source snippet matched strongly enough\./);
+  assert.match(rendered, /### 2\. hr-answer/);
   assert.match(rendered, /- Answer path: `examples\/answers\/hr-answer\.md`/);
   assert.match(rendered, /- Fail policy: clear/);
   assert.match(rendered, /- Fail verdicts: none/);
@@ -309,11 +314,46 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /#### Claim Assessments/);
   assert.match(rendered, /##### 1\. Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Verdict: `verified`/);
-  assert.match(rendered, /### 2\. support-answer/);
-  assert.match(rendered, /- Fail policy: matched/);
-  assert.match(rendered, /- Fail verdicts: unsupported/);
-  assert.match(rendered, /> Employees receive free catered lunch every day\./);
-  assert.match(rendered, /No approved source snippet matched strongly enough\./);
+});
+
+test("prioritizes fail-policy matches first in batch html reports", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
+    sourceCount: 1,
+    answerCount: 2,
+    answers: [
+      {
+        answerLabel: "clear-answer",
+        answerPath: "examples/answers/clear-answer.md",
+        report: verifyAnswer("Employees receive 12 weeks of paid parental leave.", [hrPolicy]),
+        shouldFail: false,
+        failVerdicts: [],
+      },
+      {
+        answerLabel: "risky-answer",
+        answerPath: "examples/answers/risky-answer.md",
+        report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
+        shouldFail: true,
+        failVerdicts: ["unsupported"],
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 1,
+      needs_review: 0,
+      answersWithoutClaims: 0,
+      answersWithFailures: 1,
+    },
+  };
+
+  const rendered = renderBatchHtmlReport(batchReport);
+
+  assert.match(
+    rendered,
+    /<h2>risky-answer<\/h2>[\s\S]*<h2>clear-answer<\/h2>/,
+  );
 });
 
 test("renders an HTML batch report with escaped answer paths and fail status", () => {
