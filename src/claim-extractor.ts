@@ -1,5 +1,5 @@
 import type { AtomicClaim } from "./domain.js";
-import { splitIntoSentences } from "./text.js";
+import { splitIntoSentences, stripByteOrderMark } from "./text.js";
 
 const UPPERCASE_ROMAN_NUMERAL_PREFIX = /^([IVXLCDM]{2,})[.)]\s+/;
 const LOWERCASE_ROMAN_NUMERAL_DOT_PREFIX = /^([ivxlcdm]{2,})\.\s+/;
@@ -50,7 +50,7 @@ function splitCompoundClaim(sentence: string): string[] {
 }
 
 function normalizeAnswer(answer: string): string {
-  const lines = normalizeHtmlAnswerMarkup(protectMarkdownTableHtmlBreaks(answer))
+  const lines = normalizeHtmlAnswerMarkup(protectMarkdownTableHtmlBreaks(stripByteOrderMark(answer)))
     .replace(/\r/g, "")
     .split("\n");
   const normalizedLines: string[] = [];

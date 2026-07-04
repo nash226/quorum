@@ -45,6 +45,10 @@ const LIST_PREFIX_PATTERNS = [
   /^\[[ xX]\]\s+/,
 ];
 
+export function stripByteOrderMark(text: string): string {
+  return text.replace(/^\uFEFF/, "");
+}
+
 export function splitIntoSentences(text: string): string[] {
   return text
     .replace(/\r/g, "")
