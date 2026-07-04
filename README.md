@@ -171,7 +171,8 @@ npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir exampl
 
 ## Source Metadata
 
-Source files may include optional frontmatter metadata:
+Source files may include optional frontmatter metadata with either `---` or
+`+++` delimiters:
 
 ```markdown
 ---
