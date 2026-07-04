@@ -342,12 +342,16 @@ function normalizeHtmlTableRow(rowMarkup: string): string | undefined {
   );
 
   const populatedCells = cells.filter((cell) => cell.text.length > 0);
-  if (populatedCells.length < 2) {
+  if (populatedCells.length === 0) {
     return undefined;
   }
 
   if (populatedCells.every((cell) => cell.kind === "th")) {
     return undefined;
+  }
+
+  if (populatedCells.length === 1) {
+    return populatedCells[0]?.text;
   }
 
   const [firstCell, ...otherCells] = populatedCells.map((cell) => cell.text);
@@ -836,7 +840,7 @@ function parseMarkdownTableCells(line: string): string[] | undefined {
   const relevantSegments = hasOuterPipes ? segments.slice(1, -1) : segments;
   const cells = relevantSegments.map((cell) => cell.trim()).filter(Boolean);
 
-  return cells.length >= 2 ? cells : undefined;
+  return cells.length >= 1 ? cells : undefined;
 }
 
 function splitMarkdownTableSegments(line: string): string[] {
