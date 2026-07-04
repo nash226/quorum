@@ -184,8 +184,9 @@ trustLevel: high
 Quorum includes this metadata in reports so reviewers can see which approved
 source supported or contradicted each claim. `trustLevel` accepts `high`,
 `medium`, or `low` and helps Quorum prefer stronger approved sources when
-multiple passages are similarly relevant. Sources without a trust level default
-to `medium`.
+multiple passages are similarly relevant. When trust and relevance are similar,
+Quorum also prefers fresher approved sources based on `updatedAt`. Sources
+without a trust level default to `medium`.
 
 For exported HTML knowledge-base pages, Quorum also picks up common publish-time
 metadata such as `<meta property="article:modified_time">` or
