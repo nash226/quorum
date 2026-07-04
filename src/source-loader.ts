@@ -17,6 +17,7 @@ interface SourceDocumentOptions {
   defaultTrustLevel?: SourceTrustLevel;
 }
 
+const MARKDOWN_TABLE_SEPARATOR_CELL = /^:?-{3,}:?$/;
 const HTML_PAGE_CHROME_PATTERN =
   /<(nav|form|button|select|textarea|template|noscript|svg|dialog|header|footer|aside)\b[^>]*>[\s\S]*?<\/\1>/gi;
 const HTML_HIDDEN_SECTION_PATTERNS = [
@@ -68,12 +69,12 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
   const match = normalized.match(/^---\n([\s\S]*?)\n---\n?/);
 
   if (!match) {
-    return { metadata: {}, body: content };
+    return { metadata: {}, body: normalizeMarkdownSourceTables(normalized) };
   }
 
   return {
     metadata: parseFrontmatter(match[1] ?? ""),
-    body: normalized.slice(match[0].length),
+    body: normalizeMarkdownSourceTables(normalized.slice(match[0].length)),
   };
 }
 
@@ -385,6 +386,115 @@ function normalizeHtmlTableCell(cellMarkup: string): string {
     .replace(/\s*\n\s*/g, " ")
     .replace(/[ \t]{2,}/g, " ")
     .trim();
+}
+
+function normalizeMarkdownSourceTables(content: string): string {
+  const lines = content.split("\n");
+  const normalizedLines: string[] = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const currentLine = lines[index] ?? "";
+    const currentCells = parseMarkdownTableCells(currentLine);
+    const nextCells = parseMarkdownTableCells(lines[index + 1] ?? "");
+
+    if (currentCells && nextCells && isMarkdownTableSeparatorRow(nextCells)) {
+      index += 1;
+
+      for (let rowIndex = index + 1; rowIndex < lines.length; rowIndex += 1) {
+        const rowCells = parseMarkdownTableCells(lines[rowIndex] ?? "");
+
+        if (!rowCells || isMarkdownTableSeparatorRow(rowCells)) {
+          index = rowIndex - 1;
+          break;
+        }
+
+        normalizedLines.push(normalizeMarkdownTableRow(rowCells));
+        index = rowIndex;
+      }
+
+      continue;
+    }
+
+    normalizedLines.push(currentLine);
+  }
+
+  return normalizedLines.join("\n");
+}
+
+function normalizeMarkdownTableRow(cells: string[]): string {
+  const [rawFirstCell, ...rawOtherCells] = cells;
+  const firstCell = normalizeMarkdownTableCell(rawFirstCell ?? "");
+  const otherCells = rawOtherCells.map(normalizeMarkdownTableCell).filter(Boolean);
+
+  if (!firstCell) {
+    return otherCells.join("; ");
+  }
+
+  if (otherCells.length === 0) {
+    return firstCell;
+  }
+
+  return `${firstCell}: ${otherCells.join("; ")}`;
+}
+
+function normalizeMarkdownTableCell(cell: string): string {
+  return cell
+    .replace(/<br\b[^>]*\/?>/gi, "\n")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\\([\\|])/g, "$1")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
+}
+
+function parseMarkdownTableCells(line: string): string[] | undefined {
+  if (!line.includes("|")) {
+    return undefined;
+  }
+
+  const segments = splitMarkdownTableSegments(line);
+  if (segments.length < 3) {
+    return undefined;
+  }
+
+  const hasOuterPipes = line.startsWith("|") || line.endsWith("|");
+  const relevantSegments = hasOuterPipes ? segments.slice(1, -1) : segments;
+  const cells = relevantSegments.map((cell) => cell.trim()).filter(Boolean);
+
+  return cells.length >= 2 ? cells : undefined;
+}
+
+function splitMarkdownTableSegments(line: string): string[] {
+  const segments: string[] = [];
+  let current = "";
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    const nextCharacter = line[index + 1];
+
+    if (character === "\\" && (nextCharacter === "\\" || nextCharacter === "|")) {
+      current += nextCharacter;
+      index += 1;
+      continue;
+    }
+
+    if (character === "|") {
+      segments.push(current);
+      current = "";
+      continue;
+    }
+
+    current += character;
+  }
+
+  segments.push(current);
+  return segments;
+}
+
+function isMarkdownTableSeparatorRow(cells: string[]): boolean {
+  return cells.every((cell) => MARKDOWN_TABLE_SEPARATOR_CELL.test(cell));
 }
 
 function stripTags(content: string): string {
