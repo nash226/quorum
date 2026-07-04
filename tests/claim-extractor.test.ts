@@ -252,6 +252,27 @@ test("extracts table captions alongside html table row claims", () => {
   ]);
 });
 
+test("ignores collapsed html details body content while keeping the visible summary", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <details>
+      <summary>Refund policy</summary>
+      <p>Customers can request refunds within 30 days.</p>
+    </details>
+    <details open>
+      <summary>Support policy</summary>
+      <p>Managers approve escalations within two business days.</p>
+    </details>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    ["Managers approve escalations within two business days."],
+  );
+});
+
 test("keeps escaped pipes inside markdown table cells", () => {
   const claims = extractClaims(`| Policy | Details |
 | --- | --- |
@@ -852,7 +873,7 @@ test("extracts clean claims from html answer markup", () => {
   const claims = extractClaims(`<!doctype html>
 <html>
   <body>
-    <details>
+    <details open>
       <summary>Policy summary</summary>
       <ul>
         <li>Employees receive 12 weeks of paid parental leave.</li>

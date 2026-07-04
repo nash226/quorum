@@ -28,6 +28,8 @@ const HTML_HIDDEN_SECTION_PATTERNS = [
   /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\sstyle\s*=\s*["'][^"']*\bdisplay\s*:\s*none\b[^"']*["'])[^>]*>[\s\S]*?<\/\1>/gi,
   /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\sstyle\s*=\s*["'][^"']*\bvisibility\s*:\s*hidden\b[^"']*["'])[^>]*>[\s\S]*?<\/\1>/gi,
 ];
+const OPEN_HTML_DETAILS_ATTRIBUTE =
+  /(^|\s)open(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?(?=\s|$)/i;
 
 export function sourceDocumentFromFile(
   sourcePath: string,
@@ -305,6 +307,9 @@ function normalizeHtmlText(content: string): string {
 
   return decodeHtmlEntities(
     visibleContent
+      .replace(/<details\b([^>]*)>([\s\S]*?)<\/details>/gi, (_match, attributes, detailsContent) =>
+        normalizeHtmlDetailsMarkup(attributes ?? "", detailsContent ?? ""),
+      )
       .replace(/<!--[\s\S]*?-->/g, " ")
       .replace(HTML_PAGE_CHROME_PATTERN, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
@@ -337,6 +342,15 @@ function normalizeHtmlText(content: string): string {
     .replace(/\n{3,}/g, "\n\n")
     .replace(/[ \t]{2,}/g, " ")
     .trim();
+}
+
+function normalizeHtmlDetailsMarkup(attributes: string, content: string): string {
+  if (OPEN_HTML_DETAILS_ATTRIBUTE.test(attributes)) {
+    return content;
+  }
+
+  const summaryMatch = content.match(/<summary\b[^>]*>([\s\S]*?)<\/summary>/i);
+  return summaryMatch?.[0] ?? " ";
 }
 
 function normalizeHtmlTableMarkup(tableMarkup: string): string {

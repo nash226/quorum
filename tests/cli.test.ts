@@ -220,7 +220,7 @@ test("verify-batch discovers html answers from answer directories", async () => 
         `<!doctype html>
 <html>
   <body>
-    <details>
+    <details open>
       <summary>Support policy</summary>
       <ul>
         <li>Customers&rsquo; refund requests require manager review after 30 days.</li>
@@ -258,6 +258,67 @@ test("verify-batch discovers html answers from answer directories", async () => 
     assert.deepEqual(
       report.answers[0]?.report.assessments.map((assessment) => assessment.claim.text),
       ["Customers’ refund requests require manager review after 30 days."],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify ignores collapsed html details body content in answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-collapsed-details-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.html");
+    const sourcePath = join(tempDir, "support-policy.md");
+
+    await Promise.all([
+      writeFile(
+        answerPath,
+        `<!doctype html>
+<html>
+  <body>
+    <details>
+      <summary>Support policy</summary>
+      <p>Customers&rsquo; refund requests require manager review after 30 days.</p>
+    </details>
+    <details open>
+      <summary>Escalation policy</summary>
+      <p>Managers approve billing exceptions within two business days.</p>
+    </details>
+  </body>
+</html>`,
+        "utf8",
+      ),
+      writeFile(
+        sourcePath,
+        "Managers approve billing exceptions within two business days.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      summary: Record<string, number>;
+      assessments: Array<{ claim: { text: string } }>;
+    };
+
+    assert.deepEqual(report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+    assert.deepEqual(
+      report.assessments.map((assessment) => assessment.claim.text),
+      ["Managers approve billing exceptions within two business days."],
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });

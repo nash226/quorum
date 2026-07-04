@@ -351,6 +351,37 @@ test("preserves html details summaries as readable source section labels", async
   assert.match(source.content, /- Annual plans require support approval\./);
 });
 
+test("ignores collapsed html details body content in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <main>
+      <details>
+        <summary>Refund exceptions</summary>
+        <p>Customers can request refunds within 30 days.</p>
+      </details>
+      <details open>
+        <summary>Visible policy</summary>
+        <p>Managers approve exceptions within two business days.</p>
+      </details>
+    </main>
+  </body>
+</html>`,
+    8,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Refund exceptions:/);
+  assert.doesNotMatch(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /Visible policy:/);
+  assert.match(source.content, /Managers approve exceptions within two business days\./);
+});
+
 test("preserves html figure and table captions in exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/support.html",
