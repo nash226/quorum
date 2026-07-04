@@ -117,6 +117,52 @@ test("import-review --help prints import usage without requiring a csv path", as
   assert.match(result.stdout, /--review-csv <path\|->\s+Reviewer decision CSV to import, or - to read from stdin/);
 });
 
+test("verify reports a missing answer file with a clear error", async () => {
+  await assert.rejects(
+    runCli([
+      "verify",
+      "--answer",
+      "does-not-exist.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+    ]),
+    /Answer file not found: does-not-exist\.md/,
+  );
+});
+
+test("verify reports a missing source directory with a clear error", async () => {
+  await assert.rejects(
+    runCli([
+      "verify",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source-dir",
+      "does-not-exist",
+    ]),
+    /Approved source directory not found: does-not-exist/,
+  );
+});
+
+test("verify-batch reports a file passed to --answer-dir with a clear error", async () => {
+  await assert.rejects(
+    runCli([
+      "verify-batch",
+      "--answer-dir",
+      "examples/answers/hr-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+    ]),
+    /Answer path is not a directory: examples\/answers\/hr-answer\.md/,
+  );
+});
+
+test("import-review reports a missing reviewer csv with a clear error", async () => {
+  await assert.rejects(
+    runCli(["import-review", "--review-csv", "missing-review.csv"]),
+    /Reviewer decision CSV file not found: missing-review\.csv/,
+  );
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 
