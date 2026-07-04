@@ -62,6 +62,56 @@ test("prefers higher-trust sources when evidence strength is similar", () => {
   assert.equal(report.sources[1]?.trustLevel, "high");
 });
 
+test("prefers fresher sources when evidence strength and trust are similar", () => {
+  const stalePolicy: SourceDocument = {
+    id: "stale_policy",
+    title: "Refund Policy Archive",
+    trustLevel: "high",
+    updatedAt: "2026-05-01",
+    content: "Customers can request refunds within 30 days after purchase.",
+  };
+  const freshPolicy: SourceDocument = {
+    id: "fresh_policy",
+    title: "Refund Policy Current",
+    trustLevel: "high",
+    updatedAt: "2026-06-15",
+    content: "Customers can request refunds within 30 calendar days after purchase.",
+  };
+
+  const report = verifyAnswer("Customers can request refunds within 30 days after purchase.", [
+    stalePolicy,
+    freshPolicy,
+  ]);
+
+  assert.equal(report.assessments[0]?.evidence[0]?.documentId, "fresh_policy");
+  assert.equal(report.assessments[0]?.evidence[0]?.documentUpdatedAt, "2026-06-15");
+});
+
+test("ignores invalid freshness metadata when choosing evidence", () => {
+  const invalidDatePolicy: SourceDocument = {
+    id: "invalid_date_policy",
+    title: "Refund Policy Draft",
+    trustLevel: "high",
+    updatedAt: "not-a-date",
+    content: "Customers can request refunds within 30 days after purchase.",
+  };
+  const freshPolicy: SourceDocument = {
+    id: "fresh_policy",
+    title: "Refund Policy Current",
+    trustLevel: "high",
+    updatedAt: "2026-06-15",
+    content: "Customers can request refunds within 30 calendar days after purchase.",
+  };
+
+  const report = verifyAnswer("Customers can request refunds within 30 days after purchase.", [
+    invalidDatePolicy,
+    freshPolicy,
+  ]);
+
+  assert.equal(report.assessments[0]?.evidence[0]?.documentId, "fresh_policy");
+  assert.equal(report.assessments[0]?.evidence[0]?.documentUpdatedAt, "2026-06-15");
+});
+
 test("flags numeric contradictions against approved sources", () => {
   const report = verifyAnswer("Employees receive 18 weeks of paid parental leave.", [
     hrPolicy,
