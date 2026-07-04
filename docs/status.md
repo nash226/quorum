@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4e87923` on 2026-07-03, ignore html answer chrome regions
+- Latest shipped change: `740bba2` on 2026-07-03, preserve html captions
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-03 | [#141](https://github.com/nash226/quorum/pull/141) | preserve html captions | `740bba2` |
 | 2026-07-03 | [#140](https://github.com/nash226/quorum/pull/140) | ignore html answer chrome regions | `4e87923` |
 | 2026-07-03 | [#139](https://github.com/nash226/quorum/pull/139) | ignore html page chrome | `b65fd60` |
 | 2026-07-03 | [#138](https://github.com/nash226/quorum/pull/138) | ignore html answer head metadata | `906db59` |
@@ -52,5 +53,4 @@
 | 2026-07-03 | [#136](https://github.com/nash226/quorum/pull/136) | support html description lists | `fd6198f` |
 | 2026-07-03 | [#135](https://github.com/nash226/quorum/pull/135) | ignore html preformatted answer blocks | `935aab2` |
 | 2026-07-03 | [#134](https://github.com/nash226/quorum/pull/134) | ignore html heading claims | `0244680` |
-| 2026-07-03 | [#133](https://github.com/nash226/quorum/pull/133) | fix: strip inline html tags from answer claims | `5c8bc3f` |
 
