@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f32245b` on 2026-07-04, handle bom-prefixed text inputs
+- Latest shipped change: `79caaa4` on 2026-07-04, ignore hidden answer and source files
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-04 | [#154](https://github.com/nash226/quorum/pull/154) | ignore hidden answer and source files | `79caaa4` |
 | 2026-07-04 | [#153](https://github.com/nash226/quorum/pull/153) | handle bom-prefixed text inputs | `f32245b` |
 | 2026-07-04 | [#152](https://github.com/nash226/quorum/pull/152) | support plus-delimited source frontmatter | `b0644b1` |
 | 2026-07-04 | [#151](https://github.com/nash226/quorum/pull/151) | normalize markdown table sources | `9994e0b` |
@@ -52,5 +53,4 @@
 | 2026-07-04 | [#149](https://github.com/nash226/quorum/pull/149) | ignore hidden html source chrome | `2a81db7` |
 | 2026-07-04 | [#148](https://github.com/nash226/quorum/pull/148) | ignore html source chrome | `a216f8f` |
 | 2026-07-04 | [#147](https://github.com/nash226/quorum/pull/147) | preserve html source details summaries | `fae0b46` |
-| 2026-07-04 | [#146](https://github.com/nash226/quorum/pull/146) | fix: ignore html source comments | `0922a64` |
 
