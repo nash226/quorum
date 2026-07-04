@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5f09615` on 2026-07-04, keep batch answer labels in nested reports
+- Latest shipped change: `cb87dbd` on 2026-07-04, prioritize risky batch review outputs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-04 | [#163](https://github.com/nash226/quorum/pull/163) | prioritize risky batch review outputs | `cb87dbd` |
 | 2026-07-04 | [#162](https://github.com/nash226/quorum/pull/162) | keep batch answer labels in nested reports | `5f09615` |
 | 2026-07-04 | [#161](https://github.com/nash226/quorum/pull/161) | support single-column policy tables | `fdba2ed` |
 | 2026-07-04 | [#160](https://github.com/nash226/quorum/pull/160) | ignore iframe html chrome | `79e3ef3` |
@@ -52,5 +53,4 @@
 | 2026-07-04 | [#158](https://github.com/nash226/quorum/pull/158) | clarify verify stdin docs | `75fd6ea` |
 | 2026-07-04 | [#157](https://github.com/nash226/quorum/pull/157) | clarify missing CLI input path errors | `ff6b9a4` |
 | 2026-07-04 | [#156](https://github.com/nash226/quorum/pull/156) | ignore collapsed html details content | `d71615c` |
-| 2026-07-04 | [#155](https://github.com/nash226/quorum/pull/155) | ignore inline css-hidden html content | `033f84a` |
 
