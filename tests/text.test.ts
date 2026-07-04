@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { renderAnswerLabels, splitIntoSentences } from "../src/text.js";
+import { renderAnswerLabels, renderAnswerPreview, splitIntoSentences } from "../src/text.js";
 
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
@@ -57,5 +57,31 @@ test("strips inline numeric-colon list markers when splitting sentences", () => 
       "Employees receive 12 weeks.",
       "Managers approve travel within five business days.",
     ],
+  );
+});
+
+test("renders readable previews from exported html answers", () => {
+  assert.equal(
+    renderAnswerPreview(`<!doctype html>
+<html>
+  <head>
+    <title>Ignored</title>
+    <style>.hidden { display: none; }</style>
+  </head>
+  <body>
+    <main>
+      <h1>Support Queue</h1>
+      <p>Refunds are available within 30 days of purchase.</p>
+    </main>
+  </body>
+</html>`),
+    "Support Queue Refunds are available within 30 days of purchase.",
+  );
+});
+
+test("decodes common html entities in previews", () => {
+  assert.equal(
+    renderAnswerPreview("<p>Managers approve travel &amp; lodging within 5 days &lt;when policy applies&gt;.</p>"),
+    "Managers approve travel & lodging within 5 days <when policy applies>.",
   );
 });
