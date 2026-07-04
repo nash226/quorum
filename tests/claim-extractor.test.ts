@@ -1025,6 +1025,30 @@ test("ignores html dialog chrome before extracting claims", () => {
   );
 });
 
+test("ignores html iframe chrome before extracting claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <iframe src="https://example.com/widget">
+      <p>Copied to clipboard.</p>
+      <p>Open the full answer in the portal.</p>
+    </iframe>
+    <main>
+      <p>Employees receive 12 weeks of paid parental leave.</p>
+      <p>Managers approve exceptions within five business days.</p>
+    </main>
+  </body>
+</html>`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve exceptions within five business days.",
+    ],
+  );
+});
+
 test("ignores hidden html chrome before extracting claims", () => {
   const claims = extractClaims(`<!doctype html>
 <html>
