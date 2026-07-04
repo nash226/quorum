@@ -462,7 +462,7 @@ test("verify matches claims extracted from html table answers against html table
   }
 });
 
-test("verify records the answer path in JSON and reviewer csv outputs", async () => {
+test("verify records reviewer-friendly answer context in JSON and reviewer csv outputs", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-review-"));
 
   try {
@@ -488,10 +488,14 @@ test("verify records the answer path in JSON and reviewer csv outputs", async ()
 
     const report = JSON.parse(stdout) as {
       answerPath?: string;
+      answerLabel?: string;
+      answerPreview: string;
       summary: Record<string, number>;
     };
 
     assert.equal(report.answerPath, answerPath);
+    assert.equal(report.answerLabel, "answer");
+    assert.equal(report.answerPreview, "Employees receive 12 weeks of paid parental leave.");
     assert.equal(report.summary.verified, 1);
 
     const reviewCsv = await readFile(reviewCsvOutPath, "utf8");

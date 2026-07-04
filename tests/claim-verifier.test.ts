@@ -117,3 +117,16 @@ test("verifies claims from answers with inline markdown formatting", () => {
   );
   assert.equal(report.assessments[0]?.verdict, "verified");
 });
+
+test("includes reviewer-friendly answer context in single-answer reports", () => {
+  const report = verifyAnswer(
+    "Employees receive 12 weeks of paid parental leave.\n",
+    [hrPolicy],
+    "2026-06-28T00:00:00.000Z",
+    "examples/answers/hr-answer.md",
+  );
+
+  assert.equal(report.answerPath, "examples/answers/hr-answer.md");
+  assert.equal(report.answerLabel, "hr-answer");
+  assert.equal(report.answerPreview, "Employees receive 12 weeks of paid parental leave.");
+});

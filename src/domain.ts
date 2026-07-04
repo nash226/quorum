@@ -38,6 +38,8 @@ export interface ClaimAssessment {
 export interface VerificationReport {
   generatedAt: string;
   answerPath?: string;
+  answerLabel?: string;
+  answerPreview: string;
   answer: string;
   sources: Array<Pick<SourceDocument, "id" | "title" | "updatedAt" | "trustLevel">>;
   assessments: ClaimAssessment[];
