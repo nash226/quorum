@@ -271,9 +271,19 @@ function normalizeHtmlText(content: string): string {
       .replace(/<table\b[^>]*>[\s\S]*?<\/table>/gi, (tableMarkup: string) =>
         normalizeHtmlTableMarkup(tableMarkup),
       )
-      .replace(/<(br|\/p|\/div|\/li|\/section|\/article|\/figure|\/figcaption|\/h[1-6])\b[^>]*>/gi, "\n")
+      .replace(
+        /<summary\b[^>]*>([\s\S]*?)<\/summary>/gi,
+        (_match, summaryContent: string) => `${summaryContent.trim()}:\n`,
+      )
+      .replace(
+        /<(br|\/p|\/div|\/li|\/section|\/article|\/details|\/figure|\/figcaption|\/h[1-6])\b[^>]*>/gi,
+        "\n",
+      )
       .replace(/<li\b[^>]*>/gi, "- ")
-      .replace(/<\/?(p|div|ul|ol|section|article|main|header|footer|aside|body|html|figure|figcaption)\b[^>]*>/gi, "\n")
+      .replace(
+        /<\/?(p|div|ul|ol|section|article|main|header|footer|aside|body|html|details|figure|figcaption)\b[^>]*>/gi,
+        "\n",
+      )
       .replace(/<[^>]+>/g, " "),
   )
     .split("\n")
