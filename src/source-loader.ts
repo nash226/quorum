@@ -19,6 +19,11 @@ interface SourceDocumentOptions {
 
 const HTML_PAGE_CHROME_PATTERN =
   /<(nav|form|button|select|textarea|template|noscript|svg|dialog|header|footer|aside)\b[^>]*>[\s\S]*?<\/\1>/gi;
+const HTML_HIDDEN_SECTION_PATTERNS = [
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\shidden(?:\s|=|>|\/))[^>]*>[\s\S]*?<\/\1>/gi,
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\sinert(?:\s|=|>|\/))[^>]*>[\s\S]*?<\/\1>/gi,
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\saria-hidden\s*=\s*["']?true["']?)[^>]*>[\s\S]*?<\/\1>/gi,
+];
 
 export function sourceDocumentFromFile(
   sourcePath: string,
@@ -259,8 +264,13 @@ function parseHtmlAttributes(tag: string): Record<string, string> {
 }
 
 function normalizeHtmlText(content: string): string {
+  const visibleContent = HTML_HIDDEN_SECTION_PATTERNS.reduce(
+    (currentContent, pattern) => currentContent.replace(pattern, " "),
+    content,
+  );
+
   return decodeHtmlEntities(
-    content
+    visibleContent
       .replace(/<!--[\s\S]*?-->/g, " ")
       .replace(HTML_PAGE_CHROME_PATTERN, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
