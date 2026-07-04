@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2d5415b` on 2026-07-03, add answer context to single json reports
+- Latest shipped change: `478e6ef` on 2026-07-03, prefer fresher evidence when scores tie
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-03 | [#144](https://github.com/nash226/quorum/pull/144) | prefer fresher evidence when scores tie | `478e6ef` |
 | 2026-07-03 | [#143](https://github.com/nash226/quorum/pull/143) | add answer context to single json reports | `2d5415b` |
 | 2026-07-03 | [#142](https://github.com/nash226/quorum/pull/142) | preserve markdown table html break claims | `a50026e` |
 | 2026-07-03 | [#141](https://github.com/nash226/quorum/pull/141) | preserve html captions | `740bba2` |
@@ -52,5 +53,4 @@
 | 2026-07-03 | [#139](https://github.com/nash226/quorum/pull/139) | ignore html page chrome | `b65fd60` |
 | 2026-07-03 | [#138](https://github.com/nash226/quorum/pull/138) | ignore html answer head metadata | `906db59` |
 | 2026-07-03 | [#137](https://github.com/nash226/quorum/pull/137) | normalize inline html answer fragments | `c698fff` |
-| 2026-07-03 | [#136](https://github.com/nash226/quorum/pull/136) | support html description lists | `fd6198f` |
 
