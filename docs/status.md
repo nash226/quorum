@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c962cc5` on 2026-07-04, preserve import-review fail policy context
+- Latest shipped change: `79e3ef3` on 2026-07-04, ignore iframe html chrome
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-04 | [#160](https://github.com/nash226/quorum/pull/160) | ignore iframe html chrome | `79e3ef3` |
 | 2026-07-04 | [#159](https://github.com/nash226/quorum/pull/159) | preserve import-review fail policy context | `c962cc5` |
 | 2026-07-04 | [#158](https://github.com/nash226/quorum/pull/158) | clarify verify stdin docs | `75fd6ea` |
 | 2026-07-04 | [#157](https://github.com/nash226/quorum/pull/157) | clarify missing CLI input path errors | `ff6b9a4` |
@@ -52,5 +53,4 @@
 | 2026-07-04 | [#155](https://github.com/nash226/quorum/pull/155) | ignore inline css-hidden html content | `033f84a` |
 | 2026-07-04 | [#154](https://github.com/nash226/quorum/pull/154) | ignore hidden answer and source files | `79caaa4` |
 | 2026-07-04 | [#153](https://github.com/nash226/quorum/pull/153) | handle bom-prefixed text inputs | `f32245b` |
-| 2026-07-04 | [#152](https://github.com/nash226/quorum/pull/152) | support plus-delimited source frontmatter | `b0644b1` |
 
