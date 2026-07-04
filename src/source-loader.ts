@@ -18,7 +18,7 @@ interface SourceDocumentOptions {
 }
 
 const HTML_PAGE_CHROME_PATTERN =
-  /<(nav|form|button|select|textarea|template|noscript|svg|dialog)\b[^>]*>[\s\S]*?<\/\1>/gi;
+  /<(nav|form|button|select|textarea|template|noscript|svg|dialog|header|footer|aside)\b[^>]*>[\s\S]*?<\/\1>/gi;
 
 export function sourceDocumentFromFile(
   sourcePath: string,
