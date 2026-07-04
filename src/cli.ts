@@ -23,6 +23,7 @@ import {
   renderBatchSummaryCsv,
   renderHtmlReport,
   renderMarkdownReport,
+  orderBatchAnswersForReview,
   renderReviewerDecisionCsv,
   renderSummaryCsv,
   renderTextPrimaryEvidenceLabel,
@@ -837,6 +838,7 @@ function summarizeBatchVerification(
 
 function renderBatchTextReport(report: BatchVerificationReport): string {
   const noClaimsReason = "No claims were extracted from this answer.";
+  const orderedAnswers = orderBatchAnswersForReview(report.answers);
   const lines = [
     "Quorum Batch Verification Report",
     "",
@@ -849,7 +851,7 @@ function renderBatchTextReport(report: BatchVerificationReport): string {
     "",
   ];
 
-  for (const answer of report.answers) {
+  for (const answer of orderedAnswers) {
     const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
     const primaryFinding = primaryAssessment
       ? formatVerdictLabel(primaryAssessment.verdict)
