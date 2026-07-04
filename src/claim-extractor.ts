@@ -17,9 +17,9 @@ const MARKDOWN_TABLE_HTML_BREAK_PLACEHOLDER = "__QUORUM_TABLE_HTML_BREAK__";
 const OPEN_HTML_DETAILS_ATTRIBUTE =
   /(^|\s)open(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?(?=\s|$)/i;
 const HTML_ANSWER_MARKUP_PATTERN =
-  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code|script|style)\b/i;
+  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code|script|style|iframe)\b/i;
 const HTML_PAGE_CHROME_PATTERN =
-  /<(nav|form|button|select|textarea|template|noscript|svg|dialog|header|footer|aside)\b[^>]*>[\s\S]*?<\/\1>/gi;
+  /<(nav|form|button|select|textarea|template|noscript|svg|dialog|header|footer|aside|iframe)\b[^>]*>[\s\S]*?<\/\1>/gi;
 const HTML_HIDDEN_SECTION_PATTERNS = [
   /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\shidden(?:\s|=|>|\/))[^>]*>[\s\S]*?<\/\1>/gi,
   /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\sinert(?:\s|=|>|\/))[^>]*>[\s\S]*?<\/\1>/gi,

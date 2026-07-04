@@ -382,6 +382,34 @@ test("ignores collapsed html details body content in exported html sources", asy
   assert.match(source.content, /Managers approve exceptions within two business days\./);
 });
 
+test("ignores html iframe chrome in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <iframe src="https://example.com/widget">
+      <p>Copied to clipboard.</p>
+      <p>Open the full article in a new tab.</p>
+    </iframe>
+    <main>
+      <p>Customers can request refunds within 30 days.</p>
+      <p>Annual plans require support approval.</p>
+    </main>
+  </body>
+</html>`,
+    9,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /Annual plans require support approval\./);
+  assert.doesNotMatch(source.content, /Copied to clipboard|Open the full article in a new tab/);
+});
+
 test("preserves html figure and table captions in exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/support.html",
