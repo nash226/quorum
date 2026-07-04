@@ -1,5 +1,6 @@
 import type {
   BatchVerificationReport,
+  BatchVerificationResult,
   ClaimAssessment,
   ClaimVerdict,
   VerificationReport,
@@ -9,6 +10,12 @@ import { matchingFailVerdicts } from "./report-policy.js";
 import { renderAnswerLabel, renderAnswerPreview } from "./text.js";
 
 const NO_CLAIMS_REVIEW_REASON = "No claims were extracted from this answer.";
+const REVIEW_PRIORITY_BY_VERDICT: Record<ClaimVerdict, number> = {
+  contradicted: 0,
+  unsupported: 1,
+  needs_review: 2,
+  verified: 3,
+};
 
 export function renderTextReport(
   report: VerificationReport,
@@ -105,6 +112,7 @@ export function renderMarkdownReport(
 }
 
 export function renderBatchMarkdownReport(report: BatchVerificationReport): string {
+  const orderedAnswers = orderBatchAnswersForReview(report.answers);
   const lines = [
     "# Quorum Batch Verification Report",
     "",
@@ -137,7 +145,7 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
     "",
   ];
 
-  report.answers.forEach((answer, index) => {
+  orderedAnswers.forEach((answer, index) => {
     const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
     const primaryFindingVerdict = primaryAssessment?.verdict ?? "needs_review";
     const primaryFindingReason =
@@ -475,6 +483,33 @@ export function renderHtmlReport(
   failOn: ClaimVerdict[] = [],
 ): string {
   return renderReviewConsoleHtmlReport(report, failOn);
+}
+
+export function orderBatchAnswersForReview(
+  answers: BatchVerificationResult[],
+): BatchVerificationResult[] {
+  return answers
+    .map((answer, index) => ({ answer, index }))
+    .sort((left, right) => {
+      if (left.answer.shouldFail !== right.answer.shouldFail) {
+        return left.answer.shouldFail ? -1 : 1;
+      }
+
+      const leftPrimaryVerdict = selectPrimaryAssessment(left.answer.report.assessments)?.verdict
+        ?? "needs_review";
+      const rightPrimaryVerdict =
+        selectPrimaryAssessment(right.answer.report.assessments)?.verdict ?? "needs_review";
+      const verdictPriorityDifference =
+        REVIEW_PRIORITY_BY_VERDICT[leftPrimaryVerdict]
+        - REVIEW_PRIORITY_BY_VERDICT[rightPrimaryVerdict];
+
+      if (verdictPriorityDifference !== 0) {
+        return verdictPriorityDifference;
+      }
+
+      return left.index - right.index;
+    })
+    .map(({ answer }) => answer);
 }
 
 function renderReviewConsoleHtmlReport(
@@ -1191,7 +1226,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
     )
     .join("");
 
-  const answerCards = report.answers
+  const answerCards = orderBatchAnswersForReview(report.answers)
     .map((answer, index) => {
       const statusClass = answer.shouldFail ? "status--matched" : "status--clear";
       const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
