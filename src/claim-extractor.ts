@@ -14,6 +14,8 @@ const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
 const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
 const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
 const MARKDOWN_TABLE_HTML_BREAK_PLACEHOLDER = "__QUORUM_TABLE_HTML_BREAK__";
+const OPEN_HTML_DETAILS_ATTRIBUTE =
+  /(^|\s)open(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?(?=\s|$)/i;
 const HTML_ANSWER_MARKUP_PATTERN =
   /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code|script|style)\b/i;
 const HTML_PAGE_CHROME_PATTERN =
@@ -240,6 +242,9 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
 
   return decodeHtmlEntities(
     answerWithoutHiddenChrome
+      .replace(/<details\b([^>]*)>([\s\S]*?)<\/details>/gi, (_match, attributes, content) =>
+        normalizeHtmlDetailsMarkup(attributes ?? "", content ?? ""),
+      )
       .replace(/<!doctype[^>]*>/gi, " ")
       .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, " ")
       .replace(HTML_PAGE_CHROME_PATTERN, " ")
@@ -271,6 +276,15 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
     .replace(/\n{3,}/g, "\n\n")
     .replace(/\s+([,.;:!?])/g, "$1")
     .replace(/[ \t]{2,}/g, " ");
+}
+
+function normalizeHtmlDetailsMarkup(attributes: string, content: string): string {
+  if (OPEN_HTML_DETAILS_ATTRIBUTE.test(attributes)) {
+    return content;
+  }
+
+  const summaryMatch = content.match(/<summary\b[^>]*>([\s\S]*?)<\/summary>/i);
+  return summaryMatch?.[0] ?? " ";
 }
 
 function normalizeHtmlTableMarkup(tableMarkup: string): string {
