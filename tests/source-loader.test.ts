@@ -137,6 +137,41 @@ test("ignores html navigation and control chrome in exported html sources", asyn
   assert.doesNotMatch(source.content, /Knowledge base home|Refund policy overview|Copy answer/);
 });
 
+test("preserves html figure and table captions in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/support.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Support Policies</title>
+  </head>
+  <body>
+    <main>
+      <figure>
+        <img src="/queue.png" alt="Queue targets" />
+        <figcaption>Enterprise queues receive a first response within four business hours.</figcaption>
+      </figure>
+      <table>
+        <caption>Support response targets.</caption>
+        <tbody>
+          <tr><td>Priority</td><td>Escalate incidents immediately.</td></tr>
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>`,
+    3,
+  );
+
+  assert.equal(source.title, "Support Policies");
+  assert.match(
+    source.content,
+    /Enterprise queues receive a first response within four business hours\./,
+  );
+  assert.match(source.content, /Support response targets\./);
+  assert.match(source.content, /Priority: Escalate incidents immediately\./);
+});
+
 test("falls back to html metadata when the page title is absent", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.html",
