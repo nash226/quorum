@@ -77,6 +77,23 @@ Employees get 12 weeks.
   assert.match(parsed.body, /^# HR Policy/);
 });
 
+test("parses source frontmatter when the file starts with a utf-8 byte order mark", () => {
+  const parsed = parseSource("docs/hr-policy.md", `\uFEFF---
+title: HR Benefits Policy
+updatedAt: 2026-05-31
+trustLevel: high
+---
+Employees get 12 weeks.
+`);
+
+  assert.deepEqual(parsed.metadata, {
+    title: "HR Benefits Policy",
+    updatedAt: "2026-05-31",
+    trustLevel: "high",
+  });
+  assert.equal(parsed.body, "Employees get 12 weeks.\n");
+});
+
 test("keeps frontmatter trust levels ahead of the default override", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",

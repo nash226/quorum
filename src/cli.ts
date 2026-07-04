@@ -37,7 +37,7 @@ import {
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
-import { renderAnswerLabels, renderAnswerPreview } from "./text.js";
+import { renderAnswerLabels, renderAnswerPreview, stripByteOrderMark } from "./text.js";
 
 interface VerifyArgs {
   sourcePaths: string[];
@@ -666,10 +666,10 @@ async function readAnswer(answerPath: string): Promise<string> {
 
 async function readTextInput(inputPath: string): Promise<string> {
   if (inputPath !== "-") {
-    return readFile(inputPath, "utf8");
+    return stripByteOrderMark(await readFile(inputPath, "utf8"));
   }
 
-  return readStdin();
+  return stripByteOrderMark(await readStdin());
 }
 
 async function readStdin(): Promise<string> {
