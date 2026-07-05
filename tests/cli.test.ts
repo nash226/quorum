@@ -126,6 +126,7 @@ test("evaluate --help prints evaluation usage without requiring fixtures", async
     result.stdout,
     /^Quorum evaluate\n\nUsage:\n  quorum evaluate \(\--fixture <path> \| --fixture-dir <path>\)\.\.\./,
   );
+  assert.match(result.stdout, /--markdown-out <path>\s+Write a Markdown evaluation report/);
   assert.match(result.stdout, /--fixture-dir <path>\s+Directory of evaluation fixture JSON files/);
   assert.match(result.stdout, /--fail-on-mismatch\s+Exit with code 2 when any fixture summary or claim verdict mismatches/);
 });
@@ -262,6 +263,29 @@ test("evaluate writes a one-row-per-fixture summary csv", async () => {
     assert.match(summaryCsv, /^fixture_name,fixture_path,answer_path,source_paths,summary_match,/);
     assert.match(summaryCsv, /HR policy example/);
     assert.match(summaryCsv, /Support policy example/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("evaluate writes a markdown report", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-markdown-"));
+
+  try {
+    const markdownPath = join(tempDir, "evaluation-report.md");
+    const stdout = await runCli([
+      "evaluate",
+      "--fixture",
+      "examples/evaluations/hr-policy.json",
+      "--markdown-out",
+      markdownPath,
+    ]);
+    const markdownReport = await readFile(markdownPath, "utf8");
+
+    assert.match(stdout, /Evaluation Markdown report written to/);
+    assert.match(markdownReport, /^# Quorum Evaluation Report/);
+    assert.match(markdownReport, /### 1\. HR policy example/);
+    assert.match(markdownReport, /#### Claim Verdicts/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
