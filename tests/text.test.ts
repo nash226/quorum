@@ -105,3 +105,29 @@ test("ignores screen-reader-only html sections in previews", () => {
     "Refunds are available within 30 days of purchase.",
   );
 });
+
+test("ignores common html page chrome in previews", () => {
+  assert.equal(
+    renderAnswerPreview(`<!doctype html>
+<html>
+  <body>
+    <nav>
+      <a href="/kb">Knowledge base home</a>
+    </nav>
+    <dialog open>
+      <p>Copied to clipboard.</p>
+    </dialog>
+    <iframe src="https://example.com/widget">
+      <p>Open in a new tab.</p>
+    </iframe>
+    <main>
+      <p>Refunds are available within 30 days of purchase.</p>
+    </main>
+    <footer>
+      <p>Contact support</p>
+    </footer>
+  </body>
+</html>`),
+    "Refunds are available within 30 days of purchase.",
+  );
+});
