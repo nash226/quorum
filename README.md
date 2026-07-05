@@ -181,6 +181,7 @@ import {
   loadSources,
   loadSourcesFromContent,
   verifyAnswers,
+  verifyAnswerContents,
   verifyAnswerBatch,
   verifyAnswerFile,
 } from "quorum";
@@ -226,6 +227,18 @@ sources })` batches multiple in-memory agent responses without writing temp
 files first:
 
 ```ts
+const embeddedSingle = await verifyAnswerContents({
+  answer: "Refunds are available for 30 days from the purchase date.",
+  answerLabel: "support-agent draft",
+  sources: [
+    {
+      sourcePath: "help/refunds.html",
+      content: "<html><body><main><p>Refunds are available for 30 days from the purchase date.</p></main></body></html>",
+    },
+  ],
+  defaultTrustLevel: "high",
+});
+
 const inMemoryBatch = verifyAnswers({
   answers: [
     {
@@ -300,9 +313,10 @@ already manage CSV content in memory. Verification report helpers such as
 `renderTextReport`, `renderMarkdownReport`, `renderHtmlReport`,
 `renderReviewerDecisionCsv`, and the batch renderer variants are exported too,
 so package consumers can generate the same human-review artifacts as the CLI.
-`loadSourcesFromContent` gives embedded workflows the same Markdown, HTML, and
-PDF source parsing behavior without writing temporary files first, as long as
-each source includes a representative `sourcePath` extension.
+`verifyAnswerContents` gives embedded callers a one-call path for a single
+answer plus raw source content, while `loadSourcesFromContent` still exposes
+the same Markdown, HTML, and PDF parsing behavior for callers that want to
+reuse a loaded source set across multiple answers.
 
 For fixture-driven evaluation work, Quorum also exports
 `loadEvaluationFixture`, `loadEvaluationFixtureFromContent`,
