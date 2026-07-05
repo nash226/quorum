@@ -117,6 +117,15 @@ test("import-review --help prints import usage without requiring a csv path", as
   assert.match(result.stdout, /--review-csv <path\|->\s+Reviewer decision CSV to import, or - to read from stdin/);
 });
 
+test("evaluate --help prints evaluation usage without requiring fixtures", async () => {
+  const result = await runCliAllowFailure(["evaluate", "--help"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /^Quorum evaluate\n\nUsage:\n  quorum evaluate --fixture <path>\.\.\./);
+  assert.match(result.stdout, /--fail-on-mismatch\s+Exit with code 2 when any fixture summary or claim verdict mismatches/);
+});
+
 test("verify reports a missing answer file with a clear error", async () => {
   await assert.rejects(
     runCli([
@@ -163,6 +172,13 @@ test("import-review reports a missing reviewer csv with a clear error", async ()
   );
 });
 
+test("evaluate reports a missing evaluation fixture with a clear error", async () => {
+  await assert.rejects(
+    runCli(["evaluate", "--fixture", "missing-evaluation.json"]),
+    /Evaluation fixture file not found: missing-evaluation\.json/,
+  );
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 
@@ -196,6 +212,63 @@ test("verify accepts pdf sources", async () => {
       { id: "source_1", title: "hr-policy", trustLevel: "medium" },
     ]);
     assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("evaluate renders scorecards for shipped example fixtures", async () => {
+  const stdout = await runCli([
+    "evaluate",
+    "--fixture",
+    "examples/evaluations/hr-policy.json",
+    "--fixture",
+    "examples/evaluations/support-policy.json",
+  ]);
+
+  assert.match(stdout, /Quorum Evaluation Report/);
+  assert.match(stdout, /Evaluation Fixture: HR policy example/);
+  assert.match(stdout, /Evaluation Fixture: Support policy example/);
+  assert.match(stdout, /Fixtures: 2/);
+  assert.match(stdout, /Fixtures with mismatches: 0/);
+});
+
+test("evaluate exits with code 2 when fail-on-mismatch sees a fixture mismatch", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-"));
+
+  try {
+    const fixturePath = join(tempDir, "fixture.json");
+    await writeFile(
+      fixturePath,
+      JSON.stringify(
+        {
+          name: "Mismatch fixture",
+          answerPath: resolve("examples/answers/hr-answer.md"),
+          sourcePaths: [resolve("examples/sources/hr-policy.md")],
+          expectedSummary: {
+            verified: 3,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+          },
+          expectedClaimVerdicts: ["verified", "verified", "verified"],
+        },
+        null,
+        2,
+      ),
+      "utf8",
+    );
+
+    const result = await runCliAllowFailure([
+      "evaluate",
+      "--fixture",
+      fixturePath,
+      "--fail-on-mismatch",
+    ]);
+
+    assert.equal(result.code, 2);
+    assert.match(result.stdout, /Summary match: no/);
+    assert.match(result.stdout, /Fixtures with mismatches: 1/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
