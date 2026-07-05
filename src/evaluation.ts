@@ -41,6 +41,14 @@ export interface EvaluationBatchOptions {
   generatedAt?: string;
 }
 
+export interface InMemoryEvaluationBatchOptions {
+  fixtures: EvaluationFixture[];
+  baseDir?: string;
+  baseDirs?: string[];
+  fixturePaths?: string[];
+  generatedAt?: string;
+}
+
 export async function loadEvaluationFixture(fixturePath: string): Promise<EvaluationFixture> {
   return JSON.parse(await readFile(fixturePath, "utf8")) as EvaluationFixture;
 }
@@ -126,6 +134,24 @@ export async function evaluateFixtureFile(
   });
 }
 
+export async function evaluateFixtures(
+  options: InMemoryEvaluationBatchOptions,
+): Promise<EvaluationScorecard[]> {
+  if (options.fixtures.length === 0) {
+    throw new Error("At least one evaluation fixture is required.");
+  }
+
+  return Promise.all(
+    options.fixtures.map((fixture, index) =>
+      evaluateFixture(fixture, {
+        baseDir: options.baseDirs?.[index] ?? options.baseDir,
+        fixturePath: options.fixturePaths?.[index],
+        generatedAt: options.generatedAt,
+      }),
+    ),
+  );
+}
+
 export async function evaluateFixtureFiles(
   options: EvaluationBatchOptions,
 ): Promise<EvaluationScorecard[]> {
@@ -138,11 +164,19 @@ export async function evaluateFixtureFiles(
     fixturePaths.map((fixturePath) => ensureFilePath(fixturePath, "Evaluation fixture")),
   );
 
-  return Promise.all(
-    fixturePaths.map((fixturePath) =>
-      evaluateFixtureFile(fixturePath, { generatedAt: options.generatedAt }),
-    ),
+  const fixtures = await Promise.all(
+    fixturePaths.map(async (fixturePath) => ({
+      fixturePath,
+      fixture: await loadEvaluationFixture(fixturePath),
+    })),
   );
+
+  return evaluateFixtures({
+    fixtures: fixtures.map(({ fixture }) => fixture),
+    baseDirs: fixtures.map(({ fixturePath }) => dirname(fixturePath)),
+    fixturePaths: fixtures.map(({ fixturePath }) => fixturePath),
+    generatedAt: options.generatedAt,
+  });
 }
 
 export async function resolveEvaluationFixturePaths(
