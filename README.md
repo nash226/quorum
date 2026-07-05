@@ -495,7 +495,8 @@ Options:
   reviewer walkthroughs, demos, and benchmark drift review
 - `evaluate --summary-csv-out <path>`: write one CSV row per fixture with the
   fixture path, answer path, source paths, summary match state, claim-match
-  score, and expected vs actual verdict totals
+  score, expected vs actual verdict totals, and the first mismatched claim's
+  expected versus actual verdict when drift appears
 - `evaluate --fail-on-mismatch`: exit with code `2` when any fixture summary or
   expected claim verdict does not match the current verifier output
 
