@@ -8,6 +8,7 @@ import {
   hasEvaluationMismatch,
   loadEvaluationFixture,
   renderEvaluationScorecard,
+  renderEvaluationSummaryCsv,
   renderEvaluationTextReport,
   resolveEvaluationFixturePaths,
 } from "../src/index.js";
@@ -215,4 +216,52 @@ test("renders evaluation text report totals and mismatch detection", () => {
   assert.match(rendered, /Quorum Evaluation Report/);
   assert.match(rendered, /Fixtures: 2/);
   assert.match(rendered, /Fixtures with mismatches: 1/);
+});
+
+test("renders evaluation summary csv rows for each fixture", () => {
+  const rendered = renderEvaluationSummaryCsv([
+    {
+      fixtureName: "Support policy example",
+      fixturePath: "/tmp/fixtures/support.json",
+      answerPath: "/tmp/answers/support.md",
+      sourcePaths: ["/tmp/sources/support.md", "/tmp/sources/refunds.md"],
+      report: {
+        generatedAt: "2026-07-05T10:20:00.000Z",
+        answerPath: "/tmp/answers/support.md",
+        answerLabel: "support",
+        answerPreview: "Preview",
+        answer: "Answer text",
+        sources: [],
+        assessments: [],
+        summary: {
+          verified: 1,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+        },
+      },
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      actualSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      summaryMatches: true,
+      claims: [],
+      matchedClaims: 0,
+      totalExpectedClaims: 0,
+      score: 1,
+    },
+  ]);
+
+  assert.match(rendered, /^fixture_name,fixture_path,answer_path,source_paths,summary_match,/);
+  assert.match(rendered, /Support policy example/);
+  assert.match(rendered, /\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md/);
+  assert.match(rendered, /yes,0,0,1\.000,no,1,0,0,0,1,0,0,0/);
 });
