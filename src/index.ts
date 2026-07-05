@@ -12,11 +12,16 @@ export type {
 } from "./domain.js";
 export {
   evaluateFixture,
+  evaluateFixtureFiles,
   evaluateFixtureFile,
+  hasEvaluationMismatch,
   loadEvaluationFixture,
+  renderEvaluationTextReport,
   renderEvaluationScorecard,
+  resolveEvaluationFixturePaths,
 } from "./evaluation.js";
 export type {
+  EvaluationBatchOptions,
   EvaluationClaimScore,
   EvaluationFixture,
   EvaluationScorecard,
