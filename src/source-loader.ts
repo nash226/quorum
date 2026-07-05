@@ -180,14 +180,18 @@ function parseHtmlSource(content: string): ParsedSource {
   const normalized = content.replace(/\r\n/g, "\n");
   const titleMatch = normalized.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
   const headingMatch = normalized.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
-  const title =
-    (titleMatch ? decodeHtmlEntities(stripTags(titleMatch[1] ?? "")).trim() : "") ||
-    findHtmlMetaContent(normalized, {
+  const documentTitle = titleMatch ? decodeHtmlEntities(stripTags(titleMatch[1] ?? "")).trim() : "";
+  const headingTitle = headingMatch ? decodeHtmlEntities(stripTags(headingMatch[1] ?? "")).trim() : "";
+  const metaTitle = findHtmlMetaContent(normalized, {
       property: ["og:title"],
       name: ["og:title", "twitter:title", "title", "dc.title", "dcterms.title"],
       itemprop: ["headline", "name"],
-    }) ||
-    (headingMatch ? decodeHtmlEntities(stripTags(headingMatch[1] ?? "")).trim() : "");
+    });
+  const title = selectHtmlTitle({
+    documentTitle,
+    metaTitle,
+    headingTitle,
+  });
   const updatedAt = findHtmlMetaContent(normalized, {
     property: ["article:modified_time", "og:updated_time"],
     name: [
@@ -219,6 +223,46 @@ function parseHtmlSource(content: string): ParsedSource {
     },
     body: normalizeHtmlText(normalized),
   };
+}
+
+function selectHtmlTitle(input: {
+  documentTitle: string;
+  metaTitle?: string;
+  headingTitle: string;
+}): string | undefined {
+  if (input.metaTitle) {
+    return input.metaTitle;
+  }
+
+  if (shouldPreferHeadingTitle(input.documentTitle, input.headingTitle)) {
+    return input.headingTitle;
+  }
+
+  return input.documentTitle || input.headingTitle || undefined;
+}
+
+function shouldPreferHeadingTitle(documentTitle: string, headingTitle: string): boolean {
+  if (!documentTitle || !headingTitle) {
+    return false;
+  }
+
+  const normalizedHeading = normalizeComparableHtmlTitle(headingTitle);
+  const normalizedDocumentTitle = normalizeComparableHtmlTitle(documentTitle);
+
+  if (normalizedDocumentTitle === normalizedHeading) {
+    return false;
+  }
+
+  const titleSegments = documentTitle
+    .split(/\s(?:\||-|–|—|·|•)\s/g)
+    .map((segment) => normalizeComparableHtmlTitle(segment))
+    .filter(Boolean);
+
+  return titleSegments.length > 1 && titleSegments.includes(normalizedHeading);
+}
+
+function normalizeComparableHtmlTitle(title: string): string {
+  return title.replace(/\s+/g, " ").trim().toLowerCase();
 }
 
 function findHtmlMetaContent(
