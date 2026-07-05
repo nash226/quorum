@@ -4,7 +4,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  importReviewerDecisionFile,
+  importReviewerDecisions,
   loadSources,
+  renderReviewerDecisionImportMarkdownReport,
   verifyAnswer,
   verifyAnswerBatch,
   verifyAnswerFile,
@@ -135,4 +138,41 @@ test("programmatic API still supports direct in-memory verification", () => {
 
   assert.equal(report.summary.verified, 1);
   assert.equal(report.generatedAt, "2026-07-05T02:00:00.000Z");
+});
+
+test("programmatic API imports reviewer decision csv files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-import-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    await writeFile(
+      reviewCsvPath,
+      `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Looks good
+`,
+      "utf8",
+    );
+
+    const report = await importReviewerDecisionFile(reviewCsvPath);
+
+    assert.equal(report.summary.totalClaims, 1);
+    assert.equal(report.summary.reviewedClaims, 1);
+    assert.equal(report.answerGroups[0]?.label, "HR answer");
+    assert.equal(report.answerGroups[0]?.answerPath, "answers/hr.md");
+    assert.equal(report.claims[0]?.reviewerNotes, "Looks good");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API exports reviewer import helpers for in-memory callers", () => {
+  const report = importReviewerDecisions(`claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,,
+`);
+
+  const markdown = renderReviewerDecisionImportMarkdownReport(report, ["needs_review"]);
+
+  assert.equal(report.summary.pendingClaims, 1);
+  assert.match(markdown, /# Quorum Reviewer Decision Import/);
+  assert.match(markdown, /- Pending claims: 1/);
 });
