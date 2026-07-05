@@ -1,0 +1,12 @@
+{
+  "name": "HR policy example",
+  "answerPath": "../answers/hr-answer.md",
+  "sourcePaths": ["../sources/hr-policy.md"],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["contradicted", "verified", "unsupported"]
+}
