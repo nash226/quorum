@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e9fae2a` on 2026-07-05, prefer page headings over html title chrome
+- Latest shipped change: `08eae6a` on 2026-07-05, refresh roadmap after batch launch
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-05 | [#171](https://github.com/nash226/quorum/pull/171) | refresh roadmap after batch launch | `08eae6a` |
 | 2026-07-05 | [#170](https://github.com/nash226/quorum/pull/170) | prefer page headings over html title chrome | `e9fae2a` |
 | 2026-07-05 | [#169](https://github.com/nash226/quorum/pull/169) | parse TOML source frontmatter | `66168fc` |
 | 2026-07-04 | [#168](https://github.com/nash226/quorum/pull/168) | smoke pdf source verification | `0a2cfa3` |
@@ -53,5 +54,4 @@
 | 2026-07-04 | [#166](https://github.com/nash226/quorum/pull/166) | filter html answer preview chrome | `44027ae` |
 | 2026-07-04 | [#165](https://github.com/nash226/quorum/pull/165) | ignore screen-reader-only html content | `2841e1b` |
 | 2026-07-04 | [#164](https://github.com/nash226/quorum/pull/164) | clean html answer previews | `d609b7e` |
-| 2026-07-04 | [#163](https://github.com/nash226/quorum/pull/163) | prioritize risky batch review outputs | `cb87dbd` |
 
