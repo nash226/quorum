@@ -144,6 +144,27 @@ test("extracts readable text and title from exported html sources", async () => 
   assert.doesNotMatch(source.content, /analytics|display: none/);
 });
 
+test("prefers the page heading when html titles include help-center chrome", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Help Center | Refund Policy</title>
+  </head>
+  <body>
+    <main>
+      <h1>Refund Policy</h1>
+      <p>Customers can request refunds within 30 days.</p>
+    </main>
+  </body>
+</html>`,
+    2,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+});
+
 test("normalizes one-column markdown tables in sources", () => {
   const parsed = parseSource(
     "docs/hr-policy.md",
