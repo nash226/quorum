@@ -14,6 +14,7 @@ import {
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
   renderBatchSummaryCsv,
+  renderEvaluationHtmlReport,
   renderEvaluationSummaryCsv,
   renderEvaluationTextReport,
   renderHtmlReport,
@@ -413,5 +414,6 @@ test("programmatic API exports batch evaluation helpers", async () => {
   assert.equal(scorecards.length, 2);
   assert.equal(scorecards.some(hasEvaluationMismatch), false);
   assert.match(rendered, /Fixtures: 2/);
+  assert.match(renderEvaluationHtmlReport(scorecards), /<!doctype html>/i);
   assert.match(renderEvaluationSummaryCsv(scorecards), /fixture_name,fixture_path,answer_path/);
 });
