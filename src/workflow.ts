@@ -51,6 +51,15 @@ export interface InMemoryBatchVerificationOptions {
   generatedAt?: string;
 }
 
+export interface InMemorySingleVerificationOptions {
+  answer: string;
+  answerPath?: string;
+  answerLabel?: string;
+  sources: InMemorySourceInput[];
+  defaultTrustLevel?: SourceTrustLevel;
+  generatedAt?: string;
+}
+
 export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
 export const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
 export const STDIN_ANSWER_PATH = "<stdin>";
@@ -136,6 +145,31 @@ export async function verifyAnswerFile(
     generatedAt,
     answerPath === "-" ? STDIN_ANSWER_PATH : answerPath,
   );
+}
+
+export async function verifyAnswerContents(
+  options: InMemorySingleVerificationOptions,
+): Promise<VerificationReport> {
+  const sources = await loadSourceDocumentsFromContent({
+    sources: options.sources,
+    defaultTrustLevel: options.defaultTrustLevel,
+  });
+  const report = verifyAnswer(
+    options.answer,
+    sources,
+    options.generatedAt ?? new Date().toISOString(),
+    options.answerPath,
+  );
+
+  if (options.answerPath === undefined) {
+    delete report.answerPath;
+  }
+
+  if (options.answerLabel !== undefined) {
+    report.answerLabel = options.answerLabel;
+  }
+
+  return report;
 }
 
 export async function verifyBatchAnswers(
