@@ -15,6 +15,7 @@ export {
   evaluateFixtureFiles,
   evaluateFixtureFile,
   hasEvaluationMismatch,
+  renderEvaluationHtmlReport,
   loadEvaluationFixture,
   renderEvaluationMarkdownReport,
   renderEvaluationTextReport,

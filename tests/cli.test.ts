@@ -291,6 +291,29 @@ test("evaluate writes a markdown report", async () => {
   }
 });
 
+test("evaluate writes an html report", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-html-"));
+
+  try {
+    const htmlPath = join(tempDir, "evaluation-report.html");
+    const stdout = await runCli([
+      "evaluate",
+      "--fixture",
+      "examples/evaluations/hr-policy.json",
+      "--html-out",
+      htmlPath,
+    ]);
+    const htmlReport = await readFile(htmlPath, "utf8");
+
+    assert.match(stdout, /Evaluation HTML report written to/);
+    assert.match(htmlReport, /<!doctype html>/i);
+    assert.match(htmlReport, /Fixture scorecard report/);
+    assert.match(htmlReport, /HR policy example/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("evaluate loads fixture directories recursively", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-dir-"));
 
