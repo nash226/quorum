@@ -27,7 +27,6 @@ import {
   renderTextReport,
 } from "./report-renderer.js";
 import {
-  importReviewerDecisions,
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
@@ -35,7 +34,12 @@ import {
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
 import { renderAnswerPreview, stripByteOrderMark } from "./text.js";
-import { loadSourceDocuments, verifyAnswerFile, verifyBatchAnswers } from "./workflow.js";
+import {
+  importReviewerDecisionFile,
+  loadSourceDocuments,
+  verifyAnswerFile,
+  verifyBatchAnswers,
+} from "./workflow.js";
 
 interface VerifyArgs {
   sourcePaths: string[];
@@ -264,11 +268,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
 async function runImportReview(args: string[]): Promise<void> {
   const parsed = parseImportReviewArgs(args);
-  if (parsed.reviewCsvPath !== "-") {
-    await ensureFilePath(parsed.reviewCsvPath, "Reviewer decision CSV");
-  }
-  const csvContent = await readTextInput(parsed.reviewCsvPath);
-  const report = importReviewerDecisions(csvContent);
+  const report = await importReviewerDecisionFile(parsed.reviewCsvPath);
   const jsonReport = JSON.stringify(report, null, 2);
   const markdownReport = renderReviewerDecisionImportMarkdownReport(report, parsed.failOn);
   const htmlReport = renderReviewerDecisionImportHtmlReport(report, parsed.failOn);

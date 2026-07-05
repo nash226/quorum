@@ -11,6 +11,19 @@ export type {
   VerificationReport,
 } from "./domain.js";
 export {
+  importReviewerDecisions,
+  renderReviewerDecisionImportHtmlReport,
+  renderReviewerDecisionImportMarkdownReport,
+  renderReviewerDecisionImportReport,
+  renderReviewerDecisionImportSummaryCsv,
+} from "./reviewer-decision-import.js";
+export type {
+  ImportedReviewerDecision,
+  ReviewerDecisionGroup,
+  ReviewerDecisionImportReport,
+} from "./reviewer-decision-import.js";
+export {
+  importReviewerDecisionFile,
   loadSourceDocuments as loadSources,
   resolveAnswerPaths,
   resolveSourcePaths,
