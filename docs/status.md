@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9df344c` on 2026-07-04, add example cli smoke check
+- Latest shipped change: `0a2cfa3` on 2026-07-04, smoke pdf source verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-04 | [#168](https://github.com/nash226/quorum/pull/168) | smoke pdf source verification | `0a2cfa3` |
 | 2026-07-04 | [#167](https://github.com/nash226/quorum/pull/167) | add example cli smoke check | `9df344c` |
 | 2026-07-04 | [#166](https://github.com/nash226/quorum/pull/166) | filter html answer preview chrome | `44027ae` |
 | 2026-07-04 | [#165](https://github.com/nash226/quorum/pull/165) | ignore screen-reader-only html content | `2841e1b` |
@@ -52,5 +53,4 @@
 | 2026-07-04 | [#163](https://github.com/nash226/quorum/pull/163) | prioritize risky batch review outputs | `cb87dbd` |
 | 2026-07-04 | [#162](https://github.com/nash226/quorum/pull/162) | keep batch answer labels in nested reports | `5f09615` |
 | 2026-07-04 | [#161](https://github.com/nash226/quorum/pull/161) | support single-column policy tables | `fdba2ed` |
-| 2026-07-04 | [#160](https://github.com/nash226/quorum/pull/160) | ignore iframe html chrome | `79e3ef3` |
 
