@@ -32,6 +32,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Smoke check
+        run: npm run smoke
+
   refresh-status:
     if: github.ref == 'refs/heads/main'
     needs: test
