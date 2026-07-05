@@ -35,11 +35,12 @@
 
 - Keep the CLI reliable and easy to run.
 - Improve claim extraction without hiding uncertainty.
-- Make reports useful for a human reviewer.
+- Make reviewer handoff artifacts easier to route, audit, and approve.
 
 ### Next In docs/roadmap.md
 
-- Support batch verification for multiple answers.
+- Add a lightweight API surface for agent and workflow integrations.
+- Build evaluation fixtures and scorecards for HR and support policy domains.
 
 ## Recently Shipped
 
