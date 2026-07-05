@@ -168,6 +168,33 @@ found through `--answer-dir`. Batch Markdown and HTML reports also include each
 answer's claim-level verdicts and top evidence so reviewers can inspect risky
 answers without jumping straight to JSON.
 
+## Programmatic API
+
+Quorum also exposes a small package API for agent and workflow integrations
+that want the verification flow without shelling out to the CLI:
+
+```ts
+import { loadSources, verifyAnswerBatch, verifyAnswerFile } from "quorum";
+
+const sources = await loadSources({
+  sourcePaths: [],
+  sourceDirs: ["examples/sources"],
+  defaultTrustLevel: "high",
+});
+
+const report = await verifyAnswerFile("examples/answers/hr-answer.md", sources);
+
+const batchReport = await verifyAnswerBatch({
+  answerPaths: ["examples/answers/hr-answer.md"],
+  answerDirPaths: [],
+  sources,
+  failOn: ["contradicted", "unsupported"],
+});
+```
+
+For in-memory callers, `verifyAnswer(answerText, sources)` remains available for
+teams that already manage file I/O themselves.
+
 ## Quick Start
 
 ```bash
