@@ -221,6 +221,18 @@ const scorecard = await evaluateFixtureFile("examples/evaluations/hr-policy.json
 console.log(renderEvaluationScorecard(scorecard));
 ```
 
+The CLI can run those same fixtures directly:
+
+```bash
+npm run dev -- evaluate \
+  --fixture examples/evaluations/hr-policy.json \
+  --fixture examples/evaluations/support-policy.json \
+  --fail-on-mismatch
+```
+
+`evaluate` prints one scorecard per fixture, highlights claim-level verdict
+mismatches, and can exit with status code `2` when a labeled benchmark drifts.
+
 ## Quick Start
 
 ```bash
@@ -290,6 +302,7 @@ npm run dev -- verify \
 quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+quorum evaluate --fixture <path>... [--json] [--out <path>] [--fail-on-mismatch]
 ```
 
 Options:
@@ -338,6 +351,13 @@ Options:
   reviewed/pending status, reviewer overrides, and final verdict totals
 - `import-review --fail-on <verdict>`: exit with code `2` when that final
   reviewer-aware verdict appears after any overrides; may be repeated
+- `evaluate --fixture <path>`: run one evaluation fixture JSON file; may be
+  repeated to score multiple labeled examples in one pass
+- `evaluate --json`: print the evaluation scorecard JSON for one fixture, or a
+  JSON array when multiple fixtures are provided
+- `evaluate --out <path>`: write the evaluation scorecard JSON to disk
+- `evaluate --fail-on-mismatch`: exit with code `2` when any fixture summary or
+  expected claim verdict does not match the current verifier output
 
 Supported source extensions today:
 
