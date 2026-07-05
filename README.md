@@ -177,6 +177,7 @@ the CLI:
 ```ts
 import {
   importReviewerDecisionFile,
+  evaluateFixtures,
   loadSources,
   loadSourcesFromContent,
   verifyAnswers,
@@ -200,6 +201,23 @@ const batchReport = await verifyAnswerBatch({
 });
 
 const importedReview = await importReviewerDecisionFile("reports/hr-review.csv");
+
+const evaluationScorecards = await evaluateFixtures({
+  fixtures: [
+    {
+      name: "HR policy fixture",
+      answerPath: "examples/answers/hr-answer.md",
+      sourcePaths: ["examples/sources/hr-policy.md"],
+      expectedSummary: {
+        verified: 1,
+        contradicted: 1,
+        unsupported: 1,
+        needs_review: 0,
+      },
+      expectedClaimVerdicts: ["contradicted", "verified", "unsupported"],
+    },
+  ],
+});
 ```
 
 For in-memory callers, `verifyAnswer(answerText, sources)` remains available for
@@ -250,6 +268,29 @@ const embeddedBatch = verifyAnswers({
     },
   ],
   sources: embeddedSources,
+});
+```
+
+Evaluation workflows can also keep fixture definitions in memory and score them
+in one call, which helps agent teams avoid writing temp fixture JSON files:
+
+```ts
+const scorecards = await evaluateFixtures({
+  fixtures: [
+    {
+      name: "Support policy fixture",
+      answerPath: "examples/answers/support-answer.md",
+      sourcePaths: ["examples/sources/support-playbook.md"],
+      expectedSummary: {
+        verified: 1,
+        contradicted: 1,
+        unsupported: 1,
+        needs_review: 0,
+      },
+      expectedClaimVerdicts: ["contradicted", "verified", "unsupported"],
+    },
+  ],
+  generatedAt: "2026-07-05T19:00:00.000Z",
 });
 ```
 
