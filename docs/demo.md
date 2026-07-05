@@ -84,6 +84,13 @@ queue tooling can route follow-up work one answer at a time. The summary CSV
 import artifact adds one row per answer group with reviewed, pending,
 overridden, and final verdict totals for spreadsheet queues.
 
+For benchmark-driven evaluation work, Quorum can also export a reviewer-friendly
+Markdown scorecard:
+
+```bash
+npm run dev -- evaluate --fixture-dir examples/evaluations --markdown-out reports/evaluation-report.md --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
+```
+
 Quorum also accepts exported HTML knowledge base pages via `--source` or
 `--source-dir`, which lets teams verify answers against help-center exports
 without first converting those pages to Markdown.
