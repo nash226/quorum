@@ -85,3 +85,23 @@ test("decodes common html entities in previews", () => {
     "Managers approve travel & lodging within 5 days <when policy applies>.",
   );
 });
+
+test("ignores screen-reader-only html sections in previews", () => {
+  assert.equal(
+    renderAnswerPreview(`<!doctype html>
+<html>
+  <body>
+    <div class="sr-only">
+      <p>Skip to main content</p>
+    </div>
+    <section class="visually-hidden announcement">
+      <p>Dialog closed</p>
+    </section>
+    <main>
+      <p>Refunds are available within 30 days of purchase.</p>
+    </main>
+  </body>
+</html>`),
+    "Refunds are available within 30 days of purchase.",
+  );
+});

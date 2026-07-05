@@ -36,6 +36,14 @@ const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
 const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 const HTML_PREVIEW_MARKUP_PATTERN =
   /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code)\b/i;
+const HTML_PREVIEW_HIDDEN_SECTION_PATTERNS = [
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\shidden(?:\s|=|>|\/))[^>]*>[\s\S]*?<\/\1>/gi,
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\sinert(?:\s|=|>|\/))[^>]*>[\s\S]*?<\/\1>/gi,
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\saria-hidden\s*=\s*["']?true["']?)[^>]*>[\s\S]*?<\/\1>/gi,
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\sstyle\s*=\s*["'][^"']*\bdisplay\s*:\s*none\b[^"']*["'])[^>]*>[\s\S]*?<\/\1>/gi,
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\sstyle\s*=\s*["'][^"']*\bvisibility\s*:\s*hidden\b[^"']*["'])[^>]*>[\s\S]*?<\/\1>/gi,
+  /<([A-Za-z][A-Za-z0-9:-]*)\b(?=[^>]*\sclass\s*=\s*["'][^"']*\b(?:sr-only|screen-reader-only|screen-reader-text|visually-hidden|visuallyhidden)\b[^"']*["'])[^>]*>[\s\S]*?<\/\1>/gi,
+];
 const HTML_PREVIEW_BLOCK_BREAK_TAGS =
   /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/figure|\/figcaption|\/h[1-6]|\/tr|\/td|\/th|\/dt|\/dd)\b[^>]*>/gi;
 const HTML_PREVIEW_STRIP_TAGS = /<\/?[^>\n]+>/g;
@@ -241,8 +249,13 @@ function normalizeAnswerPreviewText(answer: string): string {
     return answer;
   }
 
+  const visibleAnswer = HTML_PREVIEW_HIDDEN_SECTION_PATTERNS.reduce(
+    (currentAnswer, pattern) => currentAnswer.replace(pattern, " "),
+    answer,
+  );
+
   return decodeHtmlEntities(
-    answer
+    visibleAnswer
       .replace(/<!doctype[^>]*>/gi, " ")
       .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")

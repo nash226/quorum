@@ -345,6 +345,39 @@ test("ignores inline css-hidden sections in exported html sources", async () => 
   assert.doesNotMatch(source.content, /Draft policy change pending approval|Copied to clipboard/);
 });
 
+test("ignores common screen-reader-only sections in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <div class="sr-only">
+      <p>Skip to main content</p>
+    </div>
+    <section class="visually-hidden announcement">
+      <p>Dialog closed</p>
+    </section>
+    <aside class="screen-reader-text">
+      <p>Knowledge base controls</p>
+    </aside>
+    <main>
+      <p>Customers can request refunds within 30 days.</p>
+      <p>Annual plans require support approval.</p>
+    </main>
+  </body>
+</html>`,
+    6,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /Annual plans require support approval\./);
+  assert.doesNotMatch(source.content, /Skip to main content|Dialog closed|Knowledge base controls/);
+});
+
 test("ignores html comments in exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",
