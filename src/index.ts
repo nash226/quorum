@@ -18,6 +18,7 @@ export {
   loadEvaluationFixture,
   renderEvaluationTextReport,
   renderEvaluationScorecard,
+  renderEvaluationSummaryCsv,
   resolveEvaluationFixturePaths,
 } from "./evaluation.js";
 export type {
