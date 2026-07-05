@@ -21,6 +21,7 @@ import {
   renderReviewerDecisionCsv,
   renderSummaryCsv,
   renderTextReport,
+  verifyAnswers,
   verifyAnswer,
   verifyAnswerBatch,
   verifyAnswerFile,
@@ -151,6 +152,73 @@ test("programmatic API still supports direct in-memory verification", () => {
 
   assert.equal(report.summary.verified, 1);
   assert.equal(report.generatedAt, "2026-07-05T02:00:00.000Z");
+});
+
+test("programmatic API batches in-memory answers for workflow callers", () => {
+  const sources = [
+    {
+      id: "source_1",
+      title: "Benefits policy",
+      trustLevel: "high" as const,
+      content: "Employees receive 12 weeks of paid parental leave.",
+    },
+    {
+      id: "source_2",
+      title: "Refund policy",
+      trustLevel: "high" as const,
+      content: "Refunds are available for 30 days from the purchase date.",
+    },
+  ];
+
+  const report = verifyAnswers({
+    answers: [
+      {
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        answerPath: "answers/hr.md",
+      },
+      {
+        answer: "Employees receive 16 weeks of paid parental leave.",
+        answerLabel: "HR escalation draft",
+      },
+      {
+        answer: "Refunds are available for 30 days from the purchase date.",
+        answerPath: "answers/support.md",
+      },
+    ],
+    sources,
+    failOn: ["contradicted"],
+    generatedAt: "2026-07-05T02:15:00.000Z",
+  });
+
+  assert.equal(report.generatedAt, "2026-07-05T02:15:00.000Z");
+  assert.equal(report.answerCount, 3);
+  assert.equal(report.summary.verified, 2);
+  assert.equal(report.summary.contradicted, 1);
+  assert.equal(report.summary.answersWithFailures, 1);
+  assert.deepEqual(
+    report.answers.map((answer) => ({
+      label: answer.answerLabel,
+      path: answer.answerPath,
+      shouldFail: answer.shouldFail,
+    })),
+    [
+      {
+        label: "hr",
+        path: "answers/hr.md",
+        shouldFail: false,
+      },
+      {
+        label: "HR escalation draft",
+        path: "<memory:2>",
+        shouldFail: true,
+      },
+      {
+        label: "support",
+        path: "answers/support.md",
+        shouldFail: false,
+      },
+    ],
+  );
 });
 
 test("programmatic API exports verification report renderers", () => {

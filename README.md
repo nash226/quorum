@@ -178,6 +178,7 @@ the CLI:
 import {
   importReviewerDecisionFile,
   loadSources,
+  verifyAnswers,
   verifyAnswerBatch,
   verifyAnswerFile,
 } from "quorum";
@@ -201,8 +202,28 @@ const importedReview = await importReviewerDecisionFile("reports/hr-review.csv")
 ```
 
 For in-memory callers, `verifyAnswer(answerText, sources)` remains available for
-teams that already manage file I/O themselves. Reviewer import helpers such as
-`importReviewerDecisions` and
+teams that already manage file I/O themselves, and `verifyAnswers({ answers,
+sources })` batches multiple in-memory agent responses without writing temp
+files first:
+
+```ts
+const inMemoryBatch = verifyAnswers({
+  answers: [
+    {
+      answer: "Employees receive 12 weeks of paid parental leave.",
+      answerPath: "hr-agent/latest-response.md",
+    },
+    {
+      answer: "Refunds are available for 30 days from the purchase date.",
+      answerLabel: "support-agent draft",
+    },
+  ],
+  sources,
+  failOn: ["contradicted"],
+});
+```
+
+Reviewer import helpers such as `importReviewerDecisions` and
 `renderReviewerDecisionImportMarkdownReport` are also exported for teams that
 already manage CSV content in memory. Verification report helpers such as
 `renderTextReport`, `renderMarkdownReport`, `renderHtmlReport`,
