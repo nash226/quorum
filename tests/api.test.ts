@@ -9,6 +9,7 @@ import {
   importReviewerDecisionFile,
   importReviewerDecisions,
   loadSources,
+  loadSourcesFromContent,
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
@@ -218,6 +219,93 @@ test("programmatic API batches in-memory answers for workflow callers", () => {
         shouldFail: false,
       },
     ],
+  );
+});
+
+test("programmatic API loads in-memory source content for embedded workflows", async () => {
+  const sources = await loadSourcesFromContent({
+    sources: [
+      {
+        sourcePath: "policies/hr-policy.md",
+        content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+      },
+      {
+        sourcePath: "help/refunds.html",
+        content: `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <main>
+      <p>Refunds are available for 30 days from the purchase date.</p>
+    </main>
+  </body>
+</html>`,
+      },
+    ],
+    defaultTrustLevel: "low",
+  });
+
+  assert.deepEqual(
+    sources.map((source) => ({
+      title: source.title,
+      trustLevel: source.trustLevel,
+      content: source.content,
+    })),
+    [
+      {
+        title: "HR Policy",
+        trustLevel: "high",
+        content: "Employees receive 12 weeks of paid parental leave.\n",
+      },
+      {
+        title: "Refund Policy",
+        trustLevel: "low",
+        content: "Refund Policy\n\nRefunds are available for 30 days from the purchase date.",
+      },
+    ],
+  );
+
+  const report = verifyAnswers({
+    answers: [
+      {
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        answerPath: "answers/hr.md",
+      },
+      {
+        answer: "Refunds are available for 30 days from the purchase date.",
+        answerPath: "answers/refunds.md",
+      },
+    ],
+    sources,
+    generatedAt: "2026-07-05T03:00:00.000Z",
+  });
+
+  assert.deepEqual(report.summary, {
+    verified: 2,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
+    answersWithoutClaims: 0,
+    answersWithFailures: 0,
+  });
+});
+
+test("programmatic API rejects empty in-memory source batches", async () => {
+  await assert.rejects(
+    () =>
+      loadSourcesFromContent({
+        sources: [],
+      }),
+    {
+      message: "At least one in-memory source is required.",
+    },
   );
 });
 
