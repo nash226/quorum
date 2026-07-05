@@ -20,6 +20,16 @@ export interface SourceLoadOptions {
   defaultTrustLevel?: SourceTrustLevel;
 }
 
+export interface InMemorySourceInput {
+  sourcePath: string;
+  content: string | Buffer;
+}
+
+export interface InMemorySourceLoadOptions {
+  sources: InMemorySourceInput[];
+  defaultTrustLevel?: SourceTrustLevel;
+}
+
 export interface BatchVerificationOptions {
   answerPaths: string[];
   answerDirPaths: string[];
@@ -82,6 +92,28 @@ export async function loadSourceDocuments(
     sourcePaths.map(async (sourcePath, index) => {
       const content = await readFile(sourcePath);
       return sourceDocumentFromFile(sourcePath, content, index, {
+        defaultTrustLevel: options.defaultTrustLevel,
+      });
+    }),
+  );
+}
+
+export async function loadSourceDocumentsFromContent(
+  options: InMemorySourceLoadOptions,
+): Promise<SourceDocument[]> {
+  if (options.sources.length === 0) {
+    throw new Error("At least one in-memory source is required.");
+  }
+
+  return Promise.all(
+    options.sources.map((source, index) => {
+      if (typeof source.content === "string") {
+        return sourceDocumentFromFile(source.sourcePath, source.content, index, {
+          defaultTrustLevel: options.defaultTrustLevel,
+        });
+      }
+
+      return sourceDocumentFromFile(source.sourcePath, source.content, index, {
         defaultTrustLevel: options.defaultTrustLevel,
       });
     }),
