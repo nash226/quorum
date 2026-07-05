@@ -244,6 +244,29 @@ test("evaluate renders scorecards for shipped example fixtures", async () => {
   assert.match(stdout, /Fixtures with mismatches: 0/);
 });
 
+test("evaluate writes a one-row-per-fixture summary csv", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-summary-"));
+
+  try {
+    const summaryCsvPath = join(tempDir, "evaluation-summary.csv");
+    const stdout = await runCli([
+      "evaluate",
+      "--fixture-dir",
+      "examples/evaluations",
+      "--summary-csv-out",
+      summaryCsvPath,
+    ]);
+    const summaryCsv = await readFile(summaryCsvPath, "utf8");
+
+    assert.match(stdout, /Evaluation summary CSV written to/);
+    assert.match(summaryCsv, /^fixture_name,fixture_path,answer_path,source_paths,summary_match,/);
+    assert.match(summaryCsv, /HR policy example/);
+    assert.match(summaryCsv, /Support policy example/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("evaluate loads fixture directories recursively", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-dir-"));
 
