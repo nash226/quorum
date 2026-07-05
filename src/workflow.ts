@@ -12,6 +12,7 @@ import type {
 import { matchingFailVerdicts } from "./report-policy.js";
 import { renderAnswerLabels, stripByteOrderMark } from "./text.js";
 import { sourceDocumentFromFile } from "./source-loader.js";
+import { importReviewerDecisions, type ReviewerDecisionImportReport } from "./reviewer-decision-import.js";
 
 export interface SourceLoadOptions {
   sourcePaths: string[];
@@ -136,6 +137,16 @@ export async function verifyBatchAnswers(
   );
 
   return summarizeBatchVerification(answers, options.sources, generatedAt);
+}
+
+export async function importReviewerDecisionFile(
+  reviewCsvPath: string,
+): Promise<ReviewerDecisionImportReport> {
+  if (reviewCsvPath !== "-") {
+    await ensureFilePath(reviewCsvPath, "Reviewer decision CSV");
+  }
+
+  return importReviewerDecisions(await readTextInput(reviewCsvPath));
 }
 
 async function listSourceFiles(sourceDir: string): Promise<string[]> {
