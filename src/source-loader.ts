@@ -118,7 +118,7 @@ function parseFrontmatter(frontmatter: string): SourceMetadata {
   const metadata: SourceMetadata = {};
 
   for (const line of frontmatter.split("\n")) {
-    const match = line.match(/^([A-Za-z][A-Za-z0-9_-]*):\s*(.*?)\s*$/);
+    const match = line.match(/^([A-Za-z][A-Za-z0-9_-]*)\s*(?::|=)\s*(.*?)\s*$/);
 
     if (!match) {
       continue;
