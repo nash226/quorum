@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d609b7e` on 2026-07-04, clean html answer previews
+- Latest shipped change: `2841e1b` on 2026-07-04, ignore screen-reader-only html content
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-04 | [#165](https://github.com/nash226/quorum/pull/165) | ignore screen-reader-only html content | `2841e1b` |
 | 2026-07-04 | [#164](https://github.com/nash226/quorum/pull/164) | clean html answer previews | `d609b7e` |
 | 2026-07-04 | [#163](https://github.com/nash226/quorum/pull/163) | prioritize risky batch review outputs | `cb87dbd` |
 | 2026-07-04 | [#162](https://github.com/nash226/quorum/pull/162) | keep batch answer labels in nested reports | `5f09615` |
@@ -52,5 +53,4 @@
 | 2026-07-04 | [#160](https://github.com/nash226/quorum/pull/160) | ignore iframe html chrome | `79e3ef3` |
 | 2026-07-04 | [#159](https://github.com/nash226/quorum/pull/159) | preserve import-review fail policy context | `c962cc5` |
 | 2026-07-04 | [#158](https://github.com/nash226/quorum/pull/158) | clarify verify stdin docs | `75fd6ea` |
-| 2026-07-04 | [#157](https://github.com/nash226/quorum/pull/157) | clarify missing CLI input path errors | `ff6b9a4` |
 
