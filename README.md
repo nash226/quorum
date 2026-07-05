@@ -178,6 +178,7 @@ the CLI:
 import {
   importReviewerDecisionFile,
   loadSources,
+  loadSourcesFromContent,
   verifyAnswers,
   verifyAnswerBatch,
   verifyAnswerFile,
@@ -221,6 +222,35 @@ const inMemoryBatch = verifyAnswers({
   sources,
   failOn: ["contradicted"],
 });
+
+const embeddedSources = await loadSourcesFromContent({
+  sources: [
+    {
+      sourcePath: "policies/hr-policy.md",
+      content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+    },
+    {
+      sourcePath: "help/refunds.html",
+      content: "<html><body><main><p>Refunds are available for 30 days from the purchase date.</p></main></body></html>",
+    },
+  ],
+  defaultTrustLevel: "medium",
+});
+
+const embeddedBatch = verifyAnswers({
+  answers: [
+    {
+      answer: "Refunds are available for 30 days from the purchase date.",
+      answerLabel: "support-agent draft",
+    },
+  ],
+  sources: embeddedSources,
+});
 ```
 
 Reviewer import helpers such as `importReviewerDecisions` and
@@ -229,6 +259,9 @@ already manage CSV content in memory. Verification report helpers such as
 `renderTextReport`, `renderMarkdownReport`, `renderHtmlReport`,
 `renderReviewerDecisionCsv`, and the batch renderer variants are exported too,
 so package consumers can generate the same human-review artifacts as the CLI.
+`loadSourcesFromContent` gives embedded workflows the same Markdown, HTML, and
+PDF source parsing behavior without writing temporary files first, as long as
+each source includes a representative `sourcePath` extension.
 
 For fixture-driven evaluation work, Quorum also exports
 `loadEvaluationFixture`, `evaluateFixtureFile`, `evaluateFixtureFiles`,
