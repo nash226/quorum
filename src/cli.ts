@@ -1,18 +1,14 @@
 #!/usr/bin/env node
-import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
-import { dirname, extname, join, resolve } from "node:path";
-import { verifyAnswer } from "./claim-verifier.js";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 import type {
   BatchVerificationReport,
-  BatchVerificationResult,
   ClaimAssessment,
   ClaimVerdict,
   SourceDocument,
   SourceTrustLevel,
-  VerificationReport,
 } from "./domain.js";
 import {
-  matchingFailVerdicts,
   parseClaimVerdict,
   shouldFailReport,
 } from "./report-policy.js";
@@ -37,8 +33,9 @@ import {
   renderReviewerDecisionImportReport,
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
-import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
-import { renderAnswerLabels, renderAnswerPreview, stripByteOrderMark } from "./text.js";
+import { parseSourceTrustLevel } from "./source-loader.js";
+import { renderAnswerPreview, stripByteOrderMark } from "./text.js";
+import { loadSourceDocuments, verifyAnswerFile, verifyBatchAnswers } from "./workflow.js";
 
 interface VerifyArgs {
   sourcePaths: string[];
@@ -77,9 +74,6 @@ interface ImportReviewArgs {
   summaryCsvOutPath?: string;
 }
 
-const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
-const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
-const STDIN_ANSWER_PATH = "<stdin>";
 const HELP_FLAGS = new Set(["--help", "-h"]);
 type CommandName = "verify" | "verify-batch" | "import-review";
 
@@ -133,7 +127,7 @@ async function main(): Promise<void> {
 async function runVerify(args: string[]): Promise<void> {
   const parsed = parseVerifyArgs(args);
   const sources = await loadSources(parsed);
-  const report = await verifySingleAnswer(parsed.answerPath, sources);
+  const report = await verifyAnswerFile(parsed.answerPath, sources);
   const jsonReport = JSON.stringify(report, null, 2);
   const htmlReport = renderHtmlReport(report, parsed.failOn);
   const markdownReport = renderMarkdownReport(report, parsed.failOn);
@@ -199,40 +193,12 @@ async function runVerify(args: string[]): Promise<void> {
 async function runVerifyBatch(args: string[]): Promise<void> {
   const parsed = parseVerifyBatchArgs(args);
   const sources = await loadSources(parsed);
-  const answerPaths = await resolveAnswerPaths(parsed.answerPaths, parsed.answerDirPaths);
-
-  if (answerPaths.length === 0) {
-    const locations = [...parsed.answerPaths, ...parsed.answerDirPaths].join(", ");
-    throw new Error(`No answer files found in ${locations}`);
-  }
-
-  const stdinAnswer = answerPaths.includes("-") ? await readAnswer("-") : undefined;
-  const normalizedAnswerPaths = answerPaths.map((answerPath) =>
-    answerPath === "-" ? STDIN_ANSWER_PATH : answerPath,
-  );
-  const answerLabels = renderAnswerLabels(normalizedAnswerPaths);
-  const answers = await Promise.all(
-    answerPaths.map(async (answerPath, index) => {
-      const normalizedAnswerPath = normalizedAnswerPaths[index] ?? answerPath;
-      const answerLabel = answerLabels[index] ?? normalizedAnswerPath;
-      const report =
-        answerPath === "-" && stdinAnswer !== undefined
-          ? verifyAnswer(stdinAnswer, sources, undefined, STDIN_ANSWER_PATH)
-          : await verifySingleAnswer(answerPath, sources);
-      report.answerLabel = answerLabel;
-      const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
-
-      return {
-        answerLabel,
-        answerPath: normalizedAnswerPath,
-        report,
-        shouldFail: failVerdicts.length > 0,
-        failVerdicts,
-      };
-    }),
-  );
-
-  const batchReport = summarizeBatchVerification(answers, sources);
+  const batchReport = await verifyBatchAnswers({
+    answerPaths: parsed.answerPaths,
+    answerDirPaths: parsed.answerDirPaths,
+    sources,
+    failOn: parsed.failOn,
+  });
   const jsonReport = JSON.stringify(batchReport, null, 2);
   const markdownReport = renderBatchMarkdownReport(batchReport);
   const htmlReport = renderBatchHtmlReport(batchReport);
@@ -581,108 +547,12 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   };
 }
 
-async function resolveSourcePaths(
-  sourcePaths: string[],
-  sourceDirs: string[],
-): Promise<string[]> {
-  await Promise.all(sourcePaths.map((sourcePath) => ensureFilePath(sourcePath, "Approved source")));
-  const directoryFiles = (
-    await Promise.all(sourceDirs.map((sourceDir) => listSourceFiles(sourceDir)))
-  ).flat();
-
-  return dedupePathsInOrder([...sourcePaths, ...directoryFiles]);
-}
-
-async function resolveAnswerPaths(
-  answerPaths: string[],
-  answerDirs: string[],
-): Promise<string[]> {
-  const directoryFiles = (
-    await Promise.all(answerDirs.map((answerDir) => listAnswerFiles(answerDir)))
-  ).flat();
-
-  return dedupePathsInOrder([...answerPaths, ...directoryFiles]);
-}
-
 async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
-  const sourcePaths = await resolveSourcePaths(args.sourcePaths, args.sourceDirs);
-
-  if (sourcePaths.length === 0) {
-    const locations = [...args.sourcePaths, ...args.sourceDirs].join(", ");
-    throw new Error(`No approved source files found in ${locations}`);
-  }
-
-  return Promise.all(
-    sourcePaths.map(async (sourcePath, index) => {
-      const content = await readFile(sourcePath);
-      return sourceDocumentFromFile(sourcePath, content, index, {
-        defaultTrustLevel: args.defaultTrustLevel,
-      });
-    }),
-  );
-}
-
-async function verifySingleAnswer(
-  answerPath: string,
-  sources: SourceDocument[],
-): Promise<VerificationReport> {
-  if (answerPath !== "-") {
-    await ensureFilePath(answerPath, "Answer");
-  }
-
-  const answer = await readAnswer(answerPath);
-  return verifyAnswer(
-    answer,
-    sources,
-    undefined,
-    answerPath === "-" ? STDIN_ANSWER_PATH : answerPath,
-  );
-}
-
-async function listSourceFiles(sourceDir: string): Promise<string[]> {
-  return listFilesWithExtensions(sourceDir, SOURCE_EXTENSIONS, "Approved source");
-}
-
-async function listAnswerFiles(answerDir: string): Promise<string[]> {
-  return listFilesWithExtensions(answerDir, ANSWER_EXTENSIONS, "Answer");
-}
-
-async function listFilesWithExtensions(
-  directory: string,
-  extensions: ReadonlySet<string>,
-  label: string,
-): Promise<string[]> {
-  await ensureDirectoryPath(directory, label);
-  const entries = await readdir(directory, { withFileTypes: true });
-  const files = await Promise.all(
-    entries.map(async (entry): Promise<string[]> => {
-      if (isHiddenPathEntry(entry.name)) {
-        return [];
-      }
-
-      const path = join(directory, entry.name);
-
-      if (entry.isDirectory()) {
-        return listFilesWithExtensions(path, extensions, label);
-      }
-
-      if (entry.isFile() && extensions.has(extname(entry.name).toLowerCase())) {
-        return [path];
-      }
-
-      return [];
-    }),
-  );
-
-  return files.flat().sort();
-}
-
-function isHiddenPathEntry(name: string): boolean {
-  return name.startsWith(".");
-}
-
-async function readAnswer(answerPath: string): Promise<string> {
-  return readTextInput(answerPath);
+  return loadSourceDocuments({
+    sourcePaths: args.sourcePaths,
+    sourceDirs: args.sourceDirs,
+    defaultTrustLevel: args.defaultTrustLevel,
+  });
 }
 
 async function readTextInput(inputPath: string): Promise<string> {
@@ -709,7 +579,7 @@ async function ensureFilePath(path: string, label: string): Promise<void> {
   try {
     pathStat = await stat(path);
   } catch (error) {
-    if (isMissingPathError(error)) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
       throw new Error(`${label} file not found: ${path}`);
     }
 
@@ -719,54 +589,6 @@ async function ensureFilePath(path: string, label: string): Promise<void> {
   if (!pathStat.isFile()) {
     throw new Error(`${label} path is not a file: ${path}`);
   }
-}
-
-async function ensureDirectoryPath(path: string, label: string): Promise<void> {
-  let pathStat;
-
-  try {
-    pathStat = await stat(path);
-  } catch (error) {
-    if (isMissingPathError(error)) {
-      throw new Error(`${label} directory not found: ${path}`);
-    }
-
-    throw error;
-  }
-
-  if (!pathStat.isDirectory()) {
-    throw new Error(`${label} path is not a directory: ${path}`);
-  }
-}
-
-function isMissingPathError(error: unknown): error is NodeJS.ErrnoException {
-  return error instanceof Error && "code" in error && error.code === "ENOENT";
-}
-
-function dedupePathsInOrder(paths: string[]): string[] {
-  const seen = new Set<string>();
-  const uniquePaths: string[] = [];
-
-  for (const path of paths) {
-    const normalizedPath = normalizePathForDedupe(path);
-
-    if (seen.has(normalizedPath)) {
-      continue;
-    }
-
-    seen.add(normalizedPath);
-    uniquePaths.push(path);
-  }
-
-  return uniquePaths;
-}
-
-function normalizePathForDedupe(path: string): string {
-  if (path === "-") {
-    return STDIN_ANSWER_PATH;
-  }
-
-  return resolve(path);
 }
 
 function trimTrailingBlankLines(lines: string[]): string[] {
@@ -791,49 +613,6 @@ function renderTextSourceLabel(source: {
   }
 
   return `${source.title} (${metadata.join(", ")})`;
-}
-
-function summarizeBatchVerification(
-  answers: BatchVerificationResult[],
-  sources: SourceDocument[],
-): BatchVerificationReport {
-  const summary = {
-    verified: 0,
-    contradicted: 0,
-    unsupported: 0,
-    needs_review: 0,
-    answersWithoutClaims: 0,
-    answersWithFailures: 0,
-  };
-
-  for (const answer of answers) {
-    summary.verified += answer.report.summary.verified;
-    summary.contradicted += answer.report.summary.contradicted;
-    summary.unsupported += answer.report.summary.unsupported;
-    summary.needs_review += answer.report.summary.needs_review;
-
-    if (answer.report.assessments.length === 0) {
-      summary.answersWithoutClaims += 1;
-    }
-
-    if (answer.shouldFail) {
-      summary.answersWithFailures += 1;
-    }
-  }
-
-  return {
-    generatedAt: new Date().toISOString(),
-    sources: sources.map((source) => ({
-      id: source.id,
-      title: source.title,
-      updatedAt: source.updatedAt,
-      trustLevel: source.trustLevel,
-    })),
-    sourceCount: sources.length,
-    answerCount: answers.length,
-    answers,
-    summary,
-  };
 }
 
 function renderBatchTextReport(report: BatchVerificationReport): string {

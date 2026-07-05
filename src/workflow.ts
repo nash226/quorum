@@ -1,0 +1,297 @@
+import { readdir, readFile, stat } from "node:fs/promises";
+import { extname, join, resolve } from "node:path";
+import { verifyAnswer } from "./claim-verifier.js";
+import type {
+  BatchVerificationReport,
+  BatchVerificationResult,
+  ClaimVerdict,
+  SourceDocument,
+  SourceTrustLevel,
+  VerificationReport,
+} from "./domain.js";
+import { matchingFailVerdicts } from "./report-policy.js";
+import { renderAnswerLabels, stripByteOrderMark } from "./text.js";
+import { sourceDocumentFromFile } from "./source-loader.js";
+
+export interface SourceLoadOptions {
+  sourcePaths: string[];
+  sourceDirs: string[];
+  defaultTrustLevel?: SourceTrustLevel;
+}
+
+export interface BatchVerificationOptions {
+  answerPaths: string[];
+  answerDirPaths: string[];
+  sources: SourceDocument[];
+  failOn?: ClaimVerdict[];
+  generatedAt?: string;
+}
+
+export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
+export const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
+export const STDIN_ANSWER_PATH = "<stdin>";
+
+export async function resolveSourcePaths(
+  sourcePaths: string[],
+  sourceDirs: string[],
+): Promise<string[]> {
+  await Promise.all(sourcePaths.map((sourcePath) => ensureFilePath(sourcePath, "Approved source")));
+  const directoryFiles = (
+    await Promise.all(sourceDirs.map((sourceDir) => listSourceFiles(sourceDir)))
+  ).flat();
+
+  return dedupePathsInOrder([...sourcePaths, ...directoryFiles]);
+}
+
+export async function resolveAnswerPaths(
+  answerPaths: string[],
+  answerDirs: string[],
+): Promise<string[]> {
+  const directoryFiles = (
+    await Promise.all(answerDirs.map((answerDir) => listAnswerFiles(answerDir)))
+  ).flat();
+
+  return dedupePathsInOrder([...answerPaths, ...directoryFiles]);
+}
+
+export async function loadSourceDocuments(
+  options: SourceLoadOptions,
+): Promise<SourceDocument[]> {
+  const sourcePaths = await resolveSourcePaths(options.sourcePaths, options.sourceDirs);
+
+  if (sourcePaths.length === 0) {
+    const locations = [...options.sourcePaths, ...options.sourceDirs].join(", ");
+    throw new Error(`No approved source files found in ${locations}`);
+  }
+
+  return Promise.all(
+    sourcePaths.map(async (sourcePath, index) => {
+      const content = await readFile(sourcePath);
+      return sourceDocumentFromFile(sourcePath, content, index, {
+        defaultTrustLevel: options.defaultTrustLevel,
+      });
+    }),
+  );
+}
+
+export async function verifyAnswerFile(
+  answerPath: string,
+  sources: SourceDocument[],
+  generatedAt = new Date().toISOString(),
+): Promise<VerificationReport> {
+  if (answerPath !== "-") {
+    await ensureFilePath(answerPath, "Answer");
+  }
+
+  const answer = await readTextInput(answerPath);
+  return verifyAnswer(
+    answer,
+    sources,
+    generatedAt,
+    answerPath === "-" ? STDIN_ANSWER_PATH : answerPath,
+  );
+}
+
+export async function verifyBatchAnswers(
+  options: BatchVerificationOptions,
+): Promise<BatchVerificationReport> {
+  const answerPaths = await resolveAnswerPaths(options.answerPaths, options.answerDirPaths);
+
+  if (answerPaths.length === 0) {
+    const locations = [...options.answerPaths, ...options.answerDirPaths].join(", ");
+    throw new Error(`No answer files found in ${locations}`);
+  }
+
+  const stdinAnswerCount = answerPaths.filter((answerPath) => answerPath === "-").length;
+
+  if (stdinAnswerCount > 1) {
+    throw new Error("Only one answer path can be '-' because stdin can only be consumed once.");
+  }
+
+  const generatedAt = options.generatedAt ?? new Date().toISOString();
+  const stdinAnswer = answerPaths.includes("-") ? await readTextInput("-") : undefined;
+  const normalizedAnswerPaths = answerPaths.map((answerPath) =>
+    answerPath === "-" ? STDIN_ANSWER_PATH : answerPath,
+  );
+  const answerLabels = renderAnswerLabels(normalizedAnswerPaths);
+  const answers = await Promise.all(
+    answerPaths.map(async (answerPath, index) => {
+      const normalizedAnswerPath = normalizedAnswerPaths[index] ?? answerPath;
+      const answerLabel = answerLabels[index] ?? normalizedAnswerPath;
+      const report =
+        answerPath === "-" && stdinAnswer !== undefined
+          ? verifyAnswer(stdinAnswer, options.sources, generatedAt, STDIN_ANSWER_PATH)
+          : await verifyAnswerFile(answerPath, options.sources, generatedAt);
+      report.answerLabel = answerLabel;
+      const failVerdicts = matchingFailVerdicts(report, options.failOn ?? []);
+
+      return {
+        answerLabel,
+        answerPath: normalizedAnswerPath,
+        report,
+        shouldFail: failVerdicts.length > 0,
+        failVerdicts,
+      };
+    }),
+  );
+
+  return summarizeBatchVerification(answers, options.sources, generatedAt);
+}
+
+async function listSourceFiles(sourceDir: string): Promise<string[]> {
+  return listFilesWithExtensions(sourceDir, SOURCE_EXTENSIONS, "Approved source");
+}
+
+async function listAnswerFiles(answerDir: string): Promise<string[]> {
+  return listFilesWithExtensions(answerDir, ANSWER_EXTENSIONS, "Answer");
+}
+
+async function listFilesWithExtensions(
+  directory: string,
+  extensions: ReadonlySet<string>,
+  label: string,
+): Promise<string[]> {
+  await ensureDirectoryPath(directory, label);
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = await Promise.all(
+    entries.map(async (entry): Promise<string[]> => {
+      if (entry.name.startsWith(".")) {
+        return [];
+      }
+
+      const path = join(directory, entry.name);
+
+      if (entry.isDirectory()) {
+        return listFilesWithExtensions(path, extensions, label);
+      }
+
+      if (entry.isFile() && extensions.has(extname(entry.name).toLowerCase())) {
+        return [path];
+      }
+
+      return [];
+    }),
+  );
+
+  return files.flat().sort();
+}
+
+async function readTextInput(inputPath: string): Promise<string> {
+  if (inputPath !== "-") {
+    return stripByteOrderMark(await readFile(inputPath, "utf8"));
+  }
+
+  return stripByteOrderMark(await readStdin());
+}
+
+async function readStdin(): Promise<string> {
+  const chunks: Buffer[] = [];
+
+  for await (const chunk of process.stdin) {
+    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+  }
+
+  return Buffer.concat(chunks).toString("utf8");
+}
+
+async function ensureFilePath(path: string, label: string): Promise<void> {
+  let pathStat;
+
+  try {
+    pathStat = await stat(path);
+  } catch (error) {
+    if (isMissingPathError(error)) {
+      throw new Error(`${label} file not found: ${path}`);
+    }
+
+    throw error;
+  }
+
+  if (!pathStat.isFile()) {
+    throw new Error(`${label} path is not a file: ${path}`);
+  }
+}
+
+async function ensureDirectoryPath(path: string, label: string): Promise<void> {
+  let pathStat;
+
+  try {
+    pathStat = await stat(path);
+  } catch (error) {
+    if (isMissingPathError(error)) {
+      throw new Error(`${label} directory not found: ${path}`);
+    }
+
+    throw error;
+  }
+
+  if (!pathStat.isDirectory()) {
+    throw new Error(`${label} path is not a directory: ${path}`);
+  }
+}
+
+function isMissingPathError(error: unknown): error is NodeJS.ErrnoException {
+  return error instanceof Error && "code" in error && error.code === "ENOENT";
+}
+
+function dedupePathsInOrder(paths: string[]): string[] {
+  const seen = new Set<string>();
+  const uniquePaths: string[] = [];
+
+  for (const path of paths) {
+    const normalizedPath = path === "-" ? STDIN_ANSWER_PATH : resolve(path);
+
+    if (seen.has(normalizedPath)) {
+      continue;
+    }
+
+    seen.add(normalizedPath);
+    uniquePaths.push(path);
+  }
+
+  return uniquePaths;
+}
+
+function summarizeBatchVerification(
+  answers: BatchVerificationResult[],
+  sources: SourceDocument[],
+  generatedAt: string,
+): BatchVerificationReport {
+  const summary = {
+    verified: 0,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
+    answersWithoutClaims: 0,
+    answersWithFailures: 0,
+  };
+
+  for (const answer of answers) {
+    summary.verified += answer.report.summary.verified;
+    summary.contradicted += answer.report.summary.contradicted;
+    summary.unsupported += answer.report.summary.unsupported;
+    summary.needs_review += answer.report.summary.needs_review;
+
+    if (answer.report.assessments.length === 0) {
+      summary.answersWithoutClaims += 1;
+    }
+
+    if (answer.shouldFail) {
+      summary.answersWithFailures += 1;
+    }
+  }
+
+  return {
+    generatedAt,
+    sources: sources.map((source) => ({
+      id: source.id,
+      title: source.title,
+      updatedAt: source.updatedAt,
+      trustLevel: source.trustLevel,
+    })),
+    sourceCount: sources.length,
+    answerCount: answers.length,
+    answers,
+    summary,
+  };
+}
