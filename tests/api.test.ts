@@ -7,7 +7,16 @@ import {
   importReviewerDecisionFile,
   importReviewerDecisions,
   loadSources,
+  renderBatchHtmlReport,
+  renderBatchMarkdownReport,
+  renderBatchReviewerDecisionCsv,
+  renderBatchSummaryCsv,
+  renderHtmlReport,
+  renderMarkdownReport,
   renderReviewerDecisionImportMarkdownReport,
+  renderReviewerDecisionCsv,
+  renderSummaryCsv,
+  renderTextReport,
   verifyAnswer,
   verifyAnswerBatch,
   verifyAnswerFile,
@@ -138,6 +147,61 @@ test("programmatic API still supports direct in-memory verification", () => {
 
   assert.equal(report.summary.verified, 1);
   assert.equal(report.generatedAt, "2026-07-05T02:00:00.000Z");
+});
+
+test("programmatic API exports verification report renderers", () => {
+  const report = verifyAnswer(
+    "Benefits begin on day one of employment.",
+    [
+      {
+        id: "source_1",
+        title: "Benefits policy",
+        trustLevel: "high",
+        content: "Benefits begin on day one of employment.",
+      },
+    ],
+    "2026-07-05T02:30:00.000Z",
+    "examples/answers/hr-answer.md",
+  );
+  const batchReport = {
+    generatedAt: "2026-07-05T02:30:00.000Z",
+    answerCount: 1,
+    sourceCount: 1,
+    sources: [
+      {
+        id: "source_1",
+        title: "Benefits policy",
+        trustLevel: "high" as const,
+      },
+    ],
+    answers: [
+      {
+        answerLabel: "hr-answer",
+        answerPath: "examples/answers/hr-answer.md",
+        report,
+        shouldFail: false,
+        failVerdicts: [],
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithFailures: 0,
+      answersWithoutClaims: 0,
+    },
+  };
+
+  assert.match(renderTextReport(report), /Quorum Verification Report/);
+  assert.match(renderMarkdownReport(report), /# Quorum Verification Report/);
+  assert.match(renderHtmlReport(report), /<!doctype html>/i);
+  assert.match(renderReviewerDecisionCsv(report), /answer_label,answer_path/);
+  assert.match(renderSummaryCsv(report), /primary_verdict/);
+  assert.match(renderBatchMarkdownReport(batchReport), /# Quorum Batch Verification Report/);
+  assert.match(renderBatchHtmlReport(batchReport), /<!doctype html>/i);
+  assert.match(renderBatchReviewerDecisionCsv(batchReport), /answer_label,answer_path/);
+  assert.match(renderBatchSummaryCsv(batchReport), /primary_verdict/);
 });
 
 test("programmatic API imports reviewer decision csv files", async () => {

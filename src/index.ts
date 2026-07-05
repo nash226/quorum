@@ -23,6 +23,17 @@ export type {
   ReviewerDecisionImportReport,
 } from "./reviewer-decision-import.js";
 export {
+  renderBatchHtmlReport,
+  renderBatchMarkdownReport,
+  renderBatchReviewerDecisionCsv,
+  renderBatchSummaryCsv,
+  renderHtmlReport,
+  renderMarkdownReport,
+  renderReviewerDecisionCsv,
+  renderSummaryCsv,
+  renderTextReport,
+} from "./report-renderer.js";
+export {
   importReviewerDecisionFile,
   loadSourceDocuments as loadSources,
   resolveAnswerPaths,
