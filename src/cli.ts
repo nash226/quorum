@@ -10,6 +10,7 @@ import type {
 } from "./domain.js";
 import {
   evaluateFixtureFiles,
+  renderEvaluationHtmlReport,
   hasEvaluationMismatch,
   renderEvaluationMarkdownReport,
   renderEvaluationTextReport,
@@ -92,6 +93,7 @@ interface EvaluateArgs {
   failOnMismatch: boolean;
   outPath?: string;
   markdownOutPath?: string;
+  htmlOutPath?: string;
   summaryCsvOutPath?: string;
 }
 
@@ -361,6 +363,7 @@ async function runEvaluate(args: string[]): Promise<void> {
     2,
   );
   const markdownReport = renderEvaluationMarkdownReport(scorecards);
+  const htmlReport = renderEvaluationHtmlReport(scorecards);
   const summaryCsvReport = renderEvaluationSummaryCsv(scorecards);
   const shouldFail = scorecards.some(hasEvaluationMismatch);
 
@@ -370,6 +373,10 @@ async function runEvaluate(args: string[]): Promise<void> {
 
   if (parsed.markdownOutPath) {
     await writeReportFile(parsed.markdownOutPath, markdownReport);
+  }
+
+  if (parsed.htmlOutPath) {
+    await writeReportFile(parsed.htmlOutPath, htmlReport);
   }
 
   if (parsed.summaryCsvOutPath) {
@@ -387,6 +394,10 @@ async function runEvaluate(args: string[]): Promise<void> {
 
     if (parsed.markdownOutPath) {
       console.log(`Evaluation Markdown report written to ${parsed.markdownOutPath}`);
+    }
+
+    if (parsed.htmlOutPath) {
+      console.log(`Evaluation HTML report written to ${parsed.htmlOutPath}`);
     }
 
     if (parsed.summaryCsvOutPath) {
@@ -629,6 +640,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
   const fixtureDirPaths: string[] = [];
   let outPath: string | undefined;
   let markdownOutPath: string | undefined;
+  let htmlOutPath: string | undefined;
   let summaryCsvOutPath: string | undefined;
   let json = false;
   let failOnMismatch = false;
@@ -648,6 +660,9 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
       index += 1;
     } else if (arg === "--markdown-out" && next) {
       markdownOutPath = next;
+      index += 1;
+    } else if (arg === "--html-out" && next) {
+      htmlOutPath = next;
       index += 1;
     } else if (arg === "--summary-csv-out" && next) {
       summaryCsvOutPath = next;
@@ -672,6 +687,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
     failOnMismatch,
     outPath,
     markdownOutPath,
+    htmlOutPath,
     summaryCsvOutPath,
   };
 }
@@ -941,7 +957,7 @@ Example:
     evaluate: `Quorum evaluate
 
 Usage:
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
 
 Options:
   --fixture <path>          Evaluation fixture JSON file; may be repeated
@@ -949,11 +965,12 @@ Options:
   --json                    Print the evaluation scorecard JSON
   --out <path>              Write the JSON scorecard output to disk
   --markdown-out <path>     Write a Markdown evaluation report
+  --html-out <path>         Write a styled HTML evaluation report
   --summary-csv-out <path>  Write a one-row-per-fixture summary CSV
   --fail-on-mismatch        Exit with code 2 when any fixture summary or claim verdict mismatches
 
 Example:
-  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
+  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
   npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --json
 `,
@@ -970,7 +987,7 @@ Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
@@ -979,7 +996,7 @@ Example:
   cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
-  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
+  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
   npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
 `);
 }
