@@ -1,5 +1,6 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { dirname, extname, join, resolve } from "node:path";
+import { serializeDelimitedList } from "./csv-list.js";
 import type { ClaimVerdict, VerificationReport } from "./domain.js";
 import { loadSourceDocuments, verifyAnswerFile } from "./workflow.js";
 
@@ -212,6 +213,51 @@ export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): s
   return `${lines.join("\n")}\n`;
 }
 
+export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): string {
+  const rows = [
+    [
+      "fixture_name",
+      "fixture_path",
+      "answer_path",
+      "source_paths",
+      "summary_match",
+      "matched_claims",
+      "total_expected_claims",
+      "score",
+      "has_mismatch",
+      "expected_verified",
+      "expected_contradicted",
+      "expected_unsupported",
+      "expected_needs_review",
+      "actual_verified",
+      "actual_contradicted",
+      "actual_unsupported",
+      "actual_needs_review",
+    ],
+    ...scorecards.map((scorecard) => [
+      scorecard.fixtureName,
+      scorecard.fixturePath ?? "",
+      scorecard.answerPath,
+      serializeDelimitedList(scorecard.sourcePaths),
+      scorecard.summaryMatches ? "yes" : "no",
+      scorecard.matchedClaims.toString(),
+      scorecard.totalExpectedClaims.toString(),
+      scorecard.score.toFixed(3),
+      hasEvaluationMismatch(scorecard) ? "yes" : "no",
+      scorecard.expectedSummary.verified.toString(),
+      scorecard.expectedSummary.contradicted.toString(),
+      scorecard.expectedSummary.unsupported.toString(),
+      scorecard.expectedSummary.needs_review.toString(),
+      scorecard.actualSummary.verified.toString(),
+      scorecard.actualSummary.contradicted.toString(),
+      scorecard.actualSummary.unsupported.toString(),
+      scorecard.actualSummary.needs_review.toString(),
+    ]),
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 export function hasEvaluationMismatch(scorecard: EvaluationScorecard): boolean {
   return !scorecard.summaryMatches || scorecard.matchedClaims < scorecard.totalExpectedClaims;
 }
@@ -270,6 +316,14 @@ async function ensureFilePath(path: string, label: string): Promise<void> {
   if (!pathStat.isFile()) {
     throw new Error(`${label} path is not a file: ${path}`);
   }
+}
+
+function escapeCsvValue(value: string): string {
+  if (value.includes('"') || value.includes(",") || value.includes("\n")) {
+    return `"${value.replaceAll('"', '""')}"`;
+  }
+
+  return value;
 }
 
 async function ensureDirectoryPath(path: string, label: string): Promise<void> {
