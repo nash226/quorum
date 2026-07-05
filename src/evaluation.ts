@@ -648,6 +648,11 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       "total_expected_claims",
       "score",
       "has_mismatch",
+      "mismatch_type",
+      "first_mismatch_claim_index",
+      "first_mismatch_claim_text",
+      "first_mismatch_expected_verdict",
+      "first_mismatch_actual_verdict",
       "expected_verified",
       "expected_contradicted",
       "expected_unsupported",
@@ -667,6 +672,11 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       scorecard.totalExpectedClaims.toString(),
       scorecard.score.toFixed(3),
       hasEvaluationMismatch(scorecard) ? "yes" : "no",
+      evaluationMismatchType(scorecard),
+      renderFirstMismatchClaimIndex(scorecard),
+      renderFirstMismatchClaimText(scorecard),
+      renderFirstMismatchExpectedVerdict(scorecard),
+      renderFirstMismatchActualVerdict(scorecard),
       scorecard.expectedSummary.verified.toString(),
       scorecard.expectedSummary.contradicted.toString(),
       scorecard.expectedSummary.unsupported.toString(),
@@ -683,6 +693,41 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
 
 export function hasEvaluationMismatch(scorecard: EvaluationScorecard): boolean {
   return !scorecard.summaryMatches || scorecard.matchedClaims < scorecard.totalExpectedClaims;
+}
+
+function evaluationMismatchType(scorecard: EvaluationScorecard): string {
+  if (firstClaimMismatch(scorecard)) {
+    return "claim_verdict";
+  }
+
+  if (!scorecard.summaryMatches) {
+    return "summary";
+  }
+
+  return "none";
+}
+
+function renderFirstMismatchClaimIndex(scorecard: EvaluationScorecard): string {
+  const mismatch = firstClaimMismatch(scorecard);
+  return mismatch ? (mismatch.index + 1).toString() : "";
+}
+
+function renderFirstMismatchClaimText(scorecard: EvaluationScorecard): string {
+  return firstClaimMismatch(scorecard)?.claimText ?? "";
+}
+
+function renderFirstMismatchExpectedVerdict(scorecard: EvaluationScorecard): string {
+  return firstClaimMismatch(scorecard)?.expectedVerdict ?? "";
+}
+
+function renderFirstMismatchActualVerdict(scorecard: EvaluationScorecard): string {
+  return firstClaimMismatch(scorecard)?.actualVerdict ?? "";
+}
+
+function firstClaimMismatch(scorecard: EvaluationScorecard): EvaluationClaimScore | undefined {
+  return scorecard.claims.find(
+    (claim) => claim.expectedVerdict !== undefined && !claim.matches,
+  );
 }
 
 function hasMatchingSummary(
