@@ -28,6 +28,19 @@ export interface BatchVerificationOptions {
   generatedAt?: string;
 }
 
+export interface InMemoryAnswerInput {
+  answer: string;
+  answerPath?: string;
+  answerLabel?: string;
+}
+
+export interface InMemoryBatchVerificationOptions {
+  answers: InMemoryAnswerInput[];
+  sources: SourceDocument[];
+  failOn?: ClaimVerdict[];
+  generatedAt?: string;
+}
+
 export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
 export const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
 export const STDIN_ANSWER_PATH = "<stdin>";
@@ -135,6 +148,42 @@ export async function verifyBatchAnswers(
       };
     }),
   );
+
+  return summarizeBatchVerification(answers, options.sources, generatedAt);
+}
+
+export function verifyAnswers(
+  options: InMemoryBatchVerificationOptions,
+): BatchVerificationReport {
+  if (options.answers.length === 0) {
+    throw new Error("At least one in-memory answer is required.");
+  }
+
+  const generatedAt = options.generatedAt ?? new Date().toISOString();
+  const normalizedAnswerPaths = options.answers.map(
+    (answer, index) => answer.answerPath ?? `<memory:${index + 1}>`,
+  );
+  const generatedLabels = renderAnswerLabels(normalizedAnswerPaths);
+  const answers = options.answers.map((answer, index) => {
+    const normalizedAnswerPath = normalizedAnswerPaths[index] ?? `<memory:${index + 1}>`;
+    const report = verifyAnswer(
+      answer.answer,
+      options.sources,
+      generatedAt,
+      answer.answerPath,
+    );
+    report.answerPath = normalizedAnswerPath;
+    report.answerLabel = answer.answerLabel ?? generatedLabels[index] ?? normalizedAnswerPath;
+    const failVerdicts = matchingFailVerdicts(report, options.failOn ?? []);
+
+    return {
+      answerLabel: report.answerLabel,
+      answerPath: normalizedAnswerPath,
+      report,
+      shouldFail: failVerdicts.length > 0,
+      failVerdicts,
+    };
+  });
 
   return summarizeBatchVerification(answers, options.sources, generatedAt);
 }
