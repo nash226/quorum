@@ -7,6 +7,7 @@ import {
   evaluateFixtureFile,
   hasEvaluationMismatch,
   loadEvaluationFixture,
+  renderEvaluationMarkdownReport,
   renderEvaluationScorecard,
   renderEvaluationSummaryCsv,
   renderEvaluationTextReport,
@@ -264,4 +265,62 @@ test("renders evaluation summary csv rows for each fixture", () => {
   assert.match(rendered, /Support policy example/);
   assert.match(rendered, /\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md/);
   assert.match(rendered, /yes,0,0,1\.000,no,1,0,0,0,1,0,0,0/);
+});
+
+test("renders evaluation markdown report with fixture summaries", () => {
+  const rendered = renderEvaluationMarkdownReport([
+    {
+      fixtureName: "Support policy example",
+      fixturePath: "/tmp/fixtures/support.json",
+      answerPath: "/tmp/answers/support.md",
+      sourcePaths: ["/tmp/sources/support.md"],
+      report: {
+        generatedAt: "2026-07-05T10:25:00.000Z",
+        answerPath: "/tmp/answers/support.md",
+        answerLabel: "support",
+        answerPreview: "Preview",
+        answer: "Answer text",
+        sources: [],
+        assessments: [],
+        summary: {
+          verified: 1,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+        },
+      },
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      actualSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      summaryMatches: true,
+      claims: [
+        {
+          index: 0,
+          claimText: "Refunds are available for 30 days.",
+          actualVerdict: "verified",
+          expectedVerdict: "verified",
+          matches: true,
+        },
+      ],
+      matchedClaims: 1,
+      totalExpectedClaims: 1,
+      score: 1,
+    },
+  ]);
+
+  assert.match(rendered, /^# Quorum Evaluation Report/);
+  assert.match(rendered, /## Summary/);
+  assert.match(rendered, /### 1\. Support policy example/);
+  assert.match(rendered, /- Fixture path: `\/tmp\/fixtures\/support\.json`/);
+  assert.match(rendered, /#### Claim Verdicts/);
+  assert.match(rendered, /Claim 1: `verified` \(expected `verified`\)/);
 });

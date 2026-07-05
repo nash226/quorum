@@ -213,6 +213,58 @@ export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): s
   return `${lines.join("\n")}\n`;
 }
 
+export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]): string {
+  const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const lines = [
+    "# Quorum Evaluation Report",
+    "",
+    "## Summary",
+    "",
+    `- Fixtures: ${scorecards.length}`,
+    `- Fixtures with mismatches: ${mismatchCount}`,
+    "",
+    "## Fixtures",
+    "",
+  ];
+
+  scorecards.forEach((scorecard, index) => {
+    lines.push(
+      `### ${index + 1}. ${scorecard.fixtureName}`,
+      "",
+      ...(scorecard.fixturePath ? [`- Fixture path: \`${scorecard.fixturePath}\``] : []),
+      `- Answer path: \`${scorecard.answerPath}\``,
+      `- Sources: ${scorecard.sourcePaths.map((sourcePath) => `\`${sourcePath}\``).join(", ")}`,
+      `- Summary match: ${scorecard.summaryMatches ? "yes" : "no"}`,
+      `- Claim verdict score: ${scorecard.matchedClaims}/${scorecard.totalExpectedClaims} (${Math.round(scorecard.score * 100)}%)`,
+      "",
+      "#### Expected Summary",
+      "",
+      ...renderMarkdownSummaryList(scorecard.expectedSummary),
+      "",
+      "#### Actual Summary",
+      "",
+      ...renderMarkdownSummaryList(scorecard.actualSummary),
+      "",
+    );
+
+    if (scorecard.claims.length === 0) {
+      lines.push("No claims were extracted from this answer.", "");
+      return;
+    }
+
+    lines.push("#### Claim Verdicts", "");
+    scorecard.claims.forEach((claim) => {
+      lines.push(
+        `- Claim ${claim.index + 1}: \`${claim.actualVerdict}\`${claim.expectedVerdict ? ` (expected \`${claim.expectedVerdict}\`)` : ""}`,
+        `  ${claim.claimText}`,
+      );
+    });
+    lines.push("");
+  });
+
+  return `${trimTrailingBlankLines(lines).join("\n")}\n`;
+}
+
 export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): string {
   const rows = [
     [
@@ -326,6 +378,15 @@ function escapeCsvValue(value: string): string {
   return value;
 }
 
+function renderMarkdownSummaryList(summary: Record<ClaimVerdict, number>): string[] {
+  return [
+    `- Verified: ${summary.verified}`,
+    `- Contradicted: ${summary.contradicted}`,
+    `- Unsupported: ${summary.unsupported}`,
+    `- Needs review: ${summary.needs_review}`,
+  ];
+}
+
 async function ensureDirectoryPath(path: string, label: string): Promise<void> {
   let pathStat;
 
@@ -364,4 +425,14 @@ function dedupePathsInOrder(paths: string[]): string[] {
   }
 
   return uniquePaths;
+}
+
+function trimTrailingBlankLines(lines: string[]): string[] {
+  const trimmed = [...lines];
+
+  while (trimmed.length > 0 && trimmed[trimmed.length - 1] === "") {
+    trimmed.pop();
+  }
+
+  return trimmed;
 }
