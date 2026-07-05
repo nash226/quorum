@@ -11,6 +11,7 @@ export type {
   VerificationReport,
 } from "./domain.js";
 export {
+  evaluateFixtureContent,
   evaluateFixture,
   evaluateFixtureContents,
   evaluateFixtures,
@@ -30,6 +31,7 @@ export type {
   EvaluationBatchOptions,
   EvaluationClaimScore,
   EvaluationFixture,
+  InMemoryEvaluationFixtureFileOptions,
   InMemoryEvaluationFixtureFileBatchOptions,
   InMemoryEvaluationFixtureInput,
   InMemoryEvaluationBatchOptions,
