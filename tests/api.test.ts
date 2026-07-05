@@ -4,11 +4,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  evaluateFixtureContents,
   evaluateFixtureFiles,
   evaluateFixtures,
   hasEvaluationMismatch,
   importReviewerDecisionFile,
   importReviewerDecisions,
+  loadEvaluationFixtureFromContent,
   loadSources,
   loadSourcesFromContent,
   renderBatchHtmlReport,
@@ -360,12 +362,74 @@ test("programmatic API evaluates in-memory fixture arrays for workflow callers",
   }
 });
 
+test("programmatic API loads and evaluates in-memory fixture JSON files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-evaluation-content-"));
+
+  try {
+    const answerPath = join(tempDir, "answers", "hr-answer.md");
+    const sourcePath = join(tempDir, "sources", "hr-policy.md");
+    const fixturePath = join(tempDir, "fixtures", "hr-policy.json");
+    const fixtureContent = JSON.stringify({
+      name: "HR policy fixture",
+      answerPath: "../answers/hr-answer.md",
+      sourcePaths: ["../sources/hr-policy.md"],
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      expectedClaimVerdicts: ["verified"],
+    });
+
+    await mkdir(join(tempDir, "answers"), { recursive: true });
+    await mkdir(join(tempDir, "sources"), { recursive: true });
+    await mkdir(join(tempDir, "fixtures"), { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const fixture = loadEvaluationFixtureFromContent(Buffer.from(fixtureContent, "utf8"));
+    assert.equal(fixture.name, "HR policy fixture");
+    assert.deepEqual(fixture.expectedClaimVerdicts, ["verified"]);
+
+    const scorecards = await evaluateFixtureContents({
+      fixtures: [
+        {
+          fixturePath,
+          content: fixtureContent,
+        },
+      ],
+      generatedAt: "2026-07-05T20:30:00.000Z",
+    });
+
+    assert.equal(scorecards.length, 1);
+    assert.equal(scorecards[0]?.fixturePath, fixturePath);
+    assert.equal(scorecards[0]?.answerPath, answerPath);
+    assert.deepEqual(scorecards[0]?.sourcePaths, [sourcePath]);
+    assert.equal(scorecards[0]?.report.generatedAt, "2026-07-05T20:30:00.000Z");
+    assert.equal(scorecards[0]?.summaryMatches, true);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("programmatic API rejects empty in-memory evaluation batches", async () => {
   await assert.rejects(
     evaluateFixtures({
       fixtures: [],
     }),
     /At least one evaluation fixture is required\./,
+  );
+});
+
+test("programmatic API rejects empty in-memory evaluation fixture JSON batches", async () => {
+  await assert.rejects(
+    evaluateFixtureContents({
+      fixtures: [],
+    }),
+    /At least one in-memory evaluation fixture is required\./,
   );
 });
 
