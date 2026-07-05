@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { resolve } from "node:path";
 import test from "node:test";
 import {
+  evaluateFixtureContent,
   evaluateFixture,
   evaluateFixtureFiles,
   evaluateFixtureFile,
@@ -48,6 +49,21 @@ test("evaluates fixture files relative to the fixture directory", async () => {
   assert.equal(scorecard.matchedClaims, 3);
   assert.equal(scorecard.totalExpectedClaims, 3);
   assert.equal(scorecard.score, 1);
+});
+
+test("evaluates one in-memory fixture file relative to its fixture path", async () => {
+  const fixturePath = resolve("examples/evaluations/hr-policy.json");
+  const fixtureContent = await loadEvaluationFixture(fixturePath);
+  const scorecard = await evaluateFixtureContent({
+    fixturePath,
+    content: JSON.stringify(fixtureContent),
+    generatedAt: "2026-07-05T10:06:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR policy example");
+  assert.equal(scorecard.fixturePath, fixturePath);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.report.generatedAt, "2026-07-05T10:06:00.000Z");
 });
 
 test("resolves fixture paths from nested directories in stable order", async () => {
