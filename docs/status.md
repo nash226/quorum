@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `01553c5` on 2026-07-05, add evaluation summary csv export
+- Latest shipped change: `12ca93d` on 2026-07-05, add in-memory batch verification api
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-05 | [#180](https://github.com/nash226/quorum/pull/180) | add in-memory batch verification api | `12ca93d` |
 | 2026-07-05 | [#179](https://github.com/nash226/quorum/pull/179) | add evaluation summary csv export | `01553c5` |
 | 2026-07-05 | [#178](https://github.com/nash226/quorum/pull/178) | export batch evaluation package helpers | `a1ee96d` |
 | 2026-07-05 | [#177](https://github.com/nash226/quorum/pull/177) | add evaluate fixture directory support | `fdf7f54` |
@@ -53,5 +54,4 @@
 | 2026-07-05 | [#175](https://github.com/nash226/quorum/pull/175) | add evaluation fixture scorecards | `fd15a9e` |
 | 2026-07-05 | [#174](https://github.com/nash226/quorum/pull/174) | export package report renderers | `dd16894` |
 | 2026-07-05 | [#173](https://github.com/nash226/quorum/pull/173) | add reviewer import package api | `881cc58` |
-| 2026-07-05 | [#172](https://github.com/nash226/quorum/pull/172) | add package verification api | `9ef4564` |
 
