@@ -12,6 +12,7 @@ export type {
 } from "./domain.js";
 export {
   evaluateFixture,
+  evaluateFixtures,
   evaluateFixtureFiles,
   evaluateFixtureFile,
   hasEvaluationMismatch,
@@ -27,6 +28,7 @@ export type {
   EvaluationBatchOptions,
   EvaluationClaimScore,
   EvaluationFixture,
+  InMemoryEvaluationBatchOptions,
   EvaluationScorecard,
 } from "./evaluation.js";
 export {
