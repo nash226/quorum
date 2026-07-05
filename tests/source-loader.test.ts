@@ -60,9 +60,9 @@ Employees get 12 weeks.
 
 test("parses toml-style source frontmatter delimited by plus signs", () => {
   const parsed = parseSource("docs/hr-policy.md", `+++
-title: HR Benefits Policy
-updated_at: 2026-05-31
-trust_level: high
+title = "HR Benefits Policy"
+updated_at = "2026-05-31"
+trust_level = "high"
 +++
 # HR Policy
 
