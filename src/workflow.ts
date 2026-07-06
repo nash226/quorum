@@ -51,6 +51,14 @@ export interface InMemoryBatchVerificationOptions {
   generatedAt?: string;
 }
 
+export interface InMemoryBatchContentVerificationOptions {
+  answers: InMemoryAnswerInput[];
+  sources: InMemorySourceInput[];
+  defaultTrustLevel?: SourceTrustLevel;
+  failOn?: ClaimVerdict[];
+  generatedAt?: string;
+}
+
 export interface InMemorySingleVerificationOptions {
   answer: string;
   answerPath?: string;
@@ -252,6 +260,22 @@ export function verifyAnswers(
   });
 
   return summarizeBatchVerification(answers, options.sources, generatedAt);
+}
+
+export async function verifyAnswerBatchContents(
+  options: InMemoryBatchContentVerificationOptions,
+): Promise<BatchVerificationReport> {
+  const sources = await loadSourceDocumentsFromContent({
+    sources: options.sources,
+    defaultTrustLevel: options.defaultTrustLevel,
+  });
+
+  return verifyAnswers({
+    answers: options.answers,
+    sources,
+    failOn: options.failOn,
+    generatedAt: options.generatedAt,
+  });
 }
 
 export async function importReviewerDecisionFile(

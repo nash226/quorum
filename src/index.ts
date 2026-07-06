@@ -68,6 +68,7 @@ export {
   resolveSourcePaths,
   STDIN_ANSWER_PATH,
   verifyAnswers,
+  verifyAnswerBatchContents,
   verifyAnswerContents,
   verifyAnswerFile,
   verifyBatchAnswers as verifyAnswerBatch,
@@ -75,6 +76,7 @@ export {
 export type {
   BatchVerificationOptions,
   InMemoryAnswerInput,
+  InMemoryBatchContentVerificationOptions,
   InMemoryBatchVerificationOptions,
   InMemorySourceInput,
   InMemorySourceLoadOptions,
