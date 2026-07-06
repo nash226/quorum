@@ -59,6 +59,7 @@ interface VerifyArgs {
 
 interface VerifySingleArgs extends VerifyArgs {
   answerPath: string;
+  answerLabel?: string;
   outPath?: string;
   markdownOutPath?: string;
   htmlOutPath?: string;
@@ -160,7 +161,7 @@ async function main(): Promise<void> {
 async function runVerify(args: string[]): Promise<void> {
   const parsed = parseVerifyArgs(args);
   const sources = await loadSources(parsed);
-  const report = await verifyAnswerFile(parsed.answerPath, sources);
+  const report = await verifyAnswerFile(parsed.answerPath, sources, undefined, parsed.answerLabel);
   const jsonReport = JSON.stringify(report, null, 2);
   const htmlReport = renderHtmlReport(report, parsed.failOn);
   const markdownReport = renderMarkdownReport(report, parsed.failOn);
@@ -413,6 +414,7 @@ async function runEvaluate(args: string[]): Promise<void> {
 function parseVerifyArgs(args: string[]): VerifySingleArgs {
   const parsed = parseSharedVerifyArgs(args, new Set([
     "--answer",
+    "--answer-label",
     "--out",
     "--markdown-out",
     "--html-out",
@@ -420,6 +422,7 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
     "--summary-csv-out",
   ]));
   let answerPath = "";
+  let answerLabel: string | undefined;
   let outPath: string | undefined;
   let markdownOutPath: string | undefined;
   let htmlOutPath: string | undefined;
@@ -432,6 +435,9 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
 
     if (arg === "--answer" && next) {
       answerPath = next;
+      index += 1;
+    } else if (arg === "--answer-label" && next) {
+      answerLabel = next;
       index += 1;
     } else if (arg === "--out" && next) {
       outPath = next;
@@ -458,6 +464,7 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
   return {
     ...parsed,
     answerPath,
+    answerLabel,
     outPath,
     markdownOutPath,
     htmlOutPath,
@@ -892,10 +899,11 @@ function printHelp(command?: CommandName): void {
     verify: `Quorum verify
 
 Usage:
-  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --answer <path|->          Answer file to verify, or - to read from stdin
+  --answer-label <label>     Reviewer-facing label to use instead of the path-derived default
   --source <path>            Approved source document; may be repeated
   --source-dir <path>        Directory of approved source documents
   --default-trust-level <level>
@@ -909,8 +917,8 @@ Options:
   --fail-on <verdict>        Exit with code 2 when the verdict appears; may repeat
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
-  cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --source-dir examples/sources --json
+  npm run dev -- verify --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
+  cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --answer-label "HR reviewer packet" --source-dir examples/sources --json
 `,
     "verify-batch": `Quorum verify-batch
 
@@ -984,14 +992,14 @@ Example:
   console.log(`Quorum
 
 Usage:
-  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
 
 Example:
-  npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
-  cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --source-dir examples/sources --json
+  npm run dev -- verify --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
+  cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --answer-label "HR reviewer packet" --source-dir examples/sources --json
   npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-dir examples/answers --source-dir examples/sources --out reports/batch-report.json --markdown-out reports/batch-report.md --html-out reports/batch-report.html --review-csv-out reports/batch-review.csv --summary-csv-out reports/batch-summary.csv --fail-on contradicted
   cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
