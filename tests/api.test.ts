@@ -27,6 +27,9 @@ import {
   loadSourcesFromContent,
   matchingFailVerdicts,
   parseClaimVerdict,
+  renderAnswerLabel,
+  renderAnswerLabels,
+  renderAnswerPreview,
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
@@ -1393,6 +1396,18 @@ test("programmatic API exports verification report renderers", () => {
   assert.match(renderBatchHtmlReport(batchReport), /<!doctype html>/i);
   assert.match(renderBatchReviewerDecisionCsv(batchReport), /answer_label,answer_path/);
   assert.match(renderBatchSummaryCsv(batchReport), /primary_verdict/);
+  assert.equal(renderAnswerLabel("examples/answers/hr-answer.md"), "hr-answer");
+  assert.deepEqual(
+    renderAnswerLabels([
+      "/tmp/quorum/hr/answer.md",
+      "/tmp/quorum/support/answer.md",
+    ]),
+    ["hr/answer", "support/answer"],
+  );
+  assert.equal(
+    renderAnswerPreview("<main><p>Refunds are available within 30 days of purchase.</p></main>"),
+    "Refunds are available within 30 days of purchase.",
+  );
 });
 
 test("programmatic API imports reviewer decision csv files", async () => {
