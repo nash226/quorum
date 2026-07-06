@@ -298,7 +298,7 @@ const evaluationScorecards = await evaluateFixtures({
     {
       name: "HR policy fixture",
       answerPath: "examples/answers/hr-answer.md",
-      sourcePaths: ["examples/sources/hr-policy.md"],
+      sourceDirs: ["examples/sources"],
       expectedSummary: {
         verified: 1,
         contradicted: 1,
@@ -497,7 +497,7 @@ const scorecards = await evaluateFixtures({
     {
       name: "Support policy fixture",
       answerPath: "examples/answers/support-answer.md",
-      sourcePaths: ["examples/sources/support-playbook.md"],
+      sourceDirs: ["examples/sources"],
       expectedSummary: {
         verified: 1,
         contradicted: 1,
@@ -607,7 +607,7 @@ and evaluate those definitions without writing temporary fixture files first:
 const fixtureJson = JSON.stringify({
   name: "Support policy fixture",
   answerPath: "../answers/support-answer.md",
-  sourcePaths: ["../sources/support-playbook.md"],
+  sourceDirs: ["../sources"],
   expectedSummary: {
     verified: 1,
     contradicted: 1,
@@ -635,6 +635,11 @@ console.log(fixture.name);
 console.log(renderEvaluationScorecard(embeddedScorecard));
 console.log(renderEvaluationScorecard(embeddedScorecards[0]));
 ```
+
+Each evaluation fixture can mix explicit `sourcePaths` with recursive
+`sourceDirs`, so domain scorecards can point at a maintained source bundle
+without rewriting every fixture when a benchmark adds another approved
+document.
 
 The CLI can run those same fixtures directly:
 
