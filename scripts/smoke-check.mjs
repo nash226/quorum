@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const repoRoot = resolve(new URL("..", import.meta.url).pathname);
 const cliPath = join(repoRoot, "dist", "src", "cli.js");
@@ -87,6 +88,8 @@ ${xrefOffset}
 }
 
 requireBuiltCli();
+
+const api = await import(pathToFileURL(join(repoRoot, "dist", "src", "index.js")).href);
 
 const tempDir = mkdtempSync(join(tmpdir(), "quorum-smoke-"));
 
@@ -205,8 +208,50 @@ try {
   assert.match(readFileSync(join(tempDir, "evaluation-report.md"), "utf8"), /^# Quorum Evaluation Report/);
   assert.match(evaluationStdout, /Fixtures with mismatches: 0/);
 
+  const apiSources = await api.loadSourcesFromContent({
+    sources: [
+      {
+        sourcePath: "policies/hr-policy.md",
+        content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+      },
+    ],
+  });
+  const apiVerificationResult = api.verifyAnswerResult({
+    answer: "Employees receive 12 weeks of paid parental leave.",
+    answerPath: "answers/hr.md",
+    sources: apiSources,
+    failOn: ["contradicted"],
+    generatedAt: "2026-07-06T00:00:00.000Z",
+  });
+  assert.equal(apiVerificationResult.shouldFail, false);
+  assert.equal(apiVerificationResult.report.summary.verified, 1);
+  assert.equal(apiVerificationResult.report.answerPath, "answers/hr.md");
+
+  const apiReviewImportResult = api.importReviewerDecisionContentsResult(
+    `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,,
+`,
+    ["unsupported"],
+  );
+  assert.equal(apiReviewImportResult.shouldFail, false);
+  assert.equal(apiReviewImportResult.report.answerGroups[0]?.label, "HR answer");
+  assert.equal(apiReviewImportResult.report.answerGroups[0]?.summary.verified, 1);
+
+  const apiEvaluationFixtureResult = await api.evaluateFixtureContentResult({
+    fixturePath: join(repoRoot, "examples", "evaluations", "hr-policy.json"),
+    content: readFileSync(join(repoRoot, "examples", "evaluations", "hr-policy.json")),
+    generatedAt: "2026-07-06T00:00:00.000Z",
+  });
+  assert.equal(apiEvaluationFixtureResult.hasMismatch, false);
+  assert.equal(apiEvaluationFixtureResult.scorecard.summaryMatches, true);
+
   console.log(
-    "Smoke check passed: verify, PDF verify, verify-batch, import-review, and evaluate example flows succeeded.",
+    "Smoke check passed: CLI verify/import/evaluate flows and built package API helpers succeeded.",
   );
 } finally {
   rmSync(tempDir, { recursive: true, force: true });
