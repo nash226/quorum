@@ -221,6 +221,12 @@ const directFileReport = await verifyAnswerFileInputs({
   defaultTrustLevel: "high",
 });
 
+const gatedReportWithArgs = await verifyAnswerFileResult(
+  "examples/answers/hr-answer.md",
+  sources,
+  ["contradicted", "unsupported"],
+);
+
 const gatedReport = await verifyAnswerFileResult({
   answerPath: "examples/answers/hr-answer.md",
   answerLabel: "HR draft for approval",
@@ -323,12 +329,14 @@ const evaluationResult = await evaluateFixtureFilesResult({
 ```
 
 `verifyAnswerFile` accepts either positional arguments or a single options
-object with `answerPath`, `sources`, `generatedAt`, and `answerLabel`. The
-positional form still supports the optional fourth `answerLabel` argument, and
-the single-file options objects for `verifyAnswerFileResult`,
-`verifyAnswerFileInputs`, and `verifyAnswerFileInputsResult` also accept
-`answerLabel`, so workflow callers can keep a reviewer-facing label on
-single-answer file reports without mutating the returned report object.
+object with `answerPath`, `sources`, `generatedAt`, and `answerLabel`.
+`verifyAnswerFileResult` mirrors that flexibility: callers can pass either a
+single options object or positional arguments, using a third `failOn` array for
+the short form or the full `(answerPath, sources, generatedAt, answerLabel,
+failOn)` signature when they need all single-answer controls. The single-file
+options objects for `verifyAnswerFileInputs` and `verifyAnswerFileInputsResult`
+also accept `answerLabel`, so workflow callers can keep a reviewer-facing label
+on single-answer file reports without mutating the returned report object.
 
 For workflow runners that want the same recursive file discovery as the CLI,
 `verifyAnswerFileInputs` and `verifyAnswerFileInputsResult` accept the same
