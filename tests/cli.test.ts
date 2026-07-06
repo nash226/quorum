@@ -88,6 +88,7 @@ test("verify --help prints command-specific usage without requiring sources", as
   assert.equal(result.code, 0);
   assert.equal(result.stderr, "");
   assert.match(result.stdout, /^Quorum verify\n\nUsage:\n  quorum verify --answer <path\|->/);
+  assert.match(result.stdout, /--answer-label <label>\s+Reviewer-facing label to use instead of the path-derived default/);
   assert.match(result.stdout, /--review-csv-out <path>\s+Write a reviewer decision CSV/);
   assert.match(result.stdout, /--summary-csv-out <path>\s+Write a one-row summary CSV for this answer/);
 });
@@ -818,7 +819,7 @@ test("verify matches claims extracted from html table answers against html table
   }
 });
 
-test("verify records reviewer-friendly answer context in JSON and reviewer csv outputs", async () => {
+test("verify records an explicit reviewer-facing answer label in JSON and reviewer csv outputs", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-review-"));
 
   try {
@@ -835,6 +836,8 @@ test("verify records reviewer-friendly answer context in JSON and reviewer csv o
       "verify",
       "--answer",
       answerPath,
+      "--answer-label",
+      "HR reviewer packet",
       "--source",
       sourcePath,
       "--review-csv-out",
@@ -850,7 +853,7 @@ test("verify records reviewer-friendly answer context in JSON and reviewer csv o
     };
 
     assert.equal(report.answerPath, answerPath);
-    assert.equal(report.answerLabel, "answer");
+    assert.equal(report.answerLabel, "HR reviewer packet");
     assert.equal(report.answerPreview, "Employees receive 12 weeks of paid parental leave.");
     assert.equal(report.summary.verified, 1);
 
@@ -863,7 +866,7 @@ test("verify records reviewer-friendly answer context in JSON and reviewer csv o
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^answer,${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,clear,,true,claim_1,`,
+        `^HR reviewer packet,${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,clear,,true,claim_1,`,
       ),
     );
   } finally {

@@ -112,6 +112,8 @@ try {
     "verify",
     "--answer",
     "examples/answers/hr-answer.md",
+    "--answer-label",
+    "HR reviewer packet",
     "--source-dir",
     "examples/sources",
     "--out",
@@ -126,9 +128,12 @@ try {
 
   assert.match(singleStdout, /Quorum Verification Report/);
   assert.equal(readJson(singleReportPath).summary.contradicted, 1);
+  assert.equal(readJson(singleReportPath).answerLabel, "HR reviewer packet");
   assert.match(readFileSync(singleHtmlPath, "utf8"), /Quorum Review Console/);
   assert.match(readFileSync(singleReviewCsvPath, "utf8"), /^answer_label,answer_path,/);
+  assert.match(readFileSync(singleReviewCsvPath, "utf8"), /^HR reviewer packet,/m);
   assert.match(readFileSync(singleSummaryCsvPath, "utf8"), /^answer_label,answer_path,/);
+  assert.match(readFileSync(singleSummaryCsvPath, "utf8"), /^HR reviewer packet,/m);
 
   const pdfAnswerPath = join(tempDir, "pdf-answer.md");
   const pdfSourcePath = join(tempDir, "hr-policy.pdf");
