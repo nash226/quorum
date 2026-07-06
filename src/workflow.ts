@@ -3,6 +3,7 @@ import { extname, join, resolve } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import type {
   BatchVerificationReport,
+  BatchVerificationRunResult,
   BatchVerificationResult,
   ClaimVerdict,
   SingleVerificationResult,
@@ -269,6 +270,12 @@ export async function verifyBatchAnswers(
   return summarizeBatchVerification(answers, options.sources, generatedAt);
 }
 
+export async function verifyBatchAnswersResult(
+  options: BatchVerificationOptions,
+): Promise<BatchVerificationRunResult> {
+  return buildBatchVerificationResult(await verifyBatchAnswers(options), options.failOn);
+}
+
 export function verifyAnswers(
   options: InMemoryBatchVerificationOptions,
 ): BatchVerificationReport {
@@ -303,6 +310,12 @@ export function verifyAnswers(
   });
 
   return summarizeBatchVerification(answers, options.sources, generatedAt);
+}
+
+export function verifyAnswersResult(
+  options: InMemoryBatchVerificationOptions,
+): BatchVerificationRunResult {
+  return buildBatchVerificationResult(verifyAnswers(options), options.failOn);
 }
 
 export function verifyAnswerResult(
@@ -342,6 +355,22 @@ export async function verifyAnswerBatchContents(
   });
 }
 
+export async function verifyAnswerBatchContentsResult(
+  options: InMemoryBatchContentVerificationOptions,
+): Promise<BatchVerificationRunResult> {
+  const sources = await loadSourceDocumentsFromContent({
+    sources: options.sources,
+    defaultTrustLevel: options.defaultTrustLevel,
+  });
+
+  return verifyAnswersResult({
+    answers: options.answers,
+    sources,
+    failOn: options.failOn,
+    generatedAt: options.generatedAt,
+  });
+}
+
 export async function importReviewerDecisionFile(
   reviewCsvPath: string,
 ): Promise<ReviewerDecisionImportReport> {
@@ -373,6 +402,25 @@ function buildSingleVerificationResult(
     report,
     shouldFail: failVerdicts.length > 0,
     failVerdicts,
+  };
+}
+
+function buildBatchVerificationResult(
+  report: BatchVerificationReport,
+  failOn: ClaimVerdict[] | undefined,
+): BatchVerificationRunResult {
+  const orderedFailVerdicts = (failOn ?? []).filter((verdict, index, allVerdicts) => {
+    if (allVerdicts.indexOf(verdict) !== index) {
+      return false;
+    }
+
+    return report.answers.some((answer) => answer.failVerdicts.includes(verdict));
+  });
+
+  return {
+    report,
+    shouldFail: orderedFailVerdicts.length > 0,
+    failVerdicts: orderedFailVerdicts,
   };
 }
 

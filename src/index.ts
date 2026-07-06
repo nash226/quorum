@@ -2,6 +2,7 @@ export { verifyAnswer } from "./claim-verifier.js";
 export type {
   AtomicClaim,
   BatchVerificationReport,
+  BatchVerificationRunResult,
   BatchVerificationResult,
   ClaimAssessment,
   ClaimVerdict,
@@ -72,12 +73,15 @@ export {
   resolveSourcePaths,
   STDIN_ANSWER_PATH,
   verifyAnswers,
+  verifyAnswersResult,
   verifyAnswerFileResult,
   verifyAnswerBatchContents,
+  verifyAnswerBatchContentsResult,
   verifyAnswerContents,
   verifyAnswerContentsResult,
   verifyAnswerFile,
   verifyAnswerResult,
+  verifyBatchAnswersResult as verifyAnswerBatchResult,
   verifyBatchAnswers as verifyAnswerBatch,
 } from "./workflow.js";
 export type {
