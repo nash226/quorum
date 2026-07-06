@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -7,9 +7,14 @@ import {
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
   evaluateFixtureContent,
+  evaluateFixtureContentResult,
   evaluateFixtureContents,
+  evaluateFixtureContentsResult,
+  evaluateFixtureFileResult,
   evaluateFixtureFiles,
+  evaluateFixtureFilesResult,
   evaluateFixtures,
+  evaluateFixturesResult,
   hasEvaluationMismatch,
   importReviewerDecisionFile,
   importReviewerDecisionFileResult,
@@ -799,6 +804,128 @@ test("programmatic API rejects empty in-memory evaluation fixture JSON batches",
     }),
     /At least one in-memory evaluation fixture is required\./,
   );
+});
+
+test("programmatic API returns mismatch metadata for in-memory evaluation batches", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-eval-result-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "source.md");
+    const fixturePath = join(tempDir, "fixture.json");
+
+    await Promise.all([
+      writeFile(answerPath, "Refunds are available for 30 days from the purchase date.\n", "utf8"),
+      writeFile(sourcePath, "Refunds are available for 14 days from the purchase date.\n", "utf8"),
+    ]);
+
+    const result = await evaluateFixturesResult({
+      fixtures: [
+        {
+          name: "Refund mismatch fixture",
+          answerPath,
+          sourcePaths: [sourcePath],
+          expectedSummary: {
+            verified: 1,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+          },
+          expectedClaimVerdicts: ["verified"],
+        },
+      ],
+      fixturePaths: [fixturePath],
+      generatedAt: "2026-07-05T21:00:00.000Z",
+    });
+
+    assert.equal(result.shouldFail, true);
+    assert.equal(result.mismatchCount, 1);
+    assert.equal(result.scorecards.length, 1);
+    assert.equal(result.scorecards[0]?.fixturePath, fixturePath);
+    assert.equal(result.scorecards[0]?.report.generatedAt, "2026-07-05T21:00:00.000Z");
+    assert.equal(result.scorecards[0]?.summaryMatches, false);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API returns mismatch metadata for in-memory evaluation fixture JSON helpers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-eval-content-result-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "source.md");
+    const fixturePath = join(tempDir, "fixture.json");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const fixtureContent = JSON.stringify({
+      name: "HR match fixture",
+      answerPath,
+      sourcePaths: [sourcePath],
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      expectedClaimVerdicts: ["verified"],
+    });
+
+    const batchResult = await evaluateFixtureContentsResult({
+      fixtures: [
+        {
+          fixturePath,
+          content: fixtureContent,
+        },
+      ],
+      generatedAt: "2026-07-05T21:15:00.000Z",
+    });
+    const singleResult = await evaluateFixtureContentResult({
+      fixturePath,
+      content: fixtureContent,
+      generatedAt: "2026-07-05T21:15:00.000Z",
+    });
+
+    assert.equal(batchResult.shouldFail, false);
+    assert.equal(batchResult.mismatchCount, 0);
+    assert.equal(batchResult.scorecards[0]?.report.generatedAt, "2026-07-05T21:15:00.000Z");
+    assert.equal(singleResult.hasMismatch, false);
+    assert.equal(singleResult.scorecard.fixturePath, fixturePath);
+    assert.equal(singleResult.scorecard.report.generatedAt, "2026-07-05T21:15:00.000Z");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API returns mismatch metadata for fixture file evaluation helpers", async () => {
+  const batchResult = await evaluateFixtureFilesResult({
+    fixturePaths: [],
+    fixtureDirPaths: [join(process.cwd(), "examples/evaluations")],
+    generatedAt: "2026-07-05T21:30:00.000Z",
+  });
+  const singleResult = await evaluateFixtureFileResult(
+    join(process.cwd(), "examples/evaluations/hr-policy.json"),
+    {
+      generatedAt: "2026-07-05T21:30:00.000Z",
+    },
+  );
+  const contentResult = await evaluateFixtureContentResult({
+    fixturePath: join(process.cwd(), "examples/evaluations/hr-policy.json"),
+    content: await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json")),
+    generatedAt: "2026-07-05T21:30:00.000Z",
+  });
+
+  assert.equal(batchResult.shouldFail, false);
+  assert.equal(batchResult.mismatchCount, 0);
+  assert.equal(batchResult.scorecards.length, 2);
+  assert.equal(singleResult.hasMismatch, false);
+  assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
+  assert.equal(contentResult.hasMismatch, false);
+  assert.equal(contentResult.scorecard.fixtureName, "HR policy example");
 });
 
 test("programmatic API exports verification report renderers", () => {

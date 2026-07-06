@@ -14,11 +14,17 @@ export type {
 } from "./domain.js";
 export {
   evaluateFixtureContent,
+  evaluateFixtureContentResult,
   evaluateFixture,
+  evaluateFixtureResult,
   evaluateFixtureContents,
+  evaluateFixtureContentsResult,
   evaluateFixtures,
+  evaluateFixturesResult,
   evaluateFixtureFiles,
+  evaluateFixtureFilesResult,
   evaluateFixtureFile,
+  evaluateFixtureFileResult,
   hasEvaluationMismatch,
   renderEvaluationHtmlReport,
   loadEvaluationFixture,
@@ -31,8 +37,10 @@ export {
 } from "./evaluation.js";
 export type {
   EvaluationBatchOptions,
+  EvaluationBatchRunResult,
   EvaluationClaimScore,
   EvaluationFixture,
+  EvaluationFixtureRunResult,
   InMemoryEvaluationFixtureFileOptions,
   InMemoryEvaluationFixtureFileBatchOptions,
   InMemoryEvaluationFixtureInput,

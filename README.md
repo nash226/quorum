@@ -176,6 +176,7 @@ the CLI:
 
 ```ts
 import {
+  evaluateFixtureFilesResult,
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
   importReviewerDecisionFile,
@@ -253,6 +254,11 @@ const evaluationScorecards = await evaluateFixtures({
       expectedClaimVerdicts: ["contradicted", "verified", "unsupported"],
     },
   ],
+});
+
+const evaluationResult = await evaluateFixtureFilesResult({
+  fixturePaths: [],
+  fixtureDirPaths: ["examples/evaluations"],
 });
 ```
 
