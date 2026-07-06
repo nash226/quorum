@@ -39,6 +39,8 @@ import {
   renderReviewerDecisionCsv,
   renderSummaryCsv,
   renderTextReport,
+  resolveAnswerPaths,
+  resolveSourcePaths,
   shouldFailReport,
   verifyAnswers,
   verifyAnswersResult,
@@ -89,6 +91,51 @@ Employees receive 12 weeks of paid parental leave.
       unsupported: 0,
       needs_review: 0,
     });
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API resolves source and answer paths in CLI order", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-paths-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const nestedAnswerDir = join(answerDir, "nested");
+    const sourceDir = join(tempDir, "sources");
+    const nestedSourceDir = join(sourceDir, "nested");
+    const explicitAnswerPath = join(tempDir, "explicit-answer.md");
+    const explicitSourcePath = join(tempDir, "explicit-source.md");
+    const directoryAnswerPath = join(answerDir, "a-answer.md");
+    const nestedAnswerPath = join(nestedAnswerDir, "b-answer.txt");
+    const directorySourcePath = join(sourceDir, "a-source.md");
+    const nestedSourcePath = join(nestedSourceDir, "b-source.html");
+
+    await Promise.all([
+      mkdir(nestedAnswerDir, { recursive: true }),
+      mkdir(nestedSourceDir, { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(explicitAnswerPath, "Explicit answer.\n", "utf8"),
+      writeFile(directoryAnswerPath, "Directory answer.\n", "utf8"),
+      writeFile(nestedAnswerPath, "Nested answer.\n", "utf8"),
+      writeFile(explicitSourcePath, "Explicit source.\n", "utf8"),
+      writeFile(directorySourcePath, "Directory source.\n", "utf8"),
+      writeFile(
+        nestedSourcePath,
+        "<html><body><main><p>Nested source.</p></main></body></html>",
+        "utf8",
+      ),
+    ]);
+
+    assert.deepEqual(
+      await resolveAnswerPaths([explicitAnswerPath], [answerDir]),
+      [explicitAnswerPath, directoryAnswerPath, nestedAnswerPath],
+    );
+    assert.deepEqual(
+      await resolveSourcePaths([explicitSourcePath], [sourceDir]),
+      [explicitSourcePath, directorySourcePath, nestedSourcePath],
+    );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
