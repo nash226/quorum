@@ -187,6 +187,8 @@ import {
   verifyAnswersResult,
   verifyAnswerBatchContents,
   verifyAnswerBatchContentsResult,
+  verifyAnswerBatchFileInputs,
+  verifyAnswerBatchFileInputsResult,
   verifyAnswerContents,
   verifyAnswerContentsResult,
   verifyAnswerBatch,
@@ -244,6 +246,24 @@ const batchResult = await verifyAnswerBatchResult({
   failOn: ["contradicted", "unsupported"],
 });
 
+const directBatchReport = await verifyAnswerBatchFileInputs({
+  answerPaths: ["examples/answers/hr-answer.md"],
+  answerDirPaths: [],
+  sourcePaths: [],
+  sourceDirs: ["examples/sources"],
+  defaultTrustLevel: "high",
+  failOn: ["contradicted", "unsupported"],
+});
+
+const directBatchResult = await verifyAnswerBatchFileInputsResult({
+  answerPaths: ["examples/answers/hr-answer.md"],
+  answerDirPaths: [],
+  sourcePaths: [],
+  sourceDirs: ["examples/sources"],
+  defaultTrustLevel: "high",
+  failOn: ["contradicted", "unsupported"],
+});
+
 const importedReview = await importReviewerDecisionFile("reports/hr-review.csv");
 
 const importedEmbeddedReview = importReviewerDecisionContents(
@@ -291,7 +311,9 @@ single-answer file reports without mutating the returned report object.
 For workflow runners that want the same recursive file discovery as the CLI,
 `verifyAnswerFileInputs` and `verifyAnswerFileInputsResult` accept the same
 `sourcePaths` plus `sourceDirs` shape as the CLI for a single answer, and
-Quorum also exports `resolveSourcePaths`, `resolveAnswerPaths`, and
+`verifyAnswerBatchFileInputs` and `verifyAnswerBatchFileInputsResult` extend
+that same one-call pattern to batch file verification. Quorum also exports
+`resolveSourcePaths`, `resolveAnswerPaths`, and
 `resolveEvaluationFixturePaths` so callers can expand explicit files plus
 nested directories in the same stable order before handing the results to
 verification or evaluation helpers:
@@ -448,9 +470,9 @@ const embeddedBatchWithRawSourcesResult = await verifyAnswerBatchContentsResult(
 The `*Result` helpers wrap a single verification report with `shouldFail` and
 `failVerdicts`, so embedded callers can apply the same fail-policy logic as
 the CLI without converting one answer into a batch request. Batch workflows
-can now use `verifyAnswerBatchResult`, `verifyAnswersResult`, and
-`verifyAnswerBatchContentsResult` for the same top-level `shouldFail` and
-`failVerdicts` summary across a full answer set.
+can now use `verifyAnswerBatchResult`, `verifyAnswerBatchFileInputsResult`,
+`verifyAnswersResult`, and `verifyAnswerBatchContentsResult` for the same
+top-level `shouldFail` and `failVerdicts` summary across a full answer set.
 
 Evaluation workflows can also keep fixture definitions in memory and score them
 in one call, which helps agent teams avoid writing temp fixture JSON files:
