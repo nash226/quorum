@@ -256,6 +256,13 @@ test("programmatic API resolves source and answer paths in CLI order", async () 
   }
 });
 
+test("programmatic API reports missing explicit batch answer paths during resolution", async () => {
+  await assert.rejects(
+    resolveAnswerPaths(["missing-answer.md"], []),
+    /Answer file not found: missing-answer\.md/,
+  );
+});
+
 test("programmatic API batches file and directory answers with fail verdicts", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-batch-"));
 
