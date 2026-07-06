@@ -183,8 +183,11 @@ import {
   verifyAnswers,
   verifyAnswerBatchContents,
   verifyAnswerContents,
+  verifyAnswerContentsResult,
   verifyAnswerBatch,
   verifyAnswerFile,
+  verifyAnswerFileResult,
+  verifyAnswerResult,
 } from "quorum";
 
 const sources = await loadSources({
@@ -194,6 +197,12 @@ const sources = await loadSources({
 });
 
 const report = await verifyAnswerFile("examples/answers/hr-answer.md", sources);
+
+const gatedReport = await verifyAnswerFileResult({
+  answerPath: "examples/answers/hr-answer.md",
+  sources,
+  failOn: ["contradicted", "unsupported"],
+});
 
 const batchReport = await verifyAnswerBatch({
   answerPaths: ["examples/answers/hr-answer.md"],
@@ -238,6 +247,24 @@ const embeddedSingle = await verifyAnswerContents({
     },
   ],
   defaultTrustLevel: "high",
+});
+
+const embeddedSingleResult = verifyAnswerResult({
+  answer: "Employees receive 16 weeks of paid parental leave.",
+  answerLabel: "HR escalation draft",
+  sources,
+  failOn: ["contradicted"],
+});
+
+const embeddedRawResult = await verifyAnswerContentsResult({
+  answer: "Refunds are available for 30 days from the purchase date.",
+  sources: [
+    {
+      sourcePath: "help/refunds.html",
+      content: "<html><body><main><p>Refunds are available for 30 days from the purchase date.</p></main></body></html>",
+    },
+  ],
+  failOn: ["contradicted"],
 });
 
 const inMemoryBatch = verifyAnswers({
@@ -313,6 +340,10 @@ Employees receive 12 weeks of paid parental leave.
   failOn: ["contradicted"],
 });
 ```
+
+The `*Result` helpers wrap a single verification report with `shouldFail` and
+`failVerdicts`, so embedded callers can apply the same fail-policy logic as
+the CLI without converting one answer into a batch request.
 
 Evaluation workflows can also keep fixture definitions in memory and score them
 in one call, which helps agent teams avoid writing temp fixture JSON files:
