@@ -659,6 +659,49 @@ test("programmatic API returns fail-policy metadata for one answer file", async 
   }
 });
 
+test("programmatic API supports positional verifyAnswerFileResult calls", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-single-file-result-positional-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 16 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const sources = await loadSources({
+      sourcePaths: [sourcePath],
+      sourceDirs: [],
+      defaultTrustLevel: "high",
+    });
+
+    const resultWithFailOnOnly = await verifyAnswerFileResult(answerPath, sources, [
+      "contradicted",
+      "unsupported",
+    ]);
+    const resultWithAllArgs = await verifyAnswerFileResult(
+      answerPath,
+      sources,
+      "2026-07-06T21:00:00.000Z",
+      "HR escalation draft",
+      ["contradicted"],
+    );
+
+    assert.equal(resultWithFailOnOnly.report.answerPath, answerPath);
+    assert.equal(resultWithFailOnOnly.shouldFail, true);
+    assert.deepEqual(resultWithFailOnOnly.failVerdicts, ["contradicted"]);
+
+    assert.equal(resultWithAllArgs.report.generatedAt, "2026-07-06T21:00:00.000Z");
+    assert.equal(resultWithAllArgs.report.answerLabel, "HR escalation draft");
+    assert.equal(resultWithAllArgs.shouldFail, true);
+    assert.deepEqual(resultWithAllArgs.failVerdicts, ["contradicted"]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("programmatic API returns fail-policy metadata for file inputs", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-single-file-input-result-"));
 
