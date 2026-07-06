@@ -52,6 +52,8 @@ import {
   verifyAnswerBatch,
   verifyAnswerBatchResult,
   verifyAnswerFile,
+  verifyAnswerFileInputs,
+  verifyAnswerFileInputsResult,
   verifyAnswerFileResult,
   verifyAnswerResult,
 } from "../src/index.js";
@@ -85,6 +87,50 @@ Employees receive 12 weeks of paid parental leave.
 
     assert.equal(report.answerPath, answerPath);
     assert.equal(report.generatedAt, "2026-07-05T00:00:00.000Z");
+    assert.deepEqual(report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API verifies file inputs without a separate source-loading step", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-file-inputs-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+    const sourcePath = join(sourceDir, "policy.md");
+
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+        "utf8",
+      ),
+    ]);
+
+    const report = await verifyAnswerFileInputs({
+      answerPath,
+      sourcePaths: [],
+      sourceDirs: [sourceDir],
+      generatedAt: "2026-07-06T10:00:00.000Z",
+    });
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.generatedAt, "2026-07-06T10:00:00.000Z");
+    assert.equal(report.sources[0]?.title, "HR Policy");
     assert.deepEqual(report.summary, {
       verified: 1,
       contradicted: 0,
@@ -433,6 +479,37 @@ test("programmatic API returns fail-policy metadata for one answer file", async 
 
     assert.equal(result.report.generatedAt, "2026-07-05T03:35:00.000Z");
     assert.equal(result.report.answerPath, answerPath);
+    assert.equal(result.shouldFail, true);
+    assert.deepEqual(result.failVerdicts, ["contradicted"]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API returns fail-policy metadata for file inputs", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-single-file-input-result-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 16 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const result = await verifyAnswerFileInputsResult({
+      answerPath,
+      sourcePaths: [sourcePath],
+      sourceDirs: [],
+      defaultTrustLevel: "medium",
+      failOn: ["contradicted"],
+      generatedAt: "2026-07-06T11:00:00.000Z",
+    });
+
+    assert.equal(result.report.generatedAt, "2026-07-06T11:00:00.000Z");
+    assert.equal(result.report.answerPath, answerPath);
+    assert.equal(result.report.sources[0]?.trustLevel, "medium");
     assert.equal(result.shouldFail, true);
     assert.deepEqual(result.failVerdicts, ["contradicted"]);
   } finally {
