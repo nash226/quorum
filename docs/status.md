@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1fa7f96` on 2026-07-05, feat: add reviewer import fail policy helpers
+- Latest shipped change: `960af42` on 2026-07-05, add batch fail policy result helpers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-05 | [#192](https://github.com/nash226/quorum/pull/192) | add batch fail policy result helpers | `960af42` |
 | 2026-07-05 | [#191](https://github.com/nash226/quorum/pull/191) | feat: add reviewer import fail policy helpers | `1fa7f96` |
 | 2026-07-05 | [#190](https://github.com/nash226/quorum/pull/190) | add single-answer fail policy api | `a9886b4` |
 | 2026-07-05 | [#189](https://github.com/nash226/quorum/pull/189) | add in-memory batch verify helper | `8e184c5` |
@@ -53,5 +54,4 @@
 | 2026-07-05 | [#187](https://github.com/nash226/quorum/pull/187) | add in-memory verify helper | `738302c` |
 | 2026-07-05 | [#186](https://github.com/nash226/quorum/pull/186) | add in-memory evaluation fixture api | `0abe4ee` |
 | 2026-07-05 | [#185](https://github.com/nash226/quorum/pull/185) | enrich evaluation mismatch csv context | `57726f1` |
-| 2026-07-05 | [#184](https://github.com/nash226/quorum/pull/184) | add batch evaluation api | `0cf10ff` |
 
