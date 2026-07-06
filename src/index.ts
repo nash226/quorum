@@ -129,3 +129,4 @@ export type {
   SourceLoadOptions,
 } from "./workflow.js";
 export { parseSource, parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
+export { renderAnswerLabel, renderAnswerLabels, renderAnswerPreview } from "./text.js";
