@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ff0eb42` on 2026-07-06, add batch file-input verification helpers
+- Latest shipped change: `ff2b74f` on 2026-07-06, feat: support reviewer import option helpers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-06 | [#202](https://github.com/nash226/quorum/pull/202) | feat: support reviewer import option helpers | `ff2b74f` |
 | 2026-07-06 | [#201](https://github.com/nash226/quorum/pull/201) | add batch file-input verification helpers | `ff0eb42` |
 | 2026-07-06 | [#200](https://github.com/nash226/quorum/pull/200) | add file answer label API | `d6b6865` |
 | 2026-07-06 | [#199](https://github.com/nash226/quorum/pull/199) | add file-input verification helpers | `15ec0eb` |
@@ -53,5 +54,4 @@
 | 2026-07-06 | [#197](https://github.com/nash226/quorum/pull/197) | publish built npm package | `3b4e868` |
 | 2026-07-06 | [#196](https://github.com/nash226/quorum/pull/196) | export report policy helpers | `eaea613` |
 | 2026-07-06 | [#195](https://github.com/nash226/quorum/pull/195) | smoke built package api | `4207f04` |
-| 2026-07-06 | [#194](https://github.com/nash226/quorum/pull/194) | add evaluation result helpers | `49bcf1e` |
 
