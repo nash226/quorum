@@ -30,9 +30,12 @@ import {
   verifyAnswers,
   verifyAnswerBatchContents,
   verifyAnswerContents,
+  verifyAnswerContentsResult,
   verifyAnswer,
   verifyAnswerBatch,
   verifyAnswerFile,
+  verifyAnswerFileResult,
+  verifyAnswerResult,
 } from "../src/index.js";
 
 test("programmatic API verifies an answer file against loaded sources", async () => {
@@ -339,6 +342,87 @@ test("programmatic API verifies one in-memory answer against raw source content"
     unsupported: 0,
     needs_review: 0,
   });
+});
+
+test("programmatic API returns fail-policy metadata for one answer file", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-single-file-result-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 16 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const sources = await loadSources({
+      sourcePaths: [sourcePath],
+      sourceDirs: [],
+      defaultTrustLevel: "high",
+    });
+    const result = await verifyAnswerFileResult({
+      answerPath,
+      sources,
+      failOn: ["contradicted", "unsupported"],
+      generatedAt: "2026-07-05T03:35:00.000Z",
+    });
+
+    assert.equal(result.report.generatedAt, "2026-07-05T03:35:00.000Z");
+    assert.equal(result.report.answerPath, answerPath);
+    assert.equal(result.shouldFail, true);
+    assert.deepEqual(result.failVerdicts, ["contradicted"]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("programmatic API returns fail-policy metadata for one in-memory answer", () => {
+  const result = verifyAnswerResult({
+    answer: "Employees receive 16 weeks of paid parental leave.",
+    answerLabel: "HR escalation draft",
+    sources: [
+      {
+        id: "source_1",
+        title: "Benefits policy",
+        trustLevel: "high",
+        content: "Employees receive 12 weeks of paid parental leave.",
+      },
+    ],
+    failOn: ["contradicted"],
+    generatedAt: "2026-07-05T03:40:00.000Z",
+  });
+
+  assert.equal(result.report.generatedAt, "2026-07-05T03:40:00.000Z");
+  assert.equal(result.report.answerLabel, "HR escalation draft");
+  assert.equal(result.report.answerPath, undefined);
+  assert.equal(result.shouldFail, true);
+  assert.deepEqual(result.failVerdicts, ["contradicted"]);
+});
+
+test("programmatic API returns fail-policy metadata for one raw-content verification", async () => {
+  const result = await verifyAnswerContentsResult({
+    answer: "Employees receive 12 weeks of paid parental leave.",
+    answerPath: "answers/hr.md",
+    sources: [
+      {
+        sourcePath: "policies/hr-policy.md",
+        content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+      },
+    ],
+    failOn: ["unsupported"],
+    generatedAt: "2026-07-05T03:42:00.000Z",
+  });
+
+  assert.equal(result.report.generatedAt, "2026-07-05T03:42:00.000Z");
+  assert.equal(result.report.answerPath, "answers/hr.md");
+  assert.equal(result.shouldFail, false);
+  assert.deepEqual(result.failVerdicts, []);
 });
 
 test("programmatic API batches in-memory answers against raw source content", async () => {
