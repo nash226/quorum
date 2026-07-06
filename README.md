@@ -370,7 +370,11 @@ const scorecards = await evaluateFixtures({
 
 Reviewer import helpers such as `importReviewerDecisions` and
 `renderReviewerDecisionImportMarkdownReport` are also exported for teams that
-already manage CSV content in memory. Verification report helpers such as
+already manage CSV content in memory. `importReviewerDecisionsResult` and
+`importReviewerDecisionFileResult` wrap those imported reports with
+`shouldFail` and `failVerdicts`, so workflow callers can enforce the same
+reviewer-aware fail policy as `import-review --fail-on` without reimplementing
+summary checks. Verification report helpers such as
 `renderTextReport`, `renderMarkdownReport`, `renderHtmlReport`,
 `renderReviewerDecisionCsv`, and the batch renderer variants are exported too,
 so package consumers can generate the same human-review artifacts as the CLI.
