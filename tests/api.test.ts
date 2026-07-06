@@ -10,7 +10,9 @@ import {
   evaluateFixtures,
   hasEvaluationMismatch,
   importReviewerDecisionFile,
+  importReviewerDecisionFileResult,
   importReviewerDecisions,
+  importReviewerDecisionsResult,
   loadEvaluationFixtureFromContent,
   loadSources,
   loadSourcesFromContent,
@@ -765,6 +767,30 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
   }
 });
 
+test("programmatic API applies fail policy to imported reviewer decision csv files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-import-result-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    await writeFile(
+      reviewCsvPath,
+      `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,unsupported,Needs policy follow-up
+`,
+      "utf8",
+    );
+
+    const result = await importReviewerDecisionFileResult(reviewCsvPath, ["unsupported"]);
+
+    assert.equal(result.shouldFail, true);
+    assert.deepEqual(result.failVerdicts, ["unsupported"]);
+    assert.equal(result.report.summary.reviewedClaims, 1);
+    assert.equal(result.report.summary.unsupported, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("programmatic API exports reviewer import helpers for in-memory callers", () => {
   const report = importReviewerDecisions(`claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
 claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,,
@@ -775,6 +801,20 @@ claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched appr
   assert.equal(report.summary.pendingClaims, 1);
   assert.match(markdown, /# Quorum Reviewer Decision Import/);
   assert.match(markdown, /- Pending claims: 1/);
+});
+
+test("programmatic API exports reviewer import fail-policy helpers for in-memory callers", () => {
+  const result = importReviewerDecisionsResult(
+    `claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+claim_1,Employees receive free catered lunch every day.,unsupported,No approved source matched strongly enough,,,unsupported,Needs People Ops review
+`,
+    ["unsupported"],
+  );
+
+  assert.equal(result.shouldFail, true);
+  assert.deepEqual(result.failVerdicts, ["unsupported"]);
+  assert.equal(result.report.summary.totalClaims, 1);
+  assert.equal(result.report.summary.unsupported, 1);
 });
 
 test("programmatic API exports batch evaluation helpers", async () => {

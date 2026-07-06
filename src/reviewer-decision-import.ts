@@ -59,6 +59,12 @@ export interface ReviewerDecisionImportReport {
   } & Record<ClaimVerdict, number>;
 }
 
+export interface ReviewerDecisionImportResult {
+  report: ReviewerDecisionImportReport;
+  shouldFail: boolean;
+  failVerdicts: ClaimVerdict[];
+}
+
 export interface ReviewerDecisionGroup {
   answerLabel?: string;
   answerPath?: string;
@@ -138,6 +144,13 @@ export function importReviewerDecisions(
     answerGroups: groupImportedClaims(claims, answerGroupSeeds),
     summary,
   };
+}
+
+export function importReviewerDecisionsResult(
+  csvContent: string,
+  failOn: ClaimVerdict[] = [],
+): ReviewerDecisionImportResult {
+  return buildReviewerDecisionImportResult(importReviewerDecisions(csvContent), failOn);
 }
 
 export function renderReviewerDecisionImportReport(
@@ -857,6 +870,19 @@ function groupImportedClaims(
   }
 
   return [...groups.values()];
+}
+
+function buildReviewerDecisionImportResult(
+  report: ReviewerDecisionImportReport,
+  failOn: ClaimVerdict[],
+): ReviewerDecisionImportResult {
+  const failVerdicts = matchingFailVerdicts(report, failOn);
+
+  return {
+    report,
+    shouldFail: failVerdicts.length > 0,
+    failVerdicts,
+  };
 }
 
 function createEmptyImportSummary(): ReviewerDecisionImportReport["summary"] {

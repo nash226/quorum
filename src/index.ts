@@ -40,6 +40,7 @@ export type {
 } from "./evaluation.js";
 export {
   importReviewerDecisions,
+  importReviewerDecisionsResult,
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
@@ -49,6 +50,7 @@ export type {
   ImportedReviewerDecision,
   ReviewerDecisionGroup,
   ReviewerDecisionImportReport,
+  ReviewerDecisionImportResult,
 } from "./reviewer-decision-import.js";
 export {
   renderBatchHtmlReport,
@@ -63,6 +65,7 @@ export {
 } from "./report-renderer.js";
 export {
   importReviewerDecisionFile,
+  importReviewerDecisionFileResult,
   loadSourceDocuments as loadSources,
   loadSourceDocumentsFromContent as loadSourcesFromContent,
   resolveAnswerPaths,
