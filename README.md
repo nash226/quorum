@@ -176,6 +176,8 @@ the CLI:
 
 ```ts
 import {
+  importReviewerDecisionContents,
+  importReviewerDecisionContentsResult,
   importReviewerDecisionFile,
   evaluateFixtures,
   loadSources,
@@ -222,6 +224,19 @@ const batchResult = await verifyAnswerBatchResult({
 });
 
 const importedReview = await importReviewerDecisionFile("reports/hr-review.csv");
+
+const importedEmbeddedReview = importReviewerDecisionContents(
+  `claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,,
+`,
+);
+
+const importedEmbeddedReviewResult = importReviewerDecisionContentsResult(
+  `claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+claim_1,Employees receive free catered lunch every day.,unsupported,No approved source matched strongly enough,,,unsupported,Needs People Ops review
+`,
+  ["unsupported"],
+);
 
 const evaluationScorecards = await evaluateFixtures({
   fixtures: [
@@ -410,8 +425,11 @@ const scorecards = await evaluateFixtures({
 
 Reviewer import helpers such as `importReviewerDecisions` and
 `renderReviewerDecisionImportMarkdownReport` are also exported for teams that
-already manage CSV content in memory. `importReviewerDecisionsResult` and
-`importReviewerDecisionFileResult` wrap those imported reports with
+already manage CSV content in memory. `importReviewerDecisionContents` and
+`importReviewerDecisionContentsResult` provide the same workflow-oriented API
+shape as the verify helpers when callers already have CSV text, while
+`importReviewerDecisionsResult` and `importReviewerDecisionFileResult` wrap
+those imported reports with
 `shouldFail` and `failVerdicts`, so workflow callers can enforce the same
 reviewer-aware fail policy as `import-review --fail-on` without reimplementing
 summary checks. Verification report helpers such as

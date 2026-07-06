@@ -371,6 +371,19 @@ export async function verifyAnswerBatchContentsResult(
   });
 }
 
+export function importReviewerDecisionContents(
+  reviewCsvContent: string,
+): ReviewerDecisionImportReport {
+  return importReviewerDecisions(reviewCsvContent);
+}
+
+export function importReviewerDecisionContentsResult(
+  reviewCsvContent: string,
+  failOn: ClaimVerdict[] = [],
+): ReviewerDecisionImportResult {
+  return importReviewerDecisionsResult(reviewCsvContent, failOn);
+}
+
 export async function importReviewerDecisionFile(
   reviewCsvPath: string,
 ): Promise<ReviewerDecisionImportReport> {

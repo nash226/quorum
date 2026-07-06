@@ -66,6 +66,8 @@ export {
 } from "./report-renderer.js";
 export {
   importReviewerDecisionFile,
+  importReviewerDecisionContents,
+  importReviewerDecisionContentsResult,
   importReviewerDecisionFileResult,
   loadSourceDocuments as loadSources,
   loadSourceDocumentsFromContent as loadSourcesFromContent,
