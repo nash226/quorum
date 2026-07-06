@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { resolve } from "node:path";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import test from "node:test";
 import {
   evaluateFixtureContent,
@@ -95,6 +97,70 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       (scorecard) => scorecard.report.generatedAt === "2026-07-05T10:07:00.000Z",
     ),
   );
+});
+
+test("evaluates fixture sources discovered from source directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-eval-source-dirs-"));
+
+  try {
+    const answersDir = join(tempDir, "answers");
+    const sourcesDir = join(tempDir, "sources");
+    const fixtureDir = join(tempDir, "fixtures");
+    const answerPath = join(answersDir, "support-answer.md");
+    const sourcePath = join(sourcesDir, "support-playbook.md");
+    const fixturePath = join(fixtureDir, "support-policy.json");
+
+    await Promise.all([
+      mkdir(answersDir, { recursive: true }),
+      mkdir(sourcesDir, { recursive: true }),
+      mkdir(fixtureDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(
+        answerPath,
+        "Refunds are available for 30 days from the purchase date.\n",
+        "utf8",
+      ),
+      writeFile(
+        sourcePath,
+        "Refunds are available for 30 days from the purchase date.\n",
+        "utf8",
+      ),
+      writeFile(
+        fixturePath,
+        JSON.stringify(
+          {
+            name: "Support policy from source directory",
+            answerPath: "../answers/support-answer.md",
+            sourceDirs: ["../sources"],
+            expectedSummary: {
+              verified: 1,
+              contradicted: 0,
+              unsupported: 0,
+              needs_review: 0,
+            },
+            expectedClaimVerdicts: ["verified"],
+          },
+          null,
+          2,
+        ),
+        "utf8",
+      ),
+    ]);
+
+    const scorecard = await evaluateFixtureFile(fixturePath, {
+      generatedAt: "2026-07-06T14:00:00.000Z",
+    });
+
+    assert.equal(scorecard.fixtureName, "Support policy from source directory");
+    assert.deepEqual(scorecard.sourcePaths, [sourcePath]);
+    assert.equal(scorecard.summaryMatches, true);
+    assert.equal(scorecard.matchedClaims, 1);
+    assert.equal(scorecard.score, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("renders mismatch details in evaluation scorecards", () => {
