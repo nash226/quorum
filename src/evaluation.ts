@@ -44,6 +44,16 @@ export interface EvaluationBatchOptions {
   generatedAt?: string;
 }
 
+export interface SingleEvaluationFileOptions {
+  fixturePath: string;
+  generatedAt?: string;
+}
+
+export interface SingleEvaluationFileResultOptions {
+  fixturePath: string;
+  generatedAt?: string;
+}
+
 export interface EvaluationFixtureRunResult {
   scorecard: EvaluationScorecard;
   hasMismatch: boolean;
@@ -173,25 +183,47 @@ export async function evaluateFixtureResult(
 
 export async function evaluateFixtureFile(
   fixturePath: string,
+  options?: {
+    generatedAt?: string;
+  },
+): Promise<EvaluationScorecard>;
+export async function evaluateFixtureFile(
+  options: SingleEvaluationFileOptions,
+): Promise<EvaluationScorecard>;
+export async function evaluateFixtureFile(
+  fixturePathOrOptions: string | SingleEvaluationFileOptions,
   options: {
     generatedAt?: string;
   } = {},
 ): Promise<EvaluationScorecard> {
-  const fixture = await loadEvaluationFixture(fixturePath);
+  const normalizedOptions = normalizeSingleEvaluationFileOptions(fixturePathOrOptions, options);
+  const fixture = await loadEvaluationFixture(normalizedOptions.fixturePath);
   return evaluateFixture(fixture, {
-    baseDir: dirname(fixturePath),
-    fixturePath,
-    generatedAt: options.generatedAt,
+    baseDir: dirname(normalizedOptions.fixturePath),
+    fixturePath: normalizedOptions.fixturePath,
+    generatedAt: normalizedOptions.generatedAt,
   });
 }
 
 export async function evaluateFixtureFileResult(
   fixturePath: string,
+  options?: {
+    generatedAt?: string;
+  },
+): Promise<EvaluationFixtureRunResult>;
+export async function evaluateFixtureFileResult(
+  options: SingleEvaluationFileResultOptions,
+): Promise<EvaluationFixtureRunResult>;
+export async function evaluateFixtureFileResult(
+  fixturePathOrOptions: string | SingleEvaluationFileResultOptions,
   options: {
     generatedAt?: string;
   } = {},
 ): Promise<EvaluationFixtureRunResult> {
-  return buildEvaluationFixtureResult(await evaluateFixtureFile(fixturePath, options));
+  const normalizedOptions = normalizeSingleEvaluationFileOptions(fixturePathOrOptions, options);
+  return buildEvaluationFixtureResult(
+    await evaluateFixtureFile(normalizedOptions),
+  );
 }
 
 export async function evaluateFixtures(
@@ -1003,6 +1035,22 @@ function dedupePathsInOrder(paths: string[]): string[] {
   }
 
   return uniquePaths;
+}
+
+function normalizeSingleEvaluationFileOptions(
+  fixturePathOrOptions: string | SingleEvaluationFileOptions,
+  options: {
+    generatedAt?: string;
+  } = {},
+): SingleEvaluationFileOptions {
+  if (typeof fixturePathOrOptions === "string") {
+    return {
+      fixturePath: fixturePathOrOptions,
+      generatedAt: options.generatedAt,
+    };
+  }
+
+  return fixturePathOrOptions;
 }
 
 function trimTrailingBlankLines(lines: string[]): string[] {
