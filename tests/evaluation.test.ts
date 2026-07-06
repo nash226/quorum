@@ -40,12 +40,10 @@ test("loads and evaluates the HR example fixture", async () => {
 });
 
 test("evaluates fixture files relative to the fixture directory", async () => {
-  const scorecard = await evaluateFixtureFile(
-    resolve("examples/evaluations/support-policy.json"),
-    {
-      generatedAt: "2026-07-05T10:05:00.000Z",
-    },
-  );
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support-policy.json"),
+    generatedAt: "2026-07-05T10:05:00.000Z",
+  });
 
   assert.equal(scorecard.fixtureName, "Support policy example");
   assert.deepEqual(scorecard.sourceDirs, []);
