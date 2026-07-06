@@ -153,6 +153,11 @@ export async function resolveAnswerPaths(
   answerPaths: string[],
   answerDirs: string[],
 ): Promise<string[]> {
+  await Promise.all(
+    answerPaths
+      .filter((answerPath) => answerPath !== "-")
+      .map((answerPath) => ensureFilePath(answerPath, "Answer")),
+  );
   const directoryFiles = (
     await Promise.all(answerDirs.map((answerDir) => listAnswerFiles(answerDir)))
   ).flat();

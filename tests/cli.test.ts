@@ -170,6 +170,19 @@ test("verify-batch reports a file passed to --answer-dir with a clear error", as
   );
 });
 
+test("verify-batch reports a missing explicit answer file with a clear error", async () => {
+  await assert.rejects(
+    runCli([
+      "verify-batch",
+      "--answer",
+      "does-not-exist.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+    ]),
+    /Answer file not found: does-not-exist\.md/,
+  );
+});
+
 test("import-review reports a missing reviewer csv with a clear error", async () => {
   await assert.rejects(
     runCli(["import-review", "--review-csv", "missing-review.csv"]),
