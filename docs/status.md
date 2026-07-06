@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bc1a25b` on 2026-07-06, cover path discovery helpers
+- Latest shipped change: `15ec0eb` on 2026-07-06, add file-input verification helpers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-06 | [#199](https://github.com/nash226/quorum/pull/199) | add file-input verification helpers | `15ec0eb` |
 | 2026-07-06 | [#198](https://github.com/nash226/quorum/pull/198) | cover path discovery helpers | `bc1a25b` |
 | 2026-07-06 | [#197](https://github.com/nash226/quorum/pull/197) | publish built npm package | `3b4e868` |
 | 2026-07-06 | [#196](https://github.com/nash226/quorum/pull/196) | export report policy helpers | `eaea613` |
@@ -53,5 +54,4 @@
 | 2026-07-06 | [#194](https://github.com/nash226/quorum/pull/194) | add evaluation result helpers | `49bcf1e` |
 | 2026-07-06 | [#193](https://github.com/nash226/quorum/pull/193) | add reviewer import content helpers | `563a3b5` |
 | 2026-07-05 | [#192](https://github.com/nash226/quorum/pull/192) | add batch fail policy result helpers | `960af42` |
-| 2026-07-05 | [#191](https://github.com/nash226/quorum/pull/191) | feat: add reviewer import fail policy helpers | `1fa7f96` |
 
