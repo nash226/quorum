@@ -303,6 +303,7 @@ const evaluationScorecards = await evaluateFixtures({
     {
       name: "HR policy fixture",
       answerPath: "examples/answers/hr-answer.md",
+      answerLabel: "HR reviewer packet",
       sourceDirs: ["examples/sources"],
       expectedSummary: {
         verified: 1,
@@ -653,9 +654,11 @@ programmatic helpers.
 Each evaluation fixture can mix explicit `sourcePaths` with recursive
 `sourceDirs`, so domain scorecards can point at a maintained source bundle
 without rewriting every fixture when a benchmark adds another approved
-document. Evaluation scorecards and `--summary-csv-out` exports preserve those
-configured source directories alongside the resolved source files so drift
-reviews can see both the maintained bundle and the exact documents loaded.
+document. Fixtures can also set `answerLabel` to preserve the reviewer-facing
+name of an answer alongside its file path. Evaluation scorecards and
+`--summary-csv-out` exports preserve those configured source directories,
+resolved source files, and optional answer labels so drift reviews can see both
+the maintained bundle and the reviewer-facing context loaded for each answer.
 
 The CLI can run those same fixtures directly:
 
