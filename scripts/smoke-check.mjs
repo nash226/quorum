@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -258,6 +258,42 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
   });
   assert.equal(apiEvaluationFixtureResult.hasMismatch, false);
   assert.equal(apiEvaluationFixtureResult.scorecard.summaryMatches, true);
+
+  const resolverDir = join(tempDir, "resolver-fixtures");
+  const resolverAnswerDir = join(resolverDir, "answers");
+  const resolverNestedAnswerDir = join(resolverAnswerDir, "nested");
+  const resolverSourceDir = join(resolverDir, "sources");
+  const resolverNestedSourceDir = join(resolverSourceDir, "nested");
+  const explicitAnswerPath = join(resolverDir, "explicit-answer.md");
+  const explicitSourcePath = join(resolverDir, "explicit-source.md");
+  const directoryAnswerPath = join(resolverAnswerDir, "a-answer.md");
+  const nestedAnswerPath = join(resolverNestedAnswerDir, "b-answer.txt");
+  const directorySourcePath = join(resolverSourceDir, "a-source.md");
+  const nestedSourcePath = join(resolverNestedSourceDir, "b-source.html");
+
+  mkdirSync(resolverNestedAnswerDir, { recursive: true });
+  mkdirSync(resolverNestedSourceDir, { recursive: true });
+  writeFileSync(explicitAnswerPath, "Explicit answer.\n", "utf8");
+  writeFileSync(directoryAnswerPath, "Directory answer.\n", "utf8");
+  writeFileSync(nestedAnswerPath, "Nested answer.\n", "utf8");
+  writeFileSync(explicitSourcePath, "Explicit source.\n", "utf8");
+  writeFileSync(directorySourcePath, "Directory source.\n", "utf8");
+  writeFileSync(
+    nestedSourcePath,
+    "<html><body><main><p>Nested source.</p></main></body></html>",
+    "utf8",
+  );
+
+  assert.deepEqual(await api.resolveAnswerPaths([explicitAnswerPath], [resolverAnswerDir]), [
+    explicitAnswerPath,
+    directoryAnswerPath,
+    nestedAnswerPath,
+  ]);
+  assert.deepEqual(await api.resolveSourcePaths([explicitSourcePath], [resolverSourceDir]), [
+    explicitSourcePath,
+    directorySourcePath,
+    nestedSourcePath,
+  ]);
 
   const packedPackage = JSON.parse(runCommand("npm", ["pack", "--json"]))[0];
   assert.ok(packedPackage);
