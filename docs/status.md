@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2649a0c` on 2026-07-06, validate explicit batch answer paths
+- Latest shipped change: `722c24a` on 2026-07-06, add verify answer label flag
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-06 | [#207](https://github.com/nash226/quorum/pull/207) | add verify answer label flag | `722c24a` |
 | 2026-07-06 | [#206](https://github.com/nash226/quorum/pull/206) | validate explicit batch answer paths | `2649a0c` |
 | 2026-07-06 | [#205](https://github.com/nash226/quorum/pull/205) | support evaluation file option objects | `7a4f490` |
 | 2026-07-06 | [#204](https://github.com/nash226/quorum/pull/204) | expose evaluation source directories | `5b1c2d1` |
@@ -53,5 +54,4 @@
 | 2026-07-06 | [#202](https://github.com/nash226/quorum/pull/202) | feat: support reviewer import option helpers | `ff2b74f` |
 | 2026-07-06 | [#201](https://github.com/nash226/quorum/pull/201) | add batch file-input verification helpers | `ff0eb42` |
 | 2026-07-06 | [#200](https://github.com/nash226/quorum/pull/200) | add file answer label API | `d6b6865` |
-| 2026-07-06 | [#199](https://github.com/nash226/quorum/pull/199) | add file-input verification helpers | `15ec0eb` |
 
