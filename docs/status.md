@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `eaea613` on 2026-07-06, export report policy helpers
+- Latest shipped change: `3b4e868` on 2026-07-06, publish built npm package
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-06 | [#197](https://github.com/nash226/quorum/pull/197) | publish built npm package | `3b4e868` |
 | 2026-07-06 | [#196](https://github.com/nash226/quorum/pull/196) | export report policy helpers | `eaea613` |
 | 2026-07-06 | [#195](https://github.com/nash226/quorum/pull/195) | smoke built package api | `4207f04` |
 | 2026-07-06 | [#194](https://github.com/nash226/quorum/pull/194) | add evaluation result helpers | `49bcf1e` |
@@ -53,5 +54,4 @@
 | 2026-07-05 | [#192](https://github.com/nash226/quorum/pull/192) | add batch fail policy result helpers | `960af42` |
 | 2026-07-05 | [#191](https://github.com/nash226/quorum/pull/191) | feat: add reviewer import fail policy helpers | `1fa7f96` |
 | 2026-07-05 | [#190](https://github.com/nash226/quorum/pull/190) | add single-answer fail policy api | `a9886b4` |
-| 2026-07-05 | [#189](https://github.com/nash226/quorum/pull/189) | add in-memory batch verify helper | `8e184c5` |
 
