@@ -46,6 +46,12 @@ export interface VerificationReport {
   summary: Record<ClaimVerdict, number>;
 }
 
+export interface SingleVerificationResult {
+  report: VerificationReport;
+  shouldFail: boolean;
+  failVerdicts: ClaimVerdict[];
+}
+
 export interface BatchVerificationResult {
   answerLabel: string;
   answerPath: string;
