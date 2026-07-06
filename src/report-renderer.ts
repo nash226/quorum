@@ -203,6 +203,7 @@ export function renderReviewerDecisionCsv(
   failOn: ClaimVerdict[] = [],
 ): string {
   const failVerdicts = matchingFailVerdicts(report, failOn);
+  const answerLabel = report.answerLabel ?? (report.answerPath ? renderAnswerLabel(report.answerPath) : "");
   const rows = [
     [
       "answer_label",
@@ -225,7 +226,7 @@ export function renderReviewerDecisionCsv(
     ],
     ...(report.assessments.length > 0
       ? report.assessments.map((assessment) => [
-          report.answerPath ? renderAnswerLabel(report.answerPath) : "",
+          answerLabel,
           report.answerPath ?? "",
           renderAnswerPreview(report.answer),
           failVerdicts.length > 0 ? "matched" : "clear",
@@ -254,7 +255,7 @@ export function renderReviewerDecisionCsv(
           "",
         ])
       : [[
-          report.answerPath ? renderAnswerLabel(report.answerPath) : "",
+          answerLabel,
           report.answerPath ?? "",
           renderAnswerPreview(report.answer),
           failVerdicts.length > 0 ? "matched" : "clear",
@@ -359,6 +360,7 @@ export function renderSummaryCsv(
   failOn: ClaimVerdict[] = [],
 ): string {
   const failVerdicts = matchingFailVerdicts(report, failOn);
+  const answerLabel = report.answerLabel ?? (report.answerPath ? renderAnswerLabel(report.answerPath) : "");
   const primaryAssessment = selectPrimaryAssessment(report.assessments);
   const primaryFindingVerdict = primaryAssessment?.verdict ?? "needs_review";
   const primaryFindingReason =
@@ -388,7 +390,7 @@ export function renderSummaryCsv(
       "source_updated_at",
     ],
     [
-      report.answerPath ? renderAnswerLabel(report.answerPath) : "",
+      answerLabel,
       report.answerPath ?? "",
       renderAnswerPreview(report.answer),
       primaryFindingVerdict,
