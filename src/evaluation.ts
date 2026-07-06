@@ -1,13 +1,15 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { dirname, extname, join, resolve } from "node:path";
 import { serializeDelimitedList } from "./csv-list.js";
-import type { ClaimVerdict, VerificationReport } from "./domain.js";
-import { loadSourceDocuments, verifyAnswerFile } from "./workflow.js";
+import type { ClaimVerdict, SourceTrustLevel, VerificationReport } from "./domain.js";
+import { loadSourceDocuments, resolveSourcePaths, verifyAnswerFile } from "./workflow.js";
 
 export interface EvaluationFixture {
   name: string;
   answerPath: string;
-  sourcePaths: string[];
+  sourcePaths?: string[];
+  sourceDirs?: string[];
+  defaultTrustLevel?: SourceTrustLevel;
   expectedSummary: Record<ClaimVerdict, number>;
   expectedClaimVerdicts?: ClaimVerdict[];
 }
@@ -94,10 +96,14 @@ export async function evaluateFixture(
 ): Promise<EvaluationScorecard> {
   const baseDir = options.baseDir ?? process.cwd();
   const answerPath = resolve(baseDir, fixture.answerPath);
-  const sourcePaths = fixture.sourcePaths.map((sourcePath) => resolve(baseDir, sourcePath));
+  const sourcePaths = await resolveSourcePaths(
+    (fixture.sourcePaths ?? []).map((sourcePath) => resolve(baseDir, sourcePath)),
+    (fixture.sourceDirs ?? []).map((sourceDir) => resolve(baseDir, sourceDir)),
+  );
   const sources = await loadSourceDocuments({
     sourcePaths,
     sourceDirs: [],
+    defaultTrustLevel: fixture.defaultTrustLevel,
   });
   const report = await verifyAnswerFile(
     answerPath,
