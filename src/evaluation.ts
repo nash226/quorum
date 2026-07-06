@@ -41,6 +41,17 @@ export interface EvaluationBatchOptions {
   generatedAt?: string;
 }
 
+export interface EvaluationFixtureRunResult {
+  scorecard: EvaluationScorecard;
+  hasMismatch: boolean;
+}
+
+export interface EvaluationBatchRunResult {
+  scorecards: EvaluationScorecard[];
+  shouldFail: boolean;
+  mismatchCount: number;
+}
+
 export interface InMemoryEvaluationBatchOptions {
   fixtures: EvaluationFixture[];
   baseDir?: string;
@@ -140,6 +151,17 @@ export async function evaluateFixture(
   };
 }
 
+export async function evaluateFixtureResult(
+  fixture: EvaluationFixture,
+  options: {
+    baseDir?: string;
+    fixturePath?: string;
+    generatedAt?: string;
+  } = {},
+): Promise<EvaluationFixtureRunResult> {
+  return buildEvaluationFixtureResult(await evaluateFixture(fixture, options));
+}
+
 export async function evaluateFixtureFile(
   fixturePath: string,
   options: {
@@ -152,6 +174,15 @@ export async function evaluateFixtureFile(
     fixturePath,
     generatedAt: options.generatedAt,
   });
+}
+
+export async function evaluateFixtureFileResult(
+  fixturePath: string,
+  options: {
+    generatedAt?: string;
+  } = {},
+): Promise<EvaluationFixtureRunResult> {
+  return buildEvaluationFixtureResult(await evaluateFixtureFile(fixturePath, options));
 }
 
 export async function evaluateFixtures(
@@ -172,6 +203,12 @@ export async function evaluateFixtures(
   );
 }
 
+export async function evaluateFixturesResult(
+  options: InMemoryEvaluationBatchOptions,
+): Promise<EvaluationBatchRunResult> {
+  return buildEvaluationBatchResult(await evaluateFixtures(options));
+}
+
 export async function evaluateFixtureContents(
   options: InMemoryEvaluationFixtureFileBatchOptions,
 ): Promise<EvaluationScorecard[]> {
@@ -185,6 +222,12 @@ export async function evaluateFixtureContents(
     fixturePaths: options.fixtures.map((fixture) => fixture.fixturePath),
     generatedAt: options.generatedAt,
   });
+}
+
+export async function evaluateFixtureContentsResult(
+  options: InMemoryEvaluationFixtureFileBatchOptions,
+): Promise<EvaluationBatchRunResult> {
+  return buildEvaluationBatchResult(await evaluateFixtureContents(options));
 }
 
 export async function evaluateFixtureContent(
@@ -205,6 +248,12 @@ export async function evaluateFixtureContent(
   }
 
   return scorecard;
+}
+
+export async function evaluateFixtureContentResult(
+  options: InMemoryEvaluationFixtureFileOptions,
+): Promise<EvaluationFixtureRunResult> {
+  return buildEvaluationFixtureResult(await evaluateFixtureContent(options));
 }
 
 export async function evaluateFixtureFiles(
@@ -232,6 +281,12 @@ export async function evaluateFixtureFiles(
     fixturePaths: fixtures.map(({ fixturePath }) => fixturePath),
     generatedAt: options.generatedAt,
   });
+}
+
+export async function evaluateFixtureFilesResult(
+  options: EvaluationBatchOptions,
+): Promise<EvaluationBatchRunResult> {
+  return buildEvaluationBatchResult(await evaluateFixtureFiles(options));
 }
 
 export async function resolveEvaluationFixturePaths(
@@ -748,6 +803,27 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
 
 export function hasEvaluationMismatch(scorecard: EvaluationScorecard): boolean {
   return !scorecard.summaryMatches || scorecard.matchedClaims < scorecard.totalExpectedClaims;
+}
+
+function buildEvaluationFixtureResult(
+  scorecard: EvaluationScorecard,
+): EvaluationFixtureRunResult {
+  return {
+    scorecard,
+    hasMismatch: hasEvaluationMismatch(scorecard),
+  };
+}
+
+function buildEvaluationBatchResult(
+  scorecards: EvaluationScorecard[],
+): EvaluationBatchRunResult {
+  const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+
+  return {
+    scorecards,
+    shouldFail: mismatchCount > 0,
+    mismatchCount,
+  };
 }
 
 function evaluationMismatchType(scorecard: EvaluationScorecard): string {
