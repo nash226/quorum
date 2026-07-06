@@ -208,6 +208,7 @@ const report = await verifyAnswerFile("examples/answers/hr-answer.md", sources);
 
 const directFileReport = await verifyAnswerFileInputs({
   answerPath: "examples/answers/hr-answer.md",
+  answerLabel: "HR draft for approval",
   sourcePaths: [],
   sourceDirs: ["examples/sources"],
   defaultTrustLevel: "high",
@@ -215,12 +216,14 @@ const directFileReport = await verifyAnswerFileInputs({
 
 const gatedReport = await verifyAnswerFileResult({
   answerPath: "examples/answers/hr-answer.md",
+  answerLabel: "HR draft for approval",
   sources,
   failOn: ["contradicted", "unsupported"],
 });
 
 const directFileResult = await verifyAnswerFileInputsResult({
   answerPath: "examples/answers/hr-answer.md",
+  answerLabel: "HR draft for approval",
   sourcePaths: [],
   sourceDirs: ["examples/sources"],
   defaultTrustLevel: "high",
@@ -278,6 +281,12 @@ const evaluationResult = await evaluateFixtureFilesResult({
   fixtureDirPaths: ["examples/evaluations"],
 });
 ```
+
+`verifyAnswerFile` accepts an optional fourth `answerLabel` argument, and the
+single-file options objects for `verifyAnswerFileResult`,
+`verifyAnswerFileInputs`, and `verifyAnswerFileInputsResult` also accept
+`answerLabel`, so workflow callers can keep a reviewer-facing label on
+single-answer file reports without mutating the returned report object.
 
 For workflow runners that want the same recursive file discovery as the CLI,
 `verifyAnswerFileInputs` and `verifyAnswerFileInputsResult` accept the same

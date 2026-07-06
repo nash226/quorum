@@ -142,6 +142,72 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("programmatic API applies an explicit answer label to file verification helpers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-file-label-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+        "utf8",
+      ),
+    ]);
+
+    const sources = await loadSources({
+      sourcePaths: [sourcePath],
+      sourceDirs: [],
+    });
+
+    const report = await verifyAnswerFile(
+      answerPath,
+      sources,
+      "2026-07-06T12:00:00.000Z",
+      "HR reviewer packet",
+    );
+    const result = await verifyAnswerFileResult({
+      answerPath,
+      answerLabel: "HR reviewer packet",
+      sources,
+      failOn: ["contradicted"],
+      generatedAt: "2026-07-06T12:00:00.000Z",
+    });
+    const directFileReport = await verifyAnswerFileInputs({
+      answerPath,
+      answerLabel: "HR reviewer packet",
+      sourcePaths: [sourcePath],
+      sourceDirs: [],
+      generatedAt: "2026-07-06T12:00:00.000Z",
+    });
+    const directFileResult = await verifyAnswerFileInputsResult({
+      answerPath,
+      answerLabel: "HR reviewer packet",
+      sourcePaths: [sourcePath],
+      sourceDirs: [],
+      failOn: ["contradicted"],
+      generatedAt: "2026-07-06T12:00:00.000Z",
+    });
+
+    assert.equal(report.answerLabel, "HR reviewer packet");
+    assert.equal(result.report.answerLabel, "HR reviewer packet");
+    assert.equal(directFileReport.answerLabel, "HR reviewer packet");
+    assert.equal(directFileResult.report.answerLabel, "HR reviewer packet");
+    assert.equal(result.shouldFail, false);
+    assert.equal(directFileResult.shouldFail, false);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("programmatic API resolves source and answer paths in CLI order", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-paths-"));
 
