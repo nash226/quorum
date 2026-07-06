@@ -83,6 +83,13 @@ export interface SingleFileVerificationOptions {
   generatedAt?: string;
 }
 
+export interface SingleFileReportOptions {
+  answerPath: string;
+  answerLabel?: string;
+  sources: SourceDocument[];
+  generatedAt?: string;
+}
+
 export interface SingleFileInputVerificationOptions extends SourceLoadOptions {
   answerPath: string;
   answerLabel?: string;
@@ -210,9 +217,36 @@ export async function loadSourceDocumentsFromContent(
 export async function verifyAnswerFile(
   answerPath: string,
   sources: SourceDocument[],
+  generatedAt?: string,
+  answerLabel?: string,
+): Promise<VerificationReport>;
+export async function verifyAnswerFile(
+  options: SingleFileReportOptions,
+): Promise<VerificationReport>;
+export async function verifyAnswerFile(
+  answerPathOrOptions: string | SingleFileReportOptions,
+  sources?: SourceDocument[],
   generatedAt = new Date().toISOString(),
   answerLabel?: string,
 ): Promise<VerificationReport> {
+  const options =
+    typeof answerPathOrOptions === "string"
+      ? {
+          answerPath: answerPathOrOptions,
+          sources: sources ?? [],
+          generatedAt,
+          answerLabel,
+        }
+      : answerPathOrOptions;
+
+  const resolvedGeneratedAt = options.generatedAt ?? new Date().toISOString();
+
+  if (typeof answerPathOrOptions === "string" && sources === undefined) {
+    throw new Error("verifyAnswerFile requires sources when called with positional arguments.");
+  }
+
+  const answerPath = options.answerPath;
+
   if (answerPath !== "-") {
     await ensureFilePath(answerPath, "Answer");
   }
@@ -220,13 +254,13 @@ export async function verifyAnswerFile(
   const answer = await readTextInput(answerPath);
   const report = verifyAnswer(
     answer,
-    sources,
-    generatedAt,
+    options.sources,
+    resolvedGeneratedAt,
     answerPath === "-" ? STDIN_ANSWER_PATH : answerPath,
   );
 
-  if (answerLabel !== undefined) {
-    report.answerLabel = answerLabel;
+  if (options.answerLabel !== undefined) {
+    report.answerLabel = options.answerLabel;
   }
 
   return report;
