@@ -585,7 +585,9 @@ import {
   renderEvaluationTextReport,
 } from "quorum";
 
-const scorecard = await evaluateFixtureFile("examples/evaluations/hr-policy.json");
+const scorecard = await evaluateFixtureFile({
+  fixturePath: "examples/evaluations/hr-policy.json",
+});
 console.log(renderEvaluationScorecard(scorecard));
 
 const scorecards = await evaluateFixtureFiles({
@@ -635,6 +637,11 @@ console.log(fixture.name);
 console.log(renderEvaluationScorecard(embeddedScorecard));
 console.log(renderEvaluationScorecard(embeddedScorecards[0]));
 ```
+
+`evaluateFixtureFile` and `evaluateFixtureFileResult` accept either a fixture
+path string or an options object with `fixturePath` and `generatedAt`, which
+keeps single-fixture evaluation calls consistent with Quorum's other file-based
+programmatic helpers.
 
 Each evaluation fixture can mix explicit `sourcePaths` with recursive
 `sourceDirs`, so domain scorecards can point at a maintained source bundle
