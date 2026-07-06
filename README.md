@@ -448,6 +448,35 @@ the same Markdown, HTML, and PDF parsing behavior for callers that want to
 reuse a loaded source set across multiple answers. `verifyAnswerBatchContents`
 extends that same one-call pattern to in-memory answer batches when callers do
 not want to pre-load `SourceDocument[]` themselves.
+Fail-policy helpers such as `CLAIM_VERDICTS`, `parseClaimVerdict`,
+`matchingFailVerdicts`, and `shouldFailReport` are exported too, so workflow
+integrations can validate config and apply the same verdict gating rules as
+the CLI without duplicating Quorum's `needs_review` edge-case handling for
+empty claim sets.
+
+```ts
+import {
+  matchingFailVerdicts,
+  parseClaimVerdict,
+  shouldFailReport,
+  verifyAnswerContentsResult,
+} from "quorum";
+
+const failOn = ["contradicted", "needs_review"].map(parseClaimVerdict);
+const result = await verifyAnswerContentsResult({
+  answer: "Short.",
+  sources: [
+    {
+      sourcePath: "policies/hr-policy.md",
+      content: "Employees receive 12 weeks of paid parental leave.",
+    },
+  ],
+});
+
+console.log(result.shouldFail);
+console.log(matchingFailVerdicts(result.report, failOn));
+console.log(shouldFailReport(result.report, failOn));
+```
 
 For fixture-driven evaluation work, Quorum also exports
 `loadEvaluationFixture`, `loadEvaluationFixtureFromContent`,
