@@ -120,6 +120,7 @@ export type {
   ReviewerDecisionContentImportResultOptions,
   ReviewerDecisionFileImportOptions,
   ReviewerDecisionFileImportResultOptions,
+  SingleFileReportOptions,
   SingleFileInputVerificationOptions,
   SingleFileInputVerificationResultOptions,
   SingleFileVerificationOptions,

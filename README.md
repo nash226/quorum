@@ -207,7 +207,11 @@ const sources = await loadSources({
   defaultTrustLevel: "high",
 });
 
-const report = await verifyAnswerFile("examples/answers/hr-answer.md", sources);
+const report = await verifyAnswerFile({
+  answerPath: "examples/answers/hr-answer.md",
+  answerLabel: "HR draft for approval",
+  sources,
+});
 
 const directFileReport = await verifyAnswerFileInputs({
   answerPath: "examples/answers/hr-answer.md",
@@ -317,8 +321,10 @@ const evaluationResult = await evaluateFixtureFilesResult({
 });
 ```
 
-`verifyAnswerFile` accepts an optional fourth `answerLabel` argument, and the
-single-file options objects for `verifyAnswerFileResult`,
+`verifyAnswerFile` accepts either positional arguments or a single options
+object with `answerPath`, `sources`, `generatedAt`, and `answerLabel`. The
+positional form still supports the optional fourth `answerLabel` argument, and
+the single-file options objects for `verifyAnswerFileResult`,
 `verifyAnswerFileInputs`, and `verifyAnswerFileInputsResult` also accept
 `answerLabel`, so workflow callers can keep a reviewer-facing label on
 single-answer file reports without mutating the returned report object.

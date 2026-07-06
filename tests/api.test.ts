@@ -101,6 +101,52 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("programmatic API verifies an answer file through an options object", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-file-options-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+        "utf8",
+      ),
+    ]);
+
+    const sources = await loadSources({
+      sourcePaths: [sourcePath],
+      sourceDirs: [],
+    });
+    const report = await verifyAnswerFile({
+      answerPath,
+      answerLabel: "HR reviewer packet",
+      sources,
+      generatedAt: "2026-07-06T19:00:00.000Z",
+    });
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.answerLabel, "HR reviewer packet");
+    assert.equal(report.generatedAt, "2026-07-06T19:00:00.000Z");
+    assert.deepEqual(report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("programmatic API verifies file inputs without a separate source-loading step", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-file-inputs-"));
 
