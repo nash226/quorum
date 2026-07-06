@@ -28,6 +28,7 @@ import {
   renderSummaryCsv,
   renderTextReport,
   verifyAnswers,
+  verifyAnswerBatchContents,
   verifyAnswerContents,
   verifyAnswer,
   verifyAnswerBatch,
@@ -338,6 +339,81 @@ test("programmatic API verifies one in-memory answer against raw source content"
     unsupported: 0,
     needs_review: 0,
   });
+});
+
+test("programmatic API batches in-memory answers against raw source content", async () => {
+  const report = await verifyAnswerBatchContents({
+    answers: [
+      {
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        answerPath: "answers/hr.md",
+      },
+      {
+        answer: "Refunds are available for 14 days from the purchase date.",
+        answerLabel: "support escalation",
+      },
+    ],
+    sources: [
+      {
+        sourcePath: "policies/hr-policy.md",
+        content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+      },
+      {
+        sourcePath: "help/refunds.html",
+        content: `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+  </head>
+  <body>
+    <main>
+      <p>Refunds are available for 30 days from the purchase date.</p>
+    </main>
+  </body>
+</html>`,
+      },
+    ],
+    defaultTrustLevel: "medium",
+    failOn: ["contradicted"],
+    generatedAt: "2026-07-05T03:45:00.000Z",
+  });
+
+  assert.equal(report.generatedAt, "2026-07-05T03:45:00.000Z");
+  assert.equal(report.answerCount, 2);
+  assert.deepEqual(report.summary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 0,
+    needs_review: 0,
+    answersWithoutClaims: 0,
+    answersWithFailures: 1,
+  });
+  assert.deepEqual(
+    report.answers.map((answer) => ({
+      label: answer.answerLabel,
+      path: answer.answerPath,
+      shouldFail: answer.shouldFail,
+    })),
+    [
+      {
+        label: "hr",
+        path: "answers/hr.md",
+        shouldFail: false,
+      },
+      {
+        label: "support escalation",
+        path: "<memory:2>",
+        shouldFail: true,
+      },
+    ],
+  );
+  assert.equal(report.sources[1]?.title, "Refund Policy");
+  assert.equal(report.sources[1]?.trustLevel, "medium");
 });
 
 test("programmatic API rejects empty in-memory source batches", async () => {

@@ -181,6 +181,7 @@ import {
   loadSources,
   loadSourcesFromContent,
   verifyAnswers,
+  verifyAnswerBatchContents,
   verifyAnswerContents,
   verifyAnswerBatch,
   verifyAnswerFile,
@@ -282,6 +283,35 @@ const embeddedBatch = verifyAnswers({
   ],
   sources: embeddedSources,
 });
+
+const embeddedBatchWithRawSources = await verifyAnswerBatchContents({
+  answers: [
+    {
+      answer: "Employees receive 12 weeks of paid parental leave.",
+      answerPath: "hr-agent/latest-response.md",
+    },
+    {
+      answer: "Refunds are available for 14 days from the purchase date.",
+      answerLabel: "support escalation",
+    },
+  ],
+  sources: [
+    {
+      sourcePath: "policies/hr-policy.md",
+      content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+    },
+    {
+      sourcePath: "help/refunds.html",
+      content: "<html><body><main><p>Refunds are available for 30 days from the purchase date.</p></main></body></html>",
+    },
+  ],
+  failOn: ["contradicted"],
+});
 ```
 
 Evaluation workflows can also keep fixture definitions in memory and score them
@@ -316,7 +346,9 @@ so package consumers can generate the same human-review artifacts as the CLI.
 `verifyAnswerContents` gives embedded callers a one-call path for a single
 answer plus raw source content, while `loadSourcesFromContent` still exposes
 the same Markdown, HTML, and PDF parsing behavior for callers that want to
-reuse a loaded source set across multiple answers.
+reuse a loaded source set across multiple answers. `verifyAnswerBatchContents`
+extends that same one-call pattern to in-memory answer batches when callers do
+not want to pre-load `SourceDocument[]` themselves.
 
 For fixture-driven evaluation work, Quorum also exports
 `loadEvaluationFixture`, `loadEvaluationFixtureFromContent`,
