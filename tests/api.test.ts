@@ -4,6 +4,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  importReviewerDecisionContents,
+  importReviewerDecisionContentsResult,
   evaluateFixtureContent,
   evaluateFixtureContents,
   evaluateFixtureFiles,
@@ -879,6 +881,19 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
   }
 });
 
+test("programmatic API imports reviewer decision csv content through workflow helpers", () => {
+  const report = importReviewerDecisionContents(
+    `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Looks good
+`,
+  );
+
+  assert.equal(report.summary.totalClaims, 1);
+  assert.equal(report.summary.reviewedClaims, 1);
+  assert.equal(report.answerGroups[0]?.label, "HR answer");
+  assert.equal(report.claims[0]?.reviewerNotes, "Looks good");
+});
+
 test("programmatic API applies fail policy to imported reviewer decision csv files", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-import-result-"));
 
@@ -901,6 +916,20 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
+});
+
+test("programmatic API applies fail policy to reviewer decision csv content workflow helpers", () => {
+  const result = importReviewerDecisionContentsResult(
+    `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,unsupported,Needs policy follow-up
+`,
+    ["unsupported"],
+  );
+
+  assert.equal(result.shouldFail, true);
+  assert.deepEqual(result.failVerdicts, ["unsupported"]);
+  assert.equal(result.report.summary.reviewedClaims, 1);
+  assert.equal(result.report.summary.unsupported, 1);
 });
 
 test("programmatic API exports reviewer import helpers for in-memory callers", () => {
