@@ -28,6 +28,7 @@ test("loads and evaluates the HR example fixture", async () => {
   });
 
   assert.equal(scorecard.fixtureName, "HR policy example");
+  assert.deepEqual(scorecard.sourceDirs, []);
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.matchedClaims, 3);
   assert.equal(scorecard.totalExpectedClaims, 3);
@@ -47,6 +48,7 @@ test("evaluates fixture files relative to the fixture directory", async () => {
   );
 
   assert.equal(scorecard.fixtureName, "Support policy example");
+  assert.deepEqual(scorecard.sourceDirs, []);
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.matchedClaims, 3);
   assert.equal(scorecard.totalExpectedClaims, 3);
@@ -154,6 +156,7 @@ test("evaluates fixture sources discovered from source directories", async () =>
     });
 
     assert.equal(scorecard.fixtureName, "Support policy from source directory");
+    assert.deepEqual(scorecard.sourceDirs, [sourcesDir]);
     assert.deepEqual(scorecard.sourcePaths, [sourcePath]);
     assert.equal(scorecard.summaryMatches, true);
     assert.equal(scorecard.matchedClaims, 1);
@@ -167,6 +170,7 @@ test("renders mismatch details in evaluation scorecards", () => {
   const rendered = renderEvaluationScorecard({
     fixtureName: "Mismatch fixture",
     answerPath: "/tmp/answer.md",
+    sourceDirs: ["/tmp/source-bundle"],
     sourcePaths: ["/tmp/source.md"],
     report: {
       generatedAt: "2026-07-05T10:10:00.000Z",
@@ -211,6 +215,7 @@ test("renders mismatch details in evaluation scorecards", () => {
   });
 
   assert.match(rendered, /Summary match: no/);
+  assert.match(rendered, /Source directories: \/tmp\/source-bundle/);
   assert.match(rendered, /Claim mismatches:/);
   assert.match(rendered, /expected verified, got contradicted/);
 });
@@ -220,6 +225,7 @@ test("renders evaluation text report totals and mismatch detection", () => {
     {
       fixtureName: "Match fixture",
       answerPath: "/tmp/answer-1.md",
+      sourceDirs: [],
       sourcePaths: ["/tmp/source-1.md"],
       report: {
         generatedAt: "2026-07-05T10:15:00.000Z",
@@ -257,6 +263,7 @@ test("renders evaluation text report totals and mismatch detection", () => {
     {
       fixtureName: "Mismatch fixture",
       answerPath: "/tmp/answer-2.md",
+      sourceDirs: [],
       sourcePaths: ["/tmp/source-2.md"],
       report: {
         generatedAt: "2026-07-05T10:16:00.000Z",
@@ -308,6 +315,7 @@ test("renders evaluation summary csv rows for each fixture", () => {
       fixtureName: "Support policy example",
       fixturePath: "/tmp/fixtures/support.json",
       answerPath: "/tmp/answers/support.md",
+      sourceDirs: ["/tmp/sources"],
       sourcePaths: ["/tmp/sources/support.md", "/tmp/sources/refunds.md"],
       report: {
         generatedAt: "2026-07-05T10:20:00.000Z",
@@ -346,10 +354,10 @@ test("renders evaluation summary csv rows for each fixture", () => {
 
   assert.match(
     rendered,
-    /^fixture_name,fixture_path,answer_path,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,/,
+    /^fixture_name,fixture_path,answer_path,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,/,
   );
   assert.match(rendered, /Support policy example/);
-  assert.match(rendered, /\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md/);
+  assert.match(rendered, /\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md/);
   assert.match(rendered, /yes,0,0,1\.000,no,none,,,,,1,0,0,0,1,0,0,0/);
 });
 
@@ -359,6 +367,7 @@ test("evaluation summary csv includes first mismatched claim details", () => {
       fixtureName: "HR mismatch example",
       fixturePath: "/tmp/fixtures/hr.json",
       answerPath: "/tmp/answers/hr.md",
+      sourceDirs: [],
       sourcePaths: ["/tmp/sources/hr.md"],
       report: {
         generatedAt: "2026-07-05T10:20:00.000Z",
@@ -405,7 +414,7 @@ test("evaluation summary csv includes first mismatched claim details", () => {
 
   assert.match(
     rendered,
-    /HR mismatch example,[^,\n]+,[^,\n]+,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,1,0,0,0,0,1,0,0/,
+    /HR mismatch example,[^,\n]+,[^,\n]*,,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,1,0,0,0,0,1,0,0/,
   );
 });
 
@@ -415,6 +424,7 @@ test("renders evaluation markdown report with fixture summaries", () => {
       fixtureName: "Support policy example",
       fixturePath: "/tmp/fixtures/support.json",
       answerPath: "/tmp/answers/support.md",
+      sourceDirs: ["/tmp/source-bundle"],
       sourcePaths: ["/tmp/sources/support.md"],
       report: {
         generatedAt: "2026-07-05T10:25:00.000Z",
@@ -463,6 +473,7 @@ test("renders evaluation markdown report with fixture summaries", () => {
   assert.match(rendered, /## Summary/);
   assert.match(rendered, /### 1\. Support policy example/);
   assert.match(rendered, /- Fixture path: `\/tmp\/fixtures\/support\.json`/);
+  assert.match(rendered, /- Source directories: `\/tmp\/source-bundle`/);
   assert.match(rendered, /#### Claim Verdicts/);
   assert.match(rendered, /Claim 1: `verified` \(expected `verified`\)/);
 });
@@ -473,6 +484,7 @@ test("renders evaluation html report with fixture summaries", () => {
       fixtureName: "Support policy example",
       fixturePath: "/tmp/fixtures/support.json",
       answerPath: "/tmp/answers/support.md",
+      sourceDirs: ["/tmp/source-bundle"],
       sourcePaths: ["/tmp/sources/support.md"],
       report: {
         generatedAt: "2026-07-05T10:30:00.000Z",
@@ -518,6 +530,7 @@ test("renders evaluation html report with fixture summaries", () => {
   ]);
 
   assert.match(rendered, /<!doctype html>/i);
+  assert.match(rendered, /<dt>Source directories<\/dt><dd>\/tmp\/source-bundle<\/dd>/);
   assert.match(rendered, /Fixture scorecard report/);
   assert.match(rendered, /Support policy example/);
   assert.match(rendered, /Expected summary/);
