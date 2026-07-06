@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  CLAIM_VERDICTS,
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
   evaluateFixtureContent,
@@ -23,6 +24,8 @@ import {
   loadEvaluationFixtureFromContent,
   loadSources,
   loadSourcesFromContent,
+  matchingFailVerdicts,
+  parseClaimVerdict,
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
@@ -36,6 +39,7 @@ import {
   renderReviewerDecisionCsv,
   renderSummaryCsv,
   renderTextReport,
+  shouldFailReport,
   verifyAnswers,
   verifyAnswersResult,
   verifyAnswerBatchContents,
@@ -1083,6 +1087,36 @@ claim_1,Employees receive free catered lunch every day.,unsupported,No approved 
   assert.deepEqual(result.failVerdicts, ["unsupported"]);
   assert.equal(result.report.summary.totalClaims, 1);
   assert.equal(result.report.summary.unsupported, 1);
+});
+
+test("programmatic API exports fail-policy helpers for workflow callers", () => {
+  assert.deepEqual(CLAIM_VERDICTS, [
+    "verified",
+    "unsupported",
+    "contradicted",
+    "needs_review",
+  ]);
+  assert.equal(parseClaimVerdict("contradicted"), "contradicted");
+  assert.throws(() => parseClaimVerdict("bad"), /Unsupported verdict "bad"/);
+
+  const report = verifyAnswer(
+    "Short.",
+    [
+      {
+        id: "source_1",
+        title: "Benefits policy",
+        trustLevel: "high",
+        content: "Employees receive 12 weeks of paid parental leave.",
+      },
+    ],
+    "2026-07-06T00:15:00.000Z",
+  );
+
+  assert.deepEqual(matchingFailVerdicts(report, ["needs_review", "unsupported"]), [
+    "needs_review",
+  ]);
+  assert.equal(shouldFailReport(report, ["unsupported"]), false);
+  assert.equal(shouldFailReport(report, ["needs_review"]), true);
 });
 
 test("programmatic API exports batch evaluation helpers", async () => {

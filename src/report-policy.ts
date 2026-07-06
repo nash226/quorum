@@ -37,7 +37,7 @@ export function matchingFailVerdicts(
   });
 }
 
-type FailPolicyReport = Pick<VerificationReport, "summary"> & {
+export type FailPolicyReport = Pick<VerificationReport, "summary"> & {
   assessments?: unknown[];
   claims?: unknown[];
   answerGroups?: Array<{ claims?: unknown[] }>;
