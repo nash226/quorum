@@ -433,6 +433,73 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("programmatic API preserves explicit batch answer labels", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-batch-labels-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const explicitAnswerPath = join(tempDir, "support.md");
+    const directoryAnswerPath = join(answerDir, "hr.md");
+    const sourceDir = join(tempDir, "sources");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(explicitAnswerPath, "Refunds are available for 30 days from the purchase date.\n", "utf8"),
+      writeFile(directoryAnswerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "refunds.md"),
+        "Refunds are available for 30 days from the purchase date.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "benefits.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const sources = await loadSources({
+      sourcePaths: [],
+      sourceDirs: [sourceDir],
+      defaultTrustLevel: "high",
+    });
+    const report = await verifyAnswerBatch({
+      answerPaths: [explicitAnswerPath],
+      answerDirPaths: [answerDir],
+      answerLabelsByPath: {
+        [explicitAnswerPath]: "Support escalation packet",
+      },
+      sources,
+      generatedAt: "2026-07-06T15:00:00.000Z",
+    });
+
+    assert.deepEqual(
+      report.answers.map((answer) => ({
+        label: answer.answerLabel,
+        path: answer.answerPath,
+        reportLabel: answer.report.answerLabel,
+      })),
+      [
+        {
+          label: "Support escalation packet",
+          path: explicitAnswerPath,
+          reportLabel: "Support escalation packet",
+        },
+        {
+          label: "hr",
+          path: directoryAnswerPath,
+          reportLabel: "hr",
+        },
+      ],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("programmatic API still supports direct in-memory verification", () => {
   const report = verifyAnswer(
     "Benefits begin on day one of employment.",
