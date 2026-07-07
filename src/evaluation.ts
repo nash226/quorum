@@ -28,6 +28,7 @@ export interface EvaluationScorecard {
   fixturePath?: string;
   answerPath: string;
   answerLabel?: string;
+  answerPreview: string;
   sourceDirs: string[];
   sourcePaths: string[];
   report: VerificationReport;
@@ -158,6 +159,7 @@ export async function evaluateFixture(
     fixturePath: options.fixturePath,
     answerPath,
     answerLabel: report.answerLabel,
+    answerPreview: report.answerPreview,
     sourceDirs,
     sourcePaths,
     report,
@@ -359,6 +361,7 @@ export function renderEvaluationScorecard(scorecard: EvaluationScorecard): strin
     `Evaluation Fixture: ${scorecard.fixtureName}`,
     `Answer: ${scorecard.answerPath}`,
     ...(scorecard.answerLabel ? [`Answer label: ${scorecard.answerLabel}`] : []),
+    `Answer preview: ${scorecard.answerPreview || "No answer content provided."}`,
     ...(scorecard.sourceDirs.length > 0
       ? [`Source directories: ${scorecard.sourceDirs.join(", ")}`]
       : []),
@@ -434,6 +437,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
       ...(scorecard.fixturePath ? [`- Fixture path: \`${scorecard.fixturePath}\``] : []),
       `- Answer path: \`${scorecard.answerPath}\``,
       ...(scorecard.answerLabel ? [`- Answer label: \`${scorecard.answerLabel}\``] : []),
+      `- Answer preview: ${scorecard.answerPreview || "No answer content provided."}`,
       ...(scorecard.sourceDirs.length > 0
         ? [`- Source directories: ${scorecard.sourceDirs.map((sourceDir) => `\`${sourceDir}\``).join(", ")}`]
         : []),
@@ -513,6 +517,7 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
               ? `<div><dt>Answer label</dt><dd>${escapeHtml(scorecard.answerLabel)}</dd></div>`
               : ""
           }
+          <div><dt>Answer preview</dt><dd>${escapeHtml(scorecard.answerPreview || "No answer content provided.")}</dd></div>
           ${
             scorecard.sourceDirs.length > 0
               ? `<div><dt>Source directories</dt><dd>${scorecard.sourceDirs.map(escapeHtml).join("<br />")}</dd></div>`
@@ -823,6 +828,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       "fixture_path",
       "answer_path",
       "answer_label",
+      "answer_preview",
       "source_dirs",
       "source_paths",
       "summary_match",
@@ -849,6 +855,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       scorecard.fixturePath ?? "",
       scorecard.answerPath,
       scorecard.answerLabel ?? "",
+      scorecard.answerPreview,
       serializeDelimitedList(scorecard.sourceDirs),
       serializeDelimitedList(scorecard.sourcePaths),
       scorecard.summaryMatches ? "yes" : "no",
