@@ -6,6 +6,7 @@ import test from "node:test";
 import {
   ANSWER_EXTENSIONS,
   CLAIM_VERDICTS,
+  createApiServer,
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
   evaluateFixtureContent,
@@ -48,6 +49,7 @@ import {
   resolveAnswerPaths,
   resolveSourcePaths,
   SOURCE_EXTENSIONS,
+  startApiServer,
   shouldFailReport,
   verifyAnswers,
   verifyAnswersResult,
@@ -1750,6 +1752,146 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
   );
 
   assert.deepEqual(importResult.failVerdicts, ["unsupported"]);
+});
+
+test("programmatic API serves single-answer verification over HTTP", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const healthResponse = await fetch(`${api.url}/health`);
+    assert.equal(healthResponse.status, 200);
+    assert.deepEqual(await healthResponse.json(), { ok: true });
+
+    const verifyResponse = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        answerLabel: "HR reviewer packet",
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        defaultTrustLevel: "high",
+        failOn: ["contradicted"],
+      }),
+    });
+
+    assert.equal(verifyResponse.status, 200);
+    const result = await verifyResponse.json() as {
+      shouldFail: boolean;
+      failVerdicts: string[];
+      report: {
+        answerLabel?: string;
+        summary: Record<string, number>;
+      };
+    };
+
+    assert.equal(result.shouldFail, false);
+    assert.deepEqual(result.failVerdicts, []);
+    assert.equal(result.report.answerLabel, "HR reviewer packet");
+    assert.deepEqual(result.report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API serves batch verification over HTTP", async () => {
+  const server = createApiServer();
+
+  await new Promise<void>((resolve) => {
+    server.listen(0, "127.0.0.1", () => resolve());
+  });
+
+  try {
+    const address = server.address();
+
+    if (address === null || typeof address === "string") {
+      throw new Error("Expected the API server to bind to a TCP port.");
+    }
+
+    const apiUrl = `http://127.0.0.1:${address.port}`;
+    const response = await fetch(`${apiUrl}/verify-batch`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answers: [
+          {
+            answer: "Employees receive 12 weeks of paid parental leave.",
+            answerPath: "answers/hr.md",
+            answerLabel: "HR queue",
+          },
+          {
+            answer: "Employees receive free catered lunch every day.",
+            answerPath: "answers/support.md",
+          },
+        ],
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        failOn: ["unsupported"],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      shouldFail: boolean;
+      failVerdicts: string[];
+      report: {
+        summary: Record<string, number>;
+        answers: Array<{
+          answerLabel: string;
+        }>;
+      };
+    };
+
+    assert.equal(result.shouldFail, true);
+    assert.deepEqual(result.failVerdicts, ["unsupported"]);
+    assert.equal(result.report.answers[0]?.answerLabel, "HR queue");
+    assert.deepEqual(result.report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 1,
+      needs_review: 0,
+      answersWithoutClaims: 0,
+      answersWithFailures: 1,
+    });
+  } finally {
+    await new Promise<void>((resolve, reject) => {
+      server.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve();
+      });
+    });
+  }
 });
 
 test("programmatic API exports batch evaluation helpers", async () => {
