@@ -136,6 +136,16 @@ test("evaluate --help prints evaluation usage without requiring fixtures", async
   assert.match(result.stdout, /--fail-on-mismatch\s+Exit with code 2 when any fixture summary or claim verdict mismatches/);
 });
 
+test("serve --help prints API usage without starting the server", async () => {
+  const result = await runCliAllowFailure(["serve", "--help"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /^Quorum serve\n\nUsage:\n  quorum serve \[--host <host>\] \[--port <port>\]/);
+  assert.match(result.stdout, /GET  \/health\s+Return a simple readiness response/);
+  assert.match(result.stdout, /POST \/verify-batch\s+Verify multiple answers from JSON request content/);
+});
+
 test("verify reports a missing answer file with a clear error", async () => {
   await assert.rejects(
     runCli([
@@ -2855,6 +2865,65 @@ empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from th
   }
 });
 
+test("serve starts the HTTP API and verifies requests", async () => {
+  const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", "serve", "--port", "0"], {
+    cwd: process.cwd(),
+    stdio: ["pipe", "pipe", "pipe"],
+  });
+
+  let stdout = "";
+  let stderr = "";
+
+  child.stdout.on("data", (chunk: Buffer | string) => {
+    stdout += chunk.toString();
+  });
+
+  child.stderr.on("data", (chunk: Buffer | string) => {
+    stderr += chunk.toString();
+  });
+
+  try {
+    const apiUrl = await waitForServerUrl(() => stdout);
+    const response = await fetch(`${apiUrl}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        answerLabel: "HR reviewer packet",
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      report: {
+        answerLabel?: string;
+        summary: Record<string, number>;
+      };
+    };
+
+    assert.equal(result.report.answerLabel, "HR reviewer packet");
+    assert.equal(result.report.summary.verified, 1);
+  } finally {
+    child.kill("SIGTERM");
+    const exitCode = await waitForChildExit(child);
+    assert.equal(stderr, "");
+    assert.equal(exitCode, 0);
+  }
+});
+
 async function runCli(
   args: string[],
   options?: { stdin?: string },
@@ -2870,6 +2939,31 @@ async function runCli(
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+async function waitForServerUrl(readStdout: () => string): Promise<string> {
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < 10000) {
+    const match = readStdout().match(/Quorum API listening on (http:\/\/[^\s]+)/);
+
+    if (match?.[1]) {
+      return match[1];
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+
+  throw new Error("Timed out waiting for API server startup.");
+}
+
+async function waitForChildExit(child: ReturnType<typeof spawn>): Promise<number> {
+  return new Promise((resolve, reject) => {
+    child.once("error", reject);
+    child.once("close", (code) => {
+      resolve(code ?? 1);
+    });
+  });
 }
 
 async function runCliAllowFailure(
