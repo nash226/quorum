@@ -13,17 +13,6 @@ export type {
   VerificationReport,
 } from "./domain.js";
 export {
-  createApiServer,
-  startApiServer,
-} from "./api-server.js";
-export type {
-  ApiServerOptions,
-  ApiSourceInput,
-  StartedApiServer,
-  VerifyApiRequest,
-  VerifyBatchApiRequest,
-} from "./api-server.js";
-export {
   evaluateFixtureContent,
   evaluateFixtureContentResult,
   evaluateFixture,
