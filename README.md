@@ -118,6 +118,9 @@ automatic-refund promises for review.
 It also verifies subscription-renewal answers, preserving the self-service
 renewal window while catching a conflicting post-expiration claim and an
 unsupported automatic-renewal promise.
+The packed smoke check also verifies invoice-correction answers, preserving
+the reporting window while catching a conflicting deadline and unsupported
+automatic-refund promise.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
