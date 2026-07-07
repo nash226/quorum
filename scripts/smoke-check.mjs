@@ -336,6 +336,19 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(healthResponse.status, 200);
     assert.deepEqual(await healthResponse.json(), { ok: true });
 
+    const preflightResponse = await fetch(`${server.url}/verify`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "http://localhost:4173",
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type",
+      },
+    });
+    assert.equal(preflightResponse.status, 204);
+    assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "*");
+    assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "GET, POST, OPTIONS");
+    assert.equal(preflightResponse.headers.get("access-control-allow-headers"), "Content-Type");
+
     const verifyResponse = await fetch(`${server.url}/verify`, {
       method: "POST",
       headers: {
