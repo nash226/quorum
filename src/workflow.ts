@@ -30,6 +30,9 @@ export interface SourceLoadOptions {
 export interface InMemorySourceInput {
   sourcePath: string;
   content: string | Uint8Array;
+  title?: string;
+  updatedAt?: string;
+  trustLevel?: SourceTrustLevel;
 }
 
 export interface InMemorySourceLoadOptions {
@@ -211,11 +214,17 @@ export async function loadSourceDocumentsFromContent(
       if (typeof source.content === "string") {
         return sourceDocumentFromFile(source.sourcePath, source.content, index, {
           defaultTrustLevel: options.defaultTrustLevel,
+          title: source.title,
+          updatedAt: source.updatedAt,
+          trustLevel: source.trustLevel,
         });
       }
 
       return sourceDocumentFromFile(source.sourcePath, source.content, index, {
         defaultTrustLevel: options.defaultTrustLevel,
+        title: source.title,
+        updatedAt: source.updatedAt,
+        trustLevel: source.trustLevel,
       });
     }),
   );
