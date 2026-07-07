@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c621904` on 2026-07-07, add evaluation api endpoint
+- Latest shipped change: `9927bde` on 2026-07-07, test: smoke quorum server export
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-07 | [#225](https://github.com/nash226/quorum/pull/225) | test: smoke quorum server export | `9927bde` |
 | 2026-07-07 | [#224](https://github.com/nash226/quorum/pull/224) | add evaluation api endpoint | `c621904` |
 | 2026-07-07 | [#223](https://github.com/nash226/quorum/pull/223) | test: smoke import-review api | `fc1ffeb` |
 | 2026-07-07 | [#222](https://github.com/nash226/quorum/pull/222) | add API discovery endpoints | `c3f94e6` |
@@ -54,5 +55,4 @@
 | 2026-07-07 | [#220](https://github.com/nash226/quorum/pull/220) | smoke check serve api | `14f9fe9` |
 | 2026-07-07 | [#219](https://github.com/nash226/quorum/pull/219) | add lightweight verification api | `edb6096` |
 | 2026-07-07 | [#218](https://github.com/nash226/quorum/pull/218) | add evaluation answer previews | `fe76876` |
-| 2026-07-07 | [#217](https://github.com/nash226/quorum/pull/217) | export supported workflow extensions | `130670e` |
 
