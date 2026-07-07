@@ -361,7 +361,9 @@ npm run dev -- serve --port 3000
 
 Available endpoints:
 
+- `GET /`
 - `GET /health`
+- `GET /openapi.json`
 - `POST /verify`
 - `POST /verify-batch`
 - `POST /import-review`
@@ -393,6 +395,10 @@ Reviewer-decision import accepts a `{ reviewCsvContent, failOn? }` JSON body at
 `POST /import-review` and returns the same `importReviewerDecisionContentsResult`
 shape used by the package API, including grouped answer summaries and
 reviewer-aware fail-policy matches.
+`GET /` returns a small JSON endpoint index for human inspection, and
+`GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
+workflow clients can discover request payload shapes without scraping the
+README.
 Node integrations that want to embed the server directly can import the same
 helpers from `quorum/server`.
 
