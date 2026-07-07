@@ -406,7 +406,9 @@ Evaluation accepts a `{ fixtures }` JSON body at `POST /evaluate`, where each
 fixture entry includes `{ fixturePath, content }`, and returns the same
 `evaluateFixtureContentsResult` batch shape used by the package API so
 workflow callers can score benchmark fixtures without writing them to disk.
-`GET /` returns a small JSON endpoint index for human inspection, and
+`GET /` returns a small JSON endpoint index plus capability metadata for
+supported source extensions, answer extensions, verdicts, and trust levels, so
+local clients can avoid hardcoding Quorum's current contract, and
 `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover both request and response payload shapes without
 scraping the README. The OpenAPI document includes reusable schemas for the
