@@ -172,6 +172,7 @@ async function handleApiRequest(
       return;
     }
 
+    requireJsonRequest(request);
     const body = parseVerifyRequest(await readJsonBody(request));
     const result = await verifyAnswerContentsResult({
       answer: body.answer,
@@ -191,6 +192,7 @@ async function handleApiRequest(
       return;
     }
 
+    requireJsonRequest(request);
     const body = parseVerifyBatchRequest(await readJsonBody(request));
     const result = await verifyAnswerBatchContentsResult({
       answers: body.answers,
@@ -208,6 +210,7 @@ async function handleApiRequest(
       return;
     }
 
+    requireJsonRequest(request);
     const body = parseImportReviewRequest(await readJsonBody(request));
     const result = importReviewerDecisionContentsResult({
       reviewCsvContent: body.reviewCsvContent,
@@ -223,6 +226,7 @@ async function handleApiRequest(
       return;
     }
 
+    requireJsonRequest(request);
     const body = parseEvaluateRequest(await readJsonBody(request));
     const result = await evaluateFixtureContentsResult({
       fixtures: body.fixtures,
@@ -252,6 +256,20 @@ async function readJsonBody(request: IncomingMessage): Promise<unknown> {
   } catch {
     throw requestError("Request body must be valid JSON.");
   }
+}
+
+function requireJsonRequest(request: IncomingMessage): void {
+  const contentType = request.headers["content-type"];
+
+  if (typeof contentType !== "string" || !isJsonContentType(contentType)) {
+    throw requestError("Content-Type must be application/json.", 415);
+  }
+}
+
+function isJsonContentType(contentType: string): boolean {
+  const mediaType = contentType.split(";", 1)[0]?.trim().toLowerCase();
+
+  return mediaType === "application/json" || mediaType.endsWith("+json");
 }
 
 function parseVerifyRequest(value: unknown): {
