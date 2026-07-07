@@ -2,6 +2,7 @@ import { createServer, type IncomingMessage, type Server, type ServerResponse } 
 import { parseClaimVerdict } from "./report-policy.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
 import {
+  importReviewerDecisionContentsResult,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
   type InMemoryAnswerInput,
@@ -30,6 +31,11 @@ export interface VerifyBatchApiRequest {
   }>;
   sources: ApiSourceInput[];
   defaultTrustLevel?: string;
+  failOn?: string[];
+}
+
+export interface ImportReviewApiRequest {
+  reviewCsvContent: string;
   failOn?: string[];
 }
 
@@ -146,6 +152,21 @@ async function handleApiRequest(
     return;
   }
 
+  if (url === "/import-review") {
+    if (request.method !== "POST") {
+      writeMethodNotAllowed(response, "POST");
+      return;
+    }
+
+    const body = parseImportReviewRequest(await readJsonBody(request));
+    const result = importReviewerDecisionContentsResult({
+      reviewCsvContent: body.reviewCsvContent,
+      failOn: body.failOn,
+    });
+    writeJson(response, 200, result);
+    return;
+  }
+
   writeJson(response, 404, { error: "Not found." });
 }
 
@@ -206,6 +227,18 @@ function parseVerifyBatchRequest(value: unknown): {
     answers: answersValue.map((answer, index) => parseAnswerInput(answer, index)),
     sources: parseSources(record.sources),
     defaultTrustLevel: parseOptionalTrustLevel(record.defaultTrustLevel),
+    failOn: parseOptionalFailOn(record.failOn),
+  };
+}
+
+function parseImportReviewRequest(value: unknown): {
+  reviewCsvContent: string;
+  failOn?: ReturnType<typeof parseFailOnVerdicts>;
+} {
+  const record = requireRecord(value, "Import review request body");
+
+  return {
+    reviewCsvContent: requireString(record.reviewCsvContent, "reviewCsvContent"),
     failOn: parseOptionalFailOn(record.failOn),
   };
 }
