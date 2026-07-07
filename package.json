@@ -10,8 +10,16 @@
     "README.md"
   ],
   "exports": {
-    ".": "./dist/src/index.js",
-    "./cli": "./dist/src/cli.js"
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
+    },
+    "./cli": {
+      "types": "./dist/src/cli.d.ts",
+      "import": "./dist/src/cli.js",
+      "default": "./dist/src/cli.js"
+    }
   },
   "bin": {
     "quorum": "./dist/src/cli.js"

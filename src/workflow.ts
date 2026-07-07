@@ -29,7 +29,7 @@ export interface SourceLoadOptions {
 
 export interface InMemorySourceInput {
   sourcePath: string;
-  content: string | Buffer;
+  content: string | Uint8Array;
 }
 
 export interface InMemorySourceLoadOptions {

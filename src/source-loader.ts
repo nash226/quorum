@@ -40,13 +40,13 @@ export function sourceDocumentFromFile(
 ): Promise<SourceDocument>;
 export function sourceDocumentFromFile(
   sourcePath: string,
-  content: Buffer,
+  content: Uint8Array,
   index: number,
   options?: SourceDocumentOptions,
 ): Promise<SourceDocument>;
 export async function sourceDocumentFromFile(
   sourcePath: string,
-  content: string | Buffer,
+  content: string | Uint8Array,
   index: number,
   options: SourceDocumentOptions = {},
 ): Promise<SourceDocument> {
@@ -54,7 +54,7 @@ export async function sourceDocumentFromFile(
     return pdfSourceDocumentFromFile(sourcePath, content, index, options);
   }
 
-  const textContent = typeof content === "string" ? content : content.toString("utf8");
+  const textContent = typeof content === "string" ? content : new TextDecoder().decode(content);
   const parsed = parseSource(sourcePath, textContent);
 
   return {
@@ -642,7 +642,7 @@ function decodeHtmlEntities(content: string): string {
 
 async function pdfSourceDocumentFromFile(
   sourcePath: string,
-  content: string | Buffer,
+  content: string | Uint8Array,
   index: number,
   options: SourceDocumentOptions,
 ): Promise<SourceDocument> {

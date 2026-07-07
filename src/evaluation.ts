@@ -77,7 +77,7 @@ export interface InMemoryEvaluationBatchOptions {
 
 export interface InMemoryEvaluationFixtureInput {
   fixturePath: string;
-  content: string | Buffer;
+  content: string | Uint8Array;
 }
 
 export interface InMemoryEvaluationFixtureFileBatchOptions {
@@ -87,7 +87,7 @@ export interface InMemoryEvaluationFixtureFileBatchOptions {
 
 export interface InMemoryEvaluationFixtureFileOptions {
   fixturePath: string;
-  content: string | Buffer;
+  content: string | Uint8Array;
   generatedAt?: string;
 }
 
@@ -95,8 +95,10 @@ export async function loadEvaluationFixture(fixturePath: string): Promise<Evalua
   return JSON.parse(await readFile(fixturePath, "utf8")) as EvaluationFixture;
 }
 
-export function loadEvaluationFixtureFromContent(content: string | Buffer): EvaluationFixture {
-  return JSON.parse(content.toString()) as EvaluationFixture;
+export function loadEvaluationFixtureFromContent(content: string | Uint8Array): EvaluationFixture {
+  return JSON.parse(
+    typeof content === "string" ? content : new TextDecoder().decode(content),
+  ) as EvaluationFixture;
 }
 
 export async function evaluateFixture(
