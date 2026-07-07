@@ -110,6 +110,30 @@ Employees get 12 weeks.
   assert.equal(source.trustLevel, "low");
 });
 
+test("prefers explicit source metadata overrides over parsed metadata", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.md",
+    `---
+title: HR Benefits Policy
+updatedAt: 2026-05-31
+trustLevel: low
+---
+Employees get 12 weeks.
+`,
+    0,
+    {
+      title: "HR Handbook",
+      updatedAt: "2026-06-15",
+      trustLevel: "high",
+      defaultTrustLevel: "medium",
+    },
+  );
+
+  assert.equal(source.title, "HR Handbook");
+  assert.equal(source.updatedAt, "2026-06-15");
+  assert.equal(source.trustLevel, "high");
+});
+
 test("extracts readable text and title from exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",

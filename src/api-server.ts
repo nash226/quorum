@@ -15,6 +15,9 @@ import {
 export interface ApiSourceInput {
   sourcePath: string;
   content: string;
+  title?: string;
+  updatedAt?: string;
+  trustLevel?: string;
 }
 
 export interface VerifyApiRequest {
@@ -85,6 +88,9 @@ const OPENAPI_VERIFY_EXAMPLE = {
   sources: [
     {
       sourcePath: "sources/hr-policy.md",
+      title: "HR Policy",
+      updatedAt: "2026-05-31",
+      trustLevel: "high",
       content: `---
 title: HR Policy
 trustLevel: high
@@ -114,6 +120,8 @@ const OPENAPI_VERIFY_BATCH_EXAMPLE = {
   sources: [
     {
       sourcePath: "sources/hr-policy.md",
+      title: "HR Policy",
+      trustLevel: "high",
       content: `---
 title: HR Policy
 trustLevel: high
@@ -123,6 +131,8 @@ Employees receive 12 weeks of paid parental leave.
     },
     {
       sourcePath: "sources/support-playbook.md",
+      title: "Support Playbook",
+      trustLevel: "medium",
       content: `---
 title: Support Playbook
 trustLevel: medium
@@ -487,18 +497,22 @@ function parseSources(value: unknown): InMemorySourceInput[] {
     return {
       sourcePath: requireString(record.sourcePath, `sources[${index}].sourcePath`),
       content: requireString(record.content, `sources[${index}].content`),
+      title: optionalString(record.title, `sources[${index}].title`),
+      updatedAt: optionalString(record.updatedAt, `sources[${index}].updatedAt`),
+      trustLevel: parseOptionalTrustLevel(record.trustLevel),
     };
   });
 }
 
 function parseOptionalTrustLevel(
   value: unknown,
+  fieldName = "defaultTrustLevel",
 ): ReturnType<typeof parseSourceTrustLevel> | undefined {
   if (value === undefined) {
     return undefined;
   }
 
-  return parseSourceTrustLevel(requireString(value, "defaultTrustLevel"));
+  return parseSourceTrustLevel(requireString(value, fieldName));
 }
 
 function parseOptionalFailOn(value: unknown): ReturnType<typeof parseFailOnVerdicts> | undefined {
@@ -894,6 +908,9 @@ function buildOpenApiDocument(request: IncomingMessage) {
           properties: {
             sourcePath: { type: "string" },
             content: { type: "string" },
+            title: { type: "string" },
+            updatedAt: { type: "string" },
+            trustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
           },
           required: ["sourcePath", "content"],
         },
