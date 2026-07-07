@@ -377,6 +377,7 @@ curl -s http://127.0.0.1:3000/verify \
   -d '{
     "answer": "Employees receive 12 weeks of paid parental leave.",
     "answerLabel": "HR reviewer packet",
+    "generatedAt": "2026-07-07T19:15:00.000Z",
     "sources": [
       {
         "sourcePath": "sources/hr-policy.md",
@@ -389,6 +390,9 @@ curl -s http://127.0.0.1:3000/verify \
 
 Batch verification uses the same source shape and accepts an `answers` array of
 `{ answer, answerPath?, answerLabel? }` objects at `POST /verify-batch`.
+`POST /verify`, `POST /verify-batch`, and `POST /evaluate` also accept an
+optional `generatedAt` timestamp so workflow runners can keep report output
+stable across retries and fixture snapshots.
 All `POST` endpoints require `Content-Type: application/json` and return `415`
 when callers send a different media type.
 Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
