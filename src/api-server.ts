@@ -52,6 +52,8 @@ export interface StartedApiServer {
   close(): Promise<void>;
 }
 
+const OPENAPI_PATH = "/openapi.json";
+
 export function createApiServer(): Server {
   return createServer(async (request, response) => {
     try {
@@ -111,8 +113,35 @@ async function handleApiRequest(
 ): Promise<void> {
   const url = request.url ?? "/";
 
+  if (request.method === "GET" && url === "/") {
+    writeJson(response, 200, {
+      service: "quorum",
+      endpoints: [
+        { method: "GET", path: "/health", description: "Return a simple readiness response." },
+        { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
+        { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
+        {
+          method: "POST",
+          path: "/verify-batch",
+          description: "Verify multiple answers from JSON request content.",
+        },
+        {
+          method: "POST",
+          path: "/import-review",
+          description: "Import reviewer CSV content from JSON request content.",
+        },
+      ],
+    });
+    return;
+  }
+
   if (request.method === "GET" && url === "/health") {
     writeJson(response, 200, { ok: true });
+    return;
+  }
+
+  if (request.method === "GET" && url === OPENAPI_PATH) {
+    writeJson(response, 200, buildOpenApiDocument(request));
     return;
   }
 
@@ -316,6 +345,185 @@ function optionalString(value: unknown, fieldName: string): string | undefined {
   }
 
   return requireString(value, fieldName);
+}
+
+function buildOpenApiDocument(request: IncomingMessage) {
+  const host = request.headers.host;
+  const servers = host ? [{ url: `http://${host}` }] : [];
+
+  return {
+    openapi: "3.1.0",
+    info: {
+      title: "Quorum Local API",
+      version: "0.1.0",
+      description:
+        "Local JSON API for Quorum answer verification, batch verification, and reviewer decision imports.",
+    },
+    servers,
+    paths: {
+      "/health": {
+        get: {
+          summary: "Readiness check",
+          responses: {
+            "200": {
+              description: "Server is ready to accept requests.",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      ok: { type: "boolean", const: true },
+                    },
+                    required: ["ok"],
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      [OPENAPI_PATH]: {
+        get: {
+          summary: "OpenAPI description",
+          responses: {
+            "200": {
+              description: "Machine-readable API description for this server.",
+            },
+          },
+        },
+      },
+      "/verify": {
+        post: {
+          summary: "Verify one answer",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    answer: { type: "string" },
+                    answerPath: { type: "string" },
+                    answerLabel: { type: "string" },
+                    sources: {
+                      type: "array",
+                      minItems: 1,
+                      items: { $ref: "#/components/schemas/ApiSourceInput" },
+                    },
+                    defaultTrustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
+                    failOn: {
+                      type: "array",
+                      items: { $ref: "#/components/schemas/ClaimVerdict" },
+                    },
+                  },
+                  required: ["answer", "sources"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Single-answer verification result.",
+            },
+          },
+        },
+      },
+      "/verify-batch": {
+        post: {
+          summary: "Verify multiple answers",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    answers: {
+                      type: "array",
+                      minItems: 1,
+                      items: {
+                        type: "object",
+                        properties: {
+                          answer: { type: "string" },
+                          answerPath: { type: "string" },
+                          answerLabel: { type: "string" },
+                        },
+                        required: ["answer"],
+                      },
+                    },
+                    sources: {
+                      type: "array",
+                      minItems: 1,
+                      items: { $ref: "#/components/schemas/ApiSourceInput" },
+                    },
+                    defaultTrustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
+                    failOn: {
+                      type: "array",
+                      items: { $ref: "#/components/schemas/ClaimVerdict" },
+                    },
+                  },
+                  required: ["answers", "sources"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Batch verification result.",
+            },
+          },
+        },
+      },
+      "/import-review": {
+        post: {
+          summary: "Import reviewer decisions",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    reviewCsvContent: { type: "string" },
+                    failOn: {
+                      type: "array",
+                      items: { $ref: "#/components/schemas/ClaimVerdict" },
+                    },
+                  },
+                  required: ["reviewCsvContent"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Reviewer decision import result.",
+            },
+          },
+        },
+      },
+    },
+    components: {
+      schemas: {
+        ApiSourceInput: {
+          type: "object",
+          properties: {
+            sourcePath: { type: "string" },
+            content: { type: "string" },
+          },
+          required: ["sourcePath", "content"],
+        },
+        SourceTrustLevel: {
+          type: "string",
+          enum: ["low", "medium", "high"],
+        },
+        ClaimVerdict: {
+          type: "string",
+          enum: ["verified", "unsupported", "contradicted", "needs_review"],
+        },
+      },
+    },
+  };
 }
 
 function writeMethodNotAllowed(response: ServerResponse, allow: string): void {
