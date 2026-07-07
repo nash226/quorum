@@ -323,6 +323,8 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexResponse.status, 200);
     const indexPayload = await indexResponse.json();
     assert.equal(indexPayload.service, "quorum");
+    assert.equal(indexPayload.version, "0.1.0");
+    assert.equal(indexPayload.openapiPath, "/openapi.json");
     assert.equal(indexPayload.endpoints[1]?.path, "/openapi.json");
 
     const openApiResponse = await fetch(`${server.url}/openapi.json`);
@@ -334,7 +336,11 @@ Employees receive 12 weeks of paid parental leave.
 
     const healthResponse = await fetch(`${server.url}/health`);
     assert.equal(healthResponse.status, 200);
-    assert.deepEqual(await healthResponse.json(), { ok: true });
+    assert.deepEqual(await healthResponse.json(), {
+      ok: true,
+      service: "quorum",
+      version: "0.1.0",
+    });
 
     const preflightResponse = await fetch(`${server.url}/verify`, {
       method: "OPTIONS",
