@@ -40,6 +40,7 @@ export interface InMemorySourceLoadOptions {
 export interface BatchVerificationOptions {
   answerPaths: string[];
   answerDirPaths: string[];
+  answerLabelsByPath?: Record<string, string>;
   sources: SourceDocument[];
   failOn?: ClaimVerdict[];
   generatedAt?: string;
@@ -109,6 +110,7 @@ export interface SingleFileInputVerificationResultOptions
 export interface BatchFileInputVerificationOptions extends SourceLoadOptions {
   answerPaths: string[];
   answerDirPaths: string[];
+  answerLabelsByPath?: Record<string, string>;
   failOn?: ClaimVerdict[];
   generatedAt?: string;
 }
@@ -357,6 +359,7 @@ export async function verifyAnswerBatchFileInputs(
   return verifyBatchAnswers({
     answerPaths: options.answerPaths,
     answerDirPaths: options.answerDirPaths,
+    answerLabelsByPath: options.answerLabelsByPath,
     sources,
     failOn: options.failOn,
     generatedAt: options.generatedAt,
@@ -428,7 +431,12 @@ export async function verifyBatchAnswers(
   const answers = await Promise.all(
     answerPaths.map(async (answerPath, index) => {
       const normalizedAnswerPath = normalizedAnswerPaths[index] ?? answerPath;
-      const answerLabel = answerLabels[index] ?? normalizedAnswerPath;
+      const answerLabel =
+        resolveBatchAnswerLabel(
+          answerPath,
+          normalizedAnswerPath,
+          options.answerLabelsByPath,
+        ) ?? answerLabels[index] ?? normalizedAnswerPath;
       const report =
         answerPath === "-" && stdinAnswer !== undefined
           ? verifyAnswer(stdinAnswer, options.sources, generatedAt, STDIN_ANSWER_PATH)
@@ -767,6 +775,27 @@ function dedupePathsInOrder(paths: string[]): string[] {
   }
 
   return uniquePaths;
+}
+
+function resolveBatchAnswerLabel(
+  answerPath: string,
+  normalizedAnswerPath: string,
+  answerLabelsByPath: Record<string, string> | undefined,
+): string | undefined {
+  if (answerLabelsByPath === undefined) {
+    return undefined;
+  }
+
+  if (answerPath in answerLabelsByPath) {
+    return answerLabelsByPath[answerPath];
+  }
+
+  if (normalizedAnswerPath in answerLabelsByPath) {
+    return answerLabelsByPath[normalizedAnswerPath];
+  }
+
+  const resolvedPath = answerPath === "-" ? STDIN_ANSWER_PATH : resolve(answerPath);
+  return answerLabelsByPath[resolvedPath];
 }
 
 function resolveReviewCsvContent(
