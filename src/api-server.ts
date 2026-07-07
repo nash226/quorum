@@ -21,6 +21,7 @@ export interface VerifyApiRequest {
   answerLabel?: string;
   sources: ApiSourceInput[];
   defaultTrustLevel?: string;
+  generatedAt?: string;
   failOn?: string[];
 }
 
@@ -32,6 +33,7 @@ export interface VerifyBatchApiRequest {
   }>;
   sources: ApiSourceInput[];
   defaultTrustLevel?: string;
+  generatedAt?: string;
   failOn?: string[];
 }
 
@@ -45,6 +47,7 @@ export interface EvaluateApiRequest {
     fixturePath: string;
     content: string;
   }>;
+  generatedAt?: string;
 }
 
 export interface ApiServerOptions {
@@ -69,6 +72,7 @@ const OPENAPI_VERIFY_EXAMPLE = {
   answer: "Employees receive 12 weeks of paid parental leave.",
   answerPath: "answers/hr.md",
   answerLabel: "HR policy answer",
+  generatedAt: "2026-07-07T19:15:00.000Z",
   sources: [
     {
       sourcePath: "sources/hr-policy.md",
@@ -85,6 +89,7 @@ Employees receive 12 weeks of paid parental leave.
   failOn: ["contradicted", "unsupported"],
 } as const;
 const OPENAPI_VERIFY_BATCH_EXAMPLE = {
+  generatedAt: "2026-07-07T19:20:00.000Z",
   answers: [
     {
       answer: "Employees receive 12 weeks of paid parental leave.",
@@ -127,6 +132,7 @@ const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
   failOn: ["needs_review"],
 } as const;
 const OPENAPI_EVALUATE_EXAMPLE = {
+  generatedAt: "2026-07-07T19:25:00.000Z",
   fixtures: [
     {
       fixturePath: "evaluations/hr-policy.json",
@@ -272,6 +278,7 @@ async function handleApiRequest(
       answerLabel: body.answerLabel,
       sources: body.sources,
       defaultTrustLevel: body.defaultTrustLevel,
+      generatedAt: body.generatedAt,
       failOn: body.failOn,
     });
     writeJson(response, 200, result);
@@ -290,6 +297,7 @@ async function handleApiRequest(
       answers: body.answers,
       sources: body.sources,
       defaultTrustLevel: body.defaultTrustLevel,
+      generatedAt: body.generatedAt,
       failOn: body.failOn,
     });
     writeJson(response, 200, result);
@@ -322,6 +330,7 @@ async function handleApiRequest(
     const body = parseEvaluateRequest(await readJsonBody(request));
     const result = await evaluateFixtureContentsResult({
       fixtures: body.fixtures,
+      generatedAt: body.generatedAt,
     });
     writeJson(response, 200, result);
     return;
@@ -370,6 +379,7 @@ function parseVerifyRequest(value: unknown): {
   answerLabel?: string;
   sources: InMemorySourceInput[];
   defaultTrustLevel?: ReturnType<typeof parseSourceTrustLevel>;
+  generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
 } {
   const record = requireRecord(value, "Verify request body");
@@ -380,6 +390,7 @@ function parseVerifyRequest(value: unknown): {
     answerLabel: optionalString(record.answerLabel, "answerLabel"),
     sources: parseSources(record.sources),
     defaultTrustLevel: parseOptionalTrustLevel(record.defaultTrustLevel),
+    generatedAt: optionalString(record.generatedAt, "generatedAt"),
     failOn: parseOptionalFailOn(record.failOn),
   };
 }
@@ -388,6 +399,7 @@ function parseVerifyBatchRequest(value: unknown): {
   answers: InMemoryAnswerInput[];
   sources: InMemorySourceInput[];
   defaultTrustLevel?: ReturnType<typeof parseSourceTrustLevel>;
+  generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
 } {
   const record = requireRecord(value, "Batch verify request body");
@@ -401,6 +413,7 @@ function parseVerifyBatchRequest(value: unknown): {
     answers: answersValue.map((answer, index) => parseAnswerInput(answer, index)),
     sources: parseSources(record.sources),
     defaultTrustLevel: parseOptionalTrustLevel(record.defaultTrustLevel),
+    generatedAt: optionalString(record.generatedAt, "generatedAt"),
     failOn: parseOptionalFailOn(record.failOn),
   };
 }
@@ -419,6 +432,7 @@ function parseImportReviewRequest(value: unknown): {
 
 function parseEvaluateRequest(value: unknown): {
   fixtures: InMemoryEvaluationFixtureInput[];
+  generatedAt?: string;
 } {
   const record = requireRecord(value, "Evaluate request body");
   const fixturesValue = record.fixtures;
@@ -429,6 +443,7 @@ function parseEvaluateRequest(value: unknown): {
 
   return {
     fixtures: fixturesValue.map((fixture, index) => parseFixtureInput(fixture, index)),
+    generatedAt: optionalString(record.generatedAt, "generatedAt"),
   };
 }
 
@@ -627,6 +642,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       items: { $ref: "#/components/schemas/ApiSourceInput" },
                     },
                     defaultTrustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
+                    generatedAt: { type: "string" },
                     failOn: {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
@@ -685,6 +701,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       items: { $ref: "#/components/schemas/ApiSourceInput" },
                     },
                     defaultTrustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
+                    generatedAt: { type: "string" },
                     failOn: {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
@@ -764,6 +781,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                 schema: {
                   type: "object",
                   properties: {
+                    generatedAt: { type: "string" },
                     fixtures: {
                       type: "array",
                       minItems: 1,

@@ -1755,6 +1755,7 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
 
 test("programmatic API serves single-answer verification over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const generatedAt = "2026-07-07T19:15:00.000Z";
 
   try {
     const indexResponse = await fetch(api.url);
@@ -1865,6 +1866,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
         answer: "Employees receive 12 weeks of paid parental leave.",
         answerPath: "answers/hr.md",
         answerLabel: "HR policy answer",
+        generatedAt,
         sources: [
           {
             sourcePath: "sources/hr-policy.md",
@@ -1886,6 +1888,7 @@ Employees receive 12 weeks of paid parental leave.
         "mixedBatchReviewQueue"
       ]?.value,
       {
+        generatedAt: "2026-07-07T19:20:00.000Z",
         answers: [
           {
             answer: "Employees receive 12 weeks of paid parental leave.",
@@ -1938,6 +1941,7 @@ Refund requests receive an initial response within one business day.
         "hrFixtureScorecard"
       ]?.value,
       {
+        generatedAt: "2026-07-07T19:25:00.000Z",
         fixtures: [
           {
             fixturePath: "evaluations/hr-policy.json",
@@ -2033,6 +2037,7 @@ Refund requests receive an initial response within one business day.
       body: JSON.stringify({
         answer: "Employees receive 12 weeks of paid parental leave.",
         answerLabel: "HR reviewer packet",
+        generatedAt,
         sources: [
           {
             sourcePath: "sources/hr-policy.md",
@@ -2054,6 +2059,7 @@ Employees receive 12 weeks of paid parental leave.
       shouldFail: boolean;
       failVerdicts: string[];
       report: {
+        generatedAt: string;
         answerLabel?: string;
         summary: Record<string, number>;
       };
@@ -2061,6 +2067,7 @@ Employees receive 12 weeks of paid parental leave.
 
     assert.equal(result.shouldFail, false);
     assert.deepEqual(result.failVerdicts, []);
+    assert.equal(result.report.generatedAt, generatedAt);
     assert.equal(result.report.answerLabel, "HR reviewer packet");
     assert.deepEqual(result.report.summary, {
       verified: 1,
@@ -2097,6 +2104,7 @@ test("programmatic API answers CORS preflight requests", async () => {
 });
 
 test("programmatic API serves batch verification over HTTP", async () => {
+  const generatedAt = "2026-07-07T19:20:00.000Z";
   const server = createApiServer();
 
   await new Promise<void>((resolve) => {
@@ -2117,6 +2125,7 @@ test("programmatic API serves batch verification over HTTP", async () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        generatedAt,
         answers: [
           {
             answer: "Employees receive 12 weeks of paid parental leave.",
@@ -2148,6 +2157,7 @@ Employees receive 12 weeks of paid parental leave.
       shouldFail: boolean;
       failVerdicts: string[];
       report: {
+        generatedAt: string;
         summary: Record<string, number>;
         answers: Array<{
           answerLabel: string;
@@ -2157,6 +2167,7 @@ Employees receive 12 weeks of paid parental leave.
 
     assert.equal(result.shouldFail, true);
     assert.deepEqual(result.failVerdicts, ["unsupported"]);
+    assert.equal(result.report.generatedAt, generatedAt);
     assert.equal(result.report.answers[0]?.answerLabel, "HR queue");
     assert.deepEqual(result.report.summary, {
       verified: 1,
@@ -2306,6 +2317,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
 
 test("programmatic API serves evaluation over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const generatedAt = "2026-07-07T19:25:00.000Z";
 
   try {
     const fixtureContent = await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8");
@@ -2315,6 +2327,7 @@ test("programmatic API serves evaluation over HTTP", async () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        generatedAt,
         fixtures: [
           {
             fixturePath: join(process.cwd(), "examples/evaluations/hr-policy.json"),
@@ -2330,6 +2343,9 @@ test("programmatic API serves evaluation over HTTP", async () => {
       mismatchCount: number;
       scorecards: Array<{
         fixtureName: string;
+        report: {
+          generatedAt: string;
+        };
         summaryMatches: boolean;
         matchedClaims: number;
         totalExpectedClaims: number;
@@ -2339,6 +2355,7 @@ test("programmatic API serves evaluation over HTTP", async () => {
     assert.equal(result.shouldFail, false);
     assert.equal(result.mismatchCount, 0);
     assert.equal(result.scorecards[0]?.fixtureName, "HR policy example");
+    assert.equal(result.scorecards[0]?.report.generatedAt, generatedAt);
     assert.equal(result.scorecards[0]?.summaryMatches, true);
     assert.equal(result.scorecards[0]?.matchedClaims, 3);
     assert.equal(result.scorecards[0]?.totalExpectedClaims, 3);
