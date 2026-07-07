@@ -28,6 +28,7 @@
 - write one-row summary CSVs for single-answer and batch verification workflows, including the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
+- serve a lightweight local HTTP API for single-answer and batch verification workflows
 
 ## Roadmap Snapshot
 
