@@ -53,6 +53,7 @@ The current CLI can:
 - write one-row summary CSVs for single-answer and batch verification workflows, including the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
+- serve a lightweight local HTTP API for single-answer and batch verification workflows
 
 ## Example
 
@@ -348,6 +349,47 @@ const evaluationResult = await evaluateFixtureFilesResult({
   fixtureDirPaths: ["examples/evaluations"],
 });
 ```
+
+## HTTP API
+
+For lightweight local integrations that prefer JSON over shelling out, Quorum
+can also run a built-in HTTP server:
+
+```bash
+npm run dev -- serve --port 3000
+```
+
+Available endpoints:
+
+- `GET /health`
+- `POST /verify`
+- `POST /verify-batch`
+
+Single-answer verification request example:
+
+```bash
+curl -s http://127.0.0.1:3000/verify \
+  -H 'content-type: application/json' \
+  -d '{
+    "answer": "Employees receive 12 weeks of paid parental leave.",
+    "answerLabel": "HR reviewer packet",
+    "sources": [
+      {
+        "sourcePath": "sources/hr-policy.md",
+        "content": "---\ntitle: HR Policy\ntrustLevel: high\n---\nEmployees receive 12 weeks of paid parental leave.\n"
+      }
+    ],
+    "failOn": ["contradicted"]
+  }'
+```
+
+Batch verification uses the same source shape and accepts an `answers` array of
+`{ answer, answerPath?, answerLabel? }` objects at `POST /verify-batch`.
+Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
+`verifyAnswerBatchContentsResult` shapes so workflow callers get the report,
+matched fail verdicts, and `shouldFail` status in one JSON payload.
+Node integrations that want to embed the server directly can import the same
+helpers from `quorum/server`.
 
 `verifyAnswerFile` accepts either positional arguments or a single options
 object with `answerPath`, `sources`, `generatedAt`, and `answerLabel`.

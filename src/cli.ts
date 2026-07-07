@@ -40,6 +40,7 @@ import {
   renderReviewerDecisionImportReport,
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
+import { startApiServer } from "./api-server.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
 import { renderAnswerPreview, stripByteOrderMark } from "./text.js";
 import {
@@ -99,8 +100,13 @@ interface EvaluateArgs {
   summaryCsvOutPath?: string;
 }
 
+interface ServeArgs {
+  host?: string;
+  port?: number;
+}
+
 const HELP_FLAGS = new Set(["--help", "-h"]);
-type CommandName = "verify" | "verify-batch" | "import-review" | "evaluate";
+type CommandName = "verify" | "verify-batch" | "import-review" | "evaluate" | "serve";
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -152,6 +158,16 @@ async function main(): Promise<void> {
     }
 
     await runEvaluate(args);
+    return;
+  }
+
+  if (command === "serve") {
+    if (args.some(isHelpFlag)) {
+      printHelp("serve");
+      return;
+    }
+
+    await runServe(args);
     return;
   }
 
@@ -413,6 +429,25 @@ async function runEvaluate(args: string[]): Promise<void> {
   }
 }
 
+async function runServe(args: string[]): Promise<void> {
+  const parsed = parseServeArgs(args);
+  const api = await startApiServer({
+    host: parsed.host,
+    port: parsed.port,
+  });
+
+  console.log(`Quorum API listening on ${api.url}`);
+
+  await new Promise<void>((resolve) => {
+    const shutdown = () => {
+      void api.close().finally(resolve);
+    };
+
+    process.once("SIGINT", shutdown);
+    process.once("SIGTERM", shutdown);
+  });
+}
+
 function parseVerifyArgs(args: string[]): VerifySingleArgs {
   const parsed = parseSharedVerifyArgs(args, new Set([
     "--answer",
@@ -473,6 +508,38 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
     reviewCsvOutPath,
     summaryCsvOutPath,
   };
+}
+
+function parseServeArgs(args: string[]): ServeArgs {
+  let host: string | undefined;
+  let port: number | undefined;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    const next = args[index + 1];
+
+    if (arg === "--host" && next) {
+      host = next;
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--port" && next) {
+      const parsedPort = Number.parseInt(next, 10);
+
+      if (!Number.isInteger(parsedPort) || parsedPort < 0 || parsedPort > 65535) {
+        throw new Error(`Invalid --port value: ${next}`);
+      }
+
+      port = parsedPort;
+      index += 1;
+      continue;
+    }
+
+    throw new Error(`Unknown or incomplete argument: ${arg}`);
+  }
+
+  return { host, port };
 }
 
 function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
@@ -1008,6 +1075,23 @@ Example:
   npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --json
 `,
+    serve: `Quorum serve
+
+Usage:
+  quorum serve [--host <host>] [--port <port>]
+
+Options:
+  --host <host>             Host interface to bind; defaults to 127.0.0.1
+  --port <port>             Port to bind; defaults to 3000, use 0 for an ephemeral port
+
+Endpoints:
+  GET  /health              Return a simple readiness response
+  POST /verify              Verify one answer from JSON request content
+  POST /verify-batch        Verify multiple answers from JSON request content
+
+Example:
+  npm run dev -- serve --port 3000
+`,
   };
 
   if (command) {
@@ -1022,6 +1106,7 @@ Usage:
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
+  quorum serve [--host <host>] [--port <port>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
@@ -1032,6 +1117,7 @@ Example:
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
   npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
+  npm run dev -- serve --port 3000
 `);
 }
 
