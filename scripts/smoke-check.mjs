@@ -400,6 +400,25 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(batchVerifyResult.failVerdicts, ["needs_review"]);
     assert.equal(batchVerifyResult.report.answerCount, 2);
     assert.equal(batchVerifyResult.report.summary.needs_review, 1);
+
+    const importReviewResponse = await fetch(`${server.url}/import-review`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewCsvContent: `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
+`,
+        failOn: ["needs_review"],
+      }),
+    });
+    assert.equal(importReviewResponse.status, 200);
+    const importReviewResult = await importReviewResponse.json();
+    assert.equal(importReviewResult.shouldFail, true);
+    assert.deepEqual(importReviewResult.failVerdicts, ["needs_review"]);
+    assert.equal(importReviewResult.report.summary.needs_review, 1);
+    assert.equal(importReviewResult.report.answerGroups[0]?.label, "HR reviewer packet");
   } finally {
     await server.stop();
   }
