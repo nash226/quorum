@@ -13,6 +13,23 @@ export type {
   VerificationReport,
 } from "./domain.js";
 export {
+  API_CAPABILITIES,
+  API_SERVICE_NAME,
+  API_VERSION,
+  createApiServer,
+  OPENAPI_PATH,
+  startApiServer,
+} from "./api-server.js";
+export type {
+  ApiServerOptions,
+  ApiSourceInput,
+  EvaluateApiRequest,
+  ImportReviewApiRequest,
+  StartedApiServer,
+  VerifyApiRequest,
+  VerifyBatchApiRequest,
+} from "./api-server.js";
+export {
   evaluateFixtureContent,
   evaluateFixtureContentResult,
   evaluateFixture,
