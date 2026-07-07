@@ -483,6 +483,8 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
   const packedPaths = new Set(packedPackage.files.map((file) => file.path));
   assert.ok(packedPaths.has("dist/src/index.js"));
   assert.ok(packedPaths.has("dist/src/index.d.ts"));
+  assert.ok(packedPaths.has("dist/src/api-server.js"));
+  assert.ok(packedPaths.has("dist/src/api-server.d.ts"));
   assert.ok(packedPaths.has("dist/src/cli.js"));
   assert.ok(packedPaths.has("README.md"));
   assert.ok(!packedPaths.has("src/index.ts"));
@@ -505,10 +507,15 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
     cwd: consumerDir,
     stdio: "pipe",
   });
+  runCommand("npm", ["install", "--save-dev", "@types/node"], {
+    cwd: consumerDir,
+    stdio: "pipe",
+  });
   const consumerImportPath = join(consumerDir, "consumer-import.mjs");
   writeFileSync(
     consumerImportPath,
     `import { verifyAnswerResult } from "quorum";
+import { startApiServer } from "quorum/server";
 
 const report = verifyAnswerResult({
   answer: "Employees receive 12 weeks of paid parental leave.",
@@ -526,6 +533,18 @@ const report = verifyAnswerResult({
 if (report.report.summary.verified !== 1) {
   throw new Error("Expected packed quorum import to verify one claim.");
 }
+
+const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+try {
+  const response = await fetch(\`\${api.url}/health\`);
+
+  if (response.status !== 200) {
+    throw new Error("Expected packed quorum/server export to serve a health response.");
+  }
+} finally {
+  await api.close();
+}
 `,
     "utf8",
   );
@@ -541,6 +560,7 @@ if (report.report.summary.verified !== 1) {
   type InMemorySingleVerificationResultOptions,
   type SourceDocument,
 } from "quorum";
+import { createApiServer, type StartedApiServer } from "quorum/server";
 
 const sources: SourceDocument[] = [
   {
@@ -574,6 +594,12 @@ const rawOptions: InMemorySingleVerificationResultOptions = {
 };
 
 await verifyAnswerContentsResult(rawOptions);
+
+const server = createApiServer();
+const startedServer = {} as StartedApiServer;
+
+server.close();
+startedServer.host;
 `,
     "utf8",
   );
@@ -587,6 +613,7 @@ await verifyAnswerContentsResult(rawOptions);
           moduleResolution: "NodeNext",
           strict: true,
           noEmit: true,
+          types: ["node"],
         },
         include: ["consumer-import.ts"],
       },
