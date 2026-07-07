@@ -457,6 +457,31 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.deepEqual(importReviewResult.failVerdicts, ["needs_review"]);
     assert.equal(importReviewResult.report.summary.needs_review, 1);
     assert.equal(importReviewResult.report.answerGroups[0]?.label, "HR reviewer packet");
+
+    const evaluationFixtureContent = readFileSync(
+      join(repoRoot, "examples", "evaluations", "hr-policy.json"),
+      "utf8",
+    );
+    const evaluateResponse = await fetch(`${server.url}/evaluate`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        fixtures: [
+          {
+            fixturePath: join(repoRoot, "examples", "evaluations", "hr-policy.json"),
+            content: evaluationFixtureContent,
+          },
+        ],
+      }),
+    });
+    assert.equal(evaluateResponse.status, 200);
+    const evaluateResult = await evaluateResponse.json();
+    assert.equal(evaluateResult.shouldFail, false);
+    assert.equal(evaluateResult.mismatchCount, 0);
+    assert.equal(evaluateResult.scorecards[0]?.fixtureName, "HR policy example");
+    assert.equal(evaluateResult.scorecards[0]?.summaryMatches, true);
   } finally {
     await server.stop();
   }
