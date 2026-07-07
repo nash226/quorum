@@ -520,6 +520,10 @@ the CLI without converting one answer into a batch request. Batch workflows
 can now use `verifyAnswerBatchResult`, `verifyAnswerBatchFileInputsResult`,
 `verifyAnswersResult`, and `verifyAnswerBatchContentsResult` for the same
 top-level `shouldFail` and `failVerdicts` summary across a full answer set.
+TypeScript consumers can also reuse named option types such as
+`SingleVerificationResultOptions` and
+`InMemorySingleVerificationResultOptions` when they want those fail-policy
+inputs to stay explicit in their own workflow wrappers.
 
 Evaluation workflows can also keep fixture definitions in memory and score them
 in one call, which helps agent teams avoid writing temp fixture JSON files:

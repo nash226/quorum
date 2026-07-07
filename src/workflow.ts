@@ -75,6 +75,11 @@ export interface InMemorySingleVerificationOptions {
   generatedAt?: string;
 }
 
+export interface InMemorySingleVerificationResultOptions
+  extends InMemorySingleVerificationOptions {
+  failOn?: ClaimVerdict[];
+}
+
 export interface SingleFileVerificationOptions {
   answerPath: string;
   answerLabel?: string;
@@ -393,9 +398,7 @@ export async function verifyAnswerContents(
 }
 
 export async function verifyAnswerContentsResult(
-  options: InMemorySingleVerificationOptions & {
-    failOn?: ClaimVerdict[];
-  },
+  options: InMemorySingleVerificationResultOptions,
 ): Promise<SingleVerificationResult> {
   return buildSingleVerificationResult(await verifyAnswerContents(options), options.failOn);
 }
