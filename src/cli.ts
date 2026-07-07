@@ -1086,6 +1086,7 @@ Options:
 
 Endpoints:
   GET  /health              Return a simple readiness response
+  GET  /openapi.json        Return the machine-readable API description
   POST /verify              Verify one answer from JSON request content
   POST /verify-batch        Verify multiple answers from JSON request content
   POST /import-review       Import reviewer CSV content from JSON request content
