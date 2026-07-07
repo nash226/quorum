@@ -114,6 +114,7 @@ export type {
   InMemoryAnswerInput,
   InMemoryBatchContentVerificationOptions,
   InMemoryBatchVerificationOptions,
+  InMemorySingleVerificationResultOptions,
   InMemorySourceInput,
   InMemorySourceLoadOptions,
   ReviewerDecisionContentImportOptions,
