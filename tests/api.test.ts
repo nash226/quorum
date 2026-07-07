@@ -1759,6 +1759,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
   try {
     const indexResponse = await fetch(api.url);
     assert.equal(indexResponse.status, 200);
+    assert.equal(indexResponse.headers.get("access-control-allow-origin"), "*");
     assert.deepEqual(await indexResponse.json(), {
       service: "quorum",
       endpoints: [
@@ -1866,6 +1867,29 @@ Employees receive 12 weeks of paid parental leave.
       unsupported: 0,
       needs_review: 0,
     });
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API answers CORS preflight requests", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "http://localhost:5173",
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type",
+      },
+    });
+
+    assert.equal(response.status, 204);
+    assert.equal(response.headers.get("access-control-allow-origin"), "*");
+    assert.equal(response.headers.get("access-control-allow-methods"), "GET, POST, OPTIONS");
+    assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type");
+    assert.equal(await response.text(), "");
   } finally {
     await api.close();
   }
