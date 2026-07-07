@@ -61,6 +61,8 @@ export interface StartedApiServer {
 }
 
 const OPENAPI_PATH = "/openapi.json";
+const ALLOWED_METHODS = "GET, POST, OPTIONS";
+const ALLOWED_HEADERS = "Content-Type";
 
 export function createApiServer(): Server {
   return createServer(async (request, response) => {
@@ -119,7 +121,13 @@ async function handleApiRequest(
   request: IncomingMessage,
   response: ServerResponse,
 ): Promise<void> {
+  applyCorsHeaders(response);
   const url = request.url ?? "/";
+
+  if (request.method === "OPTIONS") {
+    writeNoContent(response);
+    return;
+  }
 
   if (request.method === "GET" && url === "/") {
     writeJson(response, 200, {
@@ -616,6 +624,17 @@ function buildOpenApiDocument(request: IncomingMessage) {
 function writeMethodNotAllowed(response: ServerResponse, allow: string): void {
   response.setHeader("Allow", allow);
   writeJson(response, 405, { error: `Method not allowed. Use ${allow}.` });
+}
+
+function applyCorsHeaders(response: ServerResponse): void {
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
+  response.setHeader("Access-Control-Allow-Headers", ALLOWED_HEADERS);
+}
+
+function writeNoContent(response: ServerResponse): void {
+  response.statusCode = 204;
+  response.end();
 }
 
 function writeJson(response: ServerResponse, statusCode: number, payload: unknown): void {
