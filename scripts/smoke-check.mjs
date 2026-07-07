@@ -587,8 +587,12 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
   const consumerImportPath = join(consumerDir, "consumer-import.mjs");
   writeFileSync(
     consumerImportPath,
-    `import { verifyAnswerResult } from "quorum";
-import { startApiServer } from "quorum/server";
+    `import {
+  API_SERVICE_NAME,
+  OPENAPI_PATH,
+  startApiServer,
+  verifyAnswerResult,
+} from "quorum";
 
 const report = verifyAnswerResult({
   answer: "Employees receive 12 weeks of paid parental leave.",
@@ -610,10 +614,22 @@ if (report.report.summary.verified !== 1) {
 const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
 try {
+  const discoveryResponse = await fetch(api.url);
+
+  if (discoveryResponse.status !== 200) {
+    throw new Error("Expected packed quorum root export to serve a discovery response.");
+  }
+
+  const discovery = await discoveryResponse.json();
+
+  if (discovery.service !== API_SERVICE_NAME || discovery.openapiPath !== OPENAPI_PATH) {
+    throw new Error("Expected packed quorum root export to preserve API discovery metadata.");
+  }
+
   const response = await fetch(\`\${api.url}/health\`);
 
   if (response.status !== 200) {
-    throw new Error("Expected packed quorum/server export to serve a health response.");
+    throw new Error("Expected packed quorum root export to serve a health response.");
   }
 } finally {
   await api.close();
@@ -628,12 +644,15 @@ try {
   writeFileSync(
     consumerTypecheckPath,
     `import {
+  API_CAPABILITIES,
+  createApiServer,
   verifyAnswerContentsResult,
   verifyAnswerResult,
+  type ApiServerOptions,
   type InMemorySingleVerificationResultOptions,
   type SourceDocument,
+  type StartedApiServer,
 } from "quorum";
-import { createApiServer, type StartedApiServer } from "quorum/server";
 
 const sources: SourceDocument[] = [
   {
@@ -670,9 +689,15 @@ await verifyAnswerContentsResult(rawOptions);
 
 const server = createApiServer();
 const startedServer = {} as StartedApiServer;
+const apiServerOptions: ApiServerOptions = {
+  host: "127.0.0.1",
+  port: 0,
+};
 
 server.close();
 startedServer.host;
+apiServerOptions.port;
+API_CAPABILITIES.verdicts;
 `,
     "utf8",
   );
