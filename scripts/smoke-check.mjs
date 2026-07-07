@@ -377,6 +377,31 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(verifyResult.report.answerLabel, "HR reviewer packet");
     assert.equal(verifyResult.report.summary.verified, 1);
 
+    const invalidContentTypeResponse = await fetch(`${server.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "text/plain",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        sources: [
+          {
+            sourcePath: "policies/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+      }),
+    });
+    assert.equal(invalidContentTypeResponse.status, 415);
+    assert.deepEqual(await invalidContentTypeResponse.json(), {
+      error: "Content-Type must be application/json.",
+    });
+
     const batchVerifyResponse = await fetch(`${server.url}/verify-batch`, {
       method: "POST",
       headers: {
