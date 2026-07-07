@@ -2076,6 +2076,65 @@ test("verify-batch prints claim-level details in the default text output", async
   }
 });
 
+test("verify-batch de-duplicates repeated fail-on verdicts in json and summary outputs", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-duplicate-fail-on-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const batchSummaryCsvOutPath = join(tempDir, "batch-summary.csv");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(
+        join(answerDir, "hr.md"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const result = await runCliAllowFailure([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--summary-csv-out",
+      batchSummaryCsvOutPath,
+      "--fail-on",
+      "contradicted",
+      "--fail-on",
+      "contradicted",
+      "--json",
+    ]);
+
+    assert.equal(result.code, 2);
+
+    const report = JSON.parse(result.stdout) as {
+      answers: Array<{ shouldFail: boolean; failVerdicts: string[] }>;
+    };
+
+    assert.equal(report.answers[0]?.shouldFail, true);
+    assert.deepEqual(report.answers[0]?.failVerdicts, ["contradicted"]);
+    assert.match(await readFile(batchSummaryCsvOutPath, "utf8"), /,matched,contradicted,/);
+    assert.doesNotMatch(
+      await readFile(batchSummaryCsvOutPath, "utf8"),
+      /contradicted \| contradicted/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch truncates long answer previews in the default text output", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-preview-text-"));
 
