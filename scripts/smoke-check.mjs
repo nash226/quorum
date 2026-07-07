@@ -341,18 +341,84 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
     cwd: consumerDir,
     stdio: "pipe",
   });
-  const packedApi = await import(
-    pathToFileURL(join(consumerDir, "node_modules", "quorum", "dist", "src", "index.js")).href
+  const consumerImportPath = join(consumerDir, "consumer-import.mjs");
+  writeFileSync(
+    consumerImportPath,
+    `import { verifyAnswerResult } from "quorum";
+
+const report = verifyAnswerResult({
+  answer: "Employees receive 12 weeks of paid parental leave.",
+  sources: [
+    {
+      id: "source_1",
+      title: "HR Policy",
+      trustLevel: "high",
+      content: "Employees receive 12 weeks of paid parental leave.",
+    },
+  ],
+  generatedAt: "2026-07-06T00:00:00.000Z",
+});
+
+if (report.report.summary.verified !== 1) {
+  throw new Error("Expected packed quorum import to verify one claim.");
+}
+`,
+    "utf8",
   );
-  const packedReport = packedApi.verifyAnswerResult({
-    answer: "Employees receive 12 weeks of paid parental leave.",
-    sources: apiSources,
-    generatedAt: "2026-07-06T00:00:00.000Z",
-  });
-  assert.equal(packedReport.report.summary.verified, 1);
+  runCommand("node", [consumerImportPath], { cwd: consumerDir });
+
+  const consumerTypecheckPath = join(consumerDir, "consumer-import.ts");
+  const consumerTsconfigPath = join(consumerDir, "tsconfig.json");
+  writeFileSync(
+    consumerTypecheckPath,
+    `import { verifyAnswerResult, type SourceDocument } from "quorum";
+
+const sources: SourceDocument[] = [
+  {
+    id: "source_1",
+    title: "HR Policy",
+    trustLevel: "high",
+    content: "Employees receive 12 weeks of paid parental leave.",
+  },
+];
+
+const report = verifyAnswerResult({
+  answer: "Employees receive 12 weeks of paid parental leave.",
+  sources,
+  generatedAt: "2026-07-06T00:00:00.000Z",
+});
+
+if (report.report.summary.verified !== 1) {
+  throw new Error("Expected packed quorum types to resolve through the package entrypoint.");
+}
+`,
+    "utf8",
+  );
+  writeFileSync(
+    consumerTsconfigPath,
+    JSON.stringify(
+      {
+        compilerOptions: {
+          target: "ES2022",
+          module: "NodeNext",
+          moduleResolution: "NodeNext",
+          strict: true,
+          noEmit: true,
+        },
+        include: ["consumer-import.ts"],
+      },
+      null,
+      2,
+    ),
+  );
+  runCommand(
+    "node",
+    [join(repoRoot, "node_modules", "typescript", "bin", "tsc"), "-p", consumerTsconfigPath],
+    { cwd: consumerDir },
+  );
 
   console.log(
-    "Smoke check passed: CLI flows, built package helpers, and packed npm artifact succeeded.",
+    "Smoke check passed: CLI flows, built package helpers, and packed npm entrypoints succeeded.",
   );
 } finally {
   rmSync(tempDir, { recursive: true, force: true });
