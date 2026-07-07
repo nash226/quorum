@@ -325,6 +325,10 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexPayload.service, "quorum");
     assert.equal(indexPayload.version, "0.1.0");
     assert.equal(indexPayload.openapiPath, "/openapi.json");
+    assert.deepEqual(indexPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
+    assert.deepEqual(indexPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
+    assert.deepEqual(indexPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
+    assert.deepEqual(indexPayload.capabilities.trustLevels, ["low", "medium", "high"]);
     assert.equal(indexPayload.endpoints[1]?.path, "/openapi.json");
 
     const openApiResponse = await fetch(`${server.url}/openapi.json`);

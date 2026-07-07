@@ -1765,6 +1765,12 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       service: "quorum",
       version: "0.1.0",
       openapiPath: "/openapi.json",
+      capabilities: {
+        sourceExtensions: [".md", ".markdown", ".txt", ".html", ".htm", ".pdf"],
+        answerExtensions: [".md", ".markdown", ".txt", ".html", ".htm"],
+        verdicts: ["verified", "unsupported", "contradicted", "needs_review"],
+        trustLevels: ["low", "medium", "high"],
+      },
       endpoints: [
         { method: "GET", path: "/health", description: "Return a simple readiness response." },
         {
@@ -1827,6 +1833,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       components: {
         schemas: {
           ApiErrorResponse: {
+            required: string[];
+          };
+          ApiCapabilities: {
             required: string[];
           };
           ApiHealthResponse: {
@@ -2001,7 +2010,14 @@ Refund requests receive an initial response within one business day.
       "service",
       "version",
       "openapiPath",
+      "capabilities",
       "endpoints",
+    ]);
+    assert.deepEqual(openApi.components.schemas.ApiCapabilities.required, [
+      "sourceExtensions",
+      "answerExtensions",
+      "verdicts",
+      "trustLevels",
     ]);
     assert.deepEqual(openApi.components.schemas.ApiHealthResponse.required, [
       "ok",
