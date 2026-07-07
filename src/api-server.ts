@@ -437,6 +437,20 @@ function buildOpenApiDocument(request: IncomingMessage) {
     },
     required: ["verified", "contradicted", "unsupported", "needs_review"],
   };
+  const errorResponse = (description: string) => ({
+    description,
+    content: {
+      "application/json": {
+        schema: { $ref: "#/components/schemas/ApiErrorResponse" },
+      },
+    },
+  });
+  const postErrorResponses = {
+    "400": errorResponse("The JSON body was missing required fields or had invalid values."),
+    "405": errorResponse("The route only accepts POST."),
+    "415": errorResponse("The request Content-Type was not application/json."),
+    "500": errorResponse("The server failed while handling the request."),
+  };
 
   return {
     openapi: "3.1.0",
@@ -460,6 +474,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                 },
               },
             },
+            "500": errorResponse("The server failed while handling the request."),
           },
         },
       },
@@ -481,6 +496,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                 },
               },
             },
+            "500": errorResponse("The server failed while handling the request."),
           },
         },
       },
@@ -502,6 +518,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                 },
               },
             },
+            "500": errorResponse("The server failed while handling the request."),
           },
         },
       },
@@ -543,6 +560,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                 },
               },
             },
+            ...postErrorResponses,
           },
         },
       },
@@ -594,6 +612,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                 },
               },
             },
+            ...postErrorResponses,
           },
         },
       },
@@ -627,6 +646,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                 },
               },
             },
+            ...postErrorResponses,
           },
         },
       },
@@ -660,12 +680,20 @@ function buildOpenApiDocument(request: IncomingMessage) {
                 },
               },
             },
+            ...postErrorResponses,
           },
         },
       },
     },
     components: {
       schemas: {
+        ApiErrorResponse: {
+          type: "object",
+          properties: {
+            error: { type: "string" },
+          },
+          required: ["error"],
+        },
         ApiDiscoveryEndpoint: {
           type: "object",
           properties: {
