@@ -1757,9 +1757,65 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
   try {
+    const indexResponse = await fetch(api.url);
+    assert.equal(indexResponse.status, 200);
+    assert.deepEqual(await indexResponse.json(), {
+      service: "quorum",
+      endpoints: [
+        { method: "GET", path: "/health", description: "Return a simple readiness response." },
+        {
+          method: "GET",
+          path: "/openapi.json",
+          description: "Return the OpenAPI description for this server.",
+        },
+        { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
+        {
+          method: "POST",
+          path: "/verify-batch",
+          description: "Verify multiple answers from JSON request content.",
+        },
+        {
+          method: "POST",
+          path: "/import-review",
+          description: "Import reviewer CSV content from JSON request content.",
+        },
+      ],
+    });
+
     const healthResponse = await fetch(`${api.url}/health`);
     assert.equal(healthResponse.status, 200);
     assert.deepEqual(await healthResponse.json(), { ok: true });
+
+    const openApiResponse = await fetch(`${api.url}/openapi.json`);
+    assert.equal(openApiResponse.status, 200);
+    const openApi = await openApiResponse.json() as {
+      openapi: string;
+      info: { title: string; version: string };
+      servers: Array<{ url: string }>;
+      paths: Record<string, { get?: { summary: string }; post?: { summary: string } }>;
+      components: {
+        schemas: {
+          ClaimVerdict: { enum: string[] };
+          SourceTrustLevel: { enum: string[] };
+        };
+      };
+    };
+
+    assert.equal(openApi.openapi, "3.1.0");
+    assert.equal(openApi.info.title, "Quorum Local API");
+    assert.equal(openApi.info.version, "0.1.0");
+    assert.deepEqual(openApi.servers, [{ url: api.url }]);
+    assert.equal(openApi.paths["/health"]?.get?.summary, "Readiness check");
+    assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
+    assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
+    assert.equal(openApi.paths["/import-review"]?.post?.summary, "Import reviewer decisions");
+    assert.deepEqual(openApi.components.schemas.SourceTrustLevel.enum, ["low", "medium", "high"]);
+    assert.deepEqual(openApi.components.schemas.ClaimVerdict.enum, [
+      "verified",
+      "unsupported",
+      "contradicted",
+      "needs_review",
+    ]);
 
     const verifyResponse = await fetch(`${api.url}/verify`, {
       method: "POST",
