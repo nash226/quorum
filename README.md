@@ -422,8 +422,10 @@ typed local clients can generate against the same contract as the CLI-backed
 server. Browser-based local tooling can call the same endpoints directly
 because the server replies with permissive CORS headers and handles `OPTIONS`
 preflight requests for JSON clients.
-Node integrations that want to embed the server directly can import the same
-helpers from `quorum/server`.
+Node integrations that want to embed the server directly can now import
+`createApiServer`, `startApiServer`, and stable discovery metadata such as
+`OPENAPI_PATH` from the main `quorum` entrypoint, while `quorum/server`
+remains available for callers that prefer the dedicated subpath.
 
 `verifyAnswerFile` accepts either positional arguments or a single options
 object with `answerPath`, `sources`, `generatedAt`, and `answerLabel`.
