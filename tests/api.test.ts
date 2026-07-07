@@ -705,6 +705,33 @@ test("programmatic API verifies one in-memory answer against raw source content"
   });
 });
 
+test("programmatic API accepts explicit metadata for in-memory sources", async () => {
+  const report = await verifyAnswerContents({
+    answer: "Employees receive 12 weeks of paid parental leave.",
+    sources: [
+      {
+        sourcePath: "policies/hr-policy.md",
+        title: "People Ops Handbook",
+        updatedAt: "2026-06-15",
+        trustLevel: "high",
+        content: `---
+title: Old Handbook
+trustLevel: low
+updatedAt: 2026-05-31
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+      },
+    ],
+    generatedAt: "2026-07-07T22:00:00.000Z",
+  });
+
+  assert.equal(report.sources[0]?.title, "People Ops Handbook");
+  assert.equal(report.sources[0]?.updatedAt, "2026-06-15");
+  assert.equal(report.sources[0]?.trustLevel, "high");
+  assert.equal(report.summary.verified, 1);
+});
+
 test("programmatic API returns fail-policy metadata for one answer file", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-single-file-result-"));
 
@@ -1879,6 +1906,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
         sources: [
           {
             sourcePath: "sources/hr-policy.md",
+            title: "HR Policy",
+            updatedAt: "2026-05-31",
+            trustLevel: "high",
             content: `---
 title: HR Policy
 trustLevel: high
@@ -1913,6 +1943,8 @@ Employees receive 12 weeks of paid parental leave.
         sources: [
           {
             sourcePath: "sources/hr-policy.md",
+            title: "HR Policy",
+            trustLevel: "high",
             content: `---
 title: HR Policy
 trustLevel: high
@@ -1922,6 +1954,8 @@ Employees receive 12 weeks of paid parental leave.
           },
           {
             sourcePath: "sources/support-playbook.md",
+            title: "Support Playbook",
+            trustLevel: "medium",
             content: `---
 title: Support Playbook
 trustLevel: medium
@@ -2091,6 +2125,56 @@ Employees receive 12 weeks of paid parental leave.
       unsupported: 0,
       needs_review: 0,
     });
+  } finally {
+    await api.close();
+  }
+});
+
+test("HTTP API accepts explicit source metadata in verify requests", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        sources: [
+          {
+            sourcePath: "policies/hr-policy.md",
+            title: "People Ops Handbook",
+            updatedAt: "2026-06-15",
+            trustLevel: "high",
+            content: `---
+title: Old Handbook
+trustLevel: low
+updatedAt: 2026-05-31
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      report: {
+        summary: Record<string, number>;
+        sources: Array<{
+          title: string;
+          updatedAt?: string;
+          trustLevel: string;
+        }>;
+      };
+    };
+
+    assert.equal(result.report.summary.verified, 1);
+    assert.equal(result.report.sources[0]?.title, "People Ops Handbook");
+    assert.equal(result.report.sources[0]?.updatedAt, "2026-06-15");
+    assert.equal(result.report.sources[0]?.trustLevel, "high");
   } finally {
     await api.close();
   }
