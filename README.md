@@ -181,6 +181,7 @@ the CLI:
 
 ```ts
 import {
+  ANSWER_EXTENSIONS,
   evaluateFixtureFilesResult,
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
@@ -206,6 +207,7 @@ import {
   verifyAnswerFileInputsResult,
   verifyAnswerFileResult,
   verifyAnswerResult,
+  SOURCE_EXTENSIONS,
 } from "quorum";
 
 const sources = await loadSources({
@@ -372,17 +374,25 @@ import {
   resolveAnswerPaths,
   resolveEvaluationFixturePaths,
   resolveSourcePaths,
+  ANSWER_EXTENSIONS,
+  SOURCE_EXTENSIONS,
 } from "quorum";
 
 const sourcePaths = await resolveSourcePaths([], ["examples/sources"]);
 const answerPaths = await resolveAnswerPaths([], ["examples/answers"]);
 const fixturePaths = await resolveEvaluationFixturePaths([], ["examples/evaluations"]);
+const supportedSourceExtensions = [...SOURCE_EXTENSIONS];
+const supportedAnswerExtensions = [...ANSWER_EXTENSIONS];
 ```
 
 Workflow integrations can also reuse Quorum's reviewer-facing naming and
 preview logic without reimplementing path parsing or HTML cleanup.
 `renderAnswerLabel`, `renderAnswerLabels`, and `renderAnswerPreview` mirror the
 same behavior used by the CLI, reviewer CSVs, and HTML reports.
+`SOURCE_EXTENSIONS` and `ANSWER_EXTENSIONS` expose the same supported file
+types that Quorum uses for recursive source and answer discovery, so workflow
+callers can prefilter uploads or filesystem scans without duplicating that
+internal list.
 
 For in-memory callers, `verifyAnswer(answerText, sources)` remains available for
 teams that already manage file I/O themselves, and `verifyAnswers({ answers,

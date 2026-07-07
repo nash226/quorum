@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  ANSWER_EXTENSIONS,
   CLAIM_VERDICTS,
   importReviewerDecisionContents,
   importReviewerDecisionContentsResult,
@@ -46,6 +47,7 @@ import {
   renderTextReport,
   resolveAnswerPaths,
   resolveSourcePaths,
+  SOURCE_EXTENSIONS,
   shouldFailReport,
   verifyAnswers,
   verifyAnswersResult,
@@ -64,6 +66,11 @@ import {
   verifyAnswerFileResult,
   verifyAnswerResult,
 } from "../src/index.js";
+
+test("programmatic API exposes supported source and answer extensions", () => {
+  assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
+  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm"]);
+});
 
 test("programmatic API verifies an answer file against loaded sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-"));
