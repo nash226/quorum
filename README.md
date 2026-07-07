@@ -367,6 +367,7 @@ Available endpoints:
 - `POST /verify`
 - `POST /verify-batch`
 - `POST /import-review`
+- `POST /evaluate`
 
 Single-answer verification request example:
 
@@ -395,6 +396,10 @@ Reviewer-decision import accepts a `{ reviewCsvContent, failOn? }` JSON body at
 `POST /import-review` and returns the same `importReviewerDecisionContentsResult`
 shape used by the package API, including grouped answer summaries and
 reviewer-aware fail-policy matches.
+Evaluation accepts a `{ fixtures }` JSON body at `POST /evaluate`, where each
+fixture entry includes `{ fixturePath, content }`, and returns the same
+`evaluateFixtureContentsResult` batch shape used by the package API so
+workflow callers can score benchmark fixtures without writing them to disk.
 `GET /` returns a small JSON endpoint index for human inspection, and
 `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover request payload shapes without scraping the

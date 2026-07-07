@@ -1779,6 +1779,11 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           path: "/import-review",
           description: "Import reviewer CSV content from JSON request content.",
         },
+        {
+          method: "POST",
+          path: "/evaluate",
+          description: "Evaluate fixture JSON content from request payloads.",
+        },
       ],
     });
 
@@ -1809,6 +1814,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
     assert.equal(openApi.paths["/import-review"]?.post?.summary, "Import reviewer decisions");
+    assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
     assert.deepEqual(openApi.components.schemas.SourceTrustLevel.enum, ["low", "medium", "high"]);
     assert.deepEqual(openApi.components.schemas.ClaimVerdict.enum, [
       "verified",
@@ -1991,6 +1997,49 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       needs_review: 1,
     });
     assert.equal(result.report.answerGroups[0]?.label, "HR reviewer packet");
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API serves evaluation over HTTP", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const fixtureContent = await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8");
+    const response = await fetch(`${api.url}/evaluate`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        fixtures: [
+          {
+            fixturePath: join(process.cwd(), "examples/evaluations/hr-policy.json"),
+            content: fixtureContent,
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      shouldFail: boolean;
+      mismatchCount: number;
+      scorecards: Array<{
+        fixtureName: string;
+        summaryMatches: boolean;
+        matchedClaims: number;
+        totalExpectedClaims: number;
+      }>;
+    };
+
+    assert.equal(result.shouldFail, false);
+    assert.equal(result.mismatchCount, 0);
+    assert.equal(result.scorecards[0]?.fixtureName, "HR policy example");
+    assert.equal(result.scorecards[0]?.summaryMatches, true);
+    assert.equal(result.scorecards[0]?.matchedClaims, 3);
+    assert.equal(result.scorecards[0]?.totalExpectedClaims, 3);
   } finally {
     await api.close();
   }
