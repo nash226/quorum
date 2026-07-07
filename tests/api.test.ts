@@ -1893,6 +1893,53 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("programmatic API serves reviewer CSV import over HTTP", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/import-review`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewCsvContent: `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
+`,
+        failOn: ["needs_review"],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      shouldFail: boolean;
+      failVerdicts: string[];
+      report: {
+        summary: Record<string, number>;
+        answerGroups: Array<{
+          label: string;
+        }>;
+      };
+    };
+
+    assert.equal(result.shouldFail, true);
+    assert.deepEqual(result.failVerdicts, ["needs_review"]);
+    assert.deepEqual(result.report.summary, {
+      totalClaims: 1,
+      reviewedClaims: 1,
+      pendingClaims: 0,
+      overriddenClaims: 1,
+      verified: 0,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 1,
+    });
+    assert.equal(result.report.answerGroups[0]?.label, "HR reviewer packet");
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API exports batch evaluation helpers", async () => {
   const scorecards = await evaluateFixtureFiles({
     fixturePaths: [],
