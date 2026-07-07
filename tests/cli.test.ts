@@ -144,6 +144,7 @@ test("serve --help prints API usage without starting the server", async () => {
   assert.match(result.stdout, /^Quorum serve\n\nUsage:\n  quorum serve \[--host <host>\] \[--port <port>\]/);
   assert.match(result.stdout, /GET  \/health\s+Return a simple readiness response/);
   assert.match(result.stdout, /POST \/verify-batch\s+Verify multiple answers from JSON request content/);
+  assert.match(result.stdout, /POST \/import-review\s+Import reviewer CSV content from JSON request content/);
 });
 
 test("verify reports a missing answer file with a clear error", async () => {
