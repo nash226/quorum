@@ -388,6 +388,8 @@ Batch verification uses the same source shape and accepts an `answers` array of
 Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
 `verifyAnswerBatchContentsResult` shapes so workflow callers get the report,
 matched fail verdicts, and `shouldFail` status in one JSON payload.
+Node integrations that want to embed the server directly can import the same
+helpers from `quorum/server`.
 
 `verifyAnswerFile` accepts either positional arguments or a single options
 object with `answerPath`, `sources`, `generatedAt`, and `answerLabel`.
