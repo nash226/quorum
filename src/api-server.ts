@@ -63,6 +63,8 @@ export interface StartedApiServer {
 const OPENAPI_PATH = "/openapi.json";
 const ALLOWED_METHODS = "GET, POST, OPTIONS";
 const ALLOWED_HEADERS = "Content-Type";
+const API_SERVICE_NAME = "quorum";
+const API_VERSION = "0.1.0";
 
 export function createApiServer(): Server {
   return createServer(async (request, response) => {
@@ -131,7 +133,9 @@ async function handleApiRequest(
 
   if (request.method === "GET" && url === "/") {
     writeJson(response, 200, {
-      service: "quorum",
+      service: API_SERVICE_NAME,
+      version: API_VERSION,
+      openapiPath: OPENAPI_PATH,
       endpoints: [
         { method: "GET", path: "/health", description: "Return a simple readiness response." },
         { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
@@ -157,7 +161,11 @@ async function handleApiRequest(
   }
 
   if (request.method === "GET" && url === "/health") {
-    writeJson(response, 200, { ok: true });
+    writeJson(response, 200, {
+      ok: true,
+      service: API_SERVICE_NAME,
+      version: API_VERSION,
+    });
     return;
   }
 
@@ -456,7 +464,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
     openapi: "3.1.0",
     info: {
       title: "Quorum Local API",
-      version: "0.1.0",
+      version: API_VERSION,
       description:
         "Local JSON API for Quorum answer verification, batch verification, and reviewer decision imports.",
     },
@@ -486,13 +494,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
               description: "Server is ready to accept requests.",
               content: {
                 "application/json": {
-                  schema: {
-                    type: "object",
-                    properties: {
-                      ok: { type: "boolean", const: true },
-                    },
-                    required: ["ok"],
-                  },
+                  schema: { $ref: "#/components/schemas/ApiHealthResponse" },
                 },
               },
             },
@@ -709,13 +711,24 @@ function buildOpenApiDocument(request: IncomingMessage) {
         ApiIndexResponse: {
           type: "object",
           properties: {
-            service: { type: "string", const: "quorum" },
+            service: { type: "string", const: API_SERVICE_NAME },
+            version: { type: "string", const: API_VERSION },
+            openapiPath: { type: "string", const: OPENAPI_PATH },
             endpoints: {
               type: "array",
               items: { $ref: "#/components/schemas/ApiDiscoveryEndpoint" },
             },
           },
-          required: ["service", "endpoints"],
+          required: ["service", "version", "openapiPath", "endpoints"],
+        },
+        ApiHealthResponse: {
+          type: "object",
+          properties: {
+            ok: { type: "boolean", const: true },
+            service: { type: "string", const: API_SERVICE_NAME },
+            version: { type: "string", const: API_VERSION },
+          },
+          required: ["ok", "service", "version"],
         },
         ApiSourceInput: {
           type: "object",
