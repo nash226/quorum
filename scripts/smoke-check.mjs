@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -30,6 +30,63 @@ function runCommand(command, args, options = {}) {
     encoding: "utf8",
     ...options,
   });
+}
+
+async function startCliServer(args) {
+  const child = spawn("node", [cliPath, "serve", ...args], {
+    cwd: repoRoot,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  let stdout = "";
+  let stderr = "";
+
+  child.stdout.setEncoding("utf8");
+  child.stderr.setEncoding("utf8");
+  child.stdout.on("data", (chunk) => {
+    stdout += chunk;
+  });
+  child.stderr.on("data", (chunk) => {
+    stderr += chunk;
+  });
+
+  const url = await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      child.kill("SIGTERM");
+      reject(new Error(`Timed out waiting for API server startup.\nstdout:\n${stdout}\nstderr:\n${stderr}`));
+    }, 10_000);
+
+    const onExit = (code, signal) => {
+      clearTimeout(timeout);
+      reject(new Error(`API server exited before startup (code=${code}, signal=${signal}).\nstdout:\n${stdout}\nstderr:\n${stderr}`));
+    };
+
+    child.once("exit", onExit);
+    child.stdout.on("data", () => {
+      const match = stdout.match(/Quorum API listening on (http:\/\/[^\s]+)/);
+
+      if (!match) {
+        return;
+      }
+
+      clearTimeout(timeout);
+      child.off("exit", onExit);
+      resolve(match[1]);
+    });
+  });
+
+  return {
+    url,
+    async stop() {
+      if (child.exitCode !== null) {
+        return;
+      }
+
+      await new Promise((resolve) => {
+        child.once("exit", resolve);
+        child.kill("SIGTERM");
+      });
+    },
+  };
 }
 
 function readJson(path) {
@@ -258,6 +315,81 @@ Employees receive 12 weeks of paid parental leave.
   assert.equal(apiFileInputResult.report.summary.verified, 1);
   assert.equal(apiFileInputResult.report.summary.contradicted, 1);
   assert.equal(apiFileInputResult.report.answerPath, join(repoRoot, "examples", "answers", "support-answer.md"));
+
+  const server = await startCliServer(["--port", "0"]);
+
+  try {
+    const healthResponse = await fetch(`${server.url}/health`);
+    assert.equal(healthResponse.status, 200);
+    assert.deepEqual(await healthResponse.json(), { ok: true });
+
+    const verifyResponse = await fetch(`${server.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        answerLabel: "HR reviewer packet",
+        sources: [
+          {
+            sourcePath: "policies/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        failOn: ["contradicted"],
+      }),
+    });
+    assert.equal(verifyResponse.status, 200);
+    const verifyResult = await verifyResponse.json();
+    assert.equal(verifyResult.shouldFail, false);
+    assert.equal(verifyResult.report.answerLabel, "HR reviewer packet");
+    assert.equal(verifyResult.report.summary.verified, 1);
+
+    const batchVerifyResponse = await fetch(`${server.url}/verify-batch`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answers: [
+          {
+            answer: "Employees receive 12 weeks of paid parental leave.",
+            answerLabel: "HR reviewer packet",
+          },
+          {
+            answer: "Employees receive free daily lunch.",
+            answerLabel: "Perks packet",
+          },
+        ],
+        sources: [
+          {
+            sourcePath: "policies/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        failOn: ["needs_review"],
+      }),
+    });
+    assert.equal(batchVerifyResponse.status, 200);
+    const batchVerifyResult = await batchVerifyResponse.json();
+    assert.equal(batchVerifyResult.shouldFail, true);
+    assert.deepEqual(batchVerifyResult.failVerdicts, ["needs_review"]);
+    assert.equal(batchVerifyResult.report.answerCount, 2);
+    assert.equal(batchVerifyResult.report.summary.needs_review, 1);
+  } finally {
+    await server.stop();
+  }
 
   const apiReviewImportResult = api.importReviewerDecisionContentsResult(
     `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
