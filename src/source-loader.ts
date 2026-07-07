@@ -16,6 +16,9 @@ interface ParsedSource {
 
 interface SourceDocumentOptions {
   defaultTrustLevel?: SourceTrustLevel;
+  title?: string;
+  updatedAt?: string;
+  trustLevel?: SourceTrustLevel;
 }
 
 const MARKDOWN_TABLE_SEPARATOR_CELL = /^:?-{3,}:?$/;
@@ -59,9 +62,9 @@ export async function sourceDocumentFromFile(
 
   return {
     id: `source_${index + 1}`,
-    title: parsed.metadata.title ?? sourceTitleFromPath(sourcePath),
-    updatedAt: parsed.metadata.updatedAt,
-    trustLevel: parsed.metadata.trustLevel ?? options.defaultTrustLevel ?? "medium",
+    title: options.title ?? parsed.metadata.title ?? sourceTitleFromPath(sourcePath),
+    updatedAt: options.updatedAt ?? parsed.metadata.updatedAt,
+    trustLevel: options.trustLevel ?? parsed.metadata.trustLevel ?? options.defaultTrustLevel ?? "medium",
     content: parsed.body,
   };
 }
@@ -661,9 +664,9 @@ async function pdfSourceDocumentFromFile(
 
     return {
       id: `source_${index + 1}`,
-      title: title || sourceTitleFromPath(sourcePath),
-      updatedAt,
-      trustLevel: options.defaultTrustLevel ?? "medium",
+      title: options.title ?? title ?? sourceTitleFromPath(sourcePath),
+      updatedAt: options.updatedAt ?? updatedAt,
+      trustLevel: options.trustLevel ?? options.defaultTrustLevel ?? "medium",
       content: normalizePdfText(result.text),
     };
   } finally {
