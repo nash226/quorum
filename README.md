@@ -403,7 +403,9 @@ workflow callers can score benchmark fixtures without writing them to disk.
 `GET /` returns a small JSON endpoint index for human inspection, and
 `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover request payload shapes without scraping the
-README.
+README. Browser-based local tooling can call the same endpoints directly
+because the server replies with permissive CORS headers and handles `OPTIONS`
+preflight requests for JSON clients.
 Node integrations that want to embed the server directly can import the same
 helpers from `quorum/server`.
 
