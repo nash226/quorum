@@ -1090,6 +1090,7 @@ Endpoints:
   POST /verify              Verify one answer from JSON request content
   POST /verify-batch        Verify multiple answers from JSON request content
   POST /import-review       Import reviewer CSV content from JSON request content
+  POST /evaluate            Evaluate fixture JSON content from request payloads
 
 Example:
   npm run dev -- serve --port 3000
