@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e5b028b` on 2026-07-07, feat: export api server helpers from root entrypoint
+- Latest shipped change: `d57a1eb` on 2026-07-07, fix: ignore collapsed html detail summaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-07 | [#237](https://github.com/nash226/quorum/pull/237) | fix: ignore collapsed html detail summaries | `d57a1eb` |
 | 2026-07-07 | [#236](https://github.com/nash226/quorum/pull/236) | feat: export api server helpers from root entrypoint | `e5b028b` |
 | 2026-07-07 | [#235](https://github.com/nash226/quorum/pull/235) | feat: accept explicit metadata for api sources | `da913da` |
 | 2026-07-07 | [#234](https://github.com/nash226/quorum/pull/234) | feat: expose api discovery capabilities | `09b82fc` |
@@ -54,5 +55,4 @@
 | 2026-07-07 | [#232](https://github.com/nash226/quorum/pull/232) | feat: add openapi request examples | `e31377f` |
 | 2026-07-07 | [#231](https://github.com/nash226/quorum/pull/231) | feat: expose api version metadata | `e618e91` |
 | 2026-07-07 | [#230](https://github.com/nash226/quorum/pull/230) | feat: document api error responses | `72696e0` |
-| 2026-07-07 | [#229](https://github.com/nash226/quorum/pull/229) | test: smoke evaluate api | `03de69a` |
 
