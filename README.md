@@ -126,6 +126,10 @@ The packed smoke check also verifies refund-status answers, preserving the
 approved status-update and processing-window claims while routing an
 unsupported instant-refund promise for review.
 
+It also verifies account-contact-change answers in the packed benchmark,
+covering current-email verification, a conflicting identity-verification
+window, and an unsupported password-manager promise.
+
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
 queue totals and benchmark drift together, including pending, reviewed, and
