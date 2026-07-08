@@ -143,6 +143,7 @@ test("serve --help prints API usage without starting the server", async () => {
   assert.equal(result.stderr, "");
   assert.match(result.stdout, /^Quorum serve\n\nUsage:\n  quorum serve \[--host <host>\] \[--port <port>\]/);
   assert.match(result.stdout, /GET  \/\s+Return API discovery metadata for local callers/);
+  assert.match(result.stdout, /GET  \/capabilities\s+Return supported Quorum capabilities without endpoint listings/);
   assert.match(result.stdout, /HEAD \/health\s+Return readiness headers without a response body/);
   assert.match(result.stdout, /GET  \/health\s+Return a simple readiness response/);
   assert.match(result.stdout, /GET  \/openapi\.json\s+Return the machine-readable API description/);
