@@ -2,7 +2,7 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import { dirname, extname, join, resolve } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import { serializeDelimitedList } from "./csv-list.js";
-import type { ClaimVerdict, SourceTrustLevel, VerificationReport } from "./domain.js";
+import type { ClaimAssessment, ClaimVerdict, SourceTrustLevel, VerificationReport } from "./domain.js";
 import { parseClaimVerdict } from "./report-policy.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
 import {
@@ -1038,6 +1038,11 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       "first_mismatch_claim_text",
       "first_mismatch_expected_verdict",
       "first_mismatch_actual_verdict",
+      "first_mismatch_evidence_title",
+      "first_mismatch_evidence_trust_level",
+      "first_mismatch_evidence_updated_at",
+      "first_mismatch_evidence_score",
+      "first_mismatch_evidence_quote",
       "expected_verified",
       "expected_contradicted",
       "expected_unsupported",
@@ -1066,6 +1071,11 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       renderFirstMismatchClaimText(scorecard),
       renderFirstMismatchExpectedVerdict(scorecard),
       renderFirstMismatchActualVerdict(scorecard),
+      renderFirstMismatchEvidenceTitle(scorecard),
+      renderFirstMismatchEvidenceTrustLevel(scorecard),
+      renderFirstMismatchEvidenceUpdatedAt(scorecard),
+      renderFirstMismatchEvidenceScore(scorecard),
+      renderFirstMismatchEvidenceQuote(scorecard),
       scorecard.expectedSummary.verified.toString(),
       scorecard.expectedSummary.contradicted.toString(),
       scorecard.expectedSummary.unsupported.toString(),
@@ -1310,10 +1320,45 @@ function renderFirstMismatchActualVerdict(scorecard: EvaluationScorecard): strin
   return firstClaimMismatch(scorecard)?.actualVerdict ?? "";
 }
 
+function renderFirstMismatchEvidenceTitle(scorecard: EvaluationScorecard): string {
+  return firstMismatchEvidence(scorecard)?.documentTitle ?? "";
+}
+
+function renderFirstMismatchEvidenceTrustLevel(scorecard: EvaluationScorecard): string {
+  return firstMismatchEvidence(scorecard)?.documentTrustLevel ?? "";
+}
+
+function renderFirstMismatchEvidenceUpdatedAt(scorecard: EvaluationScorecard): string {
+  return firstMismatchEvidence(scorecard)?.documentUpdatedAt ?? "";
+}
+
+function renderFirstMismatchEvidenceScore(scorecard: EvaluationScorecard): string {
+  const evidence = firstMismatchEvidence(scorecard);
+  return evidence ? evidence.score.toFixed(3) : "";
+}
+
+function renderFirstMismatchEvidenceQuote(scorecard: EvaluationScorecard): string {
+  return firstMismatchEvidence(scorecard)?.quote ?? "";
+}
+
 function firstClaimMismatch(scorecard: EvaluationScorecard): EvaluationClaimScore | undefined {
   return scorecard.claims.find(
     (claim) => claim.expectedVerdict !== undefined && !claim.matches,
   );
+}
+
+function firstMismatchAssessment(scorecard: EvaluationScorecard): ClaimAssessment | undefined {
+  const mismatch = firstClaimMismatch(scorecard);
+
+  if (!mismatch) {
+    return undefined;
+  }
+
+  return scorecard.report.assessments[mismatch.index];
+}
+
+function firstMismatchEvidence(scorecard: EvaluationScorecard) {
+  return firstMismatchAssessment(scorecard)?.evidence[0];
 }
 
 function hasMatchingSummary(
