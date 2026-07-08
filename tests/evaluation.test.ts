@@ -356,6 +356,8 @@ test("renders evaluation text report totals and mismatch detection", () => {
   assert.match(rendered, /Quorum Evaluation Report/);
   assert.match(rendered, /Fixtures: 2/);
   assert.match(rendered, /Fixtures with mismatches: 1/);
+  assert.match(rendered, /Matched claim verdicts: 0\/1/);
+  assert.match(rendered, /Overall claim verdict score: 0%/);
 });
 
 test("renders evaluation summary csv rows for each fixture", () => {
@@ -526,6 +528,8 @@ test("renders evaluation markdown report with fixture summaries", () => {
 
   assert.match(rendered, /^# Quorum Evaluation Report/);
   assert.match(rendered, /## Summary/);
+  assert.match(rendered, /- Matched claim verdicts: 1\/1/);
+  assert.match(rendered, /- Overall claim verdict score: 100%/);
   assert.match(rendered, /### 1\. Support policy example/);
   assert.match(rendered, /- Fixture path: `\/tmp\/fixtures\/support\.json`/);
   assert.match(rendered, /- Answer label: `Support reviewer packet`/);
@@ -593,6 +597,8 @@ test("renders evaluation html report with fixture summaries", () => {
   assert.match(rendered, /<dt>Answer preview<\/dt><dd>Support answer preview<\/dd>/);
   assert.match(rendered, /<dt>Source directories<\/dt><dd>\/tmp\/source-bundle<\/dd>/);
   assert.match(rendered, /Fixture scorecard report/);
+  assert.match(rendered, /<span>Matched Claim Verdicts<\/span>\s*<strong>1\/1<\/strong>/);
+  assert.match(rendered, /<span>Overall Claim Verdict Score<\/span>\s*<strong>100%<\/strong>/);
   assert.match(rendered, /Support policy example/);
   assert.match(rendered, /Expected summary/);
   assert.match(rendered, /Claim verdicts/);

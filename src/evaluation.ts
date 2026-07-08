@@ -397,6 +397,7 @@ export function renderEvaluationScorecard(scorecard: EvaluationScorecard): strin
 
 export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): string {
   const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const aggregate = summarizeEvaluationScorecards(scorecards);
   const lines = ["Quorum Evaluation Report", ""];
 
   scorecards.forEach((scorecard, index) => {
@@ -411,6 +412,8 @@ export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): s
     "",
     `Fixtures: ${scorecards.length}`,
     `Fixtures with mismatches: ${mismatchCount}`,
+    `Matched claim verdicts: ${aggregate.matchedClaims}/${aggregate.totalExpectedClaims}`,
+    `Overall claim verdict score: ${aggregate.claimScoreLabel}`,
   );
 
   return `${lines.join("\n")}\n`;
@@ -418,6 +421,7 @@ export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): s
 
 export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]): string {
   const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const aggregate = summarizeEvaluationScorecards(scorecards);
   const lines = [
     "# Quorum Evaluation Report",
     "",
@@ -425,6 +429,8 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
     "",
     `- Fixtures: ${scorecards.length}`,
     `- Fixtures with mismatches: ${mismatchCount}`,
+    `- Matched claim verdicts: ${aggregate.matchedClaims}/${aggregate.totalExpectedClaims}`,
+    `- Overall claim verdict score: ${aggregate.claimScoreLabel}`,
     "",
     "## Fixtures",
     "",
@@ -475,6 +481,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
 
 export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): string {
   const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const aggregate = summarizeEvaluationScorecards(scorecards);
   const fixtureCards = scorecards
     .map((scorecard, index) => {
       const claimItems =
@@ -811,6 +818,14 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
             <span>Mismatches</span>
             <strong>${mismatchCount}</strong>
           </article>
+          <article class="summary-stat">
+            <span>Matched Claim Verdicts</span>
+            <strong>${aggregate.matchedClaims}/${aggregate.totalExpectedClaims}</strong>
+          </article>
+          <article class="summary-stat">
+            <span>Overall Claim Verdict Score</span>
+            <strong>${aggregate.claimScoreLabel}</strong>
+          </article>
         </div>
       </section>
       <section class="fixture-list">
@@ -1088,6 +1103,30 @@ function trimTrailingBlankLines(lines: string[]): string[] {
   }
 
   return trimmed;
+}
+
+function summarizeEvaluationScorecards(scorecards: EvaluationScorecard[]): {
+  matchedClaims: number;
+  totalExpectedClaims: number;
+  claimScoreLabel: string;
+} {
+  const matchedClaims = scorecards.reduce(
+    (total, scorecard) => total + scorecard.matchedClaims,
+    0,
+  );
+  const totalExpectedClaims = scorecards.reduce(
+    (total, scorecard) => total + scorecard.totalExpectedClaims,
+    0,
+  );
+
+  return {
+    matchedClaims,
+    totalExpectedClaims,
+    claimScoreLabel:
+      totalExpectedClaims > 0
+        ? `${Math.round((matchedClaims / totalExpectedClaims) * 100)}%`
+        : "n/a",
+  };
 }
 
 function escapeHtml(value: string): string {
