@@ -808,7 +808,9 @@ npm run dev -- evaluate \
 `evaluate` prints one scorecard per fixture, highlights claim-level verdict
 mismatches, can write Markdown and HTML reports for async review, can write a
 one-row-per-fixture summary CSV with answer previews for spreadsheet or CI
-triage, and can exit with status code `2` when a labeled benchmark drifts.
+triage, and can exit with status code `2` when a labeled benchmark drifts. The
+shipped fixture directory includes multiple HR and support policy examples so
+teams can exercise both domains with `--fixture-dir examples/evaluations`.
 
 ## Quick Start
 
