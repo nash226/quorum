@@ -279,6 +279,7 @@ export function renderReviewerDecisionCsv(
 }
 
 export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport): string {
+  const orderedAnswers = orderBatchAnswersForReview(report.answers);
   const rows = [
     [
       "answer_label",
@@ -299,7 +300,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
       "reviewer_verdict",
       "reviewer_notes",
     ],
-    ...report.answers.flatMap((answer) =>
+    ...orderedAnswers.flatMap((answer) =>
       answer.report.assessments.length > 0
         ? answer.report.assessments.map((assessment) => [
             answer.answerLabel,
@@ -418,6 +419,7 @@ export function renderSummaryCsv(
 }
 
 export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
+  const orderedAnswers = orderBatchAnswersForReview(report.answers);
   const sourceTitles = report.sources.map((source) => source.title).join(" | ");
   const sourceTrustLevels = report.sources.map((source) => source.trustLevel).join(" | ");
   const sourceUpdatedAt = report.sources.map((source) => source.updatedAt ?? "").join(" | ");
@@ -445,7 +447,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       "source_trust_levels",
       "source_updated_at",
     ],
-    ...report.answers.map((answer) => {
+    ...orderedAnswers.map((answer) => {
       const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
       const primaryFindingVerdict = primaryAssessment?.verdict ?? "needs_review";
       const primaryFindingReason =
