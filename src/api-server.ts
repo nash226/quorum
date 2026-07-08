@@ -347,7 +347,7 @@ export async function startApiServer(options: ApiServerOptions = {}): Promise<St
     host,
     port: address.port,
     server,
-    url: `http://${host}:${address.port}`,
+    url: formatServerOrigin(host, address.port),
     close: () =>
       new Promise<void>((resolve, reject) => {
         server.close((error) => {
@@ -360,6 +360,12 @@ export async function startApiServer(options: ApiServerOptions = {}): Promise<St
         });
       }),
   };
+}
+
+function formatServerOrigin(host: string, port: number): string {
+  const formattedHost =
+    host.includes(":") && !host.startsWith("[") && !host.endsWith("]") ? `[${host}]` : host;
+  return `http://${formattedHost}:${port}`;
 }
 
 async function handleApiRequest(
