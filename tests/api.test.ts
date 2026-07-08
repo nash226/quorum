@@ -2107,13 +2107,22 @@ Refund requests receive an initial response within one business day.
       ]?.value,
       {
         reviewCsvContent: [
-          "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_title,evidence_quote,reviewer_verdict,reviewer_notes",
+          "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
           "HR policy answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved for publish",
         ].join("\n"),
         failOn: ["needs_review"],
         includeArtifacts: ["markdown", "summary_csv"],
         failOnStatus: true,
       },
+    );
+    const importReviewExample = openApi.paths["/import-review"]?.post?.requestBody?.content?.[
+      "application/json"
+    ]?.examples?.["reviewedQueueExport"]?.value;
+    assert.ok(importReviewExample);
+    assert.equal(
+      importReviewerDecisionContentsResult(importReviewExample.reviewCsvContent).report.summary
+        .reviewedClaims,
+      1,
     );
     assert.deepEqual(
       openApi.paths["/evaluate"]?.post?.requestBody?.content?.["application/json"]?.examples?.[
