@@ -353,6 +353,10 @@ const evaluationResult = await evaluateFixtureFilesResult({
 });
 ```
 
+When a fixture includes `expectedClaimVerdicts`, keep that list length aligned
+with the total claims declared in `expectedSummary` so evaluation scorecards
+stay internally consistent.
+
 ## HTTP API
 
 For lightweight local integrations that prefer JSON over shelling out, Quorum
@@ -682,6 +686,8 @@ Those in-memory fixtures can also embed an inline `answer` string and inline
 `sources` entries when a workflow wants a portable scorecard payload without
 writing separate answer or source files to disk. `answerPath` still acts as the
 reviewer-facing traceability path in the resulting scorecard and reports.
+`expectedClaimVerdicts`, when present, should include one entry per expected
+claim across the totals declared in `expectedSummary`.
 
 Reviewer import helpers such as `importReviewerDecisions` and
 `renderReviewerDecisionImportMarkdownReport` are also exported for teams that
