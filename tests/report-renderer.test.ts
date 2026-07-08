@@ -579,6 +579,44 @@ test("renders a batch reviewer decision csv with answer path context", () => {
   assert.match(lines[2] ?? "", /,,$/);
 });
 
+test("renders risky answers first in batch reviewer decision csv rows", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
+    sourceCount: 1,
+    answerCount: 2,
+    answers: [
+      {
+        answerLabel: "clear-answer",
+        answerPath: "examples/answers/clear-answer.md",
+        report: verifyAnswer("Employees receive 12 weeks of paid parental leave.", [hrPolicy]),
+        shouldFail: false,
+        failVerdicts: [],
+      },
+      {
+        answerLabel: "risky-answer",
+        answerPath: "examples/answers/risky-answer.md",
+        report: verifyAnswer("Employees receive free catered lunch every day.", [hrPolicy]),
+        shouldFail: true,
+        failVerdicts: ["unsupported"],
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 1,
+      needs_review: 0,
+      answersWithoutClaims: 0,
+      answersWithFailures: 1,
+    },
+  };
+
+  const lines = renderBatchReviewerDecisionCsv(batchReport).trim().split("\n");
+
+  assert.match(lines[1] ?? "", /^risky-answer,examples\/answers\/risky-answer\.md,/);
+  assert.match(lines[2] ?? "", /^clear-answer,examples\/answers\/clear-answer\.md,/);
+});
+
 test("renders a no-claim batch reviewer decision csv row with answer-level context", () => {
   const batchReport: BatchVerificationReport = {
     generatedAt: "2026-06-29T00:00:00.000Z",
@@ -654,11 +692,11 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
   );
   assert.equal(
     lines[1],
-    "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,1.000,Employees receive 12 weeks of paid parental leave.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
+    "support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
   );
   assert.equal(
     lines[2],
-    "support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
+    "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,1.000,Employees receive 12 weeks of paid parental leave.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
   );
 });
 

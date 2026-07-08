@@ -166,13 +166,15 @@ npm run dev -- verify-batch \
   --review-csv-out reports/selected-review.csv
 ```
 
-When `--answer` is repeated, Quorum keeps those explicit paths in the same
-order in the batch report and reviewer CSV, then appends any additional files
-found through `--answer-dir`. Add `--answer-label` after any explicit
-`--answer` to keep a reviewer-facing queue label for that input while still
-preserving the original `answer_path`. Batch Markdown and HTML reports also
-include each answer's claim-level verdicts and top evidence so reviewers can
-inspect risky answers without jumping straight to JSON.
+When `--answer` is repeated, Quorum keeps those explicit paths attached to each
+row and report section, then appends any additional files found through
+`--answer-dir`. Reviewer-facing batch reports plus the batch review and summary
+CSVs prioritize risky answers first so teams can route the hottest items
+without reshaping the export themselves. Add `--answer-label` after any
+explicit `--answer` to keep a reviewer-facing queue label for that input while
+still preserving the original `answer_path`. Batch Markdown and HTML reports
+also include each answer's claim-level verdicts and top evidence so reviewers
+can inspect risky answers without jumping straight to JSON.
 
 ## Programmatic API
 
