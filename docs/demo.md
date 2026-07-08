@@ -62,11 +62,12 @@ accepts repeated `--answer` paths:
 ```bash
 npm run dev -- verify-batch --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --answer examples/answers/support-answer.md --answer-label "Support escalation packet" --source-dir examples/sources --review-csv-out reports/selected-review.csv
 ```
-Quorum keeps repeated `--answer` paths in that explicit order in the batch
-report and reviewer CSV, then appends any extra files discovered through
-`--answer-dir`. Add `--answer-label` after any explicit `--answer` when the
-review queue should show a business-facing label instead of the path-derived
-default.
+Quorum keeps repeated `--answer` paths attached to each exported row, then
+appends any extra files discovered through `--answer-dir`. Reviewer-facing
+batch reports plus the batch review and summary CSVs prioritize risky answers
+first so the review queue starts with the hottest items. Add `--answer-label`
+after any explicit `--answer` when the review queue should show a
+business-facing label instead of the path-derived default.
 Because the samples contain risky claims, the demo commands exit with status
 code `2` when `--fail-on` is enabled.
 
