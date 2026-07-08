@@ -246,7 +246,7 @@ test("evaluates inline fixture answers and sources without reading answer files"
     assert.equal(scorecard.fixturePath, fixturePath);
     assert.equal(scorecard.answerPath, join(tempDir, "answers", "hr-inline.md"));
     assert.equal(scorecard.answerLabel, "HR API reviewer packet");
-    assert.deepEqual(scorecard.sourcePaths, []);
+    assert.deepEqual(scorecard.sourcePaths, [join(tempDir, "sources", "hr-policy.md")]);
     assert.equal(scorecard.report.sources[0]?.title, "HR Policy");
     assert.equal(scorecard.summaryMatches, true);
     assert.equal(scorecard.matchedClaims, 1);
