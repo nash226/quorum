@@ -345,6 +345,7 @@ test("renders evaluation text report totals and mismatch detection", () => {
   const scorecards = [
     {
       fixtureName: "Match fixture",
+      domain: "support",
       answerPath: "/tmp/answer-1.md",
       answerLabel: "answer-1",
       answerPreview: "Preview 1",
@@ -385,6 +386,7 @@ test("renders evaluation text report totals and mismatch detection", () => {
     },
     {
       fixtureName: "Mismatch fixture",
+      domain: "hr",
       answerPath: "/tmp/answer-2.md",
       answerLabel: "answer-2",
       answerPreview: "Preview 2",
@@ -434,6 +436,9 @@ test("renders evaluation text report totals and mismatch detection", () => {
   assert.match(rendered, /Fixtures with mismatches: 1/);
   assert.match(rendered, /Matched claim verdicts: 0\/1/);
   assert.match(rendered, /Overall claim verdict score: 0%/);
+  assert.match(rendered, /Domain rollups:/);
+  assert.match(rendered, /- hr: 1 fixture, 1 mismatch, 0\/1 matched \(0%\)/);
+  assert.match(rendered, /- support: 1 fixture, 0 mismatches, 0\/0 matched \(n\/a\)/);
 });
 
 test("renders evaluation summary csv rows for each fixture", () => {
@@ -554,6 +559,7 @@ test("renders evaluation markdown report with fixture summaries", () => {
   const rendered = renderEvaluationMarkdownReport([
     {
       fixtureName: "Support policy example",
+      domain: "support",
       fixturePath: "/tmp/fixtures/support.json",
       answerPath: "/tmp/answers/support.md",
       answerLabel: "Support reviewer packet",
@@ -607,6 +613,8 @@ test("renders evaluation markdown report with fixture summaries", () => {
   assert.match(rendered, /## Summary/);
   assert.match(rendered, /- Matched claim verdicts: 1\/1/);
   assert.match(rendered, /- Overall claim verdict score: 100%/);
+  assert.match(rendered, /### Domain Rollups/);
+  assert.match(rendered, /- `support`: 1 fixture, 0 mismatches, 1\/1 matched \(100%\)/);
   assert.match(rendered, /### 1\. Support policy example/);
   assert.match(rendered, /- Fixture path: `\/tmp\/fixtures\/support\.json`/);
   assert.match(rendered, /- Answer label: `Support reviewer packet`/);
@@ -620,6 +628,7 @@ test("renders evaluation html report with fixture summaries", () => {
   const rendered = renderEvaluationHtmlReport([
     {
       fixtureName: "Support policy example",
+      domain: "support",
       fixturePath: "/tmp/fixtures/support.json",
       answerPath: "/tmp/answers/support.md",
       answerLabel: "Support reviewer packet",
@@ -676,6 +685,8 @@ test("renders evaluation html report with fixture summaries", () => {
   assert.match(rendered, /Fixture scorecard report/);
   assert.match(rendered, /<span>Matched Claim Verdicts<\/span>\s*<strong>1\/1<\/strong>/);
   assert.match(rendered, /<span>Overall Claim Verdict Score<\/span>\s*<strong>100%<\/strong>/);
+  assert.match(rendered, /Domain rollups/);
+  assert.match(rendered, /1 fixture with 0 mismatches\./);
   assert.match(rendered, /Support policy example/);
   assert.match(rendered, /Expected summary/);
   assert.match(rendered, /Claim verdicts/);
