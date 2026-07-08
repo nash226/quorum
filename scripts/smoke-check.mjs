@@ -497,6 +497,136 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.equal(evaluateResult.mismatchCount, 0);
     assert.equal(evaluateResult.scorecards[0]?.fixtureName, "HR policy example");
     assert.equal(evaluateResult.scorecards[0]?.summaryMatches, true);
+
+    const verifyConflictResponse = await fetch(`${server.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 18 weeks of paid parental leave.",
+        answerPath: "answers/hr-conflict.md",
+        sources: [
+          {
+            sourcePath: "policies/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        failOn: ["contradicted"],
+        includeArtifacts: ["text", "summary_csv"],
+        failOnStatus: true,
+      }),
+    });
+    assert.equal(verifyConflictResponse.status, 409);
+    const verifyConflictResult = await verifyConflictResponse.json();
+    assert.equal(verifyConflictResult.shouldFail, true);
+    assert.deepEqual(verifyConflictResult.failVerdicts, ["contradicted"]);
+    assert.match(verifyConflictResult.artifacts.text, /Quorum Verification Report/);
+    assert.match(verifyConflictResult.artifacts.summary_csv, /^answer_label,answer_path,/);
+
+    const batchConflictResponse = await fetch(`${server.url}/verify-batch`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answers: [
+          {
+            answer: "Employees receive free catered lunch every day.",
+            answerPath: "answers/perks.md",
+            answerLabel: "Perks queue",
+          },
+        ],
+        sources: [
+          {
+            sourcePath: "policies/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+        failOn: ["unsupported"],
+        includeArtifacts: ["html"],
+        failOnStatus: true,
+      }),
+    });
+    assert.equal(batchConflictResponse.status, 409);
+    const batchConflictResult = await batchConflictResponse.json();
+    assert.equal(batchConflictResult.shouldFail, true);
+    assert.deepEqual(batchConflictResult.failVerdicts, ["unsupported"]);
+    assert.match(batchConflictResult.artifacts.html, /Quorum Batch Verification Report/);
+
+    const importConflictResponse = await fetch(`${server.url}/import-review`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewCsvContent: `answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
+`,
+        failOn: ["needs_review"],
+        includeArtifacts: ["markdown"],
+        failOnStatus: true,
+      }),
+    });
+    assert.equal(importConflictResponse.status, 409);
+    const importConflictResult = await importConflictResponse.json();
+    assert.equal(importConflictResult.shouldFail, true);
+    assert.deepEqual(importConflictResult.failVerdicts, ["needs_review"]);
+    assert.match(importConflictResult.artifacts.markdown, /^# Quorum Reviewer Decision Import/);
+
+    const evaluateConflictResponse = await fetch(`${server.url}/evaluate`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        fixtures: [
+          {
+            fixturePath: join(repoRoot, "tmp-fixtures", "hr-inline.json"),
+            content: JSON.stringify({
+              name: "Inline HR API fixture",
+              answerPath: "../answers/hr-inline.md",
+              answer: "Employees receive 18 weeks of paid parental leave.\n",
+              sources: [
+                {
+                  sourcePath: "../sources/hr-policy.md",
+                  title: "HR Policy",
+                  trustLevel: "high",
+                  content: "Employees receive 12 weeks of paid parental leave.\n",
+                },
+              ],
+              expectedSummary: {
+                verified: 1,
+                contradicted: 0,
+                unsupported: 0,
+                needs_review: 0,
+              },
+              expectedClaimVerdicts: ["verified"],
+            }),
+          },
+        ],
+        includeArtifacts: ["summary_csv"],
+        failOnStatus: true,
+      }),
+    });
+    assert.equal(evaluateConflictResponse.status, 409);
+    const evaluateConflictResult = await evaluateConflictResponse.json();
+    assert.equal(evaluateConflictResult.shouldFail, true);
+    assert.equal(evaluateConflictResult.mismatchCount, 1);
+    assert.match(
+      evaluateConflictResult.artifacts.summary_csv,
+      /^fixture_name,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
+    );
   } finally {
     await server.stop();
   }
