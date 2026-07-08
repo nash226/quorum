@@ -442,6 +442,10 @@ preflight requests for JSON clients.
 `POST /evaluate` also accept an `includeArtifacts` array when callers want the
 JSON response to embed reviewer-facing text, Markdown, HTML, and CSV artifacts
 without writing files first.
+Those same POST endpoints also accept `failOnStatus: true` when local
+orchestrators want Quorum to return HTTP `409` for matched fail policies or
+evaluation mismatches instead of always returning `200`, which lets workflow
+gates block risky outputs without parsing the body first.
 Node integrations that want to embed the server directly can now import
 `createApiServer`, `startApiServer`, and stable discovery metadata such as
 `OPENAPI_PATH` from the main `quorum` entrypoint, while `quorum/server`
