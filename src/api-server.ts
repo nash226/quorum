@@ -64,6 +64,7 @@ export interface VerifyApiRequest {
   generatedAt?: string;
   failOn?: string[];
   includeArtifacts?: VerifyArtifact[];
+  failOnStatus?: boolean;
 }
 
 export interface VerifyBatchApiRequest {
@@ -77,12 +78,14 @@ export interface VerifyBatchApiRequest {
   generatedAt?: string;
   failOn?: string[];
   includeArtifacts?: VerifyBatchArtifact[];
+  failOnStatus?: boolean;
 }
 
 export interface ImportReviewApiRequest {
   reviewCsvContent: string;
   failOn?: string[];
   includeArtifacts?: ImportReviewArtifact[];
+  failOnStatus?: boolean;
 }
 
 export interface EvaluateApiRequest {
@@ -92,6 +95,7 @@ export interface EvaluateApiRequest {
   }>;
   generatedAt?: string;
   includeArtifacts?: EvaluateArtifact[];
+  failOnStatus?: boolean;
 }
 
 export interface ApiServerOptions {
@@ -146,6 +150,7 @@ Employees receive 12 weeks of paid parental leave.
   defaultTrustLevel: "high",
   failOn: ["contradicted", "unsupported"],
   includeArtifacts: ["markdown", "review_csv"],
+  failOnStatus: true,
 } as const;
 const OPENAPI_VERIFY_BATCH_EXAMPLE = {
   generatedAt: "2026-07-07T19:20:00.000Z",
@@ -187,6 +192,7 @@ Refund requests receive an initial response within one business day.
   ],
   failOn: ["unsupported"],
   includeArtifacts: ["html", "summary_csv"],
+  failOnStatus: true,
 } as const;
 const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
   reviewCsvContent: [
@@ -195,6 +201,7 @@ const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
   ].join("\n"),
   failOn: ["needs_review"],
   includeArtifacts: ["markdown", "summary_csv"],
+  failOnStatus: true,
 } as const;
 const OPENAPI_EVALUATE_EXAMPLE = {
   generatedAt: "2026-07-07T19:25:00.000Z",
@@ -228,6 +235,7 @@ const OPENAPI_EVALUATE_EXAMPLE = {
     },
   ],
   includeArtifacts: ["html", "summary_csv"],
+  failOnStatus: true,
 } as const;
 
 export function createApiServer(): Server {
@@ -361,7 +369,12 @@ async function handleApiRequest(
       generatedAt: body.generatedAt,
       failOn: body.failOn,
     });
-    writeJson(response, 200, withArtifacts(result, buildVerifyArtifacts(result, body.includeArtifacts)));
+    writeOperationResult(
+      response,
+      result,
+      withArtifacts(result, buildVerifyArtifacts(result, body.includeArtifacts)),
+      body.failOnStatus,
+    );
     return;
   }
 
@@ -380,10 +393,11 @@ async function handleApiRequest(
       generatedAt: body.generatedAt,
       failOn: body.failOn,
     });
-    writeJson(
+    writeOperationResult(
       response,
-      200,
+      result,
       withArtifacts(result, buildVerifyBatchArtifacts(result, body.includeArtifacts)),
+      body.failOnStatus,
     );
     return;
   }
@@ -400,10 +414,11 @@ async function handleApiRequest(
       reviewCsvContent: body.reviewCsvContent,
       failOn: body.failOn,
     });
-    writeJson(
+    writeOperationResult(
       response,
-      200,
+      result,
       withArtifacts(result, buildImportReviewArtifacts(result, body.includeArtifacts)),
+      body.failOnStatus,
     );
     return;
   }
@@ -420,10 +435,11 @@ async function handleApiRequest(
       fixtures: body.fixtures,
       generatedAt: body.generatedAt,
     });
-    writeJson(
+    writeOperationResult(
       response,
-      200,
+      result,
       withArtifacts(result, buildEvaluateArtifacts(result, body.includeArtifacts)),
+      body.failOnStatus,
     );
     return;
   }
@@ -474,6 +490,7 @@ function parseVerifyRequest(value: unknown): {
   generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
   includeArtifacts?: VerifyArtifact[];
+  failOnStatus?: boolean;
 } {
   const record = requireRecord(value, "Verify request body");
 
@@ -486,6 +503,7 @@ function parseVerifyRequest(value: unknown): {
     generatedAt: optionalString(record.generatedAt, "generatedAt"),
     failOn: parseOptionalFailOn(record.failOn),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, VERIFY_ARTIFACTS, "includeArtifacts"),
+    failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
   };
 }
 
@@ -496,6 +514,7 @@ function parseVerifyBatchRequest(value: unknown): {
   generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
   includeArtifacts?: VerifyBatchArtifact[];
+  failOnStatus?: boolean;
 } {
   const record = requireRecord(value, "Batch verify request body");
   const answersValue = record.answers;
@@ -511,6 +530,7 @@ function parseVerifyBatchRequest(value: unknown): {
     generatedAt: optionalString(record.generatedAt, "generatedAt"),
     failOn: parseOptionalFailOn(record.failOn),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, VERIFY_BATCH_ARTIFACTS, "includeArtifacts"),
+    failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
   };
 }
 
@@ -518,6 +538,7 @@ function parseImportReviewRequest(value: unknown): {
   reviewCsvContent: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
   includeArtifacts?: ImportReviewArtifact[];
+  failOnStatus?: boolean;
 } {
   const record = requireRecord(value, "Import review request body");
 
@@ -525,6 +546,7 @@ function parseImportReviewRequest(value: unknown): {
     reviewCsvContent: requireString(record.reviewCsvContent, "reviewCsvContent"),
     failOn: parseOptionalFailOn(record.failOn),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, IMPORT_REVIEW_ARTIFACTS, "includeArtifacts"),
+    failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
   };
 }
 
@@ -532,6 +554,7 @@ function parseEvaluateRequest(value: unknown): {
   fixtures: InMemoryEvaluationFixtureInput[];
   generatedAt?: string;
   includeArtifacts?: EvaluateArtifact[];
+  failOnStatus?: boolean;
 } {
   const record = requireRecord(value, "Evaluate request body");
   const fixturesValue = record.fixtures;
@@ -544,6 +567,7 @@ function parseEvaluateRequest(value: unknown): {
     fixtures: fixturesValue.map((fixture, index) => parseFixtureInput(fixture, index)),
     generatedAt: optionalString(record.generatedAt, "generatedAt"),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, EVALUATE_ARTIFACTS, "includeArtifacts"),
+    failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
   };
 }
 
@@ -666,6 +690,18 @@ function optionalString(value: unknown, fieldName: string): string | undefined {
   }
 
   return requireString(value, fieldName);
+}
+
+function optionalBoolean(value: unknown, fieldName: string): boolean | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (typeof value !== "boolean") {
+    throw requestError(`${fieldName} must be a boolean.`);
+  }
+
+  return value;
 }
 
 function buildOpenApiDocument(request: IncomingMessage) {
@@ -836,6 +872,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       type: "array",
                       items: { $ref: "#/components/schemas/VerifyArtifactName" },
                     },
+                    failOnStatus: { type: "boolean" },
                   },
                   required: ["answer", "sources"],
                 },
@@ -851,6 +888,24 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Single-answer verification result.",
+              content: {
+                "application/json": {
+                  schema: {
+                    allOf: [
+                      { $ref: "#/components/schemas/SingleVerificationResult" },
+                      {
+                        type: "object",
+                        properties: {
+                          artifacts: { $ref: "#/components/schemas/ApiVerifyArtifacts" },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+            "409": {
+              description: "Verification matched the requested fail policy while failOnStatus was enabled.",
               content: {
                 "application/json": {
                   schema: {
@@ -909,6 +964,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       type: "array",
                       items: { $ref: "#/components/schemas/VerifyBatchArtifactName" },
                     },
+                    failOnStatus: { type: "boolean" },
                   },
                   required: ["answers", "sources"],
                 },
@@ -924,6 +980,24 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Batch verification result.",
+              content: {
+                "application/json": {
+                  schema: {
+                    allOf: [
+                      { $ref: "#/components/schemas/BatchVerificationRunResult" },
+                      {
+                        type: "object",
+                        properties: {
+                          artifacts: { $ref: "#/components/schemas/ApiVerifyBatchArtifacts" },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+            "409": {
+              description: "Batch verification matched the requested fail policy while failOnStatus was enabled.",
               content: {
                 "application/json": {
                   schema: {
@@ -963,6 +1037,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       type: "array",
                       items: { $ref: "#/components/schemas/ImportReviewArtifactName" },
                     },
+                    failOnStatus: { type: "boolean" },
                   },
                   required: ["reviewCsvContent"],
                 },
@@ -978,6 +1053,24 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Reviewer decision import result.",
+              content: {
+                "application/json": {
+                  schema: {
+                    allOf: [
+                      { $ref: "#/components/schemas/ReviewerDecisionImportResult" },
+                      {
+                        type: "object",
+                        properties: {
+                          artifacts: { $ref: "#/components/schemas/ApiImportReviewArtifacts" },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+            "409": {
+              description: "Imported reviewer decisions matched the requested fail policy while failOnStatus was enabled.",
               content: {
                 "application/json": {
                   schema: {
@@ -1018,6 +1111,7 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       type: "array",
                       items: { $ref: "#/components/schemas/EvaluateArtifactName" },
                     },
+                    failOnStatus: { type: "boolean" },
                   },
                   required: ["fixtures"],
                 },
@@ -1033,6 +1127,24 @@ function buildOpenApiDocument(request: IncomingMessage) {
           responses: {
             "200": {
               description: "Evaluation scorecard batch result.",
+              content: {
+                "application/json": {
+                  schema: {
+                    allOf: [
+                      { $ref: "#/components/schemas/EvaluationBatchRunResult" },
+                      {
+                        type: "object",
+                        properties: {
+                          artifacts: { $ref: "#/components/schemas/ApiEvaluationArtifacts" },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+            "409": {
+              description: "Evaluation mismatches were detected while failOnStatus was enabled.",
               content: {
                 "application/json": {
                   schema: {
@@ -1644,6 +1756,15 @@ function withArtifacts<T extends object, A extends Record<string, string>>(
     ...result,
     artifacts,
   };
+}
+
+function writeOperationResult<T extends { shouldFail: boolean }>(
+  response: ServerResponse,
+  result: T,
+  payload: object,
+  failOnStatus?: boolean,
+): void {
+  writeJson(response, failOnStatus && result.shouldFail ? 409 : 200, payload);
 }
 
 function writeMethodNotAllowed(response: ServerResponse, allow: string): void {
