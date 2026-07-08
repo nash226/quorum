@@ -1,4 +1,4 @@
-import { parseDelimitedList } from "./csv-list.js";
+import { parseDelimitedList, serializeDelimitedList } from "./csv-list.js";
 import type { ClaimVerdict } from "./domain.js";
 import { matchingFailVerdicts, parseClaimVerdict } from "./report-policy.js";
 import { stripByteOrderMark } from "./text.js";
@@ -347,10 +347,14 @@ export function renderReviewerDecisionImportSummaryCsv(
       "original_answer_fail_verdicts",
       "fail_policy",
       "fail_verdicts",
+      "source_titles",
+      "source_trust_levels",
+      "source_updated_at",
     ],
     ...report.answerGroups.map((group) => {
       const primaryClaim = selectPrimaryImportedClaim(group.claims);
       const failVerdicts = matchingFailVerdicts(group, failOn);
+      const sourceSummary = summarizeImportedGroupSources(group);
 
       return [
         group.label,
@@ -377,6 +381,9 @@ export function renderReviewerDecisionImportSummaryCsv(
         group.originalAnswerFailVerdicts.join(" | "),
         failVerdicts.length > 0 ? "matched" : "clear",
         failVerdicts.join(" | "),
+        serializeDelimitedList(sourceSummary.titles),
+        serializeDelimitedList(sourceSummary.trustLevels),
+        serializeDelimitedList(sourceSummary.updatedAt),
       ];
     }),
   ];
@@ -917,6 +924,49 @@ function selectPrimaryImportedClaim(
       ? claim
       : selected;
   }, undefined);
+}
+
+function summarizeImportedGroupSources(
+  group: ReviewerDecisionGroup,
+): {
+  titles: string[];
+  trustLevels: string[];
+  updatedAt: string[];
+} {
+  const sources: Array<{ title: string; trustLevel: string; updatedAt: string }> = [];
+  const seen = new Set<string>();
+
+  for (const claim of group.claims) {
+    const maxEvidenceItems = Math.max(
+      claim.evidenceTitles.length,
+      claim.evidenceTrustLevels.length,
+      claim.evidenceUpdatedAt.length,
+    );
+
+    for (let index = 0; index < maxEvidenceItems; index += 1) {
+      const title = claim.evidenceTitles[index] ?? "";
+      const trustLevel = claim.evidenceTrustLevels[index] ?? "";
+      const updatedAt = claim.evidenceUpdatedAt[index] ?? "";
+
+      if (!title && !trustLevel && !updatedAt) {
+        continue;
+      }
+
+      const key = `${title}\u0000${trustLevel}\u0000${updatedAt}`;
+      if (seen.has(key)) {
+        continue;
+      }
+
+      seen.add(key);
+      sources.push({ title, trustLevel, updatedAt });
+    }
+  }
+
+  return {
+    titles: sources.map((source) => source.title),
+    trustLevels: sources.map((source) => source.trustLevel),
+    updatedAt: sources.map((source) => source.updatedAt),
+  };
 }
 
 function accumulateClaimSummary(
