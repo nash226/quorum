@@ -75,6 +75,15 @@ export interface EvaluationBatchRunResult {
   scorecards: EvaluationScorecard[];
   shouldFail: boolean;
   mismatchCount: number;
+  summary: EvaluationAggregateSummary;
+}
+
+export interface EvaluationAggregateSummary {
+  fixtureCount: number;
+  matchedClaims: number;
+  totalExpectedClaims: number;
+  score: number | null;
+  scoreLabel: string;
 }
 
 export interface InMemoryEvaluationBatchOptions {
@@ -454,7 +463,7 @@ export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): s
     `Fixtures: ${scorecards.length}`,
     `Fixtures with mismatches: ${mismatchCount}`,
     `Matched claim verdicts: ${aggregate.matchedClaims}/${aggregate.totalExpectedClaims}`,
-    `Overall claim verdict score: ${aggregate.claimScoreLabel}`,
+    `Overall claim verdict score: ${aggregate.scoreLabel}`,
   );
 
   return `${lines.join("\n")}\n`;
@@ -471,7 +480,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
     `- Fixtures: ${scorecards.length}`,
     `- Fixtures with mismatches: ${mismatchCount}`,
     `- Matched claim verdicts: ${aggregate.matchedClaims}/${aggregate.totalExpectedClaims}`,
-    `- Overall claim verdict score: ${aggregate.claimScoreLabel}`,
+    `- Overall claim verdict score: ${aggregate.scoreLabel}`,
     "",
     "## Fixtures",
     "",
@@ -865,7 +874,7 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
           </article>
           <article class="summary-stat">
             <span>Overall Claim Verdict Score</span>
-            <strong>${aggregate.claimScoreLabel}</strong>
+            <strong>${aggregate.scoreLabel}</strong>
           </article>
         </div>
       </section>
@@ -955,11 +964,13 @@ function buildEvaluationBatchResult(
   scorecards: EvaluationScorecard[],
 ): EvaluationBatchRunResult {
   const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const summary = summarizeEvaluationScorecards(scorecards);
 
   return {
     scorecards,
     shouldFail: mismatchCount > 0,
     mismatchCount,
+    summary,
   };
 }
 
@@ -1150,11 +1161,9 @@ function trimTrailingBlankLines(lines: string[]): string[] {
   return trimmed;
 }
 
-function summarizeEvaluationScorecards(scorecards: EvaluationScorecard[]): {
-  matchedClaims: number;
-  totalExpectedClaims: number;
-  claimScoreLabel: string;
-} {
+function summarizeEvaluationScorecards(
+  scorecards: EvaluationScorecard[],
+): EvaluationAggregateSummary {
   const matchedClaims = scorecards.reduce(
     (total, scorecard) => total + scorecard.matchedClaims,
     0,
@@ -1165,12 +1174,12 @@ function summarizeEvaluationScorecards(scorecards: EvaluationScorecard[]): {
   );
 
   return {
+    fixtureCount: scorecards.length,
     matchedClaims,
     totalExpectedClaims,
-    claimScoreLabel:
-      totalExpectedClaims > 0
-        ? `${Math.round((matchedClaims / totalExpectedClaims) * 100)}%`
-        : "n/a",
+    score: totalExpectedClaims > 0 ? matchedClaims / totalExpectedClaims : null,
+    scoreLabel:
+      totalExpectedClaims > 0 ? `${Math.round((matchedClaims / totalExpectedClaims) * 100)}%` : "n/a",
   };
 }
 

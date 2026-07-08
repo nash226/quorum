@@ -1364,6 +1364,11 @@ test("programmatic API returns mismatch metadata for in-memory evaluation batche
 
     assert.equal(result.shouldFail, true);
     assert.equal(result.mismatchCount, 1);
+    assert.equal(result.summary.fixtureCount, 1);
+    assert.equal(result.summary.matchedClaims, 0);
+    assert.equal(result.summary.totalExpectedClaims, 1);
+    assert.equal(result.summary.score, 0);
+    assert.equal(result.summary.scoreLabel, "0%");
     assert.equal(result.scorecards.length, 1);
     assert.equal(result.scorecards[0]?.fixturePath, fixturePath);
     assert.equal(result.scorecards[0]?.report.generatedAt, "2026-07-05T21:00:00.000Z");
@@ -1416,6 +1421,11 @@ test("programmatic API returns mismatch metadata for in-memory evaluation fixtur
 
     assert.equal(batchResult.shouldFail, false);
     assert.equal(batchResult.mismatchCount, 0);
+    assert.equal(batchResult.summary.fixtureCount, 1);
+    assert.equal(batchResult.summary.matchedClaims, 1);
+    assert.equal(batchResult.summary.totalExpectedClaims, 1);
+    assert.equal(batchResult.summary.score, 1);
+    assert.equal(batchResult.summary.scoreLabel, "100%");
     assert.equal(batchResult.scorecards[0]?.report.generatedAt, "2026-07-05T21:15:00.000Z");
     assert.equal(singleResult.hasMismatch, false);
     assert.equal(singleResult.scorecard.fixturePath, fixturePath);
@@ -1443,6 +1453,11 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
 
   assert.equal(batchResult.shouldFail, false);
   assert.equal(batchResult.mismatchCount, 0);
+  assert.equal(batchResult.summary.fixtureCount, 4);
+  assert.equal(batchResult.summary.matchedClaims, 12);
+  assert.equal(batchResult.summary.totalExpectedClaims, 12);
+  assert.equal(batchResult.summary.score, 1);
+  assert.equal(batchResult.summary.scoreLabel, "100%");
   assert.equal(batchResult.scorecards.length, 4);
   assert.equal(singleResult.hasMismatch, false);
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
@@ -1915,7 +1930,12 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           };
           BatchVerificationRunResult: Record<string, unknown>;
           ClaimVerdict: { enum: string[] };
-          EvaluationBatchRunResult: Record<string, unknown>;
+          EvaluationAggregateSummary: {
+            required: string[];
+          };
+          EvaluationBatchRunResult: {
+            required: string[];
+          };
           ReviewerDecisionImportResult: Record<string, unknown>;
           SingleVerificationResult: Record<string, unknown>;
           SourceTrustLevel: { enum: string[] };
@@ -2122,8 +2142,19 @@ Refund requests receive an initial response within one business day.
     ]);
     assert.ok(openApi.components.schemas.SingleVerificationResult);
     assert.ok(openApi.components.schemas.BatchVerificationRunResult);
+    assert.deepEqual(openApi.components.schemas.EvaluationAggregateSummary.required, [
+      "fixtureCount",
+      "matchedClaims",
+      "totalExpectedClaims",
+      "score",
+      "scoreLabel",
+    ]);
     assert.ok(openApi.components.schemas.ReviewerDecisionImportResult);
     assert.ok(openApi.components.schemas.EvaluationBatchRunResult);
+    assert.deepEqual(
+      (openApi.components.schemas.EvaluationBatchRunResult.required as string[]).slice().sort(),
+      ["mismatchCount", "scorecards", "shouldFail", "summary"],
+    );
     assert.deepEqual(openApi.components.schemas.SourceTrustLevel.enum, ["low", "medium", "high"]);
     assert.deepEqual(openApi.components.schemas.ClaimVerdict.enum, [
       "verified",
@@ -2494,6 +2525,13 @@ test("programmatic API serves evaluation over HTTP", async () => {
     const result = await response.json() as {
       shouldFail: boolean;
       mismatchCount: number;
+      summary: {
+        fixtureCount: number;
+        matchedClaims: number;
+        totalExpectedClaims: number;
+        score: number;
+        scoreLabel: string;
+      };
       scorecards: Array<{
         fixtureName: string;
         report: {
@@ -2507,6 +2545,11 @@ test("programmatic API serves evaluation over HTTP", async () => {
 
     assert.equal(result.shouldFail, false);
     assert.equal(result.mismatchCount, 0);
+    assert.equal(result.summary.fixtureCount, 1);
+    assert.equal(result.summary.matchedClaims, 3);
+    assert.equal(result.summary.totalExpectedClaims, 3);
+    assert.equal(result.summary.score, 1);
+    assert.equal(result.summary.scoreLabel, "100%");
     assert.equal(result.scorecards[0]?.fixtureName, "HR policy example");
     assert.equal(result.scorecards[0]?.report.generatedAt, generatedAt);
     assert.equal(result.scorecards[0]?.summaryMatches, true);
@@ -2562,6 +2605,13 @@ test("programmatic API serves inline evaluation fixtures over HTTP without local
     const result = await response.json() as {
       shouldFail: boolean;
       mismatchCount: number;
+      summary: {
+        fixtureCount: number;
+        matchedClaims: number;
+        totalExpectedClaims: number;
+        score: number;
+        scoreLabel: string;
+      };
       scorecards: Array<{
         fixtureName: string;
         answerPath: string;
@@ -2580,6 +2630,11 @@ test("programmatic API serves inline evaluation fixtures over HTTP without local
 
     assert.equal(result.shouldFail, false);
     assert.equal(result.mismatchCount, 0);
+    assert.equal(result.summary.fixtureCount, 1);
+    assert.equal(result.summary.matchedClaims, 1);
+    assert.equal(result.summary.totalExpectedClaims, 1);
+    assert.equal(result.summary.score, 1);
+    assert.equal(result.summary.scoreLabel, "100%");
     assert.equal(result.scorecards[0]?.fixtureName, "Inline HR API fixture");
     assert.equal(result.scorecards[0]?.answerLabel, "HR API reviewer packet");
     assert.equal(
