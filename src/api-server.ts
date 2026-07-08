@@ -262,7 +262,7 @@ Refund requests receive an initial response within one business day.
 } as const;
 const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
   reviewCsvContent: [
-    "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_title,evidence_quote,reviewer_verdict,reviewer_notes",
+    "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
     "HR policy answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved for publish",
   ].join("\n"),
   failOn: ["needs_review"],
