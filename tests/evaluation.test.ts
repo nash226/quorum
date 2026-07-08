@@ -281,6 +281,27 @@ test("rejects invalid evaluation fixture content with a clear validation error",
   );
 });
 
+test("rejects evaluation fixtures when claim verdict expectations do not match summary totals", () => {
+  assert.throws(
+    () =>
+      loadEvaluationFixtureFromContent(
+        JSON.stringify({
+          name: "Broken fixture",
+          answerPath: "answers/hr.md",
+          sourcePaths: ["sources/hr-policy.md"],
+          expectedSummary: {
+            verified: 2,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+          },
+          expectedClaimVerdicts: ["verified"],
+        }),
+      ),
+    /Evaluation fixture\.expectedClaimVerdicts must include 2 entries to match the totals in Evaluation fixture\.expectedSummary\./,
+  );
+});
+
 test("renders mismatch details in evaluation scorecards", () => {
   const rendered = renderEvaluationScorecard({
     fixtureName: "Mismatch fixture",
