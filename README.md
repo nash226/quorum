@@ -424,8 +424,9 @@ metadata without rewriting the raw document content; those explicit fields take
 precedence over any frontmatter or HTML metadata already embedded in the
 source body.
 `GET /` returns a small JSON endpoint index plus capability metadata for
-supported source extensions, answer extensions, verdicts, and trust levels, so
-local clients can avoid hardcoding Quorum's current contract, and
+supported source extensions, answer extensions, verdicts, trust levels, and
+opt-in artifact names for each workflow surface, so local clients can avoid
+hardcoding Quorum's current contract, and
 `HEAD /`, `HEAD /health`, and `HEAD /openapi.json` expose the same status code
 and headers without a JSON body, which makes lightweight readiness probes and
 schema checks easier to wire into orchestrators and load balancers.
@@ -437,6 +438,10 @@ typed local clients can generate against the same contract as the CLI-backed
 server. Browser-based local tooling can call the same endpoints directly
 because the server replies with permissive CORS headers and handles `OPTIONS`
 preflight requests for JSON clients.
+`POST /verify`, `POST /verify-batch`, `POST /import-review`, and
+`POST /evaluate` also accept an `includeArtifacts` array when callers want the
+JSON response to embed reviewer-facing text, Markdown, HTML, and CSV artifacts
+without writing files first.
 Node integrations that want to embed the server directly can now import
 `createApiServer`, `startApiServer`, and stable discovery metadata such as
 `OPENAPI_PATH` from the main `quorum` entrypoint, while `quorum/server`
