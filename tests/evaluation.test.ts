@@ -10,6 +10,7 @@ import {
   evaluateFixtureFile,
   hasEvaluationMismatch,
   loadEvaluationFixture,
+  loadEvaluationFixtureFromContent,
   renderEvaluationHtmlReport,
   renderEvaluationMarkdownReport,
   renderEvaluationScorecard,
@@ -254,6 +255,26 @@ test("evaluates inline fixture answers and sources without reading answer files"
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
+});
+
+test("rejects invalid evaluation fixture content with a clear validation error", () => {
+  assert.throws(
+    () =>
+      loadEvaluationFixtureFromContent(
+        JSON.stringify({
+          name: "Broken fixture",
+          answerPath: "answers/hr.md",
+          sourcePaths: ["sources/hr-policy.md"],
+          expectedSummary: {
+            verified: 1,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: "nope",
+          },
+        }),
+      ),
+    /Evaluation fixture\.expectedSummary\.needs_review must be a non-negative integer\./,
+  );
 });
 
 test("renders mismatch details in evaluation scorecards", () => {

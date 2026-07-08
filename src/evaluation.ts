@@ -3,6 +3,8 @@ import { dirname, extname, join, resolve } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import { serializeDelimitedList } from "./csv-list.js";
 import type { ClaimVerdict, SourceTrustLevel, VerificationReport } from "./domain.js";
+import { parseClaimVerdict } from "./report-policy.js";
+import { parseSourceTrustLevel } from "./source-loader.js";
 import {
   loadSourceDocuments,
   loadSourceDocumentsFromContent,
@@ -110,14 +112,35 @@ export interface InMemoryEvaluationFixtureFileOptions {
   generatedAt?: string;
 }
 
-export async function loadEvaluationFixture(fixturePath: string): Promise<EvaluationFixture> {
-  return JSON.parse(await readFile(fixturePath, "utf8")) as EvaluationFixture;
+export class EvaluationFixtureValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "EvaluationFixtureValidationError";
+  }
 }
 
-export function loadEvaluationFixtureFromContent(content: string | Uint8Array): EvaluationFixture {
-  return JSON.parse(
-    typeof content === "string" ? content : new TextDecoder().decode(content),
-  ) as EvaluationFixture;
+export async function loadEvaluationFixture(fixturePath: string): Promise<EvaluationFixture> {
+  return loadEvaluationFixtureFromContent(await readFile(fixturePath, "utf8"), fixturePath);
+}
+
+export function loadEvaluationFixtureFromContent(
+  content: string | Uint8Array,
+  fixturePath?: string,
+): EvaluationFixture {
+  const fixtureLabel = fixturePath
+    ? `Evaluation fixture ${fixturePath}`
+    : "Evaluation fixture";
+  let parsed: unknown;
+
+  try {
+    parsed = JSON.parse(
+      typeof content === "string" ? content : new TextDecoder().decode(content),
+    );
+  } catch {
+    throw new EvaluationFixtureValidationError(`${fixtureLabel} must be valid JSON.`);
+  }
+
+  return validateEvaluationFixture(parsed, fixtureLabel);
 }
 
 export async function evaluateFixture(
@@ -320,7 +343,9 @@ export async function evaluateFixtureContents(
   }
 
   return evaluateFixtures({
-    fixtures: options.fixtures.map((fixture) => loadEvaluationFixtureFromContent(fixture.content)),
+    fixtures: options.fixtures.map((fixture) =>
+      loadEvaluationFixtureFromContent(fixture.content, fixture.fixturePath),
+    ),
     baseDirs: options.fixtures.map((fixture) => dirname(fixture.fixturePath)),
     fixturePaths: options.fixtures.map((fixture) => fixture.fixturePath),
     generatedAt: options.generatedAt,
@@ -955,6 +980,45 @@ export function hasEvaluationMismatch(scorecard: EvaluationScorecard): boolean {
   return !scorecard.summaryMatches || scorecard.matchedClaims < scorecard.totalExpectedClaims;
 }
 
+function validateEvaluationFixture(
+  value: unknown,
+  fixtureLabel: string,
+): EvaluationFixture {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new EvaluationFixtureValidationError(`${fixtureLabel} must be a JSON object.`);
+  }
+
+  const record = value as Record<string, unknown>;
+  const sourcePaths = optionalStringArray(record.sourcePaths, `${fixtureLabel}.sourcePaths`);
+  const sourceDirs = optionalStringArray(record.sourceDirs, `${fixtureLabel}.sourceDirs`);
+  const sources = optionalFixtureSources(record.sources, `${fixtureLabel}.sources`);
+
+  if (sourcePaths.length === 0 && sourceDirs.length === 0 && sources.length === 0) {
+    throw new EvaluationFixtureValidationError(
+      `${fixtureLabel} requires at least one source path, source directory, or in-memory source.`,
+    );
+  }
+
+  return {
+    name: requireNonEmptyString(record.name, `${fixtureLabel}.name`),
+    answerPath: requireNonEmptyString(record.answerPath, `${fixtureLabel}.answerPath`),
+    answer: optionalNonEmptyString(record.answer, `${fixtureLabel}.answer`),
+    answerLabel: optionalNonEmptyString(record.answerLabel, `${fixtureLabel}.answerLabel`),
+    sourcePaths: record.sourcePaths === undefined ? undefined : sourcePaths,
+    sourceDirs: record.sourceDirs === undefined ? undefined : sourceDirs,
+    sources: record.sources === undefined ? undefined : sources,
+    defaultTrustLevel: optionalFixtureTrustLevel(
+      record.defaultTrustLevel,
+      `${fixtureLabel}.defaultTrustLevel`,
+    ),
+    expectedSummary: parseExpectedSummary(record.expectedSummary, fixtureLabel),
+    expectedClaimVerdicts: parseExpectedClaimVerdicts(
+      record.expectedClaimVerdicts,
+      fixtureLabel,
+    ),
+  };
+}
+
 function buildEvaluationFixtureResult(
   scorecard: EvaluationScorecard,
 ): EvaluationFixtureRunResult {
@@ -988,6 +1052,140 @@ function evaluationMismatchType(scorecard: EvaluationScorecard): string {
   }
 
   return "none";
+}
+
+function requireNonEmptyString(value: unknown, fieldName: string): string {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new EvaluationFixtureValidationError(`${fieldName} must be a non-empty string.`);
+  }
+
+  return value;
+}
+
+function optionalNonEmptyString(value: unknown, fieldName: string): string | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  return requireNonEmptyString(value, fieldName);
+}
+
+function optionalStringArray(value: unknown, fieldName: string): string[] {
+  if (value === undefined) {
+    return [];
+  }
+
+  if (!Array.isArray(value)) {
+    throw new EvaluationFixtureValidationError(`${fieldName} must be an array.`);
+  }
+
+  return value.map((entry, index) => requireNonEmptyString(entry, `${fieldName}[${index}]`));
+}
+
+function optionalFixtureSources(value: unknown, fieldName: string): InMemorySourceInput[] {
+  if (value === undefined) {
+    return [];
+  }
+
+  if (!Array.isArray(value)) {
+    throw new EvaluationFixtureValidationError(`${fieldName} must be an array.`);
+  }
+
+  return value.map((entry, index) => {
+    const sourceFieldName = `${fieldName}[${index}]`;
+
+    if (entry === null || typeof entry !== "object" || Array.isArray(entry)) {
+      throw new EvaluationFixtureValidationError(`${sourceFieldName} must be a JSON object.`);
+    }
+
+    const record = entry as Record<string, unknown>;
+
+    return {
+      sourcePath: requireNonEmptyString(record.sourcePath, `${sourceFieldName}.sourcePath`),
+      content: requireNonEmptyString(record.content, `${sourceFieldName}.content`),
+      title: optionalNonEmptyString(record.title, `${sourceFieldName}.title`),
+      updatedAt: optionalNonEmptyString(record.updatedAt, `${sourceFieldName}.updatedAt`),
+      trustLevel: optionalFixtureTrustLevel(record.trustLevel, `${sourceFieldName}.trustLevel`),
+    };
+  });
+}
+
+function optionalFixtureTrustLevel(
+  value: unknown,
+  fieldName: string,
+): SourceTrustLevel | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  try {
+    return parseSourceTrustLevel(requireNonEmptyString(value, fieldName));
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new EvaluationFixtureValidationError(`${fieldName} ${error.message.toLowerCase()}.`);
+    }
+
+    throw error;
+  }
+}
+
+function parseExpectedSummary(
+  value: unknown,
+  fixtureLabel: string,
+): Record<ClaimVerdict, number> {
+  const fieldName = `${fixtureLabel}.expectedSummary`;
+
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new EvaluationFixtureValidationError(`${fieldName} must be a JSON object.`);
+  }
+
+  const record = value as Record<string, unknown>;
+
+  return {
+    verified: requireNonNegativeInteger(record.verified, `${fieldName}.verified`),
+    contradicted: requireNonNegativeInteger(record.contradicted, `${fieldName}.contradicted`),
+    unsupported: requireNonNegativeInteger(record.unsupported, `${fieldName}.unsupported`),
+    needs_review: requireNonNegativeInteger(record.needs_review, `${fieldName}.needs_review`),
+  };
+}
+
+function parseExpectedClaimVerdicts(
+  value: unknown,
+  fixtureLabel: string,
+): ClaimVerdict[] | undefined {
+  const fieldName = `${fixtureLabel}.expectedClaimVerdicts`;
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Array.isArray(value)) {
+    throw new EvaluationFixtureValidationError(`${fieldName} must be an array.`);
+  }
+
+  return value.map((entry, index) => {
+    try {
+      return parseClaimVerdict(requireNonEmptyString(entry, `${fieldName}[${index}]`));
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new EvaluationFixtureValidationError(
+          `${fieldName}[${index}] ${error.message.charAt(0).toLowerCase()}${error.message.slice(1)}`,
+        );
+      }
+
+      throw error;
+    }
+  });
+}
+
+function requireNonNegativeInteger(value: unknown, fieldName: string): number {
+  if (!Number.isInteger(value) || (value as number) < 0) {
+    throw new EvaluationFixtureValidationError(
+      `${fieldName} must be a non-negative integer.`,
+    );
+  }
+
+  return value as number;
 }
 
 function renderFirstMismatchClaimIndex(scorecard: EvaluationScorecard): string {
