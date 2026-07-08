@@ -314,6 +314,19 @@ test("ignores collapsed html details body content while keeping the visible summ
   );
 });
 
+test("ignores collapsed html details summaries without visible claim bodies", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <details>
+      <summary>Refund policy</summary>
+    </details>
+  </body>
+</html>`);
+
+  assert.deepEqual(claims, []);
+});
+
 test("keeps escaped pipes inside markdown table cells", () => {
   const claims = extractClaims(`| Policy | Details |
 | --- | --- |
