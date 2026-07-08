@@ -1,6 +1,31 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
-import { evaluateFixtureContentsResult, type InMemoryEvaluationFixtureInput } from "./evaluation.js";
+import {
+  evaluateFixtureContentsResult,
+  renderEvaluationHtmlReport,
+  renderEvaluationMarkdownReport,
+  renderEvaluationSummaryCsv,
+  renderEvaluationTextReport,
+  type InMemoryEvaluationFixtureInput,
+} from "./evaluation.js";
 import { CLAIM_VERDICTS, parseClaimVerdict } from "./report-policy.js";
+import {
+  renderBatchHtmlReport,
+  renderBatchMarkdownReport,
+  renderBatchReviewerDecisionCsv,
+  renderBatchSummaryCsv,
+  renderBatchTextReport,
+  renderHtmlReport,
+  renderMarkdownReport,
+  renderReviewerDecisionCsv,
+  renderSummaryCsv,
+  renderTextReport,
+} from "./report-renderer.js";
+import {
+  renderReviewerDecisionImportHtmlReport,
+  renderReviewerDecisionImportMarkdownReport,
+  renderReviewerDecisionImportReport,
+  renderReviewerDecisionImportSummaryCsv,
+} from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
 import {
   ANSWER_EXTENSIONS,
@@ -11,6 +36,16 @@ import {
   type InMemoryAnswerInput,
   type InMemorySourceInput,
 } from "./workflow.js";
+
+const VERIFY_ARTIFACTS = ["text", "markdown", "html", "review_csv", "summary_csv"] as const;
+const VERIFY_BATCH_ARTIFACTS = ["text", "markdown", "html", "review_csv", "summary_csv"] as const;
+const IMPORT_REVIEW_ARTIFACTS = ["text", "markdown", "html", "summary_csv"] as const;
+const EVALUATE_ARTIFACTS = ["text", "markdown", "html", "summary_csv"] as const;
+
+type VerifyArtifact = (typeof VERIFY_ARTIFACTS)[number];
+type VerifyBatchArtifact = (typeof VERIFY_BATCH_ARTIFACTS)[number];
+type ImportReviewArtifact = (typeof IMPORT_REVIEW_ARTIFACTS)[number];
+type EvaluateArtifact = (typeof EVALUATE_ARTIFACTS)[number];
 
 export interface ApiSourceInput {
   sourcePath: string;
@@ -28,6 +63,7 @@ export interface VerifyApiRequest {
   defaultTrustLevel?: string;
   generatedAt?: string;
   failOn?: string[];
+  includeArtifacts?: VerifyArtifact[];
 }
 
 export interface VerifyBatchApiRequest {
@@ -40,11 +76,13 @@ export interface VerifyBatchApiRequest {
   defaultTrustLevel?: string;
   generatedAt?: string;
   failOn?: string[];
+  includeArtifacts?: VerifyBatchArtifact[];
 }
 
 export interface ImportReviewApiRequest {
   reviewCsvContent: string;
   failOn?: string[];
+  includeArtifacts?: ImportReviewArtifact[];
 }
 
 export interface EvaluateApiRequest {
@@ -53,6 +91,7 @@ export interface EvaluateApiRequest {
     content: string;
   }>;
   generatedAt?: string;
+  includeArtifacts?: EvaluateArtifact[];
 }
 
 export interface ApiServerOptions {
@@ -79,6 +118,10 @@ export const API_CAPABILITIES = {
   answerExtensions: [...ANSWER_EXTENSIONS],
   verdicts: CLAIM_VERDICTS,
   trustLevels: [...SOURCE_TRUST_LEVELS],
+  verifyArtifacts: [...VERIFY_ARTIFACTS],
+  verifyBatchArtifacts: [...VERIFY_BATCH_ARTIFACTS],
+  importReviewArtifacts: [...IMPORT_REVIEW_ARTIFACTS],
+  evaluateArtifacts: [...EVALUATE_ARTIFACTS],
 } as const;
 const OPENAPI_VERIFY_EXAMPLE = {
   answer: "Employees receive 12 weeks of paid parental leave.",
@@ -102,6 +145,7 @@ Employees receive 12 weeks of paid parental leave.
   ],
   defaultTrustLevel: "high",
   failOn: ["contradicted", "unsupported"],
+  includeArtifacts: ["markdown", "review_csv"],
 } as const;
 const OPENAPI_VERIFY_BATCH_EXAMPLE = {
   generatedAt: "2026-07-07T19:20:00.000Z",
@@ -142,6 +186,7 @@ Refund requests receive an initial response within one business day.
     },
   ],
   failOn: ["unsupported"],
+  includeArtifacts: ["html", "summary_csv"],
 } as const;
 const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
   reviewCsvContent: [
@@ -149,6 +194,7 @@ const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
     "HR policy answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved for publish",
   ].join("\n"),
   failOn: ["needs_review"],
+  includeArtifacts: ["markdown", "summary_csv"],
 } as const;
 const OPENAPI_EVALUATE_EXAMPLE = {
   generatedAt: "2026-07-07T19:25:00.000Z",
@@ -181,6 +227,7 @@ const OPENAPI_EVALUATE_EXAMPLE = {
       ),
     },
   ],
+  includeArtifacts: ["html", "summary_csv"],
 } as const;
 
 export function createApiServer(): Server {
@@ -314,7 +361,7 @@ async function handleApiRequest(
       generatedAt: body.generatedAt,
       failOn: body.failOn,
     });
-    writeJson(response, 200, result);
+    writeJson(response, 200, withArtifacts(result, buildVerifyArtifacts(result, body.includeArtifacts)));
     return;
   }
 
@@ -333,7 +380,11 @@ async function handleApiRequest(
       generatedAt: body.generatedAt,
       failOn: body.failOn,
     });
-    writeJson(response, 200, result);
+    writeJson(
+      response,
+      200,
+      withArtifacts(result, buildVerifyBatchArtifacts(result, body.includeArtifacts)),
+    );
     return;
   }
 
@@ -349,7 +400,11 @@ async function handleApiRequest(
       reviewCsvContent: body.reviewCsvContent,
       failOn: body.failOn,
     });
-    writeJson(response, 200, result);
+    writeJson(
+      response,
+      200,
+      withArtifacts(result, buildImportReviewArtifacts(result, body.includeArtifacts)),
+    );
     return;
   }
 
@@ -365,7 +420,11 @@ async function handleApiRequest(
       fixtures: body.fixtures,
       generatedAt: body.generatedAt,
     });
-    writeJson(response, 200, result);
+    writeJson(
+      response,
+      200,
+      withArtifacts(result, buildEvaluateArtifacts(result, body.includeArtifacts)),
+    );
     return;
   }
 
@@ -414,6 +473,7 @@ function parseVerifyRequest(value: unknown): {
   defaultTrustLevel?: ReturnType<typeof parseSourceTrustLevel>;
   generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
+  includeArtifacts?: VerifyArtifact[];
 } {
   const record = requireRecord(value, "Verify request body");
 
@@ -425,6 +485,7 @@ function parseVerifyRequest(value: unknown): {
     defaultTrustLevel: parseOptionalTrustLevel(record.defaultTrustLevel),
     generatedAt: optionalString(record.generatedAt, "generatedAt"),
     failOn: parseOptionalFailOn(record.failOn),
+    includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, VERIFY_ARTIFACTS, "includeArtifacts"),
   };
 }
 
@@ -434,6 +495,7 @@ function parseVerifyBatchRequest(value: unknown): {
   defaultTrustLevel?: ReturnType<typeof parseSourceTrustLevel>;
   generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
+  includeArtifacts?: VerifyBatchArtifact[];
 } {
   const record = requireRecord(value, "Batch verify request body");
   const answersValue = record.answers;
@@ -448,24 +510,28 @@ function parseVerifyBatchRequest(value: unknown): {
     defaultTrustLevel: parseOptionalTrustLevel(record.defaultTrustLevel),
     generatedAt: optionalString(record.generatedAt, "generatedAt"),
     failOn: parseOptionalFailOn(record.failOn),
+    includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, VERIFY_BATCH_ARTIFACTS, "includeArtifacts"),
   };
 }
 
 function parseImportReviewRequest(value: unknown): {
   reviewCsvContent: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
+  includeArtifacts?: ImportReviewArtifact[];
 } {
   const record = requireRecord(value, "Import review request body");
 
   return {
     reviewCsvContent: requireString(record.reviewCsvContent, "reviewCsvContent"),
     failOn: parseOptionalFailOn(record.failOn),
+    includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, IMPORT_REVIEW_ARTIFACTS, "includeArtifacts"),
   };
 }
 
 function parseEvaluateRequest(value: unknown): {
   fixtures: InMemoryEvaluationFixtureInput[];
   generatedAt?: string;
+  includeArtifacts?: EvaluateArtifact[];
 } {
   const record = requireRecord(value, "Evaluate request body");
   const fixturesValue = record.fixtures;
@@ -477,6 +543,7 @@ function parseEvaluateRequest(value: unknown): {
   return {
     fixtures: fixturesValue.map((fixture, index) => parseFixtureInput(fixture, index)),
     generatedAt: optionalString(record.generatedAt, "generatedAt"),
+    includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, EVALUATE_ARTIFACTS, "includeArtifacts"),
   };
 }
 
@@ -534,6 +601,39 @@ function parseOptionalFailOn(value: unknown): ReturnType<typeof parseFailOnVerdi
   }
 
   return parseFailOnVerdicts(value);
+}
+
+function parseOptionalArtifacts<T extends string>(
+  value: unknown,
+  supportedArtifacts: readonly T[],
+  fieldName: string,
+): T[] | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Array.isArray(value)) {
+    throw requestError(`${fieldName} must be an array.`);
+  }
+
+  const selected: T[] = [];
+  const supportedArtifactSet = new Set<string>(supportedArtifacts);
+
+  value.forEach((entry, index) => {
+    const artifact = requireString(entry, `${fieldName}[${index}]`);
+
+    if (!supportedArtifactSet.has(artifact)) {
+      throw requestError(
+        `${fieldName}[${index}] must be one of: ${supportedArtifacts.join(", ")}.`,
+      );
+    }
+
+    if (!selected.includes(artifact as T)) {
+      selected.push(artifact as T);
+    }
+  });
+
+  return selected;
 }
 
 function parseFailOnVerdicts(value: unknown) {
@@ -732,6 +832,10 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
                     },
+                    includeArtifacts: {
+                      type: "array",
+                      items: { $ref: "#/components/schemas/VerifyArtifactName" },
+                    },
                   },
                   required: ["answer", "sources"],
                 },
@@ -749,7 +853,17 @@ function buildOpenApiDocument(request: IncomingMessage) {
               description: "Single-answer verification result.",
               content: {
                 "application/json": {
-                  schema: { $ref: "#/components/schemas/SingleVerificationResult" },
+                  schema: {
+                    allOf: [
+                      { $ref: "#/components/schemas/SingleVerificationResult" },
+                      {
+                        type: "object",
+                        properties: {
+                          artifacts: { $ref: "#/components/schemas/ApiVerifyArtifacts" },
+                        },
+                      },
+                    ],
+                  },
                 },
               },
             },
@@ -791,6 +905,10 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
                     },
+                    includeArtifacts: {
+                      type: "array",
+                      items: { $ref: "#/components/schemas/VerifyBatchArtifactName" },
+                    },
                   },
                   required: ["answers", "sources"],
                 },
@@ -808,7 +926,17 @@ function buildOpenApiDocument(request: IncomingMessage) {
               description: "Batch verification result.",
               content: {
                 "application/json": {
-                  schema: { $ref: "#/components/schemas/BatchVerificationRunResult" },
+                  schema: {
+                    allOf: [
+                      { $ref: "#/components/schemas/BatchVerificationRunResult" },
+                      {
+                        type: "object",
+                        properties: {
+                          artifacts: { $ref: "#/components/schemas/ApiVerifyBatchArtifacts" },
+                        },
+                      },
+                    ],
+                  },
                 },
               },
             },
@@ -831,6 +959,10 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
                     },
+                    includeArtifacts: {
+                      type: "array",
+                      items: { $ref: "#/components/schemas/ImportReviewArtifactName" },
+                    },
                   },
                   required: ["reviewCsvContent"],
                 },
@@ -848,7 +980,17 @@ function buildOpenApiDocument(request: IncomingMessage) {
               description: "Reviewer decision import result.",
               content: {
                 "application/json": {
-                  schema: { $ref: "#/components/schemas/ReviewerDecisionImportResult" },
+                  schema: {
+                    allOf: [
+                      { $ref: "#/components/schemas/ReviewerDecisionImportResult" },
+                      {
+                        type: "object",
+                        properties: {
+                          artifacts: { $ref: "#/components/schemas/ApiImportReviewArtifacts" },
+                        },
+                      },
+                    ],
+                  },
                 },
               },
             },
@@ -872,6 +1014,10 @@ function buildOpenApiDocument(request: IncomingMessage) {
                       minItems: 1,
                       items: { $ref: "#/components/schemas/ApiEvaluationFixtureInput" },
                     },
+                    includeArtifacts: {
+                      type: "array",
+                      items: { $ref: "#/components/schemas/EvaluateArtifactName" },
+                    },
                   },
                   required: ["fixtures"],
                 },
@@ -889,7 +1035,17 @@ function buildOpenApiDocument(request: IncomingMessage) {
               description: "Evaluation scorecard batch result.",
               content: {
                 "application/json": {
-                  schema: { $ref: "#/components/schemas/EvaluationBatchRunResult" },
+                  schema: {
+                    allOf: [
+                      { $ref: "#/components/schemas/EvaluationBatchRunResult" },
+                      {
+                        type: "object",
+                        properties: {
+                          artifacts: { $ref: "#/components/schemas/ApiEvaluationArtifacts" },
+                        },
+                      },
+                    ],
+                  },
                 },
               },
             },
@@ -952,8 +1108,87 @@ function buildOpenApiDocument(request: IncomingMessage) {
               type: "array",
               items: { $ref: "#/components/schemas/SourceTrustLevel" },
             },
+            verifyArtifacts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/VerifyArtifactName" },
+            },
+            verifyBatchArtifacts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/VerifyBatchArtifactName" },
+            },
+            importReviewArtifacts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ImportReviewArtifactName" },
+            },
+            evaluateArtifacts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/EvaluateArtifactName" },
+            },
           },
-          required: ["sourceExtensions", "answerExtensions", "verdicts", "trustLevels"],
+          required: [
+            "sourceExtensions",
+            "answerExtensions",
+            "verdicts",
+            "trustLevels",
+            "verifyArtifacts",
+            "verifyBatchArtifacts",
+            "importReviewArtifacts",
+            "evaluateArtifacts",
+          ],
+        },
+        VerifyArtifactName: {
+          type: "string",
+          enum: VERIFY_ARTIFACTS,
+        },
+        VerifyBatchArtifactName: {
+          type: "string",
+          enum: VERIFY_BATCH_ARTIFACTS,
+        },
+        ImportReviewArtifactName: {
+          type: "string",
+          enum: IMPORT_REVIEW_ARTIFACTS,
+        },
+        EvaluateArtifactName: {
+          type: "string",
+          enum: EVALUATE_ARTIFACTS,
+        },
+        ApiVerifyArtifacts: {
+          type: "object",
+          properties: {
+            text: { type: "string" },
+            markdown: { type: "string" },
+            html: { type: "string" },
+            review_csv: { type: "string" },
+            summary_csv: { type: "string" },
+          },
+        },
+        ApiVerifyBatchArtifacts: {
+          type: "object",
+          properties: {
+            text: { type: "string" },
+            markdown: { type: "string" },
+            html: { type: "string" },
+            review_csv: { type: "string" },
+            summary_csv: { type: "string" },
+          },
+        },
+        ApiImportReviewArtifacts: {
+          type: "object",
+          properties: {
+            text: { type: "string" },
+            markdown: { type: "string" },
+            html: { type: "string" },
+            summary_csv: { type: "string" },
+          },
+        },
+        ApiEvaluationArtifacts: {
+          type: "object",
+          properties: {
+            text: { type: "string" },
+            markdown: { type: "string" },
+            html: { type: "string" },
+            summary_csv: { type: "string" },
+          },
         },
         ApiHealthResponse: {
           type: "object",
@@ -1327,6 +1562,87 @@ function buildOpenApiDocument(request: IncomingMessage) {
         },
       },
     },
+  };
+}
+
+function buildVerifyArtifacts(
+  result: Awaited<ReturnType<typeof verifyAnswerContentsResult>>,
+  includeArtifacts?: VerifyArtifact[],
+) {
+  return buildArtifacts(includeArtifacts, {
+    text: () => renderTextReport(result.report, result.failVerdicts),
+    markdown: () => renderMarkdownReport(result.report, result.failVerdicts),
+    html: () => renderHtmlReport(result.report, result.failVerdicts),
+    review_csv: () => renderReviewerDecisionCsv(result.report, result.failVerdicts),
+    summary_csv: () => renderSummaryCsv(result.report, result.failVerdicts),
+  });
+}
+
+function buildVerifyBatchArtifacts(
+  result: Awaited<ReturnType<typeof verifyAnswerBatchContentsResult>>,
+  includeArtifacts?: VerifyBatchArtifact[],
+) {
+  return buildArtifacts(includeArtifacts, {
+    text: () => renderBatchTextReport(result.report),
+    markdown: () => renderBatchMarkdownReport(result.report),
+    html: () => renderBatchHtmlReport(result.report),
+    review_csv: () => renderBatchReviewerDecisionCsv(result.report),
+    summary_csv: () => renderBatchSummaryCsv(result.report),
+  });
+}
+
+function buildImportReviewArtifacts(
+  result: ReturnType<typeof importReviewerDecisionContentsResult>,
+  includeArtifacts?: ImportReviewArtifact[],
+) {
+  return buildArtifacts(includeArtifacts, {
+    text: () => renderReviewerDecisionImportReport(result.report, result.failVerdicts),
+    markdown: () => renderReviewerDecisionImportMarkdownReport(result.report, result.failVerdicts),
+    html: () => renderReviewerDecisionImportHtmlReport(result.report, result.failVerdicts),
+    summary_csv: () => renderReviewerDecisionImportSummaryCsv(result.report),
+  });
+}
+
+function buildEvaluateArtifacts(
+  result: Awaited<ReturnType<typeof evaluateFixtureContentsResult>>,
+  includeArtifacts?: EvaluateArtifact[],
+) {
+  return buildArtifacts(includeArtifacts, {
+    text: () => renderEvaluationTextReport(result.scorecards),
+    markdown: () => renderEvaluationMarkdownReport(result.scorecards),
+    html: () => renderEvaluationHtmlReport(result.scorecards),
+    summary_csv: () => renderEvaluationSummaryCsv(result.scorecards),
+  });
+}
+
+function buildArtifacts<T extends string>(
+  includeArtifacts: readonly T[] | undefined,
+  renderers: Record<T, () => string>,
+): Partial<Record<T, string>> | undefined {
+  if (!includeArtifacts || includeArtifacts.length === 0) {
+    return undefined;
+  }
+
+  const artifacts: Partial<Record<T, string>> = {};
+
+  includeArtifacts.forEach((artifact) => {
+    artifacts[artifact] = renderers[artifact]();
+  });
+
+  return artifacts;
+}
+
+function withArtifacts<T extends object, A extends Record<string, string>>(
+  result: T,
+  artifacts: A | undefined,
+): T | (T & { artifacts: A }) {
+  if (!artifacts || Object.keys(artifacts).length === 0) {
+    return result;
+  }
+
+  return {
+    ...result,
+    artifacts,
   };
 }
 
