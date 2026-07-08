@@ -362,8 +362,11 @@ npm run dev -- serve --port 3000
 Available endpoints:
 
 - `GET /`
+- `HEAD /`
 - `GET /health`
+- `HEAD /health`
 - `GET /openapi.json`
+- `HEAD /openapi.json`
 - `POST /verify`
 - `POST /verify-batch`
 - `POST /import-review`
@@ -414,6 +417,9 @@ source body.
 `GET /` returns a small JSON endpoint index plus capability metadata for
 supported source extensions, answer extensions, verdicts, and trust levels, so
 local clients can avoid hardcoding Quorum's current contract, and
+`HEAD /`, `HEAD /health`, and `HEAD /openapi.json` expose the same status code
+and headers without a JSON body, which makes lightweight readiness probes and
+schema checks easier to wire into orchestrators and load balancers.
 `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover both request and response payload shapes without
 scraping the README. The OpenAPI document includes reusable schemas for the

@@ -329,7 +329,12 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(indexPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
     assert.deepEqual(indexPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(indexPayload.capabilities.trustLevels, ["low", "medium", "high"]);
-    assert.equal(indexPayload.endpoints[1]?.path, "/openapi.json");
+    assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/health"), true);
+    assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/openapi.json"), true);
+
+    const headHealthResponse = await fetch(`${server.url}/health`, { method: "HEAD" });
+    assert.equal(headHealthResponse.status, 200);
+    assert.equal(await headHealthResponse.text(), "");
 
     const openApiResponse = await fetch(`${server.url}/openapi.json`);
     assert.equal(openApiResponse.status, 200);
@@ -356,7 +361,7 @@ Employees receive 12 weeks of paid parental leave.
     });
     assert.equal(preflightResponse.status, 204);
     assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "*");
-    assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "GET, POST, OPTIONS");
+    assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(preflightResponse.headers.get("access-control-allow-headers"), "Content-Type");
 
     const verifyResponse = await fetch(`${server.url}/verify`, {
