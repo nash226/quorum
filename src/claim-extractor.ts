@@ -284,8 +284,7 @@ function normalizeHtmlDetailsMarkup(attributes: string, content: string): string
     return content;
   }
 
-  const summaryMatch = content.match(/<summary\b[^>]*>([\s\S]*?)<\/summary>/i);
-  return summaryMatch?.[0] ?? " ";
+  return " ";
 }
 
 function normalizeHtmlTableMarkup(tableMarkup: string): string {
