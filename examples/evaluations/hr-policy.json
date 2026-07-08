@@ -1,5 +1,6 @@
 {
   "name": "HR policy example",
+  "domain": "hr",
   "answerPath": "../answers/hr-answer.md",
   "answerLabel": "HR reviewer packet",
   "sourcePaths": ["../sources/hr-policy.md"],
