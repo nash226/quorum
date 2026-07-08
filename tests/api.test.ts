@@ -1821,12 +1821,16 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
         trustLevels: ["low", "medium", "high"],
       },
       endpoints: [
+        { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
+        { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
         { method: "GET", path: "/health", description: "Return a simple readiness response." },
+        { method: "HEAD", path: "/health", description: "Return readiness headers without a JSON body." },
         {
           method: "GET",
           path: "/openapi.json",
           description: "Return the OpenAPI description for this server.",
         },
+        { method: "HEAD", path: "/openapi.json", description: "Return OpenAPI headers without a JSON body." },
         { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
         {
           method: "POST",
@@ -1854,6 +1858,21 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       version: "0.1.0",
     });
 
+    const headIndexResponse = await fetch(api.url, { method: "HEAD" });
+    assert.equal(headIndexResponse.status, 200);
+    assert.equal(headIndexResponse.headers.get("content-type"), "application/json; charset=utf-8");
+    assert.equal(await headIndexResponse.text(), "");
+
+    const headHealthResponse = await fetch(`${api.url}/health`, { method: "HEAD" });
+    assert.equal(headHealthResponse.status, 200);
+    assert.equal(headHealthResponse.headers.get("content-type"), "application/json; charset=utf-8");
+    assert.equal(await headHealthResponse.text(), "");
+
+    const headOpenApiResponse = await fetch(`${api.url}/openapi.json`, { method: "HEAD" });
+    assert.equal(headOpenApiResponse.status, 200);
+    assert.equal(headOpenApiResponse.headers.get("content-type"), "application/json; charset=utf-8");
+    assert.equal(await headOpenApiResponse.text(), "");
+
     const openApiResponse = await fetch(`${api.url}/openapi.json`);
     assert.equal(openApiResponse.status, 200);
     const openApi = await openApiResponse.json() as {
@@ -1864,6 +1883,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
         string,
         {
           get?: { summary: string; responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }> };
+          head?: { summary: string; responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }> };
           post?: {
             summary: string;
             requestBody?: {
@@ -1911,7 +1931,10 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.info.version, "0.1.0");
     assert.deepEqual(openApi.servers, [{ url: api.url }]);
     assert.equal(openApi.paths["/"]?.get?.summary, "Service discovery");
+    assert.equal(openApi.paths["/"]?.head?.summary, "Service discovery headers");
     assert.equal(openApi.paths["/health"]?.get?.summary, "Readiness check");
+    assert.equal(openApi.paths["/health"]?.head?.summary, "Readiness check headers");
+    assert.equal(openApi.paths["/openapi.json"]?.head?.summary, "OpenAPI description headers");
     assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
     assert.equal(openApi.paths["/import-review"]?.post?.summary, "Import reviewer decisions");
@@ -2217,7 +2240,7 @@ test("programmatic API answers CORS preflight requests", async () => {
 
     assert.equal(response.status, 204);
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
-    assert.equal(response.headers.get("access-control-allow-methods"), "GET, POST, OPTIONS");
+    assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type");
     assert.equal(await response.text(), "");
   } finally {
