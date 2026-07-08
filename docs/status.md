@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5e2da6a` on 2026-07-08, test: cover api artifact smoke checks
+- Latest shipped change: `ef80cc7` on 2026-07-08, feat: add api discovery headers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-08 | [#247](https://github.com/nash226/quorum/pull/247) | feat: add api discovery headers | `ef80cc7` |
 | 2026-07-08 | [#246](https://github.com/nash226/quorum/pull/246) | test: cover api artifact smoke checks | `5e2da6a` |
 | 2026-07-08 | [#245](https://github.com/nash226/quorum/pull/245) | feat: add opt-in API fail statuses | `6d10cee` |
 | 2026-07-08 | [#244](https://github.com/nash226/quorum/pull/244) | feat: return api reviewer artifacts on demand | `c8ccc5a` |
@@ -54,5 +55,4 @@
 | 2026-07-08 | [#242](https://github.com/nash226/quorum/pull/242) | feat: prioritize risky batch review exports | `e97935a` |
 | 2026-07-08 | [#241](https://github.com/nash226/quorum/pull/241) | feat: support inline evaluation fixtures | `1655ecd` |
 | 2026-07-07 | [#240](https://github.com/nash226/quorum/pull/240) | feat: add HEAD support for local api discovery | `64ca1e7` |
-| 2026-07-07 | [#239](https://github.com/nash226/quorum/pull/239) | feat: summarize aggregate evaluation claim scores | `990bf2d` |
 
