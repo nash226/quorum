@@ -65,6 +65,7 @@ export type {
   EvaluationBatchOptions,
   EvaluationBatchRunResult,
   EvaluationClaimScore,
+  EvaluationDomainAggregateSummary,
   EvaluationFixture,
   EvaluationFixtureRunResult,
   InMemoryEvaluationFixtureFileOptions,
