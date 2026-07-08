@@ -157,9 +157,17 @@ const OPENAPI_EVALUATE_EXAMPLE = {
       fixturePath: "evaluations/hr-policy.json",
       content: JSON.stringify(
         {
+          name: "HR policy API fixture",
           answerPath: "answers/hr.md",
           answer: "Employees receive 12 weeks of paid parental leave.",
-          sourcePaths: ["sources/hr-policy.md"],
+          sources: [
+            {
+              sourcePath: "sources/hr-policy.md",
+              title: "HR Policy",
+              trustLevel: "high",
+              content: "Employees receive 12 weeks of paid parental leave.\n",
+            },
+          ],
           expectedSummary: {
             verified: 1,
             contradicted: 0,
