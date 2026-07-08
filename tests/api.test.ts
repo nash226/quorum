@@ -5,6 +5,7 @@ import { join } from "node:path";
 import test from "node:test";
 import {
   API_CAPABILITIES as SERVER_API_CAPABILITIES,
+  CAPABILITIES_PATH as SERVER_CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS as SERVER_API_DISCOVERY_HEADERS,
   API_SERVICE_NAME as SERVER_API_SERVICE_NAME,
   API_VERSION as SERVER_API_VERSION,
@@ -15,6 +16,7 @@ import {
 import {
   ANSWER_EXTENSIONS,
   API_CAPABILITIES,
+  CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS,
   API_SERVICE_NAME,
   API_VERSION,
@@ -96,6 +98,7 @@ test("programmatic API exposes supported source and answer extensions", () => {
 test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(rootCreateApiServer, createApiServer);
   assert.strictEqual(rootStartApiServer, startApiServer);
+  assert.strictEqual(CAPABILITIES_PATH, SERVER_CAPABILITIES_PATH);
   assert.strictEqual(OPENAPI_PATH, SERVER_OPENAPI_PATH);
   assert.deepEqual(API_DISCOVERY_HEADERS, SERVER_API_DISCOVERY_HEADERS);
   assert.strictEqual(API_SERVICE_NAME, SERVER_API_SERVICE_NAME);
@@ -1878,6 +1881,16 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       endpoints: [
         { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
         { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
+        {
+          method: "GET",
+          path: "/capabilities",
+          description: "Return supported Quorum capabilities without endpoint listings.",
+        },
+        {
+          method: "HEAD",
+          path: "/capabilities",
+          description: "Return capability discovery headers without a JSON body.",
+        },
         { method: "GET", path: "/health", description: "Return a simple readiness response." },
         { method: "HEAD", path: "/health", description: "Return readiness headers without a JSON body." },
         {
@@ -1905,6 +1918,27 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       ],
     });
 
+    const capabilitiesResponse = await fetch(`${api.url}/capabilities`);
+    assert.equal(capabilitiesResponse.status, 200);
+    assert.equal(capabilitiesResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(capabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.deepEqual(await capabilitiesResponse.json(), {
+      service: "quorum",
+      version: "0.1.0",
+      openapiPath: "/openapi.json",
+      capabilities: {
+        sourceExtensions: [".md", ".markdown", ".txt", ".html", ".htm", ".pdf"],
+        answerExtensions: [".md", ".markdown", ".txt", ".html", ".htm"],
+        verdicts: ["verified", "unsupported", "contradicted", "needs_review"],
+        trustLevels: ["low", "medium", "high"],
+        verifyArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
+        verifyBatchArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
+        importReviewArtifacts: ["text", "markdown", "html", "summary_csv"],
+        evaluateArtifacts: ["text", "markdown", "html", "summary_csv"],
+      },
+    });
+
     const healthResponse = await fetch(`${api.url}/health`);
     assert.equal(healthResponse.status, 200);
     assert.equal(healthResponse.headers.get("x-quorum-service"), "quorum");
@@ -1923,6 +1957,14 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(headIndexResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(headIndexResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(await headIndexResponse.text(), "");
+
+    const headCapabilitiesResponse = await fetch(`${api.url}/capabilities`, { method: "HEAD" });
+    assert.equal(headCapabilitiesResponse.status, 200);
+    assert.equal(headCapabilitiesResponse.headers.get("content-type"), "application/json; charset=utf-8");
+    assert.equal(headCapabilitiesResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(headCapabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(headCapabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(await headCapabilitiesResponse.text(), "");
 
     const headHealthResponse = await fetch(`${api.url}/health`, { method: "HEAD" });
     assert.equal(headHealthResponse.status, 200);
@@ -1984,6 +2026,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           ApiCapabilities: {
             required: string[];
           };
+          ApiCapabilitiesResponse: {
+            required: string[];
+          };
           ApiHealthResponse: {
             required: string[];
           };
@@ -2014,6 +2059,8 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.deepEqual(openApi.servers, [{ url: api.url }]);
     assert.equal(openApi.paths["/"]?.get?.summary, "Service discovery");
     assert.equal(openApi.paths["/"]?.head?.summary, "Service discovery headers");
+    assert.equal(openApi.paths["/capabilities"]?.get?.summary, "Capability discovery");
+    assert.equal(openApi.paths["/capabilities"]?.head?.summary, "Capability discovery headers");
     assert.equal(openApi.paths["/health"]?.get?.summary, "Readiness check");
     assert.equal(openApi.paths["/health"]?.head?.summary, "Readiness check headers");
     assert.equal(openApi.paths["/openapi.json"]?.head?.summary, "OpenAPI description headers");
@@ -2156,6 +2203,10 @@ Refund requests receive an initial response within one business day.
       "#/components/schemas/ApiIndexResponse",
     );
     assert.equal(
+      openApi.paths["/capabilities"]?.get?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ApiCapabilitiesResponse",
+    );
+    assert.equal(
       openApi.paths["/verify"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
       "#/components/schemas/SingleVerificationResult",
     );
@@ -2189,6 +2240,12 @@ Refund requests receive an initial response within one business day.
       "openapiPath",
       "capabilities",
       "endpoints",
+    ]);
+    assert.deepEqual(openApi.components.schemas.ApiCapabilitiesResponse.required, [
+      "service",
+      "version",
+      "openapiPath",
+      "capabilities",
     ]);
     assert.deepEqual(openApi.components.schemas.ApiCapabilities.required, [
       "sourceExtensions",
