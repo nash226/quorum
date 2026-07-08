@@ -29,6 +29,7 @@ test("loads and evaluates the HR example fixture", async () => {
   });
 
   assert.equal(scorecard.fixtureName, "HR policy example");
+  assert.equal(scorecard.domain, "hr");
   assert.equal(scorecard.answerLabel, "HR reviewer packet");
   assert.equal(
     scorecard.answerPreview,
@@ -52,6 +53,7 @@ test("evaluates fixture files relative to the fixture directory", async () => {
   });
 
   assert.equal(scorecard.fixtureName, "Support policy example");
+  assert.equal(scorecard.domain, "support");
   assert.equal(scorecard.answerLabel, "Support reviewer packet");
   assert.equal(
     scorecard.answerPreview,
@@ -71,6 +73,7 @@ test("evaluates nested shipped fixture files for additional domain coverage", as
   });
 
   assert.equal(scorecard.fixtureName, "HR onboarding policy example");
+  assert.equal(scorecard.domain, "hr");
   assert.equal(scorecard.answerLabel, "HR onboarding reviewer packet");
   assert.equal(
     scorecard.answerPreview,
@@ -93,6 +96,7 @@ test("evaluates one in-memory fixture file relative to its fixture path", async 
   });
 
   assert.equal(scorecard.fixtureName, "HR policy example");
+  assert.equal(scorecard.domain, "hr");
   assert.equal(scorecard.fixturePath, fixturePath);
   assert.equal(scorecard.answerLabel, "HR reviewer packet");
   assert.equal(
@@ -280,6 +284,7 @@ test("rejects invalid evaluation fixture content with a clear validation error",
 test("renders mismatch details in evaluation scorecards", () => {
   const rendered = renderEvaluationScorecard({
     fixtureName: "Mismatch fixture",
+    domain: "hr",
     answerPath: "/tmp/answer.md",
     answerLabel: "HR escalation packet",
     answerPreview: "Benefits begin on day one.",
@@ -328,6 +333,7 @@ test("renders mismatch details in evaluation scorecards", () => {
   });
 
   assert.match(rendered, /Summary match: no/);
+  assert.match(rendered, /Domain: hr/);
   assert.match(rendered, /Answer label: HR escalation packet/);
   assert.match(rendered, /Answer preview: Benefits begin on day one\./);
   assert.match(rendered, /Source directories: \/tmp\/source-bundle/);
@@ -434,6 +440,7 @@ test("renders evaluation summary csv rows for each fixture", () => {
   const rendered = renderEvaluationSummaryCsv([
     {
       fixtureName: "Support policy example",
+      domain: "support",
       fixturePath: "/tmp/fixtures/support.json",
       answerPath: "/tmp/answers/support.md",
       answerLabel: "Support reviewer packet",
@@ -477,10 +484,10 @@ test("renders evaluation summary csv rows for each fixture", () => {
 
   assert.match(
     rendered,
-    /^fixture_name,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,/,
+    /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,/,
   );
   assert.match(rendered, /Support policy example/);
-  assert.match(rendered, /Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md/);
+  assert.match(rendered, /Support policy example,support,\/tmp\/fixtures\/support\.json/);
   assert.match(rendered, /Support reviewer packet,Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,yes,0,0,1\.000,no,none,,,,,1,0,0,0,1,0,0,0/);
 });
 
@@ -539,7 +546,7 @@ test("evaluation summary csv includes first mismatched claim details", () => {
 
   assert.match(
     rendered,
-    /HR mismatch example,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,1,0,0,0,0,1,0,0/,
+    /HR mismatch example,,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,1,0,0,0,0,1,0,0/,
   );
 });
 

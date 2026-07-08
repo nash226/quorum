@@ -1,5 +1,6 @@
 {
   "name": "Support policy example",
+  "domain": "support",
   "answerPath": "../answers/support-answer.md",
   "answerLabel": "Support reviewer packet",
   "sourcePaths": ["../sources/support-playbook.md"],
