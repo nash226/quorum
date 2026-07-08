@@ -661,6 +661,7 @@ const scorecards = await evaluateFixtures({
   fixtures: [
     {
       name: "Support policy fixture",
+      domain: "support",
       answerPath: "examples/answers/support-answer.md",
       sourceDirs: ["examples/sources"],
       expectedSummary: {
@@ -778,6 +779,7 @@ and evaluate those definitions without writing temporary fixture files first:
 ```ts
 const fixtureJson = JSON.stringify({
   name: "Support policy fixture",
+  domain: "support",
   answerPath: "../answers/support-answer.md",
   sourceDirs: ["../sources"],
   expectedSummary: {
@@ -816,12 +818,13 @@ programmatic helpers.
 Each evaluation fixture can mix explicit `sourcePaths` with recursive
 `sourceDirs`, so domain scorecards can point at a maintained source bundle
 without rewriting every fixture when a benchmark adds another approved
-document. Fixtures can also set `answerLabel` to preserve the reviewer-facing
-name of an answer alongside its file path. Evaluation scorecards and
-`--summary-csv-out` exports preserve those configured source directories,
-resolved source files, optional answer labels, and reviewer-friendly answer
-previews so drift reviews can see both the maintained bundle and the reviewer
-context loaded for each answer.
+document. Fixtures can also set `domain` to label HR, support, or other
+benchmark groups explicitly in scorecards and summary CSVs, plus `answerLabel`
+to preserve the reviewer-facing name of an answer alongside its file path.
+Evaluation scorecards and `--summary-csv-out` exports preserve those configured
+source directories, resolved source files, optional domains, optional answer
+labels, and reviewer-friendly answer previews so drift reviews can see both
+the maintained bundle and the reviewer context loaded for each answer.
 
 The CLI can run those same fixtures directly:
 
@@ -983,9 +986,10 @@ Options:
 - `evaluate --html-out <path>`: write a styled HTML evaluation report for
   reviewer walkthroughs, demos, and benchmark drift review
 - `evaluate --summary-csv-out <path>`: write one CSV row per fixture with the
-  fixture path, answer path, source directories, source paths, summary match
-  state, claim-match score, expected vs actual verdict totals, and the first
-  mismatched claim's expected versus actual verdict when drift appears
+  fixture path, optional domain, answer path, source directories, source
+  paths, summary match state, claim-match score, expected vs actual verdict
+  totals, and the first mismatched claim's expected versus actual verdict when
+  drift appears
 - `evaluate --fail-on-mismatch`: exit with code `2` when any fixture summary or
   expected claim verdict does not match the current verifier output
 
