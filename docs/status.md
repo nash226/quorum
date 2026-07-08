@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `212aec2` on 2026-07-08, feat: summarize evaluation batch results
+- Latest shipped change: `c8ccc5a` on 2026-07-08, feat: return api reviewer artifacts on demand
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-08 | [#244](https://github.com/nash226/quorum/pull/244) | feat: return api reviewer artifacts on demand | `c8ccc5a` |
 | 2026-07-08 | [#243](https://github.com/nash226/quorum/pull/243) | feat: summarize evaluation batch results | `212aec2` |
 | 2026-07-08 | [#242](https://github.com/nash226/quorum/pull/242) | feat: prioritize risky batch review exports | `e97935a` |
 | 2026-07-08 | [#241](https://github.com/nash226/quorum/pull/241) | feat: support inline evaluation fixtures | `1655ecd` |
@@ -54,5 +55,4 @@
 | 2026-07-07 | [#239](https://github.com/nash226/quorum/pull/239) | feat: summarize aggregate evaluation claim scores | `990bf2d` |
 | 2026-07-07 | [#238](https://github.com/nash226/quorum/pull/238) | test: expand evaluation fixture coverage | `de6b9df` |
 | 2026-07-07 | [#237](https://github.com/nash226/quorum/pull/237) | fix: ignore collapsed html detail summaries | `d57a1eb` |
-| 2026-07-07 | [#236](https://github.com/nash226/quorum/pull/236) | feat: export api server helpers from root entrypoint | `e5b028b` |
 
