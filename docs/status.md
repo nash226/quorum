@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `781156e` on 2026-07-08, feat: add API capabilities endpoint
+- Latest shipped change: `e159d1c` on 2026-07-08, test: cover API discovery smoke checks
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-08 | [#251](https://github.com/nash226/quorum/pull/251) | test: cover API discovery smoke checks | `e159d1c` |
 | 2026-07-08 | [#250](https://github.com/nash226/quorum/pull/250) | feat: add API capabilities endpoint | `781156e` |
 | 2026-07-08 | [#249](https://github.com/nash226/quorum/pull/249) | fix: validate evaluation fixtures | `2bf65a1` |
 | 2026-07-08 | [#248](https://github.com/nash226/quorum/pull/248) | fix: preserve inline evaluation source paths | `caae244` |
@@ -54,5 +55,4 @@
 | 2026-07-08 | [#246](https://github.com/nash226/quorum/pull/246) | test: cover api artifact smoke checks | `5e2da6a` |
 | 2026-07-08 | [#245](https://github.com/nash226/quorum/pull/245) | feat: add opt-in API fail statuses | `6d10cee` |
 | 2026-07-08 | [#244](https://github.com/nash226/quorum/pull/244) | feat: return api reviewer artifacts on demand | `c8ccc5a` |
-| 2026-07-08 | [#243](https://github.com/nash226/quorum/pull/243) | feat: summarize evaluation batch results | `212aec2` |
 
