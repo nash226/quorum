@@ -1363,6 +1363,31 @@ test("programmatic API rejects invalid in-memory evaluation fixture fields", asy
   );
 });
 
+test("programmatic API rejects evaluation fixtures whose expected claim verdicts do not match summary totals", async () => {
+  await assert.rejects(
+    evaluateFixtureContents({
+      fixtures: [
+        {
+          fixturePath: "fixtures/broken.json",
+          content: JSON.stringify({
+            name: "Broken fixture",
+            answerPath: "answers/hr.md",
+            sourcePaths: ["sources/hr-policy.md"],
+            expectedSummary: {
+              verified: 2,
+              contradicted: 0,
+              unsupported: 0,
+              needs_review: 0,
+            },
+            expectedClaimVerdicts: ["verified"],
+          }),
+        },
+      ],
+    }),
+    /Evaluation fixture fixtures\/broken\.json\.expectedClaimVerdicts must include 2 entries to match the totals in Evaluation fixture fixtures\/broken\.json\.expectedSummary\./,
+  );
+});
+
 test("programmatic API rejects empty file-backed evaluation batches", async () => {
   await assert.rejects(
     evaluateFixtureFiles({
@@ -2888,6 +2913,46 @@ test("evaluate endpoint rejects invalid fixture content with a 400", async () =>
     assert.deepEqual(await response.json(), {
       error:
         "Evaluation fixture fixtures/broken.json.expectedSummary.needs_review must be a non-negative integer.",
+    });
+  } finally {
+    await api.close();
+  }
+});
+
+test("evaluate endpoint rejects misaligned fixture expectations with a 400", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/evaluate`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        fixtures: [
+          {
+            fixturePath: "fixtures/broken.json",
+            content: JSON.stringify({
+              name: "Broken fixture",
+              answerPath: "answers/hr.md",
+              sourcePaths: ["sources/hr-policy.md"],
+              expectedSummary: {
+                verified: 2,
+                contradicted: 0,
+                unsupported: 0,
+                needs_review: 0,
+              },
+              expectedClaimVerdicts: ["verified"],
+            }),
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), {
+      error:
+        "Evaluation fixture fixtures/broken.json.expectedClaimVerdicts must include 2 entries to match the totals in Evaluation fixture fixtures/broken.json.expectedSummary.",
     });
   } finally {
     await api.close();
