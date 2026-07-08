@@ -749,6 +749,40 @@ HR answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leav
     cwd: consumerDir,
     stdio: "pipe",
   });
+  const consumerAnswerPath = join(consumerDir, "consumer-answer.md");
+  const consumerSourcePath = join(consumerDir, "consumer-source.md");
+  writeFileSync(consumerAnswerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+  writeFileSync(
+    consumerSourcePath,
+    `---
+title: Consumer HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+    "utf8",
+  );
+  const installedCliStdout = runCommand(
+    "npm",
+    [
+      "exec",
+      "--",
+      "quorum",
+      "verify",
+      "--answer",
+      consumerAnswerPath,
+      "--source",
+      consumerSourcePath,
+      "--json",
+    ],
+    {
+      cwd: consumerDir,
+      stdio: "pipe",
+    },
+  );
+  const installedCliResult = JSON.parse(installedCliStdout);
+  assert.equal(installedCliResult.summary.verified, 1);
+  assert.equal(installedCliResult.sources[0]?.title, "Consumer HR Policy");
   runCommand("npm", ["install", "--save-dev", "@types/node"], {
     cwd: consumerDir,
     stdio: "pipe",
