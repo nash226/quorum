@@ -14,6 +14,7 @@ export type {
 } from "./domain.js";
 export {
   API_CAPABILITIES,
+  CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS,
   API_SERVICE_NAME,
   API_VERSION,
