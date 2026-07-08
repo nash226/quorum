@@ -2035,9 +2035,17 @@ Refund requests receive an initial response within one business day.
             fixturePath: "evaluations/hr-policy.json",
             content: JSON.stringify(
               {
+                name: "HR policy API fixture",
                 answerPath: "answers/hr.md",
                 answer: "Employees receive 12 weeks of paid parental leave.",
-                sourcePaths: ["sources/hr-policy.md"],
+                sources: [
+                  {
+                    sourcePath: "sources/hr-policy.md",
+                    title: "HR Policy",
+                    trustLevel: "high",
+                    content: "Employees receive 12 weeks of paid parental leave.\n",
+                  },
+                ],
                 expectedSummary: {
                   verified: 1,
                   contradicted: 0,
@@ -2504,6 +2512,88 @@ test("programmatic API serves evaluation over HTTP", async () => {
     assert.equal(result.scorecards[0]?.summaryMatches, true);
     assert.equal(result.scorecards[0]?.matchedClaims, 3);
     assert.equal(result.scorecards[0]?.totalExpectedClaims, 3);
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API serves inline evaluation fixtures over HTTP without local answer files", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const generatedAt = "2026-07-08T04:05:00.000Z";
+
+  try {
+    const response = await fetch(`${api.url}/evaluate`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        generatedAt,
+        fixtures: [
+          {
+            fixturePath: join(process.cwd(), "tmp-fixtures", "hr-inline.json"),
+            content: JSON.stringify({
+              name: "Inline HR API fixture",
+              answerPath: "../answers/hr-inline.md",
+              answer: "Employees receive 12 weeks of paid parental leave.\n",
+              answerLabel: "HR API reviewer packet",
+              sources: [
+                {
+                  sourcePath: "../sources/hr-policy.md",
+                  title: "HR Policy",
+                  trustLevel: "high",
+                  content: "Employees receive 12 weeks of paid parental leave.\n",
+                },
+              ],
+              expectedSummary: {
+                verified: 1,
+                contradicted: 0,
+                unsupported: 0,
+                needs_review: 0,
+              },
+              expectedClaimVerdicts: ["verified"],
+            }),
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      shouldFail: boolean;
+      mismatchCount: number;
+      scorecards: Array<{
+        fixtureName: string;
+        answerPath: string;
+        answerLabel?: string;
+        report: {
+          generatedAt: string;
+          sources: Array<{
+            title: string;
+          }>;
+        };
+        summaryMatches: boolean;
+        matchedClaims: number;
+        totalExpectedClaims: number;
+      }>;
+    };
+
+    assert.equal(result.shouldFail, false);
+    assert.equal(result.mismatchCount, 0);
+    assert.equal(result.scorecards[0]?.fixtureName, "Inline HR API fixture");
+    assert.equal(result.scorecards[0]?.answerLabel, "HR API reviewer packet");
+    assert.equal(
+      result.scorecards[0]?.answerPath,
+      join(process.cwd(), "answers", "hr-inline.md"),
+    );
+    assert.equal(
+      result.scorecards[0]?.report.sources[0]?.title,
+      "HR Policy",
+    );
+    assert.equal(result.scorecards[0]?.report.generatedAt, generatedAt);
+    assert.equal(result.scorecards[0]?.summaryMatches, true);
+    assert.equal(result.scorecards[0]?.matchedClaims, 1);
+    assert.equal(result.scorecards[0]?.totalExpectedClaims, 1);
   } finally {
     await api.close();
   }

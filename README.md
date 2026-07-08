@@ -409,6 +409,9 @@ Evaluation accepts a `{ fixtures }` JSON body at `POST /evaluate`, where each
 fixture entry includes `{ fixturePath, content }`, and returns the same
 `evaluateFixtureContentsResult` batch shape used by the package API so
 workflow callers can score benchmark fixtures without writing them to disk.
+Fixture JSON may also embed inline `answer` and `sources` content so callers
+can send a self-contained benchmark payload while still preserving an
+`answerPath` trace in the returned scorecard.
 API and in-memory source inputs may also include explicit `title`,
 `updatedAt`, and `trustLevel` fields when a caller wants to preserve source
 metadata without rewriting the raw document content; those explicit fields take
@@ -648,6 +651,11 @@ const scorecards = await evaluateFixtures({
   generatedAt: "2026-07-05T19:00:00.000Z",
 });
 ```
+
+Those in-memory fixtures can also embed an inline `answer` string and inline
+`sources` entries when a workflow wants a portable scorecard payload without
+writing separate answer or source files to disk. `answerPath` still acts as the
+reviewer-facing traceability path in the resulting scorecard and reports.
 
 Reviewer import helpers such as `importReviewerDecisions` and
 `renderReviewerDecisionImportMarkdownReport` are also exported for teams that
