@@ -988,8 +988,9 @@ Options:
 - `evaluate --summary-csv-out <path>`: write one CSV row per fixture with the
   fixture path, optional domain, answer path, source directories, source
   paths, summary match state, claim-match score, expected vs actual verdict
-  totals, and the first mismatched claim's expected versus actual verdict when
-  drift appears
+  totals, and the first mismatched claim's expected versus actual verdict plus
+  primary evidence title, trust, freshness, score, and quote when drift
+  appears
 - `evaluate --fail-on-mismatch`: exit with code `2` when any fixture summary or
   expected claim verdict does not match the current verifier output
 

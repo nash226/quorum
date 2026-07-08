@@ -489,11 +489,11 @@ test("renders evaluation summary csv rows for each fixture", () => {
 
   assert.match(
     rendered,
-    /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,/,
+    /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,first_mismatch_evidence_title,first_mismatch_evidence_trust_level,first_mismatch_evidence_updated_at,first_mismatch_evidence_score,first_mismatch_evidence_quote,/,
   );
   assert.match(rendered, /Support policy example/);
   assert.match(rendered, /Support policy example,support,\/tmp\/fixtures\/support\.json/);
-  assert.match(rendered, /Support reviewer packet,Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,yes,0,0,1\.000,no,none,,,,,1,0,0,0,1,0,0,0/);
+  assert.match(rendered, /Support reviewer packet,Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,yes,0,0,1\.000,no,none,,,,,,,,,,1,0,0,0,1,0,0,0/);
 });
 
 test("evaluation summary csv includes first mismatched claim details", () => {
@@ -513,7 +513,26 @@ test("evaluation summary csv includes first mismatched claim details", () => {
         answerPreview: "Preview",
         answer: "Answer text",
         sources: [],
-        assessments: [],
+        assessments: [
+          {
+            claim: {
+              id: "claim_1",
+              text: "Employees receive 18 weeks of paid parental leave.",
+            },
+            verdict: "contradicted",
+            reason: "The approved policy states a different amount of leave.",
+            evidence: [
+              {
+                documentId: "source_1",
+                documentTitle: "HR Policy",
+                documentTrustLevel: "high",
+                documentUpdatedAt: "2026-06-01",
+                quote: "Employees receive 12 weeks of paid parental leave.",
+                score: 0.857,
+              },
+            ],
+          },
+        ],
         summary: {
           verified: 0,
           contradicted: 1,
@@ -551,7 +570,7 @@ test("evaluation summary csv includes first mismatched claim details", () => {
 
   assert.match(
     rendered,
-    /HR mismatch example,,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,1,0,0,0,0,1,0,0/,
+    /HR mismatch example,,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,HR Policy,high,2026-06-01,0\.857,Employees receive 12 weeks of paid parental leave\.,1,0,0,0,0,1,0,0/,
   );
 });
 
