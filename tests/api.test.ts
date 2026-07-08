@@ -2355,6 +2355,27 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("programmatic API formats IPv6 loopback server URLs for callers", async () => {
+  const api = await startApiServer({ host: "::1", port: 0 });
+
+  try {
+    assert.match(api.url, /^http:\/\/\[::1\]:\d+$/);
+
+    const discoveryResponse = await fetch(api.url);
+    assert.equal(discoveryResponse.status, 200);
+
+    const openApiResponse = await fetch(`${api.url}/openapi.json`);
+    assert.equal(openApiResponse.status, 200);
+    const openApi = await openApiResponse.json() as {
+      servers: Array<{ url: string }>;
+    };
+
+    assert.deepEqual(openApi.servers, [{ url: api.url }]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API accepts explicit source metadata in verify requests", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
