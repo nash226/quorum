@@ -104,6 +104,31 @@ export interface ApiServerOptions {
   port?: number;
 }
 
+export type ApiCapabilityMap = typeof API_CAPABILITIES;
+
+export interface ApiDiscoveryEndpoint {
+  method: "GET" | "HEAD" | "POST" | "OPTIONS";
+  path: string;
+  description: string;
+}
+
+export interface ApiCapabilitiesResponse {
+  service: string;
+  version: string;
+  openapiPath: string;
+  capabilities: ApiCapabilityMap;
+}
+
+export interface ApiDiscoveryResponse extends ApiCapabilitiesResponse {
+  endpoints: readonly ApiDiscoveryEndpoint[];
+}
+
+export interface ApiHealthResponse {
+  ok: true;
+  service: string;
+  version: string;
+}
+
 export interface StartedApiServer {
   host: string;
   port: number;
@@ -134,7 +159,7 @@ export const API_CAPABILITIES = {
   importReviewArtifacts: [...IMPORT_REVIEW_ARTIFACTS],
   evaluateArtifacts: [...EVALUATE_ARTIFACTS],
 } as const;
-const API_ENDPOINTS = [
+export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
   { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
   {
@@ -352,32 +377,35 @@ async function handleApiRequest(
   }
 
   if ((request.method === "GET" || isHeadRequest) && url === "/") {
-    writeJson(response, 200, {
+    const discoveryResponse: ApiDiscoveryResponse = {
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
       capabilities: API_CAPABILITIES,
       endpoints: API_ENDPOINTS,
-    }, isHeadRequest);
+    };
+    writeJson(response, 200, discoveryResponse, isHeadRequest);
     return;
   }
 
   if ((request.method === "GET" || isHeadRequest) && url === CAPABILITIES_PATH) {
-    writeJson(response, 200, {
+    const capabilitiesResponse: ApiCapabilitiesResponse = {
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
       capabilities: API_CAPABILITIES,
-    }, isHeadRequest);
+    };
+    writeJson(response, 200, capabilitiesResponse, isHeadRequest);
     return;
   }
 
   if ((request.method === "GET" || isHeadRequest) && url === "/health") {
-    writeJson(response, 200, {
+    const healthResponse: ApiHealthResponse = {
       ok: true,
       service: API_SERVICE_NAME,
       version: API_VERSION,
-    }, isHeadRequest);
+    };
+    writeJson(response, 200, healthResponse, isHeadRequest);
     return;
   }
 

@@ -14,6 +14,7 @@ export type {
 } from "./domain.js";
 export {
   API_CAPABILITIES,
+  API_ENDPOINTS,
   CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS,
   API_SERVICE_NAME,
@@ -23,6 +24,11 @@ export {
   startApiServer,
 } from "./api-server.js";
 export type {
+  ApiCapabilitiesResponse,
+  ApiCapabilityMap,
+  ApiDiscoveryEndpoint,
+  ApiDiscoveryResponse,
+  ApiHealthResponse,
   ApiServerOptions,
   ApiSourceInput,
   EvaluateApiRequest,

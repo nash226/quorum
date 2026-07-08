@@ -454,7 +454,9 @@ evaluation mismatches instead of always returning `200`, which lets workflow
 gates block risky outputs without parsing the body first.
 Node integrations that want to embed the server directly can now import
 `createApiServer`, `startApiServer`, and stable discovery metadata such as
-`CAPABILITIES_PATH` and `OPENAPI_PATH` from the main `quorum` entrypoint,
+`API_ENDPOINTS`, `CAPABILITIES_PATH`, and `OPENAPI_PATH` plus the typed
+`ApiDiscoveryResponse`, `ApiCapabilitiesResponse`, and `ApiHealthResponse`
+contracts from the main `quorum` entrypoint,
 while `quorum/server` remains available for callers that prefer the dedicated
 subpath.
 
