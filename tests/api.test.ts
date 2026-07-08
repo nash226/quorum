@@ -5,6 +5,7 @@ import { join } from "node:path";
 import test from "node:test";
 import {
   API_CAPABILITIES as SERVER_API_CAPABILITIES,
+  API_ENDPOINTS as SERVER_API_ENDPOINTS,
   CAPABILITIES_PATH as SERVER_CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS as SERVER_API_DISCOVERY_HEADERS,
   API_SERVICE_NAME as SERVER_API_SERVICE_NAME,
@@ -16,10 +17,15 @@ import {
 import {
   ANSWER_EXTENSIONS,
   API_CAPABILITIES,
+  API_ENDPOINTS,
   CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS,
   API_SERVICE_NAME,
   API_VERSION,
+  type ApiCapabilitiesResponse,
+  type ApiDiscoveryEndpoint,
+  type ApiDiscoveryResponse,
+  type ApiHealthResponse,
   CLAIM_VERDICTS,
   createApiServer as rootCreateApiServer,
   importReviewerDecisionContents,
@@ -104,6 +110,7 @@ test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(API_SERVICE_NAME, SERVER_API_SERVICE_NAME);
   assert.strictEqual(API_VERSION, SERVER_API_VERSION);
   assert.deepEqual(API_CAPABILITIES, SERVER_API_CAPABILITIES);
+  assert.deepEqual(API_ENDPOINTS, SERVER_API_ENDPOINTS);
 });
 
 test("programmatic API verifies an answer file against loaded sources", async () => {
@@ -1859,96 +1866,45 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
 
   try {
     const indexResponse = await fetch(api.url);
+    const expectedEndpoints: readonly ApiDiscoveryEndpoint[] = API_ENDPOINTS;
+    const expectedDiscoveryResponse: ApiDiscoveryResponse = {
+      service: "quorum",
+      version: "0.1.0",
+      openapiPath: "/openapi.json",
+      capabilities: API_CAPABILITIES,
+      endpoints: expectedEndpoints,
+    };
+    const expectedCapabilitiesResponse: ApiCapabilitiesResponse = {
+      service: "quorum",
+      version: "0.1.0",
+      openapiPath: "/openapi.json",
+      capabilities: API_CAPABILITIES,
+    };
+    const expectedHealthResponse: ApiHealthResponse = {
+      ok: true,
+      service: "quorum",
+      version: "0.1.0",
+    };
     assert.equal(indexResponse.status, 200);
     assert.equal(indexResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(indexResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(indexResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
-    assert.deepEqual(await indexResponse.json(), {
-      service: "quorum",
-      version: "0.1.0",
-      openapiPath: "/openapi.json",
-      capabilities: {
-        sourceExtensions: [".md", ".markdown", ".txt", ".html", ".htm", ".pdf"],
-        answerExtensions: [".md", ".markdown", ".txt", ".html", ".htm"],
-        verdicts: ["verified", "unsupported", "contradicted", "needs_review"],
-        trustLevels: ["low", "medium", "high"],
-        verifyArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
-        verifyBatchArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
-        importReviewArtifacts: ["text", "markdown", "html", "summary_csv"],
-        evaluateArtifacts: ["text", "markdown", "html", "summary_csv"],
-      },
-      endpoints: [
-        { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
-        { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
-        {
-          method: "GET",
-          path: "/capabilities",
-          description: "Return supported Quorum capabilities without endpoint listings.",
-        },
-        {
-          method: "HEAD",
-          path: "/capabilities",
-          description: "Return capability discovery headers without a JSON body.",
-        },
-        { method: "GET", path: "/health", description: "Return a simple readiness response." },
-        { method: "HEAD", path: "/health", description: "Return readiness headers without a JSON body." },
-        {
-          method: "GET",
-          path: "/openapi.json",
-          description: "Return the OpenAPI description for this server.",
-        },
-        { method: "HEAD", path: "/openapi.json", description: "Return OpenAPI headers without a JSON body." },
-        { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
-        {
-          method: "POST",
-          path: "/verify-batch",
-          description: "Verify multiple answers from JSON request content.",
-        },
-        {
-          method: "POST",
-          path: "/import-review",
-          description: "Import reviewer CSV content from JSON request content.",
-        },
-        {
-          method: "POST",
-          path: "/evaluate",
-          description: "Evaluate fixture JSON content from request payloads.",
-        },
-      ],
-    });
+    assert.deepEqual(await indexResponse.json(), expectedDiscoveryResponse);
 
     const capabilitiesResponse = await fetch(`${api.url}/capabilities`);
     assert.equal(capabilitiesResponse.status, 200);
     assert.equal(capabilitiesResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
-    assert.deepEqual(await capabilitiesResponse.json(), {
-      service: "quorum",
-      version: "0.1.0",
-      openapiPath: "/openapi.json",
-      capabilities: {
-        sourceExtensions: [".md", ".markdown", ".txt", ".html", ".htm", ".pdf"],
-        answerExtensions: [".md", ".markdown", ".txt", ".html", ".htm"],
-        verdicts: ["verified", "unsupported", "contradicted", "needs_review"],
-        trustLevels: ["low", "medium", "high"],
-        verifyArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
-        verifyBatchArtifacts: ["text", "markdown", "html", "review_csv", "summary_csv"],
-        importReviewArtifacts: ["text", "markdown", "html", "summary_csv"],
-        evaluateArtifacts: ["text", "markdown", "html", "summary_csv"],
-      },
-    });
+    assert.deepEqual(await capabilitiesResponse.json(), expectedCapabilitiesResponse);
 
     const healthResponse = await fetch(`${api.url}/health`);
     assert.equal(healthResponse.status, 200);
     assert.equal(healthResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(healthResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(healthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
-    assert.deepEqual(await healthResponse.json(), {
-      ok: true,
-      service: "quorum",
-      version: "0.1.0",
-    });
+    assert.deepEqual(await healthResponse.json(), expectedHealthResponse);
 
     const headIndexResponse = await fetch(api.url, { method: "HEAD" });
     assert.equal(headIndexResponse.status, 200);
