@@ -1301,6 +1301,17 @@ function buildOpenApiDocument(request: IncomingMessage) {
             "score",
           ],
         },
+        EvaluationAggregateSummary: {
+          type: "object",
+          properties: {
+            fixtureCount: { type: "integer", minimum: 0 },
+            matchedClaims: { type: "integer", minimum: 0 },
+            totalExpectedClaims: { type: "integer", minimum: 0 },
+            score: { type: ["number", "null"] },
+            scoreLabel: { type: "string" },
+          },
+          required: ["fixtureCount", "matchedClaims", "totalExpectedClaims", "score", "scoreLabel"],
+        },
         EvaluationBatchRunResult: {
           type: "object",
           properties: {
@@ -1310,8 +1321,9 @@ function buildOpenApiDocument(request: IncomingMessage) {
             },
             shouldFail: { type: "boolean" },
             mismatchCount: { type: "integer", minimum: 0 },
+            summary: { $ref: "#/components/schemas/EvaluationAggregateSummary" },
           },
-          required: ["scorecards", "shouldFail", "mismatchCount"],
+          required: ["scorecards", "shouldFail", "mismatchCount", "summary"],
         },
       },
     },

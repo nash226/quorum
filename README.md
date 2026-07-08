@@ -411,6 +411,10 @@ Evaluation accepts a `{ fixtures }` JSON body at `POST /evaluate`, where each
 fixture entry includes `{ fixturePath, content }`, and returns the same
 `evaluateFixtureContentsResult` batch shape used by the package API so
 workflow callers can score benchmark fixtures without writing them to disk.
+That structured result now includes an aggregate `summary` object with
+`fixtureCount`, `matchedClaims`, `totalExpectedClaims`, a numeric-or-null
+`score`, and a human-readable `scoreLabel`, so local runners can gate
+evaluation drift without re-rendering the text or HTML scorecard.
 Fixture JSON may also embed inline `answer` and `sources` content so callers
 can send a self-contained benchmark payload while still preserving an
 `answerPath` trace in the returned scorecard.

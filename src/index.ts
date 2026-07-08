@@ -53,6 +53,7 @@ export {
   resolveEvaluationFixturePaths,
 } from "./evaluation.js";
 export type {
+  EvaluationAggregateSummary,
   EvaluationBatchOptions,
   EvaluationBatchRunResult,
   EvaluationClaimScore,
