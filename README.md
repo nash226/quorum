@@ -430,6 +430,9 @@ hardcoding Quorum's current contract, and
 `HEAD /`, `HEAD /health`, and `HEAD /openapi.json` expose the same status code
 and headers without a JSON body, which makes lightweight readiness probes and
 schema checks easier to wire into orchestrators and load balancers.
+Those responses also include `X-Quorum-Service`, `X-Quorum-Version`, and
+`X-Quorum-OpenAPI-Path` headers so callers can confirm they reached Quorum and
+discover the local schema path without parsing a response body first.
 `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover both request and response payload shapes without
 scraping the README. The OpenAPI document includes reusable schemas for the
