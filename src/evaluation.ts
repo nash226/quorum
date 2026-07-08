@@ -139,6 +139,10 @@ export async function evaluateFixture(
     ...source,
     sourcePath: resolveFixtureMetadataPath(baseDir, source.sourcePath),
   }));
+  const resolvedSourcePaths = dedupePathsInOrder([
+    ...sourcePaths,
+    ...inlineSources.map((source) => source.sourcePath),
+  ]);
   const [fileSources, memorySources] = await Promise.all([
     sourcePaths.length > 0
       ? loadSourceDocuments({
@@ -211,7 +215,7 @@ export async function evaluateFixture(
     answerLabel: report.answerLabel,
     answerPreview: report.answerPreview,
     sourceDirs,
-    sourcePaths,
+    sourcePaths: resolvedSourcePaths,
     report,
     expectedSummary,
     actualSummary,
