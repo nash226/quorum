@@ -1501,6 +1501,26 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
   assert.equal(batchResult.summary.totalExpectedClaims, 12);
   assert.equal(batchResult.summary.score, 1);
   assert.equal(batchResult.summary.scoreLabel, "100%");
+  assert.deepEqual(batchResult.summary.domains, [
+    {
+      domain: "hr",
+      fixtureCount: 2,
+      mismatchCount: 0,
+      matchedClaims: 6,
+      totalExpectedClaims: 6,
+      score: 1,
+      scoreLabel: "100%",
+    },
+    {
+      domain: "support",
+      fixtureCount: 2,
+      mismatchCount: 0,
+      matchedClaims: 6,
+      totalExpectedClaims: 6,
+      score: 1,
+      scoreLabel: "100%",
+    },
+  ]);
   assert.equal(batchResult.scorecards.length, 4);
   assert.equal(singleResult.hasMismatch, false);
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
@@ -2810,6 +2830,17 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     const evaluateResult = await evaluateResponse.json() as Awaited<ReturnType<typeof evaluateFixtureContentsResult>> & {
       artifacts: Record<string, string>;
     };
+    assert.deepEqual(evaluateResult.summary.domains, [
+      {
+        domain: "hr",
+        fixtureCount: 1,
+        mismatchCount: 0,
+        matchedClaims: 3,
+        totalExpectedClaims: 3,
+        score: 1,
+        scoreLabel: "100%",
+      },
+    ]);
     assert.equal(evaluateResult.artifacts.text, renderEvaluationTextReport(evaluateResult.scorecards));
     assert.equal(
       evaluateResult.artifacts.markdown,
