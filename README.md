@@ -444,7 +444,9 @@ lightweight readiness probes and schema checks easier to wire into orchestrators
 and load balancers.
 Those responses also include `X-Quorum-Service`, `X-Quorum-Version`, and
 `X-Quorum-OpenAPI-Path` headers so callers can confirm they reached Quorum and
-discover the local schema path without parsing a response body first.
+discover the local schema path without parsing a response body first. Browser
+clients can read those discovery headers directly because Quorum also exposes
+them through `Access-Control-Expose-Headers`.
 `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover both request and response payload shapes without
 scraping the README. The OpenAPI document includes reusable schemas for the
