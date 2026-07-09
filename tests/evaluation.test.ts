@@ -11,6 +11,7 @@ import {
   hasEvaluationMismatch,
   loadEvaluationFixture,
   loadEvaluationFixtureFromContent,
+  renderEvaluationDomainSummaryCsv,
   renderEvaluationHtmlReport,
   renderEvaluationMarkdownReport,
   renderEvaluationScorecard,
@@ -619,6 +620,105 @@ test("evaluation summary csv includes first mismatched claim details", () => {
   assert.match(
     rendered,
     /HR mismatch example,,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,,[^,\n]+,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,HR Policy,high,2026-06-01,\/tmp\/sources\/hr-policy\.md,0\.857,Employees receive 12 weeks of paid parental leave\.,1,0,0,0,0,1,0,0/,
+  );
+});
+
+test("renders evaluation domain summary csv rows for each domain", () => {
+  const rendered = renderEvaluationDomainSummaryCsv([
+    {
+      fixtureName: "HR policy example",
+      domain: "hr",
+      fixturePath: "/tmp/fixtures/hr.json",
+      answerPath: "/tmp/answers/hr.md",
+      answerLabel: "HR reviewer packet",
+      answerPreview: "HR answer preview",
+      sourceDirs: [],
+      sourcePaths: ["/tmp/sources/hr.md"],
+      report: {
+        generatedAt: "2026-07-05T10:20:00.000Z",
+        answerPath: "/tmp/answers/hr.md",
+        answerLabel: "hr",
+        answerPreview: "Preview",
+        answer: "Answer text",
+        sources: [],
+        assessments: [],
+        summary: {
+          verified: 1,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+        },
+      },
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      actualSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      summaryMatches: true,
+      claims: [],
+      matchedClaims: 1,
+      totalExpectedClaims: 1,
+      score: 1,
+    },
+    {
+      fixtureName: "Support policy example",
+      domain: "support",
+      fixturePath: "/tmp/fixtures/support.json",
+      answerPath: "/tmp/answers/support.md",
+      answerLabel: "Support reviewer packet",
+      answerPreview: "Support answer preview",
+      sourceDirs: [],
+      sourcePaths: ["/tmp/sources/support.md"],
+      report: {
+        generatedAt: "2026-07-05T10:20:00.000Z",
+        answerPath: "/tmp/answers/support.md",
+        answerLabel: "support",
+        answerPreview: "Preview",
+        answer: "Answer text",
+        sources: [],
+        assessments: [],
+        summary: {
+          verified: 0,
+          contradicted: 1,
+          unsupported: 0,
+          needs_review: 0,
+        },
+      },
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      actualSummary: {
+        verified: 0,
+        contradicted: 1,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      summaryMatches: false,
+      claims: [],
+      matchedClaims: 0,
+      totalExpectedClaims: 1,
+      score: 0,
+    },
+  ]);
+
+  assert.equal(
+    rendered,
+    [
+      "domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label",
+      "hr,1,0,1,1,1.000,100%",
+      "support,1,1,0,1,0.000,0%",
+      "",
+    ].join("\n"),
   );
 });
 

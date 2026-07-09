@@ -769,7 +769,7 @@ For fixture-driven evaluation work, Quorum also exports
 `evaluateFixtureContent`, `evaluateFixtureContents`, `evaluateFixtureFile`, `evaluateFixtureFiles`,
 `renderEvaluationScorecard`, `renderEvaluationTextReport`,
 `renderEvaluationMarkdownReport`, `renderEvaluationHtmlReport`,
-`renderEvaluationSummaryCsv`, and
+`renderEvaluationSummaryCsv`, `renderEvaluationDomainSummaryCsv`, and
 `hasEvaluationMismatch` so teams can keep HR or support benchmark cases in
 versioned JSON files, discover nested fixture directories, and score the
 current verifier against expected verdicts:
@@ -783,6 +783,7 @@ import {
   renderEvaluationHtmlReport,
   hasEvaluationMismatch,
   loadEvaluationFixtureFromContent,
+  renderEvaluationDomainSummaryCsv,
   renderEvaluationMarkdownReport,
   renderEvaluationScorecard,
   renderEvaluationSummaryCsv,
@@ -803,6 +804,7 @@ console.log(renderEvaluationTextReport(scorecards));
 console.log(renderEvaluationMarkdownReport(scorecards));
 console.log(renderEvaluationHtmlReport(scorecards));
 console.log(renderEvaluationSummaryCsv(scorecards));
+console.log(renderEvaluationDomainSummaryCsv(scorecards));
 console.log(scorecards.some(hasEvaluationMismatch));
 ```
 
@@ -868,6 +870,7 @@ npm run dev -- evaluate \
   --markdown-out reports/evaluation-report.md \
   --html-out reports/evaluation-report.html \
   --summary-csv-out reports/evaluation-summary.csv \
+  --domain-summary-csv-out reports/evaluation-domain-summary.csv \
   --fail-on-mismatch
 ```
 
@@ -1031,6 +1034,9 @@ Options:
   totals, and the first mismatched claim's expected versus actual verdict plus
   primary evidence title, trust, freshness, source path, score, and quote when drift
   appears
+- `evaluate --domain-summary-csv-out <path>`: write one CSV row per fixture
+  domain with aggregate fixture counts, mismatch counts, matched claims, and
+  score labels for benchmark routing
 - `evaluate --fail-on-mismatch`: exit with code `2` when any fixture summary or
   expected claim verdict does not match the current verifier output
 
