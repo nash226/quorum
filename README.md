@@ -383,6 +383,9 @@ Available endpoints:
 - `POST /import-review`
 - `POST /evaluate`
 
+Every listed route also accepts `OPTIONS` and returns CORS preflight headers
+for browser-based local clients.
+
 Single-answer verification request example:
 
 ```bash

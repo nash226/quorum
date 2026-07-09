@@ -361,6 +361,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(indexPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
     assert.deepEqual(indexPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(indexPayload.capabilities.trustLevels, ["low", "medium", "high"]);
+    assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "OPTIONS" && endpoint.path === "/verify"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/health"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/healthz"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/openapi.json"), true);
@@ -409,6 +410,7 @@ Employees receive 12 weeks of paid parental leave.
     const openApiPayload = await openApiResponse.json();
     assert.equal(openApiPayload.openapi, "3.1.0");
     assert.equal(openApiPayload.info.title, "Quorum Local API");
+    assert.equal(openApiPayload.paths["/verify"].options.summary, "Verify preflight");
     assert.equal(openApiPayload.paths["/verify"].post.summary, "Verify one answer");
 
     const healthResponse = await fetch(`${server.url}/health`);

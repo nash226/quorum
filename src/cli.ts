@@ -1097,6 +1097,7 @@ Options:
   HEAD /healthz             Return readiness headers on the conventional probe path without a response body
   GET  /openapi.json        Return the machine-readable API description
   HEAD /openapi.json        Return OpenAPI headers without a response body
+  OPTIONS *                 Return CORS preflight headers for browser-based local clients
   POST /verify              Verify one answer from JSON request content
   POST /verify-batch        Verify multiple answers from JSON request content
   POST /import-review       Import reviewer CSV content from JSON request content
