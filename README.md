@@ -458,12 +458,27 @@ orchestrators want Quorum to return HTTP `409` for matched fail policies or
 evaluation mismatches instead of always returning `200`, which lets workflow
 gates block risky outputs without parsing the body first.
 Node integrations that want to embed the server directly can now import
-`createApiServer`, `startApiServer`, and stable discovery metadata such as
+`createApiServer`, `startApiServer`, `createOpenApiDocument`, and stable discovery metadata such as
 `API_ENDPOINTS`, `CAPABILITIES_PATH`, and `OPENAPI_PATH` plus the typed
-`ApiDiscoveryResponse`, `ApiCapabilitiesResponse`, and `ApiHealthResponse`
-contracts from the main `quorum` entrypoint,
+`ApiDiscoveryResponse`, `ApiCapabilitiesResponse`, `ApiHealthResponse`, and
+`OpenApiDocumentOptions` contracts from the main `quorum` entrypoint,
 while `quorum/server` remains available for callers that prefer the dedicated
 subpath.
+
+For local tooling that wants Quorum's OpenAPI contract without booting an HTTP
+listener first, `createOpenApiDocument` returns the same schema served at
+`GET /openapi.json`:
+
+```ts
+import { createOpenApiDocument } from "quorum";
+
+const openApi = createOpenApiDocument({
+  serverUrl: "http://127.0.0.1:3000",
+});
+
+console.log(openApi.openapi);
+console.log(openApi.paths["/verify"]?.post?.summary);
+```
 
 `verifyAnswerFile` accepts either positional arguments or a single options
 object with `answerPath`, `sources`, `generatedAt`, and `answerLabel`.
