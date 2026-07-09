@@ -93,6 +93,7 @@ interface ImportReviewArgs {
 interface EvaluateArgs {
   fixturePaths: string[];
   fixtureDirPaths: string[];
+  domains: string[];
   json: boolean;
   failOnMismatch: boolean;
   outPath?: string;
@@ -392,6 +393,7 @@ async function runEvaluate(args: string[]): Promise<void> {
   const scorecards = await evaluateFixtureFiles({
     fixturePaths: parsed.fixturePaths,
     fixtureDirPaths: parsed.fixtureDirPaths,
+    domains: parsed.domains,
   });
   const jsonReport = JSON.stringify(
     scorecards.length === 1 ? scorecards[0] : scorecards,
@@ -805,6 +807,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
 function parseEvaluateArgs(args: string[]): EvaluateArgs {
   const fixturePaths: string[] = [];
   const fixtureDirPaths: string[] = [];
+  const domains: string[] = [];
   let outPath: string | undefined;
   let markdownOutPath: string | undefined;
   let htmlOutPath: string | undefined;
@@ -822,6 +825,11 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
       index += 1;
     } else if (arg === "--fixture-dir" && next) {
       fixtureDirPaths.push(next);
+      index += 1;
+    } else if (arg === "--domain" && next) {
+      if (!domains.includes(next)) {
+        domains.push(next);
+      }
       index += 1;
     } else if (arg === "--out" && next) {
       outPath = next;
@@ -854,6 +862,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
   return {
     fixturePaths,
     fixtureDirPaths,
+    domains,
     json,
     failOnMismatch,
     outPath,
@@ -1058,11 +1067,12 @@ Example:
     evaluate: `Quorum evaluate
 
 Usage:
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--fail-on-mismatch]
 
 Options:
   --fixture <path>          Evaluation fixture JSON file; may be repeated
   --fixture-dir <path>      Directory of evaluation fixture JSON files; may be repeated
+  --domain <name>           Only evaluate fixtures whose domain matches this value
   --json                    Print the evaluation scorecard JSON
   --out <path>              Write the JSON scorecard output to disk
   --markdown-out <path>     Write a Markdown evaluation report
@@ -1074,7 +1084,7 @@ Options:
 
 Example:
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --fail-on-mismatch
-  npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
+  npm run dev -- evaluate --fixture-dir examples/evaluations --domain hr --fail-on-mismatch
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --json
 `,
     serve: `Quorum serve
@@ -1132,7 +1142,7 @@ Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--fail-on-mismatch]
   quorum serve [--host <host>] [--port <port>]
   quorum openapi [--server-url <url>] [--out <path>]
 
@@ -1144,7 +1154,7 @@ Example:
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --fail-on-mismatch
-  npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
+  npm run dev -- evaluate --fixture-dir examples/evaluations --domain hr --fail-on-mismatch
   npm run dev -- serve --port 3000
   npm run dev -- openapi --out reports/openapi.json
 `);
