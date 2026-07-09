@@ -2579,6 +2579,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           type: "object",
           properties: {
             fixtureName: { type: "string" },
+            domain: { type: "string" },
             fixturePath: { type: "string" },
             answerPath: { type: "string" },
             answerLabel: { type: "string" },
@@ -2621,8 +2622,33 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             totalExpectedClaims: { type: "integer", minimum: 0 },
             score: { type: ["number", "null"] },
             scoreLabel: { type: "string" },
+            domains: {
+              type: "array",
+              items: { $ref: "#/components/schemas/EvaluationDomainAggregateSummary" },
+            },
           },
-          required: ["fixtureCount", "matchedClaims", "totalExpectedClaims", "score", "scoreLabel"],
+          required: ["fixtureCount", "matchedClaims", "totalExpectedClaims", "score", "scoreLabel", "domains"],
+        },
+        EvaluationDomainAggregateSummary: {
+          type: "object",
+          properties: {
+            domain: { type: "string" },
+            fixtureCount: { type: "integer", minimum: 0 },
+            mismatchCount: { type: "integer", minimum: 0 },
+            matchedClaims: { type: "integer", minimum: 0 },
+            totalExpectedClaims: { type: "integer", minimum: 0 },
+            score: { type: ["number", "null"] },
+            scoreLabel: { type: "string" },
+          },
+          required: [
+            "domain",
+            "fixtureCount",
+            "mismatchCount",
+            "matchedClaims",
+            "totalExpectedClaims",
+            "score",
+            "scoreLabel",
+          ],
         },
         EvaluationBatchRunResult: {
           type: "object",

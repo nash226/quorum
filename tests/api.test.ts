@@ -2084,9 +2084,16 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           ClaimVerdict: { enum: string[] };
           EvaluationAggregateSummary: {
             required: string[];
+            properties: Record<string, unknown>;
+          };
+          EvaluationDomainAggregateSummary: {
+            required: string[];
           };
           EvaluationBatchRunResult: {
             required: string[];
+          };
+          EvaluationScorecard: {
+            properties: Record<string, unknown>;
           };
           ReviewerDecisionImportResult: Record<string, unknown>;
           SingleVerificationResult: Record<string, unknown>;
@@ -2407,7 +2414,11 @@ Refund requests receive an initial response within one business day.
       ]?.value as
         | {
             mismatchCount?: number;
-            summary?: { scoreLabel?: string };
+            scorecards?: Array<{ domain?: string }>;
+            summary?: {
+              scoreLabel?: string;
+              domains?: Array<{ domain?: string }>;
+            };
             artifacts?: { summary_csv?: string };
           }
         | undefined;
@@ -2418,6 +2429,14 @@ Refund requests receive an initial response within one business day.
     assert.equal(
       evaluateResponseExample?.summary?.scoreLabel,
       "100%",
+    );
+    assert.equal(
+      (evaluateResponseExample?.scorecards?.[0] as { domain?: string } | undefined)?.domain,
+      "hr",
+    );
+    assert.equal(
+      (evaluateResponseExample?.summary as { domains?: Array<{ domain?: string }> } | undefined)?.domains?.[0]?.domain,
+      "hr",
     );
     assert.equal(
       evaluateResponseExample?.artifacts?.summary_csv?.includes("HR policy API fixture"),
@@ -2569,6 +2588,23 @@ Refund requests receive an initial response within one business day.
     assert.ok(openApi.components.schemas.BatchVerificationRunResult);
     assert.deepEqual(openApi.components.schemas.EvaluationAggregateSummary.required, [
       "fixtureCount",
+      "matchedClaims",
+      "totalExpectedClaims",
+      "score",
+      "scoreLabel",
+      "domains",
+    ]);
+    assert.deepEqual(openApi.components.schemas.EvaluationScorecard.properties.domain, {
+      type: "string",
+    });
+    assert.deepEqual(openApi.components.schemas.EvaluationAggregateSummary.properties.domains, {
+      type: "array",
+      items: { $ref: "#/components/schemas/EvaluationDomainAggregateSummary" },
+    });
+    assert.deepEqual(openApi.components.schemas.EvaluationDomainAggregateSummary.required, [
+      "domain",
+      "fixtureCount",
+      "mismatchCount",
       "matchedClaims",
       "totalExpectedClaims",
       "score",
