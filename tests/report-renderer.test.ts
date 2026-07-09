@@ -17,6 +17,7 @@ import { importReviewerDecisions } from "../src/reviewer-decision-import.js";
 
 const hrPolicy: SourceDocument = {
   id: "hr_policy",
+  sourcePath: "examples/sources/hr-policy.md",
   title: "HR Policy",
   trustLevel: "high",
   updatedAt: "2026-05-31",
@@ -30,6 +31,7 @@ Healthcare coverage begins after 30 days of employment.
 const batchSources = [
   {
     id: hrPolicy.id,
+    sourcePath: hrPolicy.sourcePath,
     title: hrPolicy.title,
     trustLevel: hrPolicy.trustLevel,
     updatedAt: hrPolicy.updatedAt,
@@ -48,9 +50,9 @@ test("renders the text report used by the CLI", () => {
 
   assert.match(rendered, /Quorum Verification Report/);
   assert.match(rendered, /Answer: examples\/answers\/hr-answer\.md/);
-  assert.match(rendered, /Sources:\n- HR Policy \(high trust, updated 2026-05-31\)/);
+  assert.match(rendered, /Sources:\n- HR Policy \(high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md\)/);
   assert.match(rendered, /VERIFIED  Full-time employees receive 20 days/);
-  assert.match(rendered, /Evidence \(HR Policy, high trust, updated 2026-05-31, score /);
+  assert.match(rendered, /Evidence \(HR Policy, high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md, score /);
 });
 
 test("renders a markdown reviewer report with summary, sources, and evidence", () => {
@@ -70,7 +72,7 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
   assert.match(rendered, /- Contradicted: 1/);
   assert.match(rendered, /- Unsupported: 1/);
   assert.match(rendered, /## Sources/);
-  assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31\)/);
+  assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31, path: examples\/sources\/hr-policy\.md\)/);
   assert.match(rendered, /## Submitted Answer/);
   assert.match(
     rendered,
@@ -83,10 +85,10 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
     /- Reason: A closely matching approved source uses different numeric terms\./,
   );
   assert.match(rendered, /- Claim: Employees receive 18 weeks of paid parental leave\./);
-  assert.match(rendered, /- Evidence: \*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
+  assert.match(rendered, /- Evidence: \*\*HR Policy\*\* \(high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md, score /);
   assert.match(rendered, /### 1\. Employees receive 18 weeks of paid parental leave\./);
   assert.match(rendered, /- Verdict: `contradicted`/);
-  assert.match(rendered, /\*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
+  assert.match(rendered, /\*\*HR Policy\*\* \(high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md, score /);
   assert.match(rendered, /> Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Evidence: No approved source snippet matched strongly enough\./);
 });
@@ -122,7 +124,7 @@ test("renders a reviewer decision csv with answer fail-policy context and blank 
 
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
@@ -164,11 +166,11 @@ test("renders a single-answer summary csv with fail-policy and source context", 
 
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
   );
   assert.equal(
     lines[1],
-    "hr-answer,examples/answers/hr-answer.md,Employees receive 18 weeks of paid parental leave. Employees receive free catered lunch every day.,contradicted,Employees receive 18 weeks of paid parental leave.,A closely matching approved source uses different numeric terms.,HR Policy,high,2026-05-31,0.857,Employees receive 12 weeks of paid parental leave.,2,0,1,1,0,matched,contradicted | unsupported,HR Policy,high,2026-05-31",
+    "hr-answer,examples/answers/hr-answer.md,Employees receive 18 weeks of paid parental leave. Employees receive free catered lunch every day.,contradicted,Employees receive 18 weeks of paid parental leave.,A closely matching approved source uses different numeric terms.,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,0.857,Employees receive 12 weeks of paid parental leave.,2,0,1,1,0,matched,contradicted | unsupported,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
   );
 });
 
@@ -180,13 +182,14 @@ test("renders a no-claim single-answer summary csv row with an explicit review s
 
   assert.equal(
     lines[1],
-    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31",
+    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
   );
 });
 
 test("reviewer decision csv round-trips literal pipes in evidence fields", () => {
   const pipePolicy: SourceDocument = {
     id: "support_policy",
+    sourcePath: "examples/sources/support-policy.md",
     title: "Support | Policy",
     trustLevel: "high",
     updatedAt: "2026-06-01",
@@ -206,6 +209,7 @@ test("reviewer decision csv round-trips literal pipes in evidence fields", () =>
   assert.match(rendered, /30 days \\| standard purchases/);
   assert.equal(imported.claims[0]?.answerLabel, "support-answer");
   assert.deepEqual(imported.claims[0]?.evidenceTitles, ["Support | Policy"]);
+  assert.deepEqual(imported.claims[0]?.evidenceSourcePaths, ["examples/sources/support-policy.md"]);
   assert.deepEqual(imported.claims[0]?.evidenceQuotes, [
     "Refunds are available within 30 days | standard purchases.",
   ]);
@@ -230,7 +234,7 @@ test("renders a professional HTML reviewer report with escaped content", () => {
   assert.match(rendered, /examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /<span class="pill pill--contradicted">contradicted<\/span>/);
   assert.match(rendered, /HR Policy<\/strong>/);
-  assert.match(rendered, /high trust, updated 2026-05-31, score /);
+  assert.match(rendered, /high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md, score /);
   assert.match(rendered, /<span>Updated<\/span><strong>2026-05-31<\/strong>/);
   assert.match(rendered, /<span>Contradicted claims<\/span><strong>1<\/strong>/);
   assert.match(rendered, /<span>Unsupported claims<\/span><strong>1<\/strong>/);
@@ -294,7 +298,7 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /- Answers with no extracted claims: 0/);
   assert.match(rendered, /- Answers matching fail policy: 1/);
   assert.match(rendered, /## Sources/);
-  assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31\)/);
+  assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31, path: examples\/sources\/hr-policy\.md\)/);
   assert.match(rendered, /### 1\. support-answer/);
   assert.match(rendered, /- Fail policy: matched/);
   assert.match(rendered, /- Fail verdicts: unsupported/);
@@ -307,8 +311,8 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /- Answer preview: Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Primary finding: verified/);
   assert.match(rendered, /- Primary claim: Employees receive 12 weeks of paid parental leave\./);
-  assert.match(rendered, /- Primary evidence: \*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
-  assert.match(rendered, /\*\*HR Policy\*\* \(high trust, updated 2026-05-31, score /);
+  assert.match(rendered, /- Primary evidence: \*\*HR Policy\*\* \(high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md, score /);
+  assert.match(rendered, /\*\*HR Policy\*\* \(high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md, score /);
   assert.match(rendered, /#### Submitted Answer/);
   assert.match(rendered, /> Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /#### Claim Assessments/);
@@ -386,7 +390,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /<!doctype html>/i);
   assert.match(rendered, /<title>Quorum Batch Verification Report<\/title>/);
   assert.match(rendered, /Batch verification report for review queues/);
-  assert.match(rendered, /HR Policy<\/strong><span>high trust - updated 2026-05-31<\/span>/);
+  assert.match(rendered, /HR Policy<\/strong><span>high trust - updated 2026-05-31 - path examples\/sources\/hr-policy\.md<\/span>/);
   assert.match(rendered, /No extracted claims<\/span>\s*<strong>0 answers<\/strong>/);
   assert.match(rendered, /Fail policy matched/);
   assert.match(rendered, /<dt>Primary finding<\/dt><dd>unsupported<\/dd>/);
@@ -483,7 +487,7 @@ test("renders evidence freshness metadata in batch html claims", () => {
 
   const rendered = renderBatchHtmlReport(batchReport);
 
-  assert.match(rendered, /HR Policy<\/strong> · high trust, updated 2026-05-31, score /);
+  assert.match(rendered, /HR Policy<\/strong> · high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md, score /);
   assert.match(rendered, /Employees receive 12 weeks of paid parental leave\./);
 });
 
@@ -562,7 +566,7 @@ test("renders a batch reviewer decision csv with answer path context", () => {
 
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
   );
   assert.match(
     lines[1] ?? "",
@@ -688,15 +692,15 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
 
   assert.equal(
     lines[0],
-    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+    "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
   );
   assert.equal(
     lines[1],
-    "support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31",
+    "support-answer,examples/answers/support-answer.md,Employees receive free catered lunch every day.,unsupported,Employees receive free catered lunch every day.,No approved source contains enough overlapping policy language.,,,,,,,1,0,0,1,0,matched,unsupported,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
   );
   assert.equal(
     lines[2],
-    "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,1.000,Employees receive 12 weeks of paid parental leave.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31",
+    "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,1.000,Employees receive 12 weeks of paid parental leave.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
   );
 });
 
@@ -736,7 +740,7 @@ Managers approve travel within five business days, and international trips requi
 
   assert.equal(
     lines[1],
-    'long-answer,examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31',
+    'long-answer,examples/answers/long-answer.md,"Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days, and internation...",unsupported,"Managers approve travel within five business days, and international trips require finance review before booking.",No approved source contains enough overlapping policy language.,,,,,,,2,1,0,1,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md',
   );
 });
 
@@ -821,6 +825,6 @@ test("renders no-claim batch summary csv rows with an explicit review signal", (
 
   assert.equal(
     lines[1],
-    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31",
+    "empty,examples/answers/empty.md,Short.,needs_review,,No claims were extracted from this answer.,,,,,,,0,0,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md",
   );
 });
