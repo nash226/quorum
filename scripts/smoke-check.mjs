@@ -274,20 +274,39 @@ try {
   assert.equal(readJson(importReportPath).answerGroups.length, 5);
   assert.match(readFileSync(importSummaryCsvPath, "utf8"), /^answer_label,answer_path,/);
 
+  const evaluationReportPath = join(tempDir, "evaluation-report.md");
+  const evaluationSummaryCsvPath = join(tempDir, "evaluation-summary.csv");
+  const evaluationDomainSummaryCsvPath = join(tempDir, "evaluation-domain-summary.csv");
   const evaluationStdout = runCli([
     "evaluate",
-    "--fixture",
-    "examples/evaluations/hr-policy.json",
-    "--fixture",
-    "examples/evaluations/support-policy.json",
+    "--fixture-dir",
+    "examples/evaluations",
     "--markdown-out",
-    join(tempDir, "evaluation-report.md"),
+    evaluationReportPath,
+    "--summary-csv-out",
+    evaluationSummaryCsvPath,
+    "--domain-summary-csv-out",
+    evaluationDomainSummaryCsvPath,
     "--fail-on-mismatch",
   ]);
 
   assert.match(evaluationStdout, /Quorum Evaluation Report/);
-  assert.match(readFileSync(join(tempDir, "evaluation-report.md"), "utf8"), /^# Quorum Evaluation Report/);
+  assert.match(readFileSync(evaluationReportPath, "utf8"), /^# Quorum Evaluation Report/);
   assert.match(evaluationStdout, /Fixtures with mismatches: 0/);
+  assert.match(evaluationStdout, /Support billing HTML example/);
+  const evaluationSummaryCsv = readFileSync(evaluationSummaryCsvPath, "utf8");
+  assert.match(
+    evaluationSummaryCsv,
+    /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
+  );
+  assert.match(evaluationSummaryCsv, /^Support billing HTML example,support,/m);
+  const evaluationDomainSummaryCsv = readFileSync(evaluationDomainSummaryCsvPath, "utf8");
+  assert.match(
+    evaluationDomainSummaryCsv,
+    /^domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label\n/m,
+  );
+  assert.match(evaluationDomainSummaryCsv, /^hr,2,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
+  assert.match(evaluationDomainSummaryCsv, /^support,3,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
 
   const apiSources = await api.loadSourcesFromContent({
     sources: [
@@ -552,6 +571,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
             content: evaluationFixtureContent,
           },
         ],
+        includeArtifacts: ["summary_csv", "domain_summary_csv"],
       }),
     });
     assert.equal(evaluateResponse.status, 200);
@@ -560,6 +580,14 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.equal(evaluateResult.mismatchCount, 0);
     assert.equal(evaluateResult.scorecards[0]?.fixtureName, "HR policy example");
     assert.equal(evaluateResult.scorecards[0]?.summaryMatches, true);
+    assert.match(
+      evaluateResult.artifacts.summary_csv,
+      /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
+    );
+    assert.match(
+      evaluateResult.artifacts.domain_summary_csv,
+      /^domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label\nhr,1,0,3,3,1(?:\.0+)?,100%\n?$/,
+    );
 
     const verifyConflictResponse = await fetch(`${server.url}/verify`, {
       method: "POST",
