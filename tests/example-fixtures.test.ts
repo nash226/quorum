@@ -40,3 +40,17 @@ test("support example produces one verified, contradicted, and unsupported claim
     needs_review: 0,
   });
 });
+
+test("support HTML example produces one verified, contradicted, and unsupported claim", async () => {
+  const report = await verifyExample(
+    "examples/answers/support-billing-answer.html",
+    "examples/sources/support-billing-policy.html",
+  );
+
+  assert.deepEqual(report.summary, {
+    verified: 1,
+    unsupported: 1,
+    contradicted: 1,
+    needs_review: 0,
+  });
+});
