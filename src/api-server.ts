@@ -207,6 +207,39 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     description: "Evaluate fixture JSON content from request payloads.",
   },
 ] as const;
+const OPENAPI_DISCOVERY_RESPONSE_EXAMPLE = {
+  service: API_SERVICE_NAME,
+  version: API_VERSION,
+  openapiPath: OPENAPI_PATH,
+  capabilities: API_CAPABILITIES,
+  endpoints: API_ENDPOINTS,
+} as const;
+const OPENAPI_CAPABILITIES_RESPONSE_EXAMPLE = {
+  service: API_SERVICE_NAME,
+  version: API_VERSION,
+  openapiPath: OPENAPI_PATH,
+  capabilities: API_CAPABILITIES,
+} as const;
+const OPENAPI_HEALTH_RESPONSE_EXAMPLE = {
+  ok: true,
+  service: API_SERVICE_NAME,
+  version: API_VERSION,
+} as const;
+const OPENAPI_DOCUMENT_RESPONSE_EXAMPLE = {
+  openapi: "3.1.0",
+  info: {
+    title: "Quorum Local API",
+    version: API_VERSION,
+  },
+  servers: [{ url: "http://127.0.0.1:3000" }],
+  paths: {
+    "/verify": {
+      post: {
+        summary: "Verify one answer",
+      },
+    },
+  },
+} as const;
 const OPENAPI_VERIFY_EXAMPLE = {
   answer: "Employees receive 12 weeks of paid parental leave.",
   answerPath: "answers/hr.md",
@@ -1506,6 +1539,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiIndexResponse" },
+                  examples: {
+                    discoveryIndex: {
+                      summary: "Discover Quorum capabilities and local endpoints",
+                      value: OPENAPI_DISCOVERY_RESPONSE_EXAMPLE,
+                    },
+                  },
                 },
               },
             },
@@ -1536,6 +1575,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiCapabilitiesResponse" },
+                  examples: {
+                    capabilitiesOnly: {
+                      summary: "Read the stable Quorum capability contract",
+                      value: OPENAPI_CAPABILITIES_RESPONSE_EXAMPLE,
+                    },
+                  },
                 },
               },
             },
@@ -1566,6 +1611,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiHealthResponse" },
+                  examples: {
+                    ready: {
+                      summary: "A healthy Quorum instance",
+                      value: OPENAPI_HEALTH_RESPONSE_EXAMPLE,
+                    },
+                  },
                 },
               },
             },
@@ -1596,6 +1647,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiHealthResponse" },
+                  examples: {
+                    readinessAlias: {
+                      summary: "The conventional readiness probe response",
+                      value: OPENAPI_HEALTH_RESPONSE_EXAMPLE,
+                    },
+                  },
                 },
               },
             },
@@ -1631,6 +1688,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                       openapi: { type: "string" },
                     },
                     required: ["openapi"],
+                  },
+                  examples: {
+                    openApiDocument: {
+                      summary: "A partial Quorum OpenAPI document",
+                      value: OPENAPI_DOCUMENT_RESPONSE_EXAMPLE,
+                    },
                   },
                 },
               },
