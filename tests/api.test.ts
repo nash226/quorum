@@ -2045,6 +2045,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
                 content?: Record<
                   string,
                   {
+                    examples?: Record<string, { summary?: string; value?: unknown }>;
                     schema?: { $ref?: string; allOf?: Array<{ $ref?: string; properties?: Record<string, unknown> }> };
                   }
                 >;
@@ -2256,13 +2257,64 @@ Refund requests receive an initial response within one business day.
       openApi.paths["/verify"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
       "#/components/schemas/SingleVerificationResult",
     );
+    const verifyResponseExample =
+      openApi.paths["/verify"]?.post?.responses?.["200"]?.content?.["application/json"]?.examples?.[
+        "verifiedAnswer"
+      ]?.value as
+        | {
+            report?: { summary?: { verified?: number } };
+            artifacts?: { markdown?: string };
+          }
+        | undefined;
+    assert.equal(
+      verifyResponseExample?.report?.summary?.verified,
+      1,
+    );
+    assert.equal(
+      verifyResponseExample?.artifacts?.markdown,
+      "# Quorum Verification Report\n\nSummary: 1 verified, 0 contradicted, 0 unsupported, 0 needs review\n",
+    );
     assert.equal(
       openApi.paths["/verify-batch"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
       "#/components/schemas/BatchVerificationRunResult",
     );
+    const verifyBatchResponseExample =
+      openApi.paths["/verify-batch"]?.post?.responses?.["200"]?.content?.["application/json"]?.examples?.[
+        "verifiedQueue"
+      ]?.value as
+        | {
+            report?: { answerCount?: number };
+            artifacts?: { summary_csv?: string };
+          }
+        | undefined;
+    assert.equal(
+      verifyBatchResponseExample?.report?.answerCount,
+      2,
+    );
+    assert.equal(
+      verifyBatchResponseExample?.artifacts?.summary_csv?.includes("Support queue answer"),
+      true,
+    );
     assert.equal(
       openApi.paths["/import-review"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
       "#/components/schemas/ReviewerDecisionImportResult",
+    );
+    const importReviewResponseExample =
+      openApi.paths["/import-review"]?.post?.responses?.["200"]?.content?.["application/json"]?.examples?.[
+        "reviewedQueueSummary"
+      ]?.value as
+        | {
+            report?: { summary?: { reviewedClaims?: number } };
+            artifacts?: { summary_csv?: string };
+          }
+        | undefined;
+    assert.equal(
+      importReviewResponseExample?.report?.summary?.reviewedClaims,
+      1,
+    );
+    assert.equal(
+      importReviewResponseExample?.artifacts?.summary_csv?.includes("HR policy answer"),
+      true,
     );
     assert.equal(
       openApi.paths["/evaluate"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
