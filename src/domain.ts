@@ -8,6 +8,7 @@ export type SourceTrustLevel = "high" | "medium" | "low";
 
 export interface SourceDocument {
   id: string;
+  sourcePath?: string;
   title: string;
   content: string;
   updatedAt?: string;
@@ -21,6 +22,7 @@ export interface AtomicClaim {
 
 export interface EvidenceSnippet {
   documentId: string;
+  documentPath?: string;
   documentTitle: string;
   documentTrustLevel: SourceTrustLevel;
   documentUpdatedAt?: string;
@@ -41,7 +43,7 @@ export interface VerificationReport {
   answerLabel?: string;
   answerPreview: string;
   answer: string;
-  sources: Array<Pick<SourceDocument, "id" | "title" | "updatedAt" | "trustLevel">>;
+  sources: Array<Pick<SourceDocument, "id" | "sourcePath" | "title" | "updatedAt" | "trustLevel">>;
   assessments: ClaimAssessment[];
   summary: Record<ClaimVerdict, number>;
 }
@@ -62,7 +64,7 @@ export interface BatchVerificationResult {
 
 export interface BatchVerificationReport {
   generatedAt: string;
-  sources: Array<Pick<SourceDocument, "id" | "title" | "updatedAt" | "trustLevel">>;
+  sources: Array<Pick<SourceDocument, "id" | "sourcePath" | "title" | "updatedAt" | "trustLevel">>;
   sourceCount: number;
   answerCount: number;
   answers: BatchVerificationResult[];

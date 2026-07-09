@@ -62,6 +62,7 @@ export async function sourceDocumentFromFile(
 
   return {
     id: `source_${index + 1}`,
+    sourcePath,
     title: options.title ?? parsed.metadata.title ?? sourceTitleFromPath(sourcePath),
     updatedAt: options.updatedAt ?? parsed.metadata.updatedAt,
     trustLevel: options.trustLevel ?? parsed.metadata.trustLevel ?? options.defaultTrustLevel ?? "medium",
@@ -664,6 +665,7 @@ async function pdfSourceDocumentFromFile(
 
     return {
       id: `source_${index + 1}`,
+      sourcePath,
       title: options.title ?? title ?? sourceTitleFromPath(sourcePath),
       updatedAt: options.updatedAt ?? updatedAt,
       trustLevel: options.trustLevel ?? options.defaultTrustLevel ?? "medium",

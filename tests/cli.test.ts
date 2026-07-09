@@ -47,12 +47,12 @@ Employees receive 12 weeks of paid parental leave.
     ]);
 
     const report = JSON.parse(stdout) as {
-      sources: Array<{ id: string; title: string; trustLevel: string }>;
+      sources: Array<{ id: string; sourcePath: string; title: string; trustLevel: string }>;
     };
 
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "plain-source", trustLevel: "high" },
-      { id: "source_2", title: "Metadata Source", trustLevel: "low" },
+      { id: "source_1", sourcePath: plainSourcePath, title: "plain-source", trustLevel: "high" },
+      { id: "source_2", sourcePath: metadataSourcePath, title: "Metadata Source", trustLevel: "low" },
     ]);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -295,12 +295,12 @@ test("verify accepts pdf sources", async () => {
     ]);
 
     const report = JSON.parse(stdout) as {
-      sources: Array<{ id: string; title: string; trustLevel: string }>;
+      sources: Array<{ id: string; sourcePath: string; title: string; trustLevel: string }>;
       summary: Record<string, number>;
     };
 
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "hr-policy", trustLevel: "medium" },
+      { id: "source_1", sourcePath, title: "hr-policy", trustLevel: "medium" },
     ]);
     assert.equal(report.summary.verified, 1);
   } finally {
@@ -928,7 +928,7 @@ test("verify records an explicit reviewer-facing answer label in JSON and review
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
@@ -1182,7 +1182,7 @@ test("verify writes reviewer csv fail-policy columns for single answers", async 
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
@@ -1228,12 +1228,12 @@ test("verify writes a summary csv for single answers", async () => {
     const lines = summaryCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+      "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
     );
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,contradicted,Employees receive 18 weeks of paid parental leave\\.,A closely matching approved source uses different numeric terms\\.,hr-policy,medium,,0\\.857,Employees receive 12 weeks of paid parental leave\\.,1,0,1,0,0,matched,contradicted,hr-policy,medium,$`,
+        `^answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,contradicted,Employees receive 18 weeks of paid parental leave\\.,A closely matching approved source uses different numeric terms\\.,hr-policy,medium,,${escapeRegExp(sourcePath)},0\\.857,Employees receive 12 weeks of paid parental leave\\.,1,0,1,0,0,matched,contradicted,hr-policy,medium,,${escapeRegExp(sourcePath)}$`,
       ),
     );
   } finally {
@@ -1354,8 +1354,8 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.equal(report.answerCount, 2);
     assert.equal(report.sourceCount, 2);
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "hr-policy", trustLevel: "medium" },
-      { id: "source_2", title: "support-playbook", trustLevel: "medium" },
+      { id: "source_1", sourcePath: join(sourceDir, "hr-policy.md"), title: "hr-policy", trustLevel: "medium" },
+      { id: "source_2", sourcePath: join(sourceDir, "support-playbook.md"), title: "support-playbook", trustLevel: "medium" },
     ]);
     assert.equal(report.answers.length, 2);
     assert.deepEqual(
@@ -1379,11 +1379,11 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.match(await readFile(batchHtmlOutPath, "utf8"), /Answer preview/);
     assert.match(
       await readFile(batchReviewCsvOutPath, "utf8"),
-      /answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
+      /answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
     );
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at/,
+      /answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -1898,16 +1898,16 @@ Employees receive 12 weeks of paid parental leave.
     ]);
 
     const report = JSON.parse(stdout) as {
-      sources: Array<{ id: string; title: string; trustLevel: string }>;
+      sources: Array<{ id: string; sourcePath: string; title: string; trustLevel: string }>;
       assessments: Array<{
         evidence: Array<{ documentId: string; documentTitle: string }>;
       }>;
     };
 
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "Second Source", trustLevel: "medium" },
-      { id: "source_2", title: "First Source", trustLevel: "medium" },
-      { id: "source_3", title: "Directory Source", trustLevel: "medium" },
+      { id: "source_1", sourcePath: secondSourcePath, title: "Second Source", trustLevel: "medium" },
+      { id: "source_2", sourcePath: firstSourcePath, title: "First Source", trustLevel: "medium" },
+      { id: "source_3", sourcePath: join(sourceDir, "directory.md"), title: "Directory Source", trustLevel: "medium" },
     ]);
     assert.equal(report.assessments[0]?.evidence[0]?.documentId, "source_1");
     assert.equal(report.assessments[0]?.evidence[0]?.documentTitle, "Second Source");
@@ -1952,13 +1952,13 @@ Employees receive 12 weeks of paid parental leave.
     ]);
 
     const report = JSON.parse(stdout) as {
-      sources: Array<{ id: string; title: string; trustLevel: string }>;
+      sources: Array<{ id: string; sourcePath: string; title: string; trustLevel: string }>;
       summary: Record<string, number>;
     };
 
     assert.equal(report.sources.length, 1);
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "Shared Source", trustLevel: "medium" },
+      { id: "source_1", sourcePath: explicitSourcePath, title: "Shared Source", trustLevel: "medium" },
     ]);
     assert.equal(report.summary.verified, 1);
   } finally {
@@ -2169,7 +2169,7 @@ test("verify-batch reports matching fail verdicts in json and summary csv output
 
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /hr,.*hr\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,hr-policy,medium,,0\.857,Employees receive 12 weeks of paid parental leave\.,2,0,1,1,0,matched,contradicted \| unsupported,hr-policy,medium,/,
+      /hr,.*hr\.md,Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\.,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,hr-policy,medium,,.*hr-policy\.md,0\.857,Employees receive 12 weeks of paid parental leave\.,2,0,1,1,0,matched,contradicted \| unsupported,hr-policy,medium,,.*hr-policy\.md/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -2210,17 +2210,17 @@ test("verify-batch prints claim-level details in the default text output", async
     ]);
 
     assert.match(stdout, /Quorum Batch Verification Report/);
-    assert.match(stdout, /Sources:\n- hr-policy \(medium trust\)/);
+    assert.match(stdout, /Sources:\n- hr-policy \(medium trust, path .*hr-policy\.md\)/);
     assert.match(stdout, /Summary: 0 verified, 1 contradicted, 1 unsupported, 0 needs review/);
     assert.match(stdout, /Fail policy: clear/);
     assert.match(stdout, /Fail verdicts: none/);
     assert.match(stdout, /Answer preview: Employees receive 18 weeks of paid parental leave\. Employees receive free catered lunch every day\./);
     assert.match(stdout, /Primary finding: contradicted/);
     assert.match(stdout, /Primary claim: Employees receive 18 weeks of paid parental leave\./);
-    assert.match(stdout, /Primary evidence: hr-policy, medium trust, score /);
+    assert.match(stdout, /Primary evidence: hr-policy, medium trust, path .*hr-policy\.md, score /);
     assert.match(stdout, /CONTRADICTED  Employees receive 18 weeks of paid parental leave\./);
     assert.match(stdout, /UNSUPPORTED  Employees receive free catered lunch every day\./);
-    assert.match(stdout, /Evidence \(hr-policy, medium trust, score /);
+    assert.match(stdout, /Evidence \(hr-policy, medium trust, path .*hr-policy\.md, score /);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -2464,7 +2464,7 @@ test("verify-batch treats no-claim answers as fail-policy matches for needs_revi
     assert.deepEqual(report.answers[0]?.failVerdicts, ["needs_review"]);
     assert.match(
       await readFile(summaryCsvOutPath, "utf8"),
-      /empty,.*empty\.md,Short\.,needs_review,,No claims were extracted from this answer\.,,,,,,0,0,0,0,0,matched,needs_review,hr-policy,medium,/,
+      /empty,.*empty\.md,Short\.,needs_review,,No claims were extracted from this answer\.,,,,,,,0,0,0,0,0,matched,needs_review,hr-policy,medium,,/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -2492,7 +2492,7 @@ test("verify-batch writes a combined reviewer decision csv", async () => {
 
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
@@ -2539,7 +2539,7 @@ test("verify-batch preserves no-claim answers through reviewer csv export and im
     const reviewCsv = await readFile(reviewCsvOutPath, "utf8");
     assert.match(
       reviewCsv,
-      /answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
+      /answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
     );
     assert.match(
       reviewCsv,
@@ -2802,15 +2802,15 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
     const lines = summaryCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at",
+      "answer_label,answer_path,answer_preview,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
     );
     assert.equal(
       lines[1],
-      "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,1,1,0,0,1,0,0,0,clear,,clear,,HR Policy,high,2026-05-31",
+      "hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,Approved,HR Policy,high,2026-05-31,,0.998,Employees receive 12 weeks of paid parental leave.,1,1,0,0,1,0,0,0,clear,,clear,,HR Policy,high,2026-05-31,",
     );
     assert.equal(
       lines[2],
-      "support-answer,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,matched,contradicted,matched,needs_review,Support Playbook,medium,2026-06-01",
+      "support-answer,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,matched,contradicted,matched,needs_review,Support Playbook,medium,2026-06-01,",
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -2848,7 +2848,7 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
     const summaryCsv = await readFile(summaryCsvOutPath, "utf8");
     assert.match(
       summaryCsv,
-      /support-answer,examples\/answers\/support-answer\.md,Refunds are available within 14 days of purchase\. Enterprise support requests receive a first response within four business hours\.,unsupported,Customers receive a dedicated onboarding manager\.,No approved source matched strongly enough\.,Needs evidence,Support Playbook,medium,2026-06-01,0.200,Refund requests receive an initial response within one business day\.,3,2,1,1,1,0,1,1,matched,contradicted \| unsupported,clear,,Support Playbook \| Support SLA,medium \| high,2026-06-01 \| 2026-06-15/,
+      /support-answer,examples\/answers\/support-answer\.md,Refunds are available within 14 days of purchase\. Enterprise support requests receive a first response within four business hours\.,unsupported,Customers receive a dedicated onboarding manager\.,No approved source matched strongly enough\.,Needs evidence,Support Playbook,medium,2026-06-01,,0.200,Refund requests receive an initial response within one business day\.,3,2,1,1,1,0,1,1,matched,contradicted \| unsupported,clear,,Support Playbook \| Support SLA,medium \| high,2026-06-01 \| 2026-06-15, \| /,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
