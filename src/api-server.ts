@@ -2,6 +2,7 @@ import { createServer, type IncomingMessage, type Server, type ServerResponse } 
 import {
   EvaluationFixtureValidationError,
   evaluateFixtureContentsResult,
+  renderEvaluationDomainSummaryCsv,
   renderEvaluationHtmlReport,
   renderEvaluationMarkdownReport,
   renderEvaluationSummaryCsv,
@@ -41,7 +42,7 @@ import {
 const VERIFY_ARTIFACTS = ["text", "markdown", "html", "review_csv", "summary_csv"] as const;
 const VERIFY_BATCH_ARTIFACTS = ["text", "markdown", "html", "review_csv", "summary_csv"] as const;
 const IMPORT_REVIEW_ARTIFACTS = ["text", "markdown", "html", "summary_csv"] as const;
-const EVALUATE_ARTIFACTS = ["text", "markdown", "html", "summary_csv"] as const;
+const EVALUATE_ARTIFACTS = ["text", "markdown", "html", "summary_csv", "domain_summary_csv"] as const;
 
 type VerifyArtifact = (typeof VERIFY_ARTIFACTS)[number];
 type VerifyBatchArtifact = (typeof VERIFY_BATCH_ARTIFACTS)[number];
@@ -611,7 +612,7 @@ const OPENAPI_EVALUATE_EXAMPLE = {
       ),
     },
   ],
-  includeArtifacts: ["html", "summary_csv"],
+  includeArtifacts: ["html", "summary_csv", "domain_summary_csv"],
   failOnStatus: true,
 } as const;
 const OPENAPI_EVALUATE_RESPONSE_EXAMPLE = {
@@ -712,6 +713,8 @@ const OPENAPI_EVALUATE_RESPONSE_EXAMPLE = {
   artifacts: {
     summary_csv:
       "fixture_name,fixture_path,domain,answer_label,answer_path,matched_claims,total_expected_claims,score,score_label,summary_matches,claim_mismatch,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review,expected_claim_verdicts,actual_claim_verdicts,source_paths\nHR policy API fixture,evaluations/hr-policy.json,hr,,answers/hr.md,1,1,1,100%,true,false,1,0,0,0,1,0,0,0,verified,verified,sources/hr-policy.md\n",
+    domain_summary_csv:
+      "domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label\nhr,1,0,1,1,1,100%\n",
   },
 } as const;
 const OPENAPI_BAD_REQUEST_ERROR_EXAMPLE = {
@@ -2237,6 +2240,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             markdown: { type: "string" },
             html: { type: "string" },
             summary_csv: { type: "string" },
+            domain_summary_csv: { type: "string" },
           },
         },
         ApiHealthResponse: {
@@ -2661,6 +2665,7 @@ function buildEvaluateArtifacts(
     markdown: () => renderEvaluationMarkdownReport(result.scorecards),
     html: () => renderEvaluationHtmlReport(result.scorecards),
     summary_csv: () => renderEvaluationSummaryCsv(result.scorecards),
+    domain_summary_csv: () => renderEvaluationDomainSummaryCsv(result.scorecards),
   });
 }
 
