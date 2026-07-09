@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ed6aa7d` on 2026-07-16, test: smoke-check account contact change benchmark
+- Latest shipped change: `6772c64` on 2026-07-16, test: smoke-check order tracking benchmark
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-16 | Direct push | test: smoke-check order tracking benchmark | `6772c64` |
 | 2026-07-16 | Direct push | test: smoke-check account contact change benchmark | `ed6aa7d` |
 | 2026-07-16 | Direct push | test: smoke-check refund status benchmark | `bcb6267` |
 | 2026-07-16 | Direct push | test: smoke-check invoice correction benchmark | `0b5ac39` |
@@ -55,5 +56,4 @@
 | 2026-07-16 | Direct push | test: smoke-check support account recovery | `affa4d6` |
 | 2026-07-16 | Direct push | test: smoke-check subscription renewal benchmark | `fc28900` |
 | 2026-07-16 | Direct push | test: smoke-check order cancellation benchmark | `ed661a8` |
-| 2026-07-16 | Direct push | test: smoke-check account closure benchmark | `2dc74f7` |
 
