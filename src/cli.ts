@@ -1018,6 +1018,8 @@ Options:
   HEAD /capabilities        Return capability discovery headers without a response body
   GET  /health              Return a simple readiness response
   HEAD /health              Return readiness headers without a response body
+  GET  /healthz             Return a simple readiness response on the conventional probe path
+  HEAD /healthz             Return readiness headers on the conventional probe path without a response body
   GET  /openapi.json        Return the machine-readable API description
   HEAD /openapi.json        Return OpenAPI headers without a response body
   POST /verify              Verify one answer from JSON request content
