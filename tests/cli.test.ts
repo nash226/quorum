@@ -151,6 +151,55 @@ test("serve --help prints API usage without starting the server", async () => {
   assert.match(result.stdout, /POST \/import-review\s+Import reviewer CSV content from JSON request content/);
 });
 
+test("openapi --help prints export usage without starting the server", async () => {
+  const result = await runCliAllowFailure(["openapi", "--help"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /^Quorum openapi\n\nUsage:\n  quorum openapi \[--server-url <url>\] \[--out <path>\]/);
+  assert.match(result.stdout, /--server-url <url>\s+Set the OpenAPI server URL instead of the default local placeholder/);
+  assert.match(result.stdout, /--out <path>\s+Write the OpenAPI JSON document to disk instead of stdout/);
+});
+
+test("openapi prints the machine-readable API description", async () => {
+  const stdout = await runCli(["openapi"]);
+  const openApi = JSON.parse(stdout) as {
+    openapi: string;
+    paths: Record<string, unknown>;
+  };
+
+  assert.equal(openApi.openapi, "3.1.0");
+  assert.ok("/verify" in openApi.paths);
+  assert.ok("/verify-batch" in openApi.paths);
+  assert.ok("/import-review" in openApi.paths);
+  assert.ok("/evaluate" in openApi.paths);
+});
+
+test("openapi writes the machine-readable API description to disk", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-openapi-"));
+
+  try {
+    const outPath = join(tempDir, "openapi.json");
+    const stdout = await runCli([
+      "openapi",
+      "--server-url",
+      "https://quorum.internal.example",
+      "--out",
+      outPath,
+    ]);
+    const openApi = JSON.parse(await readFile(outPath, "utf8")) as {
+      openapi: string;
+      servers?: Array<{ url?: string }>;
+    };
+
+    assert.match(stdout, /OpenAPI document written to/);
+    assert.equal(openApi.openapi, "3.1.0");
+    assert.equal(openApi.servers?.[0]?.url, "https://quorum.internal.example");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify reports a missing answer file with a clear error", async () => {
   await assert.rejects(
     runCli([
