@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `941eb53` on 2026-07-09, feat: expose api discovery headers to browsers
+- Latest shipped change: `f1fd0a3` on 2026-07-09, feat: add evaluation domain summary csv
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-09 | [#273](https://github.com/nash226/quorum/pull/273) | feat: add evaluation domain summary csv | `f1fd0a3` |
 | 2026-07-09 | [#272](https://github.com/nash226/quorum/pull/272) | feat: expose api discovery headers to browsers | `941eb53` |
 | 2026-07-09 | Direct push | feat: add html evaluation fixture example | `6e76476` |
 | 2026-07-09 | [#270](https://github.com/nash226/quorum/pull/270) | feat: add OpenAPI discovery examples | `a79b655` |
@@ -54,5 +55,4 @@
 | 2026-07-09 | [#267](https://github.com/nash226/quorum/pull/267) | feat: add openapi error response examples | `bd86304` |
 | 2026-07-09 | [#266](https://github.com/nash226/quorum/pull/266) | feat: add openapi response examples | `348d3f6` |
 | 2026-07-09 | [#265](https://github.com/nash226/quorum/pull/265) | add openapi cli export | `949c470` |
-| 2026-07-08 | [#264](https://github.com/nash226/quorum/pull/264) | feat: add evaluation mismatch source paths | `01f7dd3` |
 
