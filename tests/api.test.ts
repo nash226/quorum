@@ -2106,6 +2106,78 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
     assert.equal(openApi.paths["/import-review"]?.post?.summary, "Import reviewer decisions");
     assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
+    const discoveryExamples = openApi.paths["/"]?.get?.responses?.["200"]?.content?.["application/json"] as
+      | { examples?: Record<string, { value: unknown }> }
+      | undefined;
+    const capabilitiesExamples = openApi.paths["/capabilities"]?.get?.responses?.["200"]?.content?.[
+      "application/json"
+    ] as
+      | { examples?: Record<string, { value: unknown }> }
+      | undefined;
+    const healthExamples = openApi.paths["/health"]?.get?.responses?.["200"]?.content?.["application/json"] as
+      | { examples?: Record<string, { value: unknown }> }
+      | undefined;
+    const healthzExamples = openApi.paths["/healthz"]?.get?.responses?.["200"]?.content?.["application/json"] as
+      | { examples?: Record<string, { value: unknown }> }
+      | undefined;
+    const openApiExamples = openApi.paths["/openapi.json"]?.get?.responses?.["200"]?.content?.[
+      "application/json"
+    ] as
+      | { examples?: Record<string, { value: unknown }> }
+      | undefined;
+    assert.deepEqual(
+      discoveryExamples?.examples?.["discoveryIndex"]?.value,
+      {
+        service: API_SERVICE_NAME,
+        version: API_VERSION,
+        openapiPath: "/openapi.json",
+        capabilities: API_CAPABILITIES,
+        endpoints: API_ENDPOINTS,
+      },
+    );
+    assert.deepEqual(
+      capabilitiesExamples?.examples?.["capabilitiesOnly"]?.value,
+      {
+        service: API_SERVICE_NAME,
+        version: API_VERSION,
+        openapiPath: "/openapi.json",
+        capabilities: API_CAPABILITIES,
+      },
+    );
+    assert.deepEqual(
+      healthExamples?.examples?.["ready"]?.value,
+      {
+        ok: true,
+        service: API_SERVICE_NAME,
+        version: API_VERSION,
+      },
+    );
+    assert.deepEqual(
+      healthzExamples?.examples?.["readinessAlias"]?.value,
+      {
+        ok: true,
+        service: API_SERVICE_NAME,
+        version: API_VERSION,
+      },
+    );
+    assert.deepEqual(
+      openApiExamples?.examples?.["openApiDocument"]?.value,
+      {
+        openapi: "3.1.0",
+        info: {
+          title: "Quorum Local API",
+          version: API_VERSION,
+        },
+        servers: [{ url: "http://127.0.0.1:3000" }],
+        paths: {
+          "/verify": {
+            post: {
+              summary: "Verify one answer",
+            },
+          },
+        },
+      },
+    );
     assert.deepEqual(
       openApi.paths["/verify"]?.post?.requestBody?.content?.["application/json"]?.examples?.[
         "hrPolicyAnswer"
