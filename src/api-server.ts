@@ -580,6 +580,106 @@ const OPENAPI_EVALUATE_EXAMPLE = {
   includeArtifacts: ["html", "summary_csv"],
   failOnStatus: true,
 } as const;
+const OPENAPI_EVALUATE_RESPONSE_EXAMPLE = {
+  scorecards: [
+    {
+      fixtureName: "HR policy API fixture",
+      fixturePath: "evaluations/hr-policy.json",
+      domain: "hr",
+      answerPath: "answers/hr.md",
+      answerPreview: "Employees receive 12 weeks of paid parental leave.",
+      sourceDirs: [],
+      sourcePaths: ["sources/hr-policy.md"],
+      report: {
+        generatedAt: "2026-07-07T19:25:00.000Z",
+        answerPath: "answers/hr.md",
+        answerPreview: "Employees receive 12 weeks of paid parental leave.",
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        sources: [
+          {
+            id: "source-1",
+            title: "HR Policy",
+            trustLevel: "high",
+          },
+        ],
+        assessments: [
+          {
+            claim: {
+              id: "claim-1",
+              text: "Employees receive 12 weeks of paid parental leave.",
+            },
+            verdict: "verified",
+            evidence: [
+              {
+                documentId: "source-1",
+                documentTitle: "HR Policy",
+                documentTrustLevel: "high",
+                quote: "Employees receive 12 weeks of paid parental leave.",
+                score: 1,
+              },
+            ],
+            reason: "The approved source directly supports this claim.",
+          },
+        ],
+        summary: {
+          verified: 1,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+        },
+      },
+      expectedSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      actualSummary: {
+        verified: 1,
+        contradicted: 0,
+        unsupported: 0,
+        needs_review: 0,
+      },
+      summaryMatches: true,
+      claims: [
+        {
+          index: 0,
+          claimText: "Employees receive 12 weeks of paid parental leave.",
+          actualVerdict: "verified",
+          expectedVerdict: "verified",
+          matches: true,
+        },
+      ],
+      matchedClaims: 1,
+      totalExpectedClaims: 1,
+      score: 1,
+    },
+  ],
+  mismatchCount: 0,
+  summary: {
+    fixtureCount: 1,
+    matchedClaims: 1,
+    totalExpectedClaims: 1,
+    score: 1,
+    scoreLabel: "100%",
+    domains: [
+      {
+        domain: "hr",
+        fixtureCount: 1,
+        mismatchCount: 0,
+        matchedClaims: 1,
+        totalExpectedClaims: 1,
+        score: 1,
+        scoreLabel: "100%",
+      },
+    ],
+  },
+  shouldFail: false,
+  artifacts: {
+    summary_csv:
+      "fixture_name,fixture_path,domain,answer_label,answer_path,matched_claims,total_expected_claims,score,score_label,summary_matches,claim_mismatch,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review,expected_claim_verdicts,actual_claim_verdicts,source_paths\nHR policy API fixture,evaluations/hr-policy.json,hr,,answers/hr.md,1,1,1,100%,true,false,1,0,0,0,1,0,0,0,verified,verified,sources/hr-policy.md\n",
+  },
+} as const;
 const OPENAPI_BAD_REQUEST_ERROR_EXAMPLE = {
   error: "sources must be a non-empty array.",
 } as const;
@@ -1880,6 +1980,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               description: "Evaluation scorecard batch result.",
               content: {
                 "application/json": {
+                  examples: {
+                    matchedFixture: {
+                      summary: "A passing HR fixture with summary CSV artifacts",
+                      value: OPENAPI_EVALUATE_RESPONSE_EXAMPLE,
+                    },
+                  },
                   schema: {
                     allOf: [
                       { $ref: "#/components/schemas/EvaluationBatchRunResult" },
