@@ -1970,6 +1970,13 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(healthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.deepEqual(await healthResponse.json(), expectedHealthResponse);
 
+    const healthzResponse = await fetch(`${api.url}/healthz`);
+    assert.equal(healthzResponse.status, 200);
+    assert.equal(healthzResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(healthzResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(healthzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.deepEqual(await healthzResponse.json(), expectedHealthResponse);
+
     const headIndexResponse = await fetch(api.url, { method: "HEAD" });
     assert.equal(headIndexResponse.status, 200);
     assert.equal(headIndexResponse.headers.get("content-type"), "application/json; charset=utf-8");
@@ -1993,6 +2000,14 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(headHealthResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(headHealthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(await headHealthResponse.text(), "");
+
+    const headHealthzResponse = await fetch(`${api.url}/healthz`, { method: "HEAD" });
+    assert.equal(headHealthzResponse.status, 200);
+    assert.equal(headHealthzResponse.headers.get("content-type"), "application/json; charset=utf-8");
+    assert.equal(headHealthzResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(headHealthzResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(headHealthzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(await headHealthzResponse.text(), "");
 
     const headOpenApiResponse = await fetch(`${api.url}/openapi.json`, { method: "HEAD" });
     assert.equal(headOpenApiResponse.status, 200);
@@ -2083,6 +2098,8 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/capabilities"]?.head?.summary, "Capability discovery headers");
     assert.equal(openApi.paths["/health"]?.get?.summary, "Readiness check");
     assert.equal(openApi.paths["/health"]?.head?.summary, "Readiness check headers");
+    assert.equal(openApi.paths["/healthz"]?.get?.summary, "Readiness check alias");
+    assert.equal(openApi.paths["/healthz"]?.head?.summary, "Readiness check alias headers");
     assert.equal(openApi.paths["/openapi.json"]?.head?.summary, "OpenAPI description headers");
     assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
