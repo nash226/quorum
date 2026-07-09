@@ -40,7 +40,7 @@ import {
   renderReviewerDecisionImportReport,
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
-import { startApiServer } from "./api-server.js";
+import { createOpenApiDocument, startApiServer } from "./api-server.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
 import { renderAnswerPreview, stripByteOrderMark } from "./text.js";
 import {
@@ -105,8 +105,13 @@ interface ServeArgs {
   port?: number;
 }
 
+interface OpenApiArgs {
+  outPath?: string;
+  serverUrl?: string;
+}
+
 const HELP_FLAGS = new Set(["--help", "-h"]);
-type CommandName = "verify" | "verify-batch" | "import-review" | "evaluate" | "serve";
+type CommandName = "verify" | "verify-batch" | "import-review" | "evaluate" | "serve" | "openapi";
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -168,6 +173,16 @@ async function main(): Promise<void> {
     }
 
     await runServe(args);
+    return;
+  }
+
+  if (command === "openapi") {
+    if (args.some(isHelpFlag)) {
+      printHelp("openapi");
+      return;
+    }
+
+    await runOpenApi(args);
     return;
   }
 
@@ -448,6 +463,22 @@ async function runServe(args: string[]): Promise<void> {
   });
 }
 
+async function runOpenApi(args: string[]): Promise<void> {
+  const parsed = parseOpenApiArgs(args);
+  const openApiDocument = createOpenApiDocument({
+    serverUrl: parsed.serverUrl,
+  });
+  const openApiJson = JSON.stringify(openApiDocument, null, 2);
+
+  if (parsed.outPath) {
+    await writeReportFile(parsed.outPath, openApiJson);
+    console.log(`OpenAPI document written to ${parsed.outPath}`);
+    return;
+  }
+
+  console.log(openApiJson);
+}
+
 function parseVerifyArgs(args: string[]): VerifySingleArgs {
   const parsed = parseSharedVerifyArgs(args, new Set([
     "--answer",
@@ -540,6 +571,32 @@ function parseServeArgs(args: string[]): ServeArgs {
   }
 
   return { host, port };
+}
+
+function parseOpenApiArgs(args: string[]): OpenApiArgs {
+  let outPath: string | undefined;
+  let serverUrl: string | undefined;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    const next = args[index + 1];
+
+    if (arg === "--out" && next) {
+      outPath = next;
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--server-url" && next) {
+      serverUrl = next;
+      index += 1;
+      continue;
+    }
+
+    throw new Error(`Unknown or incomplete argument: ${arg}`);
+  }
+
+  return { outPath, serverUrl };
 }
 
 function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
@@ -1030,6 +1087,19 @@ Options:
 Example:
   npm run dev -- serve --port 3000
 `,
+    openapi: `Quorum openapi
+
+Usage:
+  quorum openapi [--server-url <url>] [--out <path>]
+
+Options:
+  --server-url <url>        Set the OpenAPI server URL instead of the default local placeholder
+  --out <path>              Write the OpenAPI JSON document to disk instead of stdout
+
+Example:
+  npm run dev -- openapi --out reports/openapi.json
+  npm run dev -- openapi --server-url https://quorum.internal.example
+`,
   };
 
   if (command) {
@@ -1045,6 +1115,7 @@ Usage:
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
   quorum serve [--host <host>] [--port <port>]
+  quorum openapi [--server-url <url>] [--out <path>]
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
@@ -1056,6 +1127,7 @@ Example:
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
   npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
   npm run dev -- serve --port 3000
+  npm run dev -- openapi --out reports/openapi.json
 `);
 }
 

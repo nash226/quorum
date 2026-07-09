@@ -484,6 +484,9 @@ console.log(openApi.openapi);
 console.log(openApi.paths["/verify"]?.post?.summary);
 ```
 
+Teams that prefer shell-based automation can export the same contract without
+starting the server via `quorum openapi [--server-url <url>] [--out <path>]`.
+
 `verifyAnswerFile` accepts either positional arguments or a single options
 object with `answerPath`, `sources`, `generatedAt`, and `answerLabel`.
 `verifyAnswerFileResult` mirrors that flexibility: callers can pass either a
@@ -949,6 +952,7 @@ quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answe
 quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum evaluate --fixture <path>... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
+quorum openapi [--server-url <url>] [--out <path>]
 ```
 
 Options:
@@ -1010,6 +1014,10 @@ Options:
 - `evaluate --markdown-out <path>`: write a Markdown report that groups fixture
   summaries, expected vs actual verdict totals, and claim-level mismatches for
   async review
+- `openapi --server-url <url>`: set the exported OpenAPI `servers[0].url`
+  value for generated clients and workflow tooling
+- `openapi --out <path>`: write the machine-readable OpenAPI 3.1 document to
+  disk instead of stdout
 - `evaluate --html-out <path>`: write a styled HTML evaluation report for
   reviewer walkthroughs, demos, and benchmark drift review
 - `evaluate --summary-csv-out <path>`: write one CSV row per fixture with the
