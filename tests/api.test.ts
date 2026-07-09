@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import test from "node:test";
 import {
   API_CAPABILITIES as SERVER_API_CAPABILITIES,
@@ -1387,6 +1387,21 @@ test("programmatic API rejects invalid in-memory evaluation fixture fields", asy
   );
 });
 
+test("programmatic API rejects domain filters that match no evaluation fixtures", async () => {
+  await assert.rejects(
+    evaluateFixtureContents({
+      fixtures: [
+        {
+          fixturePath: resolve("examples/evaluations/hr-policy.json"),
+          content: await readFile(resolve("examples/evaluations/hr-policy.json"), "utf8"),
+        },
+      ],
+      domains: ["finance"],
+    }),
+    /No evaluation fixtures matched domain filter: finance/,
+  );
+});
+
 test("programmatic API rejects evaluation fixtures whose expected claim verdicts do not match summary totals", async () => {
   await assert.rejects(
     evaluateFixtureContents({
@@ -2316,6 +2331,7 @@ Refund requests receive an initial response within one business day.
         "hrFixtureScorecard"
       ]?.value,
       {
+        domains: ["hr"],
         generatedAt: "2026-07-07T19:25:00.000Z",
         fixtures: [
           {
@@ -2617,6 +2633,14 @@ Refund requests receive an initial response within one business day.
     assert.deepEqual(openApi.components.schemas.EvaluationAggregateSummary.properties.domains, {
       type: "array",
       items: { $ref: "#/components/schemas/EvaluationDomainAggregateSummary" },
+    });
+    const evaluateRequestSchema = openApi.paths["/evaluate"]?.post?.requestBody?.content?.[
+      "application/json"
+    ]?.schema as { properties?: Record<string, unknown> } | undefined;
+    assert.deepEqual(evaluateRequestSchema?.properties?.domains, {
+      type: "array",
+      minItems: 1,
+      items: { type: "string" },
     });
     assert.deepEqual(openApi.components.schemas.EvaluationDomainAggregateSummary.required, [
       "domain",
@@ -3207,6 +3231,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
             content: fixtureContent,
           },
         ],
+        domains: ["hr"],
         includeArtifacts: ["text", "markdown", "html", "summary_csv", "domain_summary_csv"],
       }),
     });
@@ -3238,6 +3263,55 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       evaluateResult.artifacts.domain_summary_csv,
       renderEvaluationDomainSummaryCsv(evaluateResult.scorecards),
     );
+  } finally {
+    await api.close();
+  }
+});
+
+test("evaluate endpoint filters fixtures by domain", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const [hrFixtureContent, supportFixtureContent] = await Promise.all([
+      readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8"),
+      readFile(join(process.cwd(), "examples/evaluations/support-policy.json"), "utf8"),
+    ]);
+
+    const response = await fetch(`${api.url}/evaluate`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        fixtures: [
+          {
+            fixturePath: join(process.cwd(), "examples/evaluations/hr-policy.json"),
+            content: hrFixtureContent,
+          },
+          {
+            fixturePath: join(process.cwd(), "examples/evaluations/support-policy.json"),
+            content: supportFixtureContent,
+          },
+        ],
+        domains: ["support"],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const evaluateResult = await response.json() as ApiEvaluateResponse;
+    assert.equal(evaluateResult.scorecards.length, 1);
+    assert.equal(evaluateResult.scorecards[0]?.domain, "support");
+    assert.deepEqual(evaluateResult.summary.domains, [
+      {
+        domain: "support",
+        fixtureCount: 1,
+        mismatchCount: 0,
+        matchedClaims: 3,
+        totalExpectedClaims: 3,
+        score: 1,
+        scoreLabel: "100%",
+      },
+    ]);
   } finally {
     await api.close();
   }
