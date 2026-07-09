@@ -460,7 +460,9 @@ preflight requests for JSON clients.
 `POST /verify`, `POST /verify-batch`, `POST /import-review`, and
 `POST /evaluate` also accept an `includeArtifacts` array when callers want the
 JSON response to embed reviewer-facing text, Markdown, HTML, and CSV artifacts
-without writing files first.
+without writing files first. Evaluation responses can also embed a
+`domain_summary_csv` artifact so workflow callers can route fixture results by
+domain without recomputing the aggregate rollup.
 Those same POST endpoints also accept `failOnStatus: true` when local
 orchestrators want Quorum to return HTTP `409` for matched fail policies or
 evaluation mismatches instead of always returning `200`, which lets workflow
