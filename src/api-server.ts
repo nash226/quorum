@@ -232,6 +232,56 @@ Employees receive 12 weeks of paid parental leave.
   includeArtifacts: ["markdown", "review_csv"],
   failOnStatus: true,
 } as const;
+const OPENAPI_VERIFY_RESPONSE_EXAMPLE = {
+  report: {
+    generatedAt: "2026-07-07T19:15:00.000Z",
+    answerPath: "answers/hr.md",
+    answerLabel: "HR policy answer",
+    answerPreview: "Employees receive 12 weeks of paid parental leave.",
+    answer: "Employees receive 12 weeks of paid parental leave.",
+    sources: [
+      {
+        id: "source-1",
+        title: "HR Policy",
+        updatedAt: "2026-05-31",
+        trustLevel: "high",
+      },
+    ],
+    assessments: [
+      {
+        claim: {
+          id: "claim-1",
+          text: "Employees receive 12 weeks of paid parental leave.",
+        },
+        verdict: "verified",
+        evidence: [
+          {
+            documentId: "source-1",
+            documentTitle: "HR Policy",
+            documentTrustLevel: "high",
+            documentUpdatedAt: "2026-05-31",
+            quote: "Employees receive 12 weeks of paid parental leave.",
+            score: 1,
+          },
+        ],
+        reason: "An approved source directly supports this claim.",
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    },
+  },
+  shouldFail: false,
+  failVerdicts: [],
+  artifacts: {
+    markdown: "# Quorum Verification Report\n\nSummary: 1 verified, 0 contradicted, 0 unsupported, 0 needs review\n",
+    review_csv:
+      "claim_id,claim_text,verdict,reason,evidence_titles,evidence_quotes\nclaim-1,Employees receive 12 weeks of paid parental leave.,verified,An approved source directly supports this claim.,HR Policy,Employees receive 12 weeks of paid parental leave.\n",
+  },
+} as const;
 const OPENAPI_VERIFY_BATCH_EXAMPLE = {
   generatedAt: "2026-07-07T19:20:00.000Z",
   answers: [
@@ -274,6 +324,141 @@ Refund requests receive an initial response within one business day.
   includeArtifacts: ["html", "summary_csv"],
   failOnStatus: true,
 } as const;
+const OPENAPI_VERIFY_BATCH_RESPONSE_EXAMPLE = {
+  report: {
+    generatedAt: "2026-07-07T19:20:00.000Z",
+    sources: [
+      {
+        id: "source-1",
+        title: "HR Policy",
+        trustLevel: "high",
+      },
+      {
+        id: "source-2",
+        title: "Support Playbook",
+        trustLevel: "medium",
+      },
+    ],
+    sourceCount: 2,
+    answerCount: 2,
+    answers: [
+      {
+        answerLabel: "HR policy answer",
+        answerPath: "answers/hr.md",
+        report: {
+          generatedAt: "2026-07-07T19:20:00.000Z",
+          answerPath: "answers/hr.md",
+          answerLabel: "HR policy answer",
+          answerPreview: "Employees receive 12 weeks of paid parental leave.",
+          answer: "Employees receive 12 weeks of paid parental leave.",
+          sources: [
+            {
+              id: "source-1",
+              title: "HR Policy",
+              trustLevel: "high",
+            },
+            {
+              id: "source-2",
+              title: "Support Playbook",
+              trustLevel: "medium",
+            },
+          ],
+          assessments: [
+            {
+              claim: {
+                id: "claim-1",
+                text: "Employees receive 12 weeks of paid parental leave.",
+              },
+              verdict: "verified",
+              evidence: [
+                {
+                  documentId: "source-1",
+                  documentTitle: "HR Policy",
+                  documentTrustLevel: "high",
+                  quote: "Employees receive 12 weeks of paid parental leave.",
+                  score: 1,
+                },
+              ],
+              reason: "An approved source directly supports this claim.",
+            },
+          ],
+          summary: {
+            verified: 1,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+          },
+        },
+        shouldFail: false,
+        failVerdicts: [],
+      },
+      {
+        answerLabel: "Support queue answer",
+        answerPath: "answers/support.md",
+        report: {
+          generatedAt: "2026-07-07T19:20:00.000Z",
+          answerPath: "answers/support.md",
+          answerLabel: "Support queue answer",
+          answerPreview: "Refund requests are answered within one business day.",
+          answer: "Refund requests are answered within one business day.",
+          sources: [
+            {
+              id: "source-1",
+              title: "HR Policy",
+              trustLevel: "high",
+            },
+            {
+              id: "source-2",
+              title: "Support Playbook",
+              trustLevel: "medium",
+            },
+          ],
+          assessments: [
+            {
+              claim: {
+                id: "claim-1",
+                text: "Refund requests are answered within one business day.",
+              },
+              verdict: "verified",
+              evidence: [
+                {
+                  documentId: "source-2",
+                  documentTitle: "Support Playbook",
+                  documentTrustLevel: "medium",
+                  quote: "Refund requests receive an initial response within one business day.",
+                  score: 0.889,
+                },
+              ],
+              reason: "An approved source closely supports this claim.",
+            },
+          ],
+          summary: {
+            verified: 1,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+          },
+        },
+        shouldFail: false,
+        failVerdicts: [],
+      },
+    ],
+    summary: {
+      verified: 2,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithoutClaims: 0,
+      answersWithFailures: 0,
+    },
+  },
+  shouldFail: false,
+  failVerdicts: [],
+  artifacts: {
+    summary_csv:
+      "answer_label,answer_path,verified,contradicted,unsupported,needs_review,should_fail,fail_verdicts\nHR policy answer,answers/hr.md,1,0,0,0,false,\nSupport queue answer,answers/support.md,1,0,0,0,false,\n",
+  },
+} as const;
 const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
   reviewCsvContent: [
     "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
@@ -282,6 +467,84 @@ const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
   failOn: ["needs_review"],
   includeArtifacts: ["markdown", "summary_csv"],
   failOnStatus: true,
+} as const;
+const OPENAPI_IMPORT_REVIEW_RESPONSE_EXAMPLE = {
+  report: {
+    claims: [
+      {
+        answerLabel: "HR policy answer",
+        answerPath: "answers/hr.md",
+        claimId: "claim_1",
+        claimText: "Employees receive 12 weeks of paid parental leave.",
+        modelVerdict: "verified",
+        modelReason: "Matched approved policy",
+        evidenceTitles: ["HR Policy"],
+        evidenceTrustLevels: [],
+        evidenceUpdatedAt: [],
+        evidenceScores: [],
+        evidenceQuotes: ["Employees receive 12 weeks of paid parental leave."],
+        reviewerVerdict: "verified",
+        reviewerNotes: "Approved for publish",
+        finalVerdict: "verified",
+        overridden: false,
+        originalAnswerFailVerdicts: [],
+      },
+    ],
+    answerGroups: [
+      {
+        answerLabel: "HR policy answer",
+        answerPath: "answers/hr.md",
+        label: "HR policy answer",
+        claims: [
+          {
+            answerLabel: "HR policy answer",
+            answerPath: "answers/hr.md",
+            claimId: "claim_1",
+            claimText: "Employees receive 12 weeks of paid parental leave.",
+            modelVerdict: "verified",
+            modelReason: "Matched approved policy",
+            evidenceTitles: ["HR Policy"],
+            evidenceTrustLevels: [],
+            evidenceUpdatedAt: [],
+            evidenceScores: [],
+            evidenceQuotes: ["Employees receive 12 weeks of paid parental leave."],
+            reviewerVerdict: "verified",
+            reviewerNotes: "Approved for publish",
+            finalVerdict: "verified",
+            overridden: false,
+            originalAnswerFailVerdicts: [],
+          },
+        ],
+        summary: {
+          verified: 1,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+          totalClaims: 1,
+          reviewedClaims: 1,
+          pendingClaims: 0,
+          overriddenClaims: 0,
+        },
+        originalAnswerFailVerdicts: [],
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      totalClaims: 1,
+      reviewedClaims: 1,
+      pendingClaims: 0,
+      overriddenClaims: 0,
+    },
+  },
+  shouldFail: false,
+  failVerdicts: [],
+  artifacts: {
+    summary_csv:
+      "answer_label,answer_path,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review\nHR policy answer,answers/hr.md,1,1,0,0,1,0,0,0\n",
+  },
 } as const;
 const OPENAPI_EVALUATE_EXAMPLE = {
   generatedAt: "2026-07-07T19:25:00.000Z",
@@ -1041,6 +1304,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               description: "Single-answer verification result.",
               content: {
                 "application/json": {
+                  examples: {
+                    verifiedAnswer: {
+                      summary: "A verified answer with embedded reviewer export artifacts",
+                      value: OPENAPI_VERIFY_RESPONSE_EXAMPLE,
+                    },
+                  },
                   schema: {
                     allOf: [
                       { $ref: "#/components/schemas/SingleVerificationResult" },
@@ -1133,6 +1402,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               description: "Batch verification result.",
               content: {
                 "application/json": {
+                  examples: {
+                    verifiedQueue: {
+                      summary: "A batch verification result with summary CSV artifacts",
+                      value: OPENAPI_VERIFY_BATCH_RESPONSE_EXAMPLE,
+                    },
+                  },
                   schema: {
                     allOf: [
                       { $ref: "#/components/schemas/BatchVerificationRunResult" },
@@ -1206,6 +1481,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               description: "Reviewer decision import result.",
               content: {
                 "application/json": {
+                  examples: {
+                    reviewedQueueSummary: {
+                      summary: "A reviewed queue import with final verdict totals",
+                      value: OPENAPI_IMPORT_REVIEW_RESPONSE_EXAMPLE,
+                    },
+                  },
                   schema: {
                     allOf: [
                       { $ref: "#/components/schemas/ReviewerDecisionImportResult" },

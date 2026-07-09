@@ -450,7 +450,9 @@ workflow clients can discover both request and response payload shapes without
 scraping the README. The OpenAPI document includes reusable schemas for the
 discovery, verify, batch verify, import-review, and evaluate responses so
 typed local clients can generate against the same contract as the CLI-backed
-server. Browser-based local tooling can call the same endpoints directly
+server, plus concrete response examples for the verification and reviewer
+import endpoints so agent callers can inspect realistic payloads before wiring
+up typed integrations. Browser-based local tooling can call the same endpoints directly
 because the server replies with permissive CORS headers and handles `OPTIONS`
 preflight requests for JSON clients.
 `POST /verify`, `POST /verify-batch`, `POST /import-review`, and
