@@ -1092,6 +1092,32 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
 }
 
+export function renderEvaluationDomainSummaryCsv(scorecards: EvaluationScorecard[]): string {
+  const aggregate = summarizeEvaluationScorecards(scorecards);
+  const rows = [
+    [
+      "domain",
+      "fixture_count",
+      "mismatch_count",
+      "matched_claims",
+      "total_expected_claims",
+      "score",
+      "score_label",
+    ],
+    ...aggregate.domains.map((domainSummary) => [
+      domainSummary.domain,
+      domainSummary.fixtureCount.toString(),
+      domainSummary.mismatchCount.toString(),
+      domainSummary.matchedClaims.toString(),
+      domainSummary.totalExpectedClaims.toString(),
+      domainSummary.score === null ? "" : domainSummary.score.toFixed(3),
+      domainSummary.scoreLabel,
+    ]),
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 export function hasEvaluationMismatch(scorecard: EvaluationScorecard): boolean {
   return !scorecard.summaryMatches || scorecard.matchedClaims < scorecard.totalExpectedClaims;
 }

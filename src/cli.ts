@@ -9,6 +9,7 @@ import type {
 } from "./domain.js";
 import {
   evaluateFixtureFiles,
+  renderEvaluationDomainSummaryCsv,
   renderEvaluationHtmlReport,
   hasEvaluationMismatch,
   renderEvaluationMarkdownReport,
@@ -98,6 +99,7 @@ interface EvaluateArgs {
   markdownOutPath?: string;
   htmlOutPath?: string;
   summaryCsvOutPath?: string;
+  domainSummaryCsvOutPath?: string;
 }
 
 interface ServeArgs {
@@ -399,6 +401,7 @@ async function runEvaluate(args: string[]): Promise<void> {
   const markdownReport = renderEvaluationMarkdownReport(scorecards);
   const htmlReport = renderEvaluationHtmlReport(scorecards);
   const summaryCsvReport = renderEvaluationSummaryCsv(scorecards);
+  const domainSummaryCsvReport = renderEvaluationDomainSummaryCsv(scorecards);
   const shouldFail = scorecards.some(hasEvaluationMismatch);
 
   if (parsed.outPath) {
@@ -415,6 +418,10 @@ async function runEvaluate(args: string[]): Promise<void> {
 
   if (parsed.summaryCsvOutPath) {
     await writeReportFile(parsed.summaryCsvOutPath, summaryCsvReport);
+  }
+
+  if (parsed.domainSummaryCsvOutPath) {
+    await writeReportFile(parsed.domainSummaryCsvOutPath, domainSummaryCsvReport);
   }
 
   if (parsed.json) {
@@ -436,6 +443,10 @@ async function runEvaluate(args: string[]): Promise<void> {
 
     if (parsed.summaryCsvOutPath) {
       console.log(`Evaluation summary CSV written to ${parsed.summaryCsvOutPath}`);
+    }
+
+    if (parsed.domainSummaryCsvOutPath) {
+      console.log(`Evaluation domain summary CSV written to ${parsed.domainSummaryCsvOutPath}`);
     }
   }
 
@@ -798,6 +809,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
   let markdownOutPath: string | undefined;
   let htmlOutPath: string | undefined;
   let summaryCsvOutPath: string | undefined;
+  let domainSummaryCsvOutPath: string | undefined;
   let json = false;
   let failOnMismatch = false;
 
@@ -823,6 +835,9 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
     } else if (arg === "--summary-csv-out" && next) {
       summaryCsvOutPath = next;
       index += 1;
+    } else if (arg === "--domain-summary-csv-out" && next) {
+      domainSummaryCsvOutPath = next;
+      index += 1;
     } else if (arg === "--json") {
       json = true;
     } else if (arg === "--fail-on-mismatch") {
@@ -845,6 +860,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
     markdownOutPath,
     htmlOutPath,
     summaryCsvOutPath,
+    domainSummaryCsvOutPath,
   };
 }
 
@@ -1042,7 +1058,7 @@ Example:
     evaluate: `Quorum evaluate
 
 Usage:
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--fail-on-mismatch]
 
 Options:
   --fixture <path>          Evaluation fixture JSON file; may be repeated
@@ -1052,10 +1068,12 @@ Options:
   --markdown-out <path>     Write a Markdown evaluation report
   --html-out <path>         Write a styled HTML evaluation report
   --summary-csv-out <path>  Write a one-row-per-fixture summary CSV
+  --domain-summary-csv-out <path>
+                            Write a one-row-per-domain aggregate CSV
   --fail-on-mismatch        Exit with code 2 when any fixture summary or claim verdict mismatches
 
 Example:
-  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
+  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --fail-on-mismatch
   npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --json
 `,
@@ -1113,7 +1131,7 @@ Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--fail-on-mismatch]
   quorum serve [--host <host>] [--port <port>]
   quorum openapi [--server-url <url>] [--out <path>]
 
@@ -1124,7 +1142,7 @@ Example:
   cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
-  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --fail-on-mismatch
+  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --fail-on-mismatch
   npm run dev -- evaluate --fixture-dir examples/evaluations --fail-on-mismatch
   npm run dev -- serve --port 3000
   npm run dev -- openapi --out reports/openapi.json
