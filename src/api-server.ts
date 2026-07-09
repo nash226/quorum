@@ -152,6 +152,7 @@ export const API_DISCOVERY_HEADERS = {
   version: "X-Quorum-Version",
   openapiPath: "X-Quorum-OpenAPI-Path",
 } as const;
+const EXPOSED_HEADERS = Object.values(API_DISCOVERY_HEADERS).join(", ");
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
   sourceExtensions: [...SOURCE_EXTENSIONS],
@@ -2712,6 +2713,7 @@ function applyCorsHeaders(response: ServerResponse): void {
   response.setHeader("Access-Control-Allow-Origin", "*");
   response.setHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
   response.setHeader("Access-Control-Allow-Headers", ALLOWED_HEADERS);
+  response.setHeader("Access-Control-Expose-Headers", EXPOSED_HEADERS);
 }
 
 function applyApiDiscoveryHeaders(response: ServerResponse): void {
