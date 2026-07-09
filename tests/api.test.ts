@@ -22,6 +22,10 @@ import {
   API_DISCOVERY_HEADERS,
   API_SERVICE_NAME,
   API_VERSION,
+  type ApiEvaluateResponse,
+  type ApiImportReviewResponse,
+  type ApiVerifyBatchResponse,
+  type ApiVerifyResponse,
   createOpenApiDocument,
   type ApiCapabilitiesResponse,
   type ApiDiscoveryEndpoint,
@@ -3037,9 +3041,8 @@ Employees receive 12 weeks of paid parental leave.
       }),
     });
     assert.equal(verifyResponse.status, 200);
-    const verifyResult = await verifyResponse.json() as Awaited<ReturnType<typeof verifyAnswerContentsResult>> & {
-      artifacts: Record<string, string>;
-    };
+    const verifyResult = await verifyResponse.json() as ApiVerifyResponse;
+    assert.ok(verifyResult.artifacts);
     assert.equal(verifyResult.artifacts.text, renderTextReport(verifyResult.report, verifyResult.failVerdicts));
     assert.equal(
       verifyResult.artifacts.markdown,
@@ -3097,9 +3100,8 @@ Refund requests receive an initial response within one business day.
       }),
     });
     assert.equal(batchResponse.status, 200);
-    const batchResult = await batchResponse.json() as Awaited<ReturnType<typeof verifyAnswerBatchContentsResult>> & {
-      artifacts: Record<string, string>;
-    };
+    const batchResult = await batchResponse.json() as ApiVerifyBatchResponse;
+    assert.ok(batchResult.artifacts);
     assert.equal(batchResult.artifacts.text, renderBatchTextReport(batchResult.report));
     assert.equal(batchResult.artifacts.markdown, renderBatchMarkdownReport(batchResult.report));
     assert.equal(batchResult.artifacts.html, renderBatchHtmlReport(batchResult.report));
@@ -3120,9 +3122,8 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       }),
     });
     assert.equal(importResponse.status, 200);
-    const importResult = await importResponse.json() as ReturnType<typeof importReviewerDecisionContentsResult> & {
-      artifacts: Record<string, string>;
-    };
+    const importResult = await importResponse.json() as ApiImportReviewResponse;
+    assert.ok(importResult.artifacts);
     assert.equal(
       importResult.artifacts.text,
       renderReviewerDecisionImportReport(importResult.report, importResult.failVerdicts),
@@ -3157,9 +3158,8 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       }),
     });
     assert.equal(evaluateResponse.status, 200);
-    const evaluateResult = await evaluateResponse.json() as Awaited<ReturnType<typeof evaluateFixtureContentsResult>> & {
-      artifacts: Record<string, string>;
-    };
+    const evaluateResult = await evaluateResponse.json() as ApiEvaluateResponse;
+    assert.ok(evaluateResult.artifacts);
     assert.deepEqual(evaluateResult.summary.domains, [
       {
         domain: "hr",
