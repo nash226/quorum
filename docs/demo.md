@@ -96,7 +96,9 @@ npm run dev -- evaluate --fixture-dir examples/evaluations --markdown-out report
 
 Quorum also accepts exported HTML knowledge base pages via `--source` or
 `--source-dir`, which lets teams verify answers against help-center exports
-without first converting those pages to Markdown.
+without first converting those pages to Markdown. The shipped evaluation
+fixtures now include an exported HTML support-policy example under
+`examples/evaluations/support/html-billing-policy.json`.
 
 ## Why This Matters
 
