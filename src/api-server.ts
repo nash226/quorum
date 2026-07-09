@@ -580,6 +580,283 @@ const OPENAPI_EVALUATE_EXAMPLE = {
   includeArtifacts: ["html", "summary_csv"],
   failOnStatus: true,
 } as const;
+const OPENAPI_BAD_REQUEST_ERROR_EXAMPLE = {
+  error: "sources must be a non-empty array.",
+} as const;
+const OPENAPI_METHOD_NOT_ALLOWED_ERROR_EXAMPLE = {
+  error: "Method not allowed. Use POST.",
+} as const;
+const OPENAPI_UNSUPPORTED_MEDIA_TYPE_ERROR_EXAMPLE = {
+  error: "Content-Type must be application/json.",
+} as const;
+const OPENAPI_INTERNAL_SERVER_ERROR_EXAMPLE = {
+  error: "Internal server error.",
+} as const;
+const OPENAPI_VERIFY_CONFLICT_RESPONSE_EXAMPLE = {
+  report: {
+    generatedAt: "2026-07-07T19:16:00.000Z",
+    answerPath: "answers/hr.md",
+    answerLabel: "HR policy answer",
+    answerPreview: "Employees receive 18 weeks of paid parental leave.",
+    answer: "Employees receive 18 weeks of paid parental leave.",
+    sources: [
+      {
+        id: "source-1",
+        title: "HR Policy",
+        updatedAt: "2026-05-31",
+        trustLevel: "high",
+      },
+    ],
+    assessments: [
+      {
+        claim: {
+          id: "claim-1",
+          text: "Employees receive 18 weeks of paid parental leave.",
+        },
+        verdict: "contradicted",
+        evidence: [
+          {
+            documentId: "source-1",
+            documentTitle: "HR Policy",
+            documentTrustLevel: "high",
+            documentUpdatedAt: "2026-05-31",
+            quote: "Employees receive 12 weeks of paid parental leave.",
+            score: 0.857,
+          },
+        ],
+        reason: "A closely matching approved source uses different numeric terms.",
+      },
+    ],
+    summary: {
+      verified: 0,
+      contradicted: 1,
+      unsupported: 0,
+      needs_review: 0,
+    },
+  },
+  shouldFail: true,
+  failVerdicts: ["contradicted"],
+  artifacts: {
+    markdown:
+      "# Quorum Verification Report\n\nFail policy matched: contradicted\nSummary: 0 verified, 1 contradicted, 0 unsupported, 0 needs review\n",
+  },
+} as const;
+const OPENAPI_VERIFY_BATCH_CONFLICT_RESPONSE_EXAMPLE = {
+  report: {
+    generatedAt: "2026-07-07T19:20:00.000Z",
+    sources: [
+      {
+        id: "source-1",
+        title: "HR Policy",
+        trustLevel: "high",
+      },
+      {
+        id: "source-2",
+        title: "Support Playbook",
+        trustLevel: "medium",
+      },
+    ],
+    sourceCount: 2,
+    answerCount: 2,
+    answers: [
+      {
+        answerLabel: "HR policy answer",
+        answerPath: "answers/hr.md",
+        report: OPENAPI_VERIFY_BATCH_RESPONSE_EXAMPLE.report.answers[0].report,
+        shouldFail: false,
+        failVerdicts: [],
+      },
+      {
+        answerLabel: "Support queue answer",
+        answerPath: "answers/support.md",
+        report: {
+          generatedAt: "2026-07-07T19:20:00.000Z",
+          answerPath: "answers/support.md",
+          answerLabel: "Support queue answer",
+          answerPreview: "Refunds are always approved instantly.",
+          answer: "Refunds are always approved instantly.",
+          sources: [
+            {
+              id: "source-1",
+              title: "HR Policy",
+              trustLevel: "high",
+            },
+            {
+              id: "source-2",
+              title: "Support Playbook",
+              trustLevel: "medium",
+            },
+          ],
+          assessments: [
+            {
+              claim: {
+                id: "claim-1",
+                text: "Refunds are always approved instantly.",
+              },
+              verdict: "unsupported",
+              evidence: [],
+              reason: "No approved source supports this claim closely enough.",
+            },
+          ],
+          summary: {
+            verified: 0,
+            contradicted: 0,
+            unsupported: 1,
+            needs_review: 0,
+          },
+        },
+        shouldFail: true,
+        failVerdicts: ["unsupported"],
+      },
+    ],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 1,
+      needs_review: 0,
+      answersWithoutClaims: 0,
+      answersWithFailures: 1,
+    },
+  },
+  shouldFail: true,
+  failVerdicts: ["unsupported"],
+} as const;
+const OPENAPI_IMPORT_REVIEW_CONFLICT_RESPONSE_EXAMPLE = {
+  report: {
+    claims: [
+      {
+        answerLabel: "HR policy answer",
+        answerPath: "answers/hr.md",
+        claimId: "claim_1",
+        claimText: "Employees receive 12 weeks of paid parental leave.",
+        modelVerdict: "verified",
+        modelReason: "Matched approved policy",
+        evidenceTitles: ["HR Policy"],
+        evidenceTrustLevels: [],
+        evidenceUpdatedAt: [],
+        evidenceScores: [],
+        evidenceQuotes: ["Employees receive 12 weeks of paid parental leave."],
+        reviewerVerdict: "",
+        reviewerNotes: "",
+        finalVerdict: "needs_review",
+        overridden: false,
+        originalAnswerFailVerdicts: [],
+      },
+    ],
+    answerGroups: [
+      {
+        answerLabel: "HR policy answer",
+        answerPath: "answers/hr.md",
+        label: "HR policy answer",
+        claims: [
+          {
+            answerLabel: "HR policy answer",
+            answerPath: "answers/hr.md",
+            claimId: "claim_1",
+            claimText: "Employees receive 12 weeks of paid parental leave.",
+            modelVerdict: "verified",
+            modelReason: "Matched approved policy",
+            evidenceTitles: ["HR Policy"],
+            evidenceTrustLevels: [],
+            evidenceUpdatedAt: [],
+            evidenceScores: [],
+            evidenceQuotes: ["Employees receive 12 weeks of paid parental leave."],
+            reviewerVerdict: "",
+            reviewerNotes: "",
+            finalVerdict: "needs_review",
+            overridden: false,
+            originalAnswerFailVerdicts: [],
+          },
+        ],
+        summary: {
+          verified: 0,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 1,
+          totalClaims: 1,
+          reviewedClaims: 0,
+          pendingClaims: 1,
+          overriddenClaims: 0,
+        },
+        originalAnswerFailVerdicts: [],
+      },
+    ],
+    summary: {
+      verified: 0,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 1,
+      totalClaims: 1,
+      reviewedClaims: 0,
+      pendingClaims: 1,
+      overriddenClaims: 0,
+    },
+  },
+  shouldFail: true,
+  failVerdicts: ["needs_review"],
+} as const;
+const OPENAPI_EVALUATE_CONFLICT_RESPONSE_EXAMPLE = {
+  scorecards: [
+    {
+      fixtureName: "HR policy API fixture",
+      fixturePath: "evaluations/hr-policy.json",
+      domain: "hr",
+      generatedAt: "2026-07-07T19:25:00.000Z",
+      answerPath: "answers/hr.md",
+      answerLabel: "HR reviewer packet",
+      summary: {
+        expected: {
+          verified: 1,
+          contradicted: 0,
+          unsupported: 0,
+          needs_review: 0,
+        },
+        actual: {
+          verified: 0,
+          contradicted: 1,
+          unsupported: 0,
+          needs_review: 0,
+        },
+        matches: false,
+      },
+      claimVerdicts: [
+        {
+          claimIndex: 0,
+          claimText: "Employees receive 18 weeks of paid parental leave.",
+          expectedVerdict: "verified",
+          actualVerdict: "contradicted",
+          matches: false,
+        },
+      ],
+      mismatches: [
+        {
+          type: "summary",
+          field: "verified",
+          expected: 1,
+          actual: 0,
+        },
+      ],
+      matches: false,
+    },
+  ],
+  summary: {
+    fixtureCount: 1,
+    mismatchCount: 1,
+    matchedFixtures: 0,
+    domains: [
+      {
+        domain: "hr",
+        fixtureCount: 1,
+        mismatchCount: 1,
+        matchedClaims: 0,
+        totalExpectedClaims: 1,
+        score: 0,
+        scoreLabel: "0%",
+      },
+    ],
+  },
+  shouldFail: true,
+} as const;
 
 export function createApiServer(): Server {
   return createServer(async (request, response) => {
@@ -1071,19 +1348,43 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
     },
     required: ["verified", "contradicted", "unsupported", "needs_review"],
   };
-  const errorResponse = (description: string) => ({
+  const errorResponse = (
+    description: string,
+    examples?: Record<string, { summary: string; value: { error: string } }>,
+  ) => ({
     description,
     content: {
       "application/json": {
         schema: { $ref: "#/components/schemas/ApiErrorResponse" },
+        ...(examples ? { examples } : {}),
       },
     },
   });
   const postErrorResponses = {
-    "400": errorResponse("The JSON body was missing required fields or had invalid values."),
-    "405": errorResponse("The route only accepts POST."),
-    "415": errorResponse("The request Content-Type was not application/json."),
-    "500": errorResponse("The server failed while handling the request."),
+    "400": errorResponse("The JSON body was missing required fields or had invalid values.", {
+      invalidRequest: {
+        summary: "The request body missed a required field or used an invalid value",
+        value: OPENAPI_BAD_REQUEST_ERROR_EXAMPLE,
+      },
+    }),
+    "405": errorResponse("The route only accepts POST.", {
+      wrongMethod: {
+        summary: "A GET request hit a POST-only route",
+        value: OPENAPI_METHOD_NOT_ALLOWED_ERROR_EXAMPLE,
+      },
+    }),
+    "415": errorResponse("The request Content-Type was not application/json.", {
+      invalidContentType: {
+        summary: "The caller sent a non-JSON Content-Type header",
+        value: OPENAPI_UNSUPPORTED_MEDIA_TYPE_ERROR_EXAMPLE,
+      },
+    }),
+    "500": errorResponse("The server failed while handling the request.", {
+      internalError: {
+        summary: "The server hit an unexpected runtime failure",
+        value: OPENAPI_INTERNAL_SERVER_ERROR_EXAMPLE,
+      },
+    }),
   };
 
   return {
@@ -1328,6 +1629,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               description: "Verification matched the requested fail policy while failOnStatus was enabled.",
               content: {
                 "application/json": {
+                  examples: {
+                    failPolicyMatch: {
+                      summary: "A contradicted claim triggered the requested fail policy",
+                      value: OPENAPI_VERIFY_CONFLICT_RESPONSE_EXAMPLE,
+                    },
+                  },
                   schema: {
                     allOf: [
                       { $ref: "#/components/schemas/SingleVerificationResult" },
@@ -1426,6 +1733,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               description: "Batch verification matched the requested fail policy while failOnStatus was enabled.",
               content: {
                 "application/json": {
+                  examples: {
+                    failPolicyMatch: {
+                      summary: "One answer in the batch triggered the requested fail policy",
+                      value: OPENAPI_VERIFY_BATCH_CONFLICT_RESPONSE_EXAMPLE,
+                    },
+                  },
                   schema: {
                     allOf: [
                       { $ref: "#/components/schemas/BatchVerificationRunResult" },
@@ -1505,6 +1818,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               description: "Imported reviewer decisions matched the requested fail policy while failOnStatus was enabled.",
               content: {
                 "application/json": {
+                  examples: {
+                    failPolicyMatch: {
+                      summary: "A pending reviewer decision triggered the needs_review fail policy",
+                      value: OPENAPI_IMPORT_REVIEW_CONFLICT_RESPONSE_EXAMPLE,
+                    },
+                  },
                   schema: {
                     allOf: [
                       { $ref: "#/components/schemas/ReviewerDecisionImportResult" },
@@ -1579,6 +1898,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               description: "Evaluation mismatches were detected while failOnStatus was enabled.",
               content: {
                 "application/json": {
+                  examples: {
+                    mismatchDetected: {
+                      summary: "A fixture summary mismatch triggered failOnStatus",
+                      value: OPENAPI_EVALUATE_CONFLICT_RESPONSE_EXAMPLE,
+                    },
+                  },
                   schema: {
                     allOf: [
                       { $ref: "#/components/schemas/EvaluationBatchRunResult" },

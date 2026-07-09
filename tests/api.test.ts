@@ -2324,13 +2324,106 @@ Refund requests receive an initial response within one business day.
       openApi.paths["/verify"]?.post?.responses?.["400"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",
     );
+    const verify400Example = openApi.paths["/verify"]?.post?.responses?.["400"]?.content?.[
+      "application/json"
+    ]?.examples?.["invalidRequest"]?.value as
+      | {
+          error?: string;
+        }
+      | undefined;
+    assert.equal(
+      verify400Example?.error,
+      "sources must be a non-empty array.",
+    );
+    const verify405Example = openApi.paths["/verify"]?.post?.responses?.["405"]?.content?.[
+      "application/json"
+    ]?.examples?.["wrongMethod"]?.value as
+      | {
+          error?: string;
+        }
+      | undefined;
+    assert.equal(
+      verify405Example?.error,
+      "Method not allowed. Use POST.",
+    );
     assert.equal(
       openApi.paths["/verify"]?.post?.responses?.["415"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",
     );
+    const verify415Example = openApi.paths["/verify"]?.post?.responses?.["415"]?.content?.[
+      "application/json"
+    ]?.examples?.["invalidContentType"]?.value as
+      | {
+          error?: string;
+        }
+      | undefined;
+    assert.equal(
+      verify415Example?.error,
+      "Content-Type must be application/json.",
+    );
     assert.equal(
       openApi.paths["/verify"]?.post?.responses?.["500"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",
+    );
+    const verify500Example = openApi.paths["/verify"]?.post?.responses?.["500"]?.content?.[
+      "application/json"
+    ]?.examples?.["internalError"]?.value as
+      | {
+          error?: string;
+        }
+      | undefined;
+    assert.equal(
+      verify500Example?.error,
+      "Internal server error.",
+    );
+    const verify409Example = openApi.paths["/verify"]?.post?.responses?.["409"]?.content?.[
+      "application/json"
+    ]?.examples?.["failPolicyMatch"]?.value as
+      | {
+          shouldFail?: boolean;
+          failVerdicts?: string[];
+        }
+      | undefined;
+    assert.equal(
+      verify409Example?.shouldFail,
+      true,
+    );
+    assert.deepEqual(
+      verify409Example?.failVerdicts,
+      ["contradicted"],
+    );
+    const verifyBatch409Example = openApi.paths["/verify-batch"]?.post?.responses?.["409"]?.content?.[
+      "application/json"
+    ]?.examples?.["failPolicyMatch"]?.value as
+      | {
+          failVerdicts?: string[];
+        }
+      | undefined;
+    assert.deepEqual(
+      verifyBatch409Example?.failVerdicts,
+      ["unsupported"],
+    );
+    const importReview409Example = openApi.paths["/import-review"]?.post?.responses?.["409"]?.content?.[
+      "application/json"
+    ]?.examples?.["failPolicyMatch"]?.value as
+      | {
+          failVerdicts?: string[];
+        }
+      | undefined;
+    assert.deepEqual(
+      importReview409Example?.failVerdicts,
+      ["needs_review"],
+    );
+    const evaluate409Example = openApi.paths["/evaluate"]?.post?.responses?.["409"]?.content?.[
+      "application/json"
+    ]?.examples?.["mismatchDetected"]?.value as
+      | {
+          summary?: { mismatchCount?: number };
+        }
+      | undefined;
+    assert.equal(
+      evaluate409Example?.summary?.mismatchCount,
+      1,
     );
     assert.deepEqual(openApi.components.schemas.ApiIndexResponse.required, [
       "service",
