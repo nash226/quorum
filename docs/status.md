@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1f6b4e1` on 2026-07-09, test: expand evaluation smoke coverage
+- Latest shipped change: `693eb8c` on 2026-07-09, fix: align evaluation openapi schema
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-09 | [#277](https://github.com/nash226/quorum/pull/277) | fix: align evaluation openapi schema | `693eb8c` |
 | 2026-07-09 | [#276](https://github.com/nash226/quorum/pull/276) | test: expand evaluation smoke coverage | `1f6b4e1` |
 | 2026-07-09 | [#275](https://github.com/nash226/quorum/pull/275) | feat: export api response types | `3841d6d` |
 | 2026-07-09 | [#274](https://github.com/nash226/quorum/pull/274) | feat: add evaluation domain summary api artifact | `1d26cf3` |
@@ -54,5 +55,4 @@
 | 2026-07-09 | [#272](https://github.com/nash226/quorum/pull/272) | feat: expose api discovery headers to browsers | `941eb53` |
 | 2026-07-09 | Direct push | feat: add html evaluation fixture example | `6e76476` |
 | 2026-07-09 | [#270](https://github.com/nash226/quorum/pull/270) | feat: add OpenAPI discovery examples | `a79b655` |
-| 2026-07-09 | [#268](https://github.com/nash226/quorum/pull/268) | feat: add OpenAPI evaluate response example | `0892bb3` |
 
