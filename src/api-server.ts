@@ -192,6 +192,7 @@ export const API_CAPABILITIES = {
 export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
   { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
+  { method: "OPTIONS", path: "/", description: "Return CORS preflight headers for discovery clients." },
   {
     method: "GET",
     path: CAPABILITIES_PATH,
@@ -202,8 +203,18 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     path: CAPABILITIES_PATH,
     description: "Return capability discovery headers without a JSON body.",
   },
+  {
+    method: "OPTIONS",
+    path: CAPABILITIES_PATH,
+    description: "Return CORS preflight headers for capability discovery clients.",
+  },
   { method: "GET", path: "/health", description: "Return a simple readiness response." },
   { method: "HEAD", path: "/health", description: "Return readiness headers without a JSON body." },
+  {
+    method: "OPTIONS",
+    path: "/health",
+    description: "Return CORS preflight headers for readiness probes that use browser-style requests.",
+  },
   {
     method: "GET",
     path: "/healthz",
@@ -214,13 +225,29 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     path: "/healthz",
     description: "Return readiness headers on the conventional probe path without a JSON body.",
   },
+  {
+    method: "OPTIONS",
+    path: "/healthz",
+    description: "Return CORS preflight headers for the conventional readiness probe path.",
+  },
   { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
   { method: "HEAD", path: OPENAPI_PATH, description: "Return OpenAPI headers without a JSON body." },
+  {
+    method: "OPTIONS",
+    path: OPENAPI_PATH,
+    description: "Return CORS preflight headers for OpenAPI schema clients.",
+  },
   { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
+  { method: "OPTIONS", path: "/verify", description: "Return CORS preflight headers for verify requests." },
   {
     method: "POST",
     path: "/verify-batch",
     description: "Verify multiple answers from JSON request content.",
+  },
+  {
+    method: "OPTIONS",
+    path: "/verify-batch",
+    description: "Return CORS preflight headers for batch verify requests.",
   },
   {
     method: "POST",
@@ -228,9 +255,19 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     description: "Import reviewer CSV content from JSON request content.",
   },
   {
+    method: "OPTIONS",
+    path: "/import-review",
+    description: "Return CORS preflight headers for reviewer import requests.",
+  },
+  {
     method: "POST",
     path: "/evaluate",
     description: "Evaluate fixture JSON content from request payloads.",
+  },
+  {
+    method: "OPTIONS",
+    path: "/evaluate",
+    description: "Return CORS preflight headers for evaluation requests.",
   },
 ] as const;
 const OPENAPI_DISCOVERY_RESPONSE_EXAMPLE = {
@@ -1547,6 +1584,46 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       },
     }),
   };
+  const corsPreflightResponse = {
+    "204": {
+      description: "CORS preflight succeeded for a local browser-style client.",
+      headers: {
+        "Access-Control-Allow-Origin": {
+          schema: { type: "string" },
+          description: "Origins allowed to call this endpoint.",
+        },
+        "Access-Control-Allow-Methods": {
+          schema: { type: "string" },
+          description: "HTTP methods allowed by this endpoint.",
+        },
+        "Access-Control-Allow-Headers": {
+          schema: { type: "string" },
+          description: "Request headers allowed on cross-origin calls.",
+        },
+        "Access-Control-Expose-Headers": {
+          schema: { type: "string" },
+          description: "Response headers exposed to browser callers.",
+        },
+        [API_DISCOVERY_HEADERS.service]: {
+          schema: { type: "string" },
+          description: "Stable Quorum service identifier.",
+        },
+        [API_DISCOVERY_HEADERS.version]: {
+          schema: { type: "string" },
+          description: "Running Quorum version.",
+        },
+        [API_DISCOVERY_HEADERS.openapiPath]: {
+          schema: { type: "string" },
+          description: "Relative path to the local OpenAPI document.",
+        },
+      },
+    },
+    "500": errorResponse("The server failed while handling the request."),
+  };
+  const corsPreflightOperation = (summary: string) => ({
+    summary,
+    responses: corsPreflightResponse,
+  });
 
   return {
     openapi: "3.1.0",
@@ -1593,6 +1670,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
+        options: corsPreflightOperation("Service discovery preflight"),
       },
       [CAPABILITIES_PATH]: {
         get: {
@@ -1629,6 +1707,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
+        options: corsPreflightOperation("Capability discovery preflight"),
       },
       "/health": {
         get: {
@@ -1665,6 +1744,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
+        options: corsPreflightOperation("Readiness preflight"),
       },
       "/healthz": {
         get: {
@@ -1701,6 +1781,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
+        options: corsPreflightOperation("Readiness alias preflight"),
       },
       [OPENAPI_PATH]: {
         get: {
@@ -1749,8 +1830,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
+        options: corsPreflightOperation("OpenAPI description preflight"),
       },
       "/verify": {
+        options: corsPreflightOperation("Verify preflight"),
         post: {
           summary: "Verify one answer",
           requestBody: {
@@ -1845,6 +1928,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
       },
       "/verify-batch": {
+        options: corsPreflightOperation("Batch verify preflight"),
         post: {
           summary: "Verify multiple answers",
           requestBody: {
@@ -1949,6 +2033,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
       },
       "/import-review": {
+        options: corsPreflightOperation("Reviewer import preflight"),
         post: {
           summary: "Import reviewer decisions",
           requestBody: {
@@ -2034,6 +2119,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
       },
       "/evaluate": {
+        options: corsPreflightOperation("Evaluation preflight"),
         post: {
           summary: "Evaluate fixtures",
           requestBody: {
