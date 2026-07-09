@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `01f7dd3` on 2026-07-08, feat: add evaluation mismatch source paths
+- Latest shipped change: `949c470` on 2026-07-09, add openapi cli export
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-09 | [#265](https://github.com/nash226/quorum/pull/265) | add openapi cli export | `949c470` |
 | 2026-07-08 | [#264](https://github.com/nash226/quorum/pull/264) | feat: add evaluation mismatch source paths | `01f7dd3` |
 | 2026-07-08 | [#263](https://github.com/nash226/quorum/pull/263) | feat: add source paths to review exports | `7922cbf` |
 | 2026-07-08 | [#262](https://github.com/nash226/quorum/pull/262) | feat: add healthz probe alias | `bb7562f` |
@@ -54,5 +55,4 @@
 | 2026-07-08 | [#260](https://github.com/nash226/quorum/pull/260) | test: verify installed package cli in smoke check | `dc9f5b5` |
 | 2026-07-08 | [#259](https://github.com/nash226/quorum/pull/259) | fix IPv6 API server URLs | `f045808` |
 | 2026-07-08 | [#258](https://github.com/nash226/quorum/pull/258) | validate evaluation fixture claim totals | `b3716c9` |
-| 2026-07-08 | [#257](https://github.com/nash226/quorum/pull/257) | feat: add import-review summary source context | `d4a374f` |
 
