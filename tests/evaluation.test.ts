@@ -86,6 +86,30 @@ test("evaluates nested shipped fixture files for additional domain coverage", as
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates shipped HTML fixture files for exported help-center style coverage", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/html-billing-policy.json"),
+    generatedAt: "2026-07-09T16:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support billing HTML example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support billing reviewer packet");
+  assert.equal(
+    scorecard.answerPreview,
+    "Support Billing Draft Customers can request billing credits for duplicate charges within 7 days. Annual plan refunds...",
+  );
+  assert.deepEqual(scorecard.sourceDirs, []);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.matchedClaims, 3);
+  assert.equal(scorecard.totalExpectedClaims, 3);
+  assert.equal(scorecard.score, 1);
+  assert.deepEqual(
+    scorecard.claims.map((claim) => claim.actualVerdict),
+    ["verified", "contradicted", "unsupported"],
+  );
+});
+
 test("evaluates one in-memory fixture file relative to its fixture path", async () => {
   const fixturePath = resolve("examples/evaluations/hr-policy.json");
   const fixtureContent = await loadEvaluationFixture(fixturePath);
@@ -118,6 +142,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/hr/onboarding-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
     resolve("examples/evaluations/support/account-security-policy.json"),
+    resolve("examples/evaluations/support/html-billing-policy.json"),
   ]);
 });
 
@@ -128,7 +153,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 4);
+  assert.equal(scorecards.length, 5);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -136,6 +161,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "HR onboarding policy example",
       "Support policy example",
       "Support account policy example",
+      "Support billing HTML example",
     ],
   );
   assert.ok(
