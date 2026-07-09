@@ -178,6 +178,16 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   },
   { method: "GET", path: "/health", description: "Return a simple readiness response." },
   { method: "HEAD", path: "/health", description: "Return readiness headers without a JSON body." },
+  {
+    method: "GET",
+    path: "/healthz",
+    description: "Return a simple readiness response using the conventional probe path.",
+  },
+  {
+    method: "HEAD",
+    path: "/healthz",
+    description: "Return readiness headers on the conventional probe path without a JSON body.",
+  },
   { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
   { method: "HEAD", path: OPENAPI_PATH, description: "Return OpenAPI headers without a JSON body." },
   { method: "POST", path: "/verify", description: "Verify one answer from JSON request content." },
@@ -409,7 +419,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && url === "/health") {
+  if ((request.method === "GET" || isHeadRequest) && (url === "/health" || url === "/healthz")) {
     const healthResponse: ApiHealthResponse = {
       ok: true,
       service: API_SERVICE_NAME,
@@ -903,6 +913,36 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Header-only readiness response for load balancers and probes.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiHealthResponse" },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+      },
+      "/healthz": {
+        get: {
+          summary: "Readiness check alias",
+          responses: {
+            "200": {
+              description: "Server is ready to accept requests through the conventional probe path.",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiHealthResponse" },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+        head: {
+          summary: "Readiness check alias headers",
+          responses: {
+            "200": {
+              description: "Header-only readiness response on the conventional probe path.",
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiHealthResponse" },

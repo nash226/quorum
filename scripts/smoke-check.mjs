@@ -333,6 +333,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(indexPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(indexPayload.capabilities.trustLevels, ["low", "medium", "high"]);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/health"), true);
+    assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/healthz"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/openapi.json"), true);
 
     const capabilitiesResponse = await fetch(`${server.url}/capabilities`);
@@ -364,6 +365,13 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(headHealthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(await headHealthResponse.text(), "");
 
+    const headHealthzResponse = await fetch(`${server.url}/healthz`, { method: "HEAD" });
+    assert.equal(headHealthzResponse.status, 200);
+    assert.equal(headHealthzResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(headHealthzResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(headHealthzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(await headHealthzResponse.text(), "");
+
     const openApiResponse = await fetch(`${server.url}/openapi.json`);
     assert.equal(openApiResponse.status, 200);
     assert.equal(openApiResponse.headers.get("x-quorum-service"), "quorum");
@@ -380,6 +388,17 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(healthResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(healthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.deepEqual(await healthResponse.json(), {
+      ok: true,
+      service: "quorum",
+      version: "0.1.0",
+    });
+
+    const healthzResponse = await fetch(`${server.url}/healthz`);
+    assert.equal(healthzResponse.status, 200);
+    assert.equal(healthzResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(healthzResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(healthzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.deepEqual(await healthzResponse.json(), {
       ok: true,
       service: "quorum",
       version: "0.1.0",
