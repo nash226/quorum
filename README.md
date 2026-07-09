@@ -177,6 +177,18 @@ still preserving the original `answer_path`. Batch Markdown and HTML reports
 also include each answer's claim-level verdicts and top evidence so reviewers
 can inspect risky answers without jumping straight to JSON.
 
+To run only selected evaluation domains while building scorecards:
+
+```bash
+npm run dev -- evaluate \
+  --fixture-dir examples/evaluations \
+  --domain hr \
+  --summary-csv-out reports/evaluation-summary.csv
+```
+
+Repeat `--domain` to include multiple slices. When the flag is present, Quorum
+only evaluates fixtures whose `domain` matches one of those values.
+
 ## Programmatic API
 
 Quorum also exposes a small package API for agent and workflow integrations

@@ -119,6 +119,7 @@ export interface EvaluateApiRequest {
     fixturePath: string;
     content: string;
   }>;
+  domains?: string[];
   generatedAt?: string;
   includeArtifacts?: ApiEvaluateArtifact[];
   failOnStatus?: boolean;
@@ -643,6 +644,7 @@ const OPENAPI_IMPORT_REVIEW_RESPONSE_EXAMPLE = {
   },
 } as const;
 const OPENAPI_EVALUATE_EXAMPLE = {
+  domains: ["hr"],
   generatedAt: "2026-07-07T19:25:00.000Z",
   fixtures: [
     {
@@ -1260,6 +1262,7 @@ async function handleApiRequest(
     const body = parseEvaluateRequest(await readJsonBody(request));
     const result = await evaluateFixtureContentsResult({
       fixtures: body.fixtures,
+      domains: body.domains,
       generatedAt: body.generatedAt,
     });
     writeOperationResult(
@@ -1379,6 +1382,7 @@ function parseImportReviewRequest(value: unknown): {
 
 function parseEvaluateRequest(value: unknown): {
   fixtures: InMemoryEvaluationFixtureInput[];
+  domains?: string[];
   generatedAt?: string;
   includeArtifacts?: ApiEvaluateArtifact[];
   failOnStatus?: boolean;
@@ -1392,6 +1396,7 @@ function parseEvaluateRequest(value: unknown): {
 
   return {
     fixtures: fixturesValue.map((fixture, index) => parseFixtureInput(fixture, index)),
+    domains: parseOptionalStringArray(record.domains, "domains"),
     generatedAt: optionalString(record.generatedAt, "generatedAt"),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, EVALUATE_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
@@ -1481,6 +1486,28 @@ function parseOptionalArtifacts<T extends string>(
 
     if (!selected.includes(artifact as T)) {
       selected.push(artifact as T);
+    }
+  });
+
+  return selected;
+}
+
+function parseOptionalStringArray(value: unknown, fieldName: string): string[] | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Array.isArray(value) || value.length === 0) {
+    throw requestError(`${fieldName} must be a non-empty array.`);
+  }
+
+  const selected: string[] = [];
+
+  value.forEach((entry, index) => {
+    const parsed = requireString(entry, `${fieldName}[${index}]`);
+
+    if (!selected.includes(parsed)) {
+      selected.push(parsed);
     }
   });
 
@@ -2130,6 +2157,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   type: "object",
                   properties: {
                     generatedAt: { type: "string" },
+                    domains: {
+                      type: "array",
+                      minItems: 1,
+                      items: { type: "string" },
+                    },
                     fixtures: {
                       type: "array",
                       minItems: 1,
