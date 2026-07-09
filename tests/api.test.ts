@@ -2320,6 +2320,28 @@ Refund requests receive an initial response within one business day.
       openApi.paths["/evaluate"]?.post?.responses?.["200"]?.content?.["application/json"]?.schema?.allOf?.[0]?.$ref,
       "#/components/schemas/EvaluationBatchRunResult",
     );
+    const evaluateResponseExample =
+      openApi.paths["/evaluate"]?.post?.responses?.["200"]?.content?.["application/json"]?.examples?.[
+        "matchedFixture"
+      ]?.value as
+        | {
+            mismatchCount?: number;
+            summary?: { scoreLabel?: string };
+            artifacts?: { summary_csv?: string };
+          }
+        | undefined;
+    assert.equal(
+      evaluateResponseExample?.mismatchCount,
+      0,
+    );
+    assert.equal(
+      evaluateResponseExample?.summary?.scoreLabel,
+      "100%",
+    );
+    assert.equal(
+      evaluateResponseExample?.artifacts?.summary_csv?.includes("HR policy API fixture"),
+      true,
+    );
     assert.equal(
       openApi.paths["/verify"]?.post?.responses?.["400"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",
