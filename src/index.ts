@@ -14,6 +14,7 @@ export type {
 } from "./domain.js";
 export {
   API_CAPABILITIES,
+  API_MAX_REQUEST_BYTES,
   API_ENDPOINTS,
   CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS,
