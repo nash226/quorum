@@ -817,6 +817,7 @@ function renderImportedEvidenceItems(claim: ImportedReviewerDecision): string {
         item.title,
         ...(item.trustLevel ? [`${item.trustLevel} trust`] : []),
         ...(item.updatedAt ? [`updated ${item.updatedAt}`] : []),
+        ...(item.path ? [`path ${item.path}`] : []),
         ...(item.score ? [`score ${item.score}`] : []),
       ];
       const quote = item.quote ? `: ${escapeHtml(item.quote)}` : "";
