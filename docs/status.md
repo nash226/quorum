@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9094f33` on 2026-07-10, feat: expose API transport capabilities
+- Latest shipped change: `e080990` on 2026-07-10, fix: preserve evidence paths in html imports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-10 | Direct push | fix: preserve evidence paths in html imports | `e080990` |
 | 2026-07-10 | Direct push | feat: expose API transport capabilities | `9094f33` |
 | 2026-07-10 | Direct push | test: smoke check API discovery contract | `7208ba2` |
 | 2026-07-10 | Direct push | feat: add OpenAPI operation identifiers | `6f1e20c` |
@@ -56,5 +57,4 @@
 | 2026-07-10 | Direct push | feat: allow stable CLI report timestamps | `4cfc833` |
 | 2026-07-10 | Direct push | feat: timestamp evaluation reports | `a78e8b3` |
 | 2026-07-10 | [#285](https://github.com/nash226/quorum/pull/285) | feat: timestamp text reports | `779908e` |
-| 2026-07-10 | [#284](https://github.com/nash226/quorum/pull/284) | feat: add generated timestamps to summary csv exports | `271bab7` |
 
