@@ -594,11 +594,11 @@ test("renders evaluation summary csv rows for each fixture", () => {
 
   assert.match(
     rendered,
-    /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,first_mismatch_evidence_title,first_mismatch_evidence_trust_level,first_mismatch_evidence_updated_at,first_mismatch_evidence_source_path,first_mismatch_evidence_score,first_mismatch_evidence_quote,/,
+    /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,first_mismatch_evidence_title,first_mismatch_evidence_trust_level,first_mismatch_evidence_updated_at,first_mismatch_evidence_source_path,first_mismatch_evidence_score,first_mismatch_evidence_quote,/,
   );
   assert.match(rendered, /Support policy example/);
   assert.match(rendered, /Support policy example,support,\/tmp\/fixtures\/support\.json/);
-  assert.match(rendered, /Support reviewer packet,Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,yes,0,0,1\.000,no,none,,,,,,,,,,,1,0,0,0,1,0,0,0/);
+  assert.match(rendered, /2026-07-05T10:20:00.000Z,Support policy example,support,\/tmp\/fixtures\/support\.json,\/tmp\/answers\/support\.md,Support reviewer packet,Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,yes,0,0,1\.000,no,none,,,,,,,,,,,1,0,0,0,1,0,0,0/);
 });
 
 test("evaluation summary csv includes first mismatched claim details", () => {
@@ -771,9 +771,9 @@ test("renders evaluation domain summary csv rows for each domain", () => {
   assert.equal(
     rendered,
     [
-      "domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label",
-      "hr,1,0,1,1,1.000,100%",
-      "support,1,1,0,1,0.000,0%",
+      "generated_at,domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label",
+      "2026-07-05T10:20:00.000Z,hr,1,0,1,1,1.000,100%",
+      "2026-07-05T10:20:00.000Z,support,1,1,0,1,0.000,0%",
       "",
     ].join("\n"),
   );
@@ -870,8 +870,8 @@ test("renders evaluation aggregate summary csv for the full benchmark run", () =
   assert.equal(
     rendered,
     [
-      "fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels",
-      "2,1,1,2,0.500,50%,hr | support,1 | 1,0 | 1,1.000 | 0.000,100% | 0%",
+      "generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels",
+      "2026-07-05T10:20:00.000Z,2,1,1,2,0.500,50%,hr | support,1 | 1,0 | 1,1.000 | 0.000,100% | 0%",
       "",
     ].join("\n"),
   );
