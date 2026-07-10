@@ -194,6 +194,18 @@ npm run dev -- evaluate \
 Repeat `--domain` to include multiple slices. When the flag is present, Quorum
 only evaluates fixtures whose `domain` matches one of those values.
 
+Evaluation scorecards can also enforce a minimum aggregate claim score in CI:
+
+```bash
+npm run dev -- evaluate \
+  --fixture-dir examples/evaluations \
+  --min-score 0.95 \
+  --fail-on-mismatch
+```
+
+The HTTP `POST /evaluate` workflow accepts the equivalent `minScore` value
+between `0` and `1`, and returns `scoreThresholdPassed` with the batch result.
+
 ## Programmatic API
 
 Quorum also exposes a small package API for agent and workflow integrations
