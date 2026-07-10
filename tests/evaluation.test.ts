@@ -111,6 +111,33 @@ test("evaluates shipped HTML fixture files for exported help-center style covera
   );
 });
 
+test("evaluates shipped PDF fixture files for document-export coverage", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/hr/pdf-policy.json"),
+    generatedAt: "2026-07-09T22:45:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR PDF policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.equal(scorecard.answerLabel, "HR PDF reviewer packet");
+  assert.equal(
+    scorecard.answerPreview,
+    "Employees receive 18 weeks of paid parental leave. Full-time employees receive 20 days of paid vacation each calendar...",
+  );
+  assert.deepEqual(scorecard.sourceDirs, []);
+  assert.deepEqual(scorecard.sourcePaths, [resolve("examples/sources/hr-policy.pdf")]);
+  assert.equal(scorecard.report.sources[0]?.title, "HR Benefits Policy PDF");
+  assert.equal(scorecard.report.sources[0]?.updatedAt, "2026-06-15T09:30:00-04:00");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.matchedClaims, 3);
+  assert.equal(scorecard.totalExpectedClaims, 3);
+  assert.equal(scorecard.score, 1);
+  assert.deepEqual(
+    scorecard.claims.map((claim) => claim.actualVerdict),
+    ["contradicted", "verified", "unsupported"],
+  );
+});
+
 test("evaluates one in-memory fixture file relative to its fixture path", async () => {
   const fixturePath = resolve("examples/evaluations/hr-policy.json");
   const fixtureContent = await loadEvaluationFixture(fixturePath);
@@ -141,6 +168,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
   assert.deepEqual(fixturePaths, [
     resolve("examples/evaluations/hr-policy.json"),
     resolve("examples/evaluations/hr/onboarding-policy.json"),
+    resolve("examples/evaluations/hr/pdf-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
     resolve("examples/evaluations/support/account-security-policy.json"),
     resolve("examples/evaluations/support/html-billing-policy.json"),
@@ -154,12 +182,13 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 5);
+  assert.equal(scorecards.length, 6);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
       "HR policy example",
       "HR onboarding policy example",
+      "HR PDF policy example",
       "Support policy example",
       "Support account policy example",
       "Support billing HTML example",
@@ -180,10 +209,10 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 2);
+  assert.equal(scorecards.length, 3);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
-    ["HR policy example", "HR onboarding policy example"],
+    ["HR policy example", "HR onboarding policy example", "HR PDF policy example"],
   );
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "hr"));
 });

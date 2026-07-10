@@ -387,8 +387,9 @@ test("evaluate filters shipped example fixtures by domain", async () => {
 
   assert.match(stdout, /Evaluation Fixture: HR policy example/);
   assert.match(stdout, /Evaluation Fixture: HR onboarding policy example/);
+  assert.match(stdout, /Evaluation Fixture: HR PDF policy example/);
   assert.doesNotMatch(stdout, /Evaluation Fixture: Support policy example/);
-  assert.match(stdout, /Fixtures: 2/);
+  assert.match(stdout, /Fixtures: 3/);
 });
 
 test("evaluate writes a one-row-per-fixture summary csv", async () => {
@@ -412,6 +413,7 @@ test("evaluate writes a one-row-per-fixture summary csv", async () => {
     );
     assert.match(summaryCsv, /HR policy example/);
     assert.match(summaryCsv, /HR onboarding policy example/);
+    assert.match(summaryCsv, /HR PDF policy example/);
     assert.match(summaryCsv, /Support policy example/);
     assert.match(summaryCsv, /Support account policy example/);
   } finally {
@@ -438,7 +440,7 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
       summaryCsv,
       /^domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label$/m,
     );
-    assert.match(summaryCsv, /^hr,2,0,6,6,1\.000,100%$/m);
+    assert.match(summaryCsv, /^hr,3,0,9,9,1\.000,100%$/m);
     assert.match(summaryCsv, /^support,3,0,9,9,1\.000,100%$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });

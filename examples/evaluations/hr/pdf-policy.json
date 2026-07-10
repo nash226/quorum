@@ -1,0 +1,14 @@
+{
+  "name": "HR PDF policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-answer.md",
+  "answerLabel": "HR PDF reviewer packet",
+  "sourcePaths": ["../../sources/hr-policy.pdf"],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["contradicted", "verified", "unsupported"]
+}
