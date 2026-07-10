@@ -178,6 +178,7 @@ export interface StartedApiServer {
 
 export const CAPABILITIES_PATH = "/capabilities";
 export const OPENAPI_PATH = "/openapi.json";
+export const API_MAX_REQUEST_BYTES = 10 * 1024 * 1024;
 const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
 const ALLOWED_HEADERS = "Content-Type";
 export const API_SERVICE_NAME = "quorum";
@@ -802,6 +803,9 @@ const OPENAPI_METHOD_NOT_ALLOWED_ERROR_EXAMPLE = {
 const OPENAPI_UNSUPPORTED_MEDIA_TYPE_ERROR_EXAMPLE = {
   error: "Content-Type must be application/json.",
 } as const;
+const OPENAPI_PAYLOAD_TOO_LARGE_ERROR_EXAMPLE = {
+  error: "Request body exceeds the 10 MiB limit.",
+} as const;
 const OPENAPI_INTERNAL_SERVER_ERROR_EXAMPLE = {
   error: "Internal server error.",
 } as const;
@@ -1292,10 +1296,24 @@ async function handleApiRequest(
 }
 
 async function readJsonBody(request: IncomingMessage): Promise<unknown> {
+  const contentLength = request.headers["content-length"];
+  if (contentLength !== undefined) {
+    const declaredLength = Number(contentLength);
+    if (Number.isFinite(declaredLength) && declaredLength > API_MAX_REQUEST_BYTES) {
+      throw requestError("Request body exceeds the 10 MiB limit.", 413);
+    }
+  }
+
   const chunks: Buffer[] = [];
+  let totalBytes = 0;
 
   for await (const chunk of request) {
-    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+    const buffer = typeof chunk === "string" ? Buffer.from(chunk) : chunk;
+    totalBytes += buffer.byteLength;
+    if (totalBytes > API_MAX_REQUEST_BYTES) {
+      throw requestError("Request body exceeds the 10 MiB limit.", 413);
+    }
+    chunks.push(buffer);
   }
 
   const body = Buffer.concat(chunks).toString("utf8").trim();
@@ -1618,6 +1636,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       invalidContentType: {
         summary: "The caller sent a non-JSON Content-Type header",
         value: OPENAPI_UNSUPPORTED_MEDIA_TYPE_ERROR_EXAMPLE,
+      },
+    }),
+    "413": errorResponse("The request body exceeded Quorum's 10 MiB JSON limit.", {
+      payloadTooLarge: {
+        summary: "The caller sent a JSON body larger than the configured limit",
+        value: OPENAPI_PAYLOAD_TOO_LARGE_ERROR_EXAMPLE,
       },
     }),
     "500": errorResponse("The server failed while handling the request.", {

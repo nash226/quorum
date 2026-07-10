@@ -8,6 +8,7 @@ import {
   API_ENDPOINTS as SERVER_API_ENDPOINTS,
   CAPABILITIES_PATH as SERVER_CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS as SERVER_API_DISCOVERY_HEADERS,
+  API_MAX_REQUEST_BYTES as SERVER_API_MAX_REQUEST_BYTES,
   API_SERVICE_NAME as SERVER_API_SERVICE_NAME,
   API_VERSION as SERVER_API_VERSION,
   createApiServer,
@@ -2524,6 +2525,18 @@ Refund requests receive an initial response within one business day.
       "Content-Type must be application/json.",
     );
     assert.equal(
+      openApi.paths["/verify"]?.post?.responses?.["413"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ApiErrorResponse",
+    );
+    const verify413Example = openApi.paths["/verify"]?.post?.responses?.["413"]?.content?.[
+      "application/json"
+    ]?.examples?.["payloadTooLarge"]?.value as
+      | {
+          error?: string;
+        }
+      | undefined;
+    assert.equal(verify413Example?.error, "Request body exceeds the 10 MiB limit.");
+    assert.equal(
       openApi.paths["/verify"]?.post?.responses?.["500"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",
     );
@@ -2819,6 +2832,28 @@ test("programmatic API answers CORS preflight requests", async () => {
     assert.equal(response.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(response.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(await response.text(), "");
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API rejects JSON bodies larger than the request limit", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answer: "x".repeat(SERVER_API_MAX_REQUEST_BYTES),
+        sources: [],
+      }),
+    });
+
+    assert.equal(response.status, 413);
+    assert.deepEqual(await response.json(), {
+      error: "Request body exceeds the 10 MiB limit.",
+    });
   } finally {
     await api.close();
   }
