@@ -1659,11 +1659,11 @@ test("programmatic API exports verification report renderers", () => {
   assert.match(renderTextReport(report), /Quorum Verification Report/);
   assert.match(renderMarkdownReport(report), /# Quorum Verification Report/);
   assert.match(renderHtmlReport(report), /<!doctype html>/i);
-  assert.match(renderReviewerDecisionCsv(report), /answer_label,answer_path/);
+  assert.match(renderReviewerDecisionCsv(report), /generated_at,answer_label,answer_path/);
   assert.match(renderSummaryCsv(report), /primary_verdict/);
   assert.match(renderBatchMarkdownReport(batchReport), /# Quorum Batch Verification Report/);
   assert.match(renderBatchHtmlReport(batchReport), /<!doctype html>/i);
-  assert.match(renderBatchReviewerDecisionCsv(batchReport), /answer_label,answer_path/);
+  assert.match(renderBatchReviewerDecisionCsv(batchReport), /generated_at,answer_label,answer_path/);
   assert.match(renderBatchSummaryCsv(batchReport), /primary_verdict/);
   assert.equal(renderAnswerLabel("examples/answers/hr-answer.md"), "hr-answer");
   assert.deepEqual(
