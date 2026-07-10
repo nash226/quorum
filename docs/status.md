@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `271bab7` on 2026-07-10, feat: add generated timestamps to summary csv exports
+- Latest shipped change: `779908e` on 2026-07-10, feat: timestamp text reports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -21,6 +21,7 @@
 - compare each claim against approved source snippets
 - label each claim as `verified`, `contradicted`, `unsupported`, or `needs_review`
 - print a human-readable report
+- include the report generation timestamp in text output for audit-friendly handoff
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
@@ -47,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-10 | [#285](https://github.com/nash226/quorum/pull/285) | feat: timestamp text reports | `779908e` |
 | 2026-07-10 | [#284](https://github.com/nash226/quorum/pull/284) | feat: add generated timestamps to summary csv exports | `271bab7` |
 | 2026-07-10 | [#283](https://github.com/nash226/quorum/pull/283) | feat: add generated timestamps to review csv exports | `95210fa` |
 | 2026-07-09 | [#282](https://github.com/nash226/quorum/pull/282) | feat: add evaluation aggregate summary csv | `769b05e` |
@@ -54,5 +56,4 @@
 | 2026-07-09 | [#280](https://github.com/nash226/quorum/pull/280) | test: add pdf evaluation fixture | `83cc979` |
 | 2026-07-09 | [#279](https://github.com/nash226/quorum/pull/279) | feat: filter evaluation scorecards by domain | `cdaa28d` |
 | 2026-07-09 | [#278](https://github.com/nash226/quorum/pull/278) | feat: expose api options discovery | `f354f51` |
-| 2026-07-09 | [#277](https://github.com/nash226/quorum/pull/277) | fix: align evaluation openapi schema | `693eb8c` |
 
