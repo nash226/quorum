@@ -369,6 +369,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexPayload.openapiPath, "/openapi.json");
     assert.deepEqual(indexPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
     assert.deepEqual(indexPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
+    assert.deepEqual(indexPayload.capabilities.requestContentTypes, ["application/json"]);
     assert.deepEqual(indexPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(indexPayload.capabilities.trustLevels, ["low", "medium", "high"]);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "OPTIONS" && endpoint.path === "/verify"), true);
@@ -410,6 +411,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(capabilitiesPayload.openapiPath, "/openapi.json");
     assert.deepEqual(capabilitiesPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
     assert.deepEqual(capabilitiesPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
+    assert.deepEqual(capabilitiesPayload.capabilities.requestContentTypes, ["application/json"]);
     assert.deepEqual(capabilitiesPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(capabilitiesPayload.capabilities.trustLevels, ["low", "medium", "high"]);
     assert.equal("endpoints" in capabilitiesPayload, false);
