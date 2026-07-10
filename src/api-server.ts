@@ -130,6 +130,7 @@ export interface EvaluateApiRequest {
   }>;
   domains?: string[];
   generatedAt?: string;
+  minScore?: number;
   includeArtifacts?: ApiEvaluateArtifact[];
   failOnStatus?: boolean;
 }
@@ -1282,6 +1283,7 @@ async function handleApiRequest(
       fixtures: body.fixtures,
       domains: body.domains,
       generatedAt: body.generatedAt,
+      minScore: body.minScore,
     });
     writeOperationResult(
       response,
@@ -1420,6 +1422,7 @@ function parseEvaluateRequest(value: unknown): {
   fixtures: InMemoryEvaluationFixtureInput[];
   domains?: string[];
   generatedAt?: string;
+  minScore?: number;
   includeArtifacts?: ApiEvaluateArtifact[];
   failOnStatus?: boolean;
 } {
@@ -1434,9 +1437,22 @@ function parseEvaluateRequest(value: unknown): {
     fixtures: fixturesValue.map((fixture, index) => parseFixtureInput(fixture, index)),
     domains: parseOptionalStringArray(record.domains, "domains"),
     generatedAt: optionalString(record.generatedAt, "generatedAt"),
+    minScore: parseOptionalScore(record.minScore),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, EVALUATE_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
   };
+}
+
+function parseOptionalScore(value: unknown): number | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 1) {
+    throw requestError("minScore must be a number between 0 and 1.");
+  }
+
+  return value;
 }
 
 function parseAnswerInput(value: unknown, index: number): InMemoryAnswerInput {
@@ -2220,6 +2236,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                       minItems: 1,
                       items: { type: "string" },
                     },
+                    minScore: {
+                      type: "number",
+                      minimum: 0,
+                      maximum: 1,
+                      description: "Fail the evaluation when the aggregate claim score is below this threshold.",
+                    },
                     fixtures: {
                       type: "array",
                       minItems: 1,
@@ -2857,6 +2879,8 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             },
             shouldFail: { type: "boolean" },
             mismatchCount: { type: "integer", minimum: 0 },
+            minScore: { type: "number", minimum: 0, maximum: 1 },
+            scoreThresholdPassed: { type: "boolean" },
             summary: { $ref: "#/components/schemas/EvaluationAggregateSummary" },
           },
           required: ["scorecards", "shouldFail", "mismatchCount", "summary"],
