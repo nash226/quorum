@@ -58,6 +58,7 @@ interface VerifyArgs {
   defaultTrustLevel?: SourceTrustLevel;
   json: boolean;
   failOn: ClaimVerdict[];
+  generatedAt?: string;
 }
 
 interface VerifySingleArgs extends VerifyArgs {
@@ -89,6 +90,7 @@ interface ImportReviewArgs {
   markdownOutPath?: string;
   htmlOutPath?: string;
   summaryCsvOutPath?: string;
+  generatedAt?: string;
 }
 
 interface EvaluateArgs {
@@ -103,6 +105,7 @@ interface EvaluateArgs {
   summaryCsvOutPath?: string;
   domainSummaryCsvOutPath?: string;
   aggregateSummaryCsvOutPath?: string;
+  generatedAt?: string;
 }
 
 interface ServeArgs {
@@ -198,7 +201,7 @@ async function main(): Promise<void> {
 async function runVerify(args: string[]): Promise<void> {
   const parsed = parseVerifyArgs(args);
   const sources = await loadSources(parsed);
-  const report = await verifyAnswerFile(parsed.answerPath, sources, undefined, parsed.answerLabel);
+  const report = await verifyAnswerFile(parsed.answerPath, sources, parsed.generatedAt, parsed.answerLabel);
   const jsonReport = JSON.stringify(report, null, 2);
   const htmlReport = renderHtmlReport(report, parsed.failOn);
   const markdownReport = renderMarkdownReport(report, parsed.failOn);
@@ -270,6 +273,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
     answerLabelsByPath: parsed.answerLabelsByPath,
     sources,
     failOn: parsed.failOn,
+    generatedAt: parsed.generatedAt,
   });
   const jsonReport = JSON.stringify(batchReport, null, 2);
   const markdownReport = renderBatchMarkdownReport(batchReport);
@@ -336,7 +340,10 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
 async function runImportReview(args: string[]): Promise<void> {
   const parsed = parseImportReviewArgs(args);
-  const report = await importReviewerDecisionFile(parsed.reviewCsvPath);
+  const report = await importReviewerDecisionFile({
+    reviewCsvPath: parsed.reviewCsvPath,
+    generatedAt: parsed.generatedAt,
+  });
   const jsonReport = JSON.stringify(report, null, 2);
   const markdownReport = renderReviewerDecisionImportMarkdownReport(report, parsed.failOn);
   const htmlReport = renderReviewerDecisionImportHtmlReport(report, parsed.failOn);
@@ -396,6 +403,7 @@ async function runEvaluate(args: string[]): Promise<void> {
     fixturePaths: parsed.fixturePaths,
     fixtureDirPaths: parsed.fixtureDirPaths,
     domains: parsed.domains,
+    generatedAt: parsed.generatedAt,
   });
   const jsonReport = JSON.stringify(
     scorecards.length === 1 ? scorecards[0] : scorecards,
@@ -725,6 +733,7 @@ function parseSharedVerifyArgs(
   let defaultTrustLevel: SourceTrustLevel | undefined;
   let json = false;
   const failOn: ClaimVerdict[] = [];
+  let generatedAt: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -741,6 +750,9 @@ function parseSharedVerifyArgs(
       index += 1;
     } else if (arg === "--fail-on" && next) {
       failOn.push(parseClaimVerdict(next));
+      index += 1;
+    } else if (arg === "--generated-at" && next) {
+      generatedAt = parseGeneratedAt(next);
       index += 1;
     } else if (arg === "--json") {
       json = true;
@@ -761,6 +773,7 @@ function parseSharedVerifyArgs(
     defaultTrustLevel,
     json,
     failOn,
+    generatedAt,
   };
 }
 
@@ -772,6 +785,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   let summaryCsvOutPath: string | undefined;
   let json = false;
   const failOn: ClaimVerdict[] = [];
+  let generatedAt: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -795,6 +809,9 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     } else if (arg === "--fail-on" && next) {
       failOn.push(parseClaimVerdict(next));
       index += 1;
+    } else if (arg === "--generated-at" && next) {
+      generatedAt = parseGeneratedAt(next);
+      index += 1;
     } else if (arg === "--json") {
       json = true;
     } else {
@@ -814,6 +831,7 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     markdownOutPath,
     htmlOutPath,
     summaryCsvOutPath,
+    generatedAt,
   };
 }
 
@@ -829,6 +847,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
   let aggregateSummaryCsvOutPath: string | undefined;
   let json = false;
   let failOnMismatch = false;
+  let generatedAt: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -867,6 +886,9 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
       json = true;
     } else if (arg === "--fail-on-mismatch") {
       failOnMismatch = true;
+    } else if (arg === "--generated-at" && next) {
+      generatedAt = parseGeneratedAt(next);
+      index += 1;
     } else {
       throw new Error(`Unknown or incomplete argument: ${arg}`);
     }
@@ -888,6 +910,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
     summaryCsvOutPath,
     domainSummaryCsvOutPath,
     aggregateSummaryCsvOutPath,
+    generatedAt,
   };
 }
 
@@ -1013,12 +1036,22 @@ function isHelpFlag(value: string): boolean {
   return HELP_FLAGS.has(value);
 }
 
+function parseGeneratedAt(value: string): string {
+  const timestamp = Date.parse(value);
+
+  if (Number.isNaN(timestamp)) {
+    throw new Error(`Invalid --generated-at timestamp: ${value}`);
+  }
+
+  return value;
+}
+
 function printHelp(command?: CommandName): void {
   const helpTextByCommand: Record<CommandName, string> = {
     verify: `Quorum verify
 
 Usage:
-  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--generated-at <timestamp>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --answer <path|->          Answer file to verify, or - to read from stdin
@@ -1027,6 +1060,7 @@ Options:
   --source-dir <path>        Directory of approved source documents
   --default-trust-level <level>
                              Override trust level for sources without metadata
+  --generated-at <timestamp> Use this ISO timestamp in generated reports
   --json                     Print the full JSON report
   --out <path>               Write the JSON report to disk
   --markdown-out <path>      Write a reviewer-friendly Markdown report
@@ -1042,7 +1076,7 @@ Example:
     "verify-batch": `Quorum verify-batch
 
 Usage:
-  quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--generated-at <timestamp>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --answer <path|->          Answer file to include, or - to read one answer from stdin once
@@ -1052,6 +1086,7 @@ Options:
   --source-dir <path>        Directory of approved source documents
   --default-trust-level <level>
                              Override trust level for sources without metadata
+  --generated-at <timestamp> Use this ISO timestamp in generated reports
   --json                     Print the full JSON batch report
   --out <path>               Write the JSON batch report to disk
   --markdown-out <path>      Write a Markdown batch report
@@ -1067,10 +1102,11 @@ Example:
     "import-review": `Quorum import-review
 
 Usage:
-  quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum import-review --review-csv <path|-> [--generated-at <timestamp>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --review-csv <path|->      Reviewer decision CSV to import, or - to read from stdin
+  --generated-at <timestamp> Use this ISO timestamp in generated reports
   --json                     Print the full imported JSON report
   --out <path>               Write the imported JSON report to disk
   --markdown-out <path>      Write a Markdown import report
@@ -1085,12 +1121,13 @@ Example:
     evaluate: `Quorum evaluate
 
 Usage:
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
 
 Options:
   --fixture <path>          Evaluation fixture JSON file; may be repeated
   --fixture-dir <path>      Directory of evaluation fixture JSON files; may be repeated
   --domain <name>           Only evaluate fixtures whose domain matches this value
+  --generated-at <timestamp> Use this ISO timestamp in generated reports
   --json                    Print the evaluation scorecard JSON
   --out <path>              Write the JSON scorecard output to disk
   --markdown-out <path>     Write a Markdown evaluation report
