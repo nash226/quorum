@@ -1552,6 +1552,35 @@ test("programmatic API returns mismatch metadata for in-memory evaluation fixtur
   }
 });
 
+test("programmatic API can gate evaluation batches on a minimum aggregate score", async () => {
+  const fixturePath = join(process.cwd(), "examples/evaluations/hr-policy.json");
+  const fixtureContent = await readFile(fixturePath, "utf8");
+
+  const passing = await evaluateFixtureContentsResult({
+    fixtures: [{ fixturePath, content: fixtureContent }],
+    minScore: 1,
+  });
+  const failing = await evaluateFixtureContentsResult({
+    fixtures: [
+      {
+        fixturePath,
+        content: fixtureContent.replace(
+          '["contradicted", "verified", "unsupported"]',
+          '["unsupported", "verified", "contradicted"]',
+        ),
+      },
+    ],
+    minScore: 1,
+  });
+
+  assert.equal(passing.shouldFail, false);
+  assert.equal(passing.minScore, 1);
+  assert.equal(passing.scoreThresholdPassed, true);
+  assert.equal(failing.shouldFail, true);
+  assert.equal(failing.minScore, 1);
+  assert.equal(failing.scoreThresholdPassed, false);
+});
+
 test("programmatic API returns mismatch metadata for fixture file evaluation helpers", async () => {
   const batchResult = await evaluateFixtureFilesResult({
     fixturePaths: [],
