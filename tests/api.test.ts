@@ -2130,6 +2130,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
             responses?: Record<
               string,
               {
+                headers?: Record<string, { description?: string }>;
                 content?: Record<
                   string,
                   {
@@ -2236,6 +2237,24 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       verifyResponses?.["413"]?.description,
       `The JSON request body exceeded the ${API_MAX_REQUEST_BYTES}-byte limit.`,
     );
+    assert.deepEqual(Object.keys(verifyResponses?.["200"]?.headers ?? {}).sort(), [
+      "X-Quorum-Max-Request-Bytes",
+      "X-Quorum-OpenAPI-Path",
+      "X-Quorum-Request-Id",
+      "X-Quorum-Service",
+      "X-Quorum-Version",
+    ]);
+    assert.equal(
+      verifyResponses?.["200"]?.headers?.["X-Quorum-Request-Id"]?.description,
+      "Request correlation identifier echoed by the server.",
+    );
+    assert.deepEqual(Object.keys(verifyResponses?.["400"]?.headers ?? {}).sort(), [
+      "X-Quorum-Max-Request-Bytes",
+      "X-Quorum-OpenAPI-Path",
+      "X-Quorum-Request-Id",
+      "X-Quorum-Service",
+      "X-Quorum-Version",
+    ]);
     assert.equal(openApi.paths["/verify-batch"]?.options?.summary, "Batch verify preflight");
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
     assert.equal(openApi.paths["/import-review"]?.options?.summary, "Reviewer import preflight");
