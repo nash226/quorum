@@ -1297,6 +1297,7 @@ async function readJsonBody(request: IncomingMessage): Promise<unknown> {
   if (typeof contentLength === "string") {
     const declaredLength = Number(contentLength);
     if (Number.isFinite(declaredLength) && declaredLength > API_MAX_REQUEST_BYTES) {
+      request.resume();
       throw requestError(`Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`, 413);
     }
   }
@@ -1308,6 +1309,7 @@ async function readJsonBody(request: IncomingMessage): Promise<unknown> {
     const buffer = typeof chunk === "string" ? Buffer.from(chunk) : chunk;
     bytesRead += buffer.byteLength;
     if (bytesRead > API_MAX_REQUEST_BYTES) {
+      request.resume();
       throw requestError(`Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`, 413);
     }
     chunks.push(buffer);

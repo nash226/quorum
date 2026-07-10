@@ -2872,8 +2872,7 @@ test("programmatic API enforces the request limit while reading chunked bodies",
         },
       );
       request.on("error", reject);
-      request.write(JSON.stringify({ answer: "x".repeat(API_MAX_REQUEST_BYTES / 2), sources: [] }));
-      request.write("x".repeat(API_MAX_REQUEST_BYTES));
+      request.write("x".repeat(API_MAX_REQUEST_BYTES + 1));
       request.end();
     });
 
