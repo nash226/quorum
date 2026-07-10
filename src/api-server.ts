@@ -1686,7 +1686,8 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
     },
     "500": errorResponse("The server failed while handling the request."),
   };
-  const corsPreflightOperation = (summary: string) => ({
+  const corsPreflightOperation = (operationId: string, summary: string) => ({
+    operationId,
     summary,
     responses: corsPreflightResponse,
   });
@@ -1703,6 +1704,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
     paths: {
       "/": {
         get: {
+          operationId: "getApiDiscovery",
           summary: "Service discovery",
           responses: {
             "200": {
@@ -1723,6 +1725,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
         head: {
+          operationId: "headApiDiscovery",
           summary: "Service discovery headers",
           responses: {
             "200": {
@@ -1736,10 +1739,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
-        options: corsPreflightOperation("Service discovery preflight"),
+        options: corsPreflightOperation("optionsApiDiscovery", "Service discovery preflight"),
       },
       [CAPABILITIES_PATH]: {
         get: {
+          operationId: "getCapabilities",
           summary: "Capability discovery",
           responses: {
             "200": {
@@ -1760,6 +1764,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
         head: {
+          operationId: "headCapabilities",
           summary: "Capability discovery headers",
           responses: {
             "200": {
@@ -1773,10 +1778,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
-        options: corsPreflightOperation("Capability discovery preflight"),
+        options: corsPreflightOperation("optionsCapabilities", "Capability discovery preflight"),
       },
       "/health": {
         get: {
+          operationId: "getHealth",
           summary: "Readiness check",
           responses: {
             "200": {
@@ -1797,6 +1803,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
         head: {
+          operationId: "headHealth",
           summary: "Readiness check headers",
           responses: {
             "200": {
@@ -1810,10 +1817,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
-        options: corsPreflightOperation("Readiness preflight"),
+        options: corsPreflightOperation("optionsHealth", "Readiness preflight"),
       },
       "/healthz": {
         get: {
+          operationId: "getHealthz",
           summary: "Readiness check alias",
           responses: {
             "200": {
@@ -1834,6 +1842,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
         head: {
+          operationId: "headHealthz",
           summary: "Readiness check alias headers",
           responses: {
             "200": {
@@ -1847,10 +1856,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
-        options: corsPreflightOperation("Readiness alias preflight"),
+        options: corsPreflightOperation("optionsHealthz", "Readiness alias preflight"),
       },
       [OPENAPI_PATH]: {
         get: {
+          operationId: "getOpenApi",
           summary: "OpenAPI description",
           responses: {
             "200": {
@@ -1877,6 +1887,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
         head: {
+          operationId: "headOpenApi",
           summary: "OpenAPI description headers",
           responses: {
             "200": {
@@ -1896,11 +1907,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "500": errorResponse("The server failed while handling the request."),
           },
         },
-        options: corsPreflightOperation("OpenAPI description preflight"),
+        options: corsPreflightOperation("optionsOpenApi", "OpenAPI description preflight"),
       },
       "/verify": {
-        options: corsPreflightOperation("Verify preflight"),
+        options: corsPreflightOperation("optionsVerify", "Verify preflight"),
         post: {
+          operationId: "postVerify",
           summary: "Verify one answer",
           requestBody: {
             required: true,
@@ -1994,8 +2006,9 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
       },
       "/verify-batch": {
-        options: corsPreflightOperation("Batch verify preflight"),
+        options: corsPreflightOperation("optionsVerifyBatch", "Batch verify preflight"),
         post: {
+          operationId: "postVerifyBatch",
           summary: "Verify multiple answers",
           requestBody: {
             required: true,
@@ -2099,8 +2112,9 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
       },
       "/import-review": {
-        options: corsPreflightOperation("Reviewer import preflight"),
+        options: corsPreflightOperation("optionsImportReview", "Reviewer import preflight"),
         post: {
+          operationId: "postImportReview",
           summary: "Import reviewer decisions",
           requestBody: {
             required: true,
@@ -2186,8 +2200,9 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
       },
       "/evaluate": {
-        options: corsPreflightOperation("Evaluation preflight"),
+        options: corsPreflightOperation("optionsEvaluate", "Evaluation preflight"),
         post: {
+          operationId: "postEvaluate",
           summary: "Evaluate fixtures",
           requestBody: {
             required: true,
