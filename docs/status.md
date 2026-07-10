@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8be4058` on 2026-07-10, feat: gate evaluations on minimum score
+- Latest shipped change: `5a03fff` on 2026-07-10, feat: expose API request limits in headers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-10 | Direct push | feat: expose API request limits in headers | `5a03fff` |
 | 2026-07-10 | Direct push | feat: gate evaluations on minimum score | `8be4058` |
 | 2026-07-10 | Direct push | feat: advertise api request content types | `5191523` |
 | 2026-07-10 | Direct push | fix: preserve evidence paths in html imports | `e080990` |
@@ -56,5 +57,4 @@
 | 2026-07-10 | Direct push | test: smoke check API discovery contract | `7208ba2` |
 | 2026-07-10 | Direct push | feat: add OpenAPI operation identifiers | `6f1e20c` |
 | 2026-07-10 | Direct push | fix: cap API request body size | `7c98f27` |
-| 2026-07-10 | Direct push | feat: allow stable CLI report timestamps | `4cfc833` |
 
