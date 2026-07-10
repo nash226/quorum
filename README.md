@@ -136,7 +136,7 @@ window, and an unsupported password-manager promise.
 The packed smoke check also confirms order-tracking answers preserve the verified
 tracking-history claim while routing delivery guarantees and automatic refunds to
 review or unsupported verdicts.
-The packed smoke check also verifies workspace-access answers, preserving the
+The packed smoke check now verifies workspace-access answers, preserving the
 workspace-owner invitation control while catching an incorrect acceptance
 window and an unsupported automatic-admin promise.
 
