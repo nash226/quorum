@@ -1039,6 +1039,7 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
 export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): string {
   const rows = [
     [
+      "generated_at",
       "fixture_name",
       "domain",
       "fixture_path",
@@ -1073,6 +1074,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       "actual_needs_review",
     ],
     ...scorecards.map((scorecard) => [
+      scorecard.report.generatedAt,
       scorecard.fixtureName,
       scorecard.domain ?? "",
       scorecard.fixturePath ?? "",
@@ -1113,8 +1115,10 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
 
 export function renderEvaluationDomainSummaryCsv(scorecards: EvaluationScorecard[]): string {
   const aggregate = summarizeEvaluationScorecards(scorecards);
+  const generatedAt = summarizeGeneratedAtValues(scorecards);
   const rows = [
     [
+      "generated_at",
       "domain",
       "fixture_count",
       "mismatch_count",
@@ -1124,6 +1128,7 @@ export function renderEvaluationDomainSummaryCsv(scorecards: EvaluationScorecard
       "score_label",
     ],
     ...aggregate.domains.map((domainSummary) => [
+      generatedAt,
       domainSummary.domain,
       domainSummary.fixtureCount.toString(),
       domainSummary.mismatchCount.toString(),
@@ -1140,8 +1145,10 @@ export function renderEvaluationDomainSummaryCsv(scorecards: EvaluationScorecard
 export function renderEvaluationAggregateSummaryCsv(scorecards: EvaluationScorecard[]): string {
   const aggregate = summarizeEvaluationScorecards(scorecards);
   const mismatchCount = scorecards.filter(hasEvaluationMismatch).length;
+  const generatedAt = summarizeGeneratedAtValues(scorecards);
   const rows = [
     [
+      "generated_at",
       "fixture_count",
       "mismatch_count",
       "matched_claims",
@@ -1155,6 +1162,7 @@ export function renderEvaluationAggregateSummaryCsv(scorecards: EvaluationScorec
       "domain_score_labels",
     ],
     [
+      generatedAt,
       aggregate.fixtureCount.toString(),
       mismatchCount.toString(),
       aggregate.matchedClaims.toString(),
@@ -1715,6 +1723,12 @@ function summarizeEvaluationScorecards(
       totalExpectedClaims > 0 ? `${Math.round((matchedClaims / totalExpectedClaims) * 100)}%` : "n/a",
     domains,
   };
+}
+
+function summarizeGeneratedAtValues(scorecards: EvaluationScorecard[]): string {
+  return serializeDelimitedList(
+    Array.from(new Set(scorecards.map((scorecard) => scorecard.report.generatedAt))),
+  );
 }
 
 function escapeHtml(value: string): string {
