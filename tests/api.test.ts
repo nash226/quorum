@@ -2231,7 +2231,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/verify"]?.options?.summary, "Verify preflight");
     assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
     const verifyResponses = openApi.paths["/verify"]?.post?.responses as
-      | Record<string, { description?: string }>
+      | Record<string, { description?: string; headers?: Record<string, { description?: string }> }>
       | undefined;
     assert.equal(
       verifyResponses?.["413"]?.description,
