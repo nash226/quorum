@@ -1630,6 +1630,28 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
     },
     required: ["verified", "contradicted", "unsupported", "needs_review"],
   };
+  const apiResponseHeaders = {
+    [API_DISCOVERY_HEADERS.service]: {
+      schema: { type: "string" },
+      description: "Stable Quorum service identifier.",
+    },
+    [API_DISCOVERY_HEADERS.version]: {
+      schema: { type: "string" },
+      description: "Running Quorum version.",
+    },
+    [API_DISCOVERY_HEADERS.openapiPath]: {
+      schema: { type: "string" },
+      description: "Relative path to the local OpenAPI document.",
+    },
+    [API_DISCOVERY_HEADERS.maxRequestBytes]: {
+      schema: { type: "integer", minimum: 1 },
+      description: "Maximum JSON request body size in bytes.",
+    },
+    [API_REQUEST_ID_HEADER]: {
+      schema: { type: "string", minLength: 1, maxLength: 128 },
+      description: "Request correlation identifier echoed by the server.",
+    },
+  };
   const errorResponse = (
     description: string,
     examples?: Record<string, { summary: string; value: { error: string } }>,
@@ -1641,6 +1663,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         ...(examples ? { examples } : {}),
       },
     },
+    headers: apiResponseHeaders,
   });
   const postErrorResponses = {
     "400": errorResponse("The JSON body was missing required fields or had invalid values.", {
@@ -1741,6 +1764,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Available Quorum local API endpoints.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiIndexResponse" },
@@ -1780,6 +1804,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Supported Quorum capabilities without endpoint listings.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiCapabilitiesResponse" },
@@ -1819,6 +1844,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Server is ready to accept requests.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiHealthResponse" },
@@ -1858,6 +1884,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Server is ready to accept requests through the conventional probe path.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiHealthResponse" },
@@ -1897,6 +1924,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Machine-readable API description for this server.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   schema: {
@@ -1987,6 +2015,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Single-answer verification result.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   examples: {
@@ -2011,6 +2040,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             },
             "409": {
               description: "Verification matched the requested fail policy while failOnStatus was enabled.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   examples: {
@@ -2093,6 +2123,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Batch verification result.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   examples: {
@@ -2117,6 +2148,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             },
             "409": {
               description: "Batch verification matched the requested fail policy while failOnStatus was enabled.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   examples: {
@@ -2181,6 +2213,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Reviewer decision import result.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   examples: {
@@ -2205,6 +2238,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             },
             "409": {
               description: "Imported reviewer decisions matched the requested fail policy while failOnStatus was enabled.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   examples: {
@@ -2280,6 +2314,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Evaluation scorecard batch result.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   examples: {
@@ -2304,6 +2339,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             },
             "409": {
               description: "Evaluation mismatches were detected while failOnStatus was enabled.",
+              headers: apiResponseHeaders,
               content: {
                 "application/json": {
                   examples: {
