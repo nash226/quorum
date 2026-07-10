@@ -182,7 +182,6 @@ export const CAPABILITIES_PATH = "/capabilities";
 export const OPENAPI_PATH = "/openapi.json";
 export const API_MAX_REQUEST_BYTES = 1024 * 1024;
 const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
-const ALLOWED_HEADERS = "Content-Type";
 export const API_SERVICE_NAME = "quorum";
 export const API_VERSION = "0.1.0";
 export const API_DISCOVERY_HEADERS = {
@@ -192,6 +191,7 @@ export const API_DISCOVERY_HEADERS = {
   maxRequestBytes: "X-Quorum-Max-Request-Bytes",
 } as const;
 export const API_REQUEST_ID_HEADER = "X-Quorum-Request-Id";
+export const API_CORS_ALLOWED_HEADERS = ["Content-Type", API_REQUEST_ID_HEADER].join(", ");
 const EXPOSED_HEADERS = [...Object.values(API_DISCOVERY_HEADERS), API_REQUEST_ID_HEADER].join(", ");
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
@@ -3003,7 +3003,7 @@ function writeMethodNotAllowed(response: ServerResponse, allow: string): void {
 function applyCorsHeaders(response: ServerResponse): void {
   response.setHeader("Access-Control-Allow-Origin", "*");
   response.setHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
-  response.setHeader("Access-Control-Allow-Headers", ALLOWED_HEADERS);
+  response.setHeader("Access-Control-Allow-Headers", API_CORS_ALLOWED_HEADERS);
   response.setHeader("Access-Control-Expose-Headers", EXPOSED_HEADERS);
 }
 
