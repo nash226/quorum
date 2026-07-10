@@ -188,6 +188,7 @@ export const API_DISCOVERY_HEADERS = {
   service: "X-Quorum-Service",
   version: "X-Quorum-Version",
   openapiPath: "X-Quorum-OpenAPI-Path",
+  maxRequestBytes: "X-Quorum-Max-Request-Bytes",
 } as const;
 const EXPOSED_HEADERS = Object.values(API_DISCOVERY_HEADERS).join(", ");
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
@@ -1701,6 +1702,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           schema: { type: "string" },
           description: "Relative path to the local OpenAPI document.",
         },
+        [API_DISCOVERY_HEADERS.maxRequestBytes]: {
+          schema: { type: "integer", minimum: 1 },
+          description: "Maximum JSON request body size in bytes.",
+        },
       },
     },
     "500": errorResponse("The server failed while handling the request."),
@@ -2998,6 +3003,7 @@ function applyApiDiscoveryHeaders(response: ServerResponse): void {
   response.setHeader(API_DISCOVERY_HEADERS.service, API_SERVICE_NAME);
   response.setHeader(API_DISCOVERY_HEADERS.version, API_VERSION);
   response.setHeader(API_DISCOVERY_HEADERS.openapiPath, OPENAPI_PATH);
+  response.setHeader(API_DISCOVERY_HEADERS.maxRequestBytes, API_MAX_REQUEST_BYTES);
 }
 
 function writeNoContent(response: ServerResponse): void {

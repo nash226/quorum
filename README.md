@@ -481,9 +481,10 @@ balancers and orchestrators that expect the conventional probe path. `HEAD /`,
 expose the same status code and headers without a JSON body, which makes
 lightweight readiness probes and schema checks easier to wire into orchestrators
 and load balancers.
-Those responses also include `X-Quorum-Service`, `X-Quorum-Version`, and
-`X-Quorum-OpenAPI-Path` headers so callers can confirm they reached Quorum and
-discover the local schema path without parsing a response body first. Browser
+Those responses also include `X-Quorum-Service`, `X-Quorum-Version`,
+`X-Quorum-OpenAPI-Path`, and `X-Quorum-Max-Request-Bytes` headers so callers
+can confirm they reached Quorum, discover the local schema path, and learn the
+JSON payload limit without parsing a response body first. Browser
 clients can read those discovery headers directly because Quorum also exposes
 them through `Access-Control-Expose-Headers`.
 `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
