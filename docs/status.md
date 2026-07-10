@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bd32989` on 2026-07-09, docs: clarify HTTP API workflow coverage
+- Latest shipped change: `769b05e` on 2026-07-09, feat: add evaluation aggregate summary csv
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-09 | [#282](https://github.com/nash226/quorum/pull/282) | feat: add evaluation aggregate summary csv | `769b05e` |
 | 2026-07-09 | [#281](https://github.com/nash226/quorum/pull/281) | docs: clarify HTTP API workflow coverage | `bd32989` |
 | 2026-07-09 | [#280](https://github.com/nash226/quorum/pull/280) | test: add pdf evaluation fixture | `83cc979` |
 | 2026-07-09 | [#279](https://github.com/nash226/quorum/pull/279) | feat: filter evaluation scorecards by domain | `cdaa28d` |
@@ -54,5 +55,4 @@
 | 2026-07-09 | [#277](https://github.com/nash226/quorum/pull/277) | fix: align evaluation openapi schema | `693eb8c` |
 | 2026-07-09 | [#276](https://github.com/nash226/quorum/pull/276) | test: expand evaluation smoke coverage | `1f6b4e1` |
 | 2026-07-09 | [#275](https://github.com/nash226/quorum/pull/275) | feat: export api response types | `3841d6d` |
-| 2026-07-09 | [#274](https://github.com/nash226/quorum/pull/274) | feat: add evaluation domain summary api artifact | `1d26cf3` |
 
