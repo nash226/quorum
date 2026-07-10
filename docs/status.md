@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8b294a4` on 2026-07-10, feat: add API request correlation headers
+- Latest shipped change: `8b31ef8` on 2026-07-10, fix: allow browser request correlation headers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-10 | Direct push | fix: allow browser request correlation headers | `8b31ef8` |
 | 2026-07-10 | Direct push | feat: add API request correlation headers | `8b294a4` |
 | 2026-07-10 | Direct push | feat: expose API request limits in headers | `5a03fff` |
 | 2026-07-10 | Direct push | feat: gate evaluations on minimum score | `8be4058` |
@@ -56,5 +57,4 @@
 | 2026-07-10 | Direct push | fix: preserve evidence paths in html imports | `e080990` |
 | 2026-07-10 | Direct push | feat: expose API transport capabilities | `9094f33` |
 | 2026-07-10 | Direct push | test: smoke check API discovery contract | `7208ba2` |
-| 2026-07-10 | Direct push | feat: add OpenAPI operation identifiers | `6f1e20c` |
 
