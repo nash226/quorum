@@ -137,7 +137,9 @@ reviewer-aware final verdicts. The JSON import output now includes an
 automation. `--summary-csv-out` writes one row per imported answer group with
 reviewed, pending, overridden, final verdict counts, and the original exported
 answer-level fail-policy context plus grouped source titles, trust levels, and
-update dates for queue routing and audit handoff.
+update dates for queue routing and audit handoff. Text, Markdown, and HTML
+import reports also preserve each evidence source path so reviewers can trace
+cited policy text back to the approved document.
 `import-review --fail-on` evaluates those final verdicts after reviewer
 overrides, so teams can block publication on unresolved reviewed outcomes, and
 the text, Markdown, and HTML import reports surface whether each answer matched
