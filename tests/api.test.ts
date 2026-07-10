@@ -10,6 +10,7 @@ import {
   API_MAX_REQUEST_BYTES as SERVER_API_MAX_REQUEST_BYTES,
   CAPABILITIES_PATH as SERVER_CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS as SERVER_API_DISCOVERY_HEADERS,
+  API_REQUEST_ID_HEADER as SERVER_API_REQUEST_ID_HEADER,
   API_SERVICE_NAME as SERVER_API_SERVICE_NAME,
   API_VERSION as SERVER_API_VERSION,
   createApiServer,
@@ -23,6 +24,7 @@ import {
   API_MAX_REQUEST_BYTES,
   CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS,
+  API_REQUEST_ID_HEADER,
   API_SERVICE_NAME,
   API_VERSION,
   type ApiEvaluateResponse,
@@ -123,6 +125,7 @@ test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(CAPABILITIES_PATH, SERVER_CAPABILITIES_PATH);
   assert.strictEqual(OPENAPI_PATH, SERVER_OPENAPI_PATH);
   assert.deepEqual(API_DISCOVERY_HEADERS, SERVER_API_DISCOVERY_HEADERS);
+  assert.equal(API_REQUEST_ID_HEADER, SERVER_API_REQUEST_ID_HEADER);
   assert.strictEqual(API_SERVICE_NAME, SERVER_API_SERVICE_NAME);
   assert.strictEqual(API_VERSION, SERVER_API_VERSION);
   assert.deepEqual(API_CAPABILITIES, SERVER_API_CAPABILITIES);
@@ -1988,7 +1991,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
   const generatedAt = "2026-07-07T19:15:00.000Z";
 
   try {
-    const indexResponse = await fetch(api.url);
+    const indexResponse = await fetch(api.url, {
+      headers: { "X-Quorum-Request-Id": "workflow-trace-2026-07-10" },
+    });
     const expectedEndpoints: readonly ApiDiscoveryEndpoint[] = API_ENDPOINTS;
     const expectedDiscoveryResponse: ApiDiscoveryResponse = {
       service: "quorum",
@@ -2012,8 +2017,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(indexResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(
       indexResponse.headers.get("access-control-expose-headers"),
-      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes",
+      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Id",
     );
+    assert.equal(indexResponse.headers.get("x-quorum-request-id"), "workflow-trace-2026-07-10");
     assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(indexResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(indexResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
@@ -2026,6 +2032,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(capabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.match(capabilitiesResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
     assert.deepEqual(await capabilitiesResponse.json(), expectedCapabilitiesResponse);
 
     const healthResponse = await fetch(`${api.url}/health`);
@@ -2034,6 +2041,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(healthResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(healthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(healthResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.match(healthResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
     assert.deepEqual(await healthResponse.json(), expectedHealthResponse);
 
     const healthzResponse = await fetch(`${api.url}/healthz`);
@@ -2042,6 +2050,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(healthzResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(healthzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(healthzResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.match(healthzResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
     assert.deepEqual(await healthzResponse.json(), expectedHealthResponse);
 
     const headIndexResponse = await fetch(api.url, { method: "HEAD" });
@@ -2895,7 +2904,7 @@ test("programmatic API answers CORS preflight requests", async () => {
     assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type");
     assert.equal(
       response.headers.get("access-control-expose-headers"),
-      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes",
+      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Id",
     );
     assert.equal(response.headers.get("x-quorum-service"), "quorum");
     assert.equal(response.headers.get("x-quorum-version"), "0.1.0");

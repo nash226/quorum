@@ -1,4 +1,5 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
+import { randomUUID } from "node:crypto";
 import {
   EvaluationFixtureValidationError,
   renderEvaluationAggregateSummaryCsv,
@@ -190,7 +191,9 @@ export const API_DISCOVERY_HEADERS = {
   openapiPath: "X-Quorum-OpenAPI-Path",
   maxRequestBytes: "X-Quorum-Max-Request-Bytes",
 } as const;
-const EXPOSED_HEADERS = Object.values(API_DISCOVERY_HEADERS).join(", ");
+export const API_REQUEST_ID_HEADER = "X-Quorum-Request-Id";
+const EXPOSED_HEADERS = [...Object.values(API_DISCOVERY_HEADERS), API_REQUEST_ID_HEADER].join(", ");
+const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
   httpMethods: ["GET", "HEAD", "POST", "OPTIONS"],
@@ -1145,6 +1148,7 @@ async function handleApiRequest(
   request: IncomingMessage,
   response: ServerResponse,
 ): Promise<void> {
+  applyRequestIdHeader(request, response);
   applyCorsHeaders(response);
   applyApiDiscoveryHeaders(response);
   const url = request.url ?? "/";
@@ -1705,6 +1709,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         [API_DISCOVERY_HEADERS.maxRequestBytes]: {
           schema: { type: "integer", minimum: 1 },
           description: "Maximum JSON request body size in bytes.",
+        },
+        [API_REQUEST_ID_HEADER]: {
+          schema: { type: "string", minLength: 1, maxLength: 128 },
+          description: "Request correlation identifier echoed by the server.",
         },
       },
     },
@@ -3004,6 +3012,15 @@ function applyApiDiscoveryHeaders(response: ServerResponse): void {
   response.setHeader(API_DISCOVERY_HEADERS.version, API_VERSION);
   response.setHeader(API_DISCOVERY_HEADERS.openapiPath, OPENAPI_PATH);
   response.setHeader(API_DISCOVERY_HEADERS.maxRequestBytes, API_MAX_REQUEST_BYTES);
+}
+
+function applyRequestIdHeader(request: IncomingMessage, response: ServerResponse): void {
+  const requestedId = request.headers[API_REQUEST_ID_HEADER.toLowerCase()];
+  const requestId = typeof requestedId === "string" && REQUEST_ID_PATTERN.test(requestedId)
+    ? requestedId
+    : randomUUID();
+
+  response.setHeader(API_REQUEST_ID_HEADER, requestId);
 }
 
 function writeNoContent(response: ServerResponse): void {

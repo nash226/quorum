@@ -450,6 +450,9 @@ unbounded request buffering.
 Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
 `verifyAnswerBatchContentsResult` shapes so workflow callers get the report,
 matched fail verdicts, and `shouldFail` status in one JSON payload.
+Every API response includes an `X-Quorum-Request-Id` correlation header; callers
+may provide a valid value on the request to keep logs and downstream workflow
+events tied to their own trace.
 Reviewer-decision import accepts a `{ reviewCsvContent, generatedAt?, failOn? }` JSON body at
 `POST /import-review` and returns the same `importReviewerDecisionContentsResult`
 shape used by the package API, including grouped answer summaries and
