@@ -293,6 +293,7 @@ try {
   assert.match(evaluationStdout, /Quorum Evaluation Report/);
   assert.match(readFileSync(evaluationReportPath, "utf8"), /^# Quorum Evaluation Report/);
   assert.match(evaluationStdout, /Fixtures with mismatches: 0/);
+  assert.match(evaluationStdout, /HR PDF policy example/);
   assert.match(evaluationStdout, /Support billing HTML example/);
   const evaluationSummaryCsv = readFileSync(evaluationSummaryCsvPath, "utf8");
   assert.match(
@@ -300,12 +301,13 @@ try {
     /^fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
   );
   assert.match(evaluationSummaryCsv, /^Support billing HTML example,support,/m);
+  assert.match(evaluationSummaryCsv, /^HR PDF policy example,hr,/m);
   const evaluationDomainSummaryCsv = readFileSync(evaluationDomainSummaryCsvPath, "utf8");
   assert.match(
     evaluationDomainSummaryCsv,
     /^domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label\n/m,
   );
-  assert.match(evaluationDomainSummaryCsv, /^hr,2,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
+  assert.match(evaluationDomainSummaryCsv, /^hr,3,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
   assert.match(evaluationDomainSummaryCsv, /^support,3,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
 
   const apiSources = await api.loadSourcesFromContent({
