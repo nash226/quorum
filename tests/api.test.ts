@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { request as httpRequest } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
 import {
   API_CAPABILITIES as SERVER_API_CAPABILITIES,
   API_ENDPOINTS as SERVER_API_ENDPOINTS,
+  API_MAX_REQUEST_BYTES as SERVER_API_MAX_REQUEST_BYTES,
   CAPABILITIES_PATH as SERVER_CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS as SERVER_API_DISCOVERY_HEADERS,
   API_SERVICE_NAME as SERVER_API_SERVICE_NAME,
@@ -18,6 +20,7 @@ import {
   ANSWER_EXTENSIONS,
   API_CAPABILITIES,
   API_ENDPOINTS,
+  API_MAX_REQUEST_BYTES,
   CAPABILITIES_PATH,
   API_DISCOVERY_HEADERS,
   API_SERVICE_NAME,
@@ -2145,6 +2148,13 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/openapi.json"]?.head?.summary, "OpenAPI description headers");
     assert.equal(openApi.paths["/verify"]?.options?.summary, "Verify preflight");
     assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
+    const verifyResponses = openApi.paths["/verify"]?.post?.responses as
+      | Record<string, { description?: string }>
+      | undefined;
+    assert.equal(
+      verifyResponses?.["413"]?.description,
+      `The JSON request body exceeded the ${API_MAX_REQUEST_BYTES}-byte limit.`,
+    );
     assert.equal(openApi.paths["/verify-batch"]?.options?.summary, "Batch verify preflight");
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
     assert.equal(openApi.paths["/import-review"]?.options?.summary, "Reviewer import preflight");
@@ -2819,6 +2829,60 @@ test("programmatic API answers CORS preflight requests", async () => {
     assert.equal(response.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(response.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(await response.text(), "");
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API rejects JSON request bodies larger than the documented limit", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    assert.equal(API_MAX_REQUEST_BYTES, 1024 * 1024);
+    assert.equal(SERVER_API_MAX_REQUEST_BYTES, API_MAX_REQUEST_BYTES);
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ answer: "x".repeat(API_MAX_REQUEST_BYTES), sources: [] }),
+    });
+
+    assert.equal(response.status, 413);
+    assert.deepEqual(await response.json(), {
+      error: `Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`,
+    });
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API enforces the request limit while reading chunked bodies", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await new Promise<{ statusCode?: number; body: string }>((resolve, reject) => {
+      const request = httpRequest(
+        `${api.url}/verify`,
+        { method: "POST", headers: { "content-type": "application/json" } },
+        (response) => {
+          const chunks: Buffer[] = [];
+          response.on("data", (chunk: Buffer) => chunks.push(chunk));
+          response.on("end", () =>
+            resolve({
+              statusCode: response.statusCode,
+              body: Buffer.concat(chunks).toString("utf8"),
+            }),
+          );
+        },
+      );
+      request.on("error", reject);
+      request.write("x".repeat(API_MAX_REQUEST_BYTES + 1));
+      request.end();
+    });
+
+    assert.equal(response.statusCode, 413);
+    assert.deepEqual(JSON.parse(response.body), {
+      error: `Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`,
+    });
   } finally {
     await api.close();
   }
