@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e080990` on 2026-07-10, fix: preserve evidence paths in html imports
+- Latest shipped change: `5191523` on 2026-07-10, feat: advertise api request content types
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-10 | Direct push | feat: advertise api request content types | `5191523` |
 | 2026-07-10 | Direct push | fix: preserve evidence paths in html imports | `e080990` |
 | 2026-07-10 | Direct push | feat: expose API transport capabilities | `9094f33` |
 | 2026-07-10 | Direct push | test: smoke check API discovery contract | `7208ba2` |
@@ -56,5 +57,4 @@
 | 2026-07-10 | Direct push | fix: cap API request body size | `7c98f27` |
 | 2026-07-10 | Direct push | feat: allow stable CLI report timestamps | `4cfc833` |
 | 2026-07-10 | Direct push | feat: timestamp evaluation reports | `a78e8b3` |
-| 2026-07-10 | [#285](https://github.com/nash226/quorum/pull/285) | feat: timestamp text reports | `779908e` |
 
