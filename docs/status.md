@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cd1af4a` on 2026-07-10, test: cover imported answer previews in api smoke
+- Latest shipped change: `06e1e29` on 2026-07-10, feat: document API response headers in OpenAPI
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-10 | Direct push | feat: document API response headers in OpenAPI | `06e1e29` |
 | 2026-07-10 | Direct push | test: cover imported answer previews in api smoke | `cd1af4a` |
 | 2026-07-10 | Direct push | fix: allow browser request correlation headers | `8b31ef8` |
 | 2026-07-10 | Direct push | feat: add API request correlation headers | `8b294a4` |
@@ -56,5 +57,4 @@
 | 2026-07-10 | Direct push | feat: gate evaluations on minimum score | `8be4058` |
 | 2026-07-10 | Direct push | feat: advertise api request content types | `5191523` |
 | 2026-07-10 | Direct push | fix: preserve evidence paths in html imports | `e080990` |
-| 2026-07-10 | Direct push | feat: expose API transport capabilities | `9094f33` |
 
