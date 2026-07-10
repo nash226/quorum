@@ -1108,6 +1108,7 @@ approved sources.
 Near-term work:
 
 - evaluation harness for labeled verdict examples
+- evaluation text, Markdown, HTML, and CSV reports include run timestamps for audit handoff
 - richer batch verification exports and workflow hooks
 - better claim extraction for bullets, lists, and compound sentences
 - API surface for agent integrations

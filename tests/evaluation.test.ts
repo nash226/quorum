@@ -537,6 +537,8 @@ test("renders evaluation text report totals and mismatch detection", () => {
   assert.equal(hasEvaluationMismatch(scorecards[0]), false);
   assert.equal(hasEvaluationMismatch(scorecards[1]), true);
   assert.match(rendered, /Quorum Evaluation Report/);
+  assert.match(rendered, /Generated at: 2026-07-05T10:15:00.000Z/);
+  assert.match(rendered, /Generated at: 2026-07-05T10:16:00.000Z/);
   assert.match(rendered, /Fixtures: 2/);
   assert.match(rendered, /Fixtures with mismatches: 1/);
   assert.match(rendered, /Matched claim verdicts: 0\/1/);
@@ -933,6 +935,7 @@ test("renders evaluation markdown report with fixture summaries", () => {
 
   assert.match(rendered, /^# Quorum Evaluation Report/);
   assert.match(rendered, /## Summary/);
+  assert.match(rendered, /- Generated at: 2026-07-05T10:25:00.000Z/);
   assert.match(rendered, /- Matched claim verdicts: 1\/1/);
   assert.match(rendered, /- Overall claim verdict score: 100%/);
   assert.match(rendered, /### Domain Rollups/);
@@ -1007,6 +1010,7 @@ test("renders evaluation html report with fixture summaries", () => {
   assert.match(rendered, /Fixture scorecard report/);
   assert.match(rendered, /<span>Matched Claim Verdicts<\/span>\s*<strong>1\/1<\/strong>/);
   assert.match(rendered, /<span>Overall Claim Verdict Score<\/span>\s*<strong>100%<\/strong>/);
+  assert.match(rendered, /Generated at 2026-07-05T10:30:00.000Z/);
   assert.match(rendered, /Domain rollups/);
   assert.match(rendered, /1 fixture with 0 mismatches\./);
   assert.match(rendered, /Support policy example/);
