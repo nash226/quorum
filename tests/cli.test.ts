@@ -1062,12 +1062,12 @@ test("verify records an explicit reviewer-facing answer label in JSON and review
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^HR reviewer packet,${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,clear,,true,claim_1,`,
+        `^[^,]+,HR reviewer packet,${escapeRegExp(answerPath)},Employees receive 12 weeks of paid parental leave\\.,clear,,true,claim_1,`,
       ),
     );
   } finally {
@@ -1112,7 +1112,7 @@ test("verify reads the answer from stdin when --answer - is used", async () => {
     const lines = reviewCsv.trim().split("\n");
     assert.match(
       lines[1] ?? "",
-      /^<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,true,claim_1,/,
+      /^[^,]+,<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,true,claim_1,/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -1271,9 +1271,11 @@ test("verify treats no-claim answers as fail-policy matches for needs_review", a
     assert.equal(result.code, 2);
 
     const lines = (await readFile(reviewCsvOutPath, "utf8")).trim().split("\n");
-    assert.equal(
-      lines[1],
-      `empty,${answerPath},Short.,matched,needs_review,false,,,,No claims were extracted from this answer.,,,,,,,`,
+    assert.match(
+      lines[1] ?? "",
+      new RegExp(
+        `^[^,]+,empty,${escapeRegExp(answerPath)},Short\\.,matched,needs_review,false,,,,No claims were extracted from this answer\\.,,,,,,,$`,
+      ),
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -1316,12 +1318,12 @@ test("verify writes reviewer csv fail-policy columns for single answers", async 
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,matched,contradicted,true,claim_1,`,
+        `^[^,]+,answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,matched,contradicted,true,claim_1,`,
       ),
     );
   } finally {
@@ -1362,12 +1364,12 @@ test("verify writes a summary csv for single answers", async () => {
     const lines = summaryCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
+      "generated_at,answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
     );
     assert.match(
       lines[1] ?? "",
       new RegExp(
-        `^answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,contradicted,Employees receive 18 weeks of paid parental leave\\.,A closely matching approved source uses different numeric terms\\.,hr-policy,medium,,${escapeRegExp(sourcePath)},0\\.857,Employees receive 12 weeks of paid parental leave\\.,1,0,1,0,0,matched,contradicted,hr-policy,medium,,${escapeRegExp(sourcePath)}$`,
+        `^[^,]+,answer,${escapeRegExp(answerPath)},Employees receive 18 weeks of paid parental leave\\.,contradicted,Employees receive 18 weeks of paid parental leave\\.,A closely matching approved source uses different numeric terms\\.,hr-policy,medium,,${escapeRegExp(sourcePath)},0\\.857,Employees receive 12 weeks of paid parental leave\\.,1,0,1,0,0,matched,contradicted,hr-policy,medium,,${escapeRegExp(sourcePath)}$`,
       ),
     );
   } finally {
@@ -1513,11 +1515,11 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.match(await readFile(batchHtmlOutPath, "utf8"), /Answer preview/);
     assert.match(
       await readFile(batchReviewCsvOutPath, "utf8"),
-      /answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
+      /generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
     );
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths/,
+      /generated_at,answer_label,answer_path,answer_preview,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -1666,12 +1668,12 @@ test("verify-batch reads one answer from stdin alongside explicit files", async 
     const lines = reviewCsv.trim().split("\n");
     assert.match(
       lines[1] ?? "",
-      /^<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,true,claim_1,/,
+      /^[^,]+,<stdin>,<stdin>,Employees receive 12 weeks of paid parental leave\.,clear,,true,claim_1,/,
     );
     assert.match(
       lines[2] ?? "",
       new RegExp(
-        `^support-answer,${escapeRegExp(fileAnswerPath)},Refunds are available within 30 days of purchase\\.,clear,,true,claim_1,`,
+        `^[^,]+,support-answer,${escapeRegExp(fileAnswerPath)},Refunds are available within 30 days of purchase\\.,clear,,true,claim_1,`,
       ),
     );
   } finally {
@@ -1764,12 +1766,12 @@ test("verify-batch preserves custom labels for explicit answers", async () => {
     );
 
     const reviewCsv = await readFile(reviewCsvOutPath, "utf8");
-    assert.match(reviewCsv, /^Support escalation packet,/m);
-    assert.match(reviewCsv, /^hr-answer,/m);
+    assert.match(reviewCsv, /^[^,\n]+,Support escalation packet,/m);
+    assert.match(reviewCsv, /^[^,\n]+,hr-answer,/m);
 
     const summaryCsv = await readFile(summaryCsvOutPath, "utf8");
-    assert.match(summaryCsv, /^Support escalation packet,/m);
-    assert.match(summaryCsv, /^hr-answer,/m);
+    assert.match(summaryCsv, /^[^,\n]+,Support escalation packet,/m);
+    assert.match(summaryCsv, /^[^,\n]+,hr-answer,/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -2598,7 +2600,7 @@ test("verify-batch treats no-claim answers as fail-policy matches for needs_revi
     assert.deepEqual(report.answers[0]?.failVerdicts, ["needs_review"]);
     assert.match(
       await readFile(summaryCsvOutPath, "utf8"),
-      /empty,.*empty\.md,Short\.,needs_review,,No claims were extracted from this answer\.,,,,,,,0,0,0,0,0,matched,needs_review,hr-policy,medium,,/,
+      /[^,\n]+,empty,.*empty\.md,Short\.,needs_review,,No claims were extracted from this answer\.,,,,,,,0,0,0,0,0,matched,needs_review,hr-policy,medium,,/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -2626,11 +2628,11 @@ test("verify-batch writes a combined reviewer decision csv", async () => {
 
     assert.equal(
       lines[0],
-      "answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
-      /^hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\..*,clear,,true,claim_1,/,
+      /^[^,]+,hr-answer,examples\/answers\/hr-answer\.md,Employees receive 18 weeks of paid parental leave\..*,clear,,true,claim_1,/,
     );
     assert.match(lines[lines.length - 1] ?? "", /,,$/);
   } finally {
@@ -2673,11 +2675,11 @@ test("verify-batch preserves no-claim answers through reviewer csv export and im
     const reviewCsv = await readFile(reviewCsvOutPath, "utf8");
     assert.match(
       reviewCsv,
-      /answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
+      /generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
     );
     assert.match(
       reviewCsv,
-      /empty,.*empty\.md,Short\.,clear,,false,,,,No claims were extracted from this answer\.,,,,,,/,
+      /[^,\n]+,empty,.*empty\.md,Short\.,clear,,false,,,,No claims were extracted from this answer\.,,,,,,/,
     );
 
     const stdout = await runCli([
