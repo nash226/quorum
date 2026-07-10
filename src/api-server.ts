@@ -191,6 +191,8 @@ export const API_DISCOVERY_HEADERS = {
 const EXPOSED_HEADERS = Object.values(API_DISCOVERY_HEADERS).join(", ");
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
+  httpMethods: ["GET", "HEAD", "POST", "OPTIONS"],
+  maxRequestBytes: API_MAX_REQUEST_BYTES,
   sourceExtensions: [...SOURCE_EXTENSIONS],
   answerExtensions: [...ANSWER_EXTENSIONS],
   verdicts: CLAIM_VERDICTS,
@@ -2341,6 +2343,18 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         ApiCapabilities: {
           type: "object",
           properties: {
+            httpMethods: {
+              type: "array",
+              items: {
+                type: "string",
+                enum: ["GET", "HEAD", "POST", "OPTIONS"],
+              },
+            },
+            maxRequestBytes: {
+              type: "integer",
+              minimum: 1,
+              description: "Maximum JSON request body size accepted by POST endpoints.",
+            },
             sourceExtensions: {
               type: "array",
               items: { type: "string" },
@@ -2375,6 +2389,8 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             },
           },
           required: [
+            "httpMethods",
+            "maxRequestBytes",
             "sourceExtensions",
             "answerExtensions",
             "verdicts",
