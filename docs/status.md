@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cdaa28d` on 2026-07-09, feat: filter evaluation scorecards by domain
+- Latest shipped change: `83cc979` on 2026-07-09, test: add pdf evaluation fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -47,6 +47,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-09 | [#280](https://github.com/nash226/quorum/pull/280) | test: add pdf evaluation fixture | `83cc979` |
 | 2026-07-09 | [#279](https://github.com/nash226/quorum/pull/279) | feat: filter evaluation scorecards by domain | `cdaa28d` |
 | 2026-07-09 | [#278](https://github.com/nash226/quorum/pull/278) | feat: expose api options discovery | `f354f51` |
 | 2026-07-09 | [#277](https://github.com/nash226/quorum/pull/277) | fix: align evaluation openapi schema | `693eb8c` |
@@ -54,5 +55,4 @@
 | 2026-07-09 | [#275](https://github.com/nash226/quorum/pull/275) | feat: export api response types | `3841d6d` |
 | 2026-07-09 | [#274](https://github.com/nash226/quorum/pull/274) | feat: add evaluation domain summary api artifact | `1d26cf3` |
 | 2026-07-09 | [#273](https://github.com/nash226/quorum/pull/273) | feat: add evaluation domain summary csv | `f1fd0a3` |
-| 2026-07-09 | [#272](https://github.com/nash226/quorum/pull/272) | feat: expose api discovery headers to browsers | `941eb53` |
 
