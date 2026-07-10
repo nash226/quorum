@@ -382,13 +382,13 @@ Employees receive 12 weeks of paid parental leave.
       headers: {
         origin: "https://smoke.example",
         "access-control-request-method": "POST",
-        "access-control-request-headers": "content-type",
+        "access-control-request-headers": "content-type, x-quorum-request-id",
       },
     });
     assert.equal(discoveryPreflightResponse.status, 204);
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
-    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Id");
     assert.equal(discoveryPreflightResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
 
@@ -475,13 +475,13 @@ Employees receive 12 weeks of paid parental leave.
       headers: {
         origin: "http://localhost:4173",
         "access-control-request-method": "POST",
-        "access-control-request-headers": "content-type",
+        "access-control-request-headers": "content-type, x-quorum-request-id",
       },
     });
     assert.equal(preflightResponse.status, 204);
     assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
-    assert.equal(preflightResponse.headers.get("access-control-allow-headers"), "Content-Type");
+    assert.equal(preflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id");
 
     const verifyResponse = await fetch(`${server.url}/verify`, {
       method: "POST",

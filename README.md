@@ -490,6 +490,9 @@ can confirm they reached Quorum, discover the local schema path, and learn the
 JSON payload limit without parsing a response body first. Browser
 clients can read those discovery headers directly because Quorum also exposes
 them through `Access-Control-Expose-Headers`.
+Browser clients may also send their own `X-Quorum-Request-Id` value because
+Quorum allows that correlation header during CORS preflight; the server echoes
+valid values and generates one when the header is absent or invalid.
 `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover both request and response payload shapes without
 scraping the README. The OpenAPI document includes reusable schemas for the

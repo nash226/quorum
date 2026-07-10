@@ -6,6 +6,7 @@ import { join, resolve } from "node:path";
 import test from "node:test";
 import {
   API_CAPABILITIES as SERVER_API_CAPABILITIES,
+  API_CORS_ALLOWED_HEADERS as SERVER_API_CORS_ALLOWED_HEADERS,
   API_ENDPOINTS as SERVER_API_ENDPOINTS,
   API_MAX_REQUEST_BYTES as SERVER_API_MAX_REQUEST_BYTES,
   CAPABILITIES_PATH as SERVER_CAPABILITIES_PATH,
@@ -20,6 +21,7 @@ import {
 import {
   ANSWER_EXTENSIONS,
   API_CAPABILITIES,
+  API_CORS_ALLOWED_HEADERS,
   API_ENDPOINTS,
   API_MAX_REQUEST_BYTES,
   CAPABILITIES_PATH,
@@ -125,6 +127,7 @@ test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(CAPABILITIES_PATH, SERVER_CAPABILITIES_PATH);
   assert.strictEqual(OPENAPI_PATH, SERVER_OPENAPI_PATH);
   assert.deepEqual(API_DISCOVERY_HEADERS, SERVER_API_DISCOVERY_HEADERS);
+  assert.equal(API_CORS_ALLOWED_HEADERS, SERVER_API_CORS_ALLOWED_HEADERS);
   assert.equal(API_REQUEST_ID_HEADER, SERVER_API_REQUEST_ID_HEADER);
   assert.strictEqual(API_SERVICE_NAME, SERVER_API_SERVICE_NAME);
   assert.strictEqual(API_VERSION, SERVER_API_VERSION);
@@ -2894,14 +2897,14 @@ test("programmatic API answers CORS preflight requests", async () => {
       headers: {
         origin: "http://localhost:5173",
         "access-control-request-method": "POST",
-        "access-control-request-headers": "content-type",
+        "access-control-request-headers": "content-type, x-quorum-request-id",
       },
     });
 
     assert.equal(response.status, 204);
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
     assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
-    assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type");
+    assert.equal(response.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS);
     assert.equal(
       response.headers.get("access-control-expose-headers"),
       "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Id",
