@@ -140,6 +140,10 @@ answer-level fail-policy context plus grouped source titles, trust levels, and
 update dates for queue routing and audit handoff. Text, Markdown, and HTML
 import reports also preserve each evidence source path so reviewers can trace
 cited policy text back to the approved document.
+The packaged `npm run smoke` check also verifies that the HTTP
+`POST /import-review` workflow preserves the exported `answer_preview` inside
+its grouped answer response, so API queue clients retain recognizable context
+even when they only submit reviewer CSV content.
 `import-review --fail-on` evaluates those final verdicts after reviewer
 overrides, so teams can block publication on unresolved reviewed outcomes, and
 the text, Markdown, and HTML import reports surface whether each answer matched
