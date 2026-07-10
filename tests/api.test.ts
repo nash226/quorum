@@ -113,6 +113,7 @@ test("programmatic API exposes supported source and answer extensions", () => {
 
 test("API discovery exposes transport limits and supported methods", () => {
   assert.deepEqual(API_CAPABILITIES.httpMethods, ["GET", "HEAD", "POST", "OPTIONS"]);
+  assert.deepEqual(API_CAPABILITIES.requestContentTypes, ["application/json"]);
   assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
 });
 
@@ -2642,6 +2643,7 @@ Refund requests receive an initial response within one business day.
     ]);
     assert.deepEqual(openApi.components.schemas.ApiCapabilities.required, [
       "httpMethods",
+      "requestContentTypes",
       "maxRequestBytes",
       "sourceExtensions",
       "answerExtensions",

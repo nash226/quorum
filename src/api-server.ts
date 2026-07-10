@@ -192,6 +192,7 @@ const EXPOSED_HEADERS = Object.values(API_DISCOVERY_HEADERS).join(", ");
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
   httpMethods: ["GET", "HEAD", "POST", "OPTIONS"],
+  requestContentTypes: ["application/json"],
   maxRequestBytes: API_MAX_REQUEST_BYTES,
   sourceExtensions: [...SOURCE_EXTENSIONS],
   answerExtensions: [...ANSWER_EXTENSIONS],
@@ -2350,6 +2351,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                 enum: ["GET", "HEAD", "POST", "OPTIONS"],
               },
             },
+            requestContentTypes: {
+              type: "array",
+              items: { type: "string" },
+              description: "Content types accepted by JSON request endpoints.",
+            },
             maxRequestBytes: {
               type: "integer",
               minimum: 1,
@@ -2390,6 +2396,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
           required: [
             "httpMethods",
+            "requestContentTypes",
             "maxRequestBytes",
             "sourceExtensions",
             "answerExtensions",
