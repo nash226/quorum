@@ -277,6 +277,7 @@ try {
   const evaluationReportPath = join(tempDir, "evaluation-report.md");
   const evaluationSummaryCsvPath = join(tempDir, "evaluation-summary.csv");
   const evaluationDomainSummaryCsvPath = join(tempDir, "evaluation-domain-summary.csv");
+  const evaluationAggregateSummaryCsvPath = join(tempDir, "evaluation-aggregate-summary.csv");
   const evaluationStdout = runCli([
     "evaluate",
     "--fixture-dir",
@@ -287,6 +288,8 @@ try {
     evaluationSummaryCsvPath,
     "--domain-summary-csv-out",
     evaluationDomainSummaryCsvPath,
+    "--aggregate-summary-csv-out",
+    evaluationAggregateSummaryCsvPath,
     "--fail-on-mismatch",
   ]);
 
@@ -303,12 +306,17 @@ try {
   assert.match(evaluationSummaryCsv, /^Support billing HTML example,support,/m);
   assert.match(evaluationSummaryCsv, /^HR PDF policy example,hr,/m);
   const evaluationDomainSummaryCsv = readFileSync(evaluationDomainSummaryCsvPath, "utf8");
+  const evaluationAggregateSummaryCsv = readFileSync(evaluationAggregateSummaryCsvPath, "utf8");
   assert.match(
     evaluationDomainSummaryCsv,
     /^domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label\n/m,
   );
   assert.match(evaluationDomainSummaryCsv, /^hr,3,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
   assert.match(evaluationDomainSummaryCsv, /^support,3,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
+  assert.match(
+    evaluationAggregateSummaryCsv,
+    /^fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels\n6,0,\d+,\d+,1(?:\.0+)?,100%,hr \| support,3 \| 3,0 \| 0,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%\n?$/,
+  );
 
   const apiSources = await api.loadSourcesFromContent({
     sources: [
@@ -575,7 +583,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
             content: evaluationFixtureContent,
           },
         ],
-        includeArtifacts: ["summary_csv", "domain_summary_csv"],
+        includeArtifacts: ["summary_csv", "domain_summary_csv", "aggregate_summary_csv"],
       }),
     });
     assert.equal(evaluateResponse.status, 200);
@@ -591,6 +599,10 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.match(
       evaluateResult.artifacts.domain_summary_csv,
       /^domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label\nhr,1,0,3,3,1(?:\.0+)?,100%\n?$/,
+    );
+    assert.match(
+      evaluateResult.artifacts.aggregate_summary_csv,
+      /^fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels\n1,0,3,3,1(?:\.0+)?,100%,hr,1,0,1(?:\.0+)?,100%\n?$/,
     );
 
     const verifyConflictResponse = await fetch(`${server.url}/verify`, {
