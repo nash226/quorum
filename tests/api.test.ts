@@ -2148,8 +2148,11 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/openapi.json"]?.head?.summary, "OpenAPI description headers");
     assert.equal(openApi.paths["/verify"]?.options?.summary, "Verify preflight");
     assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
+    const verifyResponses = openApi.paths["/verify"]?.post?.responses as
+      | Record<string, { description?: string }>
+      | undefined;
     assert.equal(
-      openApi.paths["/verify"]?.post?.responses?.["413"]?.description,
+      verifyResponses?.["413"]?.description,
       `The JSON request body exceeded the ${API_MAX_REQUEST_BYTES}-byte limit.`,
     );
     assert.equal(openApi.paths["/verify-batch"]?.options?.summary, "Batch verify preflight");
