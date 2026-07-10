@@ -117,6 +117,7 @@ export interface VerifyBatchApiRequest {
 
 export interface ImportReviewApiRequest {
   reviewCsvContent: string;
+  generatedAt?: string;
   failOn?: string[];
   includeArtifacts?: ApiImportReviewArtifact[];
   failOnStatus?: boolean;
@@ -569,12 +570,14 @@ const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
     "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
     "HR policy answer,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved for publish",
   ].join("\n"),
+  generatedAt: "2026-07-07T19:22:00.000Z",
   failOn: ["needs_review"],
   includeArtifacts: ["markdown", "summary_csv"],
   failOnStatus: true,
 } as const;
 const OPENAPI_IMPORT_REVIEW_RESPONSE_EXAMPLE = {
   report: {
+    generatedAt: "2026-07-07T19:22:00.000Z",
     claims: [
       {
         answerLabel: "HR policy answer",
@@ -1251,6 +1254,7 @@ async function handleApiRequest(
     const body = parseImportReviewRequest(await readJsonBody(request));
     const result = importReviewerDecisionContentsResult({
       reviewCsvContent: body.reviewCsvContent,
+      generatedAt: body.generatedAt,
       failOn: body.failOn,
     });
     writeOperationResult(
@@ -1376,6 +1380,7 @@ function parseVerifyBatchRequest(value: unknown): {
 
 function parseImportReviewRequest(value: unknown): {
   reviewCsvContent: string;
+  generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
   includeArtifacts?: ApiImportReviewArtifact[];
   failOnStatus?: boolean;
@@ -1384,6 +1389,7 @@ function parseImportReviewRequest(value: unknown): {
 
   return {
     reviewCsvContent: requireString(record.reviewCsvContent, "reviewCsvContent"),
+    generatedAt: optionalString(record.generatedAt, "generatedAt"),
     failOn: parseOptionalFailOn(record.failOn),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, IMPORT_REVIEW_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
@@ -2081,6 +2087,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   type: "object",
                   properties: {
                     reviewCsvContent: { type: "string" },
+                    generatedAt: { type: "string" },
                     failOn: {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
@@ -2669,6 +2676,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         ReviewerDecisionImportReport: {
           type: "object",
           properties: {
+            generatedAt: { type: "string" },
             claims: {
               type: "array",
               items: { $ref: "#/components/schemas/ImportedReviewerDecision" },
@@ -2679,7 +2687,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             },
             summary: { $ref: "#/components/schemas/ReviewerDecisionImportSummary" },
           },
-          required: ["claims", "answerGroups", "summary"],
+          required: ["generatedAt", "claims", "answerGroups", "summary"],
         },
         ReviewerDecisionImportResult: {
           type: "object",
