@@ -49,6 +49,7 @@ test("renders the text report used by the CLI", () => {
   const rendered = renderTextReport(report);
 
   assert.match(rendered, /Quorum Verification Report/);
+  assert.match(rendered, /Generated: 2026-06-28T00:00:00\.000Z/);
   assert.match(rendered, /Answer: examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /Sources:\n- HR Policy \(high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md\)/);
   assert.match(rendered, /VERIFIED  Full-time employees receive 20 days/);
@@ -106,6 +107,7 @@ test("renders single-answer fail policy context in text, markdown, and html repo
   const html = renderHtmlReport(report, ["contradicted", "unsupported"]);
 
   assert.match(text, /Fail policy: matched/);
+  assert.match(text, /Generated: 2026-06-28T00:00:00\.000Z/);
   assert.match(text, /Fail verdicts: contradicted, unsupported/);
   assert.match(markdown, /- Fail policy: matched \(contradicted, unsupported\)/);
   assert.match(html, /<span>Fail policy<\/span>\s*<strong>matched \(contradicted, unsupported\)<\/strong>/);
