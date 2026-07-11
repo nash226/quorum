@@ -454,6 +454,8 @@ for browser-based local clients.
 The built `npm run smoke` check now exercises that discovery contract over HTTP,
 including preflight headers and stable OpenAPI operation identifiers, so packed
 package releases verify the integration surface end to end.
+The `quorum serve --help` output also lists `POST /extract-claims`, keeping the
+CLI server guide aligned with the claim-preview endpoint exposed to integrations.
 
 Single-answer verification request example:
 
