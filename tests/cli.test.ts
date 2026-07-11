@@ -113,6 +113,16 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /^Quorum\n\nUsage:/);
 });
 
+test("version reports the CLI and API contract version", async () => {
+  for (const args of [["version"], ["--version"], ["-v"]]) {
+    const result = await runCliAllowFailure(args);
+
+    assert.equal(result.code, 0);
+    assert.equal(result.stderr, "");
+    assert.equal(result.stdout, "quorum 0.1.0\n");
+  }
+});
+
 test("verify --help prints command-specific usage without requiring sources", async () => {
   const result = await runCliAllowFailure(["verify", "--help"]);
 
