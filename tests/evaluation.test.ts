@@ -1975,6 +1975,13 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       (scorecard) => scorecard.report.generatedAt === "2026-07-05T10:07:00.000Z",
     ),
   );
+
+  assert.ok(
+    scorecards.every((scorecard) => {
+      const sourceIds = scorecard.report.sources.map((source) => source.id);
+      return new Set(sourceIds).size === sourceIds.length;
+    }),
+  );
 });
 
 test("filters evaluation fixture files by domain", async () => {
