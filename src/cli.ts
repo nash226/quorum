@@ -99,6 +99,7 @@ interface EvaluateArgs {
   domains: string[];
   json: boolean;
   resultJson: boolean;
+  resultJsonOutPath?: string;
   failOnMismatch: boolean;
   minScore?: number;
   outPath?: string;
@@ -455,6 +456,7 @@ async function runEvaluate(args: string[]): Promise<void> {
   const summaryCsvReport = renderEvaluationSummaryCsv(scorecards);
   const domainSummaryCsvReport = renderEvaluationDomainSummaryCsv(scorecards);
   const aggregateSummaryCsvReport = renderEvaluationAggregateSummaryCsv(scorecards);
+  const resultJsonReport = JSON.stringify(result, null, 2);
   const scoreThresholdPassed = result.scoreThresholdPassed ?? true;
   const shouldFail =
     (parsed.failOnMismatch && result.shouldFail) ||
@@ -484,8 +486,12 @@ async function runEvaluate(args: string[]): Promise<void> {
     await writeReportFile(parsed.aggregateSummaryCsvOutPath, aggregateSummaryCsvReport);
   }
 
+  if (parsed.resultJsonOutPath) {
+    await writeReportFile(parsed.resultJsonOutPath, resultJsonReport);
+  }
+
   if (parsed.resultJson) {
-    console.log(JSON.stringify(result, null, 2));
+    console.log(resultJsonReport);
   } else if (parsed.json) {
     console.log(jsonReport);
   } else {
@@ -519,6 +525,10 @@ async function runEvaluate(args: string[]): Promise<void> {
       console.log(
         `Evaluation aggregate summary CSV written to ${parsed.aggregateSummaryCsvOutPath}`,
       );
+    }
+
+    if (parsed.resultJsonOutPath) {
+      console.log(`Evaluation result JSON written to ${parsed.resultJsonOutPath}`);
     }
   }
 
@@ -926,6 +936,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
   let aggregateSummaryCsvOutPath: string | undefined;
   let json = false;
   let resultJson = false;
+  let resultJsonOutPath: string | undefined;
   let failOnMismatch = false;
   let minScore: number | undefined;
   let generatedAt: string | undefined;
@@ -967,6 +978,9 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
       json = true;
     } else if (arg === "--result-json") {
       resultJson = true;
+    } else if (arg === "--result-json-out" && next) {
+      resultJsonOutPath = next;
+      index += 1;
     } else if (arg === "--fail-on-mismatch") {
       failOnMismatch = true;
     } else if (arg === "--min-score" && next) {
@@ -990,6 +1004,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
     domains,
     json,
     resultJson,
+    resultJsonOutPath,
     failOnMismatch,
     minScore,
     outPath,
@@ -1232,7 +1247,7 @@ Example:
     evaluate: `Quorum evaluate
 
 Usage:
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
 
 Options:
   --fixture <path>          Evaluation fixture JSON file; may be repeated
@@ -1242,6 +1257,7 @@ Options:
   --json                    Print the evaluation scorecard JSON
   --result-json             Print the evaluation result with score, mismatch, and threshold metadata
   --out <path>              Write the JSON scorecard output to disk
+  --result-json-out <path>  Write the gate-aware evaluation result JSON to disk
   --markdown-out <path>     Write a Markdown evaluation report
   --html-out <path>         Write a styled HTML evaluation report
   --summary-csv-out <path>  Write a one-row-per-fixture summary CSV
@@ -1314,7 +1330,7 @@ Usage:
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum extract-claims --answer <path|-> [--json]
   quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--json|--result-json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
   quorum serve [--host <host>] [--port <port>]
   quorum openapi [--server-url <url>] [--out <path>]
   quorum version
