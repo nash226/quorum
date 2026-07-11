@@ -123,6 +123,35 @@ test("version reports the CLI and API contract version", async () => {
   }
 });
 
+test("extract-claims previews normalized claims as JSON", async () => {
+  const stdout = await runCli([
+    "extract-claims",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--json",
+  ]);
+
+  const claims = JSON.parse(stdout) as Array<{ id: string; text: string }>;
+
+  assert.deepEqual(claims, [
+    { id: "claim_1", text: "Employees receive 18 weeks of paid parental leave." },
+    { id: "claim_2", text: "Full-time employees receive 20 days of paid vacation each calendar year." },
+    { id: "claim_3", text: "Employees receive free catered lunch every day." },
+  ]);
+});
+
+test("extract-claims reads stdin and prints claim ids", async () => {
+  const result = await runCli(
+    ["extract-claims", "--answer", "-"],
+    { stdin: "Employees receive 12 weeks of paid parental leave.\n\nManagers approve exceptions within five business days.\n" },
+  );
+
+  assert.equal(
+    result,
+    "claim_1: Employees receive 12 weeks of paid parental leave.\nclaim_2: Managers approve exceptions within five business days.\n",
+  );
+});
+
 test("verify --help prints command-specific usage without requiring sources", async () => {
   const result = await runCliAllowFailure(["verify", "--help"]);
 
