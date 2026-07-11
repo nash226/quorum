@@ -1272,6 +1272,7 @@ Options:
   HEAD /openapi.json        Return OpenAPI headers without a response body
   OPTIONS *                 Return CORS preflight headers for browser-based local clients
   POST /verify              Verify one answer from JSON request content
+  POST /extract-claims      Extract normalized claims from answer content
   POST /verify-batch        Verify multiple answers from JSON request content
   POST /import-review       Import reviewer CSV content from JSON request content
   POST /evaluate            Evaluate fixture JSON content from request payloads
