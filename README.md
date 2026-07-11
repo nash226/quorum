@@ -1063,7 +1063,7 @@ npm run dev -- verify \
 quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-quorum evaluate --fixture <path>... [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
+quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--min-score <0..1>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
 quorum openapi [--server-url <url>] [--out <path>]
 ```
 
@@ -1120,6 +1120,12 @@ Options:
   reviewer-aware verdict appears after any overrides; may be repeated
 - `evaluate --fixture <path>`: run one evaluation fixture JSON file; may be
   repeated to score multiple labeled examples in one pass
+- `evaluate --fixture-dir <path>`: recursively discover evaluation fixture JSON
+  files under one or more directories, preserving stable path order
+- `evaluate --domain <name>`: restrict a fixture run to one or more domain
+  labels such as `hr` or `support`
+- `evaluate --min-score <0..1>`: exit with code `2` when the aggregate claim
+  score is below the configured threshold
 - `evaluate --json`: print the evaluation scorecard JSON for one fixture, or a
   JSON array when multiple fixtures are provided
 - `evaluate --out <path>`: write the evaluation scorecard JSON to disk
