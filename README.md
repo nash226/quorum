@@ -232,6 +232,9 @@ metadata; `--min-score` independently exits with status `2` when the threshold
 is not met.
 Use `--result-json-out <path>` when a workflow needs to persist that gate-aware
 result alongside its scorecard files instead of capturing stdout.
+The repository CI workflow runs `npm run evaluate:ci` against the shipped HR and
+support fixtures, requiring zero expected-result mismatches and an aggregate
+claim score of at least `0.95`.
 
 ## Programmatic API
 

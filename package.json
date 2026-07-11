@@ -33,6 +33,7 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/cli.ts",
     "smoke": "node scripts/smoke-check.mjs",
+    "evaluate:ci": "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch",
     "status:refresh": "node scripts/update-status.mjs",
     "test": "node --import tsx --test tests/**/*.test.ts"
   },
