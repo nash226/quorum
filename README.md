@@ -1018,8 +1018,7 @@ domains with `--fixture-dir examples/evaluations`.
 git clone https://github.com/nash226/quorum.git
 cd quorum
 npm install
-npm test
-npm run build
+npm run check
 npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv
 ```
 
@@ -1206,11 +1205,12 @@ docs/                  product notes, demo, roadmap, decision queue
 ## Development
 
 ```bash
-npm test
-npm run build
+npm run check
 ```
 
-The CI workflow runs both commands on pushes and pull requests.
+`npm run check` is the repository verification gate used by CI. It runs the
+test suite, TypeScript build, packed-package smoke check, and shipped-fixture
+evaluation score gate together.
 
 ## Product Direction
 
