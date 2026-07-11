@@ -230,6 +230,8 @@ For CI and workflow clients, `evaluate --result-json` emits that same result
 shape with `shouldFail`, mismatch counts, aggregate score, and threshold
 metadata; `--min-score` independently exits with status `2` when the threshold
 is not met.
+Use `--result-json-out <path>` when a workflow needs to persist that gate-aware
+result alongside its scorecard files instead of capturing stdout.
 
 ## Programmatic API
 
@@ -1138,6 +1140,9 @@ Options:
 - `evaluate --json`: print the evaluation scorecard JSON for one fixture, or a
   JSON array when multiple fixtures are provided
 - `evaluate --out <path>`: write the evaluation scorecard JSON to disk
+- `evaluate --result-json-out <path>`: write the gate-aware evaluation result,
+  including `shouldFail`, mismatch counts, aggregate score, and threshold
+  metadata, to disk
 - `evaluate --markdown-out <path>`: write a Markdown report that groups fixture
   summaries, expected vs actual verdict totals, and claim-level mismatches for
   async review
