@@ -226,6 +226,10 @@ npm run dev -- evaluate \
 
 The HTTP `POST /evaluate` workflow accepts the equivalent `minScore` value
 between `0` and `1`, and returns `scoreThresholdPassed` with the batch result.
+For CI and workflow clients, `evaluate --result-json` emits that same result
+shape with `shouldFail`, mismatch counts, aggregate score, and threshold
+metadata; `--min-score` independently exits with status `2` when the threshold
+is not met.
 
 ## Programmatic API
 
