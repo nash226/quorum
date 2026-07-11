@@ -360,7 +360,7 @@ export async function evaluateFixtures(
 export async function evaluateFixturesResult(
   options: InMemoryEvaluationBatchOptions,
 ): Promise<EvaluationBatchRunResult> {
-  return buildEvaluationBatchResult(await evaluateFixtures(options));
+  return buildEvaluationBatchResult(await evaluateFixtures(options), options.minScore);
 }
 
 export async function evaluateFixtureContents(
