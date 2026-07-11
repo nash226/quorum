@@ -210,6 +210,7 @@ test("evaluate --help prints evaluation usage without requiring fixtures", async
   assert.match(result.stdout, /--fail-on-mismatch\s+Exit with code 2 when any fixture summary or claim verdict mismatches/);
   assert.match(result.stdout, /--min-score <0\.\.1>\s+Exit with code 2 when the aggregate claim score is below this threshold/);
   assert.match(result.stdout, /--result-json\s+Print the evaluation result with score, mismatch, and threshold metadata/);
+  assert.match(result.stdout, /--result-json-out <path>\s+Write the gate-aware evaluation result JSON to disk/);
   assert.match(result.stdout, /--generated-at <timestamp>\s+Use this ISO timestamp in generated reports/);
 });
 
@@ -763,6 +764,34 @@ test("evaluate result-json exposes score gates and enforces min-score without fa
     assert.equal(payload.minScore, 1);
     assert.equal(payload.scoreThresholdPassed, false);
     assert.equal(payload.summary.score, 1 / 3);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("evaluate writes the gate-aware result JSON to disk", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-result-out-"));
+
+  try {
+    const resultPath = join(tempDir, "evaluation-result.json");
+    const result = await runCliAllowFailure([
+      "evaluate",
+      "--fixture-dir",
+      "examples/evaluations",
+      "--result-json-out",
+      resultPath,
+    ]);
+
+    assert.equal(result.code, 0);
+    assert.match(result.stdout, /Evaluation result JSON written to/);
+    const payload = JSON.parse(await readFile(resultPath, "utf8")) as {
+      shouldFail: boolean;
+      mismatchCount: number;
+      summary: { fixtureCount: number };
+    };
+    assert.equal(payload.shouldFail, false);
+    assert.equal(payload.mismatchCount, 0);
+    assert.equal(payload.summary.fixtureCount, 6);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
