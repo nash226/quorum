@@ -32,6 +32,8 @@ export type {
   ApiEvaluateArtifact,
   ApiEvaluateArtifacts,
   ApiEvaluateResponse,
+  ExtractClaimsApiRequest,
+  ExtractClaimsApiResponse,
   ApiCapabilitiesResponse,
   ApiCapabilityMap,
   ApiDiscoveryEndpoint,
