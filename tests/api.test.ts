@@ -3464,6 +3464,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
           "text",
           "markdown",
           "html",
+          "result_json",
           "summary_csv",
           "domain_summary_csv",
           "aggregate_summary_csv",
@@ -3490,6 +3491,11 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
       renderEvaluationMarkdownReport(evaluateResult.scorecards),
     );
     assert.equal(evaluateResult.artifacts.html, renderEvaluationHtmlReport(evaluateResult.scorecards));
+    const { artifacts: _artifacts, ...resultWithoutArtifacts } = evaluateResult;
+    assert.deepEqual(
+      JSON.parse(evaluateResult.artifacts.result_json ?? "null"),
+      resultWithoutArtifacts,
+    );
     assert.equal(
       evaluateResult.artifacts.summary_csv,
       renderEvaluationSummaryCsv(evaluateResult.scorecards),
