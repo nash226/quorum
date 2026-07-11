@@ -224,6 +224,7 @@ test("serve --help prints API usage without starting the server", async () => {
   assert.match(result.stdout, /GET  \/health\s+Return a simple readiness response/);
   assert.match(result.stdout, /GET  \/openapi\.json\s+Return the machine-readable API description/);
   assert.match(result.stdout, /OPTIONS \*\s+Return CORS preflight headers for browser-based local clients/);
+  assert.match(result.stdout, /POST \/extract-claims\s+Extract normalized claims from answer content/);
   assert.match(result.stdout, /POST \/verify-batch\s+Verify multiple answers from JSON request content/);
   assert.match(result.stdout, /POST \/import-review\s+Import reviewer CSV content from JSON request content/);
 });
