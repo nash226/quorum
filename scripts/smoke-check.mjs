@@ -252,6 +252,7 @@ try {
   assert.ok(openApiDocument.paths["/verify-batch"]);
   assert.ok(openApiDocument.paths["/import-review"]);
   assert.ok(openApiDocument.paths["/evaluate"]);
+  assert.equal(openApiDocument.paths["/extract-claims"].post.operationId, "postExtractClaims");
 
   const importReportPath = join(tempDir, "review-import.json");
   const importSummaryCsvPath = join(tempDir, "review-import-summary.csv");
@@ -468,6 +469,24 @@ Employees receive 12 weeks of paid parental leave.
       ok: true,
       service: "quorum",
       version: "0.1.0",
+    });
+
+    const extractClaimsResponse = await fetch(`${server.url}/extract-claims`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave. Managers approve exceptions within five business days.",
+      }),
+    });
+    assert.equal(extractClaimsResponse.status, 200);
+    assert.equal(extractClaimsResponse.headers.get("x-quorum-service"), "quorum");
+    assert.deepEqual(await extractClaimsResponse.json(), {
+      claims: [
+        { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
+        { id: "claim_2", text: "Managers approve exceptions within five business days." },
+      ],
     });
 
     const preflightResponse = await fetch(`${server.url}/verify`, {
