@@ -2653,23 +2653,27 @@ Refund requests receive an initial response within one business day.
     ]?.examples?.["invalidRequest"]?.value as
       | {
           error?: string;
+          requestId?: string;
         }
       | undefined;
     assert.equal(
       verify400Example?.error,
       "sources must be a non-empty array.",
     );
+    assert.equal(verify400Example?.requestId, "workflow-trace-2026-07-10");
     const verify405Example = openApi.paths["/verify"]?.post?.responses?.["405"]?.content?.[
       "application/json"
     ]?.examples?.["wrongMethod"]?.value as
       | {
           error?: string;
+          requestId?: string;
         }
       | undefined;
     assert.equal(
       verify405Example?.error,
       "Method not allowed. Use POST.",
     );
+    assert.equal(verify405Example?.requestId, "workflow-trace-2026-07-10");
     assert.equal(
       openApi.paths["/verify"]?.post?.responses?.["415"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",
@@ -2679,12 +2683,14 @@ Refund requests receive an initial response within one business day.
     ]?.examples?.["invalidContentType"]?.value as
       | {
           error?: string;
+          requestId?: string;
         }
       | undefined;
     assert.equal(
       verify415Example?.error,
       "Content-Type must be application/json.",
     );
+    assert.equal(verify415Example?.requestId, "workflow-trace-2026-07-10");
     assert.equal(
       openApi.paths["/verify"]?.post?.responses?.["500"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",
@@ -2694,12 +2700,14 @@ Refund requests receive an initial response within one business day.
     ]?.examples?.["internalError"]?.value as
       | {
           error?: string;
+          requestId?: string;
         }
       | undefined;
     assert.equal(
       verify500Example?.error,
       "Internal server error.",
     );
+    assert.equal(verify500Example?.requestId, "workflow-trace-2026-07-10");
     const verify409Example = openApi.paths["/verify"]?.post?.responses?.["409"]?.content?.[
       "application/json"
     ]?.examples?.["failPolicyMatch"]?.value as
@@ -2781,7 +2789,7 @@ Refund requests receive an initial response within one business day.
       "service",
       "version",
     ]);
-    assert.deepEqual(openApi.components.schemas.ApiErrorResponse.required, ["error"]);
+    assert.deepEqual(openApi.components.schemas.ApiErrorResponse.required, ["error", "requestId"]);
     assert.deepEqual(openApi.components.schemas.VerificationReport.required, [
       "generatedAt",
       "answerPreview",
@@ -3004,9 +3012,9 @@ test("programmatic API rejects JSON request bodies larger than the documented li
     });
 
     assert.equal(response.status, 413);
-    assert.deepEqual(await response.json(), {
-      error: `Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`,
-    });
+    const payload = (await response.json()) as { error: string; requestId: string };
+    assert.equal(payload.error, `Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`);
+    assert.match(payload.requestId, /^[0-9a-f-]{36}$/);
   } finally {
     await api.close();
   }
@@ -3037,9 +3045,9 @@ test("programmatic API enforces the request limit while reading chunked bodies",
     });
 
     assert.equal(response.statusCode, 413);
-    assert.deepEqual(JSON.parse(response.body), {
-      error: `Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`,
-    });
+    const payload = JSON.parse(response.body) as { error: string; requestId: string };
+    assert.equal(payload.error, `Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`);
+    assert.match(payload.requestId, /^[0-9a-f-]{36}$/);
   } finally {
     await api.close();
   }
@@ -3141,6 +3149,7 @@ test("programmatic API requires a JSON content type for POST endpoints", async (
       method: "POST",
       headers: {
         "content-type": "text/plain",
+        "X-Quorum-Request-Id": "invalid-content-type-check",
       },
       body: JSON.stringify({
         answer: "Employees receive 12 weeks of paid parental leave.",
@@ -3159,9 +3168,10 @@ Employees receive 12 weeks of paid parental leave.
     });
 
     assert.equal(response.status, 415);
-    assert.deepEqual(await response.json(), {
-      error: "Content-Type must be application/json.",
-    });
+    const payload = (await response.json()) as { error: string; requestId: string };
+    assert.equal(payload.error, "Content-Type must be application/json.");
+    assert.equal(payload.requestId, "invalid-content-type-check");
+    assert.equal(response.headers.get("x-quorum-request-id"), payload.requestId);
   } finally {
     await api.close();
   }
@@ -3591,10 +3601,12 @@ test("evaluate endpoint rejects invalid fixture content with a 400", async () =>
     });
 
     assert.equal(response.status, 400);
-    assert.deepEqual(await response.json(), {
-      error:
-        "Evaluation fixture fixtures/broken.json.expectedSummary.needs_review must be a non-negative integer.",
-    });
+    const payload = (await response.json()) as { error: string; requestId: string };
+    assert.equal(
+      payload.error,
+      "Evaluation fixture fixtures/broken.json.expectedSummary.needs_review must be a non-negative integer.",
+    );
+    assert.match(payload.requestId, /^[0-9a-f-]{36}$/);
   } finally {
     await api.close();
   }
@@ -3631,10 +3643,12 @@ test("evaluate endpoint rejects misaligned fixture expectations with a 400", asy
     });
 
     assert.equal(response.status, 400);
-    assert.deepEqual(await response.json(), {
-      error:
-        "Evaluation fixture fixtures/broken.json.expectedClaimVerdicts must include 2 entries to match the totals in Evaluation fixture fixtures/broken.json.expectedSummary.",
-    });
+    const payload = (await response.json()) as { error: string; requestId: string };
+    assert.equal(
+      payload.error,
+      "Evaluation fixture fixtures/broken.json.expectedClaimVerdicts must include 2 entries to match the totals in Evaluation fixture fixtures/broken.json.expectedSummary.",
+    );
+    assert.match(payload.requestId, /^[0-9a-f-]{36}$/);
   } finally {
     await api.close();
   }
@@ -3791,9 +3805,9 @@ Employees receive 12 weeks of paid parental leave.
     });
 
     assert.equal(response.status, 400);
-    assert.deepEqual(await response.json(), {
-      error: "failOnStatus must be a boolean.",
-    });
+    const payload = (await response.json()) as { error: string; requestId: string };
+    assert.equal(payload.error, "failOnStatus must be a boolean.");
+    assert.match(payload.requestId, /^[0-9a-f-]{36}$/);
   } finally {
     await api.close();
   }
