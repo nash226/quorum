@@ -13,6 +13,7 @@ import {
   type InMemoryEvaluationFixtureInput,
 } from "./evaluation.js";
 import type { BatchVerificationRunResult, SingleVerificationResult } from "./domain.js";
+import { extractClaims } from "./claim-extractor.js";
 import { CLAIM_VERDICTS, parseClaimVerdict } from "./report-policy.js";
 import {
   renderBatchHtmlReport,
@@ -136,6 +137,14 @@ export interface EvaluateApiRequest {
   failOnStatus?: boolean;
 }
 
+export interface ExtractClaimsApiRequest {
+  answer: string;
+}
+
+export interface ExtractClaimsApiResponse {
+  claims: ReturnType<typeof extractClaims>;
+}
+
 export interface ApiServerOptions {
   host?: string;
   port?: number;
@@ -207,6 +216,7 @@ export const API_CAPABILITIES = {
   verifyBatchArtifacts: [...VERIFY_BATCH_ARTIFACTS],
   importReviewArtifacts: [...IMPORT_REVIEW_ARTIFACTS],
   evaluateArtifacts: [...EVALUATE_ARTIFACTS],
+  extractClaims: true,
 } as const;
 export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
@@ -287,6 +297,12 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     method: "OPTIONS",
     path: "/evaluate",
     description: "Return CORS preflight headers for evaluation requests.",
+  },
+  { method: "POST", path: "/extract-claims", description: "Extract normalized claims from answer content." },
+  {
+    method: "OPTIONS",
+    path: "/extract-claims",
+    description: "Return CORS preflight headers for claim extraction requests.",
   },
 ] as const;
 const OPENAPI_DISCOVERY_RESPONSE_EXAMPLE = {
@@ -1230,6 +1246,19 @@ async function handleApiRequest(
     return;
   }
 
+  if (url === "/extract-claims") {
+    if (request.method !== "POST") {
+      writeMethodNotAllowed(response, "POST");
+      return;
+    }
+
+    requireJsonRequest(request);
+    const body = parseExtractClaimsRequest(await readJsonBody(request));
+    const result: ExtractClaimsApiResponse = { claims: extractClaims(body.answer) };
+    writeJson(response, 200, result);
+    return;
+  }
+
   if (url === "/verify-batch") {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
@@ -1375,6 +1404,14 @@ function parseVerifyRequest(value: unknown): {
     failOn: parseOptionalFailOn(record.failOn),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, VERIFY_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
+  };
+}
+
+function parseExtractClaimsRequest(value: unknown): ExtractClaimsApiRequest {
+  const record = requireRecord(value, "Extract claims request body");
+
+  return {
+    answer: requireString(record.answer, "answer"),
   };
 }
 
@@ -1969,6 +2006,51 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
         options: corsPreflightOperation("optionsOpenApi", "OpenAPI description preflight"),
       },
+      "/extract-claims": {
+        options: corsPreflightOperation("optionsExtractClaims", "Claim extraction preflight"),
+        post: {
+          operationId: "postExtractClaims",
+          summary: "Extract normalized claims",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    answer: { type: "string" },
+                  },
+                  required: ["answer"],
+                },
+                examples: {
+                  answerClaims: {
+                    summary: "Preview claims before verification",
+                    value: { answer: "Employees receive 12 weeks of paid parental leave." },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Normalized atomic claims extracted from the answer.",
+              headers: apiResponseHeaders,
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ExtractClaimsApiResponse" },
+                  examples: {
+                    extractedClaims: {
+                      summary: "One normalized claim",
+                      value: { claims: [{ id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." }] },
+                    },
+                  },
+                },
+              },
+            },
+            ...postErrorResponses,
+          },
+        },
+      },
       "/verify": {
         options: corsPreflightOperation("optionsVerify", "Verify preflight"),
         post: {
@@ -2464,6 +2546,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               type: "array",
               items: { $ref: "#/components/schemas/EvaluateArtifactName" },
             },
+            extractClaims: {
+              type: "boolean",
+              description: "Whether the API exposes normalized claim extraction.",
+            },
           },
           required: [
             "httpMethods",
@@ -2477,7 +2563,18 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "verifyBatchArtifacts",
             "importReviewArtifacts",
             "evaluateArtifacts",
+            "extractClaims",
           ],
+        },
+        ExtractClaimsApiResponse: {
+          type: "object",
+          properties: {
+            claims: {
+              type: "array",
+              items: { $ref: "#/components/schemas/AtomicClaim" },
+            },
+          },
+          required: ["claims"],
         },
         VerifyArtifactName: {
           type: "string",

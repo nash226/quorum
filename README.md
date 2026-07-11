@@ -57,6 +57,7 @@ The current CLI can:
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
+- preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
 ## Example
@@ -443,6 +444,7 @@ Available endpoints:
 - `GET /openapi.json`
 - `HEAD /openapi.json`
 - `POST /verify`
+- `POST /extract-claims`
 - `POST /verify-batch`
 - `POST /import-review`
 - `POST /evaluate`
@@ -470,6 +472,15 @@ curl -s http://127.0.0.1:3000/verify \
     ],
     "failOn": ["contradicted"]
   }'
+```
+
+Claim extraction accepts `{ answer }` and returns the same normalized atomic
+claims used by verification, without requiring source documents:
+
+```bash
+curl -s http://127.0.0.1:3000/extract-claims \
+  -H 'content-type: application/json' \
+  -d '{"answer":"Employees receive 12 weeks of paid parental leave."}'
 ```
 
 Batch verification uses the same source shape and accepts an `answers` array of
@@ -528,10 +539,11 @@ them through `Access-Control-Expose-Headers`.
 Browser clients may also send their own `X-Quorum-Request-Id` value because
 Quorum allows that correlation header during CORS preflight; the server echoes
 valid values and generates one when the header is absent or invalid.
-`GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
+`POST /extract-claims` previews the normalized `{ id, text }` claim objects used
+by verification. `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover both request and response payload shapes without
 scraping the README. The OpenAPI document includes reusable schemas for the
-discovery, verify, batch verify, import-review, and evaluate responses so
+discovery, claim extraction, verify, batch verify, import-review, and evaluate responses so
 typed local clients can generate against the same contract as the CLI-backed
 server. Every documented operation also has a stable `operationId` for generated
 client methods, tracing, and route-level integration tests. The document includes
