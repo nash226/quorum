@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `06e1e29` on 2026-07-10, feat: document API response headers in OpenAPI
+- Latest shipped change: `f7cfebd` on 2026-07-10, feat: add CLI version command
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -31,6 +31,7 @@
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
+- report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
 ## Roadmap Snapshot
 
@@ -49,6 +50,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-10 | Direct push | feat: add CLI version command | `f7cfebd` |
 | 2026-07-10 | Direct push | feat: document API response headers in OpenAPI | `06e1e29` |
 | 2026-07-10 | Direct push | test: cover imported answer previews in api smoke | `cd1af4a` |
 | 2026-07-10 | Direct push | fix: allow browser request correlation headers | `8b31ef8` |
@@ -56,5 +58,4 @@
 | 2026-07-10 | Direct push | feat: expose API request limits in headers | `5a03fff` |
 | 2026-07-10 | Direct push | feat: gate evaluations on minimum score | `8be4058` |
 | 2026-07-10 | Direct push | feat: advertise api request content types | `5191523` |
-| 2026-07-10 | Direct push | fix: preserve evidence paths in html imports | `e080990` |
 
