@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e3c8cbd` on 2026-07-11, feat: add claim extraction cli command
+- Latest shipped change: `425bf25` on 2026-07-11, feat: expose claim extraction over HTTP
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -31,6 +31,7 @@
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
+- preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
 ## Roadmap Snapshot
@@ -50,6 +51,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-11 | Direct push | feat: expose claim extraction over HTTP | `425bf25` |
 | 2026-07-11 | Direct push | feat: add claim extraction cli command | `e3c8cbd` |
 | 2026-07-10 | Direct push | feat: export claim extraction helper | `9d72e85` |
 | 2026-07-10 | Direct push | feat: add CLI version command | `f7cfebd` |
@@ -57,5 +59,4 @@
 | 2026-07-10 | Direct push | test: cover imported answer previews in api smoke | `cd1af4a` |
 | 2026-07-10 | Direct push | fix: allow browser request correlation headers | `8b31ef8` |
 | 2026-07-10 | Direct push | feat: add API request correlation headers | `8b294a4` |
-| 2026-07-10 | Direct push | feat: expose API request limits in headers | `5a03fff` |
 
