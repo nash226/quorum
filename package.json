@@ -31,6 +31,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "check": "npm test && npm run build && npm run smoke && npm run evaluate:ci",
     "dev": "tsx src/cli.ts",
     "smoke": "node scripts/smoke-check.mjs",
     "evaluate:ci": "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch",
