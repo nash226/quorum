@@ -151,6 +151,31 @@ test("programmatic API can build the OpenAPI document without starting the serve
   assert.deepEqual(openApi.servers, [{ url: "http://127.0.0.1:3000" }]);
   assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
   assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
+  assert.equal(openApi.paths["/extract-claims"]?.post?.summary, "Extract normalized claims");
+});
+
+test("HTTP API extracts normalized claims without loading sources", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/extract-claims`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave. Managers approve travel within five business days.",
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), {
+      claims: [
+        { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
+        { id: "claim_2", text: "Managers approve travel within five business days." },
+      ],
+    });
+  } finally {
+    await api.close();
+  }
 });
 
 test("programmatic API verifies an answer file against loaded sources", async () => {
@@ -2722,6 +2747,7 @@ Refund requests receive an initial response within one business day.
       "verifyBatchArtifacts",
       "importReviewArtifacts",
       "evaluateArtifacts",
+      "extractClaims",
     ]);
     assert.deepEqual(openApi.components.schemas.ApiHealthResponse.required, [
       "ok",
