@@ -821,15 +821,19 @@ const OPENAPI_EVALUATE_RESPONSE_EXAMPLE = {
 } as const;
 const OPENAPI_BAD_REQUEST_ERROR_EXAMPLE = {
   error: "sources must be a non-empty array.",
+  requestId: "workflow-trace-2026-07-10",
 } as const;
 const OPENAPI_METHOD_NOT_ALLOWED_ERROR_EXAMPLE = {
   error: "Method not allowed. Use POST.",
+  requestId: "workflow-trace-2026-07-10",
 } as const;
 const OPENAPI_UNSUPPORTED_MEDIA_TYPE_ERROR_EXAMPLE = {
   error: "Content-Type must be application/json.",
+  requestId: "workflow-trace-2026-07-10",
 } as const;
 const OPENAPI_INTERNAL_SERVER_ERROR_EXAMPLE = {
   error: "Internal server error.",
+  requestId: "workflow-trace-2026-07-10",
 } as const;
 const OPENAPI_VERIFY_CONFLICT_RESPONSE_EXAMPLE = {
   report: {
@@ -1103,16 +1107,16 @@ export function createApiServer(): Server {
       await handleApiRequest(request, response);
     } catch (error: unknown) {
       if (error instanceof ApiRequestError) {
-        writeJson(response, error.statusCode, { error: error.message });
+        writeApiError(response, error.statusCode, error.message);
         return;
       }
 
       if (error instanceof EvaluationFixtureValidationError) {
-        writeJson(response, 400, { error: error.message });
+        writeApiError(response, 400, error.message);
         return;
       }
 
-      writeJson(response, 500, { error: "Internal server error." });
+      writeApiError(response, 500, "Internal server error.");
     }
   });
 }
@@ -1329,7 +1333,7 @@ async function handleApiRequest(
     return;
   }
 
-  writeJson(response, 404, { error: "Not found." });
+  writeApiError(response, 404, "Not found.");
 }
 
 async function readJsonBody(request: IncomingMessage): Promise<unknown> {
@@ -2456,8 +2460,14 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           type: "object",
           properties: {
             error: { type: "string" },
+            requestId: {
+              type: "string",
+              minLength: 1,
+              maxLength: 128,
+              description: "Request correlation identifier echoed by the server.",
+            },
           },
-          required: ["error"],
+          required: ["error", "requestId"],
         },
         ApiDiscoveryEndpoint: {
           type: "object",
@@ -3133,7 +3143,7 @@ function writeOperationResult<T extends { shouldFail: boolean }>(
 
 function writeMethodNotAllowed(response: ServerResponse, allow: string): void {
   response.setHeader("Allow", allow);
-  writeJson(response, 405, { error: `Method not allowed. Use ${allow}.` });
+  writeApiError(response, 405, `Method not allowed. Use ${allow}.`);
 }
 
 function applyCorsHeaders(response: ServerResponse): void {
@@ -3162,6 +3172,14 @@ function applyRequestIdHeader(request: IncomingMessage, response: ServerResponse
 function writeNoContent(response: ServerResponse): void {
   response.statusCode = 204;
   response.end();
+}
+
+function writeApiError(response: ServerResponse, statusCode: number, error: string): void {
+  const requestId = response.getHeader(API_REQUEST_ID_HEADER);
+  writeJson(response, statusCode, {
+    error,
+    ...(typeof requestId === "string" ? { requestId } : {}),
+  });
 }
 
 function writeJson(
