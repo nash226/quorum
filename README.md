@@ -224,6 +224,16 @@ Quorum also exposes a small package API for agent and workflow integrations
 that want the verification and reviewer-import flows without shelling out to
 the CLI:
 
+The public package also exports `extractClaims`, so integrations can preview
+the same normalized atomic claims that Quorum will verify:
+
+```ts
+import { extractClaims } from "quorum";
+
+const claims = extractClaims("Employees receive 12 weeks of leave.");
+// [{ id: "claim_1", text: "Employees receive 12 weeks of leave." }]
+```
+
 The local HTTP API exposes its stable service, version, OpenAPI path, request
 size, and request-correlation response headers in the generated `/openapi.json`
 contract, including on error responses, so workflow clients can discover and
