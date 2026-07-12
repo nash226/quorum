@@ -2668,9 +2668,38 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           type: "object",
           properties: {
             fixturePath: { type: "string" },
-            content: { type: "string" },
+            content: {
+              type: "string",
+              description: "JSON-encoded evaluation fixture document.",
+              contentMediaType: "application/json",
+              contentSchema: { $ref: "#/components/schemas/EvaluationFixture" },
+            },
           },
           required: ["fixturePath", "content"],
+        },
+        EvaluationFixture: {
+          type: "object",
+          properties: {
+            name: { type: "string" },
+            domain: { type: "string" },
+            answerPath: { type: "string" },
+            answer: { type: "string" },
+            answerLabel: { type: "string" },
+            sourcePaths: { type: "array", items: { type: "string" } },
+            sourceDirs: { type: "array", items: { type: "string" } },
+            sources: {
+              type: "array",
+              minItems: 1,
+              items: { $ref: "#/components/schemas/ApiSourceInput" },
+            },
+            defaultTrustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
+            expectedSummary: { $ref: "#/components/schemas/VerificationSummary" },
+            expectedClaimVerdicts: {
+              type: "array",
+              items: { $ref: "#/components/schemas/ClaimVerdict" },
+            },
+          },
+          required: ["name", "answerPath", "expectedSummary"],
         },
         SourceTrustLevel: {
           type: "string",
