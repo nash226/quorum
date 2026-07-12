@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `36ad3f3` on 2026-07-12, fix: preserve import review gate in summary artifact
+- Latest shipped change: `c9403d3` on 2026-07-12, feat: expose api result json artifacts
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -53,6 +53,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-12 | [#327](https://github.com/nash226/quorum/pull/327) | feat: expose api result json artifacts | `c9403d3` |
 | 2026-07-12 | Direct push | fix: preserve import review gate in summary artifact | `36ad3f3` |
 | 2026-07-12 | [#325](https://github.com/nash226/quorum/pull/325) | test: verify packed batch result gates | `b5b209a` |
 | 2026-07-12 | Direct push | feat: describe inline evaluation fixtures in OpenAPI | `cce77a5` |
@@ -60,5 +61,4 @@
 | 2026-07-12 | [#322](https://github.com/nash226/quorum/pull/322) | test: smoke check packed API verify gate | `34bc18a` |
 | 2026-07-12 | Direct push | fix: preserve short explicit claims | `3cb4595` |
 | 2026-07-12 | Direct push | feat: expose reviewer import gate results | `9305b48` |
-| 2026-07-12 | [#319](https://github.com/nash226/quorum/pull/319) | test: smoke check packed cli fail gates | `cccbd38` |
 
