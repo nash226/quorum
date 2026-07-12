@@ -3218,6 +3218,49 @@ examples/answers/support-answer.md,claim_2,Employees receive free catered lunch 
   }
 });
 
+test("import-review result-json includes gate metadata and can be written to disk", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-import-result-json-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    const resultJsonOutPath = join(tempDir, "reports", "result.json");
+    await writeFile(
+      reviewCsvPath,
+      [
+        "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+        "2026-07-12T00:00:00.000Z,HR packet,answers/hr.md,Leave policy,clear,,true,claim_1,Employees receive 18 weeks of leave.,contradicted,Conflicting policy,HR Policy,high,2026-07-01,policies/hr.md,0.857,Employees receive 12 weeks of leave.,needs_review,Needs HR review",
+      ].join("\n"),
+      "utf8",
+    );
+
+    const result = await runCliAllowFailure([
+      "import-review",
+      "--review-csv",
+      reviewCsvPath,
+      "--result-json",
+      "--result-json-out",
+      resultJsonOutPath,
+      "--fail-on",
+      "needs_review",
+    ]);
+
+    assert.equal(result.code, 2);
+    const parsed = JSON.parse(result.stdout) as {
+      report: { summary: { needs_review: number } };
+      shouldFail: boolean;
+      failVerdicts: string[];
+    };
+    assert.equal(parsed.shouldFail, true);
+    assert.deepEqual(parsed.failVerdicts, ["needs_review"]);
+    assert.equal(parsed.report.summary.needs_review, 1);
+
+    const saved = JSON.parse(await readFile(resultJsonOutPath, "utf8")) as typeof parsed;
+    assert.deepEqual(saved, parsed);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("import-review treats no-claim metadata rows as fail-policy matches for needs_review", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-import-empty-needs-review-"));
 

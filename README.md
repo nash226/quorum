@@ -167,6 +167,10 @@ answer produces a verified report with the stable `<stdin>` answer path.
 overrides, so teams can block publication on unresolved reviewed outcomes, and
 the text, Markdown, and HTML import reports surface whether each answer matched
 that fail policy.
+For workflow runners that need the report and gate decision in one payload,
+`import-review --result-json` emits `report`, `shouldFail`, and `failVerdicts`;
+use `--result-json-out <path>` to persist the same gate-aware result alongside
+the reviewer handoff artifacts.
 
 To verify a directory of answers against the same approved source set:
 
