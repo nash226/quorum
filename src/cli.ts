@@ -19,7 +19,6 @@ import {
 import {
   matchingFailVerdicts,
   parseClaimVerdict,
-  shouldFailReport,
 } from "./report-policy.js";
 import {
   renderBatchTextReport,
@@ -58,6 +57,8 @@ interface VerifyArgs {
   sourceDirs: string[];
   defaultTrustLevel?: SourceTrustLevel;
   json: boolean;
+  resultJson: boolean;
+  resultJsonOutPath?: string;
   failOn: ClaimVerdict[];
   generatedAt?: string;
 }
@@ -235,7 +236,9 @@ async function runVerify(args: string[]): Promise<void> {
   const markdownReport = renderMarkdownReport(report, parsed.failOn);
   const reviewerDecisionCsv = renderReviewerDecisionCsv(report, parsed.failOn);
   const summaryCsv = renderSummaryCsv(report, parsed.failOn);
-  const shouldFail = shouldFailReport(report, parsed.failOn);
+  const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
+  const shouldFail = failVerdicts.length > 0;
+  const resultJson = JSON.stringify({ report, shouldFail, failVerdicts }, null, 2);
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
@@ -255,6 +258,18 @@ async function runVerify(args: string[]): Promise<void> {
 
   if (parsed.summaryCsvOutPath) {
     await writeReportFile(parsed.summaryCsvOutPath, summaryCsv);
+  }
+
+  if (parsed.resultJsonOutPath) {
+    await writeReportFile(parsed.resultJsonOutPath, resultJson);
+  }
+
+  if (parsed.resultJson) {
+    console.log(resultJson);
+    if (shouldFail) {
+      process.exitCode = 2;
+    }
+    return;
   }
 
   if (parsed.json) {
@@ -287,6 +302,10 @@ async function runVerify(args: string[]): Promise<void> {
     console.log(`Summary CSV written to ${parsed.summaryCsvOutPath}`);
   }
 
+  if (parsed.resultJsonOutPath) {
+    console.log(`Result JSON written to ${parsed.resultJsonOutPath}`);
+  }
+
   if (shouldFail) {
     process.exitCode = 2;
   }
@@ -308,6 +327,13 @@ async function runVerifyBatch(args: string[]): Promise<void> {
   const htmlReport = renderBatchHtmlReport(batchReport);
   const reviewerDecisionCsv = renderBatchReviewerDecisionCsv(batchReport);
   const summaryCsv = renderBatchSummaryCsv(batchReport);
+  const failVerdicts = [...new Set(batchReport.answers.flatMap((answer) => answer.failVerdicts))];
+  const shouldFail = failVerdicts.length > 0;
+  const resultJson = JSON.stringify(
+    { report: batchReport, shouldFail, failVerdicts },
+    null,
+    2,
+  );
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
@@ -329,7 +355,17 @@ async function runVerifyBatch(args: string[]): Promise<void> {
     await writeReportFile(parsed.summaryCsvOutPath, summaryCsv);
   }
 
-  const shouldFail = batchReport.summary.answersWithFailures > 0;
+  if (parsed.resultJsonOutPath) {
+    await writeReportFile(parsed.resultJsonOutPath, resultJson);
+  }
+
+  if (parsed.resultJson) {
+    console.log(resultJson);
+    if (shouldFail) {
+      process.exitCode = 2;
+    }
+    return;
+  }
 
   if (parsed.json) {
     console.log(jsonReport);
@@ -359,6 +395,10 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   if (parsed.summaryCsvOutPath) {
     console.log(`Batch summary CSV written to ${parsed.summaryCsvOutPath}`);
+  }
+
+  if (parsed.resultJsonOutPath) {
+    console.log(`Batch result JSON written to ${parsed.resultJsonOutPath}`);
   }
 
   if (shouldFail) {
@@ -610,6 +650,7 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
     "--html-out",
     "--review-csv-out",
     "--summary-csv-out",
+    "--result-json-out",
   ]));
   let answerPath = "";
   let answerLabel: string | undefined;
@@ -761,6 +802,7 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     "--html-out",
     "--review-csv-out",
     "--summary-csv-out",
+    "--result-json-out",
   ]));
   const explicitAnswers: Array<{ path: string; label?: string }> = [];
   const answerDirPaths: string[] = [];
@@ -850,6 +892,8 @@ function parseSharedVerifyArgs(
   const sourceDirs: string[] = [];
   let defaultTrustLevel: SourceTrustLevel | undefined;
   let json = false;
+  let resultJson = false;
+  let resultJsonOutPath: string | undefined;
   const failOn: ClaimVerdict[] = [];
   let generatedAt: string | undefined;
 
@@ -874,7 +918,12 @@ function parseSharedVerifyArgs(
       index += 1;
     } else if (arg === "--json") {
       json = true;
+    } else if (arg === "--result-json") {
+      resultJson = true;
     } else if (commandSpecificOptions.has(arg) && next) {
+      if (arg === "--result-json-out") {
+        resultJsonOutPath = next;
+      }
       index += 1;
     } else {
       throw new Error(`Unknown or incomplete argument: ${arg}`);
@@ -890,6 +939,8 @@ function parseSharedVerifyArgs(
     sourceDirs,
     defaultTrustLevel,
     json,
+    resultJson,
+    resultJsonOutPath,
     failOn,
     generatedAt,
   };
@@ -1202,7 +1253,7 @@ function printHelp(command?: CommandName): void {
     verify: `Quorum verify
 
 Usage:
-  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--generated-at <timestamp>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --answer <path|->          Answer file to verify, or - to read from stdin
@@ -1213,7 +1264,9 @@ Options:
                              Override trust level for sources without metadata
   --generated-at <timestamp> Use this ISO timestamp in generated reports
   --json                     Print the full JSON report
+  --result-json              Print the report with shouldFail and failVerdicts metadata
   --out <path>               Write the JSON report to disk
+  --result-json-out <path>   Write the gate-aware result JSON to disk
   --markdown-out <path>      Write a reviewer-friendly Markdown report
   --html-out <path>          Write a styled HTML report
   --review-csv-out <path>    Write a reviewer decision CSV
@@ -1227,7 +1280,7 @@ Example:
     "verify-batch": `Quorum verify-batch
 
 Usage:
-  quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--generated-at <timestamp>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --answer <path|->          Answer file to include, or - to read one answer from stdin once
@@ -1239,7 +1292,9 @@ Options:
                              Override trust level for sources without metadata
   --generated-at <timestamp> Use this ISO timestamp in generated reports
   --json                     Print the full JSON batch report
+  --result-json              Print the batch report with shouldFail and failVerdicts metadata
   --out <path>               Write the JSON batch report to disk
+  --result-json-out <path>   Write the gate-aware batch result JSON to disk
   --markdown-out <path>      Write a Markdown batch report
   --html-out <path>          Write a styled HTML batch report
   --review-csv-out <path>    Write a reviewer decision CSV
