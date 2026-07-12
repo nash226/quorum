@@ -495,6 +495,7 @@ Employees receive 12 weeks of paid parental leave.
       method: "POST",
       headers: {
         "content-type": "application/json",
+        "X-Quorum-Request-Id": "packed-extract-claims-contract",
       },
       body: JSON.stringify({
         answer: "Employees receive 12 weeks of paid parental leave. Managers approve exceptions within five business days.",
@@ -502,12 +503,28 @@ Employees receive 12 weeks of paid parental leave.
     });
     assert.equal(extractClaimsResponse.status, 200);
     assert.equal(extractClaimsResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(extractClaimsResponse.headers.get("x-quorum-request-id"), "packed-extract-claims-contract");
     assert.deepEqual(await extractClaimsResponse.json(), {
       claims: [
         { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
         { id: "claim_2", text: "Managers approve exceptions within five business days." },
       ],
     });
+
+    const extractClaimsPreflightResponse = await fetch(`${server.url}/extract-claims`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "http://localhost:4173",
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type, x-quorum-request-id",
+      },
+    });
+    assert.equal(extractClaimsPreflightResponse.status, 204);
+    assert.equal(extractClaimsPreflightResponse.headers.get("access-control-allow-origin"), "*");
+    assert.equal(
+      extractClaimsPreflightResponse.headers.get("access-control-allow-headers"),
+      "Content-Type, X-Quorum-Request-Id",
+    );
 
     const preflightResponse = await fetch(`${server.url}/verify`, {
       method: "OPTIONS",
