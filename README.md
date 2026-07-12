@@ -576,7 +576,9 @@ Error responses now include the same `requestId` in their JSON payload as the
 `X-Quorum-Request-Id` response header, so failed requests remain traceable even
 for clients that persist response bodies instead of headers.
 `POST /extract-claims` previews the normalized `{ id, text }` claim objects used
-by verification. `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
+by verification. Its OpenAPI operation IDs, CORS preflight, and request-correlation
+header are covered by both the TypeScript API suite and the packed-package smoke
+check, keeping browser and generated-client integrations aligned. `GET /openapi.json` returns a machine-readable OpenAPI 3.1 description so local
 workflow clients can discover both request and response payload shapes without
 scraping the README. The OpenAPI document includes reusable schemas for the
 discovery, claim extraction, verify, batch verify, import-review, and evaluate responses so
