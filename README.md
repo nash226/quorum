@@ -491,7 +491,8 @@ including preflight headers, the packaged `POST /extract-claims` workflow, and
 stable OpenAPI operation identifiers, so packed package releases verify the
 integration surface end to end.
 The `quorum serve --help` output also lists `POST /extract-claims`, keeping the
-CLI server guide aligned with the claim-preview endpoint exposed to integrations.
+CLI server guide aligned with the claim-preview endpoint exposed to integrations,
+along with the dedicated `GET` and `HEAD /version` compatibility probes.
 
 Single-answer verification request example:
 
