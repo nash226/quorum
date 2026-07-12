@@ -168,12 +168,34 @@ test("resolves fixture paths from nested directories in stable order", async () 
 
   assert.deepEqual(fixturePaths, [
     resolve("examples/evaluations/hr-policy.json"),
+    resolve("examples/evaluations/empty-answer.json"),
     resolve("examples/evaluations/hr/onboarding-policy.json"),
     resolve("examples/evaluations/hr/pdf-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
     resolve("examples/evaluations/support/account-security-policy.json"),
     resolve("examples/evaluations/support/html-billing-policy.json"),
   ]);
+});
+
+test("scores an empty-answer fixture as a matching zero-claim scorecard", async () => {
+  const scorecard = await evaluateFixtureFile(
+    resolve("examples/evaluations/empty-answer.json"),
+    { generatedAt: "2026-07-12T03:00:00.000Z" },
+  );
+
+  assert.equal(scorecard.fixtureName, "Empty answer example");
+  assert.equal(scorecard.answerLabel, "Support empty draft");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 0,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
+  });
+  assert.equal(scorecard.summaryMatches, true);
+  assert.deepEqual(scorecard.claims, []);
+  assert.equal(scorecard.matchedClaims, 0);
+  assert.equal(scorecard.totalExpectedClaims, 0);
+  assert.equal(scorecard.score, 1);
 });
 
 test("evaluates fixture files from explicit paths and fixture directories", async () => {
@@ -183,11 +205,12 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 6);
+  assert.equal(scorecards.length, 7);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
       "HR policy example",
+      "Empty answer example",
       "HR onboarding policy example",
       "HR PDF policy example",
       "Support policy example",

@@ -518,7 +518,7 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
       /^generated_at,domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label$/m,
     );
     assert.match(summaryCsv, /^[^,\n]+,hr,3,0,9,9,1\.000,100%$/m);
-    assert.match(summaryCsv, /^[^,\n]+,support,3,0,9,9,1\.000,100%$/m);
+    assert.match(summaryCsv, /^[^,\n]+,support,4,0,9,9,1\.000,100%$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -543,7 +543,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels$/m,
     );
-    assert.match(summaryCsv, /^[^,\n]+,6,0,18,18,1\.000,100%,hr \| support,3 \| 3,0 \| 0,1\.000 \| 1\.000,100% \| 100%$/m);
+    assert.match(summaryCsv, /^[^,\n]+,7,0,18,18,1\.000,100%,hr \| support,3 \| 4,0 \| 0,1\.000 \| 1\.000,100% \| 100%$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -791,7 +791,7 @@ test("evaluate writes the gate-aware result JSON to disk", async () => {
     };
     assert.equal(payload.shouldFail, false);
     assert.equal(payload.mismatchCount, 0);
-    assert.equal(payload.summary.fixtureCount, 6);
+    assert.equal(payload.summary.fixtureCount, 7);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
