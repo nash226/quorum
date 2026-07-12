@@ -41,6 +41,7 @@ The current CLI can:
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
+- preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
 - compare each claim against approved source snippets
 - label each claim as `verified`, `contradicted`, `unsupported`, or
   `needs_review`
