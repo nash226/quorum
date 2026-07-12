@@ -88,6 +88,7 @@ export type {
   EvaluationBatchRunResult,
   EvaluationClaimScore,
   EvaluationDomainAggregateSummary,
+  EvaluationFailureReason,
   EvaluationFixture,
   EvaluationFixtureRunResult,
   InMemoryEvaluationFixtureFileOptions,
