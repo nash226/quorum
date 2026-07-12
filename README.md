@@ -543,7 +543,10 @@ That structured result now includes an aggregate `summary` object with
 evaluation drift without re-rendering the text or HTML scorecard.
 Fixture JSON may also embed inline `answer` and `sources` content so callers
 can send a self-contained benchmark payload while still preserving an
-`answerPath` trace in the returned scorecard.
+`answerPath` trace in the returned scorecard. The generated OpenAPI contract
+now describes that JSON-encoded fixture document, including its answer, source,
+domain, and expected-verdict fields, so typed API clients can discover the
+inline format without reverse-engineering the example payload.
 API and in-memory source inputs may also include explicit `title`,
 `updatedAt`, and `trustLevel` fields when a caller wants to preserve source
 metadata without rewriting the raw document content; those explicit fields take
