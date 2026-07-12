@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync, spawn } from "node:child_process";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -924,6 +924,46 @@ Employees receive 12 weeks of paid parental leave.
   const installedCliResult = JSON.parse(installedCliStdout);
   assert.equal(installedCliResult.summary.verified, 1);
   assert.equal(installedCliResult.sources[0]?.title, "Consumer HR Policy");
+  const installedCliFailure = spawnSync(
+    "npm",
+    [
+      "exec",
+      "--",
+      "quorum",
+      "verify",
+      "--answer",
+      consumerAnswerPath,
+      "--source",
+      consumerSourcePath,
+      "--fail-on",
+      "unsupported",
+      "--json",
+    ],
+    { cwd: consumerDir, encoding: "utf8" },
+  );
+  assert.equal(installedCliFailure.status, 0);
+
+  const unsupportedAnswerPath = join(consumerDir, "unsupported-answer.md");
+  writeFileSync(unsupportedAnswerPath, "Employees receive free catered lunch every day.\n", "utf8");
+  const installedCliGate = spawnSync(
+    "npm",
+    [
+      "exec",
+      "--",
+      "quorum",
+      "verify",
+      "--answer",
+      unsupportedAnswerPath,
+      "--source",
+      consumerSourcePath,
+      "--fail-on",
+      "unsupported",
+      "--json",
+    ],
+    { cwd: consumerDir, encoding: "utf8" },
+  );
+  assert.equal(installedCliGate.status, 2);
+  assert.equal(JSON.parse(installedCliGate.stdout).summary.unsupported, 1);
   runCommand("npm", ["install", "--save-dev", "@types/node"], {
     cwd: consumerDir,
     stdio: "pipe",
