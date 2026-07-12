@@ -204,6 +204,32 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
   }
 });
 
+test("HTTP API routes valid requests with query strings by pathname", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const healthResponse = await fetch(`${api.url}/healthz?probe=readiness`);
+    assert.equal(healthResponse.status, 200);
+    assert.deepEqual(await healthResponse.json(), {
+      ok: true,
+      service: "quorum",
+      version: "0.1.0",
+    });
+
+    const extractClaimsResponse = await fetch(`${api.url}/extract-claims?format=json`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ answer: "Employees receive 12 weeks of leave." }),
+    });
+    assert.equal(extractClaimsResponse.status, 200);
+    assert.deepEqual(await extractClaimsResponse.json(), {
+      claims: [{ id: "claim_1", text: "Employees receive 12 weeks of leave." }],
+    });
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API verifies an answer file against loaded sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-"));
 

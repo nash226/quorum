@@ -1172,7 +1172,7 @@ async function handleApiRequest(
   applyRequestIdHeader(request, response);
   applyCorsHeaders(response);
   applyApiDiscoveryHeaders(response);
-  const url = request.url ?? "/";
+  const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
   const isHeadRequest = request.method === "HEAD";
 
   if (request.method === "OPTIONS") {
