@@ -964,6 +964,36 @@ Employees receive 12 weeks of paid parental leave.
   );
   assert.equal(installedCliGate.status, 2);
   assert.equal(JSON.parse(installedCliGate.stdout).summary.unsupported, 1);
+
+  const consumerBatchResultPath = join(consumerDir, "consumer-batch-result.json");
+  const installedBatchGate = spawnSync(
+    "npm",
+    [
+      "exec",
+      "--",
+      "quorum",
+      "verify-batch",
+      "--answer",
+      consumerAnswerPath,
+      "--answer",
+      unsupportedAnswerPath,
+      "--source",
+      consumerSourcePath,
+      "--fail-on",
+      "unsupported",
+      "--result-json",
+      "--result-json-out",
+      consumerBatchResultPath,
+    ],
+    { cwd: consumerDir, encoding: "utf8" },
+  );
+  assert.equal(installedBatchGate.status, 2);
+  const installedBatchResult = JSON.parse(installedBatchGate.stdout);
+  assert.equal(installedBatchResult.report.answerCount, 2);
+  assert.deepEqual(installedBatchResult.failVerdicts, ["unsupported"]);
+  assert.equal(installedBatchResult.shouldFail, true);
+  assert.deepEqual(readJson(consumerBatchResultPath), installedBatchResult);
+
   runCommand("npm", ["install", "--save-dev", "@types/node"], {
     cwd: consumerDir,
     stdio: "pipe",
