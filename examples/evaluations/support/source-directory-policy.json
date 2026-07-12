@@ -1,0 +1,14 @@
+{
+  "name": "Support source directory example",
+  "domain": "support",
+  "answerPath": "../../answers/support-account-answer.md",
+  "answerLabel": "Support source directory reviewer packet",
+  "sourceDirs": ["../../sources"],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 1,
+    "unsupported": 0,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "contradicted"]
+}

@@ -333,10 +333,10 @@ try {
     /^generated_at,domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label\n/m,
   );
   assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,3,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,4,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,5,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
   assert.match(
     evaluationAggregateSummaryCsv,
-    /^generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels\n[^,\n]+,7,0,\d+,\d+,1(?:\.0+)?,100%,hr \| support,3 \| 4,0 \| 0,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%\n?$/,
+    /^generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels\n[^,\n]+,8,0,\d+,\d+,1(?:\.0+)?,100%,hr \| support,3 \| 5,0 \| 0,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%\n?$/,
   );
 
   const apiSources = await api.loadSourcesFromContent({
