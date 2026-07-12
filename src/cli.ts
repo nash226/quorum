@@ -1386,6 +1386,8 @@ Options:
   HEAD /health              Return readiness headers without a response body
   GET  /healthz             Return a simple readiness response on the conventional probe path
   HEAD /healthz             Return readiness headers on the conventional probe path without a response body
+  GET  /version             Return the service and HTTP contract version
+  HEAD /version             Return version headers without a response body
   GET  /openapi.json        Return the machine-readable API description
   HEAD /openapi.json        Return OpenAPI headers without a response body
   OPTIONS *                 Return CORS preflight headers for browser-based local clients
