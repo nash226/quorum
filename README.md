@@ -250,6 +250,9 @@ support fixtures, requiring zero expected-result mismatches and an aggregate
 claim score of at least `0.95`.
 The fixture set also includes an empty-answer case, keeping the zero-claim
 scorecard and reviewer-facing “no claims extracted” behavior covered in CI.
+The shipped support fixture set also includes a source-directory example, so a
+benchmark can discover a maintained approved-source bundle with `sourceDirs`
+instead of listing every source file individually.
 Run `npm run check` locally to execute the same full gate as CI: tests, the
 TypeScript build, the end-to-end smoke check, and the shipped-fixture score
 gate. The package also runs this same gate automatically before `npm publish`,
