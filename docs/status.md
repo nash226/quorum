@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `34bc18a` on 2026-07-12, test: smoke check packed API verify gate
+- Latest shipped change: `fc80ab2` on 2026-07-12, feat: add gate-aware verify result json
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -31,6 +31,7 @@
 - write one-row summary CSVs for single-answer and batch verification workflows, including the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
+- emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
@@ -52,6 +53,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-12 | Direct push | feat: add gate-aware verify result json | `fc80ab2` |
 | 2026-07-12 | [#322](https://github.com/nash226/quorum/pull/322) | test: smoke check packed API verify gate | `34bc18a` |
 | 2026-07-12 | Direct push | fix: preserve short explicit claims | `3cb4595` |
 | 2026-07-12 | Direct push | feat: expose reviewer import gate results | `9305b48` |
@@ -59,5 +61,4 @@
 | 2026-07-12 | Direct push | test: cover empty evaluation answers | `7543150` |
 | 2026-07-11 | Direct push | test: smoke check packed server entrypoint | `8319fa6` |
 | 2026-07-11 | Direct push | test: smoke check verify stdin workflow | `365b6e8` |
-| 2026-07-11 | Direct push | test: smoke check claim extraction endpoint | `7644614` |
 
