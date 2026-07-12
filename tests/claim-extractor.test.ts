@@ -2,6 +2,18 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { extractClaims } from "../src/claim-extractor.js";
 
+test("preserves short claims instead of silently dropping them", () => {
+  const claims = extractClaims(`
+- No refunds.
+- N/A for contractors.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "No refunds.",
+    "N/A for contractors.",
+  ]);
+});
+
 test("extracts clean claims from markdown list answers", () => {
   const claims = extractClaims(`# HR Policy Summary
 
