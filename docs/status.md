@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `3cb4595` on 2026-07-12, fix: preserve short explicit claims
+- Latest shipped change: `34bc18a` on 2026-07-12, test: smoke check packed API verify gate
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -52,6 +52,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-12 | [#322](https://github.com/nash226/quorum/pull/322) | test: smoke check packed API verify gate | `34bc18a` |
 | 2026-07-12 | Direct push | fix: preserve short explicit claims | `3cb4595` |
 | 2026-07-12 | Direct push | feat: expose reviewer import gate results | `9305b48` |
 | 2026-07-12 | [#319](https://github.com/nash226/quorum/pull/319) | test: smoke check packed cli fail gates | `cccbd38` |
@@ -59,5 +60,4 @@
 | 2026-07-11 | Direct push | test: smoke check packed server entrypoint | `8319fa6` |
 | 2026-07-11 | Direct push | test: smoke check verify stdin workflow | `365b6e8` |
 | 2026-07-11 | Direct push | test: smoke check claim extraction endpoint | `7644614` |
-| 2026-07-11 | Direct push | feat: include request ids in API errors | `ba368a8` |
 
