@@ -396,6 +396,8 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "OPTIONS" && endpoint.path === "/verify"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/health"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/healthz"), true);
+    assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "GET" && endpoint.path === "/version"), true);
+    assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/version"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/openapi.json"), true);
 
     const discoveryPreflightResponse = await fetch(`${server.url}/verify`, {
@@ -420,6 +422,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(discoveryOpenApiPayload.paths["/verify"].post.operationId, "postVerify");
     assert.equal(discoveryOpenApiPayload.paths["/verify"].options.operationId, "optionsVerify");
     assert.equal(discoveryOpenApiPayload.paths["/evaluate"].post.operationId, "postEvaluate");
+    assert.equal(discoveryOpenApiPayload.paths["/version"].get.operationId, "getVersion");
 
     const capabilitiesResponse = await fetch(`${server.url}/capabilities`);
     assert.equal(capabilitiesResponse.status, 200);
@@ -490,6 +493,17 @@ Employees receive 12 weeks of paid parental leave.
       service: "quorum",
       version: "0.1.0",
     });
+
+    const versionResponse = await fetch(`${server.url}/version`);
+    assert.equal(versionResponse.status, 200);
+    assert.deepEqual(await versionResponse.json(), {
+      service: "quorum",
+      version: "0.1.0",
+    });
+
+    const headVersionResponse = await fetch(`${server.url}/version`, { method: "HEAD" });
+    assert.equal(headVersionResponse.status, 200);
+    assert.equal(await headVersionResponse.text(), "");
 
     const extractClaimsResponse = await fetch(`${server.url}/extract-claims`, {
       method: "POST",
