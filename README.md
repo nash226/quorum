@@ -598,8 +598,9 @@ Node integrations that want to embed the server directly can now import
 `OpenApiDocumentOptions` contracts from the main `quorum` entrypoint,
 while `quorum/server` remains available for callers that prefer the dedicated
 subpath. The packed-package smoke check verifies both successful and fail-gated CLI
-invocations, then starts the server through both entrypoints
-so published npm installs keep the root and dedicated server exports in sync.
+invocations, then starts the server through both entrypoints and exercises a
+fail-gated `POST /verify` request, so published npm installs keep the root and
+dedicated server exports in sync with the workflow response contract.
 
 For local tooling that wants Quorum's OpenAPI contract without booting an HTTP
 listener first, `createOpenApiDocument` returns the same schema served at
