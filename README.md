@@ -593,7 +593,9 @@ concrete success, fail-on `409`, and common error response examples
 for each POST workflow so agent callers can inspect realistic payloads before wiring
 up typed integrations. Browser-based local tooling can call the same endpoints directly
 because the server replies with permissive CORS headers and handles `OPTIONS`
-preflight requests for JSON clients.
+preflight requests for JSON clients. Routes are matched by pathname, so discovery,
+readiness, schema, and POST workflow requests continue to work when clients append
+harmless query strings for probes, tracing, or transport preferences.
 `POST /verify`, `POST /verify-batch`, `POST /import-review`, and
 `POST /evaluate` also accept an `includeArtifacts` array when callers want the
 JSON response to embed reviewer-facing text, Markdown, HTML, CSV, or
