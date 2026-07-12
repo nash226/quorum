@@ -77,9 +77,12 @@ export interface EvaluationFixtureRunResult {
   hasMismatch: boolean;
 }
 
+export type EvaluationFailureReason = "mismatch" | "min_score";
+
 export interface EvaluationBatchRunResult {
   scorecards: EvaluationScorecard[];
   shouldFail: boolean;
+  failureReasons: EvaluationFailureReason[];
   mismatchCount: number;
   summary: EvaluationAggregateSummary;
   minScore?: number;
@@ -1262,10 +1265,20 @@ function buildEvaluationBatchResult(
   const summary = summarizeEvaluationScorecards(scorecards);
   const scoreThresholdPassed =
     minScore === undefined || (summary.score !== null && summary.score >= minScore);
+  const failureReasons: EvaluationFailureReason[] = [];
+
+  if (mismatchCount > 0) {
+    failureReasons.push("mismatch");
+  }
+
+  if (!scoreThresholdPassed) {
+    failureReasons.push("min_score");
+  }
 
   return {
     scorecards,
-    shouldFail: mismatchCount > 0 || !scoreThresholdPassed,
+    shouldFail: failureReasons.length > 0,
+    failureReasons,
     mismatchCount,
     summary,
     ...(minScore === undefined ? {} : { minScore, scoreThresholdPassed }),

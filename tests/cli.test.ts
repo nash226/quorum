@@ -815,6 +815,7 @@ test("evaluate result-json exposes score gates and enforces min-score without fa
     assert.equal(result.code, 2);
     const payload = JSON.parse(result.stdout) as {
       shouldFail: boolean;
+      failureReasons: string[];
       mismatchCount: number;
       minScore: number;
       scoreThresholdPassed: boolean;
@@ -822,6 +823,7 @@ test("evaluate result-json exposes score gates and enforces min-score without fa
     };
 
     assert.equal(payload.shouldFail, true);
+    assert.deepEqual(payload.failureReasons, ["mismatch", "min_score"]);
     assert.equal(payload.mismatchCount, 1);
     assert.equal(payload.minScore, 1);
     assert.equal(payload.scoreThresholdPassed, false);
@@ -848,10 +850,12 @@ test("evaluate writes the gate-aware result JSON to disk", async () => {
     assert.match(result.stdout, /Evaluation result JSON written to/);
     const payload = JSON.parse(await readFile(resultPath, "utf8")) as {
       shouldFail: boolean;
+      failureReasons: string[];
       mismatchCount: number;
       summary: { fixtureCount: number };
     };
     assert.equal(payload.shouldFail, false);
+    assert.deepEqual(payload.failureReasons, []);
     assert.equal(payload.mismatchCount, 0);
     assert.equal(payload.summary.fixtureCount, 8);
   } finally {

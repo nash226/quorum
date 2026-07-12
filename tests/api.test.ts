@@ -1564,6 +1564,7 @@ test("programmatic API returns mismatch metadata for in-memory evaluation batche
 
     assert.equal(result.shouldFail, true);
     assert.equal(result.mismatchCount, 1);
+    assert.deepEqual(result.failureReasons, ["mismatch"]);
     assert.equal(result.summary.fixtureCount, 1);
     assert.equal(result.summary.matchedClaims, 0);
     assert.equal(result.summary.totalExpectedClaims, 1);
@@ -1686,9 +1687,11 @@ test("programmatic API can gate evaluation batches on a minimum aggregate score"
   assert.equal(passing.shouldFail, false);
   assert.equal(passing.minScore, 1);
   assert.equal(passing.scoreThresholdPassed, true);
+  assert.deepEqual(passing.failureReasons, []);
   assert.equal(failing.shouldFail, true);
   assert.equal(failing.minScore, 1);
   assert.equal(failing.scoreThresholdPassed, false);
+  assert.deepEqual(failing.failureReasons, ["mismatch", "min_score"]);
 });
 
 test("programmatic API returns mismatch metadata for fixture file evaluation helpers", async () => {
@@ -2926,7 +2929,7 @@ Refund requests receive an initial response within one business day.
     assert.ok(openApi.components.schemas.EvaluationBatchRunResult);
     assert.deepEqual(
       (openApi.components.schemas.EvaluationBatchRunResult.required as string[]).slice().sort(),
-      ["mismatchCount", "scorecards", "shouldFail", "summary"],
+      ["failureReasons", "mismatchCount", "scorecards", "shouldFail", "summary"],
     );
     assert.deepEqual(openApi.components.schemas.SourceTrustLevel.enum, ["low", "medium", "high"]);
     assert.deepEqual(openApi.components.schemas.ClaimVerdict.enum, [
