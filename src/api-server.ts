@@ -45,9 +45,9 @@ import {
   type InMemorySourceInput,
 } from "./workflow.js";
 
-const VERIFY_ARTIFACTS = ["text", "markdown", "html", "review_csv", "summary_csv"] as const;
-const VERIFY_BATCH_ARTIFACTS = ["text", "markdown", "html", "review_csv", "summary_csv"] as const;
-const IMPORT_REVIEW_ARTIFACTS = ["text", "markdown", "html", "summary_csv"] as const;
+const VERIFY_ARTIFACTS = ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"] as const;
+const VERIFY_BATCH_ARTIFACTS = ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"] as const;
+const IMPORT_REVIEW_ARTIFACTS = ["text", "markdown", "html", "result_json", "summary_csv"] as const;
 const EVALUATE_ARTIFACTS = [
   "text",
   "markdown",
@@ -2609,6 +2609,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             text: { type: "string" },
             markdown: { type: "string" },
             html: { type: "string" },
+            result_json: { type: "string" },
             review_csv: { type: "string" },
             summary_csv: { type: "string" },
           },
@@ -2619,6 +2620,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             text: { type: "string" },
             markdown: { type: "string" },
             html: { type: "string" },
+            result_json: { type: "string" },
             review_csv: { type: "string" },
             summary_csv: { type: "string" },
           },
@@ -2629,6 +2631,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             text: { type: "string" },
             markdown: { type: "string" },
             html: { type: "string" },
+            result_json: { type: "string" },
             summary_csv: { type: "string" },
           },
         },
@@ -3085,6 +3088,7 @@ function buildVerifyArtifacts(
     text: () => renderTextReport(result.report, result.failVerdicts),
     markdown: () => renderMarkdownReport(result.report, result.failVerdicts),
     html: () => renderHtmlReport(result.report, result.failVerdicts),
+    result_json: () => JSON.stringify(result, null, 2),
     review_csv: () => renderReviewerDecisionCsv(result.report, result.failVerdicts),
     summary_csv: () => renderSummaryCsv(result.report, result.failVerdicts),
   });
@@ -3098,6 +3102,7 @@ function buildVerifyBatchArtifacts(
     text: () => renderBatchTextReport(result.report),
     markdown: () => renderBatchMarkdownReport(result.report),
     html: () => renderBatchHtmlReport(result.report),
+    result_json: () => JSON.stringify(result, null, 2),
     review_csv: () => renderBatchReviewerDecisionCsv(result.report),
     summary_csv: () => renderBatchSummaryCsv(result.report),
   });
@@ -3111,6 +3116,7 @@ function buildImportReviewArtifacts(
     text: () => renderReviewerDecisionImportReport(result.report, result.failVerdicts),
     markdown: () => renderReviewerDecisionImportMarkdownReport(result.report, result.failVerdicts),
     html: () => renderReviewerDecisionImportHtmlReport(result.report, result.failVerdicts),
+    result_json: () => JSON.stringify(result, null, 2),
     summary_csv: () => renderReviewerDecisionImportSummaryCsv(result.report, result.failVerdicts),
   });
 }
