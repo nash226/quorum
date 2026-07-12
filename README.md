@@ -596,6 +596,9 @@ without writing files first. Evaluation responses can also embed a
 so workflow callers can route fixture results by domain without recomputing
 the aggregate rollup, plus an
 `aggregate_summary_csv` artifact for one-row overall benchmark gating.
+The `POST /import-review` `summary_csv` artifact applies the request's
+`failOn` policy, so queue consumers can route imported answer groups using the
+same matched verdicts returned in `failVerdicts`.
 Those same POST endpoints also accept `failOnStatus: true` when local
 orchestrators want Quorum to return HTTP `409` for matched fail policies or
 evaluation mismatches instead of always returning `200`, which lets workflow
