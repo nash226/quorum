@@ -590,7 +590,8 @@ Node integrations that want to embed the server directly can now import
 `ApiDiscoveryResponse`, `ApiCapabilitiesResponse`, `ApiHealthResponse`, and
 `OpenApiDocumentOptions` contracts from the main `quorum` entrypoint,
 while `quorum/server` remains available for callers that prefer the dedicated
-subpath.
+subpath. The packed-package smoke check starts the server through both entrypoints
+so published npm installs keep the root and dedicated server exports in sync.
 
 For local tooling that wants Quorum's OpenAPI contract without booting an HTTP
 listener first, `createOpenApiDocument` returns the same schema served at
