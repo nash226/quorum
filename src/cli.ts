@@ -17,6 +17,7 @@ import {
   renderEvaluationSummaryCsv,
 } from "./evaluation.js";
 import {
+  matchingFailVerdicts,
   parseClaimVerdict,
   shouldFailReport,
 } from "./report-policy.js";
@@ -85,6 +86,8 @@ interface VerifyBatchArgs extends VerifyArgs {
 interface ImportReviewArgs {
   reviewCsvPath: string;
   json: boolean;
+  resultJson: boolean;
+  resultJsonOutPath?: string;
   failOn: ClaimVerdict[];
   outPath?: string;
   markdownOutPath?: string;
@@ -387,10 +390,24 @@ async function runImportReview(args: string[]): Promise<void> {
   const markdownReport = renderReviewerDecisionImportMarkdownReport(report, parsed.failOn);
   const htmlReport = renderReviewerDecisionImportHtmlReport(report, parsed.failOn);
   const summaryCsv = renderReviewerDecisionImportSummaryCsv(report, parsed.failOn);
-  const shouldFail = shouldFailReport(report, parsed.failOn);
+  const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
+  const shouldFail = failVerdicts.length > 0;
+  const resultJson = JSON.stringify(
+    {
+      report,
+      shouldFail,
+      failVerdicts,
+    },
+    null,
+    2,
+  );
 
   if (parsed.outPath) {
     await writeReportFile(parsed.outPath, jsonReport);
+  }
+
+  if (parsed.resultJsonOutPath) {
+    await writeReportFile(parsed.resultJsonOutPath, resultJson);
   }
 
   if (parsed.markdownOutPath) {
@@ -405,6 +422,14 @@ async function runImportReview(args: string[]): Promise<void> {
     await writeReportFile(parsed.summaryCsvOutPath, summaryCsv);
   }
 
+  if (parsed.resultJson) {
+    console.log(resultJson);
+    if (shouldFail) {
+      process.exitCode = 2;
+    }
+    return;
+  }
+
   if (parsed.json) {
     console.log(jsonReport);
     if (shouldFail) {
@@ -417,6 +442,10 @@ async function runImportReview(args: string[]): Promise<void> {
 
   if (parsed.outPath) {
     console.log(`Imported reviewer decisions written to ${parsed.outPath}`);
+  }
+
+  if (parsed.resultJsonOutPath) {
+    console.log(`Reviewer decision result JSON written to ${parsed.resultJsonOutPath}`);
   }
 
   if (parsed.markdownOutPath) {
@@ -873,6 +902,8 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   let htmlOutPath: string | undefined;
   let summaryCsvOutPath: string | undefined;
   let json = false;
+  let resultJson = false;
+  let resultJsonOutPath: string | undefined;
   const failOn: ClaimVerdict[] = [];
   let generatedAt: string | undefined;
 
@@ -885,6 +916,9 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
       index += 1;
     } else if (arg === "--out" && next) {
       outPath = next;
+      index += 1;
+    } else if (arg === "--result-json-out" && next) {
+      resultJsonOutPath = next;
       index += 1;
     } else if (arg === "--markdown-out" && next) {
       markdownOutPath = next;
@@ -903,6 +937,8 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
       index += 1;
     } else if (arg === "--json") {
       json = true;
+    } else if (arg === "--result-json") {
+      resultJson = true;
     } else {
       throw new Error(`Unknown or incomplete argument: ${arg}`);
     }
@@ -915,6 +951,8 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
   return {
     reviewCsvPath,
     json,
+    resultJson,
+    resultJsonOutPath,
     failOn,
     outPath,
     markdownOutPath,
@@ -1228,13 +1266,15 @@ Example:
     "import-review": `Quorum import-review
 
 Usage:
-  quorum import-review --review-csv <path|-> [--generated-at <timestamp>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum import-review --review-csv <path|-> [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --review-csv <path|->      Reviewer decision CSV to import, or - to read from stdin
   --generated-at <timestamp> Use this ISO timestamp in generated reports
   --json                     Print the full imported JSON report
+  --result-json              Print the imported report with fail-policy metadata
   --out <path>               Write the imported JSON report to disk
+  --result-json-out <path>   Write the gate-aware import result JSON to disk
   --markdown-out <path>      Write a Markdown import report
   --html-out <path>          Write a styled HTML import report
   --summary-csv-out <path>   Write a one-row-per-answer summary CSV
@@ -1242,7 +1282,7 @@ Options:
 
 Example:
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
-  cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
+  cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --result-json
 `,
     evaluate: `Quorum evaluate
 
@@ -1329,7 +1369,7 @@ Usage:
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum extract-claims --answer <path|-> [--json]
-  quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum import-review --review-csv <path|-> [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
   quorum serve [--host <host>] [--port <port>]
   quorum openapi [--server-url <url>] [--out <path>]
@@ -1342,7 +1382,7 @@ Example:
   cat examples/answers/hr-answer.md | npm run dev -- verify-batch --answer - --answer examples/answers/support-answer.md --source-dir examples/sources --json
   npm run dev -- extract-claims --answer examples/answers/hr-answer.md --json
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
-  cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --json
+  cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --result-json
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --aggregate-summary-csv-out reports/evaluation-aggregate-summary.csv --fail-on-mismatch
   npm run dev -- evaluate --fixture-dir examples/evaluations --domain hr --fail-on-mismatch
   npm run dev -- serve --port 3000
