@@ -57,6 +57,7 @@ The current CLI can:
 - write one-row summary CSVs for single-answer and batch verification workflows, including the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
+- emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
@@ -90,6 +91,11 @@ npm run dev -- verify \
   --review-csv-out reports/hr-review.csv \
   --summary-csv-out reports/hr-summary.csv
 ```
+
+Use `--result-json` (or `--result-json-out <path>`) on `verify` and
+`verify-batch` when a workflow needs the report plus its fail-policy decision in
+one payload. The result includes `report`, `shouldFail`, and `failVerdicts`;
+`--json` remains available for the report-only shape.
 
 Or stream the answer directly into Quorum when another tool already produced the
 text:
