@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9305b48` on 2026-07-12, feat: expose reviewer import gate results
+- Latest shipped change: `3cb4595` on 2026-07-12, fix: preserve short explicit claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -18,6 +18,7 @@
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
+- preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
 - compare each claim against approved source snippets
 - label each claim as `verified`, `contradicted`, `unsupported`, or `needs_review`
 - print a human-readable report
@@ -51,6 +52,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-12 | Direct push | fix: preserve short explicit claims | `3cb4595` |
 | 2026-07-12 | Direct push | feat: expose reviewer import gate results | `9305b48` |
 | 2026-07-12 | [#319](https://github.com/nash226/quorum/pull/319) | test: smoke check packed cli fail gates | `cccbd38` |
 | 2026-07-12 | Direct push | test: cover empty evaluation answers | `7543150` |
@@ -58,5 +60,4 @@
 | 2026-07-11 | Direct push | test: smoke check verify stdin workflow | `365b6e8` |
 | 2026-07-11 | Direct push | test: smoke check claim extraction endpoint | `7644614` |
 | 2026-07-11 | Direct push | feat: include request ids in API errors | `ba368a8` |
-| 2026-07-11 | Direct push | docs: document repository check gate | `58aad5d` |
 
