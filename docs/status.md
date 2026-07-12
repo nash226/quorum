@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `fc80ab2` on 2026-07-12, feat: add gate-aware verify result json
+- Latest shipped change: `cce77a5` on 2026-07-12, feat: describe inline evaluation fixtures in OpenAPI
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -53,6 +53,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-12 | Direct push | feat: describe inline evaluation fixtures in OpenAPI | `cce77a5` |
 | 2026-07-12 | Direct push | feat: add gate-aware verify result json | `fc80ab2` |
 | 2026-07-12 | [#322](https://github.com/nash226/quorum/pull/322) | test: smoke check packed API verify gate | `34bc18a` |
 | 2026-07-12 | Direct push | fix: preserve short explicit claims | `3cb4595` |
@@ -60,5 +61,4 @@
 | 2026-07-12 | [#319](https://github.com/nash226/quorum/pull/319) | test: smoke check packed cli fail gates | `cccbd38` |
 | 2026-07-12 | Direct push | test: cover empty evaluation answers | `7543150` |
 | 2026-07-11 | Direct push | test: smoke check packed server entrypoint | `8319fa6` |
-| 2026-07-11 | Direct push | test: smoke check verify stdin workflow | `365b6e8` |
 
