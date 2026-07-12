@@ -474,6 +474,8 @@ Available endpoints:
 - `HEAD /health`
 - `GET /healthz`
 - `HEAD /healthz`
+- `GET /version`
+- `HEAD /version`
 - `GET /openapi.json`
 - `HEAD /openapi.json`
 - `POST /verify`
@@ -558,7 +560,9 @@ API and in-memory source inputs may also include explicit `title`,
 metadata without rewriting the raw document content; those explicit fields take
 precedence over any frontmatter or HTML metadata already embedded in the
 source body.
-`GET /` returns a small JSON endpoint index plus capability metadata for
+`GET /version` returns the service name and HTTP contract version for clients
+that need a dedicated compatibility probe without parsing readiness or
+discovery payloads. `GET /` returns a small JSON endpoint index plus capability metadata for
 supported HTTP methods, accepted JSON request content types, the maximum JSON
 request size, source extensions, answer extensions, verdicts, trust levels, and
 opt-in artifact names for each workflow surface, while `GET /capabilities`
