@@ -3487,7 +3487,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     );
     assert.equal(
       importResult.artifacts.summary_csv,
-      renderReviewerDecisionImportSummaryCsv(importResult.report),
+      renderReviewerDecisionImportSummaryCsv(importResult.report, importResult.failVerdicts),
     );
 
     const fixtureContent = await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8");
