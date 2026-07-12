@@ -252,7 +252,8 @@ The fixture set also includes an empty-answer case, keeping the zero-claim
 scorecard and reviewer-facing “no claims extracted” behavior covered in CI.
 Run `npm run check` locally to execute the same full gate as CI: tests, the
 TypeScript build, the end-to-end smoke check, and the shipped-fixture score
-gate.
+gate. The package also runs this same gate automatically before `npm publish`,
+so a release cannot skip the repository's verification contract.
 
 ## Programmatic API
 
