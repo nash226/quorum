@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8319fa6` on 2026-07-11, test: smoke check packed server entrypoint
+- Latest shipped change: `7543150` on 2026-07-12, test: cover empty evaluation answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -51,6 +51,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-12 | Direct push | test: cover empty evaluation answers | `7543150` |
 | 2026-07-11 | Direct push | test: smoke check packed server entrypoint | `8319fa6` |
 | 2026-07-11 | Direct push | test: smoke check verify stdin workflow | `365b6e8` |
 | 2026-07-11 | Direct push | test: smoke check claim extraction endpoint | `7644614` |
@@ -58,5 +59,4 @@
 | 2026-07-11 | Direct push | docs: document repository check gate | `58aad5d` |
 | 2026-07-11 | Direct push | chore: unify repository verification gate | `1fab7a5` |
 | 2026-07-11 | [#311](https://github.com/nash226/quorum/pull/311) | ci: enforce evaluation fixture score gate | `2ff905d` |
-| 2026-07-11 | Direct push | feat: expose evaluation result json artifacts | `3db0e31` |
 
