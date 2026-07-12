@@ -590,9 +590,11 @@ because the server replies with permissive CORS headers and handles `OPTIONS`
 preflight requests for JSON clients.
 `POST /verify`, `POST /verify-batch`, `POST /import-review`, and
 `POST /evaluate` also accept an `includeArtifacts` array when callers want the
-JSON response to embed reviewer-facing text, Markdown, HTML, and CSV artifacts
-without writing files first. Evaluation responses can also embed a
-`result_json` artifact for persistence, plus a `domain_summary_csv` artifact
+JSON response to embed reviewer-facing text, Markdown, HTML, CSV, or
+gate-aware `result_json` artifacts without writing files first. The
+`result_json` artifact on each workflow is the same response envelope without
+the `artifacts` field, so callers can persist or forward it without rebuilding
+the result locally. Evaluation responses can also embed a `domain_summary_csv` artifact
 so workflow callers can route fixture results by domain without recomputing
 the aggregate rollup, plus an
 `aggregate_summary_csv` artifact for one-row overall benchmark gating.

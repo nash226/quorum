@@ -693,7 +693,7 @@ Employees receive 12 weeks of paid parental leave.
           },
         ],
         failOn: ["contradicted"],
-        includeArtifacts: ["text", "summary_csv"],
+        includeArtifacts: ["text", "result_json", "summary_csv"],
         failOnStatus: true,
       }),
     });
@@ -702,6 +702,11 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(verifyConflictResult.shouldFail, true);
     assert.deepEqual(verifyConflictResult.failVerdicts, ["contradicted"]);
     assert.match(verifyConflictResult.artifacts.text, /Quorum Verification Report/);
+    assert.deepEqual(JSON.parse(verifyConflictResult.artifacts.result_json), {
+      report: verifyConflictResult.report,
+      shouldFail: verifyConflictResult.shouldFail,
+      failVerdicts: verifyConflictResult.failVerdicts,
+    });
     assert.match(verifyConflictResult.artifacts.summary_csv, /^generated_at,answer_label,answer_path,/);
 
     const batchConflictResponse = await fetch(`${server.url}/verify-batch`, {
@@ -729,7 +734,7 @@ Employees receive 12 weeks of paid parental leave.
           },
         ],
         failOn: ["unsupported"],
-        includeArtifacts: ["html"],
+        includeArtifacts: ["html", "result_json"],
         failOnStatus: true,
       }),
     });
@@ -738,6 +743,11 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(batchConflictResult.shouldFail, true);
     assert.deepEqual(batchConflictResult.failVerdicts, ["unsupported"]);
     assert.match(batchConflictResult.artifacts.html, /Quorum Batch Verification Report/);
+    assert.deepEqual(JSON.parse(batchConflictResult.artifacts.result_json), {
+      report: batchConflictResult.report,
+      shouldFail: batchConflictResult.shouldFail,
+      failVerdicts: batchConflictResult.failVerdicts,
+    });
 
     const importConflictResponse = await fetch(`${server.url}/import-review`, {
       method: "POST",
@@ -749,7 +759,7 @@ Employees receive 12 weeks of paid parental leave.
 HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
 `,
         failOn: ["needs_review"],
-        includeArtifacts: ["markdown"],
+        includeArtifacts: ["markdown", "result_json"],
         failOnStatus: true,
       }),
     });
@@ -758,6 +768,11 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.equal(importConflictResult.shouldFail, true);
     assert.deepEqual(importConflictResult.failVerdicts, ["needs_review"]);
     assert.match(importConflictResult.artifacts.markdown, /^# Quorum Reviewer Decision Import/);
+    assert.deepEqual(JSON.parse(importConflictResult.artifacts.result_json), {
+      report: importConflictResult.report,
+      shouldFail: importConflictResult.shouldFail,
+      failVerdicts: importConflictResult.failVerdicts,
+    });
 
     const evaluateConflictResponse = await fetch(`${server.url}/evaluate`, {
       method: "POST",
