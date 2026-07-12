@@ -1018,6 +1018,34 @@ try {
     throw new Error("Expected packed quorum root export to preserve API discovery metadata.");
   }
 
+  const verifyResponse = await fetch(\`\${api.url}/verify\`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      answer: "Employees receive 18 weeks of paid parental leave.",
+      sources: [
+        {
+          sourcePath: "policies/hr-policy.md",
+          content: "Employees receive 12 weeks of paid parental leave.",
+        },
+      ],
+      failOn: ["contradicted"],
+      failOnStatus: true,
+    }),
+  });
+
+  if (verifyResponse.status !== 409) {
+    throw new Error("Expected packed quorum root export to preserve verify fail-gate status.");
+  }
+
+  const verifyResult = await verifyResponse.json();
+
+  if (!verifyResult.shouldFail || verifyResult.failVerdicts?.[0] !== "contradicted") {
+    throw new Error("Expected packed quorum root export to return the contradicted fail verdict.");
+  }
+
   const response = await fetch(\`\${api.url}/health\`);
 
   if (response.status !== 200) {
