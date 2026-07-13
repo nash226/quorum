@@ -180,11 +180,13 @@ export function renderReviewerDecisionImportReport(
   for (const group of report.answerGroups) {
     const groupFailVerdicts = matchingFailVerdicts(group, failOn);
     lines.push(
-      `Answer: ${group.label}`,
+      `Answer: ${renderMarkdownInline(group.label)}`,
       ...(group.answerPath && group.answerPath !== group.label
-        ? [`Answer file: ${group.answerPath}`]
+        ? [`Answer file: ${renderMarkdownInline(group.answerPath)}`]
         : []),
-      ...(group.answerPreview ? [`Answer preview: ${group.answerPreview}`] : []),
+      ...(group.answerPreview
+        ? [`Answer preview: ${renderMarkdownInline(group.answerPreview)}`]
+        : []),
       ...(group.originalAnswerFailPolicy
         ? [
             `Original answer fail policy: ${
@@ -211,18 +213,18 @@ export function renderReviewerDecisionImportReport(
         ? `${claim.reviewerVerdict}${claim.overridden ? " (override)" : ""}`
         : "pending reviewer decision";
 
-      lines.push(`${claim.finalVerdict.toUpperCase()}  ${claim.claimText}`);
+      lines.push(`${claim.finalVerdict.toUpperCase()}  ${renderMarkdownInline(claim.claimText)}`);
 
       lines.push(`Model verdict: ${claim.modelVerdict}`, `Reviewer verdict: ${reviewState}`);
 
       if (claim.reviewerNotes) {
-        lines.push(`Reviewer notes: ${claim.reviewerNotes}`);
+        lines.push(`Reviewer notes: ${renderMarkdownInline(claim.reviewerNotes)}`);
       }
 
       const evidenceLines = renderImportedEvidenceLines(claim);
       if (evidenceLines.length > 0) {
         lines.push("Evidence:");
-        lines.push(...evidenceLines.map((line) => `- ${line}`));
+        lines.push(...evidenceLines.map((line) => `- ${renderMarkdownInline(line)}`));
       }
 
       lines.push("");
@@ -262,12 +264,14 @@ export function renderReviewerDecisionImportMarkdownReport(
   report.answerGroups.forEach((group) => {
     const groupFailVerdicts = matchingFailVerdicts(group, failOn);
     lines.push(
-      `### ${group.label}`,
+      `### ${renderMarkdownInline(group.label)}`,
       "",
       ...(group.answerPath && group.answerPath !== group.label
-        ? [`- Answer file: ${group.answerPath}`]
+        ? [`- Answer file: ${renderMarkdownInline(group.answerPath)}`]
         : []),
-      ...(group.answerPreview ? [`- Answer preview: ${group.answerPreview}`, ""] : []),
+      ...(group.answerPreview
+        ? [`- Answer preview: ${renderMarkdownInline(group.answerPreview)}`, ""]
+        : []),
       ...(group.originalAnswerFailPolicy
         ? [
             `- Original answer fail policy: ${
@@ -290,7 +294,7 @@ export function renderReviewerDecisionImportMarkdownReport(
     );
 
     if (group.claims.length === 0) {
-      lines.push(group.emptyStateReason ?? NO_CLAIMS_REVIEW_REASON, "");
+      lines.push(renderMarkdownInline(group.emptyStateReason ?? NO_CLAIMS_REVIEW_REASON), "");
       return;
     }
 
@@ -300,7 +304,7 @@ export function renderReviewerDecisionImportMarkdownReport(
         : "pending reviewer decision";
 
       lines.push(
-        `#### ${index + 1}. ${claim.claimText}`,
+        `#### ${index + 1}. ${renderMarkdownInline(claim.claimText)}`,
         "",
         `- Final verdict: ${claim.finalVerdict}`,
         `- Model verdict: ${claim.modelVerdict}`,
@@ -308,15 +312,19 @@ export function renderReviewerDecisionImportMarkdownReport(
       );
 
       if (claim.reviewerNotes) {
-        lines.push(`- Reviewer notes: ${claim.reviewerNotes}`);
+        lines.push(`- Reviewer notes: ${renderMarkdownInline(claim.reviewerNotes)}`);
       }
 
       if (claim.evidenceTitles.length > 0) {
         lines.push("- Evidence:");
-        lines.push(...renderImportedEvidenceLines(claim).map((line) => `  - ${line}`));
+        lines.push(
+          ...renderImportedEvidenceLines(claim).map(
+            (line) => `  - ${renderMarkdownInline(line)}`,
+          ),
+        );
       }
 
-      lines.push(`- Model reason: ${claim.modelReason}`, "");
+      lines.push(`- Model reason: ${renderMarkdownInline(claim.modelReason)}`, "");
     });
   });
 
@@ -840,6 +848,13 @@ function renderImportedEvidenceLines(claim: ImportedReviewerDecision): string[] 
 
     return item.quote ? `${metadata.join(", ")}: ${item.quote}` : metadata.join(", ");
   });
+}
+
+function renderMarkdownInline(value: string): string {
+  return value
+    .replace(/\\/g, "\\\\")
+    .replace(/`/g, "\\`")
+    .replace(/[\r\n]+/g, " ");
 }
 
 function collectImportedEvidence(claim: ImportedReviewerDecision): Array<{
