@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e349cfa` on 2026-07-13, test: cover uncached Kubernetes probe schemas
+- Latest shipped change: `bb85e32` on 2026-07-13, fix: keep reviewer Markdown exports structurally safe
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -32,6 +32,7 @@
 - write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path for reviewer handoff
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
+- render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
@@ -55,6 +56,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | fix: keep reviewer Markdown exports structurally safe | `bb85e32` |
 | 2026-07-13 | Direct push | test: cover uncached Kubernetes probe schemas | `e349cfa` |
 | 2026-07-13 | [#359](https://github.com/nash226/quorum/pull/359) | feat: accept base64 answers for claim previews | `0495f74` |
 | 2026-07-13 | Direct push | feat: accept base64 document content over HTTP | `b72d56c` |
@@ -62,5 +64,4 @@
 | 2026-07-13 | Direct push | feat: accept PDF and DOCX answer files | `1567320` |
 | 2026-07-13 | Direct push | feat: expose API request timeout | `14bcab3` |
 | 2026-07-13 | Direct push | feat: ingest DOCX policy sources | `5f4ce01` |
-| 2026-07-13 | [#353](https://github.com/nash226/quorum/pull/353) | feat: bound API request duration | `f6c76f6` |
 
