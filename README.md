@@ -164,7 +164,8 @@ reports also preserve that original answer-level risk signal alongside the
 reviewer-aware final verdicts. The JSON import output now includes an
 `answerGroups` array with per-answer summaries and grouped claims for workflow
 automation. `--summary-csv-out` writes one row per imported answer group with
-reviewed, pending, overridden, final verdict counts, and the original exported
+an explicit `answer_has_claims` routing flag, reviewed, pending, overridden,
+final verdict counts, and the original exported
 answer-level fail-policy context plus grouped source titles, trust levels, and
 update dates for queue routing and audit handoff. Text, Markdown, and HTML
 import reports also preserve each evidence source path so reviewers can trace
@@ -1227,7 +1228,8 @@ Options:
 - `import-review --html-out <path>`: write the imported reviewer decision
   summary as a polished HTML handoff for review meetings and approvals
 - `import-review --summary-csv-out <path>`: write one CSV row per imported
-  answer group with a `generated_at` timestamp plus the primary final finding, reviewer/model rationale,
+  answer group with a `generated_at` timestamp plus an `answer_has_claims`
+  routing flag, the primary final finding, reviewer/model rationale,
   primary evidence title plus trust/freshness/path/score/quote context,
   reviewed/pending status, reviewer overrides, and final verdict totals
 - `import-review --fail-on <verdict>`: exit with code `2` when that final
