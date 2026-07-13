@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `440f5aa` on 2026-07-12, feat: include request ids in API results
+- Latest shipped change: `47939e4` on 2026-07-13, fix: prevent cached readiness responses
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -53,6 +53,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | [#339](https://github.com/nash226/quorum/pull/339) | fix: prevent cached readiness responses | `47939e4` |
 | 2026-07-12 | Direct push | feat: include request ids in API results | `440f5aa` |
 | 2026-07-12 | [#337](https://github.com/nash226/quorum/pull/337) | ci: restrict repository write permissions | `348ac0b` |
 | 2026-07-12 | Direct push | docs: keep top-level help contract current | `07ca2d6` |
@@ -60,5 +61,4 @@
 | 2026-07-12 | Direct push | docs: list version probes in serve help | `0db3acf` |
 | 2026-07-12 | Direct push | feat: expose HTTP API version endpoint | `7b89d1e` |
 | 2026-07-12 | Direct push | feat: explain evaluation gate failures | `60bb2da` |
-| 2026-07-12 | Direct push | fix: route API requests by pathname | `9bfa476` |
 
