@@ -980,6 +980,23 @@ test("ignores html code blocks between claims", () => {
   );
 });
 
+test("ignores standalone html code elements between claims", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <p>Customers can request refunds within 30 days.</p>
+    <p>Use <code>Employees receive 12 weeks of paid parental leave.</code> as the example response.</p>
+    <p>Annual plans require support approval.</p>
+  </body>
+</html>`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Customers can request refunds within 30 days.",
+    "Use as the example response.",
+    "Annual plans require support approval.",
+  ]);
+});
+
 test("ignores html heading text before html list claims", () => {
   const claims = extractClaims(`<!doctype html>
 <html>

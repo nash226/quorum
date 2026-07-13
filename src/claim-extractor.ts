@@ -265,6 +265,7 @@ function normalizeHtmlAnswerMarkup(answer: string): string {
       .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, " ")
       .replace(HTML_PAGE_CHROME_PATTERN, " ")
       .replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi, " ")
+      .replace(/<code\b[^>]*>[\s\S]*?<\/code>/gi, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
       .replace(HTML_HEADING_PATTERN, (_match, depth: string, headingContent: string) => {
