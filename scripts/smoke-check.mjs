@@ -704,6 +704,40 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(batchVerifyResult.report.answerCount, 2);
     assert.equal(batchVerifyResult.report.summary.needs_review, 1);
 
+    const batchBinaryAnswer = readFileSync(join(repoRoot, "examples", "sources", "hr-policy.pdf"));
+    const batchBinaryVerifyResponse = await fetch(`${server.url}/verify-batch`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answers: [
+          {
+            answerBase64: batchBinaryAnswer.toString("base64"),
+            answerPath: "answers/hr-policy.pdf",
+            answerLabel: "Uploaded HR policy packet",
+          },
+        ],
+        sources: [
+          {
+            sourcePath: "policies/hr-policy.md",
+            content: `---
+title: HR Policy
+trustLevel: high
+---
+Employees receive 12 weeks of paid parental leave.
+`,
+          },
+        ],
+      }),
+    });
+    assert.equal(batchBinaryVerifyResponse.status, 200);
+    const batchBinaryVerifyResult = await batchBinaryVerifyResponse.json();
+    assert.equal(batchBinaryVerifyResult.shouldFail, false);
+    assert.equal(batchBinaryVerifyResult.report.answerCount, 1);
+    assert.equal(batchBinaryVerifyResult.report.answers[0]?.answerLabel, "Uploaded HR policy packet");
+    assert.equal(batchBinaryVerifyResult.report.summary.verified, 1);
+
     const importReviewResponse = await fetch(`${server.url}/import-review`, {
       method: "POST",
       headers: {
