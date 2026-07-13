@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `348ac0b` on 2026-07-12, ci: restrict repository write permissions
+- Latest shipped change: `440f5aa` on 2026-07-12, feat: include request ids in API results
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -53,6 +53,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-12 | Direct push | feat: include request ids in API results | `440f5aa` |
 | 2026-07-12 | [#337](https://github.com/nash226/quorum/pull/337) | ci: restrict repository write permissions | `348ac0b` |
 | 2026-07-12 | Direct push | docs: keep top-level help contract current | `07ca2d6` |
 | 2026-07-12 | Direct push | test: guard unique API discovery routes | `eb805e0` |
@@ -60,5 +61,4 @@
 | 2026-07-12 | Direct push | feat: expose HTTP API version endpoint | `7b89d1e` |
 | 2026-07-12 | Direct push | feat: explain evaluation gate failures | `60bb2da` |
 | 2026-07-12 | Direct push | fix: route API requests by pathname | `9bfa476` |
-| 2026-07-12 | Direct push | test: cover evaluation source directory fixtures | `9ed4544` |
 
