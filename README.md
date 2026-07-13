@@ -8,6 +8,10 @@ It checks AI-generated business claims against approved company sources before
 those claims reach customers, employees, tickets, workflows, or downstream
 systems.
 
+Repository CI runs the full test, build, smoke, and evaluation gate with
+read-only contents access; only the main-branch status refresh job can write
+back to the repository.
+
 ## Demo Video
 
 <a href="docs/assets/quorum-demo.mp4">
