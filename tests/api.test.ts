@@ -121,6 +121,12 @@ test("API discovery exposes transport limits and supported methods", () => {
   assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
 });
 
+test("API discovery endpoint inventory contains one entry per method and path", () => {
+  const endpointKeys = API_ENDPOINTS.map(({ method, path }) => `${method} ${path}`);
+
+  assert.equal(new Set(endpointKeys).size, endpointKeys.length);
+});
+
 test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(rootCreateApiServer, createApiServer);
   assert.strictEqual(rootStartApiServer, startApiServer);
