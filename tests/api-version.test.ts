@@ -13,7 +13,9 @@ test("HTTP API exposes a dedicated machine-readable version endpoint", async () 
   try {
     const response = await fetch(`${api.url}${VERSION_PATH}`);
     assert.equal(response.status, 200);
-    assert.deepEqual(await response.json(), { service: "quorum", version: API_VERSION });
+    const payload = await response.json() as { requestId: string; service: string; version: string };
+    assert.equal(payload.requestId, response.headers.get("x-quorum-request-id"));
+    assert.deepEqual({ ...payload, requestId: "" }, { requestId: "", service: "quorum", version: API_VERSION });
 
     const headResponse = await fetch(`${api.url}${VERSION_PATH}`, { method: "HEAD" });
     assert.equal(headResponse.status, 200);
@@ -31,5 +33,5 @@ test("OpenAPI documents the version endpoint", () => {
 
   assert.equal(document.paths[VERSION_PATH]?.get?.operationId, "getVersion");
   assert.equal(document.paths[VERSION_PATH]?.head?.operationId, "headVersion");
-  assert.deepEqual(document.components.schemas.ApiVersionResponse.required, ["service", "version"]);
+  assert.deepEqual(document.components.schemas.ApiVersionResponse.required, ["requestId", "service", "version"]);
 });

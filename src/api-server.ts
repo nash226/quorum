@@ -169,6 +169,7 @@ export interface ApiDiscoveryEndpoint {
 }
 
 export interface ApiCapabilitiesResponse {
+  requestId: string;
   service: string;
   version: string;
   openapiPath: string;
@@ -181,11 +182,13 @@ export interface ApiDiscoveryResponse extends ApiCapabilitiesResponse {
 
 export interface ApiHealthResponse {
   ok: true;
+  requestId: string;
   service: string;
   version: string;
 }
 
 export interface ApiVersionResponse {
+  requestId: string;
   service: string;
   version: string;
 }
@@ -328,6 +331,7 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   },
 ] as const;
 const OPENAPI_DISCOVERY_RESPONSE_EXAMPLE = {
+  requestId: "discovery-contract-test",
   service: API_SERVICE_NAME,
   version: API_VERSION,
   openapiPath: OPENAPI_PATH,
@@ -335,6 +339,7 @@ const OPENAPI_DISCOVERY_RESPONSE_EXAMPLE = {
   endpoints: API_ENDPOINTS,
 } as const;
 const OPENAPI_CAPABILITIES_RESPONSE_EXAMPLE = {
+  requestId: "capabilities-contract-test",
   service: API_SERVICE_NAME,
   version: API_VERSION,
   openapiPath: OPENAPI_PATH,
@@ -342,10 +347,12 @@ const OPENAPI_CAPABILITIES_RESPONSE_EXAMPLE = {
 } as const;
 const OPENAPI_HEALTH_RESPONSE_EXAMPLE = {
   ok: true,
+  requestId: "health-contract-test",
   service: API_SERVICE_NAME,
   version: API_VERSION,
 } as const;
 const OPENAPI_VERSION_RESPONSE_EXAMPLE = {
+  requestId: "version-contract-test",
   service: API_SERVICE_NAME,
   version: API_VERSION,
 } as const;
@@ -1209,6 +1216,7 @@ async function handleApiRequest(
 
   if ((request.method === "GET" || isHeadRequest) && url === "/") {
     const discoveryResponse: ApiDiscoveryResponse = {
+      requestId: requestId(response),
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
@@ -1221,6 +1229,7 @@ async function handleApiRequest(
 
   if ((request.method === "GET" || isHeadRequest) && url === CAPABILITIES_PATH) {
     const capabilitiesResponse: ApiCapabilitiesResponse = {
+      requestId: requestId(response),
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
@@ -1233,6 +1242,7 @@ async function handleApiRequest(
   if ((request.method === "GET" || isHeadRequest) && (url === "/health" || url === "/healthz" || url === "/readyz")) {
     const healthResponse: ApiHealthResponse = {
       ok: true,
+      requestId: requestId(response),
       service: API_SERVICE_NAME,
       version: API_VERSION,
     };
@@ -1243,6 +1253,7 @@ async function handleApiRequest(
 
   if ((request.method === "GET" || isHeadRequest) && url === VERSION_PATH) {
     const versionResponse: ApiVersionResponse = {
+      requestId: requestId(response),
       service: API_SERVICE_NAME,
       version: API_VERSION,
     };
@@ -2662,6 +2673,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         ApiIndexResponse: {
           type: "object",
           properties: {
+            requestId: { type: "string", minLength: 1, maxLength: 128 },
             service: { type: "string", const: API_SERVICE_NAME },
             version: { type: "string", const: API_VERSION },
             openapiPath: { type: "string", const: OPENAPI_PATH },
@@ -2671,25 +2683,27 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               items: { $ref: "#/components/schemas/ApiDiscoveryEndpoint" },
             },
           },
-          required: ["service", "version", "openapiPath", "capabilities", "endpoints"],
+          required: ["requestId", "service", "version", "openapiPath", "capabilities", "endpoints"],
         },
         ApiCapabilitiesResponse: {
           type: "object",
           properties: {
+            requestId: { type: "string", minLength: 1, maxLength: 128 },
             service: { type: "string", const: API_SERVICE_NAME },
             version: { type: "string", const: API_VERSION },
             openapiPath: { type: "string", const: OPENAPI_PATH },
             capabilities: { $ref: "#/components/schemas/ApiCapabilities" },
           },
-          required: ["service", "version", "openapiPath", "capabilities"],
+          required: ["requestId", "service", "version", "openapiPath", "capabilities"],
         },
         ApiVersionResponse: {
           type: "object",
           properties: {
+            requestId: { type: "string", minLength: 1, maxLength: 128 },
             service: { type: "string", const: API_SERVICE_NAME },
             version: { type: "string", const: API_VERSION },
           },
-          required: ["service", "version"],
+          required: ["requestId", "service", "version"],
         },
         ApiCapabilities: {
           type: "object",
@@ -2851,10 +2865,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           type: "object",
           properties: {
             ok: { type: "boolean", const: true },
+            requestId: { type: "string", minLength: 1, maxLength: 128 },
             service: { type: "string", const: API_SERVICE_NAME },
             version: { type: "string", const: API_VERSION },
           },
-          required: ["ok", "service", "version"],
+          required: ["ok", "requestId", "service", "version"],
         },
         ApiSourceInput: {
           type: "object",
@@ -3415,6 +3430,11 @@ function applyRequestIdHeader(request: IncomingMessage, response: ServerResponse
     : randomUUID();
 
   response.setHeader(API_REQUEST_ID_HEADER, requestId);
+}
+
+function requestId(response: ServerResponse): string {
+  const value = response.getHeader(API_REQUEST_ID_HEADER);
+  return typeof value === "string" ? value : "";
 }
 
 function writeNoContent(response: ServerResponse): void {
