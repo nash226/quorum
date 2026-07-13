@@ -598,7 +598,9 @@ inside the JSON request; each field is mutually exclusive with its text
 counterpart, and the original `.pdf` or `.docx` path selects the extractor.
 The packaged smoke check covers a base64 PDF answer through both the single
 `POST /verify` and batch `POST /verify-batch` workflows, keeping direct and
-queued binary uploads verified end to end.
+queued binary uploads verified end to end. It also verifies a base64 PDF source
+through the packaged single-answer HTTP workflow, including its explicit title
+and trust metadata, so binary policy uploads stay traceable as approved evidence.
 Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
 `verifyAnswerBatchContentsResult` shapes so workflow callers get the report,
 matched fail verdicts, and `shouldFail` status in one JSON payload.
