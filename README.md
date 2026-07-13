@@ -59,7 +59,7 @@ The current CLI can:
 - write a polished HTML reviewer report for demos and human review
 - write a reviewer decision CSV that teams can fill in claim by claim
   while preserving the original answer path for reviewer handoff
-- write one-row summary CSVs for single-answer and batch verification workflows, including the primary evidence score and quote
+- write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
@@ -220,6 +220,9 @@ explicit `--answer` to keep a reviewer-facing queue label for that input while
 still preserving the original `answer_path`. Batch Markdown and HTML reports
 also include each answer's claim-level verdicts and top evidence so reviewers
 can inspect risky answers without jumping straight to JSON.
+Batch summary CSV rows also include `answer_has_claims`, so queue consumers can
+route no-claim answers explicitly instead of inferring that state from verdict
+counts.
 The packaged smoke check also verifies that batch summary CSV rows preserve the
 answer label, primary finding, evidence freshness, evidence source path, and
 source quote used for queue routing.
