@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e744aac` on 2026-07-13, test: smoke test binary source uploads
+- Latest shipped change: `7350444` on 2026-07-13, test: smoke test query-string API routes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -56,6 +56,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | test: smoke test query-string API routes | `7350444` |
 | 2026-07-13 | [#364](https://github.com/nash226/quorum/pull/364) | test: smoke test binary source uploads | `e744aac` |
 | 2026-07-13 | Direct push | test: cover single binary API uploads | `9d71384` |
 | 2026-07-13 | [#362](https://github.com/nash226/quorum/pull/362) | test: cover batch binary API uploads | `6ad6061` |
@@ -63,5 +64,4 @@
 | 2026-07-13 | Direct push | test: cover uncached Kubernetes probe schemas | `e349cfa` |
 | 2026-07-13 | [#359](https://github.com/nash226/quorum/pull/359) | feat: accept base64 answers for claim previews | `0495f74` |
 | 2026-07-13 | Direct push | feat: accept base64 document content over HTTP | `b72d56c` |
-| 2026-07-13 | [#357](https://github.com/nash226/quorum/pull/357) | feat: accept binary answers in content workflows | `a3dafcc` |
 
