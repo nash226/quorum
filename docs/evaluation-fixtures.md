@@ -23,7 +23,7 @@ set covers:
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 70 fixtures. The generated
+The benchmark currently contains 71 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -200,6 +200,8 @@ specific product question:
   timing while flagging an unsupported enterprise-upgrade promise.
 - Support usage-limits coverage verifies the standard request limit, routes a
   too-broad increase claim to review, and flags an unsupported automatic increase.
+- Support holiday-hours coverage verifies the published holiday chat schedule
+  and catches an unconditional coverage promise for excluded accounts.
 - Support subscription-renewal coverage verifies the self-service renewal
   window, catches a conflicting post-expiration claim, and flags an unsupported
   automatic-renewal promise.
