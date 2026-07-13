@@ -481,6 +481,8 @@ Available endpoints:
 - `HEAD /health`
 - `GET /healthz`
 - `HEAD /healthz`
+- `GET /readyz`
+- `HEAD /readyz`
 - `GET /version`
 - `HEAD /version`
 - `GET /openapi.json`
@@ -495,6 +497,8 @@ Every listed route also accepts `OPTIONS` and returns CORS preflight headers
 for browser-based local clients.
 The `/health` and `/healthz` readiness responses include `Cache-Control: no-store`
 so a proxy or load balancer cannot reuse a stale healthy response during an outage.
+The `/readyz` alias provides the same uncached readiness contract for Kubernetes
+probes and deployment systems that use the conventional readiness path.
 The discovery payload keeps each method/path pair unique so generated clients
 can build a stable endpoint inventory without de-duplicating it first.
 The built `npm run smoke` check now exercises that discovery contract over HTTP,
