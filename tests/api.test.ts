@@ -188,6 +188,17 @@ test("programmatic API can build the OpenAPI document without starting the serve
     verifyRequestSchema.content["application/json"].schema.properties.answerBase64?.contentEncoding,
     "base64",
   );
+  const extractClaimsRequestSchema = openApi.paths["/extract-claims"]?.post?.requestBody as {
+    content: { "application/json": { schema: { oneOf: Array<{ required: string[] }>; properties: Record<string, { contentEncoding?: string }> } } };
+  };
+  assert.deepEqual(extractClaimsRequestSchema.content["application/json"].schema.oneOf, [
+    { required: ["answer"] },
+    { required: ["answerBase64"] },
+  ]);
+  assert.equal(
+    extractClaimsRequestSchema.content["application/json"].schema.properties.answerBase64?.contentEncoding,
+    "base64",
+  );
   assert.deepEqual(openApi.paths["/verify"]?.post?.parameters, [
     { $ref: "#/components/parameters/RequestIdHeader" },
   ]);
@@ -250,6 +261,38 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
     assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id");
+  } finally {
+    await api.close();
+  }
+});
+
+test("HTTP API extracts claims from base64 text and document answers", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const textResponse = await fetch(`${api.url}/extract-claims`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answerBase64: Buffer.from("Employees receive 12 weeks of paid parental leave.").toString("base64"),
+        answerPath: "answers/hr-answer.txt",
+      }),
+    });
+    assert.equal(textResponse.status, 200);
+    assert.deepEqual((await textResponse.json()).claims, [
+      { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
+    ]);
+
+    const documentResponse = await fetch(`${api.url}/extract-claims`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answerBase64: Buffer.from(await readFile(resolve("examples/sources/hr-policy.pdf"))).toString("base64"),
+        answerPath: "answers/hr-answer.pdf",
+      }),
+    });
+    assert.equal(documentResponse.status, 200);
+    assert.equal((await documentResponse.json()).claims.length, 2);
   } finally {
     await api.close();
   }
