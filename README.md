@@ -62,6 +62,7 @@ The current CLI can:
   while preserving the original answer path for reviewer handoff
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
 - import filled reviewer decision CSVs into a machine-readable summary
+- render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
