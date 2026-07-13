@@ -221,8 +221,11 @@ test("HTTP API routes valid requests with query strings by pathname", async () =
   try {
     const healthResponse = await fetch(`${api.url}/healthz?probe=readiness`);
     assert.equal(healthResponse.status, 200);
-    assert.deepEqual(await healthResponse.json(), {
+    const healthPayload = await healthResponse.json() as ApiHealthResponse;
+    assert.equal(healthPayload.requestId, healthResponse.headers.get("x-quorum-request-id"));
+    assert.deepEqual({ ...healthPayload, requestId: "" }, {
       ok: true,
+      requestId: "",
       service: "quorum",
       version: "0.1.0",
     });
@@ -2118,6 +2121,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     });
     const expectedEndpoints: readonly ApiDiscoveryEndpoint[] = API_ENDPOINTS;
     const expectedDiscoveryResponse: ApiDiscoveryResponse = {
+      requestId: "workflow-trace-2026-07-10",
       service: "quorum",
       version: "0.1.0",
       openapiPath: "/openapi.json",
@@ -2125,6 +2129,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       endpoints: expectedEndpoints,
     };
     const expectedCapabilitiesResponse: ApiCapabilitiesResponse = {
+      requestId: "",
       service: "quorum",
       version: "0.1.0",
       openapiPath: "/openapi.json",
@@ -2132,6 +2137,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     };
     const expectedHealthResponse: ApiHealthResponse = {
       ok: true,
+      requestId: "",
       service: "quorum",
       version: "0.1.0",
     };
@@ -2155,7 +2161,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
     assert.match(capabilitiesResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
-    assert.deepEqual(await capabilitiesResponse.json(), expectedCapabilitiesResponse);
+    const capabilitiesPayload = await capabilitiesResponse.json() as ApiCapabilitiesResponse;
+    expectedCapabilitiesResponse.requestId = capabilitiesResponse.headers.get("x-quorum-request-id") ?? "";
+    assert.deepEqual(capabilitiesPayload, expectedCapabilitiesResponse);
 
     const healthResponse = await fetch(`${api.url}/health`);
     assert.equal(healthResponse.status, 200);
@@ -2165,7 +2173,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(healthResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
     assert.equal(healthResponse.headers.get("cache-control"), "no-store");
     assert.match(healthResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
-    assert.deepEqual(await healthResponse.json(), expectedHealthResponse);
+    const healthPayload = await healthResponse.json() as ApiHealthResponse;
+    expectedHealthResponse.requestId = healthResponse.headers.get("x-quorum-request-id") ?? "";
+    assert.deepEqual(healthPayload, expectedHealthResponse);
 
     const healthzResponse = await fetch(`${api.url}/healthz`);
     assert.equal(healthzResponse.status, 200);
@@ -2175,12 +2185,16 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(healthzResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
     assert.equal(healthzResponse.headers.get("cache-control"), "no-store");
     assert.match(healthzResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
-    assert.deepEqual(await healthzResponse.json(), expectedHealthResponse);
+    const healthzPayload = await healthzResponse.json() as ApiHealthResponse;
+    assert.equal(healthzPayload.requestId, healthzResponse.headers.get("x-quorum-request-id"));
+    assert.deepEqual({ ...healthzPayload, requestId: "" }, { ...expectedHealthResponse, requestId: "" });
 
     const readyzResponse = await fetch(`${api.url}/readyz`);
     assert.equal(readyzResponse.status, 200);
     assert.equal(readyzResponse.headers.get("cache-control"), "no-store");
-    assert.deepEqual(await readyzResponse.json(), expectedHealthResponse);
+    const readyzPayload = await readyzResponse.json() as ApiHealthResponse;
+    assert.equal(readyzPayload.requestId, readyzResponse.headers.get("x-quorum-request-id"));
+    assert.deepEqual({ ...readyzPayload, requestId: "" }, { ...expectedHealthResponse, requestId: "" });
 
     const headIndexResponse = await fetch(api.url, { method: "HEAD" });
     assert.equal(headIndexResponse.status, 200);
@@ -2291,6 +2305,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
             required: string[];
           };
           ApiIndexResponse: {
+            required: string[];
+          };
+          ApiVersionResponse: {
             required: string[];
           };
           BatchVerificationRunResult: Record<string, unknown>;
@@ -2464,6 +2481,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.deepEqual(
       discoveryExamples?.examples?.["discoveryIndex"]?.value,
       {
+        requestId: "discovery-contract-test",
         service: API_SERVICE_NAME,
         version: API_VERSION,
         openapiPath: "/openapi.json",
@@ -2474,6 +2492,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.deepEqual(
       capabilitiesExamples?.examples?.["capabilitiesOnly"]?.value,
       {
+        requestId: "capabilities-contract-test",
         service: API_SERVICE_NAME,
         version: API_VERSION,
         openapiPath: "/openapi.json",
@@ -2484,6 +2503,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       healthExamples?.examples?.["ready"]?.value,
       {
         ok: true,
+        requestId: "health-contract-test",
         service: API_SERVICE_NAME,
         version: API_VERSION,
       },
@@ -2492,6 +2512,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       healthzExamples?.examples?.["readinessAlias"]?.value,
       {
         ok: true,
+        requestId: "health-contract-test",
         service: API_SERVICE_NAME,
         version: API_VERSION,
       },
@@ -2895,6 +2916,7 @@ Refund requests receive an initial response within one business day.
       1,
     );
     assert.deepEqual(openApi.components.schemas.ApiIndexResponse.required, [
+      "requestId",
       "service",
       "version",
       "openapiPath",
@@ -2902,6 +2924,7 @@ Refund requests receive an initial response within one business day.
       "endpoints",
     ]);
     assert.deepEqual(openApi.components.schemas.ApiCapabilitiesResponse.required, [
+      "requestId",
       "service",
       "version",
       "openapiPath",
@@ -2923,9 +2946,11 @@ Refund requests receive an initial response within one business day.
     ]);
     assert.deepEqual(openApi.components.schemas.ApiHealthResponse.required, [
       "ok",
+      "requestId",
       "service",
       "version",
     ]);
+    assert.deepEqual(openApi.components.schemas.ApiVersionResponse.required, ["requestId", "service", "version"]);
     assert.deepEqual(openApi.components.schemas.ApiErrorResponse.required, ["error", "requestId"]);
     assert.deepEqual(openApi.components.schemas.VerificationReport.required, [
       "generatedAt",

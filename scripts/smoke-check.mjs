@@ -482,6 +482,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(healthResponse.headers.get("cache-control"), "no-store");
     assert.deepEqual(await healthResponse.json(), {
       ok: true,
+      requestId: healthResponse.headers.get("x-quorum-request-id"),
       service: "quorum",
       version: "0.1.0",
     });
@@ -494,6 +495,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(healthzResponse.headers.get("cache-control"), "no-store");
     assert.deepEqual(await healthzResponse.json(), {
       ok: true,
+      requestId: healthzResponse.headers.get("x-quorum-request-id"),
       service: "quorum",
       version: "0.1.0",
     });
@@ -503,6 +505,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(readyzResponse.headers.get("cache-control"), "no-store");
     assert.deepEqual(await readyzResponse.json(), {
       ok: true,
+      requestId: readyzResponse.headers.get("x-quorum-request-id"),
       service: "quorum",
       version: "0.1.0",
     });
@@ -510,6 +513,7 @@ Employees receive 12 weeks of paid parental leave.
     const versionResponse = await fetch(`${server.url}/version`);
     assert.equal(versionResponse.status, 200);
     assert.deepEqual(await versionResponse.json(), {
+      requestId: versionResponse.headers.get("x-quorum-request-id"),
       service: "quorum",
       version: "0.1.0",
     });
