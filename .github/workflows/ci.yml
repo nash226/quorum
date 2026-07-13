@@ -6,11 +6,10 @@ on:
       - main
   pull_request:
 
-permissions:
-  contents: write
-
 jobs:
   test:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
 
     steps:
@@ -32,6 +31,8 @@ jobs:
   refresh-status:
     if: github.ref == 'refs/heads/main'
     needs: test
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
 
     steps:
