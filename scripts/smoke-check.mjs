@@ -672,6 +672,29 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(singleBinaryVerifyResult.report.answerLabel, "Uploaded HR policy packet");
     assert.equal(singleBinaryVerifyResult.report.summary.verified, 1);
 
+    const binarySourceVerifyResponse = await fetch(`${server.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        sources: [
+          {
+            sourcePath: "policies/hr-policy.pdf",
+            contentBase64: singleBinaryAnswer.toString("base64"),
+            title: "Uploaded HR policy",
+            trustLevel: "high",
+          },
+        ],
+      }),
+    });
+    assert.equal(binarySourceVerifyResponse.status, 200);
+    const binarySourceVerifyResult = await binarySourceVerifyResponse.json();
+    assert.equal(binarySourceVerifyResult.shouldFail, false);
+    assert.equal(binarySourceVerifyResult.report.sources[0]?.title, "Uploaded HR policy");
+    assert.equal(binarySourceVerifyResult.report.summary.verified, 1);
+
     const invalidContentTypeResponse = await fetch(`${server.url}/verify`, {
       method: "POST",
       headers: {
