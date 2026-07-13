@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c7cc30d` on 2026-07-13, feat: correlate claim preview responses
+- Latest shipped change: `9a2b26c` on 2026-07-13, feat: preserve claim preview answer context
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -53,6 +53,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | feat: preserve claim preview answer context | `9a2b26c` |
 | 2026-07-13 | [#341](https://github.com/nash226/quorum/pull/341) | feat: correlate claim preview responses | `c7cc30d` |
 | 2026-07-13 | Direct push | feat: add Kubernetes readiness probe alias | `7e7d01c` |
 | 2026-07-13 | [#339](https://github.com/nash226/quorum/pull/339) | fix: prevent cached readiness responses | `47939e4` |
@@ -60,5 +61,4 @@
 | 2026-07-12 | [#337](https://github.com/nash226/quorum/pull/337) | ci: restrict repository write permissions | `348ac0b` |
 | 2026-07-12 | Direct push | docs: keep top-level help contract current | `07ca2d6` |
 | 2026-07-12 | Direct push | test: guard unique API discovery routes | `eb805e0` |
-| 2026-07-12 | Direct push | docs: list version probes in serve help | `0db3acf` |
 
