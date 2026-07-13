@@ -595,6 +595,10 @@ valid values and generates one when the header is absent or invalid.
 Error responses now include the same `requestId` in their JSON payload as the
 `X-Quorum-Request-Id` response header, so failed requests remain traceable even
 for clients that persist response bodies instead of headers.
+Successful `POST /verify`, `POST /verify-batch`, `POST /import-review`, and
+`POST /evaluate` responses now include that same `requestId` in their JSON
+envelope too, so audit records can retain the correlation value without storing
+response headers separately.
 `POST /extract-claims` previews the normalized `{ id, text }` claim objects used
 by verification. Its OpenAPI operation IDs, CORS preflight, and request-correlation
 header are covered by both the TypeScript API suite and the packed-package smoke
