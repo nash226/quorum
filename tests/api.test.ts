@@ -9,6 +9,7 @@ import {
   API_CORS_ALLOWED_HEADERS as SERVER_API_CORS_ALLOWED_HEADERS,
   API_ENDPOINTS as SERVER_API_ENDPOINTS,
   API_MAX_REQUEST_BYTES as SERVER_API_MAX_REQUEST_BYTES,
+  API_REQUEST_TIMEOUT_MS as SERVER_API_REQUEST_TIMEOUT_MS,
   CAPABILITIES_PATH as SERVER_CAPABILITIES_PATH,
   HEALTH_PATH as SERVER_HEALTH_PATH,
   HEALTHZ_PATH as SERVER_HEALTHZ_PATH,
@@ -27,6 +28,7 @@ import {
   API_CORS_ALLOWED_HEADERS,
   API_ENDPOINTS,
   API_MAX_REQUEST_BYTES,
+  API_REQUEST_TIMEOUT_MS,
   CAPABILITIES_PATH,
   HEALTH_PATH,
   HEALTHZ_PATH,
@@ -3281,6 +3283,20 @@ test("programmatic API enforces the request limit while reading chunked bodies",
     assert.match(payload.requestId, /^[0-9a-f-]{36}$/);
   } finally {
     await api.close();
+  }
+});
+
+test("programmatic API bounds request duration with a configurable timeout", () => {
+  const defaultServer = createApiServer();
+  const configuredServer = createApiServer({ requestTimeoutMs: 1_500 });
+
+  try {
+    assert.equal(defaultServer.requestTimeout, SERVER_API_REQUEST_TIMEOUT_MS);
+    assert.equal(API_REQUEST_TIMEOUT_MS, SERVER_API_REQUEST_TIMEOUT_MS);
+    assert.equal(configuredServer.requestTimeout, 1_500);
+  } finally {
+    defaultServer.close();
+    configuredServer.close();
   }
 });
 
