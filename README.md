@@ -567,6 +567,9 @@ matched fail verdicts, and `shouldFail` status in one JSON payload.
 Every API response includes an `X-Quorum-Request-Id` correlation header; callers
 may provide a valid value on the request to keep logs and downstream workflow
 events tied to their own trace.
+The generated OpenAPI document declares that caller-supplied header as an
+optional reusable request parameter, so generated clients can preserve the
+same trace without hand-maintaining transport metadata.
 Successful discovery, capability, health, and version JSON responses also copy
 that correlation value into a `requestId` field, so clients that persist only
 response bodies retain the same audit trail.
