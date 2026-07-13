@@ -498,6 +498,11 @@ Available endpoints:
 
 Every listed route also accepts `OPTIONS` and returns CORS preflight headers
 for browser-based local clients.
+The server allows all browser origins by default for local development; pass
+`--cors-origin <origin>` (repeatable) to `quorum serve` or
+`corsAllowedOrigins` to `startApiServer` when a deployed client should be
+restricted to an explicit origin allowlist. Disallowed origins receive no
+`Access-Control-Allow-Origin` response header.
 The `/health` and `/healthz` readiness responses include `Cache-Control: no-store`
 so a proxy or load balancer cannot reuse a stale healthy response during an outage.
 The `/readyz` alias provides the same uncached readiness contract for Kubernetes

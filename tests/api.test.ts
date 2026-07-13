@@ -216,6 +216,30 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
   }
 });
 
+test("HTTP API restricts CORS responses to configured origins", async () => {
+  const api = await startApiServer({
+    host: "127.0.0.1",
+    port: 0,
+    corsAllowedOrigins: ["https://console.example.com"],
+  });
+
+  try {
+    const allowedResponse = await fetch(`${api.url}/health`, {
+      headers: { origin: "https://console.example.com" },
+    });
+    assert.equal(allowedResponse.headers.get("access-control-allow-origin"), "https://console.example.com");
+    assert.equal(allowedResponse.headers.get("vary"), "Origin");
+
+    const deniedResponse = await fetch(`${api.url}/health`, {
+      headers: { origin: "https://unapproved.example.com" },
+    });
+    assert.equal(deniedResponse.headers.get("access-control-allow-origin"), null);
+    assert.equal(deniedResponse.headers.get("vary"), "Origin");
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API routes valid requests with query strings by pathname", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
