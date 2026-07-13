@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `78efa57` on 2026-07-16, docs: explain fixture source ID uniqueness
+- Latest shipped change: `a71da7a` on 2026-07-16, test: cover support holiday hours evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-16 | Direct push | test: cover support holiday hours evaluation | `a71da7a` |
 | 2026-07-16 | Direct push | docs: explain fixture source ID uniqueness | `78efa57` |
 | 2026-07-16 | Direct push | test: enforce unique source IDs within fixtures | `213dafa` |
 | 2026-07-16 | Direct push | test: smoke-check workspace access benchmark | `1afc2bd` |
@@ -55,5 +56,4 @@
 | 2026-07-16 | Direct push | test: cover support workspace access evaluation | `d9f2d96` |
 | 2026-07-16 | Direct push | test: smoke-check HR benefits enrollment | `6061a7c` |
 | 2026-07-16 | Direct push | test: smoke-check order tracking benchmark | `6772c64` |
-| 2026-07-16 | Direct push | test: smoke-check account contact change benchmark | `ed6aa7d` |
 
