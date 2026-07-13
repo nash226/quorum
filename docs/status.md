@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f9c3385` on 2026-07-13, feat: include answer previews in claim extraction
+- Latest shipped change: `17c9bdd` on 2026-07-13, fix: ignore inline html code claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -18,6 +18,7 @@
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
+- ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims
 - preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
 - compare each claim against approved source snippets
 - label each claim as `verified`, `contradicted`, `unsupported`, or `needs_review`
@@ -53,6 +54,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | fix: ignore inline html code claims | `17c9bdd` |
 | 2026-07-13 | Direct push | feat: include answer previews in claim extraction | `f9c3385` |
 | 2026-07-13 | Direct push | feat: include request ids in discovery bodies | `d6ae56c` |
 | 2026-07-13 | Direct push | feat: preserve claim preview answer context | `9a2b26c` |
@@ -60,5 +62,4 @@
 | 2026-07-13 | Direct push | feat: add Kubernetes readiness probe alias | `7e7d01c` |
 | 2026-07-13 | [#339](https://github.com/nash226/quorum/pull/339) | fix: prevent cached readiness responses | `47939e4` |
 | 2026-07-12 | Direct push | feat: include request ids in API results | `440f5aa` |
-| 2026-07-12 | [#337](https://github.com/nash226/quorum/pull/337) | ci: restrict repository write permissions | `348ac0b` |
 
