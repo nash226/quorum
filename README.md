@@ -220,6 +220,9 @@ explicit `--answer` to keep a reviewer-facing queue label for that input while
 still preserving the original `answer_path`. Batch Markdown and HTML reports
 also include each answer's claim-level verdicts and top evidence so reviewers
 can inspect risky answers without jumping straight to JSON.
+The packaged smoke check also verifies that batch summary CSV rows preserve the
+answer label, primary finding, evidence freshness, evidence source path, and
+source quote used for queue routing.
 
 To run only selected evaluation domains while building scorecards:
 
