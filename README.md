@@ -39,6 +39,7 @@ auditable evidence report before an agent response becomes a business action.
 The current CLI can:
 
 - read an AI-generated answer from a Markdown, text, or exported HTML file
+- read an AI-generated answer from a PDF or DOCX file by extracting its readable text
 - batch verify multiple AI-generated answers from a directory
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
@@ -221,6 +222,9 @@ explicit `--answer` to keep a reviewer-facing queue label for that input while
 still preserving the original `answer_path`. Batch Markdown and HTML reports
 also include each answer's claim-level verdicts and top evidence so reviewers
 can inspect risky answers without jumping straight to JSON.
+Answer directories and explicit `--answer` paths also accept PDF and DOCX
+answers; Quorum extracts their readable text before claim splitting while
+preserving the original file path in reports and reviewer exports.
 Batch summary CSV rows also include `answer_has_claims`, so queue consumers can
 route no-claim answers explicitly instead of inferring that state from verdict
 counts.

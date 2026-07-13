@@ -120,7 +120,7 @@ import {
 
 test("programmatic API exposes supported source and answer extensions", () => {
   assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx"]);
-  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm"]);
+  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx"]);
 });
 
 test("API discovery exposes transport limits and supported methods", () => {
