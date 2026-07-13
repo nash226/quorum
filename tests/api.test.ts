@@ -160,7 +160,13 @@ test("programmatic API can build the OpenAPI document without starting the serve
     openapi: string;
     info: { title: string; version: string };
     servers: Array<{ url: string }>;
-    paths: Record<string, { post?: { summary: string; parameters?: Array<{ $ref?: string }> } }>;
+    paths: Record<string, {
+      post?: {
+        summary: string;
+        parameters?: Array<{ $ref?: string }>;
+        requestBody?: unknown;
+      };
+    }>;
     components: { parameters: Record<string, { name: string; in: string; required: boolean }> };
   };
 
@@ -171,6 +177,17 @@ test("programmatic API can build the OpenAPI document without starting the serve
   assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
   assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
   assert.equal(openApi.paths["/extract-claims"]?.post?.summary, "Extract normalized claims");
+  const verifyRequestSchema = openApi.paths["/verify"]?.post?.requestBody as {
+    content: { "application/json": { schema: { oneOf: Array<{ required: string[] }>; properties: Record<string, { contentEncoding?: string }> } } };
+  };
+  assert.deepEqual(verifyRequestSchema.content["application/json"].schema.oneOf, [
+    { required: ["answer"] },
+    { required: ["answerBase64"] },
+  ]);
+  assert.equal(
+    verifyRequestSchema.content["application/json"].schema.properties.answerBase64?.contentEncoding,
+    "base64",
+  );
   assert.deepEqual(openApi.paths["/verify"]?.post?.parameters, [
     { $ref: "#/components/parameters/RequestIdHeader" },
   ]);
@@ -3932,6 +3949,71 @@ test("evaluate endpoint rejects invalid fixture content with a 400", async () =>
       "Evaluation fixture fixtures/broken.json.expectedSummary.needs_review must be a non-negative integer.",
     );
     assert.match(payload.requestId, /^[0-9a-f-]{36}$/);
+  } finally {
+    await api.close();
+  }
+});
+
+test("HTTP API verifies PDF answer and source bytes sent as base64 JSON content", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const answerBytes = createSimplePdf("Employees receive 12 weeks of paid leave.");
+  const sourceBytes = createSimplePdf("Employees receive 12 weeks of paid leave.");
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answerBase64: Buffer.from(answerBytes).toString("base64"),
+        answerPath: "answers/leave-answer.pdf",
+        sources: [
+          {
+            sourcePath: "policies/leave-policy.pdf",
+            contentBase64: Buffer.from(sourceBytes).toString("base64"),
+            title: "Leave policy",
+            trustLevel: "high",
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as Awaited<ReturnType<typeof verifyAnswerContentsResult>>;
+    assert.equal(result.report.answerPath, "answers/leave-answer.pdf");
+    assert.equal(result.report.sources[0]?.title, "Leave policy");
+    assert.deepEqual(result.report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+  } finally {
+    await api.close();
+  }
+});
+
+test("HTTP API rejects malformed or ambiguous base64 content fields", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const [body, error] of [
+      [
+        { answerBase64: "not base64", sources: [{ sourcePath: "policy.md", content: "Policy." }] },
+        "answerBase64 must be valid base64.",
+      ],
+      [
+        { answer: "Policy.", answerBase64: "UG9saWN5Lg==", sources: [{ sourcePath: "policy.md", content: "Policy." }] },
+        "answer and answerBase64 are mutually exclusive.",
+      ],
+    ] as const) {
+      const response = await fetch(`${api.url}/verify`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      assert.equal(response.status, 400);
+      assert.equal((await response.json() as { error: string }).error, error);
+    }
   } finally {
     await api.close();
   }
