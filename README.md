@@ -529,7 +529,9 @@ curl -s http://127.0.0.1:3000/verify \
 ```
 
 Claim extraction accepts `{ answer }` and returns the same normalized atomic
-claims used by verification, without requiring source documents. Callers can
+claims used by verification, without requiring source documents. The response
+also includes a normalized, truncated `answerPreview` so queue consumers can
+recognize the payload without retaining the original request. Callers can
 also pass `answerPath` and `answerLabel` to preserve reviewer context in the
 response:
 
