@@ -153,7 +153,15 @@ export interface ReviewerDecisionFileImportResultOptions
 }
 
 export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx"]);
-export const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm"]);
+export const ANSWER_EXTENSIONS = new Set([
+  ".md",
+  ".markdown",
+  ".txt",
+  ".html",
+  ".htm",
+  ".pdf",
+  ".docx",
+]);
 export const STDIN_ANSWER_PATH = "<stdin>";
 
 export async function resolveSourcePaths(
@@ -269,7 +277,7 @@ export async function verifyAnswerFile(
     await ensureFilePath(answerPath, "Answer");
   }
 
-  const answer = await readTextInput(answerPath);
+  const answer = await readAnswerInput(answerPath);
   const report = verifyAnswer(
     answer,
     options.sources,
@@ -434,7 +442,7 @@ export async function verifyBatchAnswers(
   }
 
   const generatedAt = options.generatedAt ?? new Date().toISOString();
-  const stdinAnswer = answerPaths.includes("-") ? await readTextInput("-") : undefined;
+  const stdinAnswer = answerPaths.includes("-") ? await readAnswerInput("-") : undefined;
   const normalizedAnswerPaths = answerPaths.map((answerPath) =>
     answerPath === "-" ? STDIN_ANSWER_PATH : answerPath,
   );
@@ -733,6 +741,21 @@ async function listFilesWithExtensions(
   );
 
   return files.flat().sort();
+}
+
+async function readAnswerInput(inputPath: string): Promise<string> {
+  if (inputPath !== "-") {
+    const content = await readFile(inputPath);
+
+    if (/\.(?:pdf|docx)$/i.test(inputPath)) {
+      const answerDocument = await sourceDocumentFromFile(inputPath, content, 0);
+      return answerDocument.content;
+    }
+
+    return stripByteOrderMark(content.toString("utf8"));
+  }
+
+  return stripByteOrderMark(await readStdin());
 }
 
 async function readTextInput(inputPath: string): Promise<string> {
