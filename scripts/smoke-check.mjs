@@ -526,6 +526,8 @@ Employees receive 12 weeks of paid parental leave.
       },
       body: JSON.stringify({
         answer: "Employees receive 12 weeks of paid parental leave. Managers approve exceptions within five business days.",
+        answerPath: "answers/hr-answer.md",
+        answerLabel: "HR reviewer packet",
       }),
     });
     assert.equal(extractClaimsResponse.status, 200);
@@ -533,6 +535,8 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(extractClaimsResponse.headers.get("x-quorum-request-id"), "packed-extract-claims-contract");
     assert.deepEqual(await extractClaimsResponse.json(), {
       requestId: "packed-extract-claims-contract",
+      answerPath: "answers/hr-answer.md",
+      answerLabel: "HR reviewer packet",
       claims: [
         { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
         { id: "claim_2", text: "Managers approve exceptions within five business days." },
