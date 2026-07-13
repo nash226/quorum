@@ -498,6 +498,15 @@ Employees receive 12 weeks of paid parental leave.
       version: "0.1.0",
     });
 
+    const readyzResponse = await fetch(`${server.url}/readyz`);
+    assert.equal(readyzResponse.status, 200);
+    assert.equal(readyzResponse.headers.get("cache-control"), "no-store");
+    assert.deepEqual(await readyzResponse.json(), {
+      ok: true,
+      service: "quorum",
+      version: "0.1.0",
+    });
+
     const versionResponse = await fetch(`${server.url}/version`);
     assert.equal(versionResponse.status, 200);
     assert.deepEqual(await versionResponse.json(), {
