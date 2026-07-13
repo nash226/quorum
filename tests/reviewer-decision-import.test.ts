@@ -231,6 +231,20 @@ support-answer,examples/answers/support-answer.md,Employees receive free catered
   assert.match(rendered, /- Reviewer verdict: pending reviewer decision/);
 });
 
+test("keeps user-provided markdown report context on one structural line", () => {
+  const report = importReviewerDecisions(
+    'answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes\n' +
+      '"reviewer`packet",answers/review.md,"Preview line one\nline two",claim_1,"Claim line one\nline two",verified,"Reason line one\nline two",Policy,Approved,verified,"Note line one\nline two"',
+  );
+  const rendered = renderReviewerDecisionImportMarkdownReport(report);
+
+  assert.match(rendered, /### reviewer\\`packet/);
+  assert.match(rendered, /- Answer preview: Preview line one line two/);
+  assert.match(rendered, /#### 1\. Claim line one line two/);
+  assert.match(rendered, /- Reviewer notes: Note line one line two/);
+  assert.doesNotMatch(rendered, /^line two$/m);
+});
+
 test("renders a reviewer decision import html report", () => {
   const rendered = renderReviewerDecisionImportHtmlReport(
     importReviewerDecisions(`answer_label,answer_path,answer_preview,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
