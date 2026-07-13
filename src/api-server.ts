@@ -210,6 +210,9 @@ export interface StartedApiServer {
 }
 
 export const CAPABILITIES_PATH = "/capabilities";
+export const HEALTH_PATH = "/health";
+export const HEALTHZ_PATH = "/healthz";
+export const READYZ_PATH = "/readyz";
 export const VERSION_PATH = "/version";
 export const OPENAPI_PATH = "/openapi.json";
 export const LIVEZ_PATH = "/livez";
@@ -261,31 +264,31 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     path: CAPABILITIES_PATH,
     description: "Return CORS preflight headers for capability discovery clients.",
   },
-  { method: "GET", path: "/health", description: "Return a simple readiness response." },
-  { method: "HEAD", path: "/health", description: "Return readiness headers without a JSON body." },
+  { method: "GET", path: HEALTH_PATH, description: "Return a simple readiness response." },
+  { method: "HEAD", path: HEALTH_PATH, description: "Return readiness headers without a JSON body." },
   {
     method: "OPTIONS",
-    path: "/health",
+    path: HEALTH_PATH,
     description: "Return CORS preflight headers for readiness probes that use browser-style requests.",
   },
   {
     method: "GET",
-    path: "/healthz",
+    path: HEALTHZ_PATH,
     description: "Return a simple readiness response using the conventional probe path.",
   },
   {
     method: "HEAD",
-    path: "/healthz",
+    path: HEALTHZ_PATH,
     description: "Return readiness headers on the conventional probe path without a JSON body.",
   },
   {
     method: "OPTIONS",
-    path: "/healthz",
+    path: HEALTHZ_PATH,
     description: "Return CORS preflight headers for the conventional readiness probe path.",
   },
-  { method: "GET", path: "/readyz", description: "Return a simple readiness response using the Kubernetes probe alias." },
-  { method: "HEAD", path: "/readyz", description: "Return readiness headers on the Kubernetes probe alias without a JSON body." },
-  { method: "OPTIONS", path: "/readyz", description: "Return CORS preflight headers for the Kubernetes readiness probe alias." },
+  { method: "GET", path: READYZ_PATH, description: "Return a simple readiness response using the Kubernetes probe alias." },
+  { method: "HEAD", path: READYZ_PATH, description: "Return readiness headers on the Kubernetes probe alias without a JSON body." },
+  { method: "OPTIONS", path: READYZ_PATH, description: "Return CORS preflight headers for the Kubernetes readiness probe alias." },
   { method: "GET", path: LIVEZ_PATH, description: "Return a simple liveness response using the Kubernetes probe alias." },
   { method: "HEAD", path: LIVEZ_PATH, description: "Return liveness headers on the Kubernetes probe alias without a JSON body." },
   { method: "OPTIONS", path: LIVEZ_PATH, description: "Return CORS preflight headers for the Kubernetes liveness probe alias." },
@@ -1248,7 +1251,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && (url === "/health" || url === "/healthz" || url === "/readyz" || url === LIVEZ_PATH)) {
+  if ((request.method === "GET" || isHeadRequest) && (url === HEALTH_PATH || url === HEALTHZ_PATH || url === READYZ_PATH || url === LIVEZ_PATH)) {
     const healthResponse: ApiHealthResponse = {
       ok: true,
       requestId: requestId(response),
@@ -1945,7 +1948,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
         options: corsPreflightOperation("optionsCapabilities", "Capability discovery preflight"),
       },
-      "/health": {
+      [HEALTH_PATH]: {
         get: {
           operationId: "getHealth",
           summary: "Readiness check",
@@ -1997,7 +2000,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
         options: corsPreflightOperation("optionsHealth", "Readiness preflight"),
       },
-      "/healthz": {
+      [HEALTHZ_PATH]: {
         get: {
           operationId: "getHealthz",
           summary: "Readiness check alias",
@@ -2049,7 +2052,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         },
         options: corsPreflightOperation("optionsHealthz", "Readiness alias preflight"),
       },
-      "/readyz": {
+      [READYZ_PATH]: {
         get: {
           operationId: "getReadyz",
           summary: "Kubernetes readiness check alias",
