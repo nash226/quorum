@@ -35,6 +35,7 @@ import {
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel } from "./source-loader.js";
+import { renderAnswerPreview } from "./text.js";
 import {
   ANSWER_EXTENSIONS,
   SOURCE_EXTENSIONS,
@@ -152,6 +153,7 @@ export interface ExtractClaimsApiResponse {
   requestId: string;
   answerPath?: string;
   answerLabel?: string;
+  answerPreview: string;
   claims: ReturnType<typeof extractClaims>;
 }
 
@@ -1312,6 +1314,7 @@ async function handleApiRequest(
       requestId: typeof requestId === "string" ? requestId : "",
       answerPath: body.answerPath,
       answerLabel: body.answerLabel,
+      answerPreview: renderAnswerPreview(body.answer),
       claims: extractClaims(body.answer),
     };
     writeJson(response, 200, result);
@@ -2234,6 +2237,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                         requestId: "extract-claims-contract-test",
                         answerPath: "answers/hr-answer.md",
                         answerLabel: "HR reviewer packet",
+                        answerPreview: "Employees receive 12 weeks of paid parental leave.",
                         claims: [{ id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." }],
                       },
                     },
@@ -2794,12 +2798,16 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               type: "string",
               description: "Optional reviewer-facing answer label.",
             },
+            answerPreview: {
+              type: "string",
+              description: "Normalized, truncated answer text for queue and reviewer context.",
+            },
             claims: {
               type: "array",
               items: { $ref: "#/components/schemas/AtomicClaim" },
             },
           },
-          required: ["requestId", "claims"],
+          required: ["requestId", "answerPreview", "claims"],
         },
         VerifyArtifactName: {
           type: "string",
