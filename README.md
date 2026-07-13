@@ -259,6 +259,9 @@ Run `npm run check` locally to execute the same full gate as CI: tests, the
 TypeScript build, the end-to-end smoke check, and the shipped-fixture score
 gate. The package also runs this same gate automatically before `npm publish`,
 so a release cannot skip the repository's verification contract.
+The top-level `quorum --help` synopsis mirrors the command-specific help for
+stable report timestamps, gate-aware result JSON, and evaluation score
+thresholds, so the main CLI entry point remains a usable contract guide.
 
 ## Programmatic API
 
