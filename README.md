@@ -486,6 +486,8 @@ Available endpoints:
 
 Every listed route also accepts `OPTIONS` and returns CORS preflight headers
 for browser-based local clients.
+The discovery payload keeps each method/path pair unique so generated clients
+can build a stable endpoint inventory without de-duplicating it first.
 The built `npm run smoke` check now exercises that discovery contract over HTTP,
 including preflight headers, the packaged `POST /extract-claims` workflow, and
 stable OpenAPI operation identifiers, so packed package releases verify the
