@@ -117,6 +117,7 @@ import {
   verifyAnswerFileResult,
   verifyAnswerResult,
 } from "../src/index.js";
+import { createSimplePdf } from "./pdf-test-helpers.js";
 
 test("programmatic API exposes supported source and answer extensions", () => {
   assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx"]);
@@ -922,6 +923,54 @@ test("programmatic API verifies one in-memory answer against raw source content"
     unsupported: 0,
     needs_review: 0,
   });
+});
+
+test("async in-memory verification extracts PDF and DOCX answer bytes", async () => {
+  const pdfAnswer = createSimplePdf("Employees receive 12 weeks of paid leave.");
+  const pdfReport = await verifyAnswerContents({
+    answer: pdfAnswer,
+    answerPath: "answers/leave-answer.pdf",
+    sources: [
+      {
+        sourcePath: "policies/leave-policy.md",
+        content: "Employees receive 12 weeks of paid leave.",
+      },
+    ],
+  });
+
+  assert.equal(pdfReport.summary.verified, 1);
+
+  const docxAnswer = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
+  const docxReport = await verifyAnswerContents({
+    answer: docxAnswer,
+    answerPath: "answers/docx-answer.docx",
+    sources: [
+      {
+        sourcePath: "policies/docx-policy.docx",
+        content: docxAnswer,
+      },
+    ],
+  });
+
+  assert.equal(docxReport.summary.verified, 1);
+
+  const batchReport = await verifyAnswerBatchContents({
+    answers: [
+      {
+        answer: pdfAnswer,
+        answerPath: "answers/leave-answer.pdf",
+        answerLabel: "Leave answer",
+      },
+    ],
+    sources: [
+      {
+        sourcePath: "policies/leave-policy.md",
+        content: "Employees receive 12 weeks of paid leave.",
+      },
+    ],
+  });
+
+  assert.equal(batchReport.summary.verified, 1);
 });
 
 test("programmatic API accepts explicit metadata for in-memory sources", async () => {

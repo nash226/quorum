@@ -55,6 +55,12 @@ export interface InMemoryAnswerInput {
   answerLabel?: string;
 }
 
+export interface InMemoryContentAnswerInput {
+  answer: string | Uint8Array;
+  answerPath?: string;
+  answerLabel?: string;
+}
+
 export interface InMemoryBatchVerificationOptions {
   answers: InMemoryAnswerInput[];
   sources: SourceDocument[];
@@ -63,7 +69,7 @@ export interface InMemoryBatchVerificationOptions {
 }
 
 export interface InMemoryBatchContentVerificationOptions {
-  answers: InMemoryAnswerInput[];
+  answers: InMemoryContentAnswerInput[];
   sources: InMemorySourceInput[];
   defaultTrustLevel?: SourceTrustLevel;
   failOn?: ClaimVerdict[];
@@ -81,6 +87,16 @@ export interface InMemorySingleVerificationOptions {
 
 export interface InMemorySingleVerificationResultOptions
   extends InMemorySingleVerificationOptions {
+  failOn?: ClaimVerdict[];
+}
+
+export interface InMemoryContentSingleVerificationOptions
+  extends Omit<InMemorySingleVerificationOptions, "answer"> {
+  answer: string | Uint8Array;
+}
+
+export interface InMemoryContentSingleVerificationResultOptions
+  extends InMemoryContentSingleVerificationOptions {
   failOn?: ClaimVerdict[];
 }
 
@@ -395,14 +411,14 @@ export async function verifyAnswerBatchFileInputsResult(
 }
 
 export async function verifyAnswerContents(
-  options: InMemorySingleVerificationOptions,
+  options: InMemoryContentSingleVerificationOptions,
 ): Promise<VerificationReport> {
   const sources = await loadSourceDocumentsFromContent({
     sources: options.sources,
     defaultTrustLevel: options.defaultTrustLevel,
   });
   const report = verifyAnswer(
-    options.answer,
+    await answerContentToText(options.answer, options.answerPath),
     sources,
     options.generatedAt ?? new Date().toISOString(),
     options.answerPath,
@@ -420,7 +436,7 @@ export async function verifyAnswerContents(
 }
 
 export async function verifyAnswerContentsResult(
-  options: InMemorySingleVerificationResultOptions,
+  options: InMemoryContentSingleVerificationResultOptions,
 ): Promise<SingleVerificationResult> {
   return buildSingleVerificationResult(await verifyAnswerContents(options), options.failOn);
 }
@@ -554,7 +570,12 @@ export async function verifyAnswerBatchContents(
   });
 
   return verifyAnswers({
-    answers: options.answers,
+    answers: await Promise.all(
+      options.answers.map(async (answer) => ({
+        ...answer,
+        answer: await answerContentToText(answer.answer, answer.answerPath),
+      })),
+    ),
     sources,
     failOn: options.failOn,
     generatedAt: options.generatedAt,
@@ -570,11 +591,32 @@ export async function verifyAnswerBatchContentsResult(
   });
 
   return verifyAnswersResult({
-    answers: options.answers,
+    answers: await Promise.all(
+      options.answers.map(async (answer) => ({
+        ...answer,
+        answer: await answerContentToText(answer.answer, answer.answerPath),
+      })),
+    ),
     sources,
     failOn: options.failOn,
     generatedAt: options.generatedAt,
   });
+}
+
+async function answerContentToText(
+  content: string | Uint8Array,
+  answerPath?: string,
+): Promise<string> {
+  if (typeof content === "string") {
+    return content;
+  }
+
+  if (!answerPath || !/\.(?:pdf|docx)$/i.test(answerPath)) {
+    throw new Error("Binary answer content requires answerPath ending in .pdf or .docx.");
+  }
+
+  const answerDocument = await sourceDocumentFromFile(answerPath, content, 0);
+  return answerDocument.content;
 }
 
 export function importReviewerDecisionContents(
