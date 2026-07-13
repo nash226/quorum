@@ -529,12 +529,14 @@ curl -s http://127.0.0.1:3000/verify \
 ```
 
 Claim extraction accepts `{ answer }` and returns the same normalized atomic
-claims used by verification, without requiring source documents:
+claims used by verification, without requiring source documents. Callers can
+also pass `answerPath` and `answerLabel` to preserve reviewer context in the
+response:
 
 ```bash
 curl -s http://127.0.0.1:3000/extract-claims \
   -H 'content-type: application/json' \
-  -d '{"answer":"Employees receive 12 weeks of paid parental leave."}'
+  -d '{"answer":"Employees receive 12 weeks of paid parental leave.","answerPath":"answers/hr-answer.md","answerLabel":"HR reviewer packet"}'
 ```
 
 Batch verification uses the same source shape and accepts an `answers` array of

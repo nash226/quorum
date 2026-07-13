@@ -144,10 +144,14 @@ export interface EvaluateApiRequest {
 
 export interface ExtractClaimsApiRequest {
   answer: string;
+  answerPath?: string;
+  answerLabel?: string;
 }
 
 export interface ExtractClaimsApiResponse {
   requestId: string;
+  answerPath?: string;
+  answerLabel?: string;
   claims: ReturnType<typeof extractClaims>;
 }
 
@@ -1295,6 +1299,8 @@ async function handleApiRequest(
     const requestId = response.getHeader(API_REQUEST_ID_HEADER);
     const result: ExtractClaimsApiResponse = {
       requestId: typeof requestId === "string" ? requestId : "",
+      answerPath: body.answerPath,
+      answerLabel: body.answerLabel,
       claims: extractClaims(body.answer),
     };
     writeJson(response, 200, result);
@@ -1454,6 +1460,8 @@ function parseExtractClaimsRequest(value: unknown): ExtractClaimsApiRequest {
 
   return {
     answer: requireString(record.answer, "answer"),
+    answerPath: optionalString(record.answerPath, "answerPath"),
+    answerLabel: optionalString(record.answerLabel, "answerLabel"),
   };
 }
 
@@ -2177,13 +2185,25 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   type: "object",
                   properties: {
                     answer: { type: "string" },
+                    answerPath: {
+                      type: "string",
+                      description: "Optional source path to preserve for reviewer handoff.",
+                    },
+                    answerLabel: {
+                      type: "string",
+                      description: "Optional reviewer-facing label for the answer.",
+                    },
                   },
                   required: ["answer"],
                 },
                 examples: {
                   answerClaims: {
                     summary: "Preview claims before verification",
-                    value: { answer: "Employees receive 12 weeks of paid parental leave." },
+                    value: {
+                      answer: "Employees receive 12 weeks of paid parental leave.",
+                      answerPath: "answers/hr-answer.md",
+                      answerLabel: "HR reviewer packet",
+                    },
                   },
                 },
               },
@@ -2201,6 +2221,8 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                       summary: "One normalized claim",
                       value: {
                         requestId: "extract-claims-contract-test",
+                        answerPath: "answers/hr-answer.md",
+                        answerLabel: "HR reviewer packet",
                         claims: [{ id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." }],
                       },
                     },
@@ -2749,6 +2771,14 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               minLength: 1,
               maxLength: 128,
               description: "Request correlation identifier echoed by the server.",
+            },
+            answerPath: {
+              type: "string",
+              description: "Optional answer path preserved for reviewer handoff.",
+            },
+            answerLabel: {
+              type: "string",
+              description: "Optional reviewer-facing answer label.",
             },
             claims: {
               type: "array",
