@@ -579,7 +579,11 @@ curl -s http://127.0.0.1:3000/extract-claims \
 ```
 
 Batch verification uses the same source shape and accepts an `answers` array of
-`{ answer, answerPath?, answerLabel? }` objects at `POST /verify-batch`.
+`{ answer, answerPath?, answerLabel? }` objects at `POST /verify-batch`. For
+document uploads, use `{ answerBase64, answerPath, answerLabel? }` instead; the
+`.pdf` or `.docx` suffix selects the extractor. The packed smoke check covers a
+base64 PDF answer in this batch workflow so binary agent uploads stay verified
+end to end.
 `POST /verify`, `POST /verify-batch`, and `POST /evaluate` also accept an
 optional `generatedAt` timestamp so workflow runners can keep report output
 stable across retries and fixture snapshots.
