@@ -396,6 +396,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(indexResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(indexResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(indexResponse.headers.get("x-quorum-request-timeout-ms"), "30000");
     const indexPayload = await indexResponse.json();
     assert.equal(indexPayload.service, "quorum");
     assert.equal(indexPayload.version, "0.1.0");
@@ -425,7 +426,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id");
-    assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Id");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id");
     assert.equal(discoveryPreflightResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
 
     const discoveryOpenApiResponse = await fetch(`${server.url}/openapi.json`);

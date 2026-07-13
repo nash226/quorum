@@ -228,6 +228,7 @@ export const API_DISCOVERY_HEADERS = {
   version: "X-Quorum-Version",
   openapiPath: "X-Quorum-OpenAPI-Path",
   maxRequestBytes: "X-Quorum-Max-Request-Bytes",
+  requestTimeoutMs: "X-Quorum-Request-Timeout-Ms",
 } as const;
 export const API_REQUEST_ID_HEADER = "X-Quorum-Request-Id";
 export const API_CORS_ALLOWED_HEADERS = ["Content-Type", API_REQUEST_ID_HEADER].join(", ");
@@ -1223,7 +1224,7 @@ async function handleApiRequest(
 ): Promise<void> {
   applyRequestIdHeader(request, response);
   applyCorsHeaders(request, response, options.corsAllowedOrigins);
-  applyApiDiscoveryHeaders(response);
+  applyApiDiscoveryHeaders(response, options.requestTimeoutMs ?? API_REQUEST_TIMEOUT_MS);
   const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
   const isHeadRequest = request.method === "HEAD";
 
@@ -1764,6 +1765,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       schema: { type: "integer", minimum: 1 },
       description: "Maximum JSON request body size in bytes.",
     },
+    [API_DISCOVERY_HEADERS.requestTimeoutMs]: {
+      schema: { type: "integer", minimum: 1 },
+      description: "Maximum request duration in milliseconds.",
+    },
     [API_REQUEST_ID_HEADER]: {
       schema: { type: "string", minLength: 1, maxLength: 128 },
       description: "Request correlation identifier echoed by the server.",
@@ -1849,6 +1854,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         [API_DISCOVERY_HEADERS.maxRequestBytes]: {
           schema: { type: "integer", minimum: 1 },
           description: "Maximum JSON request body size in bytes.",
+        },
+        [API_DISCOVERY_HEADERS.requestTimeoutMs]: {
+          schema: { type: "integer", minimum: 1 },
+          description: "Maximum request duration in milliseconds.",
         },
         [API_REQUEST_ID_HEADER]: {
           schema: { type: "string", minLength: 1, maxLength: 128 },
@@ -3536,11 +3545,15 @@ function applyCorsHeaders(
   response.setHeader("Access-Control-Expose-Headers", EXPOSED_HEADERS);
 }
 
-function applyApiDiscoveryHeaders(response: ServerResponse): void {
+function applyApiDiscoveryHeaders(
+  response: ServerResponse,
+  requestTimeoutMs: number = API_REQUEST_TIMEOUT_MS,
+): void {
   response.setHeader(API_DISCOVERY_HEADERS.service, API_SERVICE_NAME);
   response.setHeader(API_DISCOVERY_HEADERS.version, API_VERSION);
   response.setHeader(API_DISCOVERY_HEADERS.openapiPath, OPENAPI_PATH);
   response.setHeader(API_DISCOVERY_HEADERS.maxRequestBytes, API_MAX_REQUEST_BYTES);
+  response.setHeader(API_DISCOVERY_HEADERS.requestTimeoutMs, requestTimeoutMs);
 }
 
 function applyRequestIdHeader(request: IncomingMessage, response: ServerResponse): void {

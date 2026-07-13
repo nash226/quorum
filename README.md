@@ -625,11 +625,13 @@ expose the same status code and headers without a JSON body, which makes
 lightweight readiness probes and schema checks easier to wire into orchestrators
 and load balancers.
 Those responses also include `X-Quorum-Service`, `X-Quorum-Version`,
-`X-Quorum-OpenAPI-Path`, and `X-Quorum-Max-Request-Bytes` headers so callers
-can confirm they reached Quorum, discover the local schema path, and learn the
-JSON payload limit without parsing a response body first. Browser
-clients can read those discovery headers directly because Quorum also exposes
-them through `Access-Control-Expose-Headers`.
+`X-Quorum-OpenAPI-Path`, `X-Quorum-Max-Request-Bytes`, and
+`X-Quorum-Request-Timeout-Ms` headers so callers can confirm they reached
+Quorum, discover the local schema path, and learn the JSON payload and request
+duration limits without parsing a response body first. Browser clients can
+read those discovery headers directly because Quorum also exposes them through
+`Access-Control-Expose-Headers`; a custom `requestTimeoutMs` server option is
+reflected in the timeout header.
 Browser clients may also send their own `X-Quorum-Request-Id` value because
 Quorum allows that correlation header during CORS preflight; the server echoes
 valid values and generates one when the header is absent or invalid.
