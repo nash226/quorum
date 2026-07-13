@@ -34,7 +34,7 @@ import {
   renderReviewerDecisionImportReport,
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
-import { parseSourceTrustLevel } from "./source-loader.js";
+import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
 import { renderAnswerPreview } from "./text.js";
 import {
   ANSWER_EXTENSIONS,
@@ -147,7 +147,8 @@ export interface EvaluateApiRequest {
 }
 
 export interface ExtractClaimsApiRequest {
-  answer: string;
+  answer?: string;
+  answerBase64?: string;
   answerPath?: string;
   answerLabel?: string;
 }
@@ -1330,13 +1331,14 @@ async function handleApiRequest(
 
     requireJsonRequest(request);
     const body = parseExtractClaimsRequest(await readJsonBody(request));
+    const answer = await extractClaimsAnswerText(body.answer, body.answerPath);
     const requestId = response.getHeader(API_REQUEST_ID_HEADER);
     const result: ExtractClaimsApiResponse = {
       requestId: typeof requestId === "string" ? requestId : "",
       answerPath: body.answerPath,
       answerLabel: body.answerLabel,
-      answerPreview: renderAnswerPreview(body.answer),
-      claims: extractClaims(body.answer),
+      answerPreview: renderAnswerPreview(answer),
+      claims: extractClaims(answer),
     };
     writeJson(response, 200, result);
     return;
@@ -1490,14 +1492,32 @@ function parseVerifyRequest(value: unknown): {
   };
 }
 
-function parseExtractClaimsRequest(value: unknown): ExtractClaimsApiRequest {
+function parseExtractClaimsRequest(value: unknown): Omit<ExtractClaimsApiRequest, "answer" | "answerBase64"> & {
+  answer: string | Uint8Array;
+} {
   const record = requireRecord(value, "Extract claims request body");
 
   return {
-    answer: requireString(record.answer, "answer"),
+    answer: parseContent(record.answer, record.answerBase64, "answer", "answerBase64"),
     answerPath: optionalString(record.answerPath, "answerPath"),
     answerLabel: optionalString(record.answerLabel, "answerLabel"),
   };
+}
+
+async function extractClaimsAnswerText(
+  answer: string | Uint8Array,
+  answerPath?: string,
+): Promise<string> {
+  if (typeof answer === "string") {
+    return answer;
+  }
+
+  if (answerPath && /\.(?:pdf|docx)$/i.test(answerPath)) {
+    const document = await sourceDocumentFromFile(answerPath, answer, 0);
+    return document.content;
+  }
+
+  return new TextDecoder().decode(answer);
 }
 
 function parseVerifyBatchRequest(value: unknown): {
@@ -2317,6 +2337,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   type: "object",
                   properties: {
                     answer: { type: "string" },
+                    answerBase64: {
+                      type: "string",
+                      contentEncoding: "base64",
+                      description: "Base64-encoded answer bytes for PDF or DOCX inputs.",
+                    },
                     answerPath: {
                       type: "string",
                       description: "Optional source path to preserve for reviewer handoff.",
@@ -2326,7 +2351,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                       description: "Optional reviewer-facing label for the answer.",
                     },
                   },
-                  required: ["answer"],
+                  oneOf: [
+                    { required: ["answer"] },
+                    { required: ["answerBase64"] },
+                  ],
                 },
                 examples: {
                   answerClaims: {
