@@ -396,6 +396,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "OPTIONS" && endpoint.path === "/verify"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/health"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/healthz"), true);
+    assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/livez"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "GET" && endpoint.path === "/version"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/version"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/openapi.json"), true);
@@ -423,6 +424,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(discoveryOpenApiPayload.paths["/verify"].options.operationId, "optionsVerify");
     assert.equal(discoveryOpenApiPayload.paths["/evaluate"].post.operationId, "postEvaluate");
     assert.equal(discoveryOpenApiPayload.paths["/version"].get.operationId, "getVersion");
+    assert.equal(discoveryOpenApiPayload.paths["/livez"].get.operationId, "getLivez");
 
     const capabilitiesResponse = await fetch(`${server.url}/capabilities`);
     assert.equal(capabilitiesResponse.status, 200);
@@ -506,6 +508,16 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(await readyzResponse.json(), {
       ok: true,
       requestId: readyzResponse.headers.get("x-quorum-request-id"),
+      service: "quorum",
+      version: "0.1.0",
+    });
+
+    const livezResponse = await fetch(`${server.url}/livez`);
+    assert.equal(livezResponse.status, 200);
+    assert.equal(livezResponse.headers.get("cache-control"), "no-store");
+    assert.deepEqual(await livezResponse.json(), {
+      ok: true,
+      requestId: livezResponse.headers.get("x-quorum-request-id"),
       service: "quorum",
       version: "0.1.0",
     });

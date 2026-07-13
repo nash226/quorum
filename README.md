@@ -484,6 +484,8 @@ Available endpoints:
 - `HEAD /healthz`
 - `GET /readyz`
 - `HEAD /readyz`
+- `GET /livez`
+- `HEAD /livez`
 - `GET /version`
 - `HEAD /version`
 - `GET /openapi.json`
@@ -500,6 +502,8 @@ The `/health` and `/healthz` readiness responses include `Cache-Control: no-stor
 so a proxy or load balancer cannot reuse a stale healthy response during an outage.
 The `/readyz` alias provides the same uncached readiness contract for Kubernetes
 probes and deployment systems that use the conventional readiness path.
+The `/livez` alias provides the same uncached health response for Kubernetes
+liveness probes, so deployments can distinguish process liveness from readiness.
 The discovery payload keeps each method/path pair unique so generated clients
 can build a stable endpoint inventory without de-duplicating it first.
 The built `npm run smoke` check now exercises that discovery contract over HTTP,

@@ -2198,6 +2198,13 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(readyzPayload.requestId, readyzResponse.headers.get("x-quorum-request-id"));
     assert.deepEqual({ ...readyzPayload, requestId: "" }, { ...expectedHealthResponse, requestId: "" });
 
+    const livezResponse = await fetch(`${api.url}/livez`);
+    assert.equal(livezResponse.status, 200);
+    assert.equal(livezResponse.headers.get("cache-control"), "no-store");
+    const livezPayload = await livezResponse.json() as ApiHealthResponse;
+    assert.equal(livezPayload.requestId, livezResponse.headers.get("x-quorum-request-id"));
+    assert.deepEqual({ ...livezPayload, requestId: "" }, { ...expectedHealthResponse, requestId: "" });
+
     const headIndexResponse = await fetch(api.url, { method: "HEAD" });
     assert.equal(headIndexResponse.status, 200);
     assert.equal(headIndexResponse.headers.get("content-type"), "application/json; charset=utf-8");
@@ -2240,6 +2247,11 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(headReadyzResponse.status, 200);
     assert.equal(headReadyzResponse.headers.get("cache-control"), "no-store");
     assert.equal(await headReadyzResponse.text(), "");
+
+    const headLivezResponse = await fetch(`${api.url}/livez`, { method: "HEAD" });
+    assert.equal(headLivezResponse.status, 200);
+    assert.equal(headLivezResponse.headers.get("cache-control"), "no-store");
+    assert.equal(await headLivezResponse.text(), "");
 
     const headOpenApiResponse = await fetch(`${api.url}/openapi.json`, { method: "HEAD" });
     assert.equal(headOpenApiResponse.status, 200);
@@ -2392,6 +2404,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(operationId(openApi.paths["/readyz"]?.get), "getReadyz");
     assert.equal(operationId(openApi.paths["/readyz"]?.head), "headReadyz");
     assert.equal(operationId(openApi.paths["/readyz"]?.options), "optionsReadyz");
+    assert.equal(operationId(openApi.paths["/livez"]?.get), "getLivez");
+    assert.equal(operationId(openApi.paths["/livez"]?.head), "headLivez");
+    assert.equal(operationId(openApi.paths["/livez"]?.options), "optionsLivez");
     assert.equal(operationId(openApi.paths["/openapi.json"]?.get), "getOpenApi");
     assert.equal(operationId(openApi.paths["/openapi.json"]?.head), "headOpenApi");
     assert.equal(operationId(openApi.paths["/openapi.json"]?.options), "optionsOpenApi");
@@ -2420,6 +2435,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/readyz"]?.get?.summary, "Kubernetes readiness check alias");
     assert.equal(openApi.paths["/readyz"]?.head?.summary, "Kubernetes readiness check alias headers");
     assert.equal(openApi.paths["/readyz"]?.options?.summary, "Kubernetes readiness alias preflight");
+    assert.equal(openApi.paths["/livez"]?.get?.summary, "Kubernetes liveness check alias");
+    assert.equal(openApi.paths["/livez"]?.head?.summary, "Kubernetes liveness check alias headers");
+    assert.equal(openApi.paths["/livez"]?.options?.summary, "Kubernetes liveness alias preflight");
     assert.equal(openApi.paths["/openapi.json"]?.options?.summary, "OpenAPI description preflight");
     assert.equal(openApi.paths["/openapi.json"]?.head?.summary, "OpenAPI description headers");
     assert.equal(openApi.paths["/extract-claims"]?.options?.summary, "Claim extraction preflight");
