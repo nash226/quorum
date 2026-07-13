@@ -502,7 +502,7 @@ Employees receive 12 weeks of paid parental leave.
       version: "0.1.0",
     });
 
-    const healthzResponse = await fetch(`${server.url}/healthz`);
+    const healthzResponse = await fetch(`${server.url}/healthz?probe=readiness`);
     assert.equal(healthzResponse.status, 200);
     assert.equal(healthzResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(healthzResponse.headers.get("x-quorum-version"), "0.1.0");
@@ -547,7 +547,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(headVersionResponse.status, 200);
     assert.equal(await headVersionResponse.text(), "");
 
-    const extractClaimsResponse = await fetch(`${server.url}/extract-claims`, {
+    const extractClaimsResponse = await fetch(`${server.url}/extract-claims?format=json`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
