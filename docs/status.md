@@ -6,12 +6,13 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `14bcab3` on 2026-07-13, feat: expose API request timeout
+- Latest shipped change: `1567320` on 2026-07-13, feat: accept PDF and DOCX answer files
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
 
 - read an AI-generated answer from a Markdown, text, or exported HTML file
+- read an AI-generated answer from a PDF or DOCX file by extracting its readable text
 - batch verify multiple AI-generated answers from a directory
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
@@ -54,6 +55,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | feat: accept PDF and DOCX answer files | `1567320` |
 | 2026-07-13 | Direct push | feat: expose API request timeout | `14bcab3` |
 | 2026-07-13 | Direct push | feat: ingest DOCX policy sources | `5f4ce01` |
 | 2026-07-13 | [#353](https://github.com/nash226/quorum/pull/353) | feat: bound API request duration | `f6c76f6` |
@@ -61,5 +63,4 @@
 | 2026-07-13 | [#351](https://github.com/nash226/quorum/pull/351) | feat: expose claim presence in summary csv | `37c097a` |
 | 2026-07-13 | Direct push | test: cover batch summary routing context | `0565ffa` |
 | 2026-07-13 | [#349](https://github.com/nash226/quorum/pull/349) | feat: export API probe path constants | `c4e5628` |
-| 2026-07-13 | Direct push | feat: document request correlation input in OpenAPI | `ae9ec27` |
 
