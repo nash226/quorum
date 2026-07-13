@@ -1195,7 +1195,8 @@ Employees receive 12 weeks of paid parental leave.
   const consumerImportPath = join(consumerDir, "consumer-import.mjs");
   writeFileSync(
     consumerImportPath,
-    `import {
+    `import assert from "node:assert/strict";
+import {
   API_SERVICE_NAME,
   OPENAPI_PATH,
   startApiServer,
@@ -1276,6 +1277,18 @@ try {
     throw new Error("Expected packed quorum root export to serve a health response.");
   }
 
+  const openApiResponse = await fetch(\`\${api.url}/openapi.json\`);
+
+  if (openApiResponse.status !== 200) {
+    throw new Error("Expected packed quorum root export to serve its OpenAPI document.");
+  }
+
+  const openApiDocument = await openApiResponse.json();
+  assert.equal(openApiDocument.openapi, "3.1.0");
+  assert.equal(openApiDocument.info?.title, "Quorum Local API");
+  assert.equal(openApiDocument.paths?.["/verify"]?.post?.operationId, "postVerify");
+  assert.equal(openApiDocument.paths?.["/extract-claims"]?.post?.operationId, "postExtractClaims");
+
   const serverSubpath = await startServerSubpath({ host: "127.0.0.1", port: 0 });
 
   try {
@@ -1284,6 +1297,18 @@ try {
     if (subpathResponse.status !== 200) {
       throw new Error("Expected packed quorum/server export to serve a health response.");
     }
+
+    const subpathOpenApiResponse = await fetch(\`\${serverSubpath.url}/openapi.json\`);
+
+    if (subpathOpenApiResponse.status !== 200) {
+      throw new Error("Expected packed quorum/server export to serve its OpenAPI document.");
+    }
+
+    const subpathOpenApiDocument = await subpathOpenApiResponse.json();
+    assert.equal(subpathOpenApiDocument.openapi, openApiDocument.openapi);
+    assert.deepEqual(subpathOpenApiDocument.info, openApiDocument.info);
+    assert.deepEqual(subpathOpenApiDocument.paths, openApiDocument.paths);
+    assert.deepEqual(subpathOpenApiDocument.components, openApiDocument.components);
   } finally {
     await serverSubpath.close();
   }

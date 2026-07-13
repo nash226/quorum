@@ -714,9 +714,9 @@ while `quorum/server` remains available for callers that prefer the dedicated
 subpath. The packed-package smoke check verifies successful and fail-gated
 single- and batch-CLI invocations, including persisted `verify-batch
 --result-json` gate payloads, then starts the server through both entrypoints
-and exercises a fail-gated `POST /verify` request, so published npm installs
-keep the root and dedicated server exports in sync with the workflow response
-contract.
+and exercises the OpenAPI contract plus a fail-gated `POST /verify` request,
+so published npm installs keep the root and dedicated server exports in sync
+with the discoverable workflow response contract.
 
 For local tooling that wants Quorum's OpenAPI contract without booting an HTTP
 listener first, `createOpenApiDocument` returns the same schema served at
