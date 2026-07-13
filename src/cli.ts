@@ -118,6 +118,7 @@ interface EvaluateArgs {
 interface ServeArgs {
   host?: string;
   port?: number;
+  corsAllowedOrigins?: string[];
 }
 
 interface OpenApiArgs {
@@ -611,6 +612,7 @@ async function runServe(args: string[]): Promise<void> {
   const api = await startApiServer({
     host: parsed.host,
     port: parsed.port,
+    corsAllowedOrigins: parsed.corsAllowedOrigins,
   });
 
   console.log(`Quorum API listening on ${api.url}`);
@@ -737,6 +739,7 @@ function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
 function parseServeArgs(args: string[]): ServeArgs {
   let host: string | undefined;
   let port: number | undefined;
+  const corsAllowedOrigins: string[] = [];
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -760,10 +763,16 @@ function parseServeArgs(args: string[]): ServeArgs {
       continue;
     }
 
+    if (arg === "--cors-origin" && next) {
+      corsAllowedOrigins.push(next);
+      index += 1;
+      continue;
+    }
+
     throw new Error(`Unknown or incomplete argument: ${arg}`);
   }
 
-  return { host, port };
+  return { host, port, corsAllowedOrigins: corsAllowedOrigins.length > 0 ? corsAllowedOrigins : undefined };
 }
 
 function parseOpenApiArgs(args: string[]): OpenApiArgs {
@@ -1376,6 +1385,7 @@ Usage:
 Options:
   --host <host>             Host interface to bind; defaults to 127.0.0.1
   --port <port>             Port to bind; defaults to 3000, use 0 for an ephemeral port
+  --cors-origin <origin>    Allow browser CORS requests from this origin; may be repeated
 
   Endpoints:
   GET  /                    Return API discovery metadata for local callers
