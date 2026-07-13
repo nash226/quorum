@@ -147,6 +147,7 @@ export interface ExtractClaimsApiRequest {
 }
 
 export interface ExtractClaimsApiResponse {
+  requestId: string;
   claims: ReturnType<typeof extractClaims>;
 }
 
@@ -1291,7 +1292,11 @@ async function handleApiRequest(
 
     requireJsonRequest(request);
     const body = parseExtractClaimsRequest(await readJsonBody(request));
-    const result: ExtractClaimsApiResponse = { claims: extractClaims(body.answer) };
+    const requestId = response.getHeader(API_REQUEST_ID_HEADER);
+    const result: ExtractClaimsApiResponse = {
+      requestId: typeof requestId === "string" ? requestId : "",
+      claims: extractClaims(body.answer),
+    };
     writeJson(response, 200, result);
     return;
   }
@@ -2194,7 +2199,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   examples: {
                     extractedClaims: {
                       summary: "One normalized claim",
-                      value: { claims: [{ id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." }] },
+                      value: {
+                        requestId: "extract-claims-contract-test",
+                        claims: [{ id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." }],
+                      },
                     },
                   },
                 },
@@ -2736,12 +2744,18 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         ExtractClaimsApiResponse: {
           type: "object",
           properties: {
+            requestId: {
+              type: "string",
+              minLength: 1,
+              maxLength: 128,
+              description: "Request correlation identifier echoed by the server.",
+            },
             claims: {
               type: "array",
               items: { $ref: "#/components/schemas/AtomicClaim" },
             },
           },
-          required: ["claims"],
+          required: ["requestId", "claims"],
         },
         VerifyArtifactName: {
           type: "string",
