@@ -452,6 +452,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(headHealthResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(headHealthResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(headHealthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(headHealthResponse.headers.get("cache-control"), "no-store");
     assert.equal(await headHealthResponse.text(), "");
 
     const headHealthzResponse = await fetch(`${server.url}/healthz`, { method: "HEAD" });
@@ -459,6 +460,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(headHealthzResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(headHealthzResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(headHealthzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(headHealthzResponse.headers.get("cache-control"), "no-store");
     assert.equal(await headHealthzResponse.text(), "");
 
     const openApiResponse = await fetch(`${server.url}/openapi.json`);
@@ -477,6 +479,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(healthResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(healthResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(healthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(healthResponse.headers.get("cache-control"), "no-store");
     assert.deepEqual(await healthResponse.json(), {
       ok: true,
       service: "quorum",
@@ -488,6 +491,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(healthzResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(healthzResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(healthzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(healthzResponse.headers.get("cache-control"), "no-store");
     assert.deepEqual(await healthzResponse.json(), {
       ok: true,
       service: "quorum",

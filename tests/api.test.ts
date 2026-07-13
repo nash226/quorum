@@ -2157,6 +2157,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(healthResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(healthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(healthResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(healthResponse.headers.get("cache-control"), "no-store");
     assert.match(healthResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
     assert.deepEqual(await healthResponse.json(), expectedHealthResponse);
 
@@ -2166,6 +2167,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(healthzResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(healthzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(healthzResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(healthzResponse.headers.get("cache-control"), "no-store");
     assert.match(healthzResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
     assert.deepEqual(await healthzResponse.json(), expectedHealthResponse);
 
@@ -2194,6 +2196,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(headHealthResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(headHealthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(headHealthResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(headHealthResponse.headers.get("cache-control"), "no-store");
     assert.equal(await headHealthResponse.text(), "");
 
     const headHealthzResponse = await fetch(`${api.url}/healthz`, { method: "HEAD" });
@@ -2203,6 +2206,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(headHealthzResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(headHealthzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(headHealthzResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(headHealthzResponse.headers.get("cache-control"), "no-store");
     assert.equal(await headHealthzResponse.text(), "");
 
     const headOpenApiResponse = await fetch(`${api.url}/openapi.json`, { method: "HEAD" });
@@ -2469,6 +2473,18 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
         service: API_SERVICE_NAME,
         version: API_VERSION,
       },
+    );
+    assert.equal(
+      (openApi.paths["/health"]?.get?.responses?.["200"] as unknown as {
+        headers?: Record<string, { schema?: { const?: string } }>;
+      })?.headers?.["Cache-Control"]?.schema?.const,
+      "no-store",
+    );
+    assert.equal(
+      (openApi.paths["/healthz"]?.get?.responses?.["200"] as unknown as {
+        headers?: Record<string, { schema?: { const?: string } }>;
+      })?.headers?.["Cache-Control"]?.schema?.const,
+      "no-store",
     );
     assert.deepEqual(
       openApiExamples?.examples?.["openApiDocument"]?.value,
