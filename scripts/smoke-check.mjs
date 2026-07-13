@@ -532,6 +532,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(extractClaimsResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(extractClaimsResponse.headers.get("x-quorum-request-id"), "packed-extract-claims-contract");
     assert.deepEqual(await extractClaimsResponse.json(), {
+      requestId: "packed-extract-claims-contract",
       claims: [
         { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
         { id: "claim_2", text: "Managers approve exceptions within five business days." },
