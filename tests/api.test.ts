@@ -2708,6 +2708,20 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       })?.headers?.["Cache-Control"]?.schema?.const,
       "no-store",
     );
+    for (const probePath of ["/readyz", "/livez"] as const) {
+      assert.equal(
+        (openApi.paths[probePath]?.get?.responses?.["200"] as unknown as {
+          headers?: Record<string, { schema?: { const?: string } }>;
+        })?.headers?.["Cache-Control"]?.schema?.const,
+        "no-store",
+      );
+      assert.equal(
+        (openApi.paths[probePath]?.head?.responses?.["200"] as unknown as {
+          headers?: Record<string, { schema?: { const?: string } }>;
+        })?.headers?.["Cache-Control"]?.schema?.const,
+        "no-store",
+      );
+    }
     assert.deepEqual(
       openApiExamples?.examples?.["openApiDocument"]?.value,
       {
