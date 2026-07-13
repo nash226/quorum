@@ -160,6 +160,8 @@ export interface ExtractClaimsApiResponse {
 export interface ApiServerOptions {
   host?: string;
   port?: number;
+  /** Abort requests that do not finish within this many milliseconds. */
+  requestTimeoutMs?: number;
   /** Restrict browser CORS responses to these exact origins. */
   corsAllowedOrigins?: readonly string[];
 }
@@ -217,6 +219,7 @@ export const VERSION_PATH = "/version";
 export const OPENAPI_PATH = "/openapi.json";
 export const LIVEZ_PATH = "/livez";
 export const API_MAX_REQUEST_BYTES = 1024 * 1024;
+export const API_REQUEST_TIMEOUT_MS = 30_000;
 const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
 export const API_SERVICE_NAME = "quorum";
 export const API_VERSION = "0.1.0";
@@ -1147,7 +1150,7 @@ const OPENAPI_EVALUATE_CONFLICT_RESPONSE_EXAMPLE = {
 } as const;
 
 export function createApiServer(options: ApiServerOptions = {}): Server {
-  return createServer(async (request, response) => {
+  const server = createServer(async (request, response) => {
     try {
       await handleApiRequest(request, response, options);
     } catch (error: unknown) {
@@ -1164,6 +1167,9 @@ export function createApiServer(options: ApiServerOptions = {}): Server {
       writeApiError(response, 500, "Internal server error.");
     }
   });
+
+  server.requestTimeout = options.requestTimeoutMs ?? API_REQUEST_TIMEOUT_MS;
+  return server;
 }
 
 export async function startApiServer(options: ApiServerOptions = {}): Promise<StartedApiServer> {
