@@ -498,6 +498,10 @@ Available endpoints:
 
 Every listed route also accepts `OPTIONS` and returns CORS preflight headers
 for browser-based local clients.
+The package exports `HEALTH_PATH`, `HEALTHZ_PATH`, `READYZ_PATH`, and
+`LIVEZ_PATH` alongside the server helpers, so embedded clients and deployment
+manifests can reference the readiness and liveness probe paths without
+duplicating route strings.
 The server allows all browser origins by default for local development; pass
 `--cors-origin <origin>` (repeatable) to `quorum serve` or
 `corsAllowedOrigins` to `startApiServer` when a deployed client should be
