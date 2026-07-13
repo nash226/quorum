@@ -1228,6 +1228,7 @@ async function handleApiRequest(
       service: API_SERVICE_NAME,
       version: API_VERSION,
     };
+    response.setHeader("Cache-Control", "no-store");
     writeJson(response, 200, healthResponse, isHeadRequest);
     return;
   }
@@ -1914,7 +1915,13 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Server is ready to accept requests.",
-              headers: apiResponseHeaders,
+              headers: {
+                ...apiResponseHeaders,
+                "Cache-Control": {
+                  schema: { type: "string", const: "no-store" },
+                  description: "Readiness responses must not be cached by probes or intermediaries.",
+                },
+              },
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiHealthResponse" },
@@ -1936,6 +1943,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Header-only readiness response for load balancers and probes.",
+              headers: {
+                "Cache-Control": {
+                  schema: { type: "string", const: "no-store" },
+                  description: "Readiness responses must not be cached by probes or intermediaries.",
+                },
+              },
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiHealthResponse" },
@@ -1954,7 +1967,13 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Server is ready to accept requests through the conventional probe path.",
-              headers: apiResponseHeaders,
+              headers: {
+                ...apiResponseHeaders,
+                "Cache-Control": {
+                  schema: { type: "string", const: "no-store" },
+                  description: "Readiness responses must not be cached by probes or intermediaries.",
+                },
+              },
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiHealthResponse" },
@@ -1976,6 +1995,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Header-only readiness response on the conventional probe path.",
+              headers: {
+                "Cache-Control": {
+                  schema: { type: "string", const: "no-store" },
+                  description: "Readiness responses must not be cached by probes or intermediaries.",
+                },
+              },
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiHealthResponse" },
