@@ -210,6 +210,7 @@ export interface StartedApiServer {
 export const CAPABILITIES_PATH = "/capabilities";
 export const VERSION_PATH = "/version";
 export const OPENAPI_PATH = "/openapi.json";
+export const LIVEZ_PATH = "/livez";
 export const API_MAX_REQUEST_BYTES = 1024 * 1024;
 const ALLOWED_METHODS = "GET, HEAD, POST, OPTIONS";
 export const API_SERVICE_NAME = "quorum";
@@ -283,6 +284,9 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   { method: "GET", path: "/readyz", description: "Return a simple readiness response using the Kubernetes probe alias." },
   { method: "HEAD", path: "/readyz", description: "Return readiness headers on the Kubernetes probe alias without a JSON body." },
   { method: "OPTIONS", path: "/readyz", description: "Return CORS preflight headers for the Kubernetes readiness probe alias." },
+  { method: "GET", path: LIVEZ_PATH, description: "Return a simple liveness response using the Kubernetes probe alias." },
+  { method: "HEAD", path: LIVEZ_PATH, description: "Return liveness headers on the Kubernetes probe alias without a JSON body." },
+  { method: "OPTIONS", path: LIVEZ_PATH, description: "Return CORS preflight headers for the Kubernetes liveness probe alias." },
   { method: "GET", path: VERSION_PATH, description: "Return the Quorum service and contract version." },
   { method: "HEAD", path: VERSION_PATH, description: "Return version headers without a JSON body." },
   { method: "OPTIONS", path: VERSION_PATH, description: "Return CORS preflight headers for version clients." },
@@ -1241,7 +1245,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && (url === "/health" || url === "/healthz" || url === "/readyz")) {
+  if ((request.method === "GET" || isHeadRequest) && (url === "/health" || url === "/healthz" || url === "/readyz" || url === LIVEZ_PATH)) {
     const healthResponse: ApiHealthResponse = {
       ok: true,
       requestId: requestId(response),
@@ -2093,6 +2097,58 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
         options: corsPreflightOperation("optionsReadyz", "Kubernetes readiness alias preflight"),
+      },
+      [LIVEZ_PATH]: {
+        get: {
+          operationId: "getLivez",
+          summary: "Kubernetes liveness check alias",
+          responses: {
+            "200": {
+              description: "Server is alive and able to respond through the Kubernetes probe alias.",
+              headers: {
+                ...apiResponseHeaders,
+                "Cache-Control": {
+                  schema: { type: "string", const: "no-store" },
+                  description: "Liveness responses must not be cached by probes or intermediaries.",
+                },
+              },
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiHealthResponse" },
+                  examples: {
+                    kubernetesLivenessAlias: {
+                      summary: "A Kubernetes-compatible liveness probe response",
+                      value: OPENAPI_HEALTH_RESPONSE_EXAMPLE,
+                    },
+                  },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+        head: {
+          operationId: "headLivez",
+          summary: "Kubernetes liveness check alias headers",
+          responses: {
+            "200": {
+              description: "Header-only liveness response on the Kubernetes probe alias.",
+              headers: {
+                "Cache-Control": {
+                  schema: { type: "string", const: "no-store" },
+                  description: "Liveness responses must not be cached by probes or intermediaries.",
+                },
+              },
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ApiHealthResponse" },
+                },
+              },
+            },
+            "500": errorResponse("The server failed while handling the request."),
+          },
+        },
+        options: corsPreflightOperation("optionsLivez", "Kubernetes liveness alias preflight"),
       },
       [VERSION_PATH]: {
         get: {
