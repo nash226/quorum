@@ -1855,7 +1855,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
     responses: corsPreflightResponse,
   });
 
-  return {
+  const document = {
     openapi: "3.1.0",
     info: {
       title: "Quorum Local API",
@@ -2707,6 +2707,16 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       },
     },
     components: {
+      parameters: {
+        RequestIdHeader: {
+          name: API_REQUEST_ID_HEADER,
+          in: "header",
+          required: false,
+          description:
+            "Optional caller-supplied correlation identifier. Quorum echoes valid values in the response header and response body.",
+          schema: { type: "string", pattern: REQUEST_ID_PATTERN.source, minLength: 1, maxLength: 128 },
+        },
+      },
       schemas: {
         ApiErrorResponse: {
           type: "object",
@@ -3369,6 +3379,25 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       },
     },
   };
+
+  const methods = ["get", "head", "post", "options"] as const;
+  for (const pathItem of Object.values(document.paths)) {
+    const pathItemRecord = pathItem as Record<string, unknown>;
+    for (const method of methods) {
+      const operation = pathItemRecord[method];
+      if (!operation || typeof operation !== "object") {
+        continue;
+      }
+
+      const operationRecord = operation as { parameters?: unknown[] };
+      operationRecord.parameters = [
+        { $ref: "#/components/parameters/RequestIdHeader" },
+        ...(Array.isArray(operationRecord.parameters) ? operationRecord.parameters : []),
+      ];
+    }
+  }
+
+  return document;
 }
 
 function buildVerifyArtifacts(

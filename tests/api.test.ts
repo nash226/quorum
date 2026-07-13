@@ -148,7 +148,8 @@ test("programmatic API can build the OpenAPI document without starting the serve
     openapi: string;
     info: { title: string; version: string };
     servers: Array<{ url: string }>;
-    paths: Record<string, { post?: { summary: string } }>;
+    paths: Record<string, { post?: { summary: string; parameters?: Array<{ $ref?: string }> } }>;
+    components: { parameters: Record<string, { name: string; in: string; required: boolean }> };
   };
 
   assert.equal(openApi.openapi, "3.1.0");
@@ -158,6 +159,15 @@ test("programmatic API can build the OpenAPI document without starting the serve
   assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
   assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
   assert.equal(openApi.paths["/extract-claims"]?.post?.summary, "Extract normalized claims");
+  assert.deepEqual(openApi.paths["/verify"]?.post?.parameters, [
+    { $ref: "#/components/parameters/RequestIdHeader" },
+  ]);
+  assert.deepEqual(
+    (({ name, in: location, required }) => ({ name, in: location, required }))(
+      openApi.components.parameters.RequestIdHeader,
+    ),
+    { name: API_REQUEST_ID_HEADER, in: "header", required: false },
+  );
 });
 
 test("HTTP API extracts normalized claims without loading sources", async () => {
