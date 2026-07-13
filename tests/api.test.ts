@@ -2192,13 +2192,14 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(indexResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(
       indexResponse.headers.get("access-control-expose-headers"),
-      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Id",
+      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id",
     );
     assert.equal(indexResponse.headers.get("x-quorum-request-id"), "workflow-trace-2026-07-10");
     assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(indexResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(indexResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(indexResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(indexResponse.headers.get("x-quorum-request-timeout-ms"), "30000");
     assert.deepEqual(await indexResponse.json(), expectedDiscoveryResponse);
 
     const capabilitiesResponse = await fetch(`${api.url}/capabilities`);
@@ -2207,6 +2208,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(capabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(capabilitiesResponse.headers.get("x-quorum-request-timeout-ms"), "30000");
     assert.match(capabilitiesResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
     const capabilitiesPayload = await capabilitiesResponse.json() as ApiCapabilitiesResponse;
     expectedCapabilitiesResponse.requestId = capabilitiesResponse.headers.get("x-quorum-request-id") ?? "";
@@ -2218,6 +2220,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(healthResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(healthResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(healthResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(healthResponse.headers.get("x-quorum-request-timeout-ms"), "30000");
     assert.equal(healthResponse.headers.get("cache-control"), "no-store");
     assert.match(healthResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
     const healthPayload = await healthResponse.json() as ApiHealthResponse;
@@ -2500,6 +2503,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       "X-Quorum-Max-Request-Bytes",
       "X-Quorum-OpenAPI-Path",
       "X-Quorum-Request-Id",
+      "X-Quorum-Request-Timeout-Ms",
       "X-Quorum-Service",
       "X-Quorum-Version",
     ]);
@@ -2511,6 +2515,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       "X-Quorum-Max-Request-Bytes",
       "X-Quorum-OpenAPI-Path",
       "X-Quorum-Request-Id",
+      "X-Quorum-Request-Timeout-Ms",
       "X-Quorum-Service",
       "X-Quorum-Version",
     ]);
@@ -3220,7 +3225,7 @@ test("programmatic API answers CORS preflight requests", async () => {
     assert.equal(response.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS);
     assert.equal(
       response.headers.get("access-control-expose-headers"),
-      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Id",
+      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id",
     );
     assert.equal(response.headers.get("x-quorum-service"), "quorum");
     assert.equal(response.headers.get("x-quorum-version"), "0.1.0");
@@ -3297,6 +3302,18 @@ test("programmatic API bounds request duration with a configurable timeout", () 
   } finally {
     defaultServer.close();
     configuredServer.close();
+  }
+});
+
+test("programmatic API advertises the configured request timeout", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0, requestTimeoutMs: 1_500 });
+
+  try {
+    const response = await fetch(`${api.url}/`);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("x-quorum-request-timeout-ms"), "1500");
+  } finally {
+    await api.close();
   }
 });
 
