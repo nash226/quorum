@@ -1,4 +1,5 @@
 import { basename } from "node:path";
+import mammoth from "mammoth";
 import { PDFParse } from "pdf-parse";
 import type { SourceDocument, SourceTrustLevel } from "./domain.js";
 import { stripByteOrderMark } from "./text.js";
@@ -55,6 +56,10 @@ export async function sourceDocumentFromFile(
 ): Promise<SourceDocument> {
   if (isPdfSource(sourcePath)) {
     return pdfSourceDocumentFromFile(sourcePath, content, index, options);
+  }
+
+  if (isDocxSource(sourcePath)) {
+    return docxSourceDocumentFromFile(sourcePath, content, index, options);
   }
 
   const textContent = typeof content === "string" ? content : new TextDecoder().decode(content);
@@ -176,8 +181,12 @@ function isPdfSource(sourcePath: string): boolean {
   return /\.pdf$/i.test(sourcePath);
 }
 
+function isDocxSource(sourcePath: string): boolean {
+  return /\.docx$/i.test(sourcePath);
+}
+
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf|docx)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
@@ -674,6 +683,40 @@ async function pdfSourceDocumentFromFile(
   } finally {
     await parser.destroy();
   }
+}
+
+async function docxSourceDocumentFromFile(
+  sourcePath: string,
+  content: string | Uint8Array,
+  index: number,
+  options: SourceDocumentOptions,
+): Promise<SourceDocument> {
+  if (typeof content === "string") {
+    throw new Error(`DOCX source content must be provided as binary data: ${sourcePath}`);
+  }
+
+  const result = await mammoth.extractRawText({ buffer: Buffer.from(content) });
+
+  return {
+    id: `source_${index + 1}`,
+    sourcePath,
+    title: options.title ?? sourceTitleFromPath(sourcePath),
+    updatedAt: options.updatedAt,
+    trustLevel: options.trustLevel ?? options.defaultTrustLevel ?? "medium",
+    content: normalizeDocxText(result.value),
+  };
+}
+
+function normalizeDocxText(content: string): string {
+  return content
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .map((line) => line.trim())
+    .join("\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
 }
 
 function normalizePdfText(content: string): string {

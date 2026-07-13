@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 import { parseSource, sourceDocumentFromFile } from "../src/source-loader.js";
@@ -11,6 +12,15 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.updatedAt, undefined);
   assert.equal(source.trustLevel, "medium");
   assert.equal(source.content, "Employees get 12 weeks.");
+});
+
+test("extracts readable text from DOCX source content", async () => {
+  const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
+  const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0);
+
+  assert.equal(source.title, "hr-policy");
+  assert.equal(source.trustLevel, "medium");
+  assert.equal(source.content, "Walking on imported air");
 });
 
 test("strips supported text extensions from fallback source titles", async () => {
