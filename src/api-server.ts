@@ -42,7 +42,7 @@ import {
   importReviewerDecisionContentsResult,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
-  type InMemoryAnswerInput,
+  type InMemoryContentAnswerInput,
   type InMemorySourceInput,
 } from "./workflow.js";
 
@@ -91,14 +91,16 @@ export type ApiEvaluateResponse = EvaluationBatchRunResult & {
 
 export interface ApiSourceInput {
   sourcePath: string;
-  content: string;
+  content?: string;
+  contentBase64?: string;
   title?: string;
   updatedAt?: string;
   trustLevel?: string;
 }
 
 export interface VerifyApiRequest {
-  answer: string;
+  answer?: string;
+  answerBase64?: string;
   answerPath?: string;
   answerLabel?: string;
   sources: ApiSourceInput[];
@@ -111,7 +113,8 @@ export interface VerifyApiRequest {
 
 export interface VerifyBatchApiRequest {
   answers: Array<{
-    answer: string;
+    answer?: string;
+    answerBase64?: string;
     answerPath?: string;
     answerLabel?: string;
   }>;
@@ -238,6 +241,7 @@ const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
   httpMethods: ["GET", "HEAD", "POST", "OPTIONS"],
   requestContentTypes: ["application/json"],
+  binaryContentEncodings: ["base64"],
   maxRequestBytes: API_MAX_REQUEST_BYTES,
   sourceExtensions: [...SOURCE_EXTENSIONS],
   answerExtensions: [...ANSWER_EXTENSIONS],
@@ -1461,7 +1465,7 @@ function isJsonContentType(contentType: string): boolean {
 }
 
 function parseVerifyRequest(value: unknown): {
-  answer: string;
+  answer: string | Uint8Array;
   answerPath?: string;
   answerLabel?: string;
   sources: InMemorySourceInput[];
@@ -1474,7 +1478,7 @@ function parseVerifyRequest(value: unknown): {
   const record = requireRecord(value, "Verify request body");
 
   return {
-    answer: requireString(record.answer, "answer"),
+    answer: parseContent(record.answer, record.answerBase64, "answer", "answerBase64"),
     answerPath: optionalString(record.answerPath, "answerPath"),
     answerLabel: optionalString(record.answerLabel, "answerLabel"),
     sources: parseSources(record.sources),
@@ -1497,7 +1501,7 @@ function parseExtractClaimsRequest(value: unknown): ExtractClaimsApiRequest {
 }
 
 function parseVerifyBatchRequest(value: unknown): {
-  answers: InMemoryAnswerInput[];
+  answers: InMemoryContentAnswerInput[];
   sources: InMemorySourceInput[];
   defaultTrustLevel?: ReturnType<typeof parseSourceTrustLevel>;
   generatedAt?: string;
@@ -1578,11 +1582,16 @@ function parseOptionalScore(value: unknown): number | undefined {
   return value;
 }
 
-function parseAnswerInput(value: unknown, index: number): InMemoryAnswerInput {
+function parseAnswerInput(value: unknown, index: number): InMemoryContentAnswerInput {
   const record = requireRecord(value, `answers[${index}]`);
 
   return {
-    answer: requireString(record.answer, `answers[${index}].answer`),
+    answer: parseContent(
+      record.answer,
+      record.answerBase64,
+      `answers[${index}].answer`,
+      `answers[${index}].answerBase64`,
+    ),
     answerPath: optionalString(record.answerPath, `answers[${index}].answerPath`),
     answerLabel: optionalString(record.answerLabel, `answers[${index}].answerLabel`),
   };
@@ -1607,12 +1616,44 @@ function parseSources(value: unknown): InMemorySourceInput[] {
 
     return {
       sourcePath: requireString(record.sourcePath, `sources[${index}].sourcePath`),
-      content: requireString(record.content, `sources[${index}].content`),
+      content: parseContent(
+        record.content,
+        record.contentBase64,
+        `sources[${index}].content`,
+        `sources[${index}].contentBase64`,
+      ),
       title: optionalString(record.title, `sources[${index}].title`),
       updatedAt: optionalString(record.updatedAt, `sources[${index}].updatedAt`),
       trustLevel: parseOptionalTrustLevel(record.trustLevel),
     };
   });
+}
+
+function parseContent(
+  textValue: unknown,
+  base64Value: unknown,
+  textFieldName: string,
+  base64FieldName: string,
+): string | Uint8Array {
+  if (textValue !== undefined && base64Value !== undefined) {
+    throw requestError(`${textFieldName} and ${base64FieldName} are mutually exclusive.`);
+  }
+
+  if (base64Value !== undefined) {
+    const encoded = requireString(base64Value, base64FieldName);
+    if (!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(encoded)) {
+      throw requestError(`${base64FieldName} must be valid base64.`);
+    }
+
+    const bytes = Buffer.from(encoded, "base64");
+    if (bytes.length === 0) {
+      throw requestError(`${base64FieldName} must decode to non-empty content.`);
+    }
+
+    return new Uint8Array(bytes);
+  }
+
+  return requireString(textValue, textFieldName);
 }
 
 function parseOptionalTrustLevel(
@@ -2339,6 +2380,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   type: "object",
                   properties: {
                     answer: { type: "string" },
+                    answerBase64: {
+                      type: "string",
+                      contentEncoding: "base64",
+                      description: "Base64-encoded answer bytes for PDF or DOCX inputs.",
+                    },
                     answerPath: { type: "string" },
                     answerLabel: { type: "string" },
                     sources: {
@@ -2358,7 +2404,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                     },
                     failOnStatus: { type: "boolean" },
                   },
-                  required: ["answer", "sources"],
+                  required: ["sources"],
+                  oneOf: [
+                    { required: ["answer"] },
+                    { required: ["answerBase64"] },
+                  ],
                 },
                 examples: {
                   hrPolicyAnswer: {
@@ -2443,10 +2493,18 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                         type: "object",
                         properties: {
                           answer: { type: "string" },
+                          answerBase64: {
+                            type: "string",
+                            contentEncoding: "base64",
+                            description: "Base64-encoded answer bytes for PDF or DOCX inputs.",
+                          },
                           answerPath: { type: "string" },
                           answerLabel: { type: "string" },
                         },
-                        required: ["answer"],
+                        oneOf: [
+                          { required: ["answer"] },
+                          { required: ["answerBase64"] },
+                        ],
                       },
                     },
                     sources: {
@@ -2971,11 +3029,20 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           properties: {
             sourcePath: { type: "string" },
             content: { type: "string" },
+            contentBase64: {
+              type: "string",
+              contentEncoding: "base64",
+              description: "Base64-encoded source bytes for PDF or DOCX inputs.",
+            },
             title: { type: "string" },
             updatedAt: { type: "string" },
             trustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
           },
-          required: ["sourcePath", "content"],
+          required: ["sourcePath"],
+          oneOf: [
+            { required: ["content"] },
+            { required: ["contentBase64"] },
+          ],
         },
         ApiEvaluationFixtureInput: {
           type: "object",

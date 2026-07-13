@@ -585,6 +585,10 @@ when callers send a different media type.
 JSON request bodies are limited to 1 MiB; larger payloads return `413` before
 verification or evaluation starts so an oversized workflow input cannot cause
 unbounded request buffering.
+The HTTP verification endpoints also accept `answerBase64` and
+`contentBase64` fields when an agent workflow needs to send PDF or DOCX bytes
+inside the JSON request; each field is mutually exclusive with its text
+counterpart, and the original `.pdf` or `.docx` path selects the extractor.
 Successful responses mirror Quorum's existing `verifyAnswerContentsResult` and
 `verifyAnswerBatchContentsResult` shapes so workflow callers get the report,
 matched fail verdicts, and `shouldFail` status in one JSON payload.
