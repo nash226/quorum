@@ -527,8 +527,10 @@ The embedded server bounds each request to 30 seconds by default so a stalled
 client cannot hold a workflow listener indefinitely; integrations embedding
 `createApiServer` or `startApiServer` can override that limit with
 `requestTimeoutMs`.
-The `/health` and `/healthz` readiness responses include `Cache-Control: no-store`
-so a proxy or load balancer cannot reuse a stale healthy response during an outage.
+All `/health`, `/healthz`, `/readyz`, and `/livez` probe responses include
+`Cache-Control: no-store` so a proxy or load balancer cannot reuse a stale
+healthy response during an outage; the OpenAPI contract documents that header
+for both `GET` and `HEAD` probe calls.
 The `/readyz` alias provides the same uncached readiness contract for Kubernetes
 probes and deployment systems that use the conventional readiness path.
 The `/livez` alias provides the same uncached health response for Kubernetes
