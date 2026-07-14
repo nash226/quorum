@@ -51,6 +51,7 @@ test("renders the text report used by the CLI", () => {
   assert.match(rendered, /Quorum Verification Report/);
   assert.match(rendered, /Generated: 2026-06-28T00:00:00\.000Z/);
   assert.match(rendered, /Answer: examples\/answers\/hr-answer\.md/);
+  assert.match(rendered, /Answer label: hr-answer/);
   assert.match(rendered, /Sources:\n- HR Policy \(high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md\)/);
   assert.match(rendered, /VERIFIED  Full-time employees receive 20 days/);
   assert.match(rendered, /Evidence \(HR Policy, high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md, score /);
@@ -70,6 +71,7 @@ test("renders a markdown reviewer report with summary, sources, and evidence", (
   assert.match(rendered, /Generated: 2026-06-28T00:00:00.000Z/);
   assert.match(rendered, /- Verified: 0/);
   assert.match(rendered, /- Answer path: `examples\/answers\/hr-answer\.md`/);
+  assert.match(rendered, /- Answer label: hr-answer/);
   assert.match(rendered, /- Contradicted: 1/);
   assert.match(rendered, /- Unsupported: 1/);
   assert.match(rendered, /## Sources/);
@@ -111,6 +113,20 @@ test("renders single-answer fail policy context in text, markdown, and html repo
   assert.match(text, /Fail verdicts: contradicted, unsupported/);
   assert.match(markdown, /- Fail policy: matched \(contradicted, unsupported\)/);
   assert.match(html, /<span>Fail policy<\/span>\s*<strong>matched \(contradicted, unsupported\)<\/strong>/);
+});
+
+test("preserves explicit reviewer labels across single-answer human reports", () => {
+  const report = verifyAnswer(
+    "Employees receive 12 weeks of paid parental leave.",
+    [hrPolicy],
+    "2026-06-28T00:00:00.000Z",
+    "answers/hr-answer.md",
+  );
+  report.answerLabel = "HR reviewer packet";
+
+  assert.match(renderTextReport(report), /Answer label: HR reviewer packet/);
+  assert.match(renderMarkdownReport(report), /- Answer label: HR reviewer packet/);
+  assert.match(renderHtmlReport(report), /<span>Answer label<\/span>\s*<strong>HR reviewer packet<\/strong>/);
 });
 
 test("renders a reviewer decision csv with answer fail-policy context and blank reviewer fields", () => {
@@ -233,6 +249,8 @@ test("renders a professional HTML reviewer report with escaped content", () => {
   assert.match(rendered, /Evidence detail/);
   assert.match(rendered, /Reviewer decision/);
   assert.match(rendered, /Answer path/);
+  assert.match(rendered, /Answer label/);
+  assert.match(rendered, /<span>Answer label<\/span>\s*<strong>hr-answer<\/strong>/);
   assert.match(rendered, /examples\/answers\/hr-answer\.md/);
   assert.match(rendered, /<span class="pill pill--contradicted">contradicted<\/span>/);
   assert.match(rendered, /HR Policy<\/strong>/);
