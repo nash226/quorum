@@ -536,12 +536,14 @@ The server allows all browser origins by default for local development; pass
 `corsAllowedOrigins` to `startApiServer` when a deployed client should be
 restricted to an explicit origin allowlist. Disallowed origins receive no
 `Access-Control-Allow-Origin` response header.
-The embedded server bounds each request to 30 seconds by default so a stalled
-client cannot hold a workflow listener indefinitely; integrations embedding
-`createApiServer` or `startApiServer` can override that limit with
-`requestTimeoutMs`. The option must be a positive safe integer number of
-milliseconds, so invalid timeout configuration fails during server creation
-instead of silently weakening the request-boundary contract.
+The server bounds each request to 30 seconds by default so a stalled client
+cannot hold a workflow listener indefinitely; `quorum serve` can override that
+limit with `--request-timeout-ms <milliseconds>`, while integrations embedding
+`createApiServer` or `startApiServer` can use `requestTimeoutMs`. Both options
+require a positive safe integer number of milliseconds, so invalid timeout
+configuration fails instead of silently weakening the request-boundary
+contract. The packaged smoke check starts the CLI server with a custom timeout
+and verifies that discovery headers expose the configured value.
 All `/health`, `/healthz`, `/readyz`, and `/livez` probe responses include
 `Cache-Control: no-store` so a proxy or load balancer cannot reuse a stale
 healthy response during an outage; the OpenAPI contract documents that header
