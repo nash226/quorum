@@ -3798,6 +3798,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           type: "object",
           properties: {
             fixtureCount: { type: "integer", minimum: 0 },
+            mismatchCount: { type: "integer", minimum: 0 },
             answersWithClaims: { type: "integer", minimum: 0 },
             answersWithoutClaims: { type: "integer", minimum: 0 },
             matchedClaims: { type: "integer", minimum: 0 },
@@ -3811,7 +3812,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               items: { $ref: "#/components/schemas/EvaluationDomainAggregateSummary" },
             },
           },
-          required: ["fixtureCount", "answersWithClaims", "answersWithoutClaims", "matchedClaims", "totalExpectedClaims", "score", "scoreLabel", "expectedSummary", "actualSummary", "domains"],
+          required: ["fixtureCount", "mismatchCount", "answersWithClaims", "answersWithoutClaims", "matchedClaims", "totalExpectedClaims", "score", "scoreLabel", "expectedSummary", "actualSummary", "domains"],
         },
         EvaluationDomainAggregateSummary: {
           type: "object",

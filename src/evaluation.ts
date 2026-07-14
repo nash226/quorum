@@ -93,6 +93,7 @@ export interface EvaluationBatchRunResult {
 
 export interface EvaluationAggregateSummary {
   fixtureCount: number;
+  mismatchCount: number;
   answersWithClaims: number;
   answersWithoutClaims: number;
   matchedClaims: number;
@@ -1869,6 +1870,7 @@ export function summarizeEvaluationScorecards(
 
   return {
     fixtureCount: scorecards.length,
+    mismatchCount: scorecards.filter(hasEvaluationMismatch).length,
     answersWithClaims: scorecards.filter(scorecardHasClaims).length,
     answersWithoutClaims: scorecards.filter((scorecard) => !scorecardHasClaims(scorecard)).length,
     matchedClaims,
