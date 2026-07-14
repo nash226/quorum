@@ -253,13 +253,13 @@ export const API_DISCOVERY_HEADERS = {
 } as const;
 export const API_REQUEST_ID_HEADER = "X-Quorum-Request-Id";
 export const API_CORS_ALLOWED_HEADERS = ["Content-Type", API_REQUEST_ID_HEADER, "If-None-Match"].join(", ");
-export const API_CORS_EXPOSED_HEADERS = [
+export const API_CORS_EXPOSED_HEADERS = [...new Set([
   ...Object.values(API_DISCOVERY_HEADERS),
   API_REQUEST_ID_HEADER,
   "Cache-Control",
   "ETag",
   "Allow",
-].join(", ");
+])].join(", ");
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
