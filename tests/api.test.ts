@@ -3483,11 +3483,48 @@ test("programmatic API advertises the configured request timeout", async () => {
   }
 });
 
+test("programmatic API advertises and enforces a configured request size limit", async () => {
+  const maxRequestBytes = 1_500;
+  const api = await startApiServer({ host: "127.0.0.1", port: 0, maxRequestBytes });
+
+  try {
+    const discoveryResponse = await fetch(`${api.url}/`);
+    assert.equal(discoveryResponse.headers.get("x-quorum-max-request-bytes"), String(maxRequestBytes));
+    const discoveryPayload = await discoveryResponse.json() as { capabilities: { maxRequestBytes: number } };
+    assert.equal(discoveryPayload.capabilities.maxRequestBytes, maxRequestBytes);
+
+    const openApiResponse = await fetch(`${api.url}/openapi.json`);
+    const openApi = await openApiResponse.json() as {
+      paths: { "/verify": { post: { responses: { "413": { description: string } } } } };
+    };
+    assert.equal(openApi.paths["/verify"].post.responses["413"].description, `The JSON request body exceeded the ${maxRequestBytes}-byte limit.`);
+
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ answer: "x".repeat(maxRequestBytes), sources: [] }),
+    });
+    assert.equal(response.status, 413);
+    assert.equal((await response.json() as { error: string }).error, `Request body must not exceed ${maxRequestBytes} bytes.`);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API rejects invalid request timeout configuration", () => {
   for (const requestTimeoutMs of [0, -1, Number.NaN, 1.5, Number.POSITIVE_INFINITY]) {
     assert.throws(
       () => createApiServer({ requestTimeoutMs }),
       /requestTimeoutMs must be a positive safe integer in milliseconds\./,
+    );
+  }
+});
+
+test("programmatic API rejects invalid request size configuration", () => {
+  for (const maxRequestBytes of [0, -1, Number.NaN, 1.5, Number.POSITIVE_INFINITY]) {
+    assert.throws(
+      () => createApiServer({ maxRequestBytes }),
+      /maxRequestBytes must be a positive safe integer in bytes\./,
     );
   }
 });

@@ -118,6 +118,7 @@ interface EvaluateArgs {
 interface ServeArgs {
   host?: string;
   port?: number;
+  maxRequestBytes?: number;
   requestTimeoutMs?: number;
   corsAllowedOrigins?: string[];
 }
@@ -613,6 +614,7 @@ async function runServe(args: string[]): Promise<void> {
   const api = await startApiServer({
     host: parsed.host,
     port: parsed.port,
+    maxRequestBytes: parsed.maxRequestBytes,
     requestTimeoutMs: parsed.requestTimeoutMs,
     corsAllowedOrigins: parsed.corsAllowedOrigins,
   });
@@ -741,6 +743,7 @@ function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
 function parseServeArgs(args: string[]): ServeArgs {
   let host: string | undefined;
   let port: number | undefined;
+  let maxRequestBytes: number | undefined;
   let requestTimeoutMs: number | undefined;
   const corsAllowedOrigins: string[] = [];
 
@@ -778,6 +781,18 @@ function parseServeArgs(args: string[]): ServeArgs {
       continue;
     }
 
+    if (arg === "--max-request-bytes" && next) {
+      const parsedLimit = Number(next);
+
+      if (!Number.isSafeInteger(parsedLimit) || parsedLimit <= 0) {
+        throw new Error(`Invalid --max-request-bytes value: ${next}`);
+      }
+
+      maxRequestBytes = parsedLimit;
+      index += 1;
+      continue;
+    }
+
     if (arg === "--cors-origin" && next) {
       corsAllowedOrigins.push(next);
       index += 1;
@@ -790,6 +805,7 @@ function parseServeArgs(args: string[]): ServeArgs {
   return {
     host,
     port,
+    maxRequestBytes,
     requestTimeoutMs,
     corsAllowedOrigins: corsAllowedOrigins.length > 0 ? corsAllowedOrigins : undefined,
   };
@@ -1400,11 +1416,13 @@ Example:
     serve: `Quorum serve
 
 Usage:
-  quorum serve [--host <host>] [--port <port>] [--request-timeout-ms <milliseconds>]
+  quorum serve [--host <host>] [--port <port>] [--max-request-bytes <bytes>] [--request-timeout-ms <milliseconds>]
 
 Options:
   --host <host>             Host interface to bind; defaults to 127.0.0.1
   --port <port>             Port to bind; defaults to 3000, use 0 for an ephemeral port
+  --max-request-bytes <bytes>
+                            Reject JSON bodies larger than this size; defaults to 1048576
   --request-timeout-ms <milliseconds>
                             Abort requests that exceed this duration; defaults to 30000
   --cors-origin <origin>    Allow browser CORS requests from this origin; may be repeated

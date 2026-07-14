@@ -164,6 +164,8 @@ export interface ExtractClaimsApiResponse {
 export interface ApiServerOptions {
   host?: string;
   port?: number;
+  /** Reject JSON request bodies larger than this many bytes. */
+  maxRequestBytes?: number;
   /** Abort requests that do not finish within this many milliseconds. */
   requestTimeoutMs?: number;
   /** Restrict browser CORS responses to these exact origins. */
@@ -205,6 +207,7 @@ export interface ApiVersionResponse {
 
 export interface OpenApiDocumentOptions {
   serverUrl?: string;
+  maxRequestBytes?: number;
 }
 
 export interface StartedApiServer {
@@ -258,6 +261,10 @@ export const API_CAPABILITIES = {
   evaluateArtifacts: [...EVALUATE_ARTIFACTS],
   extractClaims: true,
 } as const;
+
+function apiCapabilities(maxRequestBytes: number): ApiCapabilityMap {
+  return { ...API_CAPABILITIES, maxRequestBytes };
+}
 export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   { method: "GET", path: "/", description: "Return API discovery metadata for local callers." },
   { method: "HEAD", path: "/", description: "Return service discovery headers without a JSON body." },
@@ -1179,6 +1186,7 @@ export function createApiServer(options: ApiServerOptions = {}): Server {
   });
 
   server.requestTimeout = resolveRequestTimeoutMs(options.requestTimeoutMs);
+  resolveMaxRequestBytes(options.maxRequestBytes);
   return server;
 }
 
@@ -1187,6 +1195,16 @@ function resolveRequestTimeoutMs(requestTimeoutMs: number | undefined): number {
 
   if (!Number.isSafeInteger(resolved) || resolved <= 0) {
     throw new Error("requestTimeoutMs must be a positive safe integer in milliseconds.");
+  }
+
+  return resolved;
+}
+
+function resolveMaxRequestBytes(maxRequestBytes: number | undefined): number {
+  const resolved = maxRequestBytes ?? API_MAX_REQUEST_BYTES;
+
+  if (!Number.isSafeInteger(resolved) || resolved <= 0) {
+    throw new Error("maxRequestBytes must be a positive safe integer in bytes.");
   }
 
   return resolved;
@@ -1243,7 +1261,8 @@ async function handleApiRequest(
 ): Promise<void> {
   applyRequestIdHeader(request, response);
   applyCorsHeaders(request, response, options.corsAllowedOrigins);
-  applyApiDiscoveryHeaders(response, resolveRequestTimeoutMs(options.requestTimeoutMs));
+  const maxRequestBytes = resolveMaxRequestBytes(options.maxRequestBytes);
+  applyApiDiscoveryHeaders(response, maxRequestBytes, resolveRequestTimeoutMs(options.requestTimeoutMs));
   const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
   const isHeadRequest = request.method === "HEAD";
 
@@ -1258,7 +1277,7 @@ async function handleApiRequest(
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
-      capabilities: API_CAPABILITIES,
+      capabilities: apiCapabilities(maxRequestBytes),
       endpoints: API_ENDPOINTS,
     };
     writeJson(response, 200, discoveryResponse, isHeadRequest);
@@ -1271,7 +1290,7 @@ async function handleApiRequest(
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
-      capabilities: API_CAPABILITIES,
+      capabilities: apiCapabilities(maxRequestBytes),
     };
     writeJson(response, 200, capabilitiesResponse, isHeadRequest);
     return;
@@ -1305,6 +1324,7 @@ async function handleApiRequest(
       200,
       createOpenApiDocument({
         serverUrl: request.headers.host ? `http://${request.headers.host}` : undefined,
+        maxRequestBytes,
       }),
       isHeadRequest,
     );
@@ -1318,7 +1338,7 @@ async function handleApiRequest(
     }
 
     requireJsonRequest(request);
-    const body = parseVerifyRequest(await readJsonBody(request));
+    const body = parseVerifyRequest(await readJsonBody(request, maxRequestBytes));
     const result = await verifyAnswerContentsResult({
       answer: body.answer,
       answerPath: body.answerPath,
@@ -1344,7 +1364,7 @@ async function handleApiRequest(
     }
 
     requireJsonRequest(request);
-    const body = parseExtractClaimsRequest(await readJsonBody(request));
+    const body = parseExtractClaimsRequest(await readJsonBody(request, maxRequestBytes));
     const answer = await extractClaimsAnswerText(body.answer, body.answerPath);
     const requestId = response.getHeader(API_REQUEST_ID_HEADER);
     const result: ExtractClaimsApiResponse = {
@@ -1365,7 +1385,7 @@ async function handleApiRequest(
     }
 
     requireJsonRequest(request);
-    const body = parseVerifyBatchRequest(await readJsonBody(request));
+    const body = parseVerifyBatchRequest(await readJsonBody(request, maxRequestBytes));
     const result = await verifyAnswerBatchContentsResult({
       answers: body.answers,
       sources: body.sources,
@@ -1389,7 +1409,7 @@ async function handleApiRequest(
     }
 
     requireJsonRequest(request);
-    const body = parseImportReviewRequest(await readJsonBody(request));
+    const body = parseImportReviewRequest(await readJsonBody(request, maxRequestBytes));
     const result = importReviewerDecisionContentsResult({
       reviewCsvContent: body.reviewCsvContent,
       generatedAt: body.generatedAt,
@@ -1411,7 +1431,7 @@ async function handleApiRequest(
     }
 
     requireJsonRequest(request);
-    const body = parseEvaluateRequest(await readJsonBody(request));
+    const body = parseEvaluateRequest(await readJsonBody(request, maxRequestBytes));
     const result = await evaluateFixtureContentsResult({
       fixtures: body.fixtures,
       domains: body.domains,
@@ -1430,13 +1450,13 @@ async function handleApiRequest(
   writeApiError(response, 404, "Not found.");
 }
 
-async function readJsonBody(request: IncomingMessage): Promise<unknown> {
+async function readJsonBody(request: IncomingMessage, maxRequestBytes: number): Promise<unknown> {
   const contentLength = request.headers["content-length"];
   if (typeof contentLength === "string") {
     const declaredLength = Number(contentLength);
-    if (Number.isFinite(declaredLength) && declaredLength > API_MAX_REQUEST_BYTES) {
+    if (Number.isFinite(declaredLength) && declaredLength > maxRequestBytes) {
       request.resume();
-      throw requestError(`Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`, 413);
+      throw requestError(`Request body must not exceed ${maxRequestBytes} bytes.`, 413);
     }
   }
 
@@ -1446,9 +1466,9 @@ async function readJsonBody(request: IncomingMessage): Promise<unknown> {
   for await (const chunk of request) {
     const buffer = typeof chunk === "string" ? Buffer.from(chunk) : chunk;
     bytesRead += buffer.byteLength;
-    if (bytesRead > API_MAX_REQUEST_BYTES) {
+    if (bytesRead > maxRequestBytes) {
       request.resume();
-      throw requestError(`Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.`, 413);
+      throw requestError(`Request body must not exceed ${maxRequestBytes} bytes.`, 413);
     }
     chunks.push(buffer);
   }
@@ -1838,6 +1858,7 @@ function optionalBoolean(value: unknown, fieldName: string): boolean | undefined
 
 export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
   const serverUrl = options.serverUrl?.trim();
+  const maxRequestBytes = resolveMaxRequestBytes(options.maxRequestBytes);
   const normalizedServerUrl =
     serverUrl && serverUrl.length > 0 ? serverUrl.replace(/\/+$/, "") : undefined;
   const servers = normalizedServerUrl ? [{ url: normalizedServerUrl }] : [];
@@ -1913,10 +1934,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         value: OPENAPI_UNSUPPORTED_MEDIA_TYPE_ERROR_EXAMPLE,
       },
     }),
-    "413": errorResponse(`The JSON request body exceeded the ${API_MAX_REQUEST_BYTES}-byte limit.`, {
+    "413": errorResponse(`The JSON request body exceeded the ${maxRequestBytes}-byte limit.`, {
       requestTooLarge: {
         summary: "The request body exceeded Quorum's JSON payload limit",
-        value: { error: `Request body must not exceed ${API_MAX_REQUEST_BYTES} bytes.` },
+        value: { error: `Request body must not exceed ${maxRequestBytes} bytes.` },
       },
     }),
     "500": errorResponse("The server failed while handling the request.", {
@@ -3688,12 +3709,13 @@ function applyCorsHeaders(
 
 function applyApiDiscoveryHeaders(
   response: ServerResponse,
+  maxRequestBytes: number = API_MAX_REQUEST_BYTES,
   requestTimeoutMs: number = API_REQUEST_TIMEOUT_MS,
 ): void {
   response.setHeader(API_DISCOVERY_HEADERS.service, API_SERVICE_NAME);
   response.setHeader(API_DISCOVERY_HEADERS.version, API_VERSION);
   response.setHeader(API_DISCOVERY_HEADERS.openapiPath, OPENAPI_PATH);
-  response.setHeader(API_DISCOVERY_HEADERS.maxRequestBytes, API_MAX_REQUEST_BYTES);
+  response.setHeader(API_DISCOVERY_HEADERS.maxRequestBytes, maxRequestBytes);
   response.setHeader(API_DISCOVERY_HEADERS.requestTimeoutMs, requestTimeoutMs);
 }
 
