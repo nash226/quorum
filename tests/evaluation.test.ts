@@ -68,6 +68,27 @@ test("evaluates fixture files relative to the fixture directory", async () => {
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a support fixture that routes a partial match to review", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/escalation-policy.json"),
+    generatedAt: "2026-07-14T04:30:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support escalation ambiguity example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support escalation reviewer packet");
+  assert.equal(scorecard.answerPreview, "Support tickets receive a first response after escalation.");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 0,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["needs_review"]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates nested shipped fixture files for additional domain coverage", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/onboarding-policy.json"),
@@ -196,6 +217,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/hr/pdf-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
     resolve("examples/evaluations/support/account-security-policy.json"),
+    resolve("examples/evaluations/support/escalation-policy.json"),
     resolve("examples/evaluations/support/html-billing-policy.json"),
     resolve("examples/evaluations/support/source-directory-policy.json"),
   ]);
@@ -229,7 +251,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 8);
+  assert.equal(scorecards.length, 9);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -239,6 +261,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "HR PDF policy example",
       "Support policy example",
       "Support account policy example",
+      "Support escalation ambiguity example",
       "Support billing HTML example",
       "Support source directory example",
     ],
