@@ -208,7 +208,9 @@ The response includes `scorecards`, aggregate `mismatchCount` and `score`,
 
 ## Integration notes
 
-- All `POST` requests use `Content-Type: application/json`.
+- All `POST` requests use a JSON media type. Quorum accepts
+  `application/json` with optional parameters and vendor `application/*+json`
+  types, while returning `415` for non-JSON media types.
 - `POST /verify-batch` accepts an `answers` array for queue-style workflows.
 - `POST /import-review` imports reviewer CSV content and returns grouped answer
   summaries.
