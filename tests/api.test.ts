@@ -3309,6 +3309,7 @@ Employees receive 12 weeks of paid parental leave.
     });
 
     assert.equal(response.status, 200);
+    assert.equal(response.headers.get("cache-control"), "no-store");
     const result = await response.json() as {
       report: {
         summary: Record<string, number>;
@@ -3564,6 +3565,7 @@ Employees receive 12 weeks of paid parental leave.
     });
 
     assert.equal(response.status, 415);
+    assert.equal(response.headers.get("cache-control"), "no-store");
     const payload = (await response.json()) as { error: string; requestId: string };
     assert.equal(payload.error, "Content-Type must be application/json.");
     assert.equal(payload.requestId, "invalid-content-type-check");
