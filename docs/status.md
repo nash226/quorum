@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b639631` on 2026-07-14, test: cover CLI CORS origin contract
+- Latest shipped change: `eea16eb` on 2026-07-14, fix: return method errors for known API routes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -54,6 +54,7 @@
 - expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
 - export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
 - derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift
+- return structured `405` errors with route-specific `Allow` headers when a known API route receives an unsupported method
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
@@ -91,6 +92,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#433](https://github.com/nash226/quorum/pull/433) | fix: return method errors for known API routes | `eea16eb` |
 | 2026-07-14 | Direct push | test: cover CLI CORS origin contract | `b639631` |
 | 2026-07-14 | [#431](https://github.com/nash226/quorum/pull/431) | test: cover route-scoped CORS preflights | `e042e10` |
 | 2026-07-14 | [#430](https://github.com/nash226/quorum/pull/430) | fix: scope CORS preflight methods by route | `ad4ae86` |
@@ -98,5 +100,4 @@
 | 2026-07-14 | Direct push | feat: expose browser CORS capabilities | `e7fb655` |
 | 2026-07-14 | Direct push | fix: strip unicode numbered claim markers | `93e4eb9` |
 | 2026-07-14 | Direct push | docs: show HTTP evaluation workflow | `4cb38bf` |
-| 2026-07-14 | [#425](https://github.com/nash226/quorum/pull/425) | fix: document OpenAPI revalidation headers | `5779021` |
 
