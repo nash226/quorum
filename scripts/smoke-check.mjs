@@ -440,6 +440,11 @@ Employees receive 12 weeks of paid parental leave.
       allow: "Allow",
       corsMaxAge: "Access-Control-Max-Age",
     });
+    assert.deepEqual(indexPayload.capabilities.cors, {
+      allowedHeaders: ["Content-Type", "X-Quorum-Request-Id", "If-None-Match"],
+      exposedHeaders: ["X-Quorum-Service", "X-Quorum-Version", "X-Quorum-OpenAPI-Path", "X-Quorum-Max-Request-Bytes", "X-Quorum-Request-Timeout-Ms", "X-Quorum-Request-Id", "Cache-Control", "ETag", "Allow"],
+      maxAgeSeconds: 600,
+    });
     assert.deepEqual(indexPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(indexPayload.capabilities.trustLevels, ["low", "medium", "high"]);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "OPTIONS" && endpoint.path === "/verify"), true);

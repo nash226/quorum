@@ -33,6 +33,9 @@ are 1 MiB per JSON request and 30 seconds per request; configure them with
 Browser preflight responses advertise `Access-Control-Max-Age: 600`, so browser
 clients can reuse the stable route and header contract for ten minutes before
 asking Quorum to preflight it again.
+The same browser contract is available as `capabilities.cors`, including the
+allowed request headers, exposed response headers, and preflight cache duration,
+so generated clients do not need to duplicate CORS literals.
 The same limits are available as `capabilities.maxRequestBytes` and
 `capabilities.requestTimeoutMs` in `GET /capabilities` and `GET /` responses.
 If a browser client uses the wrong method, it can read the exposed `Allow`
