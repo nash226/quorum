@@ -3589,6 +3589,44 @@ test("programmatic API advertises the configured request timeout", async () => {
   }
 });
 
+test("OpenAPI discovery examples advertise configured runtime limits", async () => {
+  const api = await startApiServer({
+    host: "127.0.0.1",
+    port: 0,
+    maxRequestBytes: 1_500,
+    requestTimeoutMs: 1_500,
+  });
+
+  try {
+    const response = await fetch(`${api.url}/openapi.json`);
+    assert.equal(response.status, 200);
+    const openApi = await response.json() as {
+      paths: Record<string, {
+        get: {
+          responses: Record<string, {
+            content: Record<string, {
+              examples: Record<string, {
+                value: { capabilities: { maxRequestBytes: number; requestTimeoutMs: number } };
+              }>;
+            }>;
+          }>;
+        };
+      }>;
+    };
+
+    assert.deepEqual(
+      openApi.paths["/"].get.responses["200"].content["application/json"].examples.discoveryIndex.value.capabilities,
+      { ...API_CAPABILITIES, maxRequestBytes: 1_500, requestTimeoutMs: 1_500 },
+    );
+    assert.deepEqual(
+      openApi.paths["/capabilities"].get.responses["200"].content["application/json"].examples.capabilitiesOnly.value.capabilities,
+      { ...API_CAPABILITIES, maxRequestBytes: 1_500, requestTimeoutMs: 1_500 },
+    );
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API advertises and enforces a configured request size limit", async () => {
   const maxRequestBytes = 1_500;
   const api = await startApiServer({ host: "127.0.0.1", port: 0, maxRequestBytes });
