@@ -3725,6 +3725,7 @@ function writeJson(
   const body = `${JSON.stringify(payload, null, 2)}\n`;
 
   response.statusCode = statusCode;
+  response.setHeader("Cache-Control", "no-store");
   response.setHeader("Content-Type", "application/json; charset=utf-8");
   response.setHeader("Content-Length", Buffer.byteLength(body, "utf8"));
 
