@@ -709,7 +709,7 @@ test("evaluate filters shipped example fixtures by domain", async () => {
   assert.match(stdout, /Evaluation Fixture: HR onboarding policy example/);
   assert.match(stdout, /Evaluation Fixture: HR PDF policy example/);
   assert.doesNotMatch(stdout, /Evaluation Fixture: Support policy example/);
-  assert.match(stdout, /Fixtures: 3/);
+  assert.match(stdout, /Fixtures: 4/);
 });
 
 test("evaluate writes a one-row-per-fixture summary csv", async () => {
@@ -760,7 +760,7 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
       summaryCsv,
       /^generated_at,domain,fixture_count,mismatch_count,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /^[^,\n]+,hr,3,0,3,0,9,9,1\.000,100%,4,2,2,1,4,2,2,1$/m);
+    assert.match(summaryCsv, /^[^,\n]+,hr,4,0,4,0,12,12,1\.000,100%,6,2,2,2,6,2,2,2$/m);
     assert.match(summaryCsv, /^[^,\n]+,support,6,0,5,1,13,13,1\.000,100%,6,4,2,1,6,4,2,1$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -786,7 +786,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /^[^,\n]+,9,8,1,0,22,22,1\.000,100%,hr \| support,3 \| 6,0 \| 0,3 \| 5,0 \| 1,1\.000 \| 1\.000,100% \| 100%,10,6,4,2,10,6,4,2$/m);
+    assert.match(summaryCsv, /^[^,\n]+,10,9,1,0,25,25,1\.000,100%,hr \| support,4 \| 6,0 \| 0,4 \| 5,0 \| 1,1\.000 \| 1\.000,100% \| 100%,12,6,4,3,12,6,4,3$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -1038,7 +1038,7 @@ test("evaluate writes the gate-aware result JSON to disk", async () => {
     assert.equal(payload.shouldFail, false);
     assert.deepEqual(payload.failureReasons, []);
     assert.equal(payload.mismatchCount, 0);
-    assert.equal(payload.summary.fixtureCount, 9);
+    assert.equal(payload.summary.fixtureCount, 10);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
