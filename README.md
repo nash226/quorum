@@ -554,6 +554,8 @@ evaluation results, claim previews, and API errors, also include
 decision data from a workflow request. The generated OpenAPI response contract
 declares that same `Cache-Control` header for successful, fail-gated, and error
 responses so generated clients can preserve the no-store behavior explicitly.
+The API test suite verifies this header across discovery, capability, version,
+OpenAPI, claim-preview, verification, and error responses.
 The `/readyz` alias provides the same uncached readiness contract for Kubernetes
 probes and deployment systems that use the conventional readiness path.
 The `/livez` alias provides the same uncached health response for Kubernetes
