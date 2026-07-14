@@ -550,9 +550,9 @@ test("renders evaluation text report totals and mismatch detection", () => {
         sources: [
           {
             id: "support/refunds@2026-07-08",
-          sourcePath: "/tmp/sources/support.md",
-          title: "Support Policy",
-          trustLevel: "high" as const,
+            sourcePath: "/tmp/sources/support.md",
+            title: "Support Policy",
+            trustLevel: "high" as const,
           },
         ],
         assessments: [],
@@ -1062,9 +1062,9 @@ test("renders evaluation html report with fixture summaries", () => {
         sources: [
           {
             id: "support/refunds@2026-07-08",
-          sourcePath: "/tmp/sources/support.md",
-          title: "Support Policy",
-          trustLevel: "high" as const,
+            sourcePath: "/tmp/sources/support.md",
+            title: "Support Policy",
+            trustLevel: "high" as const,
           },
         ],
         assessments: [],
