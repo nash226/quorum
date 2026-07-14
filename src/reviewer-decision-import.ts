@@ -71,6 +71,8 @@ export interface ReviewerDecisionImportResult {
   failVerdicts: ClaimVerdict[];
 }
 
+export type ReviewerQueueStatus = "pending" | "reviewed" | "no_claims";
+
 export interface ReviewerDecisionGroup {
   answerLabel?: string;
   answerPath?: string;
@@ -80,6 +82,8 @@ export interface ReviewerDecisionGroup {
   originalAnswerFailPolicy?: ImportedAnswerFailPolicy;
   originalAnswerFailVerdicts: ClaimVerdict[];
   label: string;
+  /** Queue-friendly state derived from claim and reviewer decisions. */
+  reviewStatus: ReviewerQueueStatus;
   claims: ImportedReviewerDecision[];
   emptyStateReason?: string;
   summary: ReviewerDecisionImportReport["summary"];
@@ -205,6 +209,7 @@ export function renderReviewerDecisionImportReport(
         ? [`Answer file: ${renderMarkdownInline(group.answerPath)}`]
         : []),
       `Answer has claims: ${hasImportedAnswerClaims(group) ? "yes" : "no"}`,
+      `Review status: ${group.reviewStatus}`,
       ...(group.answerPreview
         ? [`Answer preview: ${renderMarkdownInline(group.answerPreview)}`]
         : []),
@@ -291,6 +296,7 @@ export function renderReviewerDecisionImportMarkdownReport(
         ? [`- Answer file: ${renderMarkdownInline(group.answerPath)}`]
         : []),
       `- Answer has claims: ${hasImportedAnswerClaims(group) ? "yes" : "no"}`,
+      `- Review status: ${group.reviewStatus}`,
       ...(group.answerPreview
         ? [`- Answer preview: ${renderMarkdownInline(group.answerPreview)}`, ""]
         : []),
@@ -364,6 +370,7 @@ export function renderReviewerDecisionImportSummaryCsv(
       "answer_path",
       "answer_preview",
       "answer_has_claims",
+      "review_status",
       "primary_final_verdict",
       "primary_claim",
       "primary_model_reason",
@@ -404,6 +411,7 @@ export function renderReviewerDecisionImportSummaryCsv(
         group.answerPath ?? "",
         group.answerPreview ?? "",
         (group.answerHasClaims ?? (group.summary.totalClaims > 0)) ? "true" : "false",
+        group.reviewStatus,
         primaryClaim?.finalVerdict ?? (group.claims.length === 0 ? "needs_review" : ""),
         primaryClaim?.claimText ?? "",
         primaryClaim?.modelReason ?? (group.claims.length === 0 ? group.emptyStateReason ?? NO_CLAIMS_REVIEW_REASON : ""),
@@ -477,6 +485,7 @@ export function renderReviewerDecisionImportHtmlReport(
                       ? `<p class="answer-group__preview">${escapeHtml(group.answerPreview)}</p>`
                       : ""}
                     <p class="answer-group__preview">Answer has claims: ${hasImportedAnswerClaims(group) ? "yes" : "no"}</p>
+                    <p class="answer-group__preview">Review status: ${escapeHtml(group.reviewStatus)}</p>
                     ${group.originalAnswerFailPolicy
                       ? `<p class="answer-group__preview">Original answer fail policy: ${escapeHtml(
                           group.originalAnswerFailPolicy === "matched"
@@ -937,7 +946,10 @@ function groupImportedClaims(
     accumulateClaimSummary(group.summary, claim);
   }
 
-  return [...groups.values()];
+  return [...groups.values()].map((group) => {
+    group.reviewStatus = getReviewerQueueStatus(group);
+    return group;
+  });
 }
 
 function buildReviewerDecisionImportResult(
@@ -968,6 +980,16 @@ function createEmptyImportSummary(): ReviewerDecisionImportReport["summary"] {
 
 function hasImportedAnswerClaims(group: ReviewerDecisionGroup): boolean {
   return group.answerHasClaims ?? group.claims.length > 0;
+}
+
+function getReviewerQueueStatus(
+  group: Pick<ReviewerDecisionGroup, "answerHasClaims" | "claims" | "summary">,
+): ReviewerQueueStatus {
+  if (!(group.answerHasClaims ?? group.claims.length > 0)) {
+    return "no_claims";
+  }
+
+  return group.summary.pendingClaims > 0 ? "pending" : "reviewed";
 }
 
 function selectPrimaryImportedClaim(
@@ -1196,6 +1218,7 @@ function getOrCreateImportedGroup(
     originalAnswerFailPolicy: value.originalAnswerFailPolicy,
     originalAnswerFailVerdicts: value.originalAnswerFailVerdicts,
     label: value.answerLabel ?? value.answerPath ?? value.answerPreview ?? "Unspecified answer",
+    reviewStatus: "pending",
     claims: [],
     emptyStateReason:
       "emptyStateReason" in value ? value.emptyStateReason : undefined,
