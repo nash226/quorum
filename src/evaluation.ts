@@ -95,6 +95,8 @@ export interface EvaluationAggregateSummary {
   totalExpectedClaims: number;
   score: number | null;
   scoreLabel: string;
+  expectedSummary: Record<ClaimVerdict, number>;
+  actualSummary: Record<ClaimVerdict, number>;
   domains: EvaluationDomainAggregateSummary[];
 }
 
@@ -106,6 +108,8 @@ export interface EvaluationDomainAggregateSummary {
   totalExpectedClaims: number;
   score: number | null;
   scoreLabel: string;
+  expectedSummary: Record<ClaimVerdict, number>;
+  actualSummary: Record<ClaimVerdict, number>;
 }
 
 export interface InMemoryEvaluationBatchOptions {
@@ -547,6 +551,8 @@ export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): s
     aggregate.domains.forEach((domainSummary) => {
       lines.push(
         `- ${domainSummary.domain}: ${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"}, ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"}, ${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims} matched (${domainSummary.scoreLabel})`,
+        `  Expected verdicts: ${renderSummaryCounts(domainSummary.expectedSummary)}`,
+        `  Actual verdicts: ${renderSummaryCounts(domainSummary.actualSummary)}`,
       );
     });
   }
@@ -574,7 +580,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
           "",
           ...aggregate.domains.map(
             (domainSummary) =>
-              `- \`${domainSummary.domain}\`: ${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"}, ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"}, ${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims} matched (${domainSummary.scoreLabel})`,
+              `- \`${domainSummary.domain}\`: ${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"}, ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"}, ${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims} matched (${domainSummary.scoreLabel})\n  - Expected verdicts: ${renderSummaryCounts(domainSummary.expectedSummary)}\n  - Actual verdicts: ${renderSummaryCounts(domainSummary.actualSummary)}`,
           ),
           "",
         ]
@@ -651,6 +657,7 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
               <div><dt>Matched claims</dt><dd>${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims}</dd></div>
               <div><dt>Score</dt><dd>${domainSummary.scoreLabel}</dd></div>
             </dl>
+            <p>Expected: ${escapeHtml(renderSummaryCounts(domainSummary.expectedSummary))}<br />Actual: ${escapeHtml(renderSummaryCounts(domainSummary.actualSummary))}</p>
           </article>`,
             )
             .join("")}
@@ -1152,6 +1159,14 @@ export function renderEvaluationDomainSummaryCsv(scorecards: EvaluationScorecard
       "total_expected_claims",
       "score",
       "score_label",
+      "expected_verified",
+      "expected_contradicted",
+      "expected_unsupported",
+      "expected_needs_review",
+      "actual_verified",
+      "actual_contradicted",
+      "actual_unsupported",
+      "actual_needs_review",
     ],
     ...aggregate.domains.map((domainSummary) => [
       generatedAt,
@@ -1162,6 +1177,14 @@ export function renderEvaluationDomainSummaryCsv(scorecards: EvaluationScorecard
       domainSummary.totalExpectedClaims.toString(),
       domainSummary.score === null ? "" : domainSummary.score.toFixed(3),
       domainSummary.scoreLabel,
+      domainSummary.expectedSummary.verified.toString(),
+      domainSummary.expectedSummary.contradicted.toString(),
+      domainSummary.expectedSummary.unsupported.toString(),
+      domainSummary.expectedSummary.needs_review.toString(),
+      domainSummary.actualSummary.verified.toString(),
+      domainSummary.actualSummary.contradicted.toString(),
+      domainSummary.actualSummary.unsupported.toString(),
+      domainSummary.actualSummary.needs_review.toString(),
     ]),
   ];
 
@@ -1186,6 +1209,14 @@ export function renderEvaluationAggregateSummaryCsv(scorecards: EvaluationScorec
       "domain_mismatch_counts",
       "domain_scores",
       "domain_score_labels",
+      "expected_verified",
+      "expected_contradicted",
+      "expected_unsupported",
+      "expected_needs_review",
+      "actual_verified",
+      "actual_contradicted",
+      "actual_unsupported",
+      "actual_needs_review",
     ],
     [
       generatedAt,
@@ -1208,6 +1239,14 @@ export function renderEvaluationAggregateSummaryCsv(scorecards: EvaluationScorec
         ),
       ),
       serializeDelimitedList(aggregate.domains.map((domainSummary) => domainSummary.scoreLabel)),
+      aggregate.expectedSummary.verified.toString(),
+      aggregate.expectedSummary.contradicted.toString(),
+      aggregate.expectedSummary.unsupported.toString(),
+      aggregate.expectedSummary.needs_review.toString(),
+      aggregate.actualSummary.verified.toString(),
+      aggregate.actualSummary.contradicted.toString(),
+      aggregate.actualSummary.unsupported.toString(),
+      aggregate.actualSummary.needs_review.toString(),
     ],
   ];
 
@@ -1719,6 +1758,8 @@ export function summarizeEvaluationScorecards(
     (total, scorecard) => total + scorecard.totalExpectedClaims,
     0,
   );
+  const expectedSummary = sumEvaluationSummaries(scorecards, "expectedSummary");
+  const actualSummary = sumEvaluationSummaries(scorecards, "actualSummary");
   const domains = Array.from(
     scorecards.reduce((groups, scorecard) => {
       if (!scorecard.domain) {
@@ -1742,6 +1783,8 @@ export function summarizeEvaluationScorecards(
         0,
       );
       const mismatchCount = domainScorecards.filter(hasEvaluationMismatch).length;
+      const expectedSummary = sumEvaluationSummaries(domainScorecards, "expectedSummary");
+      const actualSummary = sumEvaluationSummaries(domainScorecards, "actualSummary");
       const score =
         domainTotalExpectedClaims > 0
           ? domainMatchedClaims / domainTotalExpectedClaims
@@ -1756,6 +1799,8 @@ export function summarizeEvaluationScorecards(
         score,
         scoreLabel:
           score === null ? "n/a" : `${Math.round((domainMatchedClaims / domainTotalExpectedClaims) * 100)}%`,
+        expectedSummary,
+        actualSummary,
       };
     });
 
@@ -1766,8 +1811,29 @@ export function summarizeEvaluationScorecards(
     score: totalExpectedClaims > 0 ? matchedClaims / totalExpectedClaims : null,
     scoreLabel:
       totalExpectedClaims > 0 ? `${Math.round((matchedClaims / totalExpectedClaims) * 100)}%` : "n/a",
+    expectedSummary,
+    actualSummary,
     domains,
   };
+}
+
+function sumEvaluationSummaries(
+  scorecards: EvaluationScorecard[],
+  key: "expectedSummary" | "actualSummary",
+): Record<ClaimVerdict, number> {
+  return scorecards.reduce(
+    (summary, scorecard) => {
+      for (const verdict of ["verified", "contradicted", "unsupported", "needs_review"] as const) {
+        summary[verdict] += scorecard[key][verdict];
+      }
+      return summary;
+    },
+    { verified: 0, contradicted: 0, unsupported: 0, needs_review: 0 },
+  );
+}
+
+function renderSummaryCounts(summary: Record<ClaimVerdict, number>): string {
+  return `verified=${summary.verified}, contradicted=${summary.contradicted}, unsupported=${summary.unsupported}, needs_review=${summary.needs_review}`;
 }
 
 function summarizeGeneratedAtValues(scorecards: EvaluationScorecard[]): string {
