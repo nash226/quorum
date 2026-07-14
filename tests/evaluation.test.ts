@@ -478,7 +478,14 @@ test("renders mismatch details in evaluation scorecards", () => {
       answerLabel: "answer",
       answerPreview: "Preview",
       answer: "Answer text",
-      sources: [],
+      sources: [
+        {
+          id: "people-ops/hr-policy@2026-07-08",
+          sourcePath: "/tmp/sources/hr-policy.md",
+          title: "HR Policy",
+          trustLevel: "high" as const,
+        },
+      ],
       assessments: [],
       summary: {
         verified: 0,
@@ -519,6 +526,7 @@ test("renders mismatch details in evaluation scorecards", () => {
   assert.match(rendered, /Answer label: HR escalation packet/);
   assert.match(rendered, /Answer preview: Benefits begin on day one\./);
   assert.match(rendered, /Source directories: \/tmp\/source-bundle/);
+  assert.match(rendered, /Source IDs: people-ops\/hr-policy@2026-07-08/);
   assert.match(rendered, /Claim mismatches:/);
   assert.match(rendered, /expected verified, got contradicted/);
 });
@@ -539,7 +547,14 @@ test("renders evaluation text report totals and mismatch detection", () => {
         answerLabel: "answer-1",
         answerPreview: "Preview",
         answer: "Answer text",
-        sources: [],
+        sources: [
+          {
+            id: "support/refunds@2026-07-08",
+          sourcePath: "/tmp/sources/support.md",
+          title: "Support Policy",
+          trustLevel: "high" as const,
+          },
+        ],
         assessments: [],
         summary: {
           verified: 1,
@@ -1022,6 +1037,7 @@ test("renders evaluation markdown report with fixture summaries", () => {
   assert.match(rendered, /- Answer label: `Support reviewer packet`/);
   assert.match(rendered, /- Answer preview: Support answer preview/);
   assert.match(rendered, /- Source directories: `\/tmp\/source-bundle`/);
+  assert.match(rendered, /- Source IDs: `support\/refunds@2026-07-08`/);
   assert.match(rendered, /#### Claim Verdicts/);
   assert.match(rendered, /Claim 1: `verified` \(expected `verified`\)/);
 });
@@ -1043,7 +1059,14 @@ test("renders evaluation html report with fixture summaries", () => {
         answerLabel: "support",
         answerPreview: "Preview",
         answer: "Answer text",
-        sources: [],
+        sources: [
+          {
+            id: "support/refunds@2026-07-08",
+          sourcePath: "/tmp/sources/support.md",
+          title: "Support Policy",
+          trustLevel: "high" as const,
+          },
+        ],
         assessments: [],
         summary: {
           verified: 1,
@@ -1084,6 +1107,7 @@ test("renders evaluation html report with fixture summaries", () => {
   assert.match(rendered, /<dt>Answer label<\/dt><dd>Support reviewer packet<\/dd>/);
   assert.match(rendered, /<dt>Answer preview<\/dt><dd>Support answer preview<\/dd>/);
   assert.match(rendered, /<dt>Source directories<\/dt><dd>\/tmp\/source-bundle<\/dd>/);
+  assert.match(rendered, /<dt>Source IDs<\/dt><dd>support\/refunds@2026-07-08<\/dd>/);
   assert.match(rendered, /Fixture scorecard report/);
   assert.match(rendered, /<span>Matched Claim Verdicts<\/span>\s*<strong>1\/1<\/strong>/);
   assert.match(rendered, /<span>Overall Claim Verdict Score<\/span>\s*<strong>100%<\/strong>/);

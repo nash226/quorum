@@ -488,6 +488,9 @@ export function renderEvaluationScorecard(scorecard: EvaluationScorecard): strin
       ? [`Source directories: ${scorecard.sourceDirs.join(", ")}`]
       : []),
     `Sources: ${scorecard.sourcePaths.join(", ")}`,
+    ...(scorecard.report.sources.length > 0
+      ? [`Source IDs: ${scorecard.report.sources.map((source) => source.id).join(", ")}`]
+      : []),
     `Summary match: ${scorecard.summaryMatches ? "yes" : "no"}`,
     `Claim verdict score: ${scorecard.matchedClaims}/${scorecard.totalExpectedClaims || 0} (${Math.round(scorecard.score * 100)}%)`,
   ];
@@ -593,6 +596,9 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
         ? [`- Source directories: ${scorecard.sourceDirs.map((sourceDir) => `\`${sourceDir}\``).join(", ")}`]
         : []),
       `- Sources: ${scorecard.sourcePaths.map((sourcePath) => `\`${sourcePath}\``).join(", ")}`,
+      ...(scorecard.report.sources.length > 0
+        ? [`- Source IDs: ${scorecard.report.sources.map((source) => `\`${source.id}\``).join(", ")}`]
+        : []),
       `- Summary match: ${scorecard.summaryMatches ? "yes" : "no"}`,
       `- Claim verdict score: ${scorecard.matchedClaims}/${scorecard.totalExpectedClaims} (${Math.round(scorecard.score * 100)}%)`,
       "",
@@ -704,6 +710,11 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
               : ""
           }
           <div><dt>Sources</dt><dd>${scorecard.sourcePaths.map(escapeHtml).join("<br />")}</dd></div>
+          ${
+            scorecard.report.sources.length > 0
+              ? `<div><dt>Source IDs</dt><dd>${scorecard.report.sources.map((source) => escapeHtml(source.id)).join("<br />")}</dd></div>`
+              : ""
+          }
           <div><dt>Claim verdict score</dt><dd>${scorecard.matchedClaims}/${scorecard.totalExpectedClaims} (${Math.round(scorecard.score * 100)}%)</dd></div>
         </dl>
         <div class="summary-grid">
