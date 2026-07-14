@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6954211` on 2026-07-14, feat: cache OpenAPI contract with ETags
+- Latest shipped change: `7db448c` on 2026-07-14, fix: allow browser OpenAPI revalidation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -57,6 +57,7 @@
 - export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
 - serve the generated OpenAPI contract with an `ETag`, allowing integration clients to revalidate it with `If-None-Match`
+- allow browser clients to preflight `If-None-Match` when revalidating the OpenAPI contract with its `ETag`
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
@@ -77,6 +78,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#412](https://github.com/nash226/quorum/pull/412) | fix: allow browser OpenAPI revalidation | `7db448c` |
 | 2026-07-14 | [#411](https://github.com/nash226/quorum/pull/411) | feat: cache OpenAPI contract with ETags | `6954211` |
 | 2026-07-14 | Direct push | fix: document POST method errors | `cbdd36d` |
 | 2026-07-14 | Direct push | feat: export HTTP error response type | `4ef36a6` |
@@ -84,5 +86,4 @@
 | 2026-07-14 | Direct push | test: cover HTTP no-claim reviewer artifacts | `d99d5da` |
 | 2026-07-14 | Direct push | fix: reject duplicate reviewer claim rows | `9349650` |
 | 2026-07-14 | Direct push | fix: write report artifacts atomically | `f897dcf` |
-| 2026-07-14 | [#404](https://github.com/nash226/quorum/pull/404) | fix: reflect runtime limits in OpenAPI examples | `42f9b47` |
 
