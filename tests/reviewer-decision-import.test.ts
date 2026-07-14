@@ -31,6 +31,12 @@ waiting on plan language"
   assert.equal(report.answerGroups[0]?.answerHasClaims, true);
   assert.equal(report.answerGroups[0]?.reviewStatus, "pending");
   assert.equal(report.answerGroups[0]?.summary.reviewedClaims, 2);
+  assert.deepEqual(report.queueSummary, {
+    totalAnswers: 1,
+    pendingAnswers: 1,
+    reviewedAnswers: 0,
+    noClaimsAnswers: 0,
+  });
 
   assert.equal(report.claims[0]?.finalVerdict, "verified");
   assert.equal(report.claims[0]?.overridden, true);
@@ -67,6 +73,12 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
   assert.deepEqual(report.answerGroups[0]?.originalAnswerFailVerdicts, ["unsupported"]);
   assert.equal(report.answerGroups[0]?.summary.pendingClaims, 1);
   assert.equal(report.answerGroups[1]?.summary.needs_review, 1);
+  assert.deepEqual(report.queueSummary, {
+    totalAnswers: 2,
+    pendingAnswers: 1,
+    reviewedAnswers: 1,
+    noClaimsAnswers: 0,
+  });
   assert.equal(report.claims[1]?.answerPath, "examples/answers/support-answer.md");
   assert.deepEqual(report.claims[1]?.evidenceTrustLevels, ["medium"]);
   assert.deepEqual(report.claims[1]?.evidenceUpdatedAt, ["2026-06-01"]);
@@ -96,6 +108,12 @@ empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from th
   assert.equal(report.answerGroups[0]?.answerHasClaims, false);
   assert.equal(report.answerGroups[0]?.summary.totalClaims, 0);
   assert.equal(report.answerGroups[0]?.reviewStatus, "no_claims");
+  assert.deepEqual(report.queueSummary, {
+    totalAnswers: 1,
+    pendingAnswers: 0,
+    reviewedAnswers: 0,
+    noClaimsAnswers: 1,
+  });
   assert.match(
     renderReviewerDecisionImportReport(report),
     /No claims were extracted from this answer\./,
@@ -103,6 +121,10 @@ empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from th
   assert.match(
     renderReviewerDecisionImportReport(report),
     /Answer has claims: no/,
+  );
+  assert.match(
+    renderReviewerDecisionImportReport(report),
+    /Queue: 1 answers, 0 pending, 0 reviewed, 1 with no claims/,
   );
   assert.match(
     renderReviewerDecisionImportMarkdownReport(report),

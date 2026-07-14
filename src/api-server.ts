@@ -3714,9 +3714,20 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               type: "array",
               items: { $ref: "#/components/schemas/ReviewerDecisionGroup" },
             },
+            queueSummary: { $ref: "#/components/schemas/ReviewerQueueSummary" },
             summary: { $ref: "#/components/schemas/ReviewerDecisionImportSummary" },
           },
-          required: ["generatedAt", "claims", "answerGroups", "summary"],
+          required: ["generatedAt", "claims", "answerGroups", "queueSummary", "summary"],
+        },
+        ReviewerQueueSummary: {
+          type: "object",
+          properties: {
+            totalAnswers: { type: "integer", minimum: 0 },
+            pendingAnswers: { type: "integer", minimum: 0 },
+            reviewedAnswers: { type: "integer", minimum: 0 },
+            noClaimsAnswers: { type: "integer", minimum: 0 },
+          },
+          required: ["totalAnswers", "pendingAnswers", "reviewedAnswers", "noClaimsAnswers"],
         },
         ReviewerDecisionImportResult: {
           type: "object",
