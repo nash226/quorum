@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6f90c51` on 2026-07-13, fix: validate API request timeout
+- Latest shipped change: `23c3cf6` on 2026-07-13, docs: expose /readyz in serve help
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -56,6 +56,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | docs: expose /readyz in serve help | `23c3cf6` |
 | 2026-07-13 | Direct push | fix: validate API request timeout | `6f90c51` |
 | 2026-07-13 | Direct push | test: verify packaged OpenAPI entrypoints | `6f65caf` |
 | 2026-07-13 | Direct push | test: smoke test query-string API routes | `7350444` |
@@ -63,5 +64,4 @@
 | 2026-07-13 | Direct push | test: cover single binary API uploads | `9d71384` |
 | 2026-07-13 | [#362](https://github.com/nash226/quorum/pull/362) | test: cover batch binary API uploads | `6ad6061` |
 | 2026-07-13 | Direct push | fix: keep reviewer Markdown exports structurally safe | `bb85e32` |
-| 2026-07-13 | Direct push | test: cover uncached Kubernetes probe schemas | `e349cfa` |
 
