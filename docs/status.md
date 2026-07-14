@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `eea16eb` on 2026-07-14, fix: return method errors for known API routes
+- Latest shipped change: `6e29624` on 2026-07-14, fix: reject unknown route preflights
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -55,6 +55,7 @@
 - export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
 - derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift
 - return structured `405` errors with route-specific `Allow` headers when a known API route receives an unsupported method
+- reject CORS preflight requests for unknown API routes instead of advertising a route that does not exist
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
@@ -92,6 +93,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: reject unknown route preflights | `6e29624` |
 | 2026-07-14 | [#433](https://github.com/nash226/quorum/pull/433) | fix: return method errors for known API routes | `eea16eb` |
 | 2026-07-14 | Direct push | test: cover CLI CORS origin contract | `b639631` |
 | 2026-07-14 | [#431](https://github.com/nash226/quorum/pull/431) | test: cover route-scoped CORS preflights | `e042e10` |
@@ -99,5 +101,4 @@
 | 2026-07-14 | Direct push | feat: expose configured CORS origins | `1c2a1ef` |
 | 2026-07-14 | Direct push | feat: expose browser CORS capabilities | `e7fb655` |
 | 2026-07-14 | Direct push | fix: strip unicode numbered claim markers | `93e4eb9` |
-| 2026-07-14 | Direct push | docs: show HTTP evaluation workflow | `4cb38bf` |
 
