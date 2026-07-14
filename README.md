@@ -804,6 +804,9 @@ balancers and orchestrators that expect the conventional probe path. `HEAD /`,
 expose the same status code and headers without a JSON body, which makes
 lightweight readiness probes and schema checks easier to wire into orchestrators
 and load balancers.
+The end-to-end smoke gate also verifies that `/openapi.json` preserves its
+stable `ETag` across `GET` and `HEAD`, and returns `304 Not Modified` for a
+matching `If-None-Match` validator.
 Those responses also include `X-Quorum-Service`, `X-Quorum-Version`,
 `X-Quorum-OpenAPI-Path`, `X-Quorum-Max-Request-Bytes`, and
 `X-Quorum-Request-Timeout-Ms` headers so callers can confirm they reached
