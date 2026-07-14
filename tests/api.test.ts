@@ -3267,6 +3267,21 @@ Refund requests receive an initial response within one business day.
       type: "string",
       format: "date-time",
     });
+    const verifyExample = openApi.paths["/verify"]?.post?.responses?.["200"]?.content?.[
+      "application/json"
+    ]?.examples?.["verifiedAnswer"]?.value as
+      | {
+          report?: {
+            sources?: Array<{ updatedAt?: string }>;
+            assessments?: Array<{ evidence?: Array<{ documentUpdatedAt?: string }> }>;
+          };
+        }
+      | undefined;
+    assert.equal(verifyExample?.report?.sources?.[0]?.updatedAt, "2026-05-31T00:00:00.000Z");
+    assert.equal(
+      verifyExample?.report?.assessments?.[0]?.evidence?.[0]?.documentUpdatedAt,
+      "2026-05-31T00:00:00.000Z",
+    );
     assert.ok(openApi.components.schemas.SingleVerificationResult);
     assert.ok(openApi.components.schemas.BatchVerificationRunResult);
     assert.deepEqual(
