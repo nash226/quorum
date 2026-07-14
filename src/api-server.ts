@@ -3742,6 +3742,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             answerPath: { type: "string" },
             answerLabel: { type: "string" },
             answerPreview: { type: "string" },
+            answerHasClaims: { type: "boolean" },
             sourceDirs: { type: "array", items: { type: "string" } },
             sourcePaths: { type: "array", items: { type: "string" } },
             report: { $ref: "#/components/schemas/VerificationReport" },
