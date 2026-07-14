@@ -1162,6 +1162,10 @@ Evaluation scorecards and `--summary-csv-out` exports preserve those configured
 source directories, resolved source files, optional domains, optional answer
 labels, and reviewer-friendly answer previews so drift reviews can see both
 the maintained bundle and the reviewer context loaded for each answer.
+Inline evaluation sources may also set an `id` such as
+`people-ops/hr-policy@2026-07-08`; Quorum carries that durable identifier into
+the scorecard report and claim evidence so benchmark failures remain traceable
+even when the fixture uses in-memory source content.
 
 The CLI can run those same fixtures directly:
 
