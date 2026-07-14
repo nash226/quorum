@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `334841b` on 2026-07-14, fix: canonicalize CORS exposed headers
+- Latest shipped change: `9392a4a` on 2026-07-14, feat: export supported HTTP methods
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -51,6 +51,7 @@
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
 - expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
+- export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
@@ -81,6 +82,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#418](https://github.com/nash226/quorum/pull/418) | feat: export supported HTTP methods | `9392a4a` |
 | 2026-07-14 | Direct push | fix: canonicalize CORS exposed headers | `334841b` |
 | 2026-07-14 | [#416](https://github.com/nash226/quorum/pull/416) | test: smoke check machine-readable version output | `715913f` |
 | 2026-07-14 | Direct push | feat: add machine-readable version output | `307988d` |
@@ -88,5 +90,4 @@
 | 2026-07-14 | Direct push | fix: expose OpenAPI ETags to browsers | `2ed0c47` |
 | 2026-07-14 | [#412](https://github.com/nash226/quorum/pull/412) | fix: allow browser OpenAPI revalidation | `7db448c` |
 | 2026-07-14 | [#411](https://github.com/nash226/quorum/pull/411) | feat: cache OpenAPI contract with ETags | `6954211` |
-| 2026-07-14 | Direct push | fix: document POST method errors | `cbdd36d` |
 
