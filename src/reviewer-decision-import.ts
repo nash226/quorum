@@ -81,6 +81,14 @@ export interface ReviewerDecisionImportResult {
 
 export type ReviewerQueueStatus = "pending" | "reviewed" | "no_claims";
 
+export function parseReviewerQueueStatus(value: string): ReviewerQueueStatus {
+  if (value === "pending" || value === "reviewed" || value === "no_claims") {
+    return value;
+  }
+
+  throw new Error(`Invalid reviewer queue status: ${value}. Expected pending, reviewed, or no_claims.`);
+}
+
 export interface ReviewerDecisionGroup {
   answerLabel?: string;
   answerPath?: string;
@@ -192,6 +200,38 @@ export function importReviewerDecisionsResult(
   generatedAt = new Date().toISOString(),
 ): ReviewerDecisionImportResult {
   return buildReviewerDecisionImportResult(importReviewerDecisions(csvContent, generatedAt), failOn);
+}
+
+export function filterReviewerDecisionImportReport(
+  report: ReviewerDecisionImportReport,
+  status: ReviewerQueueStatus,
+): ReviewerDecisionImportReport {
+  const answerGroups = report.answerGroups.filter((group) => group.reviewStatus === status);
+  const claims = answerGroups.flatMap((group) => group.claims);
+  const summary = claims.reduce<ReviewerDecisionImportReport["summary"]>(
+    (current, claim) => {
+      current.totalClaims += 1;
+      current[claim.finalVerdict] += 1;
+      if (claim.reviewerVerdict) {
+        current.reviewedClaims += 1;
+      } else {
+        current.pendingClaims += 1;
+      }
+      if (claim.overridden) {
+        current.overriddenClaims += 1;
+      }
+      return current;
+    },
+    createEmptyImportSummary(),
+  );
+
+  return {
+    ...report,
+    claims,
+    answerGroups,
+    queueSummary: summarizeReviewerQueue(answerGroups),
+    summary,
+  };
 }
 
 export function renderReviewerDecisionImportReport(
