@@ -342,13 +342,13 @@ try {
   const evaluationAggregateSummaryCsv = readFileSync(evaluationAggregateSummaryCsvPath, "utf8");
   assert.match(
     evaluationDomainSummaryCsv,
-    /^generated_at,domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label\n/m,
+    /^generated_at,domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n/m,
   );
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,3,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,6,0,\d+,\d+,1(?:\.0+)?\,100%$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,3,0,\d+,\d+,1(?:\.0+)?\,100%,4,2,2,1,4,2,2,1$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,6,0,\d+,\d+,1(?:\.0+)?\,100%,6,4,2,1,6,4,2,1$/m);
   assert.match(
     evaluationAggregateSummaryCsv,
-    /^generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels\n[^,\n]+,9,0,\d+,\d+,1(?:\.0+)?,100%,hr \| support,3 \| 6,0 \| 0,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%\n?$/,
+    /^generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,9,0,\d+,\d+,1(?:\.0+)?,100%,hr \| support,3 \| 6,0 \| 0,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,10,6,4,2,10,6,4,2\n?$/,
   );
 
   const apiSources = await api.loadSourcesFromContent({
@@ -892,11 +892,11 @@ HR reviewer packet,answers/hr.md,Employees receive 12 weeks of paid parental lea
     );
     assert.match(
       evaluateResult.artifacts.domain_summary_csv,
-      /^generated_at,domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label\n[^,\n]+,hr,1,0,3,3,1(?:\.0+)?,100%\n?$/,
+      /^generated_at,domain,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,hr,1,0,3,3,1(?:\.0+)?,100%,1,1,1,0,1,1,1,0\n?$/,
     );
     assert.match(
       evaluateResult.artifacts.aggregate_summary_csv,
-      /^generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels\n[^,\n]+,1,0,3,3,1(?:\.0+)?,100%,hr,1,0,1(?:\.0+)?,100%\n?$/,
+      /^generated_at,fixture_count,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,1,0,3,3,1(?:\.0+)?,100%,hr,1,0,1(?:\.0+)?,100%,1,1,1,0,1,1,1,0\n?$/,
     );
 
     const verifyConflictResponse = await fetch(`${server.url}/verify`, {
