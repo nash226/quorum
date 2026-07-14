@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ad4ae86` on 2026-07-14, fix: scope CORS preflight methods by route
+- Latest shipped change: `e042e10` on 2026-07-14, test: cover route-scoped CORS preflights
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -91,6 +91,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#431](https://github.com/nash226/quorum/pull/431) | test: cover route-scoped CORS preflights | `e042e10` |
 | 2026-07-14 | [#430](https://github.com/nash226/quorum/pull/430) | fix: scope CORS preflight methods by route | `ad4ae86` |
 | 2026-07-14 | Direct push | feat: expose configured CORS origins | `1c2a1ef` |
 | 2026-07-14 | Direct push | feat: expose browser CORS capabilities | `e7fb655` |
@@ -98,5 +99,4 @@
 | 2026-07-14 | Direct push | docs: show HTTP evaluation workflow | `4cb38bf` |
 | 2026-07-14 | [#425](https://github.com/nash226/quorum/pull/425) | fix: document OpenAPI revalidation headers | `5779021` |
 | 2026-07-14 | [#424](https://github.com/nash226/quorum/pull/424) | feat: cache browser CORS preflight results | `703f987` |
-| 2026-07-14 | Direct push | feat: make API discovery revalidatable | `9614349` |
 
