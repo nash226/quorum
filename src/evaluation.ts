@@ -1059,6 +1059,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       "answer_preview",
       "source_dirs",
       "source_paths",
+      "source_ids",
       "summary_match",
       "matched_claims",
       "total_expected_claims",
@@ -1073,6 +1074,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       "first_mismatch_evidence_trust_level",
       "first_mismatch_evidence_updated_at",
       "first_mismatch_evidence_source_path",
+      "first_mismatch_evidence_source_id",
       "first_mismatch_evidence_score",
       "first_mismatch_evidence_quote",
       "expected_verified",
@@ -1094,6 +1096,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       scorecard.answerPreview,
       serializeDelimitedList(scorecard.sourceDirs),
       serializeDelimitedList(scorecard.sourcePaths),
+      serializeDelimitedList(scorecard.report.sources.map((source) => source.id)),
       scorecard.summaryMatches ? "yes" : "no",
       scorecard.matchedClaims.toString(),
       scorecard.totalExpectedClaims.toString(),
@@ -1108,6 +1111,7 @@ export function renderEvaluationSummaryCsv(scorecards: EvaluationScorecard[]): s
       renderFirstMismatchEvidenceTrustLevel(scorecard),
       renderFirstMismatchEvidenceUpdatedAt(scorecard),
       renderFirstMismatchEvidenceSourcePath(scorecard),
+      renderFirstMismatchEvidenceSourceId(scorecard),
       renderFirstMismatchEvidenceScore(scorecard),
       renderFirstMismatchEvidenceQuote(scorecard),
       scorecard.expectedSummary.verified.toString(),
@@ -1485,6 +1489,10 @@ function renderFirstMismatchEvidenceUpdatedAt(scorecard: EvaluationScorecard): s
 
 function renderFirstMismatchEvidenceSourcePath(scorecard: EvaluationScorecard): string {
   return firstMismatchEvidence(scorecard)?.documentPath ?? "";
+}
+
+function renderFirstMismatchEvidenceSourceId(scorecard: EvaluationScorecard): string {
+  return firstMismatchEvidence(scorecard)?.documentId ?? "";
 }
 
 function renderFirstMismatchEvidenceScore(scorecard: EvaluationScorecard): string {
