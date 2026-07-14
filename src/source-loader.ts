@@ -69,7 +69,7 @@ export async function sourceDocumentFromFile(
     id: `source_${index + 1}`,
     sourcePath,
     title: options.title ?? parsed.metadata.title ?? sourceTitleFromPath(sourcePath),
-    updatedAt: options.updatedAt ?? parsed.metadata.updatedAt,
+    updatedAt: validatedUpdatedAt(sourcePath, options.updatedAt ?? parsed.metadata.updatedAt),
     trustLevel: options.trustLevel ?? parsed.metadata.trustLevel ?? options.defaultTrustLevel ?? "medium",
     content: parsed.body,
   };
@@ -676,7 +676,7 @@ async function pdfSourceDocumentFromFile(
       id: `source_${index + 1}`,
       sourcePath,
       title: options.title ?? title ?? sourceTitleFromPath(sourcePath),
-      updatedAt: options.updatedAt ?? updatedAt,
+      updatedAt: validatedUpdatedAt(sourcePath, options.updatedAt ?? updatedAt),
       trustLevel: options.trustLevel ?? options.defaultTrustLevel ?? "medium",
       content: normalizePdfText(result.text),
     };
@@ -701,10 +701,22 @@ async function docxSourceDocumentFromFile(
     id: `source_${index + 1}`,
     sourcePath,
     title: options.title ?? sourceTitleFromPath(sourcePath),
-    updatedAt: options.updatedAt,
+    updatedAt: validatedUpdatedAt(sourcePath, options.updatedAt),
     trustLevel: options.trustLevel ?? options.defaultTrustLevel ?? "medium",
     content: normalizeDocxText(result.value),
   };
+}
+
+function validatedUpdatedAt(sourcePath: string, updatedAt?: string): string | undefined {
+  if (updatedAt === undefined) {
+    return undefined;
+  }
+
+  if (Number.isNaN(Date.parse(updatedAt))) {
+    throw new Error(`Invalid updatedAt timestamp for source: ${sourcePath}`);
+  }
+
+  return updatedAt;
 }
 
 function normalizeDocxText(content: string): string {
