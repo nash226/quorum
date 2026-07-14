@@ -2301,7 +2301,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(indexResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(
       indexResponse.headers.get("access-control-expose-headers"),
-      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id",
+      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control",
     );
     assert.equal(indexResponse.headers.get("x-quorum-request-id"), "workflow-trace-2026-07-10");
     assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
@@ -2609,6 +2609,7 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       `The JSON request body exceeded the ${API_MAX_REQUEST_BYTES}-byte limit.`,
     );
     assert.deepEqual(Object.keys(verifyResponses?.["200"]?.headers ?? {}).sort(), [
+      "Cache-Control",
       "X-Quorum-Max-Request-Bytes",
       "X-Quorum-OpenAPI-Path",
       "X-Quorum-Request-Id",
@@ -2620,7 +2621,12 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
       verifyResponses?.["200"]?.headers?.["X-Quorum-Request-Id"]?.description,
       "Request correlation identifier echoed by the server.",
     );
+    assert.equal(
+      verifyResponses?.["200"]?.headers?.["Cache-Control"]?.description,
+      "Evidence and workflow responses are not cacheable.",
+    );
     assert.deepEqual(Object.keys(verifyResponses?.["400"]?.headers ?? {}).sort(), [
+      "Cache-Control",
       "X-Quorum-Max-Request-Bytes",
       "X-Quorum-OpenAPI-Path",
       "X-Quorum-Request-Id",
@@ -3349,7 +3355,7 @@ test("programmatic API answers CORS preflight requests", async () => {
     assert.equal(response.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS);
     assert.equal(
       response.headers.get("access-control-expose-headers"),
-      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id",
+      "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control",
     );
     assert.equal(response.headers.get("x-quorum-service"), "quorum");
     assert.equal(response.headers.get("x-quorum-version"), "0.1.0");

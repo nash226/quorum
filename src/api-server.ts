@@ -236,7 +236,11 @@ export const API_DISCOVERY_HEADERS = {
 } as const;
 export const API_REQUEST_ID_HEADER = "X-Quorum-Request-Id";
 export const API_CORS_ALLOWED_HEADERS = ["Content-Type", API_REQUEST_ID_HEADER].join(", ");
-const EXPOSED_HEADERS = [...Object.values(API_DISCOVERY_HEADERS), API_REQUEST_ID_HEADER].join(", ");
+const EXPOSED_HEADERS = [
+  ...Object.values(API_DISCOVERY_HEADERS),
+  API_REQUEST_ID_HEADER,
+  "Cache-Control",
+].join(", ");
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
@@ -1871,6 +1875,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
     [API_REQUEST_ID_HEADER]: {
       schema: { type: "string", minLength: 1, maxLength: 128 },
       description: "Request correlation identifier echoed by the server.",
+    },
+    "Cache-Control": {
+      schema: { type: "string", const: "no-store" },
+      description: "Evidence and workflow responses are not cacheable.",
     },
   };
   const errorResponse = (
