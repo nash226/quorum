@@ -3440,6 +3440,15 @@ test("programmatic API advertises the configured request timeout", async () => {
   }
 });
 
+test("programmatic API rejects invalid request timeout configuration", () => {
+  for (const requestTimeoutMs of [0, -1, Number.NaN, 1.5, Number.POSITIVE_INFINITY]) {
+    assert.throws(
+      () => createApiServer({ requestTimeoutMs }),
+      /requestTimeoutMs must be a positive safe integer in milliseconds\./,
+    );
+  }
+});
+
 test("programmatic API serves batch verification over HTTP", async () => {
   const generatedAt = "2026-07-07T19:20:00.000Z";
   const server = createApiServer();
