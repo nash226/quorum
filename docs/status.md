@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1bf0c9c` on 2026-07-14, feat: add reviewer queue summary
+- Latest shipped change: `6fee78b` on 2026-07-14, feat: show reviewer queue totals in html reports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -55,6 +55,7 @@
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
 - include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
 - include a top-level `queueSummary` in reviewer-import JSON reports so queue consumers can route pending, reviewed, and claim-less answers without scanning every group
+- show the same reviewer queue totals in polished HTML import reports so human handoffs expose pending, reviewed, and claim-less answers at a glance
 - show the imported `answer_has_claims` routing signal in text, Markdown, and HTML reviewer handoff reports
 - reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
@@ -106,6 +107,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: show reviewer queue totals in html reports | `6fee78b` |
 | 2026-07-14 | [#452](https://github.com/nash226/quorum/pull/452) | feat: add reviewer queue summary | `1bf0c9c` |
 | 2026-07-14 | [#451](https://github.com/nash226/quorum/pull/451) | Expose queue-ready reviewer import status with tests and API documentation. | `0acba18` |
 | 2026-07-14 | Direct push | docs: add API deployment guidance | `81535f4` |
@@ -113,5 +115,4 @@
 | 2026-07-14 | Direct push | feat: expose batch claim routing totals | `9e5dc1f` |
 | 2026-07-14 | Direct push | feat: show imported claim routing signal | `fe40b56` |
 | 2026-07-14 | Direct push | fix: preserve reviewer claim routing | `8d1bed1` |
-| 2026-07-14 | Direct push | fix: preserve colon-terminated business claims | `12c8153` |
 
