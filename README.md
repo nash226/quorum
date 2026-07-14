@@ -52,6 +52,7 @@ The current CLI can:
 - label each claim as `verified`, `contradicted`, `unsupported`, or
   `needs_review`
 - print a human-readable report
+- preserve the reviewer-facing `answer_label` in text, Markdown, and HTML reports as well as machine-readable exports
 - include the report generation timestamp in text output for audit-friendly handoff
 - accept `--generated-at <timestamp>` on report-producing CLI workflows when CI
   retries or snapshot tests need a stable audit timestamp

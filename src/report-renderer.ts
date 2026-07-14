@@ -22,11 +22,13 @@ export function renderTextReport(
   failOn: ClaimVerdict[] = [],
 ): string {
   const failVerdicts = matchingFailVerdicts(report, failOn);
+  const answerLabel = report.answerLabel ?? (report.answerPath ? renderAnswerLabel(report.answerPath) : "");
   const lines = [
     "Quorum Verification Report",
     "",
     `Generated: ${report.generatedAt}`,
     "",
+    ...(answerLabel ? [`Answer label: ${answerLabel}`] : []),
     ...(report.answerPath ? [`Answer: ${report.answerPath}`] : []),
     "Sources:",
     ...report.sources.map((source) => `- ${renderTextSourceLabel(source)}`),
@@ -121,6 +123,9 @@ export function renderMarkdownReport(
     "## Summary",
     "",
     ...(report.answerPath ? [`- Answer path: \`${report.answerPath}\``] : []),
+    ...(report.answerLabel || report.answerPath
+      ? [`- Answer label: ${report.answerLabel ?? renderAnswerLabel(report.answerPath ?? "")}`]
+      : []),
     `- Sources reviewed: ${report.sources.length}`,
     `- Verified: ${report.summary.verified}`,
     `- Contradicted: ${report.summary.contradicted}`,
@@ -655,6 +660,13 @@ function renderReviewConsoleHtmlReport(
                 <div class="field">
                   <span>Answer path</span>
                   <strong>${escapeHtml(report.answerPath)}</strong>
+                </div>`
+    : "";
+  const answerLabelField = report.answerLabel || report.answerPath
+    ? `
+                <div class="field">
+                  <span>Answer label</span>
+                  <strong>${escapeHtml(report.answerLabel ?? renderAnswerLabel(report.answerPath ?? ""))}</strong>
                 </div>`
     : "";
   const failPolicyField = `
@@ -1282,7 +1294,7 @@ function renderReviewConsoleHtmlReport(
               <section class="drawer-body answer-panel">
                 <h2>Submitted answer</h2>
                 <p class="subtitle">Original model output under review.</p>
-                <div class="field-grid">${answerPathField}${failPolicyField}</div>
+                <div class="field-grid">${answerLabelField}${answerPathField}${failPolicyField}</div>
                 <div class="field answer-text">${escapeHtml(report.answer)}</div>
               </section>
               <section class="drawer-body">
