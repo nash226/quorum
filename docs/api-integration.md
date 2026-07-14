@@ -30,6 +30,9 @@ service contract without parsing the response body:
 These headers are exposed to browser clients through CORS. The default limits
 are 1 MiB per JSON request and 30 seconds per request; configure them with
 `--max-request-bytes` and `--request-timeout-ms` when starting the server.
+Browser preflight responses advertise `Access-Control-Max-Age: 600`, so browser
+clients can reuse the stable route and header contract for ten minutes before
+asking Quorum to preflight it again.
 The same limits are available as `capabilities.maxRequestBytes` and
 `capabilities.requestTimeoutMs` in `GET /capabilities` and `GET /` responses.
 If a browser client uses the wrong method, it can read the exposed `Allow`
