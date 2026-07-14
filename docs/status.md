@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2ed0c47` on 2026-07-14, fix: expose OpenAPI ETags to browsers
+- Latest shipped change: `ab00936` on 2026-07-14, fix: expose allowed methods to browsers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -79,6 +79,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#414](https://github.com/nash226/quorum/pull/414) | fix: expose allowed methods to browsers | `ab00936` |
 | 2026-07-14 | Direct push | fix: expose OpenAPI ETags to browsers | `2ed0c47` |
 | 2026-07-14 | [#412](https://github.com/nash226/quorum/pull/412) | fix: allow browser OpenAPI revalidation | `7db448c` |
 | 2026-07-14 | [#411](https://github.com/nash226/quorum/pull/411) | feat: cache OpenAPI contract with ETags | `6954211` |
@@ -86,5 +87,4 @@
 | 2026-07-14 | Direct push | feat: export HTTP error response type | `4ef36a6` |
 | 2026-07-14 | [#408](https://github.com/nash226/quorum/pull/408) | fix: validate evaluation verdict totals | `1591db8` |
 | 2026-07-14 | Direct push | test: cover HTTP no-claim reviewer artifacts | `d99d5da` |
-| 2026-07-14 | Direct push | fix: reject duplicate reviewer claim rows | `9349650` |
 
