@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5cb342b` on 2026-07-14, fix: advertise supported JSON media types
+- Latest shipped change: `1978db9` on 2026-07-14, test: smoke-test OpenAPI cache revalidation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -96,6 +96,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#441](https://github.com/nash226/quorum/pull/441) | test: smoke-test OpenAPI cache revalidation | `1978db9` |
 | 2026-07-14 | [#440](https://github.com/nash226/quorum/pull/440) | fix: advertise supported JSON media types | `5cb342b` |
 | 2026-07-14 | Direct push | test: verify vendor JSON API requests | `ce3e8aa` |
 | 2026-07-14 | Direct push | feat: expose CLI claim preview routing | `ba1e7c2` |
@@ -103,5 +104,4 @@
 | 2026-07-14 | Direct push | feat: expose claim routing in preview responses | `2681cb8` |
 | 2026-07-14 | Direct push | feat: expose batch answer claim routing | `8f52bb6` |
 | 2026-07-14 | Direct push | fix: reject unknown route preflights | `6e29624` |
-| 2026-07-14 | [#433](https://github.com/nash226/quorum/pull/433) | fix: return method errors for known API routes | `eea16eb` |
 
