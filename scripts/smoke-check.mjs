@@ -463,6 +463,9 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(capabilitiesResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(capabilitiesResponse.headers.get("x-quorum-max-request-bytes"), "1500");
+    assert.equal(capabilitiesResponse.headers.get("x-quorum-request-timeout-ms"), "1500");
+    assert.equal(capabilitiesResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control");
     const capabilitiesPayload = await capabilitiesResponse.json();
     assert.equal(capabilitiesPayload.service, "quorum");
     assert.equal(capabilitiesPayload.version, "0.1.0");
