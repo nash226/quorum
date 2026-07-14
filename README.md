@@ -76,6 +76,7 @@ The current CLI can:
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
 - preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
 - preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
+- include an explicit `answerHasClaims` signal in evaluation scorecards and CSVs so empty benchmark answers can be routed without recounting claims
 - include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
 - import filled reviewer decision CSVs into a machine-readable summary
 - reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
