@@ -424,10 +424,24 @@ test("HTTP API marks mutable JSON responses as non-cacheable and contracts as re
     for (const [index, response] of responses.entries()) {
       assert.equal(
         response.headers.get("cache-control"),
-        index === 1 || index === 2 || index === 3 ? "public, max-age=0, must-revalidate" : "no-store",
+        index === 0 || index === 1 || index === 2 || index === 3 ? "public, max-age=0, must-revalidate" : "no-store",
       );
       await response.arrayBuffer();
     }
+
+    const discoveryResponse = responses[0];
+    const discoveryEtag = discoveryResponse.headers.get("etag");
+    assert.match(discoveryEtag ?? "", /^\"[a-f0-9]{64}\"$/);
+    const headDiscoveryResponse = await fetch(api.url, { method: "HEAD" });
+    assert.equal(headDiscoveryResponse.status, 200);
+    assert.equal(headDiscoveryResponse.headers.get("etag"), discoveryEtag);
+    assert.equal(await headDiscoveryResponse.text(), "");
+    const notModifiedDiscoveryResponse = await fetch(api.url, {
+      headers: { "if-none-match": discoveryEtag ?? "" },
+    });
+    assert.equal(notModifiedDiscoveryResponse.status, 304);
+    assert.equal(notModifiedDiscoveryResponse.headers.get("etag"), discoveryEtag);
+    assert.equal(await notModifiedDiscoveryResponse.text(), "");
   } finally {
     await api.close();
   }
