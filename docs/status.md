@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cd741be` on 2026-07-14, feat: expose evaluation claim routing
+- Latest shipped change: `8d1e1db` on 2026-07-14, feat: expose evaluation claim rollups
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 - preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
 - preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
 - include an explicit `answerHasClaims` signal in evaluation scorecards and CSVs so empty benchmark answers can be routed without recounting claims
+- include `answersWithClaims` and `answersWithoutClaims` in evaluation aggregate and domain rollups so queue integrations can route empty benchmark answers without inspecting every scorecard
 - include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
 - import filled reviewer decision CSVs into a machine-readable summary
 - reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
@@ -97,6 +98,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: expose evaluation claim rollups | `8d1e1db` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim routing | `cd741be` |
 | 2026-07-14 | [#441](https://github.com/nash226/quorum/pull/441) | test: smoke-test OpenAPI cache revalidation | `1978db9` |
 | 2026-07-14 | [#440](https://github.com/nash226/quorum/pull/440) | fix: advertise supported JSON media types | `5cb342b` |
@@ -104,5 +106,4 @@
 | 2026-07-14 | Direct push | feat: expose CLI claim preview routing | `ba1e7c2` |
 | 2026-07-14 | [#437](https://github.com/nash226/quorum/pull/437) | feat: expose claim preview routing result | `6d6422e` |
 | 2026-07-14 | Direct push | feat: expose claim routing in preview responses | `2681cb8` |
-| 2026-07-14 | Direct push | feat: expose batch answer claim routing | `8f52bb6` |
 
