@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `307988d` on 2026-07-14, feat: add machine-readable version output
+- Latest shipped change: `715913f` on 2026-07-14, test: smoke check machine-readable version output
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -62,6 +62,7 @@
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 - emit the CLI and API contract version as stable JSON with `quorum version --json`
+- verify the built CLI's machine-readable version output in the end-to-end smoke gate
 
 ## Roadmap Snapshot
 
@@ -80,6 +81,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#416](https://github.com/nash226/quorum/pull/416) | test: smoke check machine-readable version output | `715913f` |
 | 2026-07-14 | Direct push | feat: add machine-readable version output | `307988d` |
 | 2026-07-14 | [#414](https://github.com/nash226/quorum/pull/414) | fix: expose allowed methods to browsers | `ab00936` |
 | 2026-07-14 | Direct push | fix: expose OpenAPI ETags to browsers | `2ed0c47` |
@@ -87,5 +89,4 @@
 | 2026-07-14 | [#411](https://github.com/nash226/quorum/pull/411) | feat: cache OpenAPI contract with ETags | `6954211` |
 | 2026-07-14 | Direct push | fix: document POST method errors | `cbdd36d` |
 | 2026-07-14 | Direct push | feat: export HTTP error response type | `4ef36a6` |
-| 2026-07-14 | [#408](https://github.com/nash226/quorum/pull/408) | fix: validate evaluation verdict totals | `1591db8` |
 
