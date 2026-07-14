@@ -1495,7 +1495,7 @@ function parseVerifyRequest(value: unknown): {
     answerLabel: optionalString(record.answerLabel, "answerLabel"),
     sources: parseSources(record.sources),
     defaultTrustLevel: parseOptionalTrustLevel(record.defaultTrustLevel),
-    generatedAt: optionalString(record.generatedAt, "generatedAt"),
+    generatedAt: parseOptionalGeneratedAt(record.generatedAt),
     failOn: parseOptionalFailOn(record.failOn),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, VERIFY_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
@@ -1550,7 +1550,7 @@ function parseVerifyBatchRequest(value: unknown): {
     answers: answersValue.map((answer, index) => parseAnswerInput(answer, index)),
     sources: parseSources(record.sources),
     defaultTrustLevel: parseOptionalTrustLevel(record.defaultTrustLevel),
-    generatedAt: optionalString(record.generatedAt, "generatedAt"),
+    generatedAt: parseOptionalGeneratedAt(record.generatedAt),
     failOn: parseOptionalFailOn(record.failOn),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, VERIFY_BATCH_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
@@ -1568,7 +1568,7 @@ function parseImportReviewRequest(value: unknown): {
 
   return {
     reviewCsvContent: requireString(record.reviewCsvContent, "reviewCsvContent"),
-    generatedAt: optionalString(record.generatedAt, "generatedAt"),
+    generatedAt: parseOptionalGeneratedAt(record.generatedAt),
     failOn: parseOptionalFailOn(record.failOn),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, IMPORT_REVIEW_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
@@ -1593,7 +1593,7 @@ function parseEvaluateRequest(value: unknown): {
   return {
     fixtures: fixturesValue.map((fixture, index) => parseFixtureInput(fixture, index)),
     domains: parseOptionalStringArray(record.domains, "domains"),
-    generatedAt: optionalString(record.generatedAt, "generatedAt"),
+    generatedAt: parseOptionalGeneratedAt(record.generatedAt),
     minScore: parseOptionalScore(record.minScore),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, EVALUATE_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
@@ -1610,6 +1610,20 @@ function parseOptionalScore(value: unknown): number | undefined {
   }
 
   return value;
+}
+
+function parseOptionalGeneratedAt(value: unknown): string | undefined {
+  const generatedAt = optionalString(value, "generatedAt");
+
+  if (generatedAt === undefined) {
+    return undefined;
+  }
+
+  if (Number.isNaN(Date.parse(generatedAt))) {
+    throw requestError("generatedAt must be a valid timestamp.");
+  }
+
+  return generatedAt;
 }
 
 function parseAnswerInput(value: unknown, index: number): InMemoryContentAnswerInput {
@@ -2431,7 +2445,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                       items: { $ref: "#/components/schemas/ApiSourceInput" },
                     },
                     defaultTrustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
-                    generatedAt: { type: "string" },
+                    generatedAt: { type: "string", format: "date-time" },
                     failOn: {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
@@ -2551,7 +2565,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                       items: { $ref: "#/components/schemas/ApiSourceInput" },
                     },
                     defaultTrustLevel: { $ref: "#/components/schemas/SourceTrustLevel" },
-                    generatedAt: { type: "string" },
+                    generatedAt: { type: "string", format: "date-time" },
                     failOn: {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
@@ -2641,7 +2655,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   type: "object",
                   properties: {
                     reviewCsvContent: { type: "string" },
-                    generatedAt: { type: "string" },
+                    generatedAt: { type: "string", format: "date-time" },
                     failOn: {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
@@ -2730,7 +2744,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                 schema: {
                   type: "object",
                   properties: {
-                    generatedAt: { type: "string" },
+                    generatedAt: { type: "string", format: "date-time" },
                     domains: {
                       type: "array",
                       minItems: 1,
