@@ -45,7 +45,9 @@ curl -sS http://127.0.0.1:3000/version
 ```
 
 `GET /` returns the endpoint inventory plus the same capability metadata as
-`/capabilities`. `GET /version` is a smaller compatibility check for clients
+`/capabilities`. It returns a stable `ETag` and supports `If-None-Match`, so a
+bootstrap client can revalidate the discovery contract without downloading the
+JSON body. `GET /version` is a smaller compatibility check for clients
 that only need to confirm the service and HTTP contract version. It returns a
 stable `ETag` and supports `If-None-Match`, so clients can revalidate the
 version without downloading the JSON body. `GET /capabilities` also returns a

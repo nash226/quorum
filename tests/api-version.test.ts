@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   API_VERSION,
+  API_ROOT_PATH,
   VERSION_PATH,
   createOpenApiDocument,
   startApiServer,
@@ -63,4 +64,18 @@ test("OpenAPI documents revalidation for the capabilities endpoint", () => {
   assert.ok(document.paths["/capabilities"]?.get?.responses?.["304"]?.headers?.ETag);
   assert.ok(document.paths["/capabilities"]?.head?.responses?.["200"]?.headers?.ETag);
   assert.ok(document.paths["/capabilities"]?.head?.responses?.["304"]?.headers?.ETag);
+});
+
+test("OpenAPI documents revalidation for the discovery endpoint", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, {
+      get?: { responses?: Record<string, { headers?: Record<string, unknown> }> };
+      head?: { responses?: Record<string, { headers?: Record<string, unknown> }> };
+    }>;
+  };
+
+  assert.ok(document.paths[API_ROOT_PATH]?.get?.responses?.["200"]?.headers?.ETag);
+  assert.ok(document.paths[API_ROOT_PATH]?.get?.responses?.["304"]?.headers?.ETag);
+  assert.ok(document.paths[API_ROOT_PATH]?.head?.responses?.["200"]?.headers?.ETag);
+  assert.ok(document.paths[API_ROOT_PATH]?.head?.responses?.["304"]?.headers?.ETag);
 });
