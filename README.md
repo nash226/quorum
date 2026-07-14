@@ -317,6 +317,9 @@ The HTTP `POST /evaluate` workflow accepts the equivalent `minScore` value
 between `0` and `1`, and returns `scoreThresholdPassed` with the batch result.
 Evaluation result JSON also includes ordered `failureReasons` values (`mismatch`
 and/or `min_score`) so workflow callers can explain why a benchmark gate failed.
+The [API integration guide](docs/api-integration.md) includes a copy-paste
+`POST /evaluate` example that sends fixture content, filters by domain, enforces
+`minScore`, and requests benchmark CSV artifacts for workflow handoff.
 For CI and workflow clients, `evaluate --result-json` emits that same result
 shape with `shouldFail`, mismatch counts, aggregate score, and threshold
 metadata; `--min-score` independently exits with status `2` when the threshold
