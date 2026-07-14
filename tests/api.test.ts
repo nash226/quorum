@@ -155,6 +155,7 @@ test("API discovery exposes transport limits and supported methods", () => {
   assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
   assert.equal(API_CAPABILITIES.requestTimeoutMs, SERVER_API_REQUEST_TIMEOUT_MS);
   assert.deepEqual(API_CAPABILITIES.cors, {
+    allowedOrigins: ["*"],
     allowedHeaders: ["Content-Type", "X-Quorum-Request-Id", "If-None-Match"],
     exposedHeaders: API_CORS_EXPOSED_HEADERS.split(", "),
     maxAgeSeconds: API_CORS_MAX_AGE_SECONDS,
@@ -389,6 +390,21 @@ test("HTTP API restricts CORS responses to configured origins", async () => {
   });
 
   try {
+    const capabilitiesResponse = await fetch(`${api.url}/capabilities`);
+    const capabilitiesPayload = await capabilitiesResponse.json() as ApiCapabilitiesResponse;
+    assert.deepEqual(capabilitiesPayload.capabilities.cors.allowedOrigins, ["https://console.example.com"]);
+
+    const openApiResponse = await fetch(`${api.url}/openapi.json`);
+    const openApi = await openApiResponse.json() as {
+      paths: { "/": { get: { responses: { "200": { content: { "application/json": { examples: {
+        discoveryIndex: { value: { capabilities: ApiCapabilitiesResponse["capabilities"] } };
+      } } } } } } } };
+    };
+    assert.deepEqual(
+      openApi.paths["/"].get.responses["200"].content["application/json"].examples.discoveryIndex.value.capabilities.cors.allowedOrigins,
+      ["https://console.example.com"],
+    );
+
     const allowedResponse = await fetch(`${api.url}/health`, {
       headers: { origin: "https://console.example.com" },
     });

@@ -441,6 +441,7 @@ Employees receive 12 weeks of paid parental leave.
       corsMaxAge: "Access-Control-Max-Age",
     });
     assert.deepEqual(indexPayload.capabilities.cors, {
+      allowedOrigins: ["*"],
       allowedHeaders: ["Content-Type", "X-Quorum-Request-Id", "If-None-Match"],
       exposedHeaders: ["X-Quorum-Service", "X-Quorum-Version", "X-Quorum-OpenAPI-Path", "X-Quorum-Max-Request-Bytes", "X-Quorum-Request-Timeout-Ms", "X-Quorum-Request-Id", "Cache-Control", "ETag", "Allow"],
       maxAgeSeconds: 600,

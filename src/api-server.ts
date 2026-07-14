@@ -216,6 +216,7 @@ export interface OpenApiDocumentOptions {
   serverUrl?: string;
   maxRequestBytes?: number;
   requestTimeoutMs?: number;
+  corsAllowedOrigins?: readonly string[];
 }
 
 export interface StartedApiServer {
@@ -283,6 +284,7 @@ export const API_CAPABILITIES = {
   httpMethods: [...API_ALLOWED_METHODS],
   headerNames: API_CAPABILITY_HEADERS,
   cors: {
+    allowedOrigins: ["*"] as readonly string[],
     allowedHeaders: API_CORS_ALLOWED_HEADER_NAMES,
     exposedHeaders: API_CORS_EXPOSED_HEADER_NAMES,
     maxAgeSeconds: API_CORS_MAX_AGE_SECONDS,
@@ -302,8 +304,17 @@ export const API_CAPABILITIES = {
   extractClaims: true,
 } as const;
 
-function apiCapabilities(maxRequestBytes: number, requestTimeoutMs: number): ApiCapabilityMap {
-  return { ...API_CAPABILITIES, maxRequestBytes, requestTimeoutMs };
+function apiCapabilities(
+  maxRequestBytes: number,
+  requestTimeoutMs: number,
+  corsAllowedOrigins: readonly string[] = API_CAPABILITIES.cors.allowedOrigins,
+): ApiCapabilityMap {
+  return {
+    ...API_CAPABILITIES,
+    cors: { ...API_CAPABILITIES.cors, allowedOrigins: [...corsAllowedOrigins] },
+    maxRequestBytes,
+    requestTimeoutMs,
+  };
 }
 export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   { method: "GET", path: API_ROOT_PATH, description: "Return API discovery metadata for local callers." },
@@ -1303,6 +1314,7 @@ async function handleApiRequest(
   applyCorsHeaders(request, response, options.corsAllowedOrigins);
   const maxRequestBytes = resolveMaxRequestBytes(options.maxRequestBytes);
   const requestTimeoutMs = resolveRequestTimeoutMs(options.requestTimeoutMs);
+  const corsAllowedOrigins = options.corsAllowedOrigins ?? API_CAPABILITIES.cors.allowedOrigins;
   applyApiDiscoveryHeaders(response, maxRequestBytes, requestTimeoutMs);
   const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
   const isHeadRequest = request.method === "HEAD";
@@ -1318,7 +1330,7 @@ async function handleApiRequest(
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
-      capabilities: apiCapabilities(maxRequestBytes, requestTimeoutMs),
+      capabilities: apiCapabilities(maxRequestBytes, requestTimeoutMs, corsAllowedOrigins),
       endpoints: API_ENDPOINTS,
     };
     writeConditionalJson(
@@ -1344,7 +1356,7 @@ async function handleApiRequest(
       service: API_SERVICE_NAME,
       version: API_VERSION,
       openapiPath: OPENAPI_PATH,
-      capabilities: apiCapabilities(maxRequestBytes, requestTimeoutMs),
+      capabilities: apiCapabilities(maxRequestBytes, requestTimeoutMs, corsAllowedOrigins),
     };
     writeConditionalJson(
       request,
@@ -1400,6 +1412,7 @@ async function handleApiRequest(
         serverUrl: request.headers.host ? `http://${request.headers.host}` : undefined,
         maxRequestBytes,
         requestTimeoutMs,
+        corsAllowedOrigins,
       }),
       isHeadRequest,
     );
@@ -1936,7 +1949,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
   const serverUrl = options.serverUrl?.trim();
   const maxRequestBytes = resolveMaxRequestBytes(options.maxRequestBytes);
   const requestTimeoutMs = resolveRequestTimeoutMs(options.requestTimeoutMs);
-  const runtimeCapabilities = apiCapabilities(maxRequestBytes, requestTimeoutMs);
+  const runtimeCapabilities = apiCapabilities(maxRequestBytes, requestTimeoutMs, options.corsAllowedOrigins);
   const discoveryResponseExample = {
     ...OPENAPI_DISCOVERY_RESPONSE_EXAMPLE,
     capabilities: runtimeCapabilities,
