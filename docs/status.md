@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `aecc409` on 2026-07-14, feat: preserve source IDs in evaluation reports
+- Latest shipped change: `c9b90f0` on 2026-07-14, feat: expose verdict totals in evaluation rollups
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -41,6 +41,7 @@
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
 - preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
 - preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
+- include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
 - import filled reviewer decision CSVs into a machine-readable summary
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
@@ -68,6 +69,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: expose verdict totals in evaluation rollups | `c9b90f0` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation reports | `aecc409` |
 | 2026-07-14 | [#395](https://github.com/nash226/quorum/pull/395) | feat: advertise API request timeout capability | `de599cf` |
 | 2026-07-14 | Direct push | fix: keep OpenAPI freshness examples date-time compatible | `89caa0c` |
@@ -75,5 +77,4 @@
 | 2026-07-14 | Direct push | fix: describe report timestamps in OpenAPI | `9256104` |
 | 2026-07-14 | [#390](https://github.com/nash226/quorum/pull/390) | feat: export HTTP operation path constants | `48f882b` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in reviewer CSVs | `ab2073a` |
-| 2026-07-14 | Direct push | feat: preserve source IDs in evaluation summaries | `d517f43` |
 
