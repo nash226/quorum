@@ -1319,12 +1319,18 @@ async function handleApiRequest(
   applyApiDiscoveryHeaders(response, maxRequestBytes, requestTimeoutMs);
   const isHeadRequest = request.method === "HEAD";
 
+  const routeMethods = routeMethodsForPath(url);
+
   if (request.method === "OPTIONS") {
+    if (routeMethods === undefined) {
+      writeApiError(response, 404, "Not found.");
+      return;
+    }
+
     writeNoContent(response);
     return;
   }
 
-  const routeMethods = routeMethodsForPath(url);
   if (routeMethods !== undefined && !routeMethods.includes(request.method ?? "")) {
     writeMethodNotAllowed(response, routeMethods.join(", "));
     return;
