@@ -429,6 +429,18 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id");
     assert.equal(discoveryPreflightResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
 
+    const oversizedRequestResponse = await fetch(`${server.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ answer: "x".repeat(api.API_MAX_REQUEST_BYTES), sources: [] }),
+    });
+    assert.equal(oversizedRequestResponse.status, 413);
+    assert.equal(oversizedRequestResponse.headers.get("x-quorum-max-request-bytes"), String(api.API_MAX_REQUEST_BYTES));
+    assert.deepEqual(await oversizedRequestResponse.json(), {
+      error: `Request body must not exceed ${api.API_MAX_REQUEST_BYTES} bytes.`,
+      requestId: oversizedRequestResponse.headers.get("x-quorum-request-id"),
+    });
+
     const discoveryOpenApiResponse = await fetch(`${server.url}/openapi.json`);
     assert.equal(discoveryOpenApiResponse.status, 200);
     const discoveryOpenApiPayload = await discoveryOpenApiResponse.json();
