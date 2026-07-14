@@ -188,6 +188,7 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /^Quorum\n\nUsage:/);
   assert.match(result.stdout, /quorum verify .*--generated-at <timestamp>.*--result-json-out <path>/);
   assert.match(result.stdout, /quorum verify-batch .*--generated-at <timestamp>.*--result-json-out <path>/);
+  assert.match(result.stdout, /quorum extract-claims .*--answer-label <label>.*--json/);
   assert.match(result.stdout, /quorum import-review .*--generated-at <timestamp>/);
   assert.match(result.stdout, /quorum evaluate .*--generated-at <timestamp>.*--min-score <0\.\.1>/);
 });
