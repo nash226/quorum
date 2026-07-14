@@ -87,6 +87,7 @@ The current CLI can:
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
 - export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
+- serve the generated OpenAPI contract with an `ETag`, allowing integration clients to revalidate it with `If-None-Match`
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 

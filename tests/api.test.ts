@@ -379,7 +379,7 @@ test("HTTP API restricts CORS responses to configured origins", async () => {
   }
 });
 
-test("HTTP API marks every JSON response as non-cacheable", async () => {
+test("HTTP API marks mutable JSON responses as non-cacheable", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
   try {
@@ -406,8 +406,11 @@ test("HTTP API marks every JSON response as non-cacheable", async () => {
 
     const responses = await Promise.all(requests);
 
-    for (const response of responses) {
-      assert.equal(response.headers.get("cache-control"), "no-store");
+    for (const [index, response] of responses.entries()) {
+      assert.equal(
+        response.headers.get("cache-control"),
+        index === 3 ? "public, max-age=0, must-revalidate" : "no-store",
+      );
       await response.arrayBuffer();
     }
   } finally {
@@ -2378,6 +2381,39 @@ test("HTTP API advertises the allowed method on POST-only route errors", async (
       error: "Method not allowed. Use POST.",
       requestId: "wrong-method-check",
     });
+  } finally {
+    await api.close();
+  }
+});
+
+test("HTTP API supports conditional OpenAPI downloads with ETags", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const firstResponse = await fetch(`${api.url}/openapi.json`);
+    const etag = firstResponse.headers.get("etag");
+
+    assert.equal(firstResponse.status, 200);
+    assert.match(etag ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(firstResponse.headers.get("cache-control"), "public, max-age=0, must-revalidate");
+    assert.ok((await firstResponse.text()).includes('"openapi": "3.1.0"'));
+
+    const notModifiedResponse = await fetch(`${api.url}/openapi.json`, {
+      headers: { "if-none-match": etag ?? "" },
+    });
+
+    assert.equal(notModifiedResponse.status, 304);
+    assert.equal(notModifiedResponse.headers.get("etag"), etag);
+    assert.equal(await notModifiedResponse.text(), "");
+
+    const headResponse = await fetch(`${api.url}/openapi.json`, {
+      method: "HEAD",
+      headers: { "if-none-match": '"stale-etag"' },
+    });
+
+    assert.equal(headResponse.status, 200);
+    assert.equal(headResponse.headers.get("etag"), etag);
+    assert.equal(await headResponse.text(), "");
   } finally {
     await api.close();
   }

@@ -1,5 +1,5 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import {
   EvaluationFixtureValidationError,
   renderEvaluationAggregateSummaryCsv,
@@ -1335,7 +1335,8 @@ async function handleApiRequest(
   }
 
   if ((request.method === "GET" || isHeadRequest) && url === OPENAPI_PATH) {
-    writeJson(
+    writeConditionalJson(
+      request,
       response,
       200,
       createOpenApiDocument({
@@ -3821,6 +3822,50 @@ function writeJson(
   }
 
   response.end(body);
+}
+
+function writeConditionalJson(
+  request: IncomingMessage,
+  response: ServerResponse,
+  statusCode: number,
+  payload: unknown,
+  omitBody = false,
+): void {
+  const body = `${JSON.stringify(payload, null, 2)}\n`;
+  const etag = `"${createHash("sha256").update(body, "utf8").digest("hex")}"`;
+
+  response.setHeader("ETag", etag);
+  response.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+
+  if (matchesEtag(request.headers["if-none-match"], etag)) {
+    response.statusCode = 304;
+    response.removeHeader("Content-Length");
+    response.removeHeader("Content-Type");
+    response.end();
+    return;
+  }
+
+  response.statusCode = statusCode;
+  response.setHeader("Content-Type", "application/json; charset=utf-8");
+  response.setHeader("Content-Length", Buffer.byteLength(body, "utf8"));
+
+  if (omitBody) {
+    response.end();
+    return;
+  }
+
+  response.end(body);
+}
+
+function matchesEtag(value: string | string[] | undefined, etag: string): boolean {
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  return value
+    .split(",")
+    .map((candidate) => candidate.trim())
+    .some((candidate) => candidate === "*" || candidate === etag || candidate === `W/${etag}`);
 }
 
 class ApiRequestError extends Error {
