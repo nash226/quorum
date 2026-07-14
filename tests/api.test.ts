@@ -2443,6 +2443,26 @@ test("HTTP API advertises the allowed method on POST-only route errors", async (
   }
 });
 
+test("HTTP API advertises allowed methods on GET-only route errors", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/health`, {
+      method: "POST",
+      headers: { "X-Quorum-Request-Id": "health-method-check" },
+    });
+
+    assert.equal(response.status, 405);
+    assert.equal(response.headers.get("allow"), "GET, HEAD");
+    assert.deepEqual(await response.json(), {
+      error: "Method not allowed. Use GET, HEAD.",
+      requestId: "health-method-check",
+    });
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API supports conditional OpenAPI downloads with ETags", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
