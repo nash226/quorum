@@ -988,7 +988,14 @@ test("renders evaluation markdown report with fixture summaries", () => {
         answerLabel: "support",
         answerPreview: "Preview",
         answer: "Answer text",
-        sources: [],
+        sources: [
+          {
+            id: "support/refunds@2026-07-08",
+            sourcePath: "/tmp/sources/support.md",
+            title: "Support Policy",
+            trustLevel: "high" as const,
+          },
+        ],
         assessments: [],
         summary: {
           verified: 1,
