@@ -568,7 +568,9 @@ The machine-readable `/` and `/capabilities` responses additionally publish
 the canonical response-header names for correlation, caching, and method
 negotiation.
 Their `capabilities.cors` object also publishes the browser request-header
-allowlist, readable response headers, and preflight cache duration.
+allowlist, readable response headers, preflight cache duration, and the
+configured origin allowlist, so browser integrations can discover the same CORS
+policy from `/capabilities` or the generated OpenAPI examples.
 It now includes the bootstrap flow for `/`, `/version`, `/readyz`, and `/livez`,
 including header-only `HEAD` probes for deployment clients.
 It now shows how agent workflows can send base64 answer and source bytes with
