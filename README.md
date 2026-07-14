@@ -517,6 +517,8 @@ copy-paste guide covering verification, claim previews, request correlation,
 fail-gated HTTP responses, binary PDF/DOCX uploads, and reviewer artifacts.
 The guide also documents the discovery headers that expose the running service
 version, OpenAPI path, request limits, and request-correlation ID to clients.
+It now includes the bootstrap flow for `/`, `/version`, `/readyz`, and `/livez`,
+including header-only `HEAD` probes for deployment clients.
 It now shows how agent workflows can send base64 answer and source bytes with
 the required document extensions, and how to request queue-ready Markdown and
 CSV artifacts in the response.
