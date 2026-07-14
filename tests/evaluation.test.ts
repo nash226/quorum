@@ -463,6 +463,27 @@ test("rejects evaluation fixtures when claim verdict expectations do not match s
   );
 });
 
+test("rejects evaluation fixtures when claim verdict counts disagree with summary totals", () => {
+  assert.throws(
+    () =>
+      loadEvaluationFixtureFromContent(
+        JSON.stringify({
+          name: "Contradictory fixture",
+          answerPath: "answers/hr.md",
+          sourcePaths: ["sources/hr-policy.md"],
+          expectedSummary: {
+            verified: 1,
+            contradicted: 0,
+            unsupported: 1,
+            needs_review: 0,
+          },
+          expectedClaimVerdicts: ["verified", "verified"],
+        }),
+      ),
+    /Evaluation fixture\.expectedClaimVerdicts counts must match the totals in Evaluation fixture\.expectedSummary\./,
+  );
+});
+
 test("renders mismatch details in evaluation scorecards", () => {
   const rendered = renderEvaluationScorecard({
     fixtureName: "Mismatch fixture",
