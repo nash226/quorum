@@ -791,6 +791,9 @@ the aggregate rollup, plus an
 The `POST /import-review` `summary_csv` artifact applies the request's
 `failOn` policy, so queue consumers can route imported answer groups using the
 same matched verdicts returned in `failVerdicts`.
+No-claim answers remain explicit reviewer work items in HTTP artifacts: their
+summary rows preserve the answer label and preview, set `answer_has_claims` to
+`false`, and report `needs_review` with the standard no-claims reason.
 Those same POST endpoints also accept `failOnStatus: true` when local
 orchestrators want Quorum to return HTTP `409` for matched fail policies or
 evaluation mismatches instead of always returning `200`, which lets workflow
