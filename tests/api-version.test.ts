@@ -50,3 +50,17 @@ test("OpenAPI documents the version endpoint", () => {
   assert.ok(document.paths[VERSION_PATH]?.get?.responses?.["304"]?.headers?.ETag);
   assert.deepEqual(document.components.schemas.ApiVersionResponse.required, ["requestId", "service", "version"]);
 });
+
+test("OpenAPI documents revalidation for the capabilities endpoint", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, {
+      get?: { responses?: Record<string, { headers?: Record<string, unknown> }> };
+      head?: { responses?: Record<string, { headers?: Record<string, unknown> }> };
+    }>;
+  };
+
+  assert.ok(document.paths["/capabilities"]?.get?.responses?.["200"]?.headers?.ETag);
+  assert.ok(document.paths["/capabilities"]?.get?.responses?.["304"]?.headers?.ETag);
+  assert.ok(document.paths["/capabilities"]?.head?.responses?.["200"]?.headers?.ETag);
+  assert.ok(document.paths["/capabilities"]?.head?.responses?.["304"]?.headers?.ETag);
+});

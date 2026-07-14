@@ -45,7 +45,10 @@ curl -sS http://127.0.0.1:3000/version
 `/capabilities`. `GET /version` is a smaller compatibility check for clients
 that only need to confirm the service and HTTP contract version. It returns a
 stable `ETag` and supports `If-None-Match`, so clients can revalidate the
-version without downloading the JSON body. Kubernetes
+version without downloading the JSON body. `GET /capabilities` also returns a
+stable `ETag` and supports `If-None-Match`, allowing clients to revalidate
+configured runtime limits and capability metadata without downloading the JSON
+body. Kubernetes
 and load-balancer integrations can use `/readyz` for readiness and `/livez` for
 process liveness; both probes return `Cache-Control: no-store`.
 

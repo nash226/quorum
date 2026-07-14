@@ -389,7 +389,7 @@ test("HTTP API restricts CORS responses to configured origins", async () => {
   }
 });
 
-test("HTTP API marks mutable JSON responses as non-cacheable", async () => {
+test("HTTP API marks mutable JSON responses as non-cacheable and contracts as revalidatable", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
   try {
@@ -419,7 +419,7 @@ test("HTTP API marks mutable JSON responses as non-cacheable", async () => {
     for (const [index, response] of responses.entries()) {
       assert.equal(
         response.headers.get("cache-control"),
-        index === 2 || index === 3 ? "public, max-age=0, must-revalidate" : "no-store",
+        index === 1 || index === 2 || index === 3 ? "public, max-age=0, must-revalidate" : "no-store",
       );
       await response.arrayBuffer();
     }
@@ -2477,6 +2477,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
 
     const capabilitiesResponse = await fetch(`${api.url}/capabilities`);
     assert.equal(capabilitiesResponse.status, 200);
+    const capabilitiesEtag = capabilitiesResponse.headers.get("etag");
+    assert.match(capabilitiesEtag ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(capabilitiesResponse.headers.get("cache-control"), "public, max-age=0, must-revalidate");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(capabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
@@ -2486,6 +2489,18 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     const capabilitiesPayload = await capabilitiesResponse.json() as ApiCapabilitiesResponse;
     expectedCapabilitiesResponse.requestId = capabilitiesResponse.headers.get("x-quorum-request-id") ?? "";
     assert.deepEqual(capabilitiesPayload, expectedCapabilitiesResponse);
+
+    const conditionalCapabilitiesHeadResponse = await fetch(`${api.url}/capabilities`, { method: "HEAD" });
+    assert.equal(conditionalCapabilitiesHeadResponse.status, 200);
+    assert.equal(conditionalCapabilitiesHeadResponse.headers.get("etag"), capabilitiesEtag);
+    assert.equal(await conditionalCapabilitiesHeadResponse.text(), "");
+
+    const notModifiedCapabilitiesResponse = await fetch(`${api.url}/capabilities`, {
+      headers: { "if-none-match": capabilitiesEtag ?? "" },
+    });
+    assert.equal(notModifiedCapabilitiesResponse.status, 304);
+    assert.equal(notModifiedCapabilitiesResponse.headers.get("etag"), capabilitiesEtag);
+    assert.equal(await notModifiedCapabilitiesResponse.text(), "");
 
     const healthResponse = await fetch(`${api.url}/health`);
     assert.equal(healthResponse.status, 200);
