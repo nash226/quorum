@@ -57,6 +57,20 @@ export function extractClaims(answer: string): AtomicClaim[] {
     }));
 }
 
+export interface ExtractClaimsResult {
+  answerHasClaims: boolean;
+  claims: AtomicClaim[];
+}
+
+/** Return normalized claims with the queue-routing signal used by API workflows. */
+export function extractClaimsResult(answer: string): ExtractClaimsResult {
+  const claims = extractClaims(answer);
+  return {
+    answerHasClaims: claims.length > 0,
+    claims,
+  };
+}
+
 function isThematicBreak(text: string): boolean {
   return /^(?:-{3,}|_{3,}|\*{3,})$/.test(text);
 }
