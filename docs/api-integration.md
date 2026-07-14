@@ -44,6 +44,9 @@ The same limits are available as `capabilities.maxRequestBytes` and
 Queue integrations can use `capabilities.reviewQueueStatuses` to route imported
 answers without hard-coding the allowed values: `pending`, `reviewed`, and
 `no_claims`.
+The `POST /import-review` request also accepts an optional `queueStatus` value
+to return only matching answer groups; queue totals, artifacts, and `failOn`
+results are scoped to that filtered queue.
 If a browser client uses the wrong method, it can read the exposed `Allow`
 header on the `405` response to discover the route's supported method.
 
