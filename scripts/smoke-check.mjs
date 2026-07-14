@@ -154,6 +154,11 @@ ${xrefOffset}
 
 requireBuiltCli();
 
+assert.deepEqual(JSON.parse(runCli(["version", "--json"])), {
+  service: "quorum",
+  version: "0.1.0",
+});
+
 const api = await import(pathToFileURL(join(repoRoot, "dist", "src", "index.js")).href);
 
 const tempDir = mkdtempSync(join(tmpdir(), "quorum-smoke-"));
