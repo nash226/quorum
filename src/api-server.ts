@@ -253,10 +253,11 @@ export const API_DISCOVERY_HEADERS = {
 } as const;
 export const API_REQUEST_ID_HEADER = "X-Quorum-Request-Id";
 export const API_CORS_ALLOWED_HEADERS = ["Content-Type", API_REQUEST_ID_HEADER, "If-None-Match"].join(", ");
-const EXPOSED_HEADERS = [
+export const API_CORS_EXPOSED_HEADERS = [
   ...Object.values(API_DISCOVERY_HEADERS),
   API_REQUEST_ID_HEADER,
   "Cache-Control",
+  "ETag",
 ].join(", ");
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
@@ -3761,7 +3762,7 @@ function applyCorsHeaders(
 
   response.setHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
   response.setHeader("Access-Control-Allow-Headers", API_CORS_ALLOWED_HEADERS);
-  response.setHeader("Access-Control-Expose-Headers", EXPOSED_HEADERS);
+  response.setHeader("Access-Control-Expose-Headers", API_CORS_EXPOSED_HEADERS);
 }
 
 function applyApiDiscoveryHeaders(
