@@ -285,7 +285,11 @@ test("serve --help prints API usage without starting the server", async () => {
 
   assert.equal(result.code, 0);
   assert.equal(result.stderr, "");
-  assert.match(result.stdout, /^Quorum serve\n\nUsage:\n  quorum serve \[--host <host>\] \[--port <port>\]/);
+  assert.match(
+    result.stdout,
+    /^Quorum serve\n\nUsage:\n  quorum serve \[--host <host>\] \[--port <port>\] \[--request-timeout-ms <milliseconds>\]/,
+  );
+  assert.match(result.stdout, /--request-timeout-ms <milliseconds>\s+Abort requests that exceed this duration; defaults to 30000/);
   assert.match(result.stdout, /GET  \/\s+Return API discovery metadata for local callers/);
   assert.match(result.stdout, /GET  \/capabilities\s+Return supported Quorum capabilities without endpoint listings/);
   assert.match(result.stdout, /HEAD \/health\s+Return readiness headers without a response body/);
@@ -299,6 +303,13 @@ test("serve --help prints API usage without starting the server", async () => {
   assert.match(result.stdout, /POST \/extract-claims\s+Extract normalized claims from answer content/);
   assert.match(result.stdout, /POST \/verify-batch\s+Verify multiple answers from JSON request content/);
   assert.match(result.stdout, /POST \/import-review\s+Import reviewer CSV content from JSON request content/);
+});
+
+test("serve rejects non-positive request timeout values", async () => {
+  const result = await runCliAllowFailure(["serve", "--request-timeout-ms", "0"]);
+
+  assert.equal(result.code, 1);
+  assert.match(result.stderr, /Invalid --request-timeout-ms value: 0/);
 });
 
 test("openapi --help prints export usage without starting the server", async () => {
