@@ -2555,6 +2555,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           ApiVersionResponse: {
             required: string[];
           };
+          BatchVerificationReport: {
+            properties: Record<string, unknown>;
+          };
           BatchVerificationRunResult: Record<string, unknown>;
           ClaimVerdict: { enum: string[] };
           EvaluationAggregateSummary: {
@@ -2577,11 +2580,15 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           EvaluationScorecard: {
             properties: Record<string, unknown>;
           };
+          ReviewerDecisionImportReport: {
+            properties: Record<string, unknown>;
+          };
           ReviewerDecisionImportResult: Record<string, unknown>;
           SingleVerificationResult: Record<string, unknown>;
           SourceTrustLevel: { enum: string[] };
           VerificationReport: {
             required: string[];
+            properties: Record<string, unknown>;
           };
         };
       };
@@ -3233,6 +3240,18 @@ Refund requests receive an initial response within one business day.
       "assessments",
       "summary",
     ]);
+    assert.deepEqual(openApi.components.schemas.VerificationReport.properties.generatedAt, {
+      type: "string",
+      format: "date-time",
+    });
+    assert.deepEqual(openApi.components.schemas.BatchVerificationReport.properties.generatedAt, {
+      type: "string",
+      format: "date-time",
+    });
+    assert.deepEqual(openApi.components.schemas.ReviewerDecisionImportReport.properties.generatedAt, {
+      type: "string",
+      format: "date-time",
+    });
     assert.ok(openApi.components.schemas.SingleVerificationResult);
     assert.ok(openApi.components.schemas.BatchVerificationRunResult);
     assert.deepEqual(
