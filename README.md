@@ -631,6 +631,8 @@ The API test suite verifies this header across discovery, capability, version,
 OpenAPI, claim-preview, verification, and error responses.
 Browser clients can also preflight `If-None-Match`, so conditional OpenAPI
 revalidation works across the documented CORS integration path.
+The exposed CORS header list is canonical and duplicate-free, so browser clients
+can consume each discovery and caching header once.
 The `/readyz` alias provides the same uncached readiness contract for Kubernetes
 probes and deployment systems that use the conventional readiness path.
 The `/livez` alias provides the same uncached health response for Kubernetes
