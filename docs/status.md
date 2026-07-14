@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f897dcf` on 2026-07-14, fix: write report artifacts atomically
+- Latest shipped change: `9349650` on 2026-07-14, fix: reject duplicate reviewer claim rows
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -45,6 +45,7 @@
 - preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
 - include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
 - import filled reviewer decision CSVs into a machine-readable summary
+- reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
@@ -74,6 +75,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: reject duplicate reviewer claim rows | `9349650` |
 | 2026-07-14 | Direct push | fix: write report artifacts atomically | `f897dcf` |
 | 2026-07-14 | [#404](https://github.com/nash226/quorum/pull/404) | fix: reflect runtime limits in OpenAPI examples | `42f9b47` |
 | 2026-07-14 | Direct push | feat: export API discovery path constant | `52afc14` |
@@ -81,5 +83,4 @@
 | 2026-07-14 | Direct push | fix: advertise claim preview labels in top-level help | `bdd6787` |
 | 2026-07-14 | Direct push | feat: preserve CLI source identifiers | `d48d06c` |
 | 2026-07-14 | [#399](https://github.com/nash226/quorum/pull/399) | feat: label CLI claim previews | `22beff0` |
-| 2026-07-14 | [#398](https://github.com/nash226/quorum/pull/398) | docs: document API discovery probes | `399e112` |
 
