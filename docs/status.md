@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `93e4eb9` on 2026-07-14, fix: strip unicode numbered claim markers
+- Latest shipped change: `e7fb655` on 2026-07-14, feat: expose browser CORS capabilities
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -57,6 +57,7 @@
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
+- expose the browser CORS allowlist, exposed response headers, and preflight cache duration in machine-readable API capabilities
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
 - export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
@@ -90,6 +91,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: expose browser CORS capabilities | `e7fb655` |
 | 2026-07-14 | Direct push | fix: strip unicode numbered claim markers | `93e4eb9` |
 | 2026-07-14 | Direct push | docs: show HTTP evaluation workflow | `4cb38bf` |
 | 2026-07-14 | [#425](https://github.com/nash226/quorum/pull/425) | fix: document OpenAPI revalidation headers | `5779021` |
@@ -97,5 +99,4 @@
 | 2026-07-14 | Direct push | feat: make API discovery revalidatable | `9614349` |
 | 2026-07-14 | Direct push | feat: expose API capability header names | `62ce549` |
 | 2026-07-14 | Direct push | feat: make capabilities probe revalidatable | `53a2aa5` |
-| 2026-07-14 | Direct push | feat: make version probe revalidatable | `4b5efec` |
 
