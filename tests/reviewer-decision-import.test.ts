@@ -28,6 +28,7 @@ waiting on plan language"
   });
   assert.equal(report.answerGroups.length, 1);
   assert.equal(report.answerGroups[0]?.label, "Unspecified answer");
+  assert.equal(report.answerGroups[0]?.answerHasClaims, true);
   assert.equal(report.answerGroups[0]?.summary.reviewedClaims, 2);
 
   assert.equal(report.claims[0]?.finalVerdict, "verified");
@@ -91,6 +92,7 @@ empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from th
   assert.equal(report.answerGroups.length, 1);
   assert.equal(report.answerGroups[0]?.label, "empty");
   assert.equal(report.answerGroups[0]?.answerPath, "examples/answers/empty.md");
+  assert.equal(report.answerGroups[0]?.answerHasClaims, false);
   assert.equal(report.answerGroups[0]?.summary.totalClaims, 0);
   assert.match(
     renderReviewerDecisionImportReport(report),
