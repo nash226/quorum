@@ -1626,6 +1626,20 @@ function parseOptionalGeneratedAt(value: unknown): string | undefined {
   return generatedAt;
 }
 
+function parseOptionalSourceUpdatedAt(value: unknown, fieldName: string): string | undefined {
+  const updatedAt = optionalString(value, fieldName);
+
+  if (updatedAt === undefined) {
+    return undefined;
+  }
+
+  if (Number.isNaN(Date.parse(updatedAt))) {
+    throw requestError(`${fieldName} must be a valid timestamp.`);
+  }
+
+  return updatedAt;
+}
+
 function parseAnswerInput(value: unknown, index: number): InMemoryContentAnswerInput {
   const record = requireRecord(value, `answers[${index}]`);
 
@@ -1667,7 +1681,7 @@ function parseSources(value: unknown): InMemorySourceInput[] {
         `sources[${index}].contentBase64`,
       ),
       title: optionalString(record.title, `sources[${index}].title`),
-      updatedAt: optionalString(record.updatedAt, `sources[${index}].updatedAt`),
+      updatedAt: parseOptionalSourceUpdatedAt(record.updatedAt, `sources[${index}].updatedAt`),
       trustLevel: parseOptionalTrustLevel(record.trustLevel),
     };
   });
