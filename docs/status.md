@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f2a0b79` on 2026-07-14, feat: expose evaluation mismatch count in summary
+- Latest shipped change: `ffef62a` on 2026-07-14, docs: explain reviewer queue workflow
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -109,6 +109,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | docs: explain reviewer queue workflow | `ffef62a` |
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch count in summary | `f2a0b79` |
 | 2026-07-14 | Direct push | test: cover HR source directory evaluations | `dcdad63` |
 | 2026-07-14 | Direct push | feat: show reviewer queue totals in html reports | `6fee78b` |
@@ -116,5 +117,4 @@
 | 2026-07-14 | [#451](https://github.com/nash226/quorum/pull/451) | Expose queue-ready reviewer import status with tests and API documentation. | `0acba18` |
 | 2026-07-14 | Direct push | docs: add API deployment guidance | `81535f4` |
 | 2026-07-14 | Direct push | docs: refresh roadmap after API and evaluation foundation | `5cd22c9` |
-| 2026-07-14 | Direct push | feat: expose batch claim routing totals | `9e5dc1f` |
 
