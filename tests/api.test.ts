@@ -350,6 +350,29 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
   }
 });
 
+test("HTTP API rejects CORS preflight requests for unknown routes", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/missing`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "http://localhost:4173",
+        "access-control-request-method": "GET",
+      },
+    });
+
+    assert.equal(response.status, 404);
+    assert.deepEqual(await response.json(), {
+      error: "Not found.",
+      requestId: response.headers.get("x-quorum-request-id"),
+    });
+    assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API extracts claims from base64 text and document answers", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

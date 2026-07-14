@@ -86,6 +86,7 @@ The current CLI can:
 - export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
 - derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift
 - return structured `405` errors with route-specific `Allow` headers when a known API route receives an unsupported method
+- reject CORS preflight requests for unknown API routes instead of advertising a route that does not exist
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
