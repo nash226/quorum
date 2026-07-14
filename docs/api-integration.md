@@ -27,6 +27,8 @@ service contract without parsing the response body:
 These headers are exposed to browser clients through CORS. The default limits
 are 1 MiB per JSON request and 30 seconds per request; configure them with
 `--max-request-bytes` and `--request-timeout-ms` when starting the server.
+The same limits are available as `capabilities.maxRequestBytes` and
+`capabilities.requestTimeoutMs` in `GET /capabilities` and `GET /` responses.
 
 ## Verify an answer
 
