@@ -101,6 +101,7 @@ The current CLI can:
 - expose the OpenAPI `ETag` through CORS so browser clients can cache and reuse the validator
 - preview normalized claims over HTTP before loading approved sources for verification
 - include an `answerHasClaims` routing flag in HTTP claim previews so queue clients can identify empty drafts without recounting claims
+- expose the same `answerHasClaims` routing flag from CLI claim previews with opt-in result JSON
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 - emit the CLI and API contract version as stable JSON with `quorum version --json`
 - revalidate the HTTP `/version` compatibility probe with a stable `ETag`
@@ -123,6 +124,7 @@ documents:
 
 ```bash
 npm run dev -- extract-claims --answer examples/answers/hr-answer.md --json
+npm run dev -- extract-claims --answer examples/answers/empty-answer.md --result-json
 cat examples/answers/hr-answer.md | npm run dev -- extract-claims --answer -
 npm run dev -- extract-claims --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet"
 ```
@@ -145,7 +147,9 @@ npm run dev -- verify \
 
 When a human is reviewing a claim preview, `--answer-label` adds the
 reviewer-facing label to the text output. JSON output remains the same claims
-array for scripts that already consume the preview command.
+array for scripts that already consume the preview command. Use `--result-json`
+(or `--result-json-out <path>`) when a queue integration also needs the
+`answerHasClaims` routing flag without recounting the returned claims.
 
 ```bash
 npm run dev -- verify \
