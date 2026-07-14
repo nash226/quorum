@@ -258,6 +258,7 @@ export const API_CORS_EXPOSED_HEADERS = [
   API_REQUEST_ID_HEADER,
   "Cache-Control",
   "ETag",
+  "Allow",
 ].join(", ");
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;

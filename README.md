@@ -600,7 +600,8 @@ restricted to an explicit origin allowlist. Disallowed origins receive no
 `Access-Control-Allow-Origin` response header.
 POST-only route errors return an `Allow: POST` header, and the generated
 OpenAPI contract documents that header so integration clients can recover from
-wrong-method calls without hard-coding the route contract.
+wrong-method calls without hard-coding the route contract. The `Allow` header is
+also exposed through CORS so browser clients can inspect the recovery hint.
 The server bounds each request to 30 seconds by default so a stalled client
 cannot hold a workflow listener indefinitely; `quorum serve` can override that
 limit with `--request-timeout-ms <milliseconds>`, while integrations embedding
