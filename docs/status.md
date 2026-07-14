@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `52afc14` on 2026-07-14, feat: export API discovery path constant
+- Latest shipped change: `42f9b47` on 2026-07-14, fix: reflect runtime limits in OpenAPI examples
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -52,6 +52,7 @@
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
+- generate OpenAPI discovery examples with the server's configured request-size and timeout limits
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
@@ -72,6 +73,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#404](https://github.com/nash226/quorum/pull/404) | fix: reflect runtime limits in OpenAPI examples | `42f9b47` |
 | 2026-07-14 | Direct push | feat: export API discovery path constant | `52afc14` |
 | 2026-07-14 | Direct push | fix: document binary encoding in OpenAPI | `61fba85` |
 | 2026-07-14 | Direct push | fix: advertise claim preview labels in top-level help | `bdd6787` |
@@ -79,5 +81,4 @@
 | 2026-07-14 | [#399](https://github.com/nash226/quorum/pull/399) | feat: label CLI claim previews | `22beff0` |
 | 2026-07-14 | [#398](https://github.com/nash226/quorum/pull/398) | docs: document API discovery probes | `399e112` |
 | 2026-07-14 | Direct push | feat: expose verdict totals in evaluation rollups | `c9b90f0` |
-| 2026-07-14 | Direct push | feat: preserve source IDs in evaluation reports | `aecc409` |
 
