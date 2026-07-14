@@ -682,6 +682,7 @@ Employees receive 12 weeks of paid parental leave.
       answerPath: "answers/hr-answer.md",
       answerLabel: "HR reviewer packet",
       answerPreview: "Employees receive 12 weeks of paid parental leave. Managers approve exceptions within five business days.",
+      answerHasClaims: true,
       claims: [
         { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
         { id: "claim_2", text: "Managers approve exceptions within five business days." },
