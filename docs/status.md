@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6e29624` on 2026-07-14, fix: reject unknown route preflights
+- Latest shipped change: `8f52bb6` on 2026-07-14, feat: expose batch answer claim routing
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -14,6 +14,7 @@
 - read an AI-generated answer from a Markdown, text, or exported HTML file
 - read an AI-generated answer from a PDF or DOCX file by extracting its readable text
 - batch verify multiple AI-generated answers from a directory
+- include a per-answer `answerHasClaims` flag in batch results so queue integrations can route empty drafts without recounting claims
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
@@ -93,6 +94,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: expose batch answer claim routing | `8f52bb6` |
 | 2026-07-14 | Direct push | fix: reject unknown route preflights | `6e29624` |
 | 2026-07-14 | [#433](https://github.com/nash226/quorum/pull/433) | fix: return method errors for known API routes | `eea16eb` |
 | 2026-07-14 | Direct push | test: cover CLI CORS origin contract | `b639631` |
@@ -100,5 +102,4 @@
 | 2026-07-14 | [#430](https://github.com/nash226/quorum/pull/430) | fix: scope CORS preflight methods by route | `ad4ae86` |
 | 2026-07-14 | Direct push | feat: expose configured CORS origins | `1c2a1ef` |
 | 2026-07-14 | Direct push | feat: expose browser CORS capabilities | `e7fb655` |
-| 2026-07-14 | Direct push | fix: strip unicode numbered claim markers | `93e4eb9` |
 
