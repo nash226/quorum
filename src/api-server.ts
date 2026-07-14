@@ -253,6 +253,17 @@ export const API_DISCOVERY_HEADERS = {
   requestTimeoutMs: "X-Quorum-Request-Timeout-Ms",
 } as const;
 export const API_REQUEST_ID_HEADER = "X-Quorum-Request-Id";
+export const API_CAPABILITY_HEADERS = {
+  requestId: API_REQUEST_ID_HEADER,
+  service: API_DISCOVERY_HEADERS.service,
+  version: API_DISCOVERY_HEADERS.version,
+  openapiPath: API_DISCOVERY_HEADERS.openapiPath,
+  maxRequestBytes: API_DISCOVERY_HEADERS.maxRequestBytes,
+  requestTimeoutMs: API_DISCOVERY_HEADERS.requestTimeoutMs,
+  cacheControl: "Cache-Control",
+  etag: "ETag",
+  allow: "Allow",
+} as const;
 export const API_CORS_ALLOWED_HEADERS = ["Content-Type", API_REQUEST_ID_HEADER, "If-None-Match"].join(", ");
 export const API_CORS_EXPOSED_HEADERS = [...new Set([
   ...Object.values(API_DISCOVERY_HEADERS),
@@ -265,6 +276,7 @@ const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
   httpMethods: [...API_ALLOWED_METHODS],
+  headerNames: API_CAPABILITY_HEADERS,
   requestContentTypes: ["application/json"],
   binaryContentEncodings: ["base64"],
   maxRequestBytes: API_MAX_REQUEST_BYTES,
@@ -3061,6 +3073,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                 enum: API_ALLOWED_METHODS,
               },
             },
+            headerNames: {
+              type: "object",
+              additionalProperties: { type: "string" },
+              description: "Canonical response-header names used by the HTTP API.",
+            },
             requestContentTypes: {
               type: "array",
               items: { type: "string" },
@@ -3120,6 +3137,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
           required: [
             "httpMethods",
+            "headerNames",
             "requestContentTypes",
             "binaryContentEncodings",
             "maxRequestBytes",
