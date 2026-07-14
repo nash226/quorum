@@ -3541,6 +3541,9 @@ Refund requests receive an initial response within one business day.
     assert.deepEqual(openApi.components.schemas.EvaluationScorecard.properties.domain, {
       type: "string",
     });
+    assert.deepEqual(openApi.components.schemas.EvaluationScorecard.properties.answerHasClaims, {
+      type: "boolean",
+    });
     assert.deepEqual(openApi.components.schemas.EvaluationAggregateSummary.properties.domains, {
       type: "array",
       items: { $ref: "#/components/schemas/EvaluationDomainAggregateSummary" },
