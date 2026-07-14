@@ -88,6 +88,7 @@ The current CLI can:
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
+- expose the browser CORS allowlist, exposed response headers, and preflight cache duration in machine-readable API capabilities
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
 - export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
@@ -566,6 +567,8 @@ version, OpenAPI path, request limits, and request-correlation ID to clients.
 The machine-readable `/` and `/capabilities` responses additionally publish
 the canonical response-header names for correlation, caching, and method
 negotiation.
+Their `capabilities.cors` object also publishes the browser request-header
+allowlist, readable response headers, and preflight cache duration.
 It now includes the bootstrap flow for `/`, `/version`, `/readyz`, and `/livez`,
 including header-only `HEAD` probes for deployment clients.
 It now shows how agent workflows can send base64 answer and source bytes with
