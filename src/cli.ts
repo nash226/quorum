@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import type {
   ClaimAssessment,
@@ -1296,7 +1297,14 @@ async function writeReportFile(
 ): Promise<void> {
   await mkdir(dirname(outPath), { recursive: true });
   const output = reportContents.endsWith("\n") ? reportContents : `${reportContents}\n`;
-  await writeFile(outPath, output, "utf8");
+  const temporaryPath = `${outPath}.${randomUUID()}.tmp`;
+
+  try {
+    await writeFile(temporaryPath, output, "utf8");
+    await rename(temporaryPath, outPath);
+  } finally {
+    await rm(temporaryPath, { force: true });
+  }
 }
 
 function isHelpFlag(value: string): boolean {
