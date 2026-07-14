@@ -101,6 +101,10 @@ cat examples/answers/hr-answer.md | npm run dev -- extract-claims --answer -
 npm run dev -- extract-claims --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet"
 ```
 
+The top-level `quorum --help` synopsis includes the optional
+`extract-claims --answer-label <label>` reviewer label, keeping the discoverable
+CLI contract aligned with the command-specific help.
+
 When a file-based workflow already has durable approved-document IDs, attach
 them to explicit sources so reviewer evidence stays linked to the source
 system:
