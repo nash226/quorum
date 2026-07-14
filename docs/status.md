@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8f52bb6` on 2026-07-14, feat: expose batch answer claim routing
+- Latest shipped change: `2681cb8` on 2026-07-14, feat: expose claim routing in preview responses
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -69,6 +69,7 @@
 - cache browser CORS preflight results for ten minutes through `Access-Control-Max-Age`
 - expose the OpenAPI `ETag` through CORS so browser clients can cache and reuse the validator
 - preview normalized claims over HTTP before loading approved sources for verification
+- include an `answerHasClaims` routing flag in HTTP claim previews so queue clients can identify empty drafts without recounting claims
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 - emit the CLI and API contract version as stable JSON with `quorum version --json`
 - revalidate the HTTP `/version` compatibility probe with a stable `ETag`
@@ -94,6 +95,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: expose claim routing in preview responses | `2681cb8` |
 | 2026-07-14 | Direct push | feat: expose batch answer claim routing | `8f52bb6` |
 | 2026-07-14 | Direct push | fix: reject unknown route preflights | `6e29624` |
 | 2026-07-14 | [#433](https://github.com/nash226/quorum/pull/433) | fix: return method errors for known API routes | `eea16eb` |
@@ -101,5 +103,4 @@
 | 2026-07-14 | [#431](https://github.com/nash226/quorum/pull/431) | test: cover route-scoped CORS preflights | `e042e10` |
 | 2026-07-14 | [#430](https://github.com/nash226/quorum/pull/430) | fix: scope CORS preflight methods by route | `ad4ae86` |
 | 2026-07-14 | Direct push | feat: expose configured CORS origins | `1c2a1ef` |
-| 2026-07-14 | Direct push | feat: expose browser CORS capabilities | `e7fb655` |
 
