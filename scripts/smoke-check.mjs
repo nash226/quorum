@@ -388,7 +388,14 @@ Employees receive 12 weeks of paid parental leave.
   assert.equal(apiFileInputResult.report.summary.contradicted, 1);
   assert.equal(apiFileInputResult.report.answerPath, join(repoRoot, "examples", "answers", "support-answer.md"));
 
-  const server = await startCliServer(["--port", "0", "--request-timeout-ms", "1500"]);
+  const server = await startCliServer([
+    "--port",
+    "0",
+    "--max-request-bytes",
+    "1500",
+    "--request-timeout-ms",
+    "1500",
+  ]);
 
   try {
     const indexResponse = await fetch(server.url);
@@ -435,9 +442,9 @@ Employees receive 12 weeks of paid parental leave.
       body: JSON.stringify({ answer: "x".repeat(api.API_MAX_REQUEST_BYTES), sources: [] }),
     });
     assert.equal(oversizedRequestResponse.status, 413);
-    assert.equal(oversizedRequestResponse.headers.get("x-quorum-max-request-bytes"), String(api.API_MAX_REQUEST_BYTES));
+    assert.equal(oversizedRequestResponse.headers.get("x-quorum-max-request-bytes"), "1500");
     assert.deepEqual(await oversizedRequestResponse.json(), {
-      error: `Request body must not exceed ${api.API_MAX_REQUEST_BYTES} bytes.`,
+      error: "Request body must not exceed 1500 bytes.",
       requestId: oversizedRequestResponse.headers.get("x-quorum-request-id"),
     });
 
