@@ -47,6 +47,25 @@ answers without hard-coding the allowed values: `pending`, `reviewed`, and
 The `POST /import-review` request also accepts an optional `queueStatus` value
 to return only matching answer groups; queue totals, artifacts, and `failOn`
 results are scoped to that filtered queue.
+
+For example, request only pending answers for the next reviewer step:
+
+```bash
+curl -sS http://127.0.0.1:3000/import-review \
+  -H 'content-type: application/json' \
+  -d @- <<'JSON'
+{
+  "reviewCsvContent": "...csv content...",
+  "queueStatus": "pending",
+  "includeArtifacts": ["result_json", "summary_csv"]
+}
+JSON
+```
+
+The accepted values are `pending`, `reviewed`, and `no_claims`; integrations
+can discover the same list from `capabilities.reviewQueueStatuses`. The
+response contains only matching answer groups, and its queue totals and
+artifacts describe that filtered handoff.
 If a browser client uses the wrong method, it can read the exposed `Allow`
 header on the `405` response to discover the route's supported method.
 
