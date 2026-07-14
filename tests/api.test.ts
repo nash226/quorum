@@ -151,6 +151,12 @@ test("API discovery endpoint inventory contains one entry per method and path", 
   assert.equal(new Set(endpointKeys).size, endpointKeys.length);
 });
 
+test("API CORS exposed headers contain each browser-visible header once", () => {
+  const exposedHeaders = API_CORS_EXPOSED_HEADERS.split(", ");
+
+  assert.equal(new Set(exposedHeaders).size, exposedHeaders.length);
+});
+
 test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(rootCreateApiServer, createApiServer);
   assert.strictEqual(rootStartApiServer, startApiServer);
