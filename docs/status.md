@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6ec9140` on 2026-07-14, fix: document evaluation claim routing in OpenAPI
+- Latest shipped change: `12c8153` on 2026-07-14, fix: preserve colon-terminated business claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -24,6 +24,7 @@
 - split the answer into atomic claims
 - split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
 - strip common Unicode numbered-list markers from exported policy answers
+- keep colon-terminated business claims such as `No refunds:` while still skipping recognized wrapper labels such as `Policy summary:`
 - ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims
 - preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
 - compare each claim against approved source snippets
@@ -99,6 +100,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: preserve colon-terminated business claims | `12c8153` |
 | 2026-07-14 | Direct push | fix: document evaluation claim routing in OpenAPI | `6ec9140` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim rollups | `8d1e1db` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim routing | `cd741be` |
@@ -106,5 +108,4 @@
 | 2026-07-14 | [#440](https://github.com/nash226/quorum/pull/440) | fix: advertise supported JSON media types | `5cb342b` |
 | 2026-07-14 | Direct push | test: verify vendor JSON API requests | `ce3e8aa` |
 | 2026-07-14 | Direct push | feat: expose CLI claim preview routing | `ba1e7c2` |
-| 2026-07-14 | [#437](https://github.com/nash226/quorum/pull/437) | feat: expose claim preview routing result | `6d6422e` |
 
