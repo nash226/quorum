@@ -450,6 +450,7 @@ Employees receive 12 weeks of paid parental leave.
     });
     assert.deepEqual(indexPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(indexPayload.capabilities.trustLevels, ["low", "medium", "high"]);
+    assert.deepEqual(indexPayload.capabilities.reviewQueueStatuses, ["pending", "reviewed", "no_claims"]);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "OPTIONS" && endpoint.path === "/verify"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/health"), true);
     assert.equal(indexPayload.endpoints.some((endpoint) => endpoint.method === "HEAD" && endpoint.path === "/healthz"), true);
@@ -519,6 +520,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(capabilitiesPayload.capabilities.requestContentTypes, ["application/json", "application/*+json"]);
     assert.deepEqual(capabilitiesPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(capabilitiesPayload.capabilities.trustLevels, ["low", "medium", "high"]);
+    assert.deepEqual(capabilitiesPayload.capabilities.reviewQueueStatuses, ["pending", "reviewed", "no_claims"]);
     assert.equal("endpoints" in capabilitiesPayload, false);
 
     const allowedCorsResponse = await fetch(`${server.url}/health`, {
@@ -1521,6 +1523,7 @@ server.close();
 startedServer.host;
 apiServerOptions.port;
 API_CAPABILITIES.verdicts;
+API_CAPABILITIES.reviewQueueStatuses;
 `,
     "utf8",
   );

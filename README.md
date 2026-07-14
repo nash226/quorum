@@ -104,6 +104,7 @@ The current CLI can:
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
 - expose the browser CORS allowlist, exposed response headers, and preflight cache duration in machine-readable API capabilities
+- expose reviewer queue statuses (`pending`, `reviewed`, and `no_claims`) in machine-readable API capabilities so integrations can route imported answers without hard-coded values
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
 - export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
