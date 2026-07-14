@@ -1367,7 +1367,7 @@ test("verify records an explicit reviewer-facing answer label in JSON and review
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_source_ids,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
@@ -1623,7 +1623,7 @@ test("verify writes reviewer csv fail-policy columns for single answers", async 
     const lines = reviewCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_source_ids,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
@@ -1669,7 +1669,7 @@ test("verify writes a summary csv for single answers", async () => {
     const lines = summaryCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
+      "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids",
     );
     assert.match(
       lines[1] ?? "",
@@ -1820,11 +1820,11 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.match(await readFile(batchHtmlOutPath, "utf8"), /Answer preview/);
     assert.match(
       await readFile(batchReviewCsvOutPath, "utf8"),
-      /generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
+      /generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_source_ids,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
     );
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
-      /generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths/,
+      /generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -2934,7 +2934,7 @@ test("verify-batch writes a combined reviewer decision csv", async () => {
 
     assert.equal(
       lines[0],
-      "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_source_ids,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
     );
     assert.match(
       lines[1] ?? "",
@@ -2981,7 +2981,7 @@ test("verify-batch preserves no-claim answers through reviewer csv export and im
     const reviewCsv = await readFile(reviewCsvOutPath, "utf8");
     assert.match(
       reviewCsv,
-      /generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
+      /generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_source_ids,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes/,
     );
     assert.match(
       reviewCsv,
@@ -3244,7 +3244,7 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
     const lines = summaryCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths",
+      "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids",
     );
     assert.match(
       lines[1] ?? "",
@@ -3374,7 +3374,7 @@ test("import-review result-json includes gate metadata and can be written to dis
     await writeFile(
       reviewCsvPath,
       [
-        "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
+        "generated_at,answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_source_ids,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes",
         "2026-07-12T00:00:00.000Z,HR packet,answers/hr.md,Leave policy,clear,,true,claim_1,Employees receive 18 weeks of leave.,contradicted,Conflicting policy,HR Policy,high,2026-07-01,policies/hr.md,0.857,Employees receive 12 weeks of leave.,needs_review,Needs HR review",
       ].join("\n"),
       "utf8",
