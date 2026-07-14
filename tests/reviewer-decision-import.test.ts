@@ -316,6 +316,10 @@ support-answer,examples/answers/support-answer.md,<Flag this answer for legal re
   assert.match(rendered, /<title>Quorum Reviewer Decision Import<\/title>/);
   assert.match(rendered, /Imported reviewer decisions, final verdicts/);
   assert.match(rendered, /<span>Total claims<\/span><strong>2<\/strong>/);
+  assert.match(rendered, /<span>Queue answers<\/span><strong>2<\/strong>/);
+  assert.match(rendered, /<span>Queue pending<\/span><strong>1<\/strong>/);
+  assert.match(rendered, /<span>Queue reviewed<\/span><strong>1<\/strong>/);
+  assert.match(rendered, /<span>Queue no claims<\/span><strong>0<\/strong>/);
   assert.match(rendered, /<span>Fail policy<\/span><strong>matched \(unsupported\)<\/strong>/);
   assert.match(rendered, /Answer file/);
   assert.match(rendered, /<h2><code>hr-answer<\/code><\/h2>/);
