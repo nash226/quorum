@@ -2973,6 +2973,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               items: { type: "string" },
               description: "Content types accepted by JSON request endpoints.",
             },
+            binaryContentEncodings: {
+              type: "array",
+              items: { type: "string" },
+              description: "Encodings accepted for binary answer and source content.",
+            },
             maxRequestBytes: {
               type: "integer",
               minimum: 1,
@@ -3023,6 +3028,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           required: [
             "httpMethods",
             "requestContentTypes",
+            "binaryContentEncodings",
             "maxRequestBytes",
             "requestTimeoutMs",
             "sourceExtensions",
