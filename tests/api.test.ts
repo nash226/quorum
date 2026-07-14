@@ -244,6 +244,29 @@ test("HTTP API extracts normalized claims without loading sources", async () => 
   }
 });
 
+test("HTTP API keeps semicolon-separated policy clauses atomic", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/extract-claims`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave; Healthcare coverage begins after 30 days of employment.",
+        answerPath: "answers/hr-answer.md",
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    assert.deepEqual((await response.json()).claims, [
+      { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave" },
+      { id: "claim_2", text: "Healthcare coverage begins after 30 days of employment." },
+    ]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
