@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a287556` on 2026-07-13, fix: document API no-store response headers
+- Latest shipped change: `2a8121a` on 2026-07-13, fix: preserve answer labels in human reports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -24,6 +24,7 @@
 - compare each claim against approved source snippets
 - label each claim as `verified`, `contradicted`, `unsupported`, or `needs_review`
 - print a human-readable report
+- preserve the reviewer-facing `answer_label` in text, Markdown, and HTML reports as well as machine-readable exports
 - include the report generation timestamp in text output for audit-friendly handoff
 - accept `--generated-at <timestamp>` on report-producing CLI workflows when CI retries or snapshot tests need a stable audit timestamp
 - validate HTTP `generatedAt` values as timestamps before producing audit reports
@@ -58,6 +59,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | fix: preserve answer labels in human reports | `2a8121a` |
 | 2026-07-13 | Direct push | fix: document API no-store response headers | `a287556` |
 | 2026-07-13 | Direct push | test: smoke test reviewer summary artifacts | `04593c2` |
 | 2026-07-13 | [#373](https://github.com/nash226/quorum/pull/373) | test: smoke test oversized API requests | `79e1495` |
@@ -65,5 +67,4 @@
 | 2026-07-13 | Direct push | fix: validate source freshness timestamps | `5088c51` |
 | 2026-07-13 | Direct push | fix: validate HTTP report timestamps | `c18da55` |
 | 2026-07-13 | Direct push | test: smoke test Kubernetes probe aliases | `95ea238` |
-| 2026-07-13 | Direct push | docs: expose /readyz in serve help | `23c3cf6` |
 
