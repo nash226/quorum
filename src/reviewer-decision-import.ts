@@ -33,6 +33,7 @@ export interface ImportedReviewerDecision {
   answerLabel?: string;
   answerPath?: string;
   answerPreview?: string;
+  answerHasClaims?: boolean;
   originalAnswerFailPolicy?: ImportedAnswerFailPolicy;
   originalAnswerFailVerdicts: ClaimVerdict[];
   claimId: string;
@@ -74,6 +75,8 @@ export interface ReviewerDecisionGroup {
   answerLabel?: string;
   answerPath?: string;
   answerPreview?: string;
+  /** Preserve the source CSV routing decision when it is explicitly present. */
+  answerHasClaims?: boolean;
   originalAnswerFailPolicy?: ImportedAnswerFailPolicy;
   originalAnswerFailVerdicts: ClaimVerdict[];
   label: string;
@@ -86,6 +89,7 @@ interface ImportedAnswerGroupSeed {
   answerLabel?: string;
   answerPath?: string;
   answerPreview?: string;
+  answerHasClaims?: boolean;
   originalAnswerFailPolicy?: ImportedAnswerFailPolicy;
   originalAnswerFailVerdicts: ClaimVerdict[];
   emptyStateReason?: string;
@@ -397,7 +401,7 @@ export function renderReviewerDecisionImportSummaryCsv(
         group.label,
         group.answerPath ?? "",
         group.answerPreview ?? "",
-        group.summary.totalClaims > 0 ? "true" : "false",
+        (group.answerHasClaims ?? (group.summary.totalClaims > 0)) ? "true" : "false",
         primaryClaim?.finalVerdict ?? (group.claims.length === 0 ? "needs_review" : ""),
         primaryClaim?.claimText ?? "",
         primaryClaim?.modelReason ?? (group.claims.length === 0 ? group.emptyStateReason ?? NO_CLAIMS_REVIEW_REASON : ""),
@@ -1088,6 +1092,7 @@ function importDecisionRow(
       answerLabel,
       answerPath,
       answerPreview,
+      answerHasClaims,
       originalAnswerFailPolicy,
       originalAnswerFailVerdicts,
       emptyStateReason:
@@ -1113,6 +1118,7 @@ function importDecisionRow(
     answerLabel,
     answerPath,
     answerPreview,
+    answerHasClaims: answerHasClaims ?? true,
     originalAnswerFailPolicy,
     originalAnswerFailVerdicts,
     claimId,
@@ -1179,6 +1185,7 @@ function getOrCreateImportedGroup(
     answerLabel: value.answerLabel,
     answerPath: value.answerPath,
     answerPreview: value.answerPreview,
+    answerHasClaims: value.answerHasClaims,
     originalAnswerFailPolicy: value.originalAnswerFailPolicy,
     originalAnswerFailVerdicts: value.originalAnswerFailVerdicts,
     label: value.answerLabel ?? value.answerPath ?? value.answerPreview ?? "Unspecified answer",
