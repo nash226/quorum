@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c1fd83c` on 2026-07-13, feat: configure CLI server request timeout
+- Latest shipped change: `51bc571` on 2026-07-13, test: cover API response cache policy
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -59,6 +59,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | test: cover API response cache policy | `51bc571` |
 | 2026-07-13 | Direct push | feat: configure CLI server request timeout | `c1fd83c` |
 | 2026-07-13 | Direct push | fix: preserve answer labels in human reports | `2a8121a` |
 | 2026-07-13 | Direct push | fix: document API no-store response headers | `a287556` |
@@ -66,5 +67,4 @@
 | 2026-07-13 | [#373](https://github.com/nash226/quorum/pull/373) | test: smoke test oversized API requests | `79e1495` |
 | 2026-07-13 | Direct push | fix: prevent caching API evidence responses | `93cb4a5` |
 | 2026-07-13 | Direct push | fix: validate source freshness timestamps | `5088c51` |
-| 2026-07-13 | Direct push | fix: validate HTTP report timestamps | `c18da55` |
 
