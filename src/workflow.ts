@@ -30,6 +30,8 @@ export interface SourceLoadOptions {
 export interface InMemorySourceInput {
   sourcePath: string;
   content: string | Uint8Array;
+  /** Stable caller-owned identifier preserved in evidence and reports. */
+  id?: string;
   title?: string;
   updatedAt?: string;
   trustLevel?: SourceTrustLevel;
@@ -239,6 +241,7 @@ export async function loadSourceDocumentsFromContent(
     options.sources.map((source, index) => {
       if (typeof source.content === "string") {
         return sourceDocumentFromFile(source.sourcePath, source.content, index, {
+          id: source.id,
           defaultTrustLevel: options.defaultTrustLevel,
           title: source.title,
           updatedAt: source.updatedAt,
@@ -247,6 +250,7 @@ export async function loadSourceDocumentsFromContent(
       }
 
       return sourceDocumentFromFile(source.sourcePath, source.content, index, {
+        id: source.id,
         defaultTrustLevel: options.defaultTrustLevel,
         title: source.title,
         updatedAt: source.updatedAt,

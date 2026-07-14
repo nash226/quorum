@@ -47,6 +47,14 @@ test("applies the default trust override when metadata is absent", async () => {
   assert.equal(source.trustLevel, "high");
 });
 
+test("preserves a caller-supplied source identifier", async () => {
+  const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
+    id: "people-ops/hr-policy@2026-05-31",
+  });
+
+  assert.equal(source.id, "people-ops/hr-policy@2026-05-31");
+});
+
 test("parses supported frontmatter metadata and strips it from content", () => {
   const parsed = parseSource("docs/hr-policy.md", `---
 title: HR Benefits Policy

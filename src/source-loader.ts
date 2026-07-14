@@ -16,6 +16,7 @@ interface ParsedSource {
 }
 
 interface SourceDocumentOptions {
+  id?: string;
   defaultTrustLevel?: SourceTrustLevel;
   title?: string;
   updatedAt?: string;
@@ -66,7 +67,7 @@ export async function sourceDocumentFromFile(
   const parsed = parseSource(sourcePath, textContent);
 
   return {
-    id: `source_${index + 1}`,
+    id: options.id ?? `source_${index + 1}`,
     sourcePath,
     title: options.title ?? parsed.metadata.title ?? sourceTitleFromPath(sourcePath),
     updatedAt: validatedUpdatedAt(sourcePath, options.updatedAt ?? parsed.metadata.updatedAt),
