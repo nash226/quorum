@@ -57,6 +57,8 @@ export interface SingleVerificationResult {
 export interface BatchVerificationResult {
   answerLabel: string;
   answerPath: string;
+  /** Whether claim extraction produced at least one claim for this answer. */
+  answerHasClaims?: boolean;
   report: VerificationReport;
   shouldFail: boolean;
   failVerdicts: ClaimVerdict[];

@@ -488,6 +488,7 @@ export async function verifyBatchAnswers(
       return {
         answerLabel,
         answerPath: normalizedAnswerPath,
+        answerHasClaims: report.assessments.length > 0,
         report,
         shouldFail: failVerdicts.length > 0,
         failVerdicts,
@@ -531,6 +532,7 @@ export function verifyAnswers(
     return {
       answerLabel: report.answerLabel,
       answerPath: normalizedAnswerPath,
+      answerHasClaims: report.assessments.length > 0,
       report,
       shouldFail: failVerdicts.length > 0,
       failVerdicts,

@@ -1418,6 +1418,8 @@ test("programmatic API returns top-level fail-policy metadata for in-memory batc
   assert.equal(result.report.generatedAt, "2026-07-05T03:43:00.000Z");
   assert.equal(result.report.summary.answersWithFailures, 2);
   assert.equal(result.report.summary.answersWithoutClaims, 1);
+  assert.equal(result.report.answers[0]?.answerHasClaims, true);
+  assert.equal(result.report.answers[1]?.answerHasClaims, false);
   assert.equal(result.shouldFail, true);
   assert.deepEqual(result.failVerdicts, ["needs_review", "contradicted"]);
 });
@@ -3931,6 +3933,7 @@ Employees receive 12 weeks of paid parental leave.
         summary: Record<string, number>;
         answers: Array<{
           answerLabel: string;
+          answerHasClaims: boolean;
         }>;
       };
     };
@@ -3939,6 +3942,8 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(result.failVerdicts, ["unsupported"]);
     assert.equal(result.report.generatedAt, generatedAt);
     assert.equal(result.report.answers[0]?.answerLabel, "HR queue");
+    assert.equal(result.report.answers[0]?.answerHasClaims, true);
+    assert.equal(result.report.answers[1]?.answerHasClaims, true);
     assert.deepEqual(result.report.summary, {
       verified: 1,
       contradicted: 0,

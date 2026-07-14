@@ -41,6 +41,7 @@ The current CLI can:
 - read an AI-generated answer from a Markdown, text, or exported HTML file
 - read an AI-generated answer from a PDF or DOCX file by extracting its readable text
 - batch verify multiple AI-generated answers from a directory
+- include a per-answer `answerHasClaims` flag in batch results so queue integrations can route empty drafts without recounting claims
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
