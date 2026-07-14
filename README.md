@@ -497,6 +497,10 @@ can also run a built-in HTTP server:
 npm run dev -- serve --port 3000
 ```
 
+See [docs/api-integration.md](docs/api-integration.md) for a focused
+copy-paste guide covering verification, claim previews, request correlation,
+and fail-gated HTTP responses.
+
 Available endpoints:
 
 - `GET /`
