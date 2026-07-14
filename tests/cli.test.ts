@@ -74,6 +74,81 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("verify preserves explicit stable source IDs in evidence and reports", async () => {
+  const stdout = await runCli([
+    "verify",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--source",
+    "examples/sources/hr-policy.md",
+    "--source-id",
+    "people-ops/hr-policy@2026-07-14",
+    "--json",
+  ]);
+
+  const report = JSON.parse(stdout) as {
+    sources: Array<{ id: string }>;
+    assessments: Array<{ evidence: Array<{ documentId: string }> }>;
+  };
+
+  assert.equal(report.sources[0]?.id, "people-ops/hr-policy@2026-07-14");
+  assert.equal(report.assessments[0]?.evidence[0]?.documentId, "people-ops/hr-policy@2026-07-14");
+});
+
+test("source IDs require a preceding explicit source and cannot be repeated", async () => {
+  await assert.rejects(
+    runCli(["verify", "--source-id", "policy-1", "--source", "examples/sources/hr-policy.md"]),
+    /Source IDs require a preceding --source <path>\./,
+  );
+
+  await assert.rejects(
+    runCli([
+      "verify",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--source-id",
+      "policy-1",
+      "--source-id",
+      "policy-2",
+    ]),
+    /already has an ID/,
+  );
+
+  await assert.rejects(
+    runCli([
+      "verify",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--source-id",
+      "policy-1",
+      "--source",
+      "examples/sources/support-playbook.md",
+      "--source-id",
+      "policy-1",
+    ]),
+    /Source ID policy-1 is already assigned/,
+  );
+});
+
+test("verify-batch preserves explicit stable source IDs", async () => {
+  const stdout = await runCli([
+    "verify-batch",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--source",
+    "examples/sources/hr-policy.md",
+    "--source-id",
+    "people-ops/hr-policy@2026-07-14",
+    "--json",
+  ]);
+
+  const report = JSON.parse(stdout) as {
+    sources: Array<{ id: string }>;
+  };
+
+  assert.equal(report.sources[0]?.id, "people-ops/hr-policy@2026-07-14");
+});
+
 test("verify uses a caller-supplied generated timestamp", async () => {
   const stdout = await runCli([
     "verify",
