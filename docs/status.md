@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `89caa0c` on 2026-07-14, fix: keep OpenAPI freshness examples date-time compatible
+- Latest shipped change: `de599cf` on 2026-07-14, feat: advertise API request timeout capability
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, and evaluation workflows
 - expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
+- expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
@@ -66,6 +67,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#395](https://github.com/nash226/quorum/pull/395) | feat: advertise API request timeout capability | `de599cf` |
 | 2026-07-14 | Direct push | fix: keep OpenAPI freshness examples date-time compatible | `89caa0c` |
 | 2026-07-14 | Direct push | fix: describe source freshness timestamps in OpenAPI | `0c4c5aa` |
 | 2026-07-14 | Direct push | fix: describe report timestamps in OpenAPI | `9256104` |
@@ -73,5 +75,4 @@
 | 2026-07-14 | Direct push | feat: preserve source IDs in reviewer CSVs | `ab2073a` |
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation summaries | `d517f43` |
 | 2026-07-14 | [#387](https://github.com/nash226/quorum/pull/387) | feat: preserve evaluation source identifiers | `3c5621f` |
-| 2026-07-14 | [#386](https://github.com/nash226/quorum/pull/386) | feat: preserve stable source identifiers | `bfcc03d` |
 
