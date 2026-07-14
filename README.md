@@ -85,6 +85,7 @@ The current CLI can:
 - export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
+- export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
