@@ -33,6 +33,7 @@ test("loads and evaluates the HR example fixture", async () => {
   assert.equal(scorecard.fixtureName, "HR policy example");
   assert.equal(scorecard.domain, "hr");
   assert.equal(scorecard.answerLabel, "HR reviewer packet");
+  assert.equal(scorecard.answerHasClaims, true);
   assert.equal(
     scorecard.answerPreview,
     "Employees receive 18 weeks of paid parental leave. Full-time employees receive 20 days of paid vacation each calendar...",
@@ -231,6 +232,7 @@ test("scores an empty-answer fixture as a matching zero-claim scorecard", async 
 
   assert.equal(scorecard.fixtureName, "Empty answer example");
   assert.equal(scorecard.answerLabel, "Support empty draft");
+  assert.equal(scorecard.answerHasClaims, false);
   assert.deepEqual(scorecard.actualSummary, {
     verified: 0,
     contradicted: 0,
@@ -709,11 +711,12 @@ test("renders evaluation summary csv rows for each fixture", () => {
 
   assert.match(
     rendered,
-    /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,source_ids,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,first_mismatch_evidence_title,first_mismatch_evidence_trust_level,first_mismatch_evidence_updated_at,first_mismatch_evidence_source_path,first_mismatch_evidence_source_id,first_mismatch_evidence_score,first_mismatch_evidence_quote,/,
+    /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,answer_has_claims,source_dirs,source_paths,source_ids,summary_match,matched_claims,total_expected_claims,score,has_mismatch,mismatch_type,first_mismatch_claim_index,first_mismatch_claim_text,first_mismatch_expected_verdict,first_mismatch_actual_verdict,first_mismatch_evidence_title,first_mismatch_evidence_trust_level,first_mismatch_evidence_updated_at,first_mismatch_evidence_source_path,first_mismatch_evidence_source_id,first_mismatch_evidence_score,first_mismatch_evidence_quote,/,
   );
   assert.match(rendered, /Support policy example/);
+  assert.match(rendered, /answer_has_claims/);
   assert.match(rendered, /Support policy example,support,\/tmp\/fixtures\/support\.json/);
-  assert.match(rendered, /2026-07-05T10:20:00.000Z,Support policy example,support,\/tmp\/fixtures\/support\.json,\/tmp\/answers\/support\.md,Support reviewer packet,Support answer preview,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,,yes,0,0,1\.000,no,none,,,,,,,,,,,,1,0,0,0,1,0,0,0/);
+  assert.match(rendered, /2026-07-05T10:20:00.000Z,Support policy example,support,\/tmp\/fixtures\/support\.json,\/tmp\/answers\/support\.md,Support reviewer packet,Support answer preview,no,\/tmp\/sources,\/tmp\/sources\/support\.md \| \/tmp\/sources\/refunds\.md,,yes,0,0,1\.000,no,none,,,,,,,,,,,,1,0,0,0,1,0,0,0/);
 });
 
 test("evaluation summary csv includes first mismatched claim details", () => {
@@ -791,7 +794,7 @@ test("evaluation summary csv includes first mismatched claim details", () => {
 
   assert.match(
     rendered,
-    /HR mismatch example,,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,,[^,\n]+,,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,HR Policy,high,2026-06-01,\/tmp\/sources\/hr-policy\.md,source_1,0\.857,Employees receive 12 weeks of paid parental leave\.,1,0,0,0,0,1,0,0/,
+    /HR mismatch example,,[^,\n]+,[^,\n]+,HR reviewer packet,HR answer preview,yes,,[^,\n]+,,no,0,1,0\.000,yes,claim_verdict,1,Employees receive 18 weeks of paid parental leave\.,verified,contradicted,HR Policy,high,2026-06-01,\/tmp\/sources\/hr-policy\.md,source_1,0\.857,Employees receive 12 weeks of paid parental leave\.,1,0,0,0,0,1,0,0/,
   );
 });
 

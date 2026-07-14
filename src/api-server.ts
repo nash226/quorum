@@ -3502,6 +3502,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             answerPath: { type: "string" },
             answerLabel: { type: "string" },
             answerPreview: { type: "string" },
+            answerHasClaims: { type: "boolean" },
             answer: { type: "string" },
             sources: {
               type: "array",
@@ -3755,6 +3756,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "fixtureName",
             "answerPath",
             "answerPreview",
+            "answerHasClaims",
             "sourceDirs",
             "sourcePaths",
             "report",
