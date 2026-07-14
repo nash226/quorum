@@ -79,3 +79,17 @@ test("OpenAPI documents revalidation for the discovery endpoint", () => {
   assert.ok(document.paths[API_ROOT_PATH]?.head?.responses?.["200"]?.headers?.ETag);
   assert.ok(document.paths[API_ROOT_PATH]?.head?.responses?.["304"]?.headers?.ETag);
 });
+
+test("OpenAPI documents revalidation for the OpenAPI endpoint", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, {
+      get?: { responses?: Record<string, { headers?: Record<string, unknown> }> };
+      head?: { responses?: Record<string, { headers?: Record<string, unknown> }> };
+    }>;
+  };
+
+  assert.ok(document.paths["/openapi.json"]?.get?.responses?.["200"]?.headers?.ETag);
+  assert.ok(document.paths["/openapi.json"]?.get?.responses?.["304"]?.headers?.ETag);
+  assert.ok(document.paths["/openapi.json"]?.head?.responses?.["200"]?.headers?.ETag);
+  assert.ok(document.paths["/openapi.json"]?.head?.responses?.["304"]?.headers?.ETag);
+});
