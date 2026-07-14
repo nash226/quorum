@@ -739,7 +739,8 @@ send a different media type. Standard `application/json` (with optional
 parameters) and vendor `application/*+json` types are accepted, so typed
 workflow clients can use a domain-specific JSON media type without changing
 the request envelope. The packaged smoke check verifies a vendor media type
-through the built CLI server.
+through the built CLI server. API discovery and `/capabilities` advertise both
+accepted JSON media-type forms so generated clients can choose either one.
 JSON request bodies are limited to 1 MiB; larger payloads return `413` before
 verification or evaluation starts so an oversized workflow input cannot cause
 unbounded request buffering.
