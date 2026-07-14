@@ -100,6 +100,7 @@ The current CLI can:
 - revalidate the HTTP `/version` compatibility probe with a stable `ETag`
 - revalidate the HTTP `/capabilities` runtime contract with a stable `ETag`
 - revalidate the root API discovery contract with a stable `ETag`
+- revalidate the generated `/openapi.json` contract with `GET` or `HEAD` and a stable `ETag`
 - verify the built CLI's machine-readable version output in the end-to-end smoke gate
 
 ## Example
