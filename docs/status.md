@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b0b8cc4` on 2026-07-14, docs: explain targeted reviewer queue handoffs
+- Latest shipped change: `b4ca101` on 2026-07-14, fix: advertise reviewer queue filter in OpenAPI
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -57,6 +57,7 @@
 - import filled reviewer decision CSVs into a machine-readable summary
 - filter imported reviewer decisions by `pending`, `reviewed`, or `no_claims` queue status for targeted handoffs
 - filter HTTP reviewer-import responses by `queueStatus` so integrations can request only pending, reviewed, or claim-less answer groups
+- advertise the supported HTTP reviewer-import `queueStatus` values in the generated OpenAPI schema for typed clients
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
 - include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
 - include a top-level `queueSummary` in reviewer-import JSON reports so queue consumers can route pending, reviewed, and claim-less answers without scanning every group
@@ -113,6 +114,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: advertise reviewer queue filter in OpenAPI | `b4ca101` |
 | 2026-07-14 | Direct push | docs: explain targeted reviewer queue handoffs | `b0b8cc4` |
 | 2026-07-14 | Direct push | feat: filter HTTP reviewer imports by queue status | `1e3a519` |
 | 2026-07-14 | Direct push | feat: filter reviewer imports by queue status | `03cbf03` |
@@ -120,5 +122,4 @@
 | 2026-07-14 | Direct push | feat: advertise reviewer queue statuses | `2e00ee2` |
 | 2026-07-14 | Direct push | docs: explain reviewer queue workflow | `ffef62a` |
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch count in summary | `f2a0b79` |
-| 2026-07-14 | Direct push | test: cover HR source directory evaluations | `dcdad63` |
 
