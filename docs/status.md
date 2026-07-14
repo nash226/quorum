@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2d26d77` on 2026-07-14, docs: document binary HTTP workflow uploads
+- Latest shipped change: `bfcc03d` on 2026-07-14, feat: preserve stable source identifiers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -17,6 +17,7 @@
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
+- preserve caller-supplied source IDs in API evidence and reports for stable audit references
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
 - split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
@@ -60,6 +61,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#386](https://github.com/nash226/quorum/pull/386) | feat: preserve stable source identifiers | `bfcc03d` |
 | 2026-07-14 | Direct push | docs: document binary HTTP workflow uploads | `2d26d77` |
 | 2026-07-14 | Direct push | test: add support escalation scorecard | `d3fdd6a` |
 | 2026-07-14 | Direct push | docs: document HTTP discovery headers | `0b1bc9d` |
@@ -67,5 +69,4 @@
 | 2026-07-13 | [#381](https://github.com/nash226/quorum/pull/381) | test: cover HTTP semicolon claim previews | `ef48606` |
 | 2026-07-13 | Direct push | feat: configure API request body limits | `cf46420` |
 | 2026-07-13 | Direct push | feat: split independent comma clauses | `094af71` |
-| 2026-07-13 | Direct push | test: cover API response cache policy | `51bc571` |
 
