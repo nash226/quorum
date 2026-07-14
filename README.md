@@ -281,6 +281,9 @@ scorecard and reviewer-facing “no claims extracted” behavior covered in CI.
 The shipped support fixture set also includes a source-directory example, so a
 benchmark can discover a maintained approved-source bundle with `sourceDirs`
 instead of listing every source file individually.
+Evaluation summary CSVs preserve the ordered source IDs used by each fixture
+and include the durable ID for a first mismatched claim's evidence when one is
+available, so benchmark drift can be reconciled with approved-source records.
 It also includes a support escalation example where a partial policy match is
 correctly routed to `needs_review`, keeping reviewer handoff behavior covered
 in the shipped scorecard gate.

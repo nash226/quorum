@@ -334,7 +334,7 @@ try {
   const evaluationSummaryCsv = readFileSync(evaluationSummaryCsvPath, "utf8");
   assert.match(
     evaluationSummaryCsv,
-    /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
+    /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,source_ids,summary_match,/,
   );
   assert.match(evaluationSummaryCsv, /^[^,\n]+,Support billing HTML example,support,/m);
   assert.match(evaluationSummaryCsv, /^[^,\n]+,HR PDF policy example,hr,/m);
@@ -888,7 +888,7 @@ HR reviewer packet,answers/hr.md,Employees receive 12 weeks of paid parental lea
     assert.equal(evaluateResult.scorecards[0]?.summaryMatches, true);
     assert.match(
       evaluateResult.artifacts.summary_csv,
-      /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
+      /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,source_ids,summary_match,/,
     );
     assert.match(
       evaluateResult.artifacts.domain_summary_csv,
@@ -1041,7 +1041,7 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.equal(evaluateConflictResult.mismatchCount, 1);
     assert.match(
       evaluateConflictResult.artifacts.summary_csv,
-      /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,summary_match,/,
+      /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,source_dirs,source_paths,source_ids,summary_match,/,
     );
   } finally {
     await server.stop();
