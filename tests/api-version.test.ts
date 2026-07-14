@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  API_CORS_ALLOWED_HEADERS,
+  API_CORS_EXPOSED_HEADERS,
+  API_CORS_MAX_AGE_SECONDS,
+  API_ENDPOINTS,
   API_VERSION,
   API_ROOT_PATH,
   VERSION_PATH,
@@ -32,6 +36,40 @@ test("HTTP API exposes a dedicated machine-readable version endpoint", async () 
     assert.equal(notModifiedResponse.status, 304);
     assert.equal(notModifiedResponse.headers.get("etag"), etag);
     assert.equal(await notModifiedResponse.text(), "");
+  } finally {
+    await api.close();
+  }
+});
+
+test("HTTP API scopes browser preflight methods to every discovered route", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const paths = [...new Set(API_ENDPOINTS.map((endpoint) => endpoint.path))];
+
+    for (const path of paths) {
+      const expectedMethods = API_ENDPOINTS
+        .filter((endpoint) => endpoint.path === path)
+        .map((endpoint) => endpoint.method)
+        .join(", ");
+      const requestedMethod = API_ENDPOINTS.find((endpoint) => endpoint.path === path)?.method;
+      const response = await fetch(`${api.url}${path}`, {
+        method: "OPTIONS",
+        headers: {
+          origin: "https://browser.example",
+          "access-control-request-method": requestedMethod ?? "GET",
+          "access-control-request-headers": "content-type, x-quorum-request-id",
+        },
+      });
+
+      assert.equal(response.status, 204, path);
+      assert.equal(response.headers.get("access-control-allow-origin"), "*");
+      assert.equal(response.headers.get("access-control-allow-methods"), expectedMethods, path);
+      assert.equal(response.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS, path);
+      assert.equal(response.headers.get("access-control-expose-headers"), API_CORS_EXPOSED_HEADERS, path);
+      assert.equal(response.headers.get("access-control-max-age"), API_CORS_MAX_AGE_SECONDS.toString(), path);
+      assert.equal(await response.text(), "", path);
+    }
   } finally {
     await api.close();
   }
