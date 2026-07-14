@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `81535f4` on 2026-07-14, docs: add API deployment guidance
+- Latest shipped change: `0acba18` on 2026-07-14, Expose queue-ready reviewer import status with tests and API documentation.
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -53,6 +53,7 @@
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
+- include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
 - show the imported `answer_has_claims` routing signal in text, Markdown, and HTML reviewer handoff reports
 - reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
@@ -104,6 +105,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#451](https://github.com/nash226/quorum/pull/451) | Expose queue-ready reviewer import status with tests and API documentation. | `0acba18` |
 | 2026-07-14 | Direct push | docs: add API deployment guidance | `81535f4` |
 | 2026-07-14 | Direct push | docs: refresh roadmap after API and evaluation foundation | `5cd22c9` |
 | 2026-07-14 | Direct push | feat: expose batch claim routing totals | `9e5dc1f` |
@@ -111,5 +113,4 @@
 | 2026-07-14 | Direct push | fix: preserve reviewer claim routing | `8d1bed1` |
 | 2026-07-14 | Direct push | fix: preserve colon-terminated business claims | `12c8153` |
 | 2026-07-14 | Direct push | fix: document evaluation claim routing in OpenAPI | `6ec9140` |
-| 2026-07-14 | Direct push | feat: expose evaluation claim rollups | `8d1e1db` |
 
