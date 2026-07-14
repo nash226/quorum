@@ -206,6 +206,12 @@ export interface ApiVersionResponse {
   version: string;
 }
 
+/** Structured error returned by HTTP API failures, including its correlation ID. */
+export interface ApiErrorResponse {
+  error: string;
+  requestId: string;
+}
+
 export interface OpenApiDocumentOptions {
   serverUrl?: string;
   maxRequestBytes?: number;
