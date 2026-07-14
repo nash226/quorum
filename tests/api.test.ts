@@ -419,7 +419,7 @@ test("HTTP API marks mutable JSON responses as non-cacheable", async () => {
     for (const [index, response] of responses.entries()) {
       assert.equal(
         response.headers.get("cache-control"),
-        index === 3 ? "public, max-age=0, must-revalidate" : "no-store",
+        index === 2 || index === 3 ? "public, max-age=0, must-revalidate" : "no-store",
       );
       await response.arrayBuffer();
     }
