@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ffef62a` on 2026-07-14, docs: explain reviewer queue workflow
+- Latest shipped change: `2e00ee2` on 2026-07-14, feat: advertise reviewer queue statuses
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -73,6 +73,7 @@
 - expose configured request size and timeout limits in machine-readable API capabilities for integration clients
 - expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
 - expose the browser CORS allowlist, exposed response headers, and preflight cache duration in machine-readable API capabilities
+- expose reviewer queue statuses (`pending`, `reviewed`, and `no_claims`) in machine-readable API capabilities so integrations can route imported answers without hard-coded values
 - publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
 - export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
@@ -109,6 +110,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: advertise reviewer queue statuses | `2e00ee2` |
 | 2026-07-14 | Direct push | docs: explain reviewer queue workflow | `ffef62a` |
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch count in summary | `f2a0b79` |
 | 2026-07-14 | Direct push | test: cover HR source directory evaluations | `dcdad63` |
@@ -116,5 +118,4 @@
 | 2026-07-14 | [#452](https://github.com/nash226/quorum/pull/452) | feat: add reviewer queue summary | `1bf0c9c` |
 | 2026-07-14 | [#451](https://github.com/nash226/quorum/pull/451) | Expose queue-ready reviewer import status with tests and API documentation. | `0acba18` |
 | 2026-07-14 | Direct push | docs: add API deployment guidance | `81535f4` |
-| 2026-07-14 | Direct push | docs: refresh roadmap after API and evaluation foundation | `5cd22c9` |
 
