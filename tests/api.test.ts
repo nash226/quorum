@@ -3166,6 +3166,17 @@ Refund requests receive an initial response within one business day.
         failOnStatus: true,
       },
     );
+    const importReviewRequestSchema = openApi.paths["/import-review"]?.post?.requestBody?.content?.[
+      "application/json"
+    ]?.schema as { properties?: Record<string, unknown> } | undefined;
+    assert.deepEqual(
+      (importReviewRequestSchema?.properties?.queueStatus as Record<string, unknown> | undefined),
+      {
+        type: "string",
+        enum: ["pending", "reviewed", "no_claims"],
+        description: "Only return answer groups in this reviewer queue status.",
+      },
+    );
     const importReviewExample = openApi.paths["/import-review"]?.post?.requestBody?.content?.[
       "application/json"
     ]?.examples?.["reviewedQueueExport"]?.value;
