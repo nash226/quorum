@@ -138,6 +138,7 @@ test("API discovery exposes transport limits and supported methods", () => {
   assert.deepEqual(API_CAPABILITIES.httpMethods, ["GET", "HEAD", "POST", "OPTIONS"]);
   assert.deepEqual(API_CAPABILITIES.requestContentTypes, ["application/json"]);
   assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
+  assert.equal(API_CAPABILITIES.requestTimeoutMs, SERVER_API_REQUEST_TIMEOUT_MS);
 });
 
 test("API discovery endpoint inventory contains one entry per method and path", () => {
@@ -3229,6 +3230,7 @@ Refund requests receive an initial response within one business day.
       "httpMethods",
       "requestContentTypes",
       "maxRequestBytes",
+      "requestTimeoutMs",
       "sourceExtensions",
       "answerExtensions",
       "verdicts",
@@ -3568,6 +3570,8 @@ test("programmatic API advertises the configured request timeout", async () => {
     const response = await fetch(`${api.url}/`);
     assert.equal(response.status, 200);
     assert.equal(response.headers.get("x-quorum-request-timeout-ms"), "1500");
+    const payload = await response.json() as { capabilities: { requestTimeoutMs: number } };
+    assert.equal(payload.capabilities.requestTimeoutMs, 1_500);
   } finally {
     await api.close();
   }
@@ -3580,8 +3584,11 @@ test("programmatic API advertises and enforces a configured request size limit",
   try {
     const discoveryResponse = await fetch(`${api.url}/`);
     assert.equal(discoveryResponse.headers.get("x-quorum-max-request-bytes"), String(maxRequestBytes));
-    const discoveryPayload = await discoveryResponse.json() as { capabilities: { maxRequestBytes: number } };
+    const discoveryPayload = await discoveryResponse.json() as {
+      capabilities: { maxRequestBytes: number; requestTimeoutMs: number };
+    };
     assert.equal(discoveryPayload.capabilities.maxRequestBytes, maxRequestBytes);
+    assert.equal(discoveryPayload.capabilities.requestTimeoutMs, SERVER_API_REQUEST_TIMEOUT_MS);
 
     const openApiResponse = await fetch(`${api.url}/openapi.json`);
     const openApi = await openApiResponse.json() as {
