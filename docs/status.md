@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4b5efec` on 2026-07-14, feat: make version probe revalidatable
+- Latest shipped change: `53a2aa5` on 2026-07-14, feat: make capabilities probe revalidatable
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -65,6 +65,7 @@
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 - emit the CLI and API contract version as stable JSON with `quorum version --json`
 - revalidate the HTTP `/version` compatibility probe with a stable `ETag`
+- revalidate the HTTP `/capabilities` runtime contract with a stable `ETag`
 - verify the built CLI's machine-readable version output in the end-to-end smoke gate
 
 ## Roadmap Snapshot
@@ -84,6 +85,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: make capabilities probe revalidatable | `53a2aa5` |
 | 2026-07-14 | Direct push | feat: make version probe revalidatable | `4b5efec` |
 | 2026-07-14 | Direct push | fix: keep OpenAPI methods canonical | `9f18d78` |
 | 2026-07-14 | [#418](https://github.com/nash226/quorum/pull/418) | feat: export supported HTTP methods | `9392a4a` |
@@ -91,5 +93,4 @@
 | 2026-07-14 | [#416](https://github.com/nash226/quorum/pull/416) | test: smoke check machine-readable version output | `715913f` |
 | 2026-07-14 | Direct push | feat: add machine-readable version output | `307988d` |
 | 2026-07-14 | [#414](https://github.com/nash226/quorum/pull/414) | fix: expose allowed methods to browsers | `ab00936` |
-| 2026-07-14 | Direct push | fix: expose OpenAPI ETags to browsers | `2ed0c47` |
 
