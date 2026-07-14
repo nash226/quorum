@@ -94,6 +94,7 @@ export interface EvaluationBatchRunResult {
 export interface EvaluationAggregateSummary {
   fixtureCount: number;
   mismatchCount: number;
+  mismatchRate: number | null;
   answersWithClaims: number;
   answersWithoutClaims: number;
   matchedClaims: number;
@@ -109,6 +110,7 @@ export interface EvaluationDomainAggregateSummary {
   domain: string;
   fixtureCount: number;
   mismatchCount: number;
+  mismatchRate: number | null;
   answersWithClaims: number;
   answersWithoutClaims: number;
   matchedClaims: number;
@@ -551,7 +553,7 @@ export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): s
     `Fixtures: ${scorecards.length}`,
     `Answers with claims: ${aggregate.answersWithClaims}`,
     `Answers without claims: ${aggregate.answersWithoutClaims}`,
-    `Fixtures with mismatches: ${mismatchCount}`,
+    `Fixtures with mismatches: ${mismatchCount} (${formatEvaluationRate(aggregate.mismatchRate)})`,
     `Matched claim verdicts: ${aggregate.matchedClaims}/${aggregate.totalExpectedClaims}`,
     `Overall claim verdict score: ${aggregate.scoreLabel}`,
   );
@@ -561,7 +563,7 @@ export function renderEvaluationTextReport(scorecards: EvaluationScorecard[]): s
 
     aggregate.domains.forEach((domainSummary) => {
       lines.push(
-        `- ${domainSummary.domain}: ${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"}, ${domainSummary.answersWithClaims} with claims, ${domainSummary.answersWithoutClaims} without claims, ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"}, ${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims} matched (${domainSummary.scoreLabel})`,
+        `- ${domainSummary.domain}: ${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"}, ${domainSummary.answersWithClaims} with claims, ${domainSummary.answersWithoutClaims} without claims, ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"} (${formatEvaluationRate(domainSummary.mismatchRate)}), ${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims} matched (${domainSummary.scoreLabel})`,
         `  Expected verdicts: ${renderSummaryCounts(domainSummary.expectedSummary)}`,
         `  Actual verdicts: ${renderSummaryCounts(domainSummary.actualSummary)}`,
       );
@@ -583,7 +585,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
     `- Fixtures: ${scorecards.length}`,
     `- Answers with claims: ${aggregate.answersWithClaims}`,
     `- Answers without claims: ${aggregate.answersWithoutClaims}`,
-    `- Fixtures with mismatches: ${mismatchCount}`,
+    `- Fixtures with mismatches: ${mismatchCount} (${formatEvaluationRate(aggregate.mismatchRate)})`,
     `- Matched claim verdicts: ${aggregate.matchedClaims}/${aggregate.totalExpectedClaims}`,
     `- Overall claim verdict score: ${aggregate.scoreLabel}`,
     "",
@@ -593,7 +595,7 @@ export function renderEvaluationMarkdownReport(scorecards: EvaluationScorecard[]
           "",
           ...aggregate.domains.map(
             (domainSummary) =>
-              `- \`${domainSummary.domain}\`: ${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"}, ${domainSummary.answersWithClaims} with claims, ${domainSummary.answersWithoutClaims} without claims, ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"}, ${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims} matched (${domainSummary.scoreLabel})\n  - Expected verdicts: ${renderSummaryCounts(domainSummary.expectedSummary)}\n  - Actual verdicts: ${renderSummaryCounts(domainSummary.actualSummary)}`,
+              `- \`${domainSummary.domain}\`: ${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"}, ${domainSummary.answersWithClaims} with claims, ${domainSummary.answersWithoutClaims} without claims, ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"} (${formatEvaluationRate(domainSummary.mismatchRate)}), ${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims} matched (${domainSummary.scoreLabel})\n  - Expected verdicts: ${renderSummaryCounts(domainSummary.expectedSummary)}\n  - Actual verdicts: ${renderSummaryCounts(domainSummary.actualSummary)}`,
           ),
           "",
         ]
@@ -666,12 +668,13 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
             .map(
               (domainSummary) => `<article class="summary-card domain-card">
             <h3>${escapeHtml(domainSummary.domain)}</h3>
-            <p>${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"} with ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"}.</p>
+            <p>${domainSummary.fixtureCount} fixture${domainSummary.fixtureCount === 1 ? "" : "s"} with ${domainSummary.mismatchCount} mismatch${domainSummary.mismatchCount === 1 ? "" : "es"} (${formatEvaluationRate(domainSummary.mismatchRate)}).</p>
             <dl>
               <div><dt>Answers with claims</dt><dd>${domainSummary.answersWithClaims}</dd></div>
               <div><dt>Answers without claims</dt><dd>${domainSummary.answersWithoutClaims}</dd></div>
               <div><dt>Matched claims</dt><dd>${domainSummary.matchedClaims}/${domainSummary.totalExpectedClaims}</dd></div>
               <div><dt>Score</dt><dd>${domainSummary.scoreLabel}</dd></div>
+              <div><dt>Mismatch rate</dt><dd>${formatEvaluationRate(domainSummary.mismatchRate)}</dd></div>
             </dl>
             <p>Expected: ${escapeHtml(renderSummaryCounts(domainSummary.expectedSummary))}<br />Actual: ${escapeHtml(renderSummaryCounts(domainSummary.actualSummary))}</p>
           </article>`,
@@ -1069,7 +1072,7 @@ export function renderEvaluationHtmlReport(scorecards: EvaluationScorecard[]): s
           </article>
           <article class="summary-stat">
             <span>Mismatches</span>
-            <strong>${mismatchCount}</strong>
+            <strong>${mismatchCount} (${formatEvaluationRate(aggregate.mismatchRate)})</strong>
           </article>
           <article class="summary-stat">
             <span>Matched Claim Verdicts</span>
@@ -1182,6 +1185,7 @@ export function renderEvaluationDomainSummaryCsv(scorecards: EvaluationScorecard
       "domain",
       "fixture_count",
       "mismatch_count",
+      "mismatch_rate",
       "answers_with_claims",
       "answers_without_claims",
       "matched_claims",
@@ -1202,6 +1206,7 @@ export function renderEvaluationDomainSummaryCsv(scorecards: EvaluationScorecard
       domainSummary.domain,
       domainSummary.fixtureCount.toString(),
       domainSummary.mismatchCount.toString(),
+      domainSummary.mismatchRate === null ? "" : domainSummary.mismatchRate.toFixed(3),
       domainSummary.answersWithClaims.toString(),
       domainSummary.answersWithoutClaims.toString(),
       domainSummary.matchedClaims.toString(),
@@ -1233,6 +1238,7 @@ export function renderEvaluationAggregateSummaryCsv(scorecards: EvaluationScorec
       "answers_with_claims",
       "answers_without_claims",
       "mismatch_count",
+      "mismatch_rate",
       "matched_claims",
       "total_expected_claims",
       "score",
@@ -1240,6 +1246,7 @@ export function renderEvaluationAggregateSummaryCsv(scorecards: EvaluationScorec
       "domains",
       "domain_fixture_counts",
       "domain_mismatch_counts",
+      "domain_mismatch_rates",
       "domain_answers_with_claims",
       "domain_answers_without_claims",
       "domain_scores",
@@ -1259,6 +1266,7 @@ export function renderEvaluationAggregateSummaryCsv(scorecards: EvaluationScorec
       aggregate.answersWithClaims.toString(),
       aggregate.answersWithoutClaims.toString(),
       mismatchCount.toString(),
+      aggregate.mismatchRate === null ? "" : aggregate.mismatchRate.toFixed(3),
       aggregate.matchedClaims.toString(),
       aggregate.totalExpectedClaims.toString(),
       aggregate.score === null ? "" : aggregate.score.toFixed(3),
@@ -1269,6 +1277,11 @@ export function renderEvaluationAggregateSummaryCsv(scorecards: EvaluationScorec
       ),
       serializeDelimitedList(
         aggregate.domains.map((domainSummary) => domainSummary.mismatchCount.toString()),
+      ),
+      serializeDelimitedList(
+        aggregate.domains.map((domainSummary) =>
+          domainSummary.mismatchRate === null ? "" : domainSummary.mismatchRate.toFixed(3),
+        ),
       ),
       serializeDelimitedList(
         aggregate.domains.map((domainSummary) => domainSummary.answersWithClaims.toString()),
@@ -1808,6 +1821,10 @@ function trimTrailingBlankLines(lines: string[]): string[] {
   return trimmed;
 }
 
+function formatEvaluationRate(rate: number | null): string {
+  return rate === null ? "n/a" : `${Math.round(rate * 100)}%`;
+}
+
 export function summarizeEvaluationScorecards(
   scorecards: EvaluationScorecard[],
 ): EvaluationAggregateSummary {
@@ -1856,6 +1873,7 @@ export function summarizeEvaluationScorecards(
         domain,
         fixtureCount: domainScorecards.length,
         mismatchCount,
+        mismatchRate: mismatchCount / domainScorecards.length,
         answersWithClaims,
         answersWithoutClaims: domainScorecards.length - answersWithClaims,
         matchedClaims: domainMatchedClaims,
@@ -1871,6 +1889,8 @@ export function summarizeEvaluationScorecards(
   return {
     fixtureCount: scorecards.length,
     mismatchCount: scorecards.filter(hasEvaluationMismatch).length,
+    mismatchRate:
+      scorecards.length > 0 ? scorecards.filter(hasEvaluationMismatch).length / scorecards.length : null,
     answersWithClaims: scorecards.filter(scorecardHasClaims).length,
     answersWithoutClaims: scorecards.filter((scorecard) => !scorecardHasClaims(scorecard)).length,
     matchedClaims,

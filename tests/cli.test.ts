@@ -758,10 +758,10 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
     assert.match(stdout, /Evaluation domain summary CSV written to/);
     assert.match(
       summaryCsv,
-      /^generated_at,domain,fixture_count,mismatch_count,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
+      /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /^[^,\n]+,hr,4,0,4,0,12,12,1\.000,100%,6,2,2,2,6,2,2,2$/m);
-    assert.match(summaryCsv, /^[^,\n]+,support,6,0,5,1,13,13,1\.000,100%,6,4,2,1,6,4,2,1$/m);
+    assert.match(summaryCsv, /^[^,\n]+,hr,4,0,0\.000,4,0,12,12,1\.000,100%,6,2,2,2,6,2,2,2$/m);
+    assert.match(summaryCsv, /^[^,\n]+,support,6,0,0\.000,5,1,13,13,1\.000,100%,6,4,2,1,6,4,2,1$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -784,9 +784,9 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
     assert.match(stdout, /Evaluation aggregate summary CSV written to/);
     assert.match(
       summaryCsv,
-      /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
+      /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /^[^,\n]+,10,9,1,0,25,25,1\.000,100%,hr \| support,4 \| 6,0 \| 0,4 \| 5,0 \| 1,1\.000 \| 1\.000,100% \| 100%,12,6,4,3,12,6,4,3$/m);
+    assert.match(summaryCsv, /^[^,\n]+,10,9,1,0,0\.000,25,25,1\.000,100%,hr \| support,4 \| 6,0 \| 0,0\.000 \| 0\.000,4 \| 5,0 \| 1,1\.000 \| 1\.000,100% \| 100%,12,6,4,3,12,6,4,3$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
