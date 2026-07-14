@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `04593c2` on 2026-07-13, test: smoke test reviewer summary artifacts
+- Latest shipped change: `a287556` on 2026-07-13, fix: document API no-store response headers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -58,6 +58,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | Direct push | fix: document API no-store response headers | `a287556` |
 | 2026-07-13 | Direct push | test: smoke test reviewer summary artifacts | `04593c2` |
 | 2026-07-13 | [#373](https://github.com/nash226/quorum/pull/373) | test: smoke test oversized API requests | `79e1495` |
 | 2026-07-13 | Direct push | fix: prevent caching API evidence responses | `93cb4a5` |
@@ -65,5 +66,4 @@
 | 2026-07-13 | Direct push | fix: validate HTTP report timestamps | `c18da55` |
 | 2026-07-13 | Direct push | test: smoke test Kubernetes probe aliases | `95ea238` |
 | 2026-07-13 | Direct push | docs: expose /readyz in serve help | `23c3cf6` |
-| 2026-07-13 | Direct push | fix: validate API request timeout | `6f90c51` |
 
