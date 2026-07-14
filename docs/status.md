@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9e5dc1f` on 2026-07-14, feat: expose batch claim routing totals
+- Latest shipped change: `5cd22c9` on 2026-07-14, docs: refresh roadmap after API and evaluation foundation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -90,19 +90,21 @@
 
 ### Now
 
-- Keep the CLI reliable and easy to run.
+- Keep the CLI and local HTTP API reliable and easy to run.
 - Improve claim extraction without hiding uncertainty.
 - Make reviewer handoff artifacts easier to route, audit, and approve.
+- Expand evaluation fixtures and scorecards across HR and support policy domains.
 
 ### Next In docs/roadmap.md
 
-- Add a lightweight API surface for agent and workflow integrations.
-- Build evaluation fixtures and scorecards for HR and support policy domains.
+- Add a reviewer queue surface for triaging imported decisions and benchmark drift.
+- Document deployment and integration patterns for the local API, including authentication boundaries and durable source identifiers.
 
 ## Recently Shipped
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | docs: refresh roadmap after API and evaluation foundation | `5cd22c9` |
 | 2026-07-14 | Direct push | feat: expose batch claim routing totals | `9e5dc1f` |
 | 2026-07-14 | Direct push | feat: show imported claim routing signal | `fe40b56` |
 | 2026-07-14 | Direct push | fix: preserve reviewer claim routing | `8d1bed1` |
@@ -110,5 +112,4 @@
 | 2026-07-14 | Direct push | fix: document evaluation claim routing in OpenAPI | `6ec9140` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim rollups | `8d1e1db` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim routing | `cd741be` |
-| 2026-07-14 | [#441](https://github.com/nash226/quorum/pull/441) | test: smoke-test OpenAPI cache revalidation | `1978db9` |
 
