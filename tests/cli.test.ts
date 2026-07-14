@@ -156,6 +156,34 @@ test("extract-claims reads stdin and prints claim ids", async () => {
   );
 });
 
+test("extract-claims prints an optional reviewer-facing answer label", async () => {
+  const result = await runCli([
+    "extract-claims",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--answer-label",
+    "HR reviewer packet",
+  ]);
+
+  assert.match(result, /^Answer: HR reviewer packet\nclaim_1:/);
+});
+
+test("extract-claims keeps JSON output backward compatible when labeled", async () => {
+  const stdout = await runCli([
+    "extract-claims",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--answer-label",
+    "HR reviewer packet",
+    "--json",
+  ]);
+
+  const claims = JSON.parse(stdout) as Array<{ id: string; text: string }>;
+
+  assert.equal(claims[0]?.id, "claim_1");
+  assert.equal(claims.length, 3);
+});
+
 test("verify --help prints command-specific usage without requiring sources", async () => {
   const result = await runCliAllowFailure(["verify", "--help"]);
 
