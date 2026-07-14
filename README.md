@@ -734,8 +734,12 @@ end to end.
 `POST /verify`, `POST /verify-batch`, and `POST /evaluate` also accept an
 optional `generatedAt` timestamp so workflow runners can keep report output
 stable across retries and fixture snapshots.
-All `POST` endpoints require `Content-Type: application/json` and return `415`
-when callers send a different media type.
+All `POST` endpoints require a JSON media type and return `415` when callers
+send a different media type. Standard `application/json` (with optional
+parameters) and vendor `application/*+json` types are accepted, so typed
+workflow clients can use a domain-specific JSON media type without changing
+the request envelope. The packaged smoke check verifies a vendor media type
+through the built CLI server.
 JSON request bodies are limited to 1 MiB; larger payloads return `413` before
 verification or evaluation starts so an oversized workflow input cannot cause
 unbounded request buffering.

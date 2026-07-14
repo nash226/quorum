@@ -4072,6 +4072,35 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("programmatic API accepts vendor JSON content types", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/extract-claims`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/vnd.quorum.claim-preview+json",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      answerHasClaims: boolean;
+      claims: Array<{ id: string; text: string }>;
+    };
+
+    assert.equal(result.answerHasClaims, true);
+    assert.deepEqual(result.claims, [
+      { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
+    ]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves reviewer CSV import over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
