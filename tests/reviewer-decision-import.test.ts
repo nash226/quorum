@@ -176,6 +176,27 @@ claim_1,Sample,Needs approval
   );
 });
 
+test("rejects duplicate claim rows for the same answer", () => {
+  assert.throws(
+    () =>
+      importReviewerDecisions(`answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Supported by policy,HR Policy,Employees receive 12 weeks of paid parental leave.,,
+answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Supported by policy,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved
+`),
+    /duplicate claim_id 'claim_1'.*rows 2 and 3/i,
+  );
+});
+
+test("allows the same claim id for different answers", () => {
+  const report = importReviewerDecisions(`answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Supported by policy,HR Policy,Employees receive 12 weeks of paid parental leave.,,
+answers/support.md,claim_1,Refunds are available within 30 days.,verified,Supported by policy,Support Policy,Refunds are available within 30 days.,,
+`);
+
+  assert.equal(report.summary.totalClaims, 2);
+  assert.equal(report.answerGroups.length, 2);
+});
+
 test("renders a reviewer decision import summary for humans", () => {
   const rendered = renderReviewerDecisionImportReport(
     importReviewerDecisions(`answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
