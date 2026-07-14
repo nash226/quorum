@@ -13,13 +13,24 @@ test("HTTP API exposes a dedicated machine-readable version endpoint", async () 
   try {
     const response = await fetch(`${api.url}${VERSION_PATH}`);
     assert.equal(response.status, 200);
+    const etag = response.headers.get("etag");
+    assert.match(etag ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(response.headers.get("cache-control"), "public, max-age=0, must-revalidate");
     const payload = await response.json() as { requestId: string; service: string; version: string };
     assert.equal(payload.requestId, response.headers.get("x-quorum-request-id"));
     assert.deepEqual({ ...payload, requestId: "" }, { requestId: "", service: "quorum", version: API_VERSION });
 
     const headResponse = await fetch(`${api.url}${VERSION_PATH}`, { method: "HEAD" });
     assert.equal(headResponse.status, 200);
+    assert.equal(headResponse.headers.get("etag"), etag);
     assert.equal(await headResponse.text(), "");
+
+    const notModifiedResponse = await fetch(`${api.url}${VERSION_PATH}`, {
+      headers: { "if-none-match": etag ?? "" },
+    });
+    assert.equal(notModifiedResponse.status, 304);
+    assert.equal(notModifiedResponse.headers.get("etag"), etag);
+    assert.equal(await notModifiedResponse.text(), "");
   } finally {
     await api.close();
   }
@@ -27,11 +38,15 @@ test("HTTP API exposes a dedicated machine-readable version endpoint", async () 
 
 test("OpenAPI documents the version endpoint", () => {
   const document = createOpenApiDocument() as {
-    paths: Record<string, { get?: { operationId?: string }; head?: { operationId?: string } }>;
+    paths: Record<string, {
+      get?: { operationId?: string; responses?: Record<string, { headers?: Record<string, unknown> }> };
+      head?: { operationId?: string };
+    }>;
     components: { schemas: Record<string, { required?: string[] }> };
   };
 
   assert.equal(document.paths[VERSION_PATH]?.get?.operationId, "getVersion");
   assert.equal(document.paths[VERSION_PATH]?.head?.operationId, "headVersion");
+  assert.ok(document.paths[VERSION_PATH]?.get?.responses?.["304"]?.headers?.ETag);
   assert.deepEqual(document.components.schemas.ApiVersionResponse.required, ["requestId", "service", "version"]);
 });
