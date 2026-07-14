@@ -582,6 +582,9 @@ Employees receive 12 weeks of paid parental leave.
 
     const versionResponse = await fetch(`${server.url}/version`);
     assert.equal(versionResponse.status, 200);
+    const versionEtag = versionResponse.headers.get("etag");
+    assert.match(versionEtag ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(versionResponse.headers.get("cache-control"), "public, max-age=0, must-revalidate");
     assert.deepEqual(await versionResponse.json(), {
       requestId: versionResponse.headers.get("x-quorum-request-id"),
       service: "quorum",
@@ -590,7 +593,15 @@ Employees receive 12 weeks of paid parental leave.
 
     const headVersionResponse = await fetch(`${server.url}/version`, { method: "HEAD" });
     assert.equal(headVersionResponse.status, 200);
+    assert.equal(headVersionResponse.headers.get("etag"), versionEtag);
     assert.equal(await headVersionResponse.text(), "");
+
+    const notModifiedVersionResponse = await fetch(`${server.url}/version`, {
+      headers: { "if-none-match": versionEtag ?? "" },
+    });
+    assert.equal(notModifiedVersionResponse.status, 304);
+    assert.equal(notModifiedVersionResponse.headers.get("etag"), versionEtag);
+    assert.equal(await notModifiedVersionResponse.text(), "");
 
     const extractClaimsResponse = await fetch(`${server.url}/extract-claims?format=json`, {
       method: "POST",

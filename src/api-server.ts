@@ -1333,7 +1333,14 @@ async function handleApiRequest(
       service: API_SERVICE_NAME,
       version: API_VERSION,
     };
-    writeJson(response, 200, versionResponse, isHeadRequest);
+    writeConditionalJson(
+      request,
+      response,
+      200,
+      versionResponse,
+      isHeadRequest,
+      { service: API_SERVICE_NAME, version: API_VERSION },
+    );
     return;
   }
 
@@ -1934,6 +1941,17 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       description: "Evidence and workflow responses are not cacheable.",
     },
   };
+  const versionResponseHeaders = {
+    ...apiResponseHeaders,
+    "Cache-Control": {
+      schema: { type: "string", const: "public, max-age=0, must-revalidate" },
+      description: "Version responses may be revalidated because they contain no evidence or workflow data.",
+    },
+    ETag: {
+      schema: { type: "string" },
+      description: "Stable validator for the service and HTTP contract version.",
+    },
+  };
   const errorResponse = (
     description: string,
     examples?: Record<string, { summary: string; value: { error: string } }>,
@@ -2344,7 +2362,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Quorum service and HTTP contract version.",
-              headers: apiResponseHeaders,
+              headers: versionResponseHeaders,
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiVersionResponse" },
@@ -2357,6 +2375,13 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                 },
               },
             },
+            "304": {
+              description: "The service and HTTP contract version have not changed.",
+              headers: {
+                ETag: versionResponseHeaders.ETag,
+                "Cache-Control": versionResponseHeaders["Cache-Control"],
+              },
+            },
             "500": errorResponse("The server failed while handling the request."),
           },
         },
@@ -2366,6 +2391,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Header-only version response for lightweight clients.",
+              headers: versionResponseHeaders,
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiVersionResponse" },
@@ -3833,9 +3859,11 @@ function writeConditionalJson(
   statusCode: number,
   payload: unknown,
   omitBody = false,
+  etagPayload: unknown = payload,
 ): void {
   const body = `${JSON.stringify(payload, null, 2)}\n`;
-  const etag = `"${createHash("sha256").update(body, "utf8").digest("hex")}"`;
+  const etagBody = `${JSON.stringify(etagPayload, null, 2)}\n`;
+  const etag = `"${createHash("sha256").update(etagBody, "utf8").digest("hex")}"`;
 
   response.setHeader("ETag", etag);
   response.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
