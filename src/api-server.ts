@@ -14,7 +14,7 @@ import {
 } from "./evaluation.js";
 import type { BatchVerificationRunResult, SingleVerificationResult } from "./domain.js";
 import { extractClaims } from "./claim-extractor.js";
-import { CLAIM_VERDICTS, parseClaimVerdict } from "./report-policy.js";
+import { CLAIM_VERDICTS, matchingFailVerdicts, parseClaimVerdict } from "./report-policy.js";
 import {
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
@@ -29,6 +29,8 @@ import {
 } from "./report-renderer.js";
 import {
   type ReviewerDecisionImportResult,
+  filterReviewerDecisionImportReport,
+  parseReviewerQueueStatus,
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
@@ -131,6 +133,7 @@ export interface ImportReviewApiRequest {
   reviewCsvContent: string;
   generatedAt?: string;
   failOn?: string[];
+  queueStatus?: "pending" | "reviewed" | "no_claims";
   includeArtifacts?: ApiImportReviewArtifact[];
   failOnStatus?: boolean;
 }
@@ -718,6 +721,7 @@ const OPENAPI_IMPORT_REVIEW_EXAMPLE = {
   ].join("\n"),
   generatedAt: "2026-07-07T19:22:00.000Z",
   failOn: ["needs_review"],
+  queueStatus: "reviewed",
   includeArtifacts: ["markdown", "summary_csv"],
   failOnStatus: true,
 } as const;
@@ -1523,11 +1527,20 @@ async function handleApiRequest(
 
     requireJsonRequest(request);
     const body = parseImportReviewRequest(await readJsonBody(request, maxRequestBytes));
-    const result = importReviewerDecisionContentsResult({
+    const importedResult = importReviewerDecisionContentsResult({
       reviewCsvContent: body.reviewCsvContent,
       generatedAt: body.generatedAt,
       failOn: body.failOn,
     });
+    const report = body.queueStatus
+      ? filterReviewerDecisionImportReport(importedResult.report, body.queueStatus)
+      : importedResult.report;
+    const failVerdicts = matchingFailVerdicts(report, body.failOn ?? []);
+    const result = {
+      report,
+      shouldFail: failVerdicts.length > 0,
+      failVerdicts,
+    } satisfies ReviewerDecisionImportResult;
     writeOperationResult(
       response,
       result,
@@ -1698,6 +1711,7 @@ function parseImportReviewRequest(value: unknown): {
   reviewCsvContent: string;
   generatedAt?: string;
   failOn?: ReturnType<typeof parseFailOnVerdicts>;
+  queueStatus?: "pending" | "reviewed" | "no_claims";
   includeArtifacts?: ApiImportReviewArtifact[];
   failOnStatus?: boolean;
 } {
@@ -1707,6 +1721,9 @@ function parseImportReviewRequest(value: unknown): {
     reviewCsvContent: requireString(record.reviewCsvContent, "reviewCsvContent"),
     generatedAt: parseOptionalGeneratedAt(record.generatedAt),
     failOn: parseOptionalFailOn(record.failOn),
+    queueStatus: record.queueStatus === undefined
+      ? undefined
+      : parseReviewerQueueStatus(requireString(record.queueStatus, "queueStatus")),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, IMPORT_REVIEW_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
   };
@@ -2719,6 +2736,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                     failOn: {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
+                    },
+                    queueStatus: {
+                      type: "string",
+                      enum: [...REVIEW_QUEUE_STATUSES],
+                      description: "Only return answer groups in this reviewer queue status.",
                     },
                     includeArtifacts: {
                       type: "array",
