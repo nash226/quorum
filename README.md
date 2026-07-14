@@ -63,9 +63,10 @@ The current CLI can:
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
-- write a reviewer decision CSV that teams can fill in claim by claim
-  while preserving the original answer path for reviewer handoff
+- write a reviewer decision CSV that teams can fill in claim by claim while
+  preserving the original answer path and stable source IDs for audit handoff
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
+- preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
 - import filled reviewer decision CSVs into a machine-readable summary
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear

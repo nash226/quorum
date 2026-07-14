@@ -293,6 +293,7 @@ export function renderReviewerDecisionCsv(
       "evidence_trust_levels",
       "evidence_updated_at",
       "evidence_source_paths",
+      "evidence_source_ids",
       "evidence_scores",
       "evidence_quotes",
       "reviewer_verdict",
@@ -324,6 +325,9 @@ export function renderReviewerDecisionCsv(
             assessment.evidence.map((evidence) => evidence.documentPath ?? ""),
           ),
           serializeDelimitedList(
+            assessment.evidence.map((evidence) => evidence.documentId),
+          ),
+          serializeDelimitedList(
             assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
           ),
           serializeDelimitedList(
@@ -344,6 +348,7 @@ export function renderReviewerDecisionCsv(
           "",
           "",
           NO_CLAIMS_REVIEW_REASON,
+          "",
           "",
           "",
           "",
@@ -376,6 +381,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
       "evidence_trust_levels",
       "evidence_updated_at",
       "evidence_source_paths",
+      "evidence_source_ids",
       "evidence_scores",
       "evidence_quotes",
       "reviewer_verdict",
@@ -408,6 +414,9 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
               assessment.evidence.map((evidence) => evidence.documentPath ?? ""),
             ),
             serializeDelimitedList(
+              assessment.evidence.map((evidence) => evidence.documentId),
+            ),
+            serializeDelimitedList(
               assessment.evidence.map((evidence) => evidence.score.toFixed(3)),
             ),
             serializeDelimitedList(
@@ -428,6 +437,7 @@ export function renderBatchReviewerDecisionCsv(report: BatchVerificationReport):
             "",
             "",
             NO_CLAIMS_REVIEW_REASON,
+            "",
             "",
             "",
             "",
@@ -466,6 +476,7 @@ export function renderSummaryCsv(
       "primary_evidence_trust_level",
       "primary_evidence_updated_at",
       "primary_evidence_source_path",
+      "primary_evidence_source_id",
       "primary_evidence_score",
       "primary_evidence_quote",
       "total_claims",
@@ -479,6 +490,7 @@ export function renderSummaryCsv(
       "source_trust_levels",
       "source_updated_at",
       "source_paths",
+      "source_ids",
     ],
     [
       report.generatedAt,
@@ -493,6 +505,7 @@ export function renderSummaryCsv(
       primaryAssessment?.evidence[0]?.documentTrustLevel ?? "",
       primaryAssessment?.evidence[0]?.documentUpdatedAt ?? "",
       primaryAssessment?.evidence[0]?.documentPath ?? "",
+      primaryAssessment?.evidence[0]?.documentId ?? "",
       primaryAssessment?.evidence[0]?.score.toFixed(3) ?? "",
       primaryAssessment?.evidence[0]?.quote ?? "",
       report.assessments.length.toString(),
@@ -506,6 +519,7 @@ export function renderSummaryCsv(
       report.sources.map((source) => source.trustLevel).join(" | "),
       report.sources.map((source) => source.updatedAt ?? "").join(" | "),
       report.sources.map((source) => source.sourcePath ?? "").join(" | "),
+      report.sources.map((source) => source.id).join(" | "),
     ],
   ];
 
@@ -531,6 +545,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       "primary_evidence_trust_level",
       "primary_evidence_updated_at",
       "primary_evidence_source_path",
+      "primary_evidence_source_id",
       "primary_evidence_score",
       "primary_evidence_quote",
       "total_claims",
@@ -544,6 +559,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
       "source_trust_levels",
       "source_updated_at",
       "source_paths",
+      "source_ids",
     ],
     ...orderedAnswers.map((answer) => {
       const primaryAssessment = selectPrimaryAssessment(answer.report.assessments);
@@ -564,6 +580,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
         primaryAssessment?.evidence[0]?.documentTrustLevel ?? "",
         primaryAssessment?.evidence[0]?.documentUpdatedAt ?? "",
         primaryAssessment?.evidence[0]?.documentPath ?? "",
+        primaryAssessment?.evidence[0]?.documentId ?? "",
         primaryAssessment?.evidence[0]?.score.toFixed(3) ?? "",
         primaryAssessment?.evidence[0]?.quote ?? "",
         answer.report.assessments.length.toString(),
@@ -577,6 +594,7 @@ export function renderBatchSummaryCsv(report: BatchVerificationReport): string {
         sourceTrustLevels,
         sourceUpdatedAt,
         report.sources.map((source) => source.sourcePath ?? "").join(" | "),
+        report.sources.map((source) => source.id).join(" | "),
       ];
     }),
   ];
