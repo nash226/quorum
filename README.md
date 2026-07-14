@@ -49,6 +49,7 @@ The current CLI can:
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
 - split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
+- strip common Unicode numbered-list markers from exported policy answers
 - ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims
 - preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
 - compare each claim against approved source snippets
