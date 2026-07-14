@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1e3a519` on 2026-07-14, feat: filter HTTP reviewer imports by queue status
+- Latest shipped change: `b0b8cc4` on 2026-07-14, docs: explain targeted reviewer queue handoffs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -113,6 +113,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | docs: explain targeted reviewer queue handoffs | `b0b8cc4` |
 | 2026-07-14 | Direct push | feat: filter HTTP reviewer imports by queue status | `1e3a519` |
 | 2026-07-14 | Direct push | feat: filter reviewer imports by queue status | `03cbf03` |
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch rates | `fae6d0c` |
@@ -120,5 +121,4 @@
 | 2026-07-14 | Direct push | docs: explain reviewer queue workflow | `ffef62a` |
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch count in summary | `f2a0b79` |
 | 2026-07-14 | Direct push | test: cover HR source directory evaluations | `dcdad63` |
-| 2026-07-14 | Direct push | feat: show reviewer queue totals in html reports | `6fee78b` |
 
