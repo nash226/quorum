@@ -3242,7 +3242,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         VerificationReport: {
           type: "object",
           properties: {
-            generatedAt: { type: "string" },
+            generatedAt: { type: "string", format: "date-time" },
             answerPath: { type: "string" },
             answerLabel: { type: "string" },
             answerPreview: { type: "string" },
@@ -3309,7 +3309,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         BatchVerificationReport: {
           type: "object",
           properties: {
-            generatedAt: { type: "string" },
+            generatedAt: { type: "string", format: "date-time" },
             sources: {
               type: "array",
               items: { $ref: "#/components/schemas/SourceSummary" },
@@ -3434,7 +3434,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         ReviewerDecisionImportReport: {
           type: "object",
           properties: {
-            generatedAt: { type: "string" },
+            generatedAt: { type: "string", format: "date-time" },
             claims: {
               type: "array",
               items: { $ref: "#/components/schemas/ImportedReviewerDecision" },
