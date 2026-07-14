@@ -1346,6 +1346,7 @@ function optionalFixtureSources(value: unknown, fieldName: string): InMemorySour
     return {
       sourcePath: requireNonEmptyString(record.sourcePath, `${sourceFieldName}.sourcePath`),
       content: requireNonEmptyString(record.content, `${sourceFieldName}.content`),
+      id: optionalNonEmptyString(record.id, `${sourceFieldName}.id`),
       title: optionalNonEmptyString(record.title, `${sourceFieldName}.title`),
       updatedAt: optionalNonEmptyString(record.updatedAt, `${sourceFieldName}.updatedAt`),
       trustLevel: optionalFixtureTrustLevel(record.trustLevel, `${sourceFieldName}.trustLevel`),
