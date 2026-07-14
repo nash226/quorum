@@ -1311,7 +1311,19 @@ async function handleApiRequest(
       openapiPath: OPENAPI_PATH,
       capabilities: apiCapabilities(maxRequestBytes, requestTimeoutMs),
     };
-    writeJson(response, 200, capabilitiesResponse, isHeadRequest);
+    writeConditionalJson(
+      request,
+      response,
+      200,
+      capabilitiesResponse,
+      isHeadRequest,
+      {
+        service: API_SERVICE_NAME,
+        version: API_VERSION,
+        openapiPath: OPENAPI_PATH,
+        capabilities: capabilitiesResponse.capabilities,
+      },
+    );
     return;
   }
 
@@ -1952,6 +1964,17 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       description: "Stable validator for the service and HTTP contract version.",
     },
   };
+  const capabilitiesResponseHeaders = {
+    ...apiResponseHeaders,
+    "Cache-Control": {
+      schema: { type: "string", const: "public, max-age=0, must-revalidate" },
+      description: "Capability responses may be revalidated because they contain no evidence or workflow data.",
+    },
+    ETag: {
+      schema: { type: "string" },
+      description: "Stable validator for the service capability contract and configured runtime limits.",
+    },
+  };
   const errorResponse = (
     description: string,
     examples?: Record<string, { summary: string; value: { error: string } }>,
@@ -2114,7 +2137,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Supported Quorum capabilities without endpoint listings.",
-              headers: apiResponseHeaders,
+              headers: capabilitiesResponseHeaders,
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiCapabilitiesResponse" },
@@ -2127,6 +2150,13 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                 },
               },
             },
+            "304": {
+              description: "The service capability contract and configured runtime limits have not changed.",
+              headers: {
+                ETag: capabilitiesResponseHeaders.ETag,
+                "Cache-Control": capabilitiesResponseHeaders["Cache-Control"],
+              },
+            },
             "500": errorResponse("The server failed while handling the request."),
           },
         },
@@ -2136,10 +2166,18 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Header-only capability discovery response for lightweight clients.",
+              headers: capabilitiesResponseHeaders,
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiCapabilitiesResponse" },
                 },
+              },
+            },
+            "304": {
+              description: "The service capability contract and configured runtime limits have not changed.",
+              headers: {
+                ETag: capabilitiesResponseHeaders.ETag,
+                "Cache-Control": capabilitiesResponseHeaders["Cache-Control"],
               },
             },
             "500": errorResponse("The server failed while handling the request."),
