@@ -57,12 +57,20 @@ export interface ReviewerDecisionImportReport {
   generatedAt: string;
   claims: ImportedReviewerDecision[];
   answerGroups: ReviewerDecisionGroup[];
+  queueSummary: ReviewerQueueSummary;
   summary: {
     totalClaims: number;
     reviewedClaims: number;
     pendingClaims: number;
     overriddenClaims: number;
   } & Record<ClaimVerdict, number>;
+}
+
+export interface ReviewerQueueSummary {
+  totalAnswers: number;
+  pendingAnswers: number;
+  reviewedAnswers: number;
+  noClaimsAnswers: number;
 }
 
 export interface ReviewerDecisionImportResult {
@@ -162,10 +170,13 @@ export function importReviewerDecisions(
     }
   }
 
+  const answerGroups = groupImportedClaims(claims, answerGroupSeeds);
+
   return {
     generatedAt,
     claims,
-    answerGroups: groupImportedClaims(claims, answerGroupSeeds),
+    answerGroups,
+    queueSummary: summarizeReviewerQueue(answerGroups),
     summary,
   };
 }
@@ -192,6 +203,7 @@ export function renderReviewerDecisionImportReport(
     "Quorum Reviewer Decision Import",
     "",
     `Claims: ${report.summary.totalClaims} total, ${report.summary.reviewedClaims} reviewed, ${report.summary.pendingClaims} pending`,
+    `Queue: ${report.queueSummary.totalAnswers} answers, ${report.queueSummary.pendingAnswers} pending, ${report.queueSummary.reviewedAnswers} reviewed, ${report.queueSummary.noClaimsAnswers} with no claims`,
     `Final verdicts: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
     `Overrides: ${report.summary.overriddenClaims}`,
     `Fail policy: ${failVerdicts.length > 0 ? `matched (${failVerdicts.join(", ")})` : "clear"}`,
@@ -271,6 +283,10 @@ export function renderReviewerDecisionImportMarkdownReport(
     "## Summary",
     "",
     `- Total claims: ${report.summary.totalClaims}`,
+    `- Queue answers: ${report.queueSummary.totalAnswers}`,
+    `- Queue pending: ${report.queueSummary.pendingAnswers}`,
+    `- Queue reviewed: ${report.queueSummary.reviewedAnswers}`,
+    `- Queue with no claims: ${report.queueSummary.noClaimsAnswers}`,
     `- Reviewed claims: ${report.summary.reviewedClaims}`,
     `- Pending claims: ${report.summary.pendingClaims}`,
     `- Reviewer overrides: ${report.summary.overriddenClaims}`,
@@ -950,6 +966,23 @@ function groupImportedClaims(
     group.reviewStatus = getReviewerQueueStatus(group);
     return group;
   });
+}
+
+function summarizeReviewerQueue(groups: ReviewerDecisionGroup[]): ReviewerQueueSummary {
+  return groups.reduce<ReviewerQueueSummary>(
+    (summary, group) => {
+      summary.totalAnswers += 1;
+      if (group.reviewStatus === "pending") {
+        summary.pendingAnswers += 1;
+      } else if (group.reviewStatus === "reviewed") {
+        summary.reviewedAnswers += 1;
+      } else {
+        summary.noClaimsAnswers += 1;
+      }
+      return summary;
+    },
+    { totalAnswers: 0, pendingAnswers: 0, reviewedAnswers: 0, noClaimsAnswers: 0 },
+  );
 }
 
 function buildReviewerDecisionImportResult(
