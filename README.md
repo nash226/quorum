@@ -74,6 +74,7 @@ The current CLI can:
 - preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
 - include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
 - import filled reviewer decision CSVs into a machine-readable summary
+- reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows

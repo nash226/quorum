@@ -106,6 +106,7 @@ export function importReviewerDecisions(
   const columnIndex = createColumnIndex(headers);
   const claims: ImportedReviewerDecision[] = [];
   const answerGroupSeeds: ImportedAnswerGroupSeed[] = [];
+  const claimRows = new Map<string, number>();
 
   rows
     .slice(1)
@@ -114,6 +115,14 @@ export function importReviewerDecisions(
       const importedRow = importDecisionRow(row, rowIndex + 2, columnIndex);
 
       if ("claimId" in importedRow) {
+        const claimKey = reviewerClaimKey(importedRow);
+        const previousRow = claimRows.get(claimKey);
+        if (previousRow !== undefined) {
+          throw new Error(
+            `Reviewer decision CSV contains duplicate claim_id '${importedRow.claimId}' for the same answer on rows ${previousRow} and ${rowIndex + 2}.`,
+          );
+        }
+        claimRows.set(claimKey, rowIndex + 2);
         claims.push(importedRow);
       } else {
         answerGroupSeeds.push(importedRow);
@@ -151,6 +160,11 @@ export function importReviewerDecisions(
     answerGroups: groupImportedClaims(claims, answerGroupSeeds),
     summary,
   };
+}
+
+function reviewerClaimKey(claim: ImportedReviewerDecision): string {
+  const answerIdentity = claim.answerPath ?? claim.answerLabel ?? claim.answerPreview ?? "";
+  return `${answerIdentity}\u0000${claim.claimId}`;
 }
 
 export function importReviewerDecisionsResult(
