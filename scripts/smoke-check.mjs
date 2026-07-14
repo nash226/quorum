@@ -426,13 +426,13 @@ Employees receive 12 weeks of paid parental leave.
       headers: {
         origin: "https://smoke.example",
         "access-control-request-method": "POST",
-        "access-control-request-headers": "content-type, x-quorum-request-id",
+        "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
       },
     });
     assert.equal(discoveryPreflightResponse.status, 204);
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
-    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control");
     assert.equal(discoveryPreflightResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
 
@@ -629,14 +629,14 @@ Employees receive 12 weeks of paid parental leave.
       headers: {
         origin: "http://localhost:4173",
         "access-control-request-method": "POST",
-        "access-control-request-headers": "content-type, x-quorum-request-id",
+        "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
       },
     });
     assert.equal(extractClaimsPreflightResponse.status, 204);
     assert.equal(extractClaimsPreflightResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(
       extractClaimsPreflightResponse.headers.get("access-control-allow-headers"),
-      "Content-Type, X-Quorum-Request-Id",
+      "Content-Type, X-Quorum-Request-Id, If-None-Match",
     );
 
     const preflightResponse = await fetch(`${server.url}/verify`, {
@@ -644,13 +644,13 @@ Employees receive 12 weeks of paid parental leave.
       headers: {
         origin: "http://localhost:4173",
         "access-control-request-method": "POST",
-        "access-control-request-headers": "content-type, x-quorum-request-id",
+        "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
       },
     });
     assert.equal(preflightResponse.status, 204);
     assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
-    assert.equal(preflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id");
+    assert.equal(preflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
 
     const verifyResponse = await fetch(`${server.url}/verify`, {
       method: "POST",
