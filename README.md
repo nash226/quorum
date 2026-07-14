@@ -46,7 +46,7 @@ The current CLI can:
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
-- split independently capitalized clauses joined by comma conjunctions into separate claims
+- split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
 - ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims
 - preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
 - compare each claim against approved source snippets
@@ -526,6 +526,9 @@ for browser-based local clients.
 The `quorum serve --help` endpoint guide includes both `/readyz` readiness
 entries, so Kubernetes deployment wiring is discoverable directly from the
 CLI as well as this README.
+The `POST /extract-claims` preview keeps independently capitalized policy
+clauses separated by semicolons as distinct atomic claims, matching the CLI
+claim-extraction behavior used before evidence verification.
 Route matching uses the pathname, so harmless query parameters remain compatible
 with readiness probes and claim-preview clients.
 The package exports `HEALTH_PATH`, `HEALTHZ_PATH`, `READYZ_PATH`, and
