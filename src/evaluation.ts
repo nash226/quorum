@@ -1496,6 +1496,20 @@ function validateExpectedClaimTotals(
       `${fixtureLabel}.expectedClaimVerdicts must include ${expectedClaimCount} entries to match the totals in ${fixtureLabel}.expectedSummary.`,
     );
   }
+
+  const verdictCounts = expectedClaimVerdicts.reduce<Record<ClaimVerdict, number>>(
+    (counts, verdict) => {
+      counts[verdict] += 1;
+      return counts;
+    },
+    { verified: 0, contradicted: 0, unsupported: 0, needs_review: 0 },
+  );
+
+  if (!hasMatchingSummary(expectedSummary, verdictCounts)) {
+    throw new EvaluationFixtureValidationError(
+      `${fixtureLabel}.expectedClaimVerdicts counts must match the totals in ${fixtureLabel}.expectedSummary.`,
+    );
+  }
 }
 
 function requireNonNegativeInteger(value: unknown, fieldName: string): number {
