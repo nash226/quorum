@@ -804,6 +804,10 @@ export function renderReviewerDecisionImportHtmlReport(
           <article class="summary-card"><span>Contradicted</span><strong>${report.summary.contradicted}</strong></article>
           <article class="summary-card"><span>Unsupported</span><strong>${report.summary.unsupported}</strong></article>
           <article class="summary-card"><span>Needs review</span><strong>${report.summary.needs_review}</strong></article>
+          <article class="summary-card"><span>Queue answers</span><strong>${report.queueSummary.totalAnswers}</strong></article>
+          <article class="summary-card"><span>Queue pending</span><strong>${report.queueSummary.pendingAnswers}</strong></article>
+          <article class="summary-card"><span>Queue reviewed</span><strong>${report.queueSummary.reviewedAnswers}</strong></article>
+          <article class="summary-card"><span>Queue no claims</span><strong>${report.queueSummary.noClaimsAnswers}</strong></article>
           <article class="summary-card"><span>Fail policy</span><strong>${failVerdicts.length > 0 ? `matched (${escapeHtml(failVerdicts.join(", "))})` : "clear"}</strong></article>
         </div>
       </section>
