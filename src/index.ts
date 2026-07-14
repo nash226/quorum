@@ -132,6 +132,7 @@ export type {
   ReviewerDecisionGroup,
   ReviewerDecisionImportReport,
   ReviewerDecisionImportResult,
+  ReviewerQueueSummary,
   ReviewerQueueStatus,
 } from "./reviewer-decision-import.js";
 export {
