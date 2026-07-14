@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4cb38bf` on 2026-07-14, docs: show HTTP evaluation workflow
+- Latest shipped change: `93e4eb9` on 2026-07-14, fix: strip unicode numbered claim markers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -22,6 +22,7 @@
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
 - split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
+- strip common Unicode numbered-list markers from exported policy answers
 - ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims
 - preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
 - compare each claim against approved source snippets
@@ -89,6 +90,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: strip unicode numbered claim markers | `93e4eb9` |
 | 2026-07-14 | Direct push | docs: show HTTP evaluation workflow | `4cb38bf` |
 | 2026-07-14 | [#425](https://github.com/nash226/quorum/pull/425) | fix: document OpenAPI revalidation headers | `5779021` |
 | 2026-07-14 | [#424](https://github.com/nash226/quorum/pull/424) | feat: cache browser CORS preflight results | `703f987` |
@@ -96,5 +98,4 @@
 | 2026-07-14 | Direct push | feat: expose API capability header names | `62ce549` |
 | 2026-07-14 | Direct push | feat: make capabilities probe revalidatable | `53a2aa5` |
 | 2026-07-14 | Direct push | feat: make version probe revalidatable | `4b5efec` |
-| 2026-07-14 | Direct push | fix: keep OpenAPI methods canonical | `9f18d78` |
 
