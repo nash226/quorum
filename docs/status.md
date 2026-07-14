@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5cd22c9` on 2026-07-14, docs: refresh roadmap after API and evaluation foundation
+- Latest shipped change: `81535f4` on 2026-07-14, docs: add API deployment guidance
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -104,6 +104,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | docs: add API deployment guidance | `81535f4` |
 | 2026-07-14 | Direct push | docs: refresh roadmap after API and evaluation foundation | `5cd22c9` |
 | 2026-07-14 | Direct push | feat: expose batch claim routing totals | `9e5dc1f` |
 | 2026-07-14 | Direct push | feat: show imported claim routing signal | `fe40b56` |
@@ -111,5 +112,4 @@
 | 2026-07-14 | Direct push | fix: preserve colon-terminated business claims | `12c8153` |
 | 2026-07-14 | Direct push | fix: document evaluation claim routing in OpenAPI | `6ec9140` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim rollups | `8d1e1db` |
-| 2026-07-14 | Direct push | feat: expose evaluation claim routing | `cd741be` |
 
