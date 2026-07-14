@@ -253,6 +253,8 @@ export const API_DISCOVERY_HEADERS = {
   requestTimeoutMs: "X-Quorum-Request-Timeout-Ms",
 } as const;
 export const API_REQUEST_ID_HEADER = "X-Quorum-Request-Id";
+/** Cache CORS preflight results for ten minutes while the route contract is stable. */
+export const API_CORS_MAX_AGE_SECONDS = 600;
 export const API_CAPABILITY_HEADERS = {
   requestId: API_REQUEST_ID_HEADER,
   service: API_DISCOVERY_HEADERS.service,
@@ -263,6 +265,7 @@ export const API_CAPABILITY_HEADERS = {
   cacheControl: "Cache-Control",
   etag: "ETag",
   allow: "Allow",
+  corsMaxAge: "Access-Control-Max-Age",
 } as const;
 export const API_CORS_ALLOWED_HEADERS = ["Content-Type", API_REQUEST_ID_HEADER, "If-None-Match"].join(", ");
 export const API_CORS_EXPOSED_HEADERS = [...new Set([
@@ -2070,6 +2073,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         "Access-Control-Expose-Headers": {
           schema: { type: "string" },
           description: "Response headers exposed to browser callers.",
+        },
+        "Access-Control-Max-Age": {
+          schema: { type: "integer", minimum: 0 },
+          description: "Seconds that a browser may cache this preflight result.",
         },
         [API_DISCOVERY_HEADERS.service]: {
           schema: { type: "string" },
@@ -3887,6 +3894,10 @@ function applyCorsHeaders(
   response.setHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
   response.setHeader("Access-Control-Allow-Headers", API_CORS_ALLOWED_HEADERS);
   response.setHeader("Access-Control-Expose-Headers", API_CORS_EXPOSED_HEADERS);
+
+  if (request.method === "OPTIONS") {
+    response.setHeader("Access-Control-Max-Age", API_CORS_MAX_AGE_SECONDS);
+  }
 }
 
 function applyApiDiscoveryHeaders(

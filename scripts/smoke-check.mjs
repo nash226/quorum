@@ -438,6 +438,7 @@ Employees receive 12 weeks of paid parental leave.
       cacheControl: "Cache-Control",
       etag: "ETag",
       allow: "Allow",
+      corsMaxAge: "Access-Control-Max-Age",
     });
     assert.deepEqual(indexPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(indexPayload.capabilities.trustLevels, ["low", "medium", "high"]);
@@ -461,6 +462,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
+    assert.equal(discoveryPreflightResponse.headers.get("access-control-max-age"), "600");
     assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control, ETag, Allow");
     assert.equal(discoveryPreflightResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
 
@@ -703,6 +705,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "*");
     assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
     assert.equal(preflightResponse.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
+    assert.equal(preflightResponse.headers.get("access-control-max-age"), "600");
 
     const verifyResponse = await fetch(`${server.url}/verify`, {
       method: "POST",
