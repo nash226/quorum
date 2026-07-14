@@ -4161,6 +4161,47 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
   }
 });
 
+test("HTTP reviewer artifacts preserve no-claim answers as needs_review", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: "Short.",
+        answerPath: "answers/empty.md",
+        answerLabel: "Empty reviewer packet",
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: "Employees receive 12 weeks of paid parental leave.\n",
+          },
+        ],
+        failOn: ["needs_review"],
+        includeArtifacts: ["review_csv", "summary_csv"],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as ApiVerifyResponse;
+    assert.equal(result.shouldFail, true);
+    assert.deepEqual(result.failVerdicts, ["needs_review"]);
+    assert.equal(result.report.answerLabel, "Empty reviewer packet");
+    assert.equal(result.report.assessments.length, 0);
+    assert.match(result.artifacts?.review_csv ?? "", /Empty reviewer packet/);
+    assert.match(result.artifacts?.review_csv ?? "", /answer_has_claims/);
+    assert.match(result.artifacts?.review_csv ?? "", /false/);
+    assert.match(result.artifacts?.summary_csv ?? "", /Empty reviewer packet/);
+    assert.match(result.artifacts?.summary_csv ?? "", /needs_review/);
+    assert.match(result.artifacts?.summary_csv ?? "", /No claims were extracted from this answer\./);
+  } finally {
+    await api.close();
+  }
+});
+
 test("evaluate endpoint filters fixtures by domain", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
