@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6fee78b` on 2026-07-14, feat: show reviewer queue totals in html reports
+- Latest shipped change: `dcdad63` on 2026-07-14, test: cover HR source directory evaluations
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -50,6 +50,7 @@
 - include an explicit `answerHasClaims` signal in evaluation scorecards and CSVs so empty benchmark answers can be routed without recounting claims
 - include `answersWithClaims` and `answersWithoutClaims` in evaluation aggregate and domain rollups so queue integrations can route empty benchmark answers without inspecting every scorecard
 - include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
+- ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
@@ -107,6 +108,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | test: cover HR source directory evaluations | `dcdad63` |
 | 2026-07-14 | Direct push | feat: show reviewer queue totals in html reports | `6fee78b` |
 | 2026-07-14 | [#452](https://github.com/nash226/quorum/pull/452) | feat: add reviewer queue summary | `1bf0c9c` |
 | 2026-07-14 | [#451](https://github.com/nash226/quorum/pull/451) | Expose queue-ready reviewer import status with tests and API documentation. | `0acba18` |
@@ -114,5 +116,4 @@
 | 2026-07-14 | Direct push | docs: refresh roadmap after API and evaluation foundation | `5cd22c9` |
 | 2026-07-14 | Direct push | feat: expose batch claim routing totals | `9e5dc1f` |
 | 2026-07-14 | Direct push | feat: show imported claim routing signal | `fe40b56` |
-| 2026-07-14 | Direct push | fix: preserve reviewer claim routing | `8d1bed1` |
 
