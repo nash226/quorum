@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5779021` on 2026-07-14, fix: document OpenAPI revalidation headers
+- Latest shipped change: `4cb38bf` on 2026-07-14, docs: show HTTP evaluation workflow
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -89,6 +89,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | docs: show HTTP evaluation workflow | `4cb38bf` |
 | 2026-07-14 | [#425](https://github.com/nash226/quorum/pull/425) | fix: document OpenAPI revalidation headers | `5779021` |
 | 2026-07-14 | [#424](https://github.com/nash226/quorum/pull/424) | feat: cache browser CORS preflight results | `703f987` |
 | 2026-07-14 | Direct push | feat: make API discovery revalidatable | `9614349` |
@@ -96,5 +97,4 @@
 | 2026-07-14 | Direct push | feat: make capabilities probe revalidatable | `53a2aa5` |
 | 2026-07-14 | Direct push | feat: make version probe revalidatable | `4b5efec` |
 | 2026-07-14 | Direct push | fix: keep OpenAPI methods canonical | `9f18d78` |
-| 2026-07-14 | [#418](https://github.com/nash226/quorum/pull/418) | feat: export supported HTTP methods | `9392a4a` |
 
