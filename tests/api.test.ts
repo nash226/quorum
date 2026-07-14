@@ -32,6 +32,7 @@ import {
 import {
   ANSWER_EXTENSIONS,
   API_CAPABILITIES,
+  API_CAPABILITY_HEADERS,
   API_CORS_ALLOWED_HEADERS,
   API_CORS_EXPOSED_HEADERS,
   API_ROOT_PATH,
@@ -140,6 +141,10 @@ test("programmatic API exposes supported source and answer extensions", () => {
 
 test("API discovery exposes transport limits and supported methods", () => {
   assert.deepEqual(API_CAPABILITIES.httpMethods, ["GET", "HEAD", "POST", "OPTIONS"]);
+  assert.deepEqual(API_CAPABILITIES.headerNames, API_CAPABILITY_HEADERS);
+  assert.equal(API_CAPABILITY_HEADERS.requestId, "X-Quorum-Request-Id");
+  assert.equal(API_CAPABILITY_HEADERS.etag, "ETag");
+  assert.equal(API_CAPABILITY_HEADERS.allow, "Allow");
   assert.deepEqual(API_CAPABILITIES.requestContentTypes, ["application/json"]);
   assert.deepEqual(API_CAPABILITIES.binaryContentEncodings, ["base64"]);
   assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
@@ -3334,6 +3339,7 @@ Refund requests receive an initial response within one business day.
     ]);
     assert.deepEqual(openApi.components.schemas.ApiCapabilities.required, [
       "httpMethods",
+      "headerNames",
       "requestContentTypes",
       "binaryContentEncodings",
       "maxRequestBytes",
