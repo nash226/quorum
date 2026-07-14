@@ -541,6 +541,10 @@ All `/health`, `/healthz`, `/readyz`, and `/livez` probe responses include
 `Cache-Control: no-store` so a proxy or load balancer cannot reuse a stale
 healthy response during an outage; the OpenAPI contract documents that header
 for both `GET` and `HEAD` probe calls.
+All JSON API responses, including verification reports, reviewer imports,
+evaluation results, claim previews, and API errors, also include
+`Cache-Control: no-store` so intermediaries do not retain evidence or reviewer
+decision data from a workflow request.
 The `/readyz` alias provides the same uncached readiness contract for Kubernetes
 probes and deployment systems that use the conventional readiness path.
 The `/livez` alias provides the same uncached health response for Kubernetes
