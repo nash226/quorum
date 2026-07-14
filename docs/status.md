@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0c4c5aa` on 2026-07-14, fix: describe source freshness timestamps in OpenAPI
+- Latest shipped change: `89caa0c` on 2026-07-14, fix: keep OpenAPI freshness examples date-time compatible
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -33,6 +33,7 @@
 - describe generated report timestamps as `date-time` values in the OpenAPI contract for typed clients
 - validate approved-source `updatedAt` values as timestamps before using freshness metadata
 - describe source freshness timestamps as `date-time` values in the OpenAPI contract for typed clients
+- keep OpenAPI freshness examples RFC 3339 date-times so generated-client fixtures validate against the published schema
 - write a JSON report for workflow automation
 - write a Markdown reviewer report for approvals and handoff
 - write a polished HTML reviewer report for demos and human review
@@ -65,6 +66,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: keep OpenAPI freshness examples date-time compatible | `89caa0c` |
 | 2026-07-14 | Direct push | fix: describe source freshness timestamps in OpenAPI | `0c4c5aa` |
 | 2026-07-14 | Direct push | fix: describe report timestamps in OpenAPI | `9256104` |
 | 2026-07-14 | [#390](https://github.com/nash226/quorum/pull/390) | feat: export HTTP operation path constants | `48f882b` |
@@ -72,5 +74,4 @@
 | 2026-07-14 | Direct push | feat: preserve source IDs in evaluation summaries | `d517f43` |
 | 2026-07-14 | [#387](https://github.com/nash226/quorum/pull/387) | feat: preserve evaluation source identifiers | `3c5621f` |
 | 2026-07-14 | [#386](https://github.com/nash226/quorum/pull/386) | feat: preserve stable source identifiers | `bfcc03d` |
-| 2026-07-14 | Direct push | docs: document binary HTTP workflow uploads | `2d26d77` |
 
