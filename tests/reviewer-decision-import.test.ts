@@ -99,12 +99,24 @@ empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from th
     /No claims were extracted from this answer\./,
   );
   assert.match(
+    renderReviewerDecisionImportReport(report),
+    /Answer has claims: no/,
+  );
+  assert.match(
     renderReviewerDecisionImportMarkdownReport(report),
     /No claims were extracted from this answer\./,
   );
   assert.match(
+    renderReviewerDecisionImportMarkdownReport(report),
+    /- Answer has claims: no/,
+  );
+  assert.match(
     renderReviewerDecisionImportHtmlReport(report),
     /Review note/,
+  );
+  assert.match(
+    renderReviewerDecisionImportHtmlReport(report),
+    /Answer has claims: no/,
   );
   assert.match(
     renderReviewerDecisionImportSummaryCsv(report),
