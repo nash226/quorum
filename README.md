@@ -89,6 +89,7 @@ The current CLI can:
 - generate OpenAPI discovery examples with the server's configured request-size and timeout limits
 - serve the generated OpenAPI contract with an `ETag`, allowing integration clients to revalidate it with `If-None-Match`
 - allow browser clients to preflight `If-None-Match` when revalidating the OpenAPI contract with its `ETag`
+- expose the OpenAPI `ETag` through CORS so browser clients can cache and reuse the validator
 - preview normalized claims over HTTP before loading approved sources for verification
 - report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
 
