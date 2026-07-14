@@ -31,6 +31,7 @@ import {
   ANSWER_EXTENSIONS,
   API_CAPABILITIES,
   API_CORS_ALLOWED_HEADERS,
+  API_ROOT_PATH,
   API_ENDPOINTS,
   API_MAX_REQUEST_BYTES,
   API_REQUEST_TIMEOUT_MS,
@@ -152,6 +153,7 @@ test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(rootCreateApiServer, createApiServer);
   assert.strictEqual(rootStartApiServer, startApiServer);
   assert.strictEqual(CAPABILITIES_PATH, SERVER_CAPABILITIES_PATH);
+  assert.equal(API_ROOT_PATH, "/");
   assert.strictEqual(HEALTH_PATH, SERVER_HEALTH_PATH);
   assert.strictEqual(HEALTHZ_PATH, SERVER_HEALTHZ_PATH);
   assert.strictEqual(OPENAPI_PATH, SERVER_OPENAPI_PATH);

@@ -45,6 +45,10 @@ that only need to confirm the service and HTTP contract version. Kubernetes
 and load-balancer integrations can use `/readyz` for readiness and `/livez` for
 process liveness; both probes return `Cache-Control: no-store`.
 
+Package consumers can use the exported `API_ROOT_PATH` constant when building
+the initial discovery request, keeping the bootstrap route aligned with the
+other exported API path constants.
+
 When a client only needs headers, use `HEAD` to avoid downloading a JSON body:
 
 ```bash
