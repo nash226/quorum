@@ -322,6 +322,42 @@ test("HTTP API restricts CORS responses to configured origins", async () => {
   }
 });
 
+test("HTTP API marks every JSON response as non-cacheable", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const requests: Array<Promise<Response>> = [
+      fetch(api.url),
+      fetch(`${api.url}/capabilities`),
+      fetch(`${api.url}/version`),
+      fetch(`${api.url}/openapi.json`),
+      fetch(`${api.url}/extract-claims`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ answer: "Employees receive 12 weeks of leave." }),
+      }),
+      fetch(`${api.url}/verify`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          answer: "Employees receive 12 weeks of leave.",
+          sources: [{ sourcePath: "hr.md", content: "Employees receive 12 weeks of leave." }],
+        }),
+      }),
+      fetch(`${api.url}/missing`),
+    ];
+
+    const responses = await Promise.all(requests);
+
+    for (const response of responses) {
+      assert.equal(response.headers.get("cache-control"), "no-store");
+      await response.arrayBuffer();
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API routes valid requests with query strings by pathname", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
