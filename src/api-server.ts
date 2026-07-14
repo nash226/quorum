@@ -1311,7 +1311,20 @@ async function handleApiRequest(
       capabilities: apiCapabilities(maxRequestBytes, requestTimeoutMs),
       endpoints: API_ENDPOINTS,
     };
-    writeJson(response, 200, discoveryResponse, isHeadRequest);
+    writeConditionalJson(
+      request,
+      response,
+      200,
+      discoveryResponse,
+      isHeadRequest,
+      {
+        service: API_SERVICE_NAME,
+        version: API_VERSION,
+        openapiPath: OPENAPI_PATH,
+        capabilities: discoveryResponse.capabilities,
+        endpoints: API_ENDPOINTS,
+      },
+    );
     return;
   }
 
@@ -2109,7 +2122,13 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Available Quorum local API endpoints.",
-              headers: apiResponseHeaders,
+              headers: {
+                ...capabilitiesResponseHeaders,
+                ETag: {
+                  ...capabilitiesResponseHeaders.ETag,
+                  description: "Stable validator for the discovery contract and configured runtime limits.",
+                },
+              },
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiIndexResponse" },
@@ -2122,6 +2141,13 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                 },
               },
             },
+            "304": {
+              description: "The discovery contract and configured runtime limits have not changed.",
+              headers: {
+                ETag: capabilitiesResponseHeaders.ETag,
+                "Cache-Control": capabilitiesResponseHeaders["Cache-Control"],
+              },
+            },
             "500": errorResponse("The server failed while handling the request."),
           },
         },
@@ -2131,10 +2157,24 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Header-only discovery response for probes and lightweight clients.",
+              headers: {
+                ...capabilitiesResponseHeaders,
+                ETag: {
+                  ...capabilitiesResponseHeaders.ETag,
+                  description: "Stable validator for the discovery contract and configured runtime limits.",
+                },
+              },
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ApiIndexResponse" },
                 },
+              },
+            },
+            "304": {
+              description: "The discovery contract and configured runtime limits have not changed.",
+              headers: {
+                ETag: capabilitiesResponseHeaders.ETag,
+                "Cache-Control": capabilitiesResponseHeaders["Cache-Control"],
               },
             },
             "500": errorResponse("The server failed while handling the request."),

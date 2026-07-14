@@ -405,6 +405,18 @@ Employees receive 12 weeks of paid parental leave.
   try {
     const indexResponse = await fetch(server.url);
     assert.equal(indexResponse.status, 200);
+    const indexEtag = indexResponse.headers.get("etag");
+    assert.match(indexEtag ?? "", /^\"[a-f0-9]{64}\"$/);
+    const headIndexResponse = await fetch(server.url, { method: "HEAD" });
+    assert.equal(headIndexResponse.status, 200);
+    assert.equal(headIndexResponse.headers.get("etag"), indexEtag);
+    assert.equal(await headIndexResponse.text(), "");
+    const notModifiedIndexResponse = await fetch(server.url, {
+      headers: { "if-none-match": indexEtag ?? "" },
+    });
+    assert.equal(notModifiedIndexResponse.status, 304);
+    assert.equal(notModifiedIndexResponse.headers.get("etag"), indexEtag);
+    assert.equal(await notModifiedIndexResponse.text(), "");
     assert.equal(indexResponse.headers.get("x-quorum-service"), "quorum");
     assert.equal(indexResponse.headers.get("x-quorum-version"), "0.1.0");
     assert.equal(indexResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
