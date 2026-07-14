@@ -547,8 +547,10 @@ The discovery payload keeps each method/path pair unique so generated clients
 can build a stable endpoint inventory without de-duplicating it first.
 The built `npm run smoke` check now exercises that discovery contract over HTTP,
 including preflight headers, the packaged `POST /extract-claims` workflow, and
-stable OpenAPI operation identifiers, so packed package releases verify the
-integration surface end to end.
+stable OpenAPI operation identifiers. It also checks that packaged
+`HEAD /readyz` and `HEAD /livez` calls return uncached probe headers with no
+response body, so deployment clients can validate both Kubernetes aliases
+before routing traffic.
 The `quorum serve --help` output also lists `POST /extract-claims`, keeping the
 CLI server guide aligned with the claim-preview endpoint exposed to integrations,
 along with the dedicated `GET` and `HEAD /version` compatibility probes.
