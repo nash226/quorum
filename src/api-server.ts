@@ -159,6 +159,8 @@ export interface ExtractClaimsApiResponse {
   answerPath?: string;
   answerLabel?: string;
   answerPreview: string;
+  /** Whether normalized claim extraction produced at least one claim. */
+  answerHasClaims: boolean;
   claims: ReturnType<typeof extractClaims>;
 }
 
@@ -1467,12 +1469,14 @@ async function handleApiRequest(
     const body = parseExtractClaimsRequest(await readJsonBody(request, maxRequestBytes));
     const answer = await extractClaimsAnswerText(body.answer, body.answerPath);
     const requestId = response.getHeader(API_REQUEST_ID_HEADER);
+    const claims = extractClaims(answer);
     const result: ExtractClaimsApiResponse = {
       requestId: typeof requestId === "string" ? requestId : "",
       answerPath: body.answerPath,
       answerLabel: body.answerLabel,
       answerPreview: renderAnswerPreview(answer),
-      claims: extractClaims(answer),
+      answerHasClaims: claims.length > 0,
+      claims,
     };
     writeJson(response, 200, result);
     return;
@@ -2664,6 +2668,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                         answerPath: "answers/hr-answer.md",
                         answerLabel: "HR reviewer packet",
                         answerPreview: "Employees receive 12 weeks of paid parental leave.",
+                        answerHasClaims: true,
                         claims: [{ id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." }],
                       },
                     },
@@ -3295,12 +3300,16 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               type: "string",
               description: "Normalized, truncated answer text for queue and reviewer context.",
             },
+            answerHasClaims: {
+              type: "boolean",
+              description: "Whether claim extraction produced at least one claim for this answer.",
+            },
             claims: {
               type: "array",
               items: { $ref: "#/components/schemas/AtomicClaim" },
             },
           },
-          required: ["requestId", "answerPreview", "claims"],
+          required: ["requestId", "answerPreview", "answerHasClaims", "claims"],
         },
         VerifyArtifactName: {
           type: "string",
