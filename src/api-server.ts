@@ -282,6 +282,7 @@ const API_CORS_ALLOWED_HEADER_NAMES = API_CORS_ALLOWED_HEADERS.split(", ");
 const API_CORS_EXPOSED_HEADER_NAMES = API_CORS_EXPOSED_HEADERS.split(", ");
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
+const REVIEW_QUEUE_STATUSES = ["pending", "reviewed", "no_claims"] as const;
 export const API_REQUEST_CONTENT_TYPES = ["application/json", "application/*+json"] as const;
 export const API_CAPABILITIES = {
   httpMethods: [...API_ALLOWED_METHODS],
@@ -300,6 +301,7 @@ export const API_CAPABILITIES = {
   answerExtensions: [...ANSWER_EXTENSIONS],
   verdicts: CLAIM_VERDICTS,
   trustLevels: [...SOURCE_TRUST_LEVELS],
+  reviewQueueStatuses: [...REVIEW_QUEUE_STATUSES],
   verifyArtifacts: [...VERIFY_ARTIFACTS],
   verifyBatchArtifacts: [...VERIFY_BATCH_ARTIFACTS],
   importReviewArtifacts: [...IMPORT_REVIEW_ARTIFACTS],
@@ -3246,6 +3248,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               type: "array",
               items: { $ref: "#/components/schemas/SourceTrustLevel" },
             },
+            reviewQueueStatuses: {
+              type: "array",
+              items: { type: "string", enum: [...REVIEW_QUEUE_STATUSES] },
+              description: "Reviewer-import queue statuses used for answer routing.",
+            },
             verifyArtifacts: {
               type: "array",
               items: { $ref: "#/components/schemas/VerifyArtifactName" },
@@ -3279,6 +3286,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             "answerExtensions",
             "verdicts",
             "trustLevels",
+            "reviewQueueStatuses",
             "verifyArtifacts",
             "verifyBatchArtifacts",
             "importReviewArtifacts",
