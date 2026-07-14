@@ -275,11 +275,18 @@ export const API_CORS_EXPOSED_HEADERS = [...new Set([
   "ETag",
   "Allow",
 ])].join(", ");
+const API_CORS_ALLOWED_HEADER_NAMES = API_CORS_ALLOWED_HEADERS.split(", ");
+const API_CORS_EXPOSED_HEADER_NAMES = API_CORS_EXPOSED_HEADERS.split(", ");
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const SOURCE_TRUST_LEVELS = ["low", "medium", "high"] as const;
 export const API_CAPABILITIES = {
   httpMethods: [...API_ALLOWED_METHODS],
   headerNames: API_CAPABILITY_HEADERS,
+  cors: {
+    allowedHeaders: API_CORS_ALLOWED_HEADER_NAMES,
+    exposedHeaders: API_CORS_EXPOSED_HEADER_NAMES,
+    maxAgeSeconds: API_CORS_MAX_AGE_SECONDS,
+  },
   requestContentTypes: ["application/json"],
   binaryContentEncodings: ["base64"],
   maxRequestBytes: API_MAX_REQUEST_BYTES,
@@ -3145,6 +3152,27 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               additionalProperties: { type: "string" },
               description: "Canonical response-header names used by the HTTP API.",
             },
+            cors: {
+              type: "object",
+              properties: {
+                allowedHeaders: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Request headers accepted during browser CORS preflight.",
+                },
+                exposedHeaders: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Response headers browser clients may read.",
+                },
+                maxAgeSeconds: {
+                  type: "integer",
+                  minimum: 0,
+                  description: "Browser CORS preflight cache duration in seconds.",
+                },
+              },
+              required: ["allowedHeaders", "exposedHeaders", "maxAgeSeconds"],
+            },
             requestContentTypes: {
               type: "array",
               items: { type: "string" },
@@ -3205,6 +3233,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           required: [
             "httpMethods",
             "headerNames",
+            "cors",
             "requestContentTypes",
             "binaryContentEncodings",
             "maxRequestBytes",
