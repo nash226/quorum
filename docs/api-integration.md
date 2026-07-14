@@ -176,6 +176,29 @@ make claim-level decisions. The `/evaluate` endpoint accepts fixture JSON in a
 `fixtures` array and can emit `summary_csv`, `domain_summary_csv`, and
 `aggregate_summary_csv` for benchmark reporting.
 
+Run the same HR benchmark through the HTTP API by sending each fixture's JSON
+content alongside its path. The path keeps relative answer and source paths
+resolvable while the content makes the request self-contained for a workflow
+runner:
+
+```bash
+FIXTURE_CONTENT="$(<examples/evaluations/hr-policy.json)"
+jq -n --arg content "$FIXTURE_CONTENT" '{
+  fixtures: [{ fixturePath: "examples/evaluations/hr-policy.json", content: $content }],
+  domains: ["hr"],
+  minScore: 0.95,
+  includeArtifacts: ["summary_csv", "domain_summary_csv", "aggregate_summary_csv"]
+}' \
+  | curl -sS http://127.0.0.1:3000/evaluate \
+      -H 'content-type: application/json' \
+      --data-binary @-
+```
+
+The response includes `scorecards`, aggregate `mismatchCount` and `score`,
+`scoreThresholdPassed`, and the requested CSV artifacts. Add
+`failOnStatus: true` when a mismatch or failed `minScore` should return HTTP
+`409` while preserving the gate-aware result in the response body.
+
 ## Integration notes
 
 - All `POST` requests use `Content-Type: application/json`.
