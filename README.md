@@ -515,6 +515,9 @@ Available endpoints:
 
 Every listed route also accepts `OPTIONS` and returns CORS preflight headers
 for browser-based local clients.
+The `quorum serve --help` endpoint guide includes both `/readyz` readiness
+entries, so Kubernetes deployment wiring is discoverable directly from the
+CLI as well as this README.
 Route matching uses the pathname, so harmless query parameters remain compatible
 with readiness probes and claim-preview clients.
 The package exports `HEALTH_PATH`, `HEALTHZ_PATH`, `READYZ_PATH`, and
