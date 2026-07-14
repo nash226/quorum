@@ -154,6 +154,11 @@ test("API discovery exposes transport limits and supported methods", () => {
   assert.deepEqual(API_CAPABILITIES.binaryContentEncodings, ["base64"]);
   assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
   assert.equal(API_CAPABILITIES.requestTimeoutMs, SERVER_API_REQUEST_TIMEOUT_MS);
+  assert.deepEqual(API_CAPABILITIES.cors, {
+    allowedHeaders: ["Content-Type", "X-Quorum-Request-Id", "If-None-Match"],
+    exposedHeaders: API_CORS_EXPOSED_HEADERS.split(", "),
+    maxAgeSeconds: API_CORS_MAX_AGE_SECONDS,
+  });
 });
 
 test("API discovery endpoint inventory contains one entry per method and path", () => {
@@ -3360,6 +3365,7 @@ Refund requests receive an initial response within one business day.
     assert.deepEqual(openApi.components.schemas.ApiCapabilities.required, [
       "httpMethods",
       "headerNames",
+      "cors",
       "requestContentTypes",
       "binaryContentEncodings",
       "maxRequestBytes",
