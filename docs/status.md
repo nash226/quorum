@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ef48606` on 2026-07-13, test: cover HTTP semicolon claim previews
+- Latest shipped change: `4385e6f` on 2026-07-13, docs: add HTTP API integration guide
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -60,6 +60,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-13 | [#382](https://github.com/nash226/quorum/pull/382) | docs: add HTTP API integration guide | `4385e6f` |
 | 2026-07-13 | [#381](https://github.com/nash226/quorum/pull/381) | test: cover HTTP semicolon claim previews | `ef48606` |
 | 2026-07-13 | Direct push | feat: configure API request body limits | `cf46420` |
 | 2026-07-13 | Direct push | feat: split independent comma clauses | `094af71` |
@@ -67,5 +68,4 @@
 | 2026-07-13 | Direct push | feat: configure CLI server request timeout | `c1fd83c` |
 | 2026-07-13 | Direct push | fix: preserve answer labels in human reports | `2a8121a` |
 | 2026-07-13 | Direct push | fix: document API no-store response headers | `a287556` |
-| 2026-07-13 | Direct push | test: smoke test reviewer summary artifacts | `04593c2` |
 
