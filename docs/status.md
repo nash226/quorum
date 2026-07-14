@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8d1e1db` on 2026-07-14, feat: expose evaluation claim rollups
+- Latest shipped change: `6ec9140` on 2026-07-14, fix: document evaluation claim routing in OpenAPI
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 - include an explicit `answerHasClaims` signal in evaluation scorecards and CSVs so empty benchmark answers can be routed without recounting claims
 - include `answersWithClaims` and `answersWithoutClaims` in evaluation aggregate and domain rollups so queue integrations can route empty benchmark answers without inspecting every scorecard
 - include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
+- publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
 - reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
@@ -98,6 +99,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: document evaluation claim routing in OpenAPI | `6ec9140` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim rollups | `8d1e1db` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim routing | `cd741be` |
 | 2026-07-14 | [#441](https://github.com/nash226/quorum/pull/441) | test: smoke-test OpenAPI cache revalidation | `1978db9` |
@@ -105,5 +107,4 @@
 | 2026-07-14 | Direct push | test: verify vendor JSON API requests | `ce3e8aa` |
 | 2026-07-14 | Direct push | feat: expose CLI claim preview routing | `ba1e7c2` |
 | 2026-07-14 | [#437](https://github.com/nash226/quorum/pull/437) | feat: expose claim preview routing result | `6d6422e` |
-| 2026-07-14 | Direct push | feat: expose claim routing in preview responses | `2681cb8` |
 
