@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d3fdd6a` on 2026-07-14, test: add support escalation scorecard
+- Latest shipped change: `2d26d77` on 2026-07-14, docs: document binary HTTP workflow uploads
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -60,6 +60,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | docs: document binary HTTP workflow uploads | `2d26d77` |
 | 2026-07-14 | Direct push | test: add support escalation scorecard | `d3fdd6a` |
 | 2026-07-14 | Direct push | docs: document HTTP discovery headers | `0b1bc9d` |
 | 2026-07-13 | [#382](https://github.com/nash226/quorum/pull/382) | docs: add HTTP API integration guide | `4385e6f` |
@@ -67,5 +68,4 @@
 | 2026-07-13 | Direct push | feat: configure API request body limits | `cf46420` |
 | 2026-07-13 | Direct push | feat: split independent comma clauses | `094af71` |
 | 2026-07-13 | Direct push | test: cover API response cache policy | `51bc571` |
-| 2026-07-13 | Direct push | feat: configure CLI server request timeout | `c1fd83c` |
 
