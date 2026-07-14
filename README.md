@@ -230,6 +230,22 @@ npm run dev -- import-review \
   --fail-on needs_review
 ```
 
+To hand only one queue state to a downstream reviewer or approval step, add
+`--queue-status`:
+
+```bash
+npm run dev -- import-review \
+  --review-csv reports/hr-review.csv \
+  --queue-status pending \
+  --result-json-out reports/hr-pending.json \
+  --summary-csv-out reports/hr-pending-summary.csv
+```
+
+The filtered result recomputes answer groups, claims, queue totals, and
+fail-policy matches for the selected `pending`, `reviewed`, or `no_claims`
+state. This keeps a targeted handoff self-contained instead of requiring the
+next system to filter the full import again.
+
 Or stream the reviewer CSV directly into the import step:
 
 ```bash
@@ -1396,7 +1412,7 @@ npm run dev -- verify \
 ```text
 quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum verify-batch (--answer <path|-> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-quorum import-review --review-csv <path|-> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+quorum import-review --review-csv <path|-> [--queue-status <pending|reviewed|no_claims>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--min-score <0..1>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
 quorum openapi [--server-url <url>] [--out <path>]
 ```

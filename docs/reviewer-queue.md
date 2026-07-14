@@ -48,6 +48,20 @@ consumer can route rows without recounting claims. The HTML report presents
 the same totals for human review, while the CSV keeps stable answer and source
 context for downstream handoff.
 
+For a targeted handoff, filter the import at the boundary where it is created:
+
+```bash
+npm run dev -- import-review \
+  --review-csv reports/reviewer-queue.csv \
+  --queue-status pending \
+  --result-json-out reports/reviewer-queue-pending.json \
+  --summary-csv-out reports/reviewer-queue-pending.csv
+```
+
+Use `pending`, `reviewed`, or `no_claims`. The filtered report recalculates its
+queue totals, grouped claims, artifacts, and optional `--fail-on` result, so a
+downstream reviewer receives only the selected state.
+
 ## Benchmark drift alongside reviewer work
 
 Run evaluation separately when the queue also needs benchmark drift context:
