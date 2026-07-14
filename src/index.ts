@@ -1,5 +1,6 @@
 export { verifyAnswer } from "./claim-verifier.js";
-export { extractClaims } from "./claim-extractor.js";
+export { extractClaims, extractClaimsResult } from "./claim-extractor.js";
+export type { ExtractClaimsResult } from "./claim-extractor.js";
 export type {
   AtomicClaim,
   BatchVerificationReport,
