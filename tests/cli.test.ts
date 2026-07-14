@@ -3400,15 +3400,15 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
     const lines = summaryCsv.trim().split("\n");
     assert.equal(
       lines[0],
-      "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids",
+      "generated_at,answer_label,answer_path,answer_preview,answer_has_claims,review_status,primary_final_verdict,primary_claim,primary_model_reason,primary_reviewer_notes,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,original_answer_fail_policy,original_answer_fail_verdicts,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids",
     );
     assert.match(
       lines[1] ?? "",
-      /^[^,\n]+,hr-answer,examples\/answers\/hr-answer\.md,Employees receive 12 weeks of paid parental leave\.,true,verified,Employees receive 12 weeks of paid parental leave\.,The claim is strongly supported by an approved source\.,Approved,HR Policy,high,2026-05-31,,,0\.998,Employees receive 12 weeks of paid parental leave\.,1,1,0,0,1,0,0,0,clear,,clear,,HR Policy,high,2026-05-31,,$/,
+      /^[^,\n]+,hr-answer,examples\/answers\/hr-answer\.md,Employees receive 12 weeks of paid parental leave\.,true,reviewed,verified,Employees receive 12 weeks of paid parental leave\.,The claim is strongly supported by an approved source\.,Approved,HR Policy,high,2026-05-31,,,0\.998,Employees receive 12 weeks of paid parental leave\.,1,1,0,0,1,0,0,0,clear,,clear,,HR Policy,high,2026-05-31,,$/,
     );
     assert.match(
       lines[2] ?? "",
-      /^[^,\n]+,support-answer,examples\/answers\/support-answer\.md,Refunds are available within 14 days of purchase\.,true,needs_review,Refunds are available within 14 days of purchase\.,A closely matching approved source uses different numeric terms\.,Escalate to support ops,Support Playbook,medium,2026-06-01,,,0\.842,Refunds are available within 30 days of purchase\.,1,1,0,1,0,0,0,1,matched,contradicted,matched,needs_review,Support Playbook,medium,2026-06-01,,$/,
+      /^[^,\n]+,support-answer,examples\/answers\/support-answer\.md,Refunds are available within 14 days of purchase\.,true,reviewed,needs_review,Refunds are available within 14 days of purchase\.,A closely matching approved source uses different numeric terms\.,Escalate to support ops,Support Playbook,medium,2026-06-01,,,0\.842,Refunds are available within 30 days of purchase\.,1,1,0,1,0,0,0,1,matched,contradicted,matched,needs_review,Support Playbook,medium,2026-06-01,,$/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -3448,7 +3448,7 @@ support-answer,examples/answers/support-answer.md,Refunds are available within 1
       .replaceAll(", | , | ", ", | ");
     assert.match(
       summaryCsv,
-      /support-answer,examples\/answers\/support-answer\.md,Refunds are available within 14 days of purchase\. Enterprise support requests receive a first response within four business hours\.,true,unsupported,Customers receive a dedicated onboarding manager\.,No approved source matched strongly enough\.,Needs evidence,Support Playbook,medium,2026-06-01,,0.200,Refund requests receive an initial response within one business day\.,3,2,1,1,1,0,1,1,matched,contradicted \| unsupported,clear,,Support Playbook \| Support SLA,medium \| high,2026-06-01 \| 2026-06-15, \| /,
+      /support-answer,examples\/answers\/support-answer\.md,Refunds are available within 14 days of purchase\. Enterprise support requests receive a first response within four business hours\.,true,pending,unsupported,Customers receive a dedicated onboarding manager\.,No approved source matched strongly enough\.,Needs evidence,Support Playbook,medium,2026-06-01,,0.200,Refund requests receive an initial response within one business day\.,3,2,1,1,1,0,1,1,matched,contradicted \| unsupported,clear,,Support Playbook \| Support SLA,medium \| high,2026-06-01 \| 2026-06-15, \| /,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -3595,7 +3595,7 @@ empty,examples/answers/empty.md,Short.,false,,,,No claims were extracted from th
     assert.equal(result.code, 2);
     assert.match(
       await readFile(summaryCsvOutPath, "utf8"),
-      /empty,examples\/answers\/empty\.md,Short\.,false,needs_review,,No claims were extracted from this answer\.,,.*0,0,0,0,0,0,0,0,,,matched,needs_review/,
+      /empty,examples\/answers\/empty\.md,Short\.,false,no_claims,needs_review,,No claims were extracted from this answer\.,,.*0,0,0,0,0,0,0,0,,,matched,needs_review/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
