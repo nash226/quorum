@@ -3615,6 +3615,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             answerLabel: { type: "string" },
             answerPath: { type: "string" },
             answerPreview: { type: "string" },
+            answerHasClaims: { type: "boolean" },
             originalAnswerFailPolicy: {
               type: "string",
               enum: ["matched", "clear"],
@@ -3687,6 +3688,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               items: { $ref: "#/components/schemas/ClaimVerdict" },
             },
             label: { type: "string" },
+            reviewStatus: {
+              type: "string",
+              enum: ["pending", "reviewed", "no_claims"],
+              description: "Queue-friendly state derived from claim and reviewer decisions.",
+            },
             claims: {
               type: "array",
               items: { $ref: "#/components/schemas/ImportedReviewerDecision" },
@@ -3694,7 +3700,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             emptyStateReason: { type: "string" },
             summary: { $ref: "#/components/schemas/ReviewerDecisionImportSummary" },
           },
-          required: ["originalAnswerFailVerdicts", "label", "claims", "summary"],
+          required: ["originalAnswerFailVerdicts", "label", "reviewStatus", "claims", "summary"],
         },
         ReviewerDecisionImportReport: {
           type: "object",
