@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `703f987` on 2026-07-14, feat: cache browser CORS preflight results
+- Latest shipped change: `5779021` on 2026-07-14, fix: document OpenAPI revalidation headers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -69,6 +69,7 @@
 - revalidate the HTTP `/version` compatibility probe with a stable `ETag`
 - revalidate the HTTP `/capabilities` runtime contract with a stable `ETag`
 - revalidate the root API discovery contract with a stable `ETag`
+- revalidate the generated `/openapi.json` contract with `GET` or `HEAD` and a stable `ETag`
 - verify the built CLI's machine-readable version output in the end-to-end smoke gate
 
 ## Roadmap Snapshot
@@ -88,6 +89,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#425](https://github.com/nash226/quorum/pull/425) | fix: document OpenAPI revalidation headers | `5779021` |
 | 2026-07-14 | [#424](https://github.com/nash226/quorum/pull/424) | feat: cache browser CORS preflight results | `703f987` |
 | 2026-07-14 | Direct push | feat: make API discovery revalidatable | `9614349` |
 | 2026-07-14 | Direct push | feat: expose API capability header names | `62ce549` |
@@ -95,5 +97,4 @@
 | 2026-07-14 | Direct push | feat: make version probe revalidatable | `4b5efec` |
 | 2026-07-14 | Direct push | fix: keep OpenAPI methods canonical | `9f18d78` |
 | 2026-07-14 | [#418](https://github.com/nash226/quorum/pull/418) | feat: export supported HTTP methods | `9392a4a` |
-| 2026-07-14 | Direct push | fix: canonicalize CORS exposed headers | `334841b` |
 
