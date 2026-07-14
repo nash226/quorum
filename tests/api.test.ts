@@ -4085,6 +4085,61 @@ test("HTTP API rejects malformed or ambiguous base64 content fields", async () =
   }
 });
 
+test("HTTP API rejects invalid generatedAt timestamps across report workflows", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const requests = [
+    {
+      path: "/verify",
+      body: {
+        answer: "Policy.",
+        sources: [{ sourcePath: "policy.md", content: "Policy." }],
+        generatedAt: "not-a-timestamp",
+      },
+    },
+    {
+      path: "/verify-batch",
+      body: {
+        answers: [{ answer: "Policy.", answerPath: "answer.md" }],
+        sources: [{ sourcePath: "policy.md", content: "Policy." }],
+        generatedAt: "not-a-timestamp",
+      },
+    },
+    {
+      path: "/import-review",
+      body: {
+        reviewCsvContent: "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes\nanswer.md,claim_1,Policy.,verified,Matched,Policy,Policy.,verified,\n",
+        generatedAt: "not-a-timestamp",
+      },
+    },
+    {
+      path: "/evaluate",
+      body: {
+        fixtures: [{ fixturePath: "fixture.json", content: "{}" }],
+        generatedAt: "not-a-timestamp",
+      },
+    },
+  ] as const;
+
+  try {
+    for (const request of requests) {
+      const response = await fetch(`${api.url}${request.path}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(request.body),
+      });
+
+      assert.equal(response.status, 400, request.path);
+      assert.equal(
+        (await response.json() as { error: string }).error,
+        "generatedAt must be a valid timestamp.",
+        request.path,
+      );
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("evaluate endpoint rejects misaligned fixture expectations with a 400", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
