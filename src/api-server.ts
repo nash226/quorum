@@ -209,6 +209,7 @@ export interface ApiVersionResponse {
 export interface OpenApiDocumentOptions {
   serverUrl?: string;
   maxRequestBytes?: number;
+  requestTimeoutMs?: number;
 }
 
 export interface StartedApiServer {
@@ -1334,6 +1335,7 @@ async function handleApiRequest(
       createOpenApiDocument({
         serverUrl: request.headers.host ? `http://${request.headers.host}` : undefined,
         maxRequestBytes,
+        requestTimeoutMs,
       }),
       isHeadRequest,
     );
@@ -1869,6 +1871,16 @@ function optionalBoolean(value: unknown, fieldName: string): boolean | undefined
 export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
   const serverUrl = options.serverUrl?.trim();
   const maxRequestBytes = resolveMaxRequestBytes(options.maxRequestBytes);
+  const requestTimeoutMs = resolveRequestTimeoutMs(options.requestTimeoutMs);
+  const runtimeCapabilities = apiCapabilities(maxRequestBytes, requestTimeoutMs);
+  const discoveryResponseExample = {
+    ...OPENAPI_DISCOVERY_RESPONSE_EXAMPLE,
+    capabilities: runtimeCapabilities,
+  };
+  const capabilitiesResponseExample = {
+    ...OPENAPI_CAPABILITIES_RESPONSE_EXAMPLE,
+    capabilities: runtimeCapabilities,
+  };
   const normalizedServerUrl =
     serverUrl && serverUrl.length > 0 ? serverUrl.replace(/\/+$/, "") : undefined;
   const servers = normalizedServerUrl ? [{ url: normalizedServerUrl }] : [];
@@ -2035,7 +2047,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   examples: {
                     discoveryIndex: {
                       summary: "Discover Quorum capabilities and local endpoints",
-                      value: OPENAPI_DISCOVERY_RESPONSE_EXAMPLE,
+                      value: discoveryResponseExample,
                     },
                   },
                 },
@@ -2075,7 +2087,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   examples: {
                     capabilitiesOnly: {
                       summary: "Read the stable Quorum capability contract",
-                      value: OPENAPI_CAPABILITIES_RESPONSE_EXAMPLE,
+                      value: capabilitiesResponseExample,
                     },
                   },
                 },
