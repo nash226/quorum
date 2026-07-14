@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `12c8153` on 2026-07-14, fix: preserve colon-terminated business claims
+- Latest shipped change: `8d1bed1` on 2026-07-14, fix: preserve reviewer claim routing
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -51,6 +51,7 @@
 - include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
+- preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
 - reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
 - render Markdown reviewer-import reports with safe, single-line answer and claim context
 - fail a CI job when selected risky verdicts appear
@@ -100,6 +101,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: preserve reviewer claim routing | `8d1bed1` |
 | 2026-07-14 | Direct push | fix: preserve colon-terminated business claims | `12c8153` |
 | 2026-07-14 | Direct push | fix: document evaluation claim routing in OpenAPI | `6ec9140` |
 | 2026-07-14 | Direct push | feat: expose evaluation claim rollups | `8d1e1db` |
@@ -107,5 +109,4 @@
 | 2026-07-14 | [#441](https://github.com/nash226/quorum/pull/441) | test: smoke-test OpenAPI cache revalidation | `1978db9` |
 | 2026-07-14 | [#440](https://github.com/nash226/quorum/pull/440) | fix: advertise supported JSON media types | `5cb342b` |
 | 2026-07-14 | Direct push | test: verify vendor JSON API requests | `ce3e8aa` |
-| 2026-07-14 | Direct push | feat: expose CLI claim preview routing | `ba1e7c2` |
 
