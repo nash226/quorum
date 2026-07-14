@@ -30,6 +30,33 @@ are 1 MiB per JSON request and 30 seconds per request; configure them with
 The same limits are available as `capabilities.maxRequestBytes` and
 `capabilities.requestTimeoutMs` in `GET /capabilities` and `GET /` responses.
 
+## Discover and probe the service
+
+An integration can bootstrap without hard-coding the full route inventory:
+
+```bash
+curl -sS http://127.0.0.1:3000/
+curl -sS http://127.0.0.1:3000/version
+```
+
+`GET /` returns the endpoint inventory plus the same capability metadata as
+`/capabilities`. `GET /version` is a smaller compatibility check for clients
+that only need to confirm the service and HTTP contract version. Kubernetes
+and load-balancer integrations can use `/readyz` for readiness and `/livez` for
+process liveness; both probes return `Cache-Control: no-store`.
+
+When a client only needs headers, use `HEAD` to avoid downloading a JSON body:
+
+```bash
+curl -sSI http://127.0.0.1:3000/readyz
+curl -sSI http://127.0.0.1:3000/livez
+```
+
+The discovery headers on these responses include the service version, the
+OpenAPI path, configured request limits, and a request ID. Use the returned
+`X-Quorum-OpenAPI-Path` value to fetch the generated contract before building
+request payloads.
+
 ## Verify an answer
 
 Send the answer and approved source content in one request:
