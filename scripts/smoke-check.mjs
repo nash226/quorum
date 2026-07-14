@@ -665,7 +665,7 @@ Employees receive 12 weeks of paid parental leave.
     const extractClaimsResponse = await fetch(`${server.url}/extract-claims?format=json`, {
       method: "POST",
       headers: {
-        "content-type": "application/json",
+        "content-type": "application/vnd.quorum.claim-preview+json",
         "X-Quorum-Request-Id": "packed-extract-claims-contract",
       },
       body: JSON.stringify({
