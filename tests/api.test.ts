@@ -2027,6 +2027,7 @@ test("programmatic API returns mismatch metadata for in-memory evaluation fixtur
     assert.equal(batchResult.shouldFail, false);
     assert.equal(batchResult.mismatchCount, 0);
     assert.equal(batchResult.summary.fixtureCount, 1);
+    assert.equal(batchResult.summary.mismatchCount, 0);
     assert.equal(batchResult.summary.matchedClaims, 1);
     assert.equal(batchResult.summary.totalExpectedClaims, 1);
     assert.equal(batchResult.summary.score, 1);
@@ -2090,6 +2091,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
   assert.equal(batchResult.shouldFail, false);
   assert.equal(batchResult.mismatchCount, 0);
   assert.equal(batchResult.summary.fixtureCount, 10);
+  assert.equal(batchResult.summary.mismatchCount, 0);
   assert.equal(batchResult.summary.matchedClaims, 25);
   assert.equal(batchResult.summary.totalExpectedClaims, 25);
   assert.equal(batchResult.summary.score, 1);
@@ -3540,6 +3542,7 @@ Refund requests receive an initial response within one business day.
     );
     assert.deepEqual(openApi.components.schemas.EvaluationAggregateSummary.required, [
       "fixtureCount",
+      "mismatchCount",
       "answersWithClaims",
       "answersWithoutClaims",
       "matchedClaims",

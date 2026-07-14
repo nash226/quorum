@@ -81,6 +81,7 @@ The current CLI can:
 - include an explicit `answerHasClaims` signal in evaluation scorecards and CSVs so empty benchmark answers can be routed without recounting claims
 - include `answersWithClaims` and `answersWithoutClaims` in evaluation aggregate and domain rollups so queue integrations can route empty benchmark answers without inspecting every scorecard
 - include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
+- include aggregate evaluation mismatch counts in the reusable JSON summary so queue and dashboard consumers can triage benchmark drift from one object
 - ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
@@ -791,7 +792,7 @@ fixture entry includes `{ fixturePath, content }`, and returns the same
 `evaluateFixtureContentsResult` batch shape used by the package API so
 workflow callers can score benchmark fixtures without writing them to disk.
 That structured result now includes an aggregate `summary` object with
-`fixtureCount`, `matchedClaims`, `totalExpectedClaims`, a numeric-or-null
+`fixtureCount`, `mismatchCount`, `matchedClaims`, `totalExpectedClaims`, a numeric-or-null
 `score`, and a human-readable `scoreLabel`, so local runners can gate
 evaluation drift without re-rendering the text or HTML scorecard.
 Fixture JSON may also embed inline `answer` and `sources` content so callers
