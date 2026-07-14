@@ -55,6 +55,7 @@ import {
 interface VerifyArgs {
   sourcePaths: string[];
   sourceDirs: string[];
+  sourceIdsByPath?: Record<string, string>;
   defaultTrustLevel?: SourceTrustLevel;
   json: boolean;
   resultJson: boolean;
@@ -944,6 +945,7 @@ function parseSharedVerifyArgs(
 ): VerifyArgs {
   const sourcePaths: string[] = [];
   const sourceDirs: string[] = [];
+  const sourceIdsByPath: Record<string, string> = {};
   let defaultTrustLevel: SourceTrustLevel | undefined;
   let json = false;
   let resultJson = false;
@@ -957,6 +959,23 @@ function parseSharedVerifyArgs(
 
     if (arg === "--source" && next) {
       sourcePaths.push(next);
+      index += 1;
+    } else if (arg === "--source-id" && next) {
+      const sourcePath = sourcePaths.at(-1);
+
+      if (!sourcePath) {
+        throw new Error("Source IDs require a preceding --source <path>.");
+      }
+
+      if (sourceIdsByPath[sourcePath] !== undefined) {
+        throw new Error(`Source ${sourcePath} already has an ID. Use one --source-id per explicit --source.`);
+      }
+
+      if (Object.values(sourceIdsByPath).includes(next)) {
+        throw new Error(`Source ID ${next} is already assigned. Use a unique ID for each explicit --source.`);
+      }
+
+      sourceIdsByPath[sourcePath] = next;
       index += 1;
     } else if (arg === "--source-dir" && next) {
       sourceDirs.push(next);
@@ -991,6 +1010,7 @@ function parseSharedVerifyArgs(
   return {
     sourcePaths,
     sourceDirs,
+    sourceIdsByPath: Object.keys(sourceIdsByPath).length > 0 ? sourceIdsByPath : undefined,
     defaultTrustLevel,
     json,
     resultJson,
@@ -1164,6 +1184,7 @@ async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
   return loadSourceDocuments({
     sourcePaths: args.sourcePaths,
     sourceDirs: args.sourceDirs,
+    sourceIdsByPath: args.sourceIdsByPath,
     defaultTrustLevel: args.defaultTrustLevel,
   });
 }
@@ -1313,6 +1334,7 @@ Options:
   --answer <path|->          Answer file to verify, or - to read from stdin
   --answer-label <label>     Reviewer-facing label to use instead of the path-derived default
   --source <path>            Approved source document; may be repeated
+  --source-id <id>            Stable ID for the most recent explicit --source; use once per source
   --source-dir <path>        Directory of approved source documents
   --default-trust-level <level>
                              Override trust level for sources without metadata
@@ -1341,6 +1363,7 @@ Options:
   --answer-label <label>     Apply a reviewer-facing label to the most recent explicit --answer input
   --answer-dir <path>        Directory of answer files to include
   --source <path>            Approved source document; may be repeated
+  --source-id <id>            Stable ID for the most recent explicit --source; use once per source
   --source-dir <path>        Directory of approved source documents
   --default-trust-level <level>
                              Override trust level for sources without metadata
