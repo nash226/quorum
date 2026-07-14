@@ -887,6 +887,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(batchVerifyResult.shouldFail, true);
     assert.deepEqual(batchVerifyResult.failVerdicts, ["needs_review"]);
     assert.equal(batchVerifyResult.report.answerCount, 2);
+    assert.equal(batchVerifyResult.report.summary.answersWithClaims, 2);
     assert.equal(batchVerifyResult.report.summary.needs_review, 1);
 
     const batchBinaryAnswer = readFileSync(join(repoRoot, "examples", "sources", "hr-policy.pdf"));

@@ -697,6 +697,7 @@ const OPENAPI_VERIFY_BATCH_RESPONSE_EXAMPLE = {
       contradicted: 0,
       unsupported: 0,
       needs_review: 0,
+      answersWithClaims: 2,
       answersWithoutClaims: 0,
       answersWithFailures: 0,
     },
@@ -1079,6 +1080,7 @@ const OPENAPI_VERIFY_BATCH_CONFLICT_RESPONSE_EXAMPLE = {
       contradicted: 0,
       unsupported: 1,
       needs_review: 0,
+      answersWithClaims: 2,
       answersWithoutClaims: 0,
       answersWithFailures: 1,
     },
@@ -3561,10 +3563,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             {
               type: "object",
               properties: {
+                answersWithClaims: { type: "integer", minimum: 0 },
                 answersWithoutClaims: { type: "integer", minimum: 0 },
                 answersWithFailures: { type: "integer", minimum: 0 },
               },
-              required: ["answersWithoutClaims", "answersWithFailures"],
+              required: ["answersWithClaims", "answersWithoutClaims", "answersWithFailures"],
             },
           ],
         },

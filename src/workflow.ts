@@ -931,6 +931,7 @@ function summarizeBatchVerification(
     contradicted: 0,
     unsupported: 0,
     needs_review: 0,
+    answersWithClaims: 0,
     answersWithoutClaims: 0,
     answersWithFailures: 0,
   };
@@ -943,6 +944,8 @@ function summarizeBatchVerification(
 
     if (answer.report.assessments.length === 0) {
       summary.answersWithoutClaims += 1;
+    } else {
+      summary.answersWithClaims += 1;
     }
 
     if (answer.shouldFail) {

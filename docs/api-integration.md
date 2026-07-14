@@ -212,6 +212,9 @@ The response includes `scorecards`, aggregate `mismatchCount` and `score`,
   `application/json` with optional parameters and vendor `application/*+json`
   types, while returning `415` for non-JSON media types.
 - `POST /verify-batch` accepts an `answers` array for queue-style workflows.
+- Batch responses include `summary.answersWithClaims` and
+  `summary.answersWithoutClaims` so queue clients can route claim-bearing and
+  empty answers without recounting the per-answer rows.
 - `POST /import-review` imports reviewer CSV content and returns grouped answer
   summaries.
 - `POST /evaluate` scores JSON fixtures and can return benchmark CSV artifacts.

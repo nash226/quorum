@@ -914,6 +914,7 @@ Employees receive 12 weeks of paid parental leave.
       contradicted: 0,
       unsupported: 0,
       needs_review: 0,
+      answersWithClaims: 1,
       answersWithoutClaims: 0,
       answersWithFailures: 0,
     });
@@ -1144,6 +1145,7 @@ Employees receive 12 weeks of paid parental leave.
     contradicted: 0,
     unsupported: 0,
     needs_review: 0,
+    answersWithClaims: 2,
     answersWithoutClaims: 0,
     answersWithFailures: 0,
   });
@@ -1499,6 +1501,7 @@ Employees receive 12 weeks of paid parental leave.
     contradicted: 1,
     unsupported: 0,
     needs_review: 0,
+    answersWithClaims: 2,
     answersWithoutClaims: 0,
     answersWithFailures: 1,
   });
@@ -2184,6 +2187,7 @@ test("programmatic API exports verification report renderers", () => {
       contradicted: 0,
       unsupported: 0,
       needs_review: 0,
+      answersWithClaims: 1,
       answersWithFailures: 0,
       answersWithoutClaims: 0,
     },
@@ -2791,6 +2795,9 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
           };
           BatchVerificationReport: {
             properties: Record<string, unknown>;
+          };
+          BatchVerificationSummary: {
+            allOf: Array<{ required?: string[] }>;
           };
           BatchVerificationRunResult: Record<string, unknown>;
           ClaimVerdict: { enum: string[] };
@@ -3497,6 +3504,11 @@ Refund requests receive an initial response within one business day.
       type: "string",
       format: "date-time",
     });
+    assert.deepEqual(openApi.components.schemas.BatchVerificationSummary.allOf[1]?.required, [
+      "answersWithClaims",
+      "answersWithoutClaims",
+      "answersWithFailures",
+    ]);
     assert.deepEqual(openApi.components.schemas.BatchVerificationReport.properties.generatedAt, {
       type: "string",
       format: "date-time",
@@ -3986,6 +3998,7 @@ Employees receive 12 weeks of paid parental leave.
       contradicted: 0,
       unsupported: 1,
       needs_review: 0,
+      answersWithClaims: 2,
       answersWithoutClaims: 0,
       answersWithFailures: 1,
     });
