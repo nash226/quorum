@@ -607,6 +607,9 @@ when callers send a different media type.
 JSON request bodies are limited to 1 MiB; larger payloads return `413` before
 verification or evaluation starts so an oversized workflow input cannot cause
 unbounded request buffering.
+The packaged `npm run smoke` check also sends an oversized verification request
+through the built CLI server and verifies the documented status, error, and
+request-limit headers.
 The HTTP verification endpoints also accept `answerBase64` and
 `contentBase64` fields when an agent workflow needs to send PDF or DOCX bytes
 inside the JSON request; each field is mutually exclusive with its text
