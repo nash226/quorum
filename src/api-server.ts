@@ -2003,6 +2003,17 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       description: "Stable validator for the service capability contract and configured runtime limits.",
     },
   };
+  const openApiResponseHeaders = {
+    ...apiResponseHeaders,
+    "Cache-Control": {
+      schema: { type: "string", const: "public, max-age=0, must-revalidate" },
+      description: "OpenAPI responses may be revalidated because they contain only the API contract.",
+    },
+    ETag: {
+      schema: { type: "string" },
+      description: "Stable validator for the generated OpenAPI contract and configured runtime limits.",
+    },
+  };
   const errorResponse = (
     description: string,
     examples?: Record<string, { summary: string; value: { error: string } }>,
@@ -2507,7 +2518,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Machine-readable API description for this server.",
-              headers: apiResponseHeaders,
+              headers: openApiResponseHeaders,
               content: {
                 "application/json": {
                   schema: {
@@ -2526,6 +2537,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                 },
               },
             },
+            "304": {
+              description: "The OpenAPI contract has not changed since the supplied ETag.",
+              headers: { ETag: openApiResponseHeaders.ETag },
+            },
             "500": errorResponse("The server failed while handling the request."),
           },
         },
@@ -2535,6 +2550,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           responses: {
             "200": {
               description: "Header-only OpenAPI response for schema probes.",
+              headers: openApiResponseHeaders,
               content: {
                 "application/json": {
                   schema: {
@@ -2546,6 +2562,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   },
                 },
               },
+            },
+            "304": {
+              description: "The OpenAPI contract has not changed since the supplied ETag.",
+              headers: { ETag: openApiResponseHeaders.ETag },
             },
             "500": errorResponse("The server failed while handling the request."),
           },
