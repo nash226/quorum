@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `03cbf03` on 2026-07-14, feat: filter reviewer imports by queue status
+- Latest shipped change: `1e3a519` on 2026-07-14, feat: filter HTTP reviewer imports by queue status
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -56,6 +56,7 @@
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
 - filter imported reviewer decisions by `pending`, `reviewed`, or `no_claims` queue status for targeted handoffs
+- filter HTTP reviewer-import responses by `queueStatus` so integrations can request only pending, reviewed, or claim-less answer groups
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
 - include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
 - include a top-level `queueSummary` in reviewer-import JSON reports so queue consumers can route pending, reviewed, and claim-less answers without scanning every group
@@ -112,6 +113,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: filter HTTP reviewer imports by queue status | `1e3a519` |
 | 2026-07-14 | Direct push | feat: filter reviewer imports by queue status | `03cbf03` |
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch rates | `fae6d0c` |
 | 2026-07-14 | Direct push | feat: advertise reviewer queue statuses | `2e00ee2` |
@@ -119,5 +121,4 @@
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch count in summary | `f2a0b79` |
 | 2026-07-14 | Direct push | test: cover HR source directory evaluations | `dcdad63` |
 | 2026-07-14 | Direct push | feat: show reviewer queue totals in html reports | `6fee78b` |
-| 2026-07-14 | [#452](https://github.com/nash226/quorum/pull/452) | feat: add reviewer queue summary | `1bf0c9c` |
 
