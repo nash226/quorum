@@ -1525,13 +1525,18 @@ The first wedge is HR and customer-support policy verification. These workflows
 are document-grounded, high-volume, and risky when AI answers drift from
 approved sources.
 
+The current foundation includes a lightweight local HTTP API for agent and
+workflow integrations plus a checked-in HR/support evaluation fixture set with
+claim-level scorecards and CI gating. Reviewer exports include queue-oriented
+summary CSVs, and imported decisions preserve answer context and source
+provenance for audit handoff.
+
 Near-term work:
 
-- evaluation harness for labeled verdict examples
-- evaluation text, Markdown, HTML, and CSV reports include run timestamps for audit handoff
-- richer batch verification exports and workflow hooks
-- better claim extraction for bullets, lists, and compound sentences, including independently capitalized comma conjunctions
-- API surface for agent integrations
+- expand the HR and support fixture set as policy coverage grows
+- add a reviewer queue surface for imported decisions and benchmark drift
+- document deployment and integration patterns for the local API, including
+  authentication boundaries and durable source identifiers
 
 See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
 [docs/product-brief.md](docs/product-brief.md) for the product brief. For an

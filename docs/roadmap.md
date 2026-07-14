@@ -5,14 +5,17 @@ front of enterprise agent workflows.
 
 ## Now
 
-- Keep the CLI reliable and easy to run.
+- Keep the CLI and local HTTP API reliable and easy to run.
 - Improve claim extraction without hiding uncertainty.
 - Make reviewer handoff artifacts easier to route, audit, and approve.
+- Expand evaluation fixtures and scorecards across HR and support policy domains.
 
 ## Next
 
-- Add a lightweight API surface for agent and workflow integrations.
-- Build evaluation fixtures and scorecards for HR and support policy domains.
+- Add a reviewer queue surface for triaging imported decisions and benchmark
+  drift.
+- Document deployment and integration patterns for the local API, including
+  authentication boundaries and durable source identifiers.
 
 ## Later
 
