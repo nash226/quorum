@@ -1,0 +1,14 @@
+{
+  "name": "HR source directory policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-onboarding-answer.md",
+  "answerLabel": "HR source directory reviewer packet",
+  "sourceDirs": ["../../sources"],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "needs_review"]
+}
