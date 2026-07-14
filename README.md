@@ -44,6 +44,7 @@ The current CLI can:
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
+- preserve caller-supplied source IDs in API evidence and reports for stable audit references
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
 - split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims

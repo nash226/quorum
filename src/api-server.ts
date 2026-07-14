@@ -93,6 +93,7 @@ export interface ApiSourceInput {
   sourcePath: string;
   content?: string;
   contentBase64?: string;
+  id?: string;
   title?: string;
   updatedAt?: string;
   trustLevel?: string;
@@ -1698,6 +1699,7 @@ function parseSources(value: unknown): InMemorySourceInput[] {
 
     return {
       sourcePath: requireString(record.sourcePath, `sources[${index}].sourcePath`),
+      id: optionalString(record.id, `sources[${index}].id`),
       content: parseContent(
         record.content,
         record.contentBase64,
@@ -3122,6 +3124,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         ApiSourceInput: {
           type: "object",
           properties: {
+            id: {
+              type: "string",
+              description: "Optional stable caller-owned source identifier preserved in evidence and reports.",
+            },
             sourcePath: { type: "string" },
             content: { type: "string" },
             contentBase64: {
