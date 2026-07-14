@@ -1,6 +1,18 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { extractClaims } from "../src/claim-extractor.js";
+import { extractClaims, extractClaimsResult } from "../src/claim-extractor.js";
+
+test("returns a queue-routing signal alongside normalized claims", () => {
+  assert.deepEqual(extractClaimsResult("Employees receive 12 weeks of leave."), {
+    answerHasClaims: true,
+    claims: [{ id: "claim_1", text: "Employees receive 12 weeks of leave." }],
+  });
+
+  assert.deepEqual(extractClaimsResult("# Draft notes\n\n---"), {
+    answerHasClaims: false,
+    claims: [],
+  });
+});
 
 test("preserves short claims instead of silently dropping them", () => {
   const claims = extractClaims(`

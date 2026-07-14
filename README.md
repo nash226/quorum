@@ -360,14 +360,18 @@ Quorum also exposes a small package API for agent and workflow integrations
 that want the verification and reviewer-import flows without shelling out to
 the CLI:
 
-The public package also exports `extractClaims`, so integrations can preview
-the same normalized atomic claims that Quorum will verify:
+The public package exports `extractClaims` for previewing normalized atomic
+claims, plus `extractClaimsResult` when a queue integration also needs the
+stable `answerHasClaims` routing signal used by the HTTP API:
 
 ```ts
-import { extractClaims } from "quorum";
+import { extractClaims, extractClaimsResult } from "quorum";
 
 const claims = extractClaims("Employees receive 12 weeks of leave.");
 // [{ id: "claim_1", text: "Employees receive 12 weeks of leave." }]
+
+const preview = extractClaimsResult("No policy claims were generated.");
+// { answerHasClaims: true, claims: [{ id: "claim_1", text: "..." }] }
 ```
 
 The local HTTP API exposes its stable service, version, OpenAPI path, request
