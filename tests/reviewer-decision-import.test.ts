@@ -2,11 +2,33 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   importReviewerDecisions,
+  filterReviewerDecisionImportReport,
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
   renderReviewerDecisionImportSummaryCsv,
 } from "../src/reviewer-decision-import.js";
+
+test("filters imported answer groups by reviewer queue status", () => {
+  const csv = [
+    "answer_label,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "pending-answer,true,claim_1,Refunds are available.,unsupported,No evidence.,Support Policy,Refunds are available within 30 days.,,",
+    "reviewed-answer,true,claim_2,Employees receive leave.,verified,Supported.,HR Policy,Employees receive leave.,verified,Approved",
+    "no-claims-answer,false,,,,,,,,",
+  ].join("\n");
+  const report = importReviewerDecisions(csv);
+
+  const pending = filterReviewerDecisionImportReport(report, "pending");
+  assert.deepEqual(pending.answerGroups.map((group) => group.label), ["pending-answer"]);
+  assert.equal(pending.summary.pendingClaims, 1);
+  assert.equal(pending.queueSummary.pendingAnswers, 1);
+  assert.equal(pending.queueSummary.reviewedAnswers, 0);
+
+  const noClaims = filterReviewerDecisionImportReport(report, "no_claims");
+  assert.deepEqual(noClaims.answerGroups.map((group) => group.label), ["no-claims-answer"]);
+  assert.equal(noClaims.summary.totalClaims, 0);
+  assert.equal(noClaims.queueSummary.noClaimsAnswers, 1);
+});
 
 test("imports reviewer decisions with overrides, notes, and quoted csv fields", () => {
   const report = importReviewerDecisions(`claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
