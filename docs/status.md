@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ce3e8aa` on 2026-07-14, test: verify vendor JSON API requests
+- Latest shipped change: `5cb342b` on 2026-07-14, fix: advertise supported JSON media types
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -96,6 +96,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#440](https://github.com/nash226/quorum/pull/440) | fix: advertise supported JSON media types | `5cb342b` |
 | 2026-07-14 | Direct push | test: verify vendor JSON API requests | `ce3e8aa` |
 | 2026-07-14 | Direct push | feat: expose CLI claim preview routing | `ba1e7c2` |
 | 2026-07-14 | [#437](https://github.com/nash226/quorum/pull/437) | feat: expose claim preview routing result | `6d6422e` |
@@ -103,5 +104,4 @@
 | 2026-07-14 | Direct push | feat: expose batch answer claim routing | `8f52bb6` |
 | 2026-07-14 | Direct push | fix: reject unknown route preflights | `6e29624` |
 | 2026-07-14 | [#433](https://github.com/nash226/quorum/pull/433) | fix: return method errors for known API routes | `eea16eb` |
-| 2026-07-14 | Direct push | test: cover CLI CORS origin contract | `b639631` |
 
