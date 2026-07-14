@@ -280,6 +280,9 @@ scorecard and reviewer-facing “no claims extracted” behavior covered in CI.
 The shipped support fixture set also includes a source-directory example, so a
 benchmark can discover a maintained approved-source bundle with `sourceDirs`
 instead of listing every source file individually.
+It also includes a support escalation example where a partial policy match is
+correctly routed to `needs_review`, keeping reviewer handoff behavior covered
+in the shipped scorecard gate.
 Run `npm run check` locally to execute the same full gate as CI: tests, the
 TypeScript build, the end-to-end smoke check, and the shipped-fixture score
 gate. The package also runs this same gate automatically before `npm publish`,

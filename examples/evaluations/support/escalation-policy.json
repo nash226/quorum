@@ -1,0 +1,14 @@
+{
+  "name": "Support escalation ambiguity example",
+  "domain": "support",
+  "answerPath": "../../answers/support-escalation-answer.md",
+  "answerLabel": "Support escalation reviewer packet",
+  "sourcePaths": ["../../sources/support-playbook.md"],
+  "expectedSummary": {
+    "verified": 0,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["needs_review"]
+}
