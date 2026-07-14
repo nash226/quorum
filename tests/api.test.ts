@@ -225,6 +225,21 @@ test("programmatic API can build the OpenAPI document without starting the serve
   );
 });
 
+test("OpenAPI describes source freshness timestamps as date-time values", () => {
+  const openApi = createOpenApiDocument() as {
+    components: {
+      schemas: Record<string, { properties?: Record<string, { format?: string }> }>;
+    };
+  };
+
+  assert.equal(openApi.components.schemas.ApiSourceInput?.properties?.updatedAt?.format, "date-time");
+  assert.equal(openApi.components.schemas.SourceSummary?.properties?.updatedAt?.format, "date-time");
+  assert.equal(
+    openApi.components.schemas.EvidenceSnippet?.properties?.documentUpdatedAt?.format,
+    "date-time",
+  );
+});
+
 test("HTTP API extracts normalized claims without loading sources", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
