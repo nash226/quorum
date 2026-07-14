@@ -45,6 +45,7 @@ The current CLI can:
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - preserve caller-supplied source IDs in API evidence and reports for stable audit references
+- preserve caller-supplied source IDs for explicit CLI sources with `--source-id`, while directory sources keep positional fallback IDs
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
 - split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
@@ -98,6 +99,18 @@ documents:
 npm run dev -- extract-claims --answer examples/answers/hr-answer.md --json
 cat examples/answers/hr-answer.md | npm run dev -- extract-claims --answer -
 npm run dev -- extract-claims --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet"
+```
+
+When a file-based workflow already has durable approved-document IDs, attach
+them to explicit sources so reviewer evidence stays linked to the source
+system:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source examples/sources/hr-policy.md \
+  --source-id people-ops/hr-policy@2026-07-14 \
+  --json
 ```
 
 When a human is reviewing a claim preview, `--answer-label` adds the
