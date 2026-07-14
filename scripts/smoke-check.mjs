@@ -349,11 +349,11 @@ try {
     evaluationDomainSummaryCsv,
     /^generated_at,domain,fixture_count,mismatch_count,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n/m,
   );
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,3,0,3,0,\d+,\d+,1(?:\.0+)?\,100%,4,2,2,1,4,2,2,1$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,4,0,4,0,\d+,\d+,1(?:\.0+)?\,100%,6,2,2,2,6,2,2,2$/m);
   assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,6,0,5,1,\d+,\d+,1(?:\.0+)?\,100%,6,4,2,1,6,4,2,1$/m);
   assert.match(
     evaluationAggregateSummaryCsv,
-    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,9,8,1,0,\d+,\d+,1(?:\.0+)?,100%,hr \| support,3 \| 6,0 \| 0,3 \| 5,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,10,6,4,2,10,6,4,2\n?$/,
+    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,10,9,1,0,\d+,\d+,1(?:\.0+)?,100%,hr \| support,4 \| 6,0 \| 0,4 \| 5,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,12,6,4,3,12,6,4,3\n?$/,
   );
 
   const apiSources = await api.loadSourcesFromContent({
