@@ -625,7 +625,10 @@ The server allows all browser origins by default for local development; pass
 `--cors-origin <origin>` (repeatable) to `quorum serve` or
 `corsAllowedOrigins` to `startApiServer` when a deployed client should be
 restricted to an explicit origin allowlist. Disallowed origins receive no
-`Access-Control-Allow-Origin` response header.
+`Access-Control-Allow-Origin` response header. The packaged smoke check starts
+the CLI with an explicit origin and verifies both allowed and denied browser
+responses, keeping the deployable command path aligned with the programmatic
+server contract.
 POST-only route errors return an `Allow: POST` header, and the generated
 OpenAPI contract documents that header so integration clients can recover from
 wrong-method calls without hard-coding the route contract. The `Allow` header is
