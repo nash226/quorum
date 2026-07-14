@@ -478,6 +478,22 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(headHealthzResponse.headers.get("cache-control"), "no-store");
     assert.equal(await headHealthzResponse.text(), "");
 
+    const headReadyzResponse = await fetch(`${server.url}/readyz`, { method: "HEAD" });
+    assert.equal(headReadyzResponse.status, 200);
+    assert.equal(headReadyzResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(headReadyzResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(headReadyzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(headReadyzResponse.headers.get("cache-control"), "no-store");
+    assert.equal(await headReadyzResponse.text(), "");
+
+    const headLivezResponse = await fetch(`${server.url}/livez`, { method: "HEAD" });
+    assert.equal(headLivezResponse.status, 200);
+    assert.equal(headLivezResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(headLivezResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(headLivezResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(headLivezResponse.headers.get("cache-control"), "no-store");
+    assert.equal(await headLivezResponse.text(), "");
+
     const openApiResponse = await fetch(`${server.url}/openapi.json`);
     assert.equal(openApiResponse.status, 200);
     assert.equal(openApiResponse.headers.get("x-quorum-service"), "quorum");
