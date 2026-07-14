@@ -42,6 +42,9 @@ published chat schedule while catching an unconditional coverage promise. The
 packed smoke check asserts that this evaluation remains in the generated report.
 The benchmark inventory also verifies that every approved source ID is unique,
 so evidence references remain unambiguous across the full packet set.
+The packed smoke check also verifies priority-support answers, preserving the
+14-day response commitment while catching a conflicting 30-day promise and an
+unsupported dedicated-account-manager claim.
 
 The packed smoke check also verifies that tax-exemption answers appear in the
 benchmark report, covering certificate submission, review timing, and an
