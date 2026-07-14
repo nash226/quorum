@@ -176,7 +176,7 @@ export interface ApiServerOptions {
 export type ApiCapabilityMap = typeof API_CAPABILITIES;
 
 export interface ApiDiscoveryEndpoint {
-  method: "GET" | "HEAD" | "POST" | "OPTIONS";
+  method: (typeof API_ALLOWED_METHODS)[number];
   path: string;
   description: string;
 }
@@ -2945,7 +2945,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           properties: {
             method: {
               type: "string",
-              enum: ["GET", "HEAD", "POST", "OPTIONS"],
+              enum: API_ALLOWED_METHODS,
             },
             path: { type: "string" },
             description: { type: "string" },
@@ -2994,7 +2994,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               type: "array",
               items: {
                 type: "string",
-                enum: ["GET", "HEAD", "POST", "OPTIONS"],
+                enum: API_ALLOWED_METHODS,
               },
             },
             requestContentTypes: {
@@ -3620,7 +3620,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
     },
   };
 
-  const methods = ["get", "head", "post", "options"] as const;
+  const methods = API_ALLOWED_METHODS.map((method) => method.toLowerCase());
   for (const pathItem of Object.values(document.paths)) {
     const pathItemRecord = pathItem as Record<string, unknown>;
     for (const method of methods) {
