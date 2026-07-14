@@ -843,6 +843,17 @@ for full-time staff only.
   ]);
 });
 
+test("keeps colon-terminated business claims instead of treating them as labels", () => {
+  const claims = extractClaims(`No refunds are available:
+Customers can request store credit within 30 days.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "No refunds are available:",
+    "Customers can request store credit within 30 days.",
+  ]);
+});
+
 test("keeps wrapped plain-text lines as one claim when the next line is a continuation", () => {
   const claims = extractClaims(`Employees receive 12 weeks of paid parental leave
 for full-time staff only.

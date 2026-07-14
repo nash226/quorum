@@ -16,6 +16,7 @@ const MARKDOWN_REFERENCE_DEFINITION_PREFIX = /^\[[^\]]+\]:\s*\S+/;
 const MARKDOWN_FOOTNOTE_DEFINITION_PREFIX = /^\[\^[^\]]+\]:\s+/;
 const MARKDOWN_TABLE_HTML_BREAK_PLACEHOLDER = "__QUORUM_TABLE_HTML_BREAK__";
 const EXPLICIT_CLAIM_MARKER = "QUORUMEXPLICITCLAIM";
+const INTRO_LABEL_PATTERN = /^(?:(?:draft|final|the|our)?\s*(?:answer|response|summary|result|conclusion|recommendation|notes?|details?|claims?|findings?|outcome|rationale)(?:\s+(?:summary|notes?|details?))?|(?:policy|deployment|support|key|leave)(?:\s+[A-Za-z][A-Za-z0-9-]*){0,3}|[A-Za-z][A-Za-z0-9 /-]*\s+policy(?:\s+(?:summary|notes?|details?))?):$/i;
 const OPEN_HTML_DETAILS_ATTRIBUTE =
   /(^|\s)open(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?(?=\s|$)/i;
 const HTML_ANSWER_MARKUP_PATTERN =
@@ -574,7 +575,7 @@ function isIntroLabel(
   lines: string[],
   currentIndex: number,
 ): boolean {
-  if (!/:$/.test(line)) {
+  if (!INTRO_LABEL_PATTERN.test(line)) {
     return false;
   }
 
