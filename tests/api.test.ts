@@ -2380,6 +2380,7 @@ test("HTTP API advertises the allowed method on POST-only route errors", async (
 
     assert.equal(response.status, 405);
     assert.equal(response.headers.get("allow"), "POST");
+    assert.equal(response.headers.get("access-control-expose-headers"), API_CORS_EXPOSED_HEADERS);
     assert.deepEqual(await response.json(), {
       error: "Method not allowed. Use POST.",
       requestId: "wrong-method-check",
