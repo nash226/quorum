@@ -21,7 +21,7 @@ set covers:
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 28 fixtures. The generated
+The benchmark currently contains 29 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -117,6 +117,8 @@ specific product question:
   alongside an unsupported commuter-shuttle promise.
 - HR parental-leave coverage tests a paid-leave duration contradiction
   alongside a verified duration and an unrelated unsupported office-hours claim.
+- HR payroll-change coverage tests a payroll timing contradiction alongside
+  identity-verification evidence and an unsupported rejected-deposit promise.
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
