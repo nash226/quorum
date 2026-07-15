@@ -36,6 +36,11 @@ verdict routing against approved Markdown, HTML, PDF, or directory-backed
 sources. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.
 
+The current benchmark has 20 HR fixtures and 45 support fixtures (65 total);
+64 packets contain claims and one intentionally exercises empty-answer routing.
+Use repeated `--domain hr` or `--domain support` flags to score a focused
+policy slice while preserving the same reviewer-facing verdict contracts.
+
 The HR benchmark now includes medical-leave coverage for matched sick-day and
 manager-notification claims alongside an unsupported unlimited-leave promise.
 
