@@ -50,7 +50,7 @@ The current CLI can:
 - preserve caller-supplied source IDs for explicit CLI sources with `--source-id`, while directory sources keep positional fallback IDs
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
-- split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
+- split independently capitalized or numeric clauses joined by semicolons or comma conjunctions into separate claims
 - strip common Unicode numbered-list markers from exported policy answers
 - keep colon-terminated business claims such as `No refunds:` while still skipping recognized wrapper labels such as `Policy summary:`
 - ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims

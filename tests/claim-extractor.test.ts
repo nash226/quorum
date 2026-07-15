@@ -685,6 +685,17 @@ test("splits independently capitalized comma-and conjunctions into claims", () =
   ]);
 });
 
+test("splits comma conjunctions when the next claim starts with a number", () => {
+  const claims = extractClaims(
+    "Customers can cancel monthly subscriptions from account billing settings, and 30-day refunds require manager approval.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Customers can cancel monthly subscriptions from account billing settings",
+    "30-day refunds require manager approval.",
+  ]);
+});
+
 test("keeps lowercase comma conjunctions together when they may be continuations", () => {
   const claims = extractClaims(
     "Customers can cancel monthly subscriptions from account billing settings, and refund requests remain subject to the annual plan policy.",
