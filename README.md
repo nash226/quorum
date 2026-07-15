@@ -43,8 +43,9 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in benchmark includes an HR onboarding reviewer packet that proves
-verified benefits claims and routes an unsupported wellness claim to review.
+The checked-in benchmark includes HR onboarding and support refunds reviewer
+packets that prove policy claims, surface contradictions, and route uncertain
+or unsupported answers for review.
 
 ## Documentation Map
 
