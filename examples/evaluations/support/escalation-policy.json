@@ -1,14 +1,24 @@
 {
-  "name": "Support escalation ambiguity example",
+  "name": "Support escalation policy example",
   "domain": "support",
   "answerPath": "../../answers/support-escalation-answer.md",
+  "answer": "Escalated support tickets receive a first response within 4 business hours.\nEscalated support tickets receive a first response within 30 calendar days.\nEvery escalated support ticket receives a dedicated engineer.\n",
   "answerLabel": "Support escalation reviewer packet",
-  "sourcePaths": ["../../sources/support-playbook.md"],
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-escalation-policy.md",
+      "id": "support/escalation@2026-07-15",
+      "title": "Support Escalation Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Escalated support tickets receive a first response within 4 business hours.\nEscalated security incidents are routed to the on-call engineer.\n"
+    }
+  ],
   "expectedSummary": {
-    "verified": 0,
+    "verified": 1,
     "contradicted": 0,
-    "unsupported": 0,
+    "unsupported": 1,
     "needs_review": 1
   },
-  "expectedClaimVerdicts": ["needs_review"]
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
 }
