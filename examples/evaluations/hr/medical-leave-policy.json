@@ -1,0 +1,23 @@
+{
+  "name": "HR medical leave policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-medical-leave-answer.md",
+  "answerLabel": "HR medical leave reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "hr/medical-leave-policy@2026-07-15",
+      "id": "hr/medical-leave@2026-07-15",
+      "title": "HR Medical Leave Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees receive 5 paid sick days per calendar year. Employees must notify their manager before the start of a missed shift."
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "needs_review"]
+}
