@@ -30,6 +30,7 @@ import {
 } from "./report-renderer.js";
 import {
   type ReviewerDecisionImportResult,
+  type ReviewerQueueStatus,
   filterReviewerDecisionImportReport,
   parseReviewerQueueStatus,
   renderReviewerDecisionImportHtmlReport,
@@ -98,6 +99,7 @@ export interface ApiReviewQueueRequest {
   fixtures?: InMemoryEvaluationFixtureInput[];
   domains?: string[];
   generatedAt?: string;
+  queueStatus?: ReviewerQueueStatus;
 }
 
 export interface ApiReviewQueueResponse {
@@ -1600,10 +1602,13 @@ async function handleApiRequest(
 
     requireJsonRequest(request);
     const body = parseReviewQueueRequest(await readJsonBody(request, maxRequestBytes));
-    const reviewReport = importReviewerDecisionContentsResult({
+    const importedReviewReport = importReviewerDecisionContentsResult({
       reviewCsvContent: body.reviewCsvContent,
       generatedAt: body.generatedAt,
     }).report;
+    const reviewReport = body.queueStatus
+      ? filterReviewerDecisionImportReport(importedReviewReport, body.queueStatus)
+      : importedReviewReport;
     const evaluation = body.fixtures && body.fixtures.length > 0
       ? await evaluateFixtureContentsResult({
           fixtures: body.fixtures,
@@ -1827,6 +1832,9 @@ function parseReviewQueueRequest(value: unknown): ApiReviewQueueRequest {
     fixtures: fixturesValue?.map((fixture, index) => parseFixtureInput(fixture, index)),
     domains: parseOptionalStringArray(record.domains, "domains"),
     generatedAt: parseOptionalGeneratedAt(record.generatedAt),
+    queueStatus: record.queueStatus === undefined
+      ? undefined
+      : parseReviewerQueueStatus(requireString(record.queueStatus, "queueStatus")),
   };
 }
 
@@ -3154,6 +3162,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   properties: {
                     reviewCsvContent: { type: "string" },
                     generatedAt: { type: "string", format: "date-time" },
+                    queueStatus: {
+                      type: "string",
+                      enum: [...REVIEW_QUEUE_STATUSES],
+                      description: "Only include answers in this reviewer queue status.",
+                    },
                     domains: { type: "array", minItems: 1, items: { type: "string" } },
                     fixtures: {
                       type: "array",
