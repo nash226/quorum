@@ -29,7 +29,7 @@ For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 63-fixture benchmark spans HR and support workflows, including
+The checked-in 65-fixture benchmark spans HR and support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
