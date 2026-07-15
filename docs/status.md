@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c85ad82` on 2026-07-15, test: add support tax exemption evaluation coverage
+- Latest shipped change: `e2f1606` on 2026-07-15, test: add support account closure evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | [#531](https://github.com/nash226/quorum/pull/531) | test: add support account closure evaluation coverage | `e2f1606` |
 | 2026-07-15 | Direct push | test: add support tax exemption evaluation coverage | `c85ad82` |
 | 2026-07-15 | Direct push | test: add support order cancellation evaluation coverage | `12db314` |
 | 2026-07-15 | Direct push | test: add support billing address evaluation coverage | `8104013` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add support subscription pause evaluation | `556d920` |
 | 2026-07-15 | Direct push | test: add support invoice correction evaluation coverage | `05253bd` |
 | 2026-07-15 | [#524](https://github.com/nash226/quorum/pull/524) | test: add support replacement evaluation coverage | `78903a7` |
-| 2026-07-15 | Direct push | docs: sync benchmark fixture inventory | `865137e` |
 
