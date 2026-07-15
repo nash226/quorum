@@ -249,6 +249,31 @@ test("evaluates a shipped support account closure fixture across lifecycle claim
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support usage limits fixture across rate claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/usage-limits-policy.json"),
+    generatedAt: "2026-07-15T23:58:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support usage limits policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support usage limits reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/usage-limits@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped support cancellation fixture across risk verdicts", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/cancellation-policy.json"),
@@ -1226,6 +1251,7 @@ test("evaluates a shipped fixture that discovers approved sources from a directo
     resolve("examples/sources/support-playbook.md"),
     resolve("examples/sources/support-priority-policy.md"),
     resolve("examples/sources/support-refunds-policy.md"),
+    resolve("examples/sources/support-usage-limits-policy.md"),
   ]);
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.matchedClaims, 3);
@@ -1340,6 +1366,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/source-directory-policy.json"),
     resolve("examples/evaluations/support/subscription-pause-policy.json"),
     resolve("examples/evaluations/support/tax-exemption-policy.json"),
+    resolve("examples/evaluations/support/usage-limits-policy.json"),
     resolve("examples/evaluations/support/warranty-policy.json"),
   ]);
 });
@@ -1373,7 +1400,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 53);
+  assert.equal(scorecards.length, 54);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -1429,6 +1456,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support source directory example",
       "Support subscription pause policy example",
       "Support tax exemption policy example",
+      "Support usage limits policy example",
       "Support warranty policy example",
     ],
   );
