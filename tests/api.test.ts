@@ -24,6 +24,7 @@ import {
   EVALUATE_PATH as SERVER_EVALUATE_PATH,
   EXTRACT_CLAIMS_PATH as SERVER_EXTRACT_CLAIMS_PATH,
   IMPORT_REVIEW_PATH as SERVER_IMPORT_REVIEW_PATH,
+  REVIEW_QUEUE_PATH as SERVER_REVIEW_QUEUE_PATH,
   OPENAPI_PATH as SERVER_OPENAPI_PATH,
   READYZ_PATH as SERVER_READYZ_PATH,
   startApiServer,
@@ -51,11 +52,13 @@ import {
   EVALUATE_PATH,
   EXTRACT_CLAIMS_PATH,
   IMPORT_REVIEW_PATH,
+  REVIEW_QUEUE_PATH,
   READYZ_PATH,
   VERIFY_BATCH_PATH,
   VERIFY_PATH,
   type ApiEvaluateResponse,
   type ApiImportReviewResponse,
+  type ApiReviewQueueResponse,
   type ApiVerifyBatchResponse,
   type ApiVerifyResponse,
   createOpenApiDocument,
@@ -189,6 +192,7 @@ test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(EVALUATE_PATH, SERVER_EVALUATE_PATH);
   assert.strictEqual(EXTRACT_CLAIMS_PATH, SERVER_EXTRACT_CLAIMS_PATH);
   assert.strictEqual(IMPORT_REVIEW_PATH, SERVER_IMPORT_REVIEW_PATH);
+  assert.strictEqual(REVIEW_QUEUE_PATH, SERVER_REVIEW_QUEUE_PATH);
   assert.strictEqual(VERIFY_BATCH_PATH, SERVER_VERIFY_BATCH_PATH);
   assert.strictEqual(VERIFY_PATH, SERVER_VERIFY_PATH);
   assert.deepEqual(API_DISCOVERY_HEADERS, SERVER_API_DISCOVERY_HEADERS);
@@ -224,6 +228,7 @@ test("programmatic API can build the OpenAPI document without starting the serve
   assert.deepEqual(openApi.servers, [{ url: "http://127.0.0.1:3000" }]);
   assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
   assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
+  assert.equal(openApi.paths["/review-queue"]?.post?.summary, "Summarize reviewer queue and benchmark drift");
   assert.equal(openApi.paths["/extract-claims"]?.post?.summary, "Extract normalized claims");
   const verifyRequestSchema = openApi.paths["/verify"]?.post?.requestBody as {
     content: { "application/json": { schema: { oneOf: Array<{ required: string[] }>; properties: Record<string, { contentEncoding?: string }> } } };
@@ -2905,6 +2910,8 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(operationId(openApi.paths["/verify-batch"]?.post), "postVerifyBatch");
     assert.equal(operationId(openApi.paths["/import-review"]?.options), "optionsImportReview");
     assert.equal(operationId(openApi.paths["/import-review"]?.post), "postImportReview");
+    assert.equal(operationId(openApi.paths["/review-queue"]?.options), "optionsReviewQueue");
+    assert.equal(operationId(openApi.paths["/review-queue"]?.post), "postReviewQueue");
     assert.equal(operationId(openApi.paths["/evaluate"]?.options), "optionsEvaluate");
     assert.equal(operationId(openApi.paths["/evaluate"]?.post), "postEvaluate");
     assert.equal(openApi.paths["/"]?.get?.summary, "Service discovery");
@@ -2968,6 +2975,8 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(openApi.paths["/verify-batch"]?.post?.summary, "Verify multiple answers");
     assert.equal(openApi.paths["/import-review"]?.options?.summary, "Reviewer import preflight");
     assert.equal(openApi.paths["/import-review"]?.post?.summary, "Import reviewer decisions");
+    assert.equal(openApi.paths["/review-queue"]?.options?.summary, "Reviewer queue overview preflight");
+    assert.equal(openApi.paths["/review-queue"]?.post?.summary, "Summarize reviewer queue and benchmark drift");
     assert.equal(openApi.paths["/evaluate"]?.options?.summary, "Evaluation preflight");
     assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
     assert.equal(
@@ -4278,6 +4287,46 @@ test("HTTP reviewer imports can filter answer groups by queue status", async () 
     assert.deepEqual(result.report.answerGroups.map((group) => [group.label, group.reviewStatus]), [
       ["Pending answer", "pending"],
     ]);
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API serves reviewer queue overview over HTTP", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const generatedAt = "2026-07-07T19:30:00.000Z";
+
+  try {
+    const fixtureContent = await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8");
+    const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        generatedAt,
+        reviewCsvContent: [
+          "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched,HR Policy,Employees receive 12 weeks of paid parental leave.,,",
+        ].join("\n"),
+        fixtures: [{ fixturePath: "examples/evaluations/hr-policy.json", content: fixtureContent }],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as ApiReviewQueueResponse;
+    assert.equal(result.requestId, response.headers.get("x-quorum-request-id"));
+    assert.equal(result.generatedAt, generatedAt);
+    assert.deepEqual(result.review, {
+      totalAnswers: 1,
+      pendingAnswers: 1,
+      reviewedAnswers: 0,
+      noClaimsAnswers: 0,
+      totalClaims: 1,
+      pendingClaims: 1,
+      reviewedClaims: 0,
+    });
+    assert.equal(result.evaluation?.fixtureCount, 1);
+    assert.equal(result.evaluation?.mismatchCount, 0);
+    assert.equal(result.evaluation?.scoreLabel, "100%");
   } finally {
     await api.close();
   }
