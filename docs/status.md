@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bd9ba74` on 2026-07-14, feat: stabilize reviewer queue timestamps
+- Latest shipped change: `2643c88` on 2026-07-15, test: smoke test reviewer queue timestamps
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -35,6 +35,7 @@
 - preserve the reviewer-facing `answer_label` in text, Markdown, and HTML reports as well as machine-readable exports
 - include the report generation timestamp in text output for audit-friendly handoff
 - accept `--generated-at <timestamp>` on report-producing CLI workflows when CI retries or snapshot tests need a stable audit timestamp
+- preserve a caller-supplied `--generated-at` timestamp across `review-queue` JSON and CSV handoffs for retryable queue runs
 - validate HTTP `generatedAt` values as timestamps before producing audit reports
 - describe generated report timestamps as `date-time` values in the OpenAPI contract for typed clients
 - validate approved-source `updatedAt` values as timestamps before using freshness metadata
@@ -120,6 +121,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: smoke test reviewer queue timestamps | `2643c88` |
 | 2026-07-14 | Direct push | feat: stabilize reviewer queue timestamps | `bd9ba74` |
 | 2026-07-14 | [#477](https://github.com/nash226/quorum/pull/477) | test: add support password reset evaluation fixture | `70f8b50` |
 | 2026-07-14 | Direct push | test: smoke test filtered reviewer queue cli | `331a22a` |
@@ -127,5 +129,4 @@
 | 2026-07-14 | [#474](https://github.com/nash226/quorum/pull/474) | test: add HR leave evaluation fixture | `db3445f` |
 | 2026-07-14 | Direct push | test: add support SLA evaluation fixture | `9ff89ca` |
 | 2026-07-14 | Direct push | feat: filter reviewer queue overview by status | `95b3d89` |
-| 2026-07-14 | [#471](https://github.com/nash226/quorum/pull/471) | docs: refresh roadmap after queue foundation | `bc360c9` |
 
