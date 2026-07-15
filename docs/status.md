@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2643c88` on 2026-07-15, test: smoke test reviewer queue timestamps
+- Latest shipped change: `4cfadf7` on 2026-07-15, test: expand support cancellation evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -121,6 +121,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: expand support cancellation evaluation coverage | `4cfadf7` |
 | 2026-07-15 | Direct push | test: smoke test reviewer queue timestamps | `2643c88` |
 | 2026-07-14 | Direct push | feat: stabilize reviewer queue timestamps | `bd9ba74` |
 | 2026-07-14 | [#477](https://github.com/nash226/quorum/pull/477) | test: add support password reset evaluation fixture | `70f8b50` |
@@ -128,5 +129,4 @@
 | 2026-07-14 | Direct push | feat: filter reviewer queue cli by status | `27ab1fc` |
 | 2026-07-14 | [#474](https://github.com/nash226/quorum/pull/474) | test: add HR leave evaluation fixture | `db3445f` |
 | 2026-07-14 | Direct push | test: add support SLA evaluation fixture | `9ff89ca` |
-| 2026-07-14 | Direct push | feat: filter reviewer queue overview by status | `95b3d89` |
 
