@@ -1,0 +1,24 @@
+{
+  "name": "HR professional development policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-professional-development-answer.md",
+  "answer": "Employees may request 10 hours of professional development each quarter after manager approval.\nEmployees may request 30 hours of professional development each quarter after manager approval.\nEmployees receive a monthly learning stipend.\n",
+  "answerLabel": "HR professional development reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-professional-development-policy.md",
+      "id": "people-ops/hr-professional-development@2026-07-15",
+      "title": "HR Professional Development Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees may request 10 hours of professional development each quarter after manager approval.\nThe company reimburses up to $1,200 per year for approved professional certifications.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
