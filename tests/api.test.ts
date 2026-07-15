@@ -2119,7 +2119,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
       fixtureCount: 10,
       mismatchCount: 0,
       mismatchRate: 0,
-      answersWithClaims: 9,
+      answersWithClaims: 10,
       answersWithoutClaims: 0,
       matchedClaims: 30,
       totalExpectedClaims: 30,
