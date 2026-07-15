@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `dd33591` on 2026-07-14, feat: export reviewer queue summary csv
+- Latest shipped change: `03c8819` on 2026-07-14, fix: split numeric compound claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -23,7 +23,7 @@
 - preserve caller-supplied source IDs for explicit CLI sources with `--source-id`, while directory sources keep positional fallback IDs
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
-- split independently capitalized clauses joined by semicolons or comma conjunctions into separate claims
+- split independently capitalized or numeric clauses joined by semicolons or comma conjunctions into separate claims
 - strip common Unicode numbered-list markers from exported policy answers
 - keep colon-terminated business claims such as `No refunds:` while still skipping recognized wrapper labels such as `Policy summary:`
 - ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims
@@ -116,6 +116,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: split numeric compound claims | `03c8819` |
 | 2026-07-14 | Direct push | feat: export reviewer queue summary csv | `dd33591` |
 | 2026-07-14 | Direct push | test: smoke-test reviewer queue filtering | `a2e023e` |
 | 2026-07-14 | Direct push | fix: scope reviewer queue filter to imports | `460bdcb` |
@@ -123,5 +124,4 @@
 | 2026-07-14 | Direct push | docs: explain targeted reviewer queue handoffs | `b0b8cc4` |
 | 2026-07-14 | Direct push | feat: filter HTTP reviewer imports by queue status | `1e3a519` |
 | 2026-07-14 | Direct push | feat: filter reviewer imports by queue status | `03cbf03` |
-| 2026-07-14 | Direct push | feat: expose evaluation mismatch rates | `fae6d0c` |
 
