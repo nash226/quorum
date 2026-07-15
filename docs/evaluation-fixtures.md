@@ -19,11 +19,11 @@ set covers:
 - support account closure, account recovery, account contact changes, account security, account suspension, billing address changes, billing-suspension appeals, cancellation, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, payment method
   changes, replacement, and tax exemption
-  eligibility, subscription pauses, SLA, billing, service credits, shipping protection,
+  eligibility, subscription pauses, SLA, billing, gift cards, service credits, shipping protection,
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 57 fixtures. The generated
+The benchmark currently contains 58 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -157,6 +157,8 @@ specific product question:
 - Support escalation coverage tests a verified first-response window, a
   conflicting response claim routed for review, and an unsupported dedicated-engineer
   promise.
+- Support gift-card coverage verifies account ownership before redemption,
+  catches an expired-card claim, and flags an unsupported automatic refund.
 - Support charge-dispute coverage tests a verified dispute window, a conflicting
   deadline, and an automatic-reversal promise routed for review.
 - Support delivery-delay coverage tests a verified status-update window, a
