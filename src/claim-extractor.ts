@@ -50,7 +50,10 @@ export function extractClaims(answer: string): AtomicClaim[] {
     })
     .filter(
       ({ isExplicitClaim, text }) =>
-        Boolean(text) && (isExplicitClaim || (text.length >= 12 && !isThematicBreak(text))),
+        Boolean(text) &&
+        (isExplicitClaim ||
+          (text.length >= 12 && !isThematicBreak(text)) ||
+          isShortPunctuatedClaim(text)),
     )
     .map(({ text }, index) => ({
       id: `claim_${index + 1}`,
@@ -74,6 +77,15 @@ export function extractClaimsResult(answer: string): ExtractClaimsResult {
 
 function isThematicBreak(text: string): boolean {
   return /^(?:-{3,}|_{3,}|\*{3,})$/.test(text);
+}
+
+function isShortPunctuatedClaim(text: string): boolean {
+  return (
+    text.length >= 8 &&
+    text.length < 12 &&
+    /[.!?]$/.test(text) &&
+    /[A-Za-z]{2,}/.test(text)
+  );
 }
 
 function splitCompoundClaim(sentence: string): string[] {
