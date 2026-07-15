@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `331a22a` on 2026-07-14, test: smoke test filtered reviewer queue cli
+- Latest shipped change: `70f8b50` on 2026-07-14, test: add support password reset evaluation fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -119,6 +119,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | [#477](https://github.com/nash226/quorum/pull/477) | test: add support password reset evaluation fixture | `70f8b50` |
 | 2026-07-14 | Direct push | test: smoke test filtered reviewer queue cli | `331a22a` |
 | 2026-07-14 | Direct push | feat: filter reviewer queue cli by status | `27ab1fc` |
 | 2026-07-14 | [#474](https://github.com/nash226/quorum/pull/474) | test: add HR leave evaluation fixture | `db3445f` |
@@ -126,5 +127,4 @@
 | 2026-07-14 | Direct push | feat: filter reviewer queue overview by status | `95b3d89` |
 | 2026-07-14 | [#471](https://github.com/nash226/quorum/pull/471) | docs: refresh roadmap after queue foundation | `bc360c9` |
 | 2026-07-14 | Direct push | feat: expose reviewer queue overview over HTTP | `5c83701` |
-| 2026-07-14 | Direct push | feat: add reviewer queue overview command | `310c43a` |
 
