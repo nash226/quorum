@@ -89,6 +89,9 @@ while flagging a conflicting response-time promise and an unsupported stipend.
 The benchmark now also covers HR time-off requests, verifying the notice rule,
 routing conflicting notice and rollover claims for review, and catching an
 unsupported stipend claim.
+Support escalation coverage now also spans a verified response window, a
+conflicting response claim routed for review, and an unsupported
+dedicated-engineer promise.
 
 ## Documentation Map
 
