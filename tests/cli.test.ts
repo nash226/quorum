@@ -3738,12 +3738,14 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       csvOutPath,
     ]);
     const overview = JSON.parse(stdout) as {
+      queueStatus: string | null;
       review: { totalAnswers: number; pendingAnswers: number };
       evaluation: { fixtureCount: number; mismatchCount: number };
     };
 
     assert.equal(overview.review.totalAnswers, 14);
     assert.equal(overview.review.pendingAnswers, 13);
+    assert.equal(overview.queueStatus, null);
     assert.equal(overview.evaluation.fixtureCount, 20);
     assert.equal(overview.evaluation.mismatchCount, 0);
     assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
@@ -3782,6 +3784,7 @@ test("review-queue accepts a stable generated-at timestamp for JSON and CSV hand
     const overview = JSON.parse(stdout) as { generatedAt: string };
     assert.equal(overview.generatedAt, "2026-07-15T04:00:00.000Z");
     assert.match(await readFile(csvOutPath, "utf8"), /2026-07-15T04:00:00\.000Z/);
+    assert.match(await readFile(csvOutPath, "utf8"), /"generated_at","queue_status","total_answers"/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -3811,6 +3814,7 @@ test("review-queue scopes workload to a queue status", async () => {
       "--json",
     ]);
     const pendingOverview = JSON.parse(pendingStdout) as {
+      queueStatus: string;
       review: Record<string, number>;
     };
     assert.deepEqual(pendingOverview.review, {
@@ -3822,6 +3826,7 @@ test("review-queue scopes workload to a queue status", async () => {
       pendingClaims: 38,
       reviewedClaims: 0,
     });
+    assert.equal(pendingOverview.queueStatus, "pending");
 
     const noClaimsStdout = await runCli([
       "review-queue",
