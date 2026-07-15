@@ -234,6 +234,7 @@ test("programmatic API can build the OpenAPI document without starting the serve
     verifyRequestSchema.content["application/json"].schema.properties.answerBase64?.contentEncoding,
     "base64",
   );
+  assert.equal("queueStatus" in verifyRequestSchema.content["application/json"].schema.properties, false);
   const extractClaimsRequestSchema = openApi.paths["/extract-claims"]?.post?.requestBody as {
     content: { "application/json": { schema: { oneOf: Array<{ required: string[] }>; properties: Record<string, { contentEncoding?: string }> } } };
   };

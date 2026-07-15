@@ -2737,11 +2737,6 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                       type: "array",
                       items: { $ref: "#/components/schemas/ClaimVerdict" },
                     },
-                    queueStatus: {
-                      type: "string",
-                      enum: [...REVIEW_QUEUE_STATUSES],
-                      description: "Only return answer groups in this reviewer queue status.",
-                    },
                     includeArtifacts: {
                       type: "array",
                       items: { $ref: "#/components/schemas/VerifyArtifactName" },
