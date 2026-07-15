@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c196255` on 2026-07-15, test: cover HR medical leave evaluation
+- Latest shipped change: `79e8187` on 2026-07-15, test: cover support account merge evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: cover support account merge evaluation | `79e8187` |
 | 2026-07-15 | [#549](https://github.com/nash226/quorum/pull/549) | test: cover HR medical leave evaluation | `c196255` |
 | 2026-07-15 | Direct push | docs: explain evaluation domain filtering | `ba06ae1` |
 | 2026-07-15 | Direct push | test: cover support refund status evaluation | `b086888` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: cover support plan changes | `6fc1aad` |
 | 2026-07-15 | [#542](https://github.com/nash226/quorum/pull/542) | docs: correct README benchmark coverage | `10c5a09` |
 | 2026-07-15 | Direct push | test: cover support gift card claims | `f125698` |
-| 2026-07-15 | Direct push | test: cover support live chat html evaluation | `0310aea` |
 
