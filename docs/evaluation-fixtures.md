@@ -23,7 +23,7 @@ set covers:
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 59 fixtures. The generated
+The benchmark currently contains 60 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -105,6 +105,8 @@ specific product question:
   the first customer-support wedge across common high-risk answers.
 - Support refunds coverage isolates a time-bound annual-plan policy with
   verified, contradicted, and unsupported customer claims.
+- Support refund-status coverage tests a billing-history control, a matched
+  processing-window claim, and an unsupported automatic-retry promise.
 - Support data-export coverage tests inline source metadata, durable source
   identity, and conflicting customer policy claims.
 - Support priority coverage tests a response-time contradiction alongside an
