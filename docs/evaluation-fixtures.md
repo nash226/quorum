@@ -13,12 +13,13 @@ set covers:
 - Markdown, HTML, PDF, and source-directory ingestion
 - empty-answer queue routing
 - explicit source IDs and inline source metadata
-- HR leave, onboarding, professional development, and compensation review
+- HR leave, onboarding, professional development, compensation review, and
+  benefits enrollment
 - support account security, cancellation, escalation, live chat, password
   reset, refunds, data export, SLA, billing, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 20 fixtures. The generated
+The benchmark currently contains 21 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -102,6 +103,8 @@ specific product question:
   identity, and conflicting customer policy claims.
 - Support priority coverage tests a response-time contradiction alongside an
   unsupported account-management promise.
+- HR benefits coverage tests health-coverage eligibility timing alongside a
+  verified enrollment window and an unsupported stipend promise.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.
