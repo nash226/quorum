@@ -2107,26 +2107,26 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
 
   assert.equal(batchResult.shouldFail, false);
   assert.equal(batchResult.mismatchCount, 0);
-  assert.equal(batchResult.summary.fixtureCount, 24);
+  assert.equal(batchResult.summary.fixtureCount, 25);
   assert.equal(batchResult.summary.mismatchCount, 0);
-  assert.equal(batchResult.summary.matchedClaims, 68);
-  assert.equal(batchResult.summary.totalExpectedClaims, 68);
+  assert.equal(batchResult.summary.matchedClaims, 71);
+  assert.equal(batchResult.summary.totalExpectedClaims, 71);
   assert.equal(batchResult.summary.score, 1);
   assert.equal(batchResult.summary.scoreLabel, "100%");
   assert.deepEqual(batchResult.summary.domains, [
     {
       domain: "hr",
-      fixtureCount: 11,
+      fixtureCount: 12,
       mismatchCount: 0,
       mismatchRate: 0,
-      answersWithClaims: 11,
+      answersWithClaims: 12,
       answersWithoutClaims: 0,
-      matchedClaims: 33,
-      totalExpectedClaims: 33,
+      matchedClaims: 36,
+      totalExpectedClaims: 36,
       score: 1,
       scoreLabel: "100%",
-      expectedSummary: { verified: 13, contradicted: 9, unsupported: 8, needs_review: 3 },
-      actualSummary: { verified: 13, contradicted: 9, unsupported: 8, needs_review: 3 },
+      expectedSummary: { verified: 14, contradicted: 10, unsupported: 9, needs_review: 3 },
+      actualSummary: { verified: 14, contradicted: 10, unsupported: 9, needs_review: 3 },
     },
     {
       domain: "support",
@@ -2143,7 +2143,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
       actualSummary: { verified: 14, contradicted: 11, unsupported: 9, needs_review: 1 },
     },
   ]);
-  assert.equal(batchResult.scorecards.length, 24);
+  assert.equal(batchResult.scorecards.length, 25);
   assert.equal(singleResult.hasMismatch, false);
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
   assert.equal(contentResult.hasMismatch, false);
@@ -5235,9 +5235,9 @@ test("programmatic API exports batch evaluation helpers", async () => {
 
   const rendered = renderEvaluationTextReport(scorecards);
 
-  assert.equal(scorecards.length, 24);
+  assert.equal(scorecards.length, 25);
   assert.equal(scorecards.some(hasEvaluationMismatch), false);
-  assert.match(rendered, /Fixtures: 24/);
+  assert.match(rendered, /Fixtures: 25/);
   assert.match(renderEvaluationHtmlReport(scorecards), /<!doctype html>/i);
   assert.match(renderEvaluationSummaryCsv(scorecards), /generated_at,fixture_name,domain,fixture_path,answer_path/);
 });
