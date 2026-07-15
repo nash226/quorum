@@ -1,0 +1,24 @@
+{
+  "name": "Support usage limits policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-usage-limits-answer.md",
+  "answer": "Standard-plan customers can make up to 100 API requests per minute.\nSupport increases the limit after reviewing every account.\nQuorum automatically raises every account's limit after one support request.\n",
+  "answerLabel": "Support usage limits reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-usage-limits-policy.md",
+      "id": "support/usage-limits@2026-07-15",
+      "title": "Support Usage Limits Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Standard-plan customers can make up to 100 API requests per minute.\nRequests above the limit are throttled until the next minute.\nSupport may increase the limit after reviewing the account.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
