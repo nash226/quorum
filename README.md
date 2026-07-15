@@ -47,6 +47,7 @@ The current CLI can:
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - preserve caller-supplied source IDs in API evidence and reports for stable audit references
+- reject duplicate API source IDs so evidence references remain unambiguous
 - preserve caller-supplied source IDs for explicit CLI sources with `--source-id`, while directory sources keep positional fallback IDs
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
@@ -163,6 +164,10 @@ npm run dev -- verify \
   --source-id people-ops/hr-policy@2026-07-14 \
   --json
 ```
+
+API requests must use a unique `sources[].id` for each approved record. Quorum
+rejects duplicate IDs before verification so an evidence reference cannot point
+to multiple source documents.
 
 When a human is reviewing a claim preview, `--answer-label` adds the
 reviewer-facing label to the text output. JSON output remains the same claims

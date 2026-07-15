@@ -1824,7 +1824,7 @@ function parseSources(value: unknown): InMemorySourceInput[] {
     throw requestError("sources must be a non-empty array.");
   }
 
-  return value.map((source, index) => {
+  const sources = value.map((source, index) => {
     const record = requireRecord(source, `sources[${index}]`);
 
     return {
@@ -1841,6 +1841,21 @@ function parseSources(value: unknown): InMemorySourceInput[] {
       trustLevel: parseOptionalTrustLevel(record.trustLevel),
     };
   });
+
+  const seenIds = new Set<string>();
+  for (const source of sources) {
+    if (source.id === undefined) {
+      continue;
+    }
+
+    if (seenIds.has(source.id)) {
+      throw requestError(`Duplicate source ID: ${source.id}`);
+    }
+
+    seenIds.add(source.id);
+  }
+
+  return sources;
 }
 
 function parseContent(
