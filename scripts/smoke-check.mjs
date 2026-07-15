@@ -465,6 +465,40 @@ Employees receive 12 weeks of paid parental leave.
   ]);
 
   try {
+    const reviewQueueResponse = await fetch(`${server.url}/review-queue`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        generatedAt: "2026-07-15T04:00:00.000Z",
+        reviewCsvContent: [
+          "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched,HR Policy,Employees receive 12 weeks of paid parental leave.,,",
+        ].join("\n"),
+        fixtures: [
+          {
+            fixturePath: join(repoRoot, "examples", "evaluations", "hr-policy.json"),
+            content: readFileSync(join(repoRoot, "examples", "evaluations", "hr-policy.json"), "utf8"),
+          },
+        ],
+      }),
+    });
+    const reviewQueueBody = await reviewQueueResponse.text();
+    assert.equal(reviewQueueResponse.status, 200, reviewQueueBody);
+    const reviewQueueResult = JSON.parse(reviewQueueBody);
+    assert.equal(reviewQueueResult.generatedAt, "2026-07-15T04:00:00.000Z");
+    assert.deepEqual(reviewQueueResult.review, {
+      totalAnswers: 1,
+      pendingAnswers: 1,
+      reviewedAnswers: 0,
+      noClaimsAnswers: 0,
+      totalClaims: 1,
+      pendingClaims: 1,
+      reviewedClaims: 0,
+    });
+    assert.equal(reviewQueueResult.evaluation.fixtureCount, 1);
+    assert.equal(reviewQueueResult.evaluation.mismatchCount, 0);
+    assert.equal(reviewQueueResult.evaluation.scoreLabel, "100%");
+
     const indexResponse = await fetch(server.url);
     assert.equal(indexResponse.status, 200);
     const indexEtag = indexResponse.headers.get("etag");
