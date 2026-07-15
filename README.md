@@ -110,6 +110,7 @@ eligibility deadline, and flags an unconditional replacement promise as unsuppor
 
 - [CLI guide](docs/cli-guide.md): local verification, reports, imports, and evaluation.
 - [HTTP API integration](docs/api-integration.md): server startup, discovery, requests, and artifacts.
+- [Programmatic API](docs/programmatic-api.md): embed in-memory or file-backed verification in Node.js workflows.
 - [Reviewer queue workflow](docs/reviewer-queue.md): reviewer CSV handoff and queue summaries.
 - [Evaluation fixture guide](docs/evaluation-fixtures.md): benchmark context, shipped coverage, and adding fixtures.
 - [API deployment guide](docs/api-deployment.md): network boundary, limits, and durable source identity.
