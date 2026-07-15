@@ -1,0 +1,24 @@
+{
+  "name": "HR remote work policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-remote-work-answer.md",
+  "answer": "Employees may work remotely up to 3 days each week.\nEmployees may work remotely 5 days each week.\nEmployees receive a monthly home-office stipend.\n",
+  "answerLabel": "HR remote work reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-remote-work-policy.md",
+      "id": "people-ops/hr-remote-work@2026-07-15",
+      "title": "HR Remote Work Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees may work remotely up to 3 days each week.\nRemote employees must be available during their team's core collaboration hours.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
