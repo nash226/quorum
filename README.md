@@ -35,8 +35,9 @@ The goal is not to replace reviewers. The goal is to give reviewers a clear,
 auditable evidence report before an agent response becomes a business action.
 
 The evaluation suite includes an HR compensation-review fixture plus support
-password-reset, subscription-cancellation, and live-chat fixtures that exercise
-verified, contradicted, and unsupported claims against approved policy sources.
+account-security, password-reset, subscription-cancellation, and live-chat
+fixtures that exercise verified, contradicted, and unsupported claims against
+approved policy sources.
 
 ## What It Does
 
@@ -94,6 +95,7 @@ The current CLI can:
 - ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
 - ship an HR leave evaluation fixture that covers verified, contradicted, and unsupported policy claims
 - ship an HR compensation-review evaluation fixture that covers verified, contradicted, and unsupported policy claims with inline approved-source metadata
+- ship a support account-security evaluation fixture that covers verified and contradicted account claims
 - ship an HR professional-development evaluation fixture that covers verified, contradicted, and unsupported policy claims with inline approved-source metadata
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
