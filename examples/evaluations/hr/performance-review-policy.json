@@ -1,0 +1,24 @@
+{
+  "name": "HR performance review policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-performance-review-answer.md",
+  "answer": "Employees receive a performance review every six months.\nEmployees may request a performance review after 5 years.\nEmployees receive a guaranteed promotion after each review.\n",
+  "answerLabel": "HR performance review reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-performance-review-policy.md",
+      "id": "people-ops/hr-performance-review@2026-07-15",
+      "title": "HR Performance Review Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees receive a performance review every six months.\nEmployees may request a performance review after 1 year.\nThe company publishes review outcomes within 30 days of the review.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "needs_review"]
+}

@@ -14,12 +14,12 @@ set covers:
 - empty-answer queue routing
 - explicit source IDs and inline source metadata
 - HR leave, leave carryover, onboarding, professional development, compensation
-  review, benefits enrollment, and remote work
+  review, benefits enrollment, performance review, and remote work
 - support account security, cancellation, escalation, live chat, password
   reset, refunds, data export, SLA, billing, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 23 fixtures. The generated
+The benchmark currently contains 24 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -109,6 +109,8 @@ specific product question:
   verified enrollment window and an unsupported stipend promise.
 - HR remote-work coverage tests a weekly remote-work limit alongside a
   contradicted five-day claim and an unsupported home-office stipend promise.
+- HR performance-review coverage tests a review cadence contradiction alongside
+  an unsupported promotion promise.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.
