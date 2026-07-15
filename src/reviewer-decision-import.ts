@@ -503,6 +503,48 @@ export function renderReviewerDecisionImportSummaryCsv(
   return `${rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")}\n`;
 }
 
+export function renderReviewerDecisionImportQueueSummaryCsv(
+  report: ReviewerDecisionImportReport,
+  failOn: ClaimVerdict[] = [],
+): string {
+  const row = [
+    report.generatedAt,
+    report.queueSummary.totalAnswers.toString(),
+    report.queueSummary.pendingAnswers.toString(),
+    report.queueSummary.reviewedAnswers.toString(),
+    report.queueSummary.noClaimsAnswers.toString(),
+    report.summary.totalClaims.toString(),
+    report.summary.reviewedClaims.toString(),
+    report.summary.pendingClaims.toString(),
+    report.summary.overriddenClaims.toString(),
+    report.summary.verified.toString(),
+    report.summary.contradicted.toString(),
+    report.summary.unsupported.toString(),
+    report.summary.needs_review.toString(),
+    matchingFailVerdicts(report, failOn).length > 0 ? "matched" : "clear",
+    matchingFailVerdicts(report, failOn).join(" | "),
+  ];
+  const header = [
+    "generated_at",
+    "total_answers",
+    "pending_answers",
+    "reviewed_answers",
+    "no_claims_answers",
+    "total_claims",
+    "reviewed_claims",
+    "pending_claims",
+    "overridden_claims",
+    "verified",
+    "contradicted",
+    "unsupported",
+    "needs_review",
+    "fail_policy",
+    "fail_verdicts",
+  ];
+
+  return `${[header, row].map((values) => values.map(escapeCsvValue).join(",")).join("\n")}\n`;
+}
+
 export function renderReviewerDecisionImportHtmlReport(
   report: ReviewerDecisionImportReport,
   failOn: ClaimVerdict[] = [],
