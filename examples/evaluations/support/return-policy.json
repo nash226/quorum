@@ -1,0 +1,24 @@
+{
+  "name": "Support return policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-return-answer.md",
+  "answer": "Customers may request a return within 30 days of delivery.\nCustomers may request a return within 90 days of delivery.\nSupport automatically approves every return without reviewing eligibility.\n",
+  "answerLabel": "Support return reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-return-policy.md",
+      "id": "support/return@2026-07-15",
+      "title": "Support Return Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers may request a return within 30 days of delivery.\nSupport reviews return eligibility before approving a return.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "needs_review"]
+}
