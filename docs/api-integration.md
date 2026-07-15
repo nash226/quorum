@@ -203,8 +203,9 @@ the workflow needs with `includeArtifacts`, for example:
 }
 ```
 
-Use `summary_csv` for queue routing fields and `review_csv` when a human will
-make claim-level decisions. The `/evaluate` endpoint accepts fixture JSON in a
+Use `summary_csv` for per-answer queue routing fields, `queue_summary_csv` for
+one-row reviewer queue totals, and `review_csv` when a human will make
+claim-level decisions. The `/evaluate` endpoint accepts fixture JSON in a
 `fixtures` array and can emit `summary_csv`, `domain_summary_csv`, and
 `aggregate_summary_csv` for benchmark reporting.
 
