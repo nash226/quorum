@@ -52,6 +52,8 @@ The support benchmark also covers authentication-device approval against a
 trusted-email control while flagging unsupported hardware-key promises.
 The support benchmark includes payment-failure coverage for retry promises and
 verification-sensitive card updates, keeping billing claims reviewer-visible.
+It now also covers service-outage answers, including update-cadence drift,
+blanket-refund promises, and incident-status confirmation.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
