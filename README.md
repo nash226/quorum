@@ -39,6 +39,9 @@ the current coverage inventory and extension workflow.
 The HR benchmark now includes medical-leave coverage for matched sick-day and
 manager-notification claims alongside an unsupported unlimited-leave promise.
 
+The HR benchmark now also covers dependent-benefits eligibility, including
+qualifying-event timing and unsupported undocumented-dependent claims.
+
 The support benchmark now has direct regression coverage for plan changes,
 including billing eligibility, conflicting upgrade timing, and unsupported
 automatic-upgrade claims.
