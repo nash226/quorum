@@ -762,7 +762,7 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
       /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
     assert.match(summaryCsv, /^[^,\n]+,hr,7,0,0\.000,7,0,21,21,1\.000,100%,9,5,5,2,9,5,5,2$/m);
-    assert.match(summaryCsv, /^[^,\n]+,support,12,0,0\.000,11,1,32,32,1\.000,100%,13,10,8,1,13,10,8,1$/m);
+    assert.match(summaryCsv, /^[^,\n]+,support,13,0,0\.000,12,1,35,35,1\.000,100%,14,11,9,1,14,11,9,1$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -787,7 +787,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /,19,18,1,0,0\.000,53,53,1\.000,100%,hr \| support,7 \| 12,0 \| 0,0\.000 \| 0\.000,7 \| 11,0 \| 1,1\.000 \| 1\.000,100% \| 100%,22,15,13,3,22,15,13,3/);
+    assert.match(summaryCsv, /,20,19,1,0,0\.000,56,56,1\.000,100%,hr \| support,7 \| 13,0 \| 0,0\.000 \| 0\.000,7 \| 12,0 \| 1,1\.000 \| 1\.000,100% \| 100%,23,16,14,3,23,16,14,3/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -1039,7 +1039,7 @@ test("evaluate writes the gate-aware result JSON to disk", async () => {
     assert.equal(payload.shouldFail, false);
     assert.deepEqual(payload.failureReasons, []);
     assert.equal(payload.mismatchCount, 0);
-    assert.equal(payload.summary.fixtureCount, 19);
+    assert.equal(payload.summary.fixtureCount, 20);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -3742,9 +3742,9 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       evaluation: { fixtureCount: number; mismatchCount: number };
     };
 
-    assert.equal(overview.review.totalAnswers, 13);
-    assert.equal(overview.review.pendingAnswers, 12);
-    assert.equal(overview.evaluation.fixtureCount, 19);
+    assert.equal(overview.review.totalAnswers, 14);
+    assert.equal(overview.review.pendingAnswers, 13);
+    assert.equal(overview.evaluation.fixtureCount, 20);
     assert.equal(overview.evaluation.mismatchCount, 0);
     assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
   } finally {
@@ -3814,12 +3814,12 @@ test("review-queue scopes workload to a queue status", async () => {
       review: Record<string, number>;
     };
     assert.deepEqual(pendingOverview.review, {
-      totalAnswers: 12,
-      pendingAnswers: 12,
+      totalAnswers: 13,
+      pendingAnswers: 13,
       reviewedAnswers: 0,
       noClaimsAnswers: 0,
-      totalClaims: 35,
-      pendingClaims: 35,
+      totalClaims: 38,
+      pendingClaims: 38,
       reviewedClaims: 0,
     });
 
