@@ -1,0 +1,24 @@
+{
+  "name": "Support billing suspension appeal policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-billing-suspension-answer.md",
+  "answer": "Suspensions for billing issues can be appealed after the outstanding balance is paid.\nSuspensions for billing issues can be appealed within 7 days.\nSupport automatically reinstates every billing suspension after payment.\n",
+  "answerLabel": "Support billing suspension reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-account-suspension-policy.md",
+      "id": "support/account-suspension@2026-07-15",
+      "title": "Support Account Suspension Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers may appeal an account suspension within 14 days.\nAccounts suspended for confirmed abuse are not eligible for reinstatement.\nSuspensions for billing issues can be appealed after the outstanding balance is paid.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
