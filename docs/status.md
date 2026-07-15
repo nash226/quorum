@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0c4aca8` on 2026-07-14, fix: reject duplicate API source IDs
+- Latest shipped change: `d192372` on 2026-07-14, feat: export batch aggregate summary csv
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -46,6 +46,7 @@
 - write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path and stable source IDs for audit handoff
 - write requested report artifacts atomically so queue watchers only observe complete files during reviewer handoff
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
+- write a standalone batch aggregate summary CSV with answer routing totals, verdict totals, and approved-source context for queue handoffs
 - preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
 - preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
 - include an explicit `answerHasClaims` signal in evaluation scorecards and CSVs so empty benchmark answers can be routed without recounting claims
@@ -117,6 +118,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: export batch aggregate summary csv | `d192372` |
 | 2026-07-14 | Direct push | fix: reject duplicate API source IDs | `0c4aca8` |
 | 2026-07-14 | Direct push | fix: split numeric compound claims | `03c8819` |
 | 2026-07-14 | Direct push | feat: export reviewer queue summary csv | `dd33591` |
@@ -124,5 +126,4 @@
 | 2026-07-14 | Direct push | fix: scope reviewer queue filter to imports | `460bdcb` |
 | 2026-07-14 | Direct push | fix: advertise reviewer queue filter in OpenAPI | `b4ca101` |
 | 2026-07-14 | Direct push | docs: explain targeted reviewer queue handoffs | `b0b8cc4` |
-| 2026-07-14 | Direct push | feat: filter HTTP reviewer imports by queue status | `1e3a519` |
 
