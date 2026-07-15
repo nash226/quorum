@@ -1,0 +1,24 @@
+{
+  "name": "Support subscription pause policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-subscription-pause-answer.md",
+  "answer": "Customers can pause a subscription within 14 days of the renewal date.\nCustomers can pause a subscription within 30 days of the renewal date.\nPaused subscriptions receive an automatic prorated refund.\n",
+  "answerLabel": "Support subscription pause reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-subscription-pause-policy.md",
+      "id": "support/subscription-pause@2026-07-15",
+      "title": "Support Subscription Pause Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can pause a subscription within 14 days of the renewal date.\nPaused subscriptions remain available until the current billing period ends.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
