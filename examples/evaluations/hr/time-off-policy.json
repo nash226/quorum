@@ -1,0 +1,13 @@
+{
+  "name": "HR time-off request policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-time-off-answer.md",
+  "sourcePaths": ["../../sources/hr-time-off-policy.md"],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 2
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "needs_review", "unsupported"]
+}
