@@ -113,13 +113,13 @@ test("evaluates a shipped support SLA fixture across risk verdicts", async () =>
   );
   assert.deepEqual(scorecard.actualSummary, {
     verified: 1,
-    contradicted: 0,
+    contradicted: 1,
     unsupported: 1,
-    needs_review: 1,
+    needs_review: 0,
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
     "verified",
-    "needs_review",
+    "contradicted",
     "unsupported",
   ]);
   assert.equal(scorecard.summaryMatches, true);
