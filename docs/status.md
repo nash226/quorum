@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `db3445f` on 2026-07-14, test: add HR leave evaluation fixture
+- Latest shipped change: `27ab1fc` on 2026-07-14, feat: filter reviewer queue cli by status
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -119,6 +119,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | feat: filter reviewer queue cli by status | `27ab1fc` |
 | 2026-07-14 | [#474](https://github.com/nash226/quorum/pull/474) | test: add HR leave evaluation fixture | `db3445f` |
 | 2026-07-14 | Direct push | test: add support SLA evaluation fixture | `9ff89ca` |
 | 2026-07-14 | Direct push | feat: filter reviewer queue overview by status | `95b3d89` |
@@ -126,5 +127,4 @@
 | 2026-07-14 | Direct push | feat: expose reviewer queue overview over HTTP | `5c83701` |
 | 2026-07-14 | Direct push | feat: add reviewer queue overview command | `310c43a` |
 | 2026-07-14 | Direct push | feat: export batch aggregate summary csv | `d192372` |
-| 2026-07-14 | Direct push | fix: reject duplicate API source IDs | `0c4aca8` |
 
