@@ -1,0 +1,24 @@
+{
+  "name": "Support notification preferences policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-notification-preferences-answer.md",
+  "answer": "Customers may update email notification preferences from account settings.\nCustomers receive notification changes immediately.\nSupport automatically enables every notification channel after an update.\n",
+  "answerLabel": "Support notification preferences reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-notification-preferences-policy.md",
+      "id": "support/notification-preferences@2026-07-15",
+      "title": "Support Notification Preferences Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers may update email notification preferences from account settings.\nNotification preference changes take effect at the next scheduled notification.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}

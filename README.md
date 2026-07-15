@@ -43,7 +43,7 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 57-fixture benchmark includes HR onboarding, leave-carryover,
+The checked-in 58-fixture benchmark includes HR onboarding, leave-carryover,
 benefits-enrollment, remote-work, performance-review, and
 expense-reimbursement,
 support refunds, data-export, and priority-support reviewer packets that prove
@@ -142,6 +142,9 @@ Evaluation regression coverage now also verifies authentication-device approval
 against a trusted-email control and routes an unsupported hardware-key promise.
 The live-chat fixture now has a focused regression test that verifies HTML policy
 ingestion still preserves verified, contradicted, and unsupported routing.
+The benchmark now also covers support notification preferences, verifying the
+account-settings control, detecting an immediate-effect timing contradiction,
+and routing an unsupported automatic-channel claim for review.
 
 ## Documentation Map
 

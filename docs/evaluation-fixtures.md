@@ -20,10 +20,11 @@ set covers:
   reset, refunds, charge disputes, delivery delays, data export, payment method
   changes, replacement, and tax exemption
   eligibility, subscription pauses, SLA, billing, service credits, shipping protection,
-  warranty claims, usage limits, subscription renewals, and source-directory workflows
+  warranty claims, usage limits, subscription renewals, notification preferences,
+  and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 57 fixtures. The generated
+The benchmark currently contains 58 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
