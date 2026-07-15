@@ -266,7 +266,7 @@ try {
   ]);
 
   assert.match(batchStdout, /Quorum Batch Verification Report/);
-  assert.equal(readJson(batchReportPath).answerCount, 11);
+  assert.equal(readJson(batchReportPath).answerCount, 12);
   assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
   const batchSummaryCsv = readFileSync(batchSummaryCsvPath, "utf8");
   assert.match(
@@ -297,7 +297,7 @@ try {
   assert.equal(timestampedQueueOverview.generatedAt, "2026-07-15T04:00:00.000Z");
   assert.match(
     readFileSync(queueOverviewCsvPath, "utf8"),
-    /^"generated_at","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","11",/m,
+    /^"generated_at","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","12",/m,
   );
 
   const pendingQueueOverview = JSON.parse(
@@ -311,12 +311,12 @@ try {
     ]),
   );
   assert.deepEqual(pendingQueueOverview.review, {
-    totalAnswers: 10,
-    pendingAnswers: 10,
+    totalAnswers: 11,
+    pendingAnswers: 11,
     reviewedAnswers: 0,
     noClaimsAnswers: 0,
-    totalClaims: 28,
-    pendingClaims: 28,
+    totalClaims: 31,
+    pendingClaims: 31,
     reviewedClaims: 0,
   });
 
@@ -368,7 +368,7 @@ try {
   );
 
   assert.match(importStdout, /Quorum Reviewer Decision Import/);
-  assert.equal(readJson(importReportPath).answerGroups.length, 11);
+  assert.equal(readJson(importReportPath).answerGroups.length, 12);
   assert.match(readFileSync(importSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
 
   const evaluationReportPath = join(tempDir, "evaluation-report.md");
@@ -395,6 +395,7 @@ try {
   assert.match(evaluationStdout, /Fixtures with mismatches: 0/);
   assert.match(evaluationStdout, /HR PDF policy example/);
   assert.match(evaluationStdout, /Support billing HTML example/);
+  assert.match(evaluationStdout, /Support live chat policy example/);
   const evaluationSummaryCsv = readFileSync(evaluationSummaryCsvPath, "utf8");
   assert.match(
     evaluationSummaryCsv,
@@ -409,10 +410,10 @@ try {
     /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n/m,
   );
   assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,6,0,0\.000,6,0,18,18,1(?:\.0+)?\,100%,8,4,4,2,8,4,4,2$/m);
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,9,0,0\.000,8,1,\d+,\d+,1(?:\.0+)?\,100%,9,7,5,1,9,7,5,1$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,10,0,0\.000,9,1,\d+,\d+,1(?:\.0+)?\,100%,10,8,6,1,10,8,6,1$/m);
   assert.match(
     evaluationAggregateSummaryCsv,
-    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,15,14,1,0,0\.000,40,40,1(?:\.0+)?,100%,hr \| support,6 \| 9,0 \| 0,0\.000 \| 0\.000,6 \| 8,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,17,11,9,3,17,11,9,3\n?$/,
+    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,16,15,1,0,0\.000,43,43,1(?:\.0+)?,100%,hr \| support,6 \| 10,0 \| 0,0\.000 \| 0\.000,6 \| 9,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,18,12,10,3,18,12,10,3\n?$/,
   );
 
   const apiSources = await api.loadSourcesFromContent({
