@@ -190,13 +190,13 @@ export function updateStatus() {
   }
 
   const repoUrl = remoteToHttp(git(["remote", "get-url", "origin"]));
-  const readmeCapabilities = extractBulletList(readSection("README.md", "What It Does"));
+  const capabilities = extractBulletList(readSection("docs/cli-guide.md", "Capability Index"));
   const roadmapNow = extractBulletList(readSection("docs/roadmap.md", "Now"));
   const roadmapNext = extractBulletList(readSection("docs/roadmap.md", "Next"));
   const statusDocument = renderStatusDocument({
     defaultBranch: branchNameFromHistoryRef(historyRef),
     latestShipment,
-    readmeCapabilities,
+    readmeCapabilities: capabilities,
     recentShipments,
     repoUrl,
     roadmapNow,
