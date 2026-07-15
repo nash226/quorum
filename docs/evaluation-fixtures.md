@@ -13,7 +13,7 @@ set covers:
 - Markdown, HTML, PDF, and source-directory ingestion
 - empty-answer queue routing
 - explicit source IDs and inline source metadata
-- HR bereavement leave, leave, leave carryover, onboarding, parental leave, professional
+- HR bereavement leave, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   remote work, and expense reimbursement
 - support account recovery, account security, account suspension, cancellation, escalation, live chat, password
@@ -121,6 +121,8 @@ specific product question:
   a related vacation-carryover claim, and an unrelated unsupported stipend claim.
 - HR payroll-change coverage tests a payroll timing contradiction alongside
   identity-verification evidence and an unsupported rejected-deposit promise.
+- HR offboarding coverage tests final-pay timing, last-day access deprovisioning,
+  and an unsupported unconditional severance promise.
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
