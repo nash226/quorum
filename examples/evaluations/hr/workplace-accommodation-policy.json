@@ -1,0 +1,24 @@
+{
+  "name": "HR workplace accommodation policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-workplace-accommodation-answer.md",
+  "answer": "Employees may request workplace accommodations through People Operations.\nPeople Operations approves every accommodation request within 2 business days.\nEvery employee receives a $500 home-office stipend.\n",
+  "answerLabel": "HR workplace accommodation reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-workplace-accommodation-policy.md",
+      "id": "people-ops/hr-workplace-accommodation@2026-07-15",
+      "title": "HR Workplace Accommodation Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees may request workplace accommodations through People Operations.\nPeople Operations reviews accommodation requests and responds within 5 business days.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
