@@ -45,6 +45,8 @@ automatic-upgrade claims.
 
 The support benchmark also verifies account-merge answers against ownership
 controls, completion timing, and unsupported service promises.
+The support benchmark includes payment-failure coverage for retry promises and
+verification-sensitive card updates, keeping billing claims reviewer-visible.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify

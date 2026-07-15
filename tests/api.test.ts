@@ -2130,17 +2130,17 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
     },
     {
       domain: "support",
-      fixtureCount: 42,
+      fixtureCount: 43,
       mismatchCount: 0,
       mismatchRate: 0,
-      answersWithClaims: 41,
+      answersWithClaims: 42,
       answersWithoutClaims: 1,
-      matchedClaims: 124,
-      totalExpectedClaims: 124,
+      matchedClaims: 127,
+      totalExpectedClaims: 127,
       score: 1,
       scoreLabel: "100%",
-      expectedSummary: { verified: 46, contradicted: 30, unsupported: 35, needs_review: 13 },
-      actualSummary: { verified: 46, contradicted: 30, unsupported: 35, needs_review: 13 },
+      expectedSummary: { verified: 47, contradicted: 30, unsupported: 37, needs_review: 13 },
+      actualSummary: { verified: 47, contradicted: 30, unsupported: 37, needs_review: 13 },
     },
   ]);
   assert.equal(batchResult.scorecards.length, 61);
