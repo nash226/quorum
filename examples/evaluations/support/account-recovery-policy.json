@@ -1,0 +1,24 @@
+{
+  "name": "Support account recovery policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-account-recovery-answer.md",
+  "answer": "Customers must verify the email address on their account before support can change it.\nSupport can unlock an account after 24 hours following identity verification.\nSupport can reset multi-factor authentication immediately on request.\n",
+  "answerLabel": "Support account recovery reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-account-recovery-policy.md",
+      "id": "support/account-recovery@2026-07-15",
+      "title": "Support Account Recovery Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers must verify the email address on their account before support can change it.\nSupport can unlock an account after 2 hours following identity verification.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
