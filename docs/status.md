@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1a54c30` on 2026-07-15, test: add HR remote work evaluation coverage
+- Latest shipped change: `c5842ed` on 2026-07-15, test: add HR performance review evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | [#496](https://github.com/nash226/quorum/pull/496) | test: add HR performance review evaluation coverage | `c5842ed` |
 | 2026-07-15 | Direct push | test: add HR remote work evaluation coverage | `1a54c30` |
 | 2026-07-15 | Direct push | test: add HR leave carryover evaluation coverage | `aa6f54a` |
 | 2026-07-15 | Direct push | test: add HR benefits evaluation coverage | `a2fb01d` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | [#491](https://github.com/nash226/quorum/pull/491) | feat: label reviewer queue status | `cf7a2c2` |
 | 2026-07-15 | Direct push | test: add support priority evaluation coverage | `387841a` |
 | 2026-07-15 | Direct push | test: add support data export evaluation coverage | `88a7690` |
-| 2026-07-15 | [#488](https://github.com/nash226/quorum/pull/488) | test: add support refunds evaluation coverage | `5fca3e8` |
 
