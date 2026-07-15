@@ -17,12 +17,13 @@ set covers:
   development, compensation review, benefits enrollment, performance review,
   remote work, workplace accommodations, and expense reimbursement
 - support account recovery, account contact changes, account security, account suspension, billing-suspension appeals, cancellation, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
-  reset, refunds, charge disputes, delivery delays, data export, replacement
+  reset, refunds, charge disputes, delivery delays, data export, payment method
+  changes, replacement
   eligibility, subscription pauses, SLA, billing, service credits, warranty claims, and
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 48 fixtures. The generated
+The benchmark currently contains 49 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -144,6 +145,8 @@ specific product question:
   conflicting deadline, and an unsupported automatic-refund promise.
 - Support subscription-pause coverage tests a verified renewal window, a
   conflicting pause deadline, and an unsupported automatic-refund promise.
+- Support payment-method coverage tests a verified account billing control, a
+  conflicting update deadline, and an unsupported automatic-refund promise.
 - Support data-retention coverage tests an approved deletion channel, a
   conflicting completion window, and an unsupported recovery promise.
 - Support escalation coverage tests a verified first-response window, a
