@@ -16,12 +16,12 @@ set covers:
 - HR bereavement leave, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   remote work, and expense reimbursement
-- support account recovery, account security, account suspension, billing-suspension appeals, cancellation, escalation, live chat, password
+- support account recovery, account security, account suspension, billing-suspension appeals, cancellation, escalation, incident communication, live chat, password
   reset, refunds, data export, SLA, billing, service credits, and
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 34 fixtures. The generated
+The benchmark currently contains 35 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -133,6 +133,8 @@ specific product question:
 - Support billing-suspension coverage tests the required payment condition for
   appeals, a premature-appeal claim routed to review, and an unsupported
   automatic reinstatement promise.
+- Support incident-communication coverage tests a verified update cadence, a
+  related cadence routed to review, and an unrelated unsupported claim.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.
