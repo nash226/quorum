@@ -67,6 +67,8 @@ The current CLI can:
 - include the report generation timestamp in text output for audit-friendly handoff
 - accept `--generated-at <timestamp>` on report-producing CLI workflows when CI
   retries or snapshot tests need a stable audit timestamp
+- preserve a caller-supplied `--generated-at` timestamp across `review-queue`
+  JSON and CSV handoffs for retryable queue runs
 - validate HTTP `generatedAt` values as timestamps before producing audit reports
 - describe generated report timestamps as `date-time` values in the OpenAPI contract for typed clients
 - validate approved-source `updatedAt` values as timestamps before using freshness metadata
