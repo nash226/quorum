@@ -16,14 +16,14 @@ set covers:
 - HR bereavement leave, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   remote work, workplace accommodations, and expense reimbursement
-- support account recovery, account contact changes, account security, account suspension, billing address changes, billing-suspension appeals, cancellation, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
+- support account closure, account recovery, account contact changes, account security, account suspension, billing address changes, billing-suspension appeals, cancellation, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, payment method
   changes, replacement, and tax exemption
   eligibility, subscription pauses, SLA, billing, service credits, warranty claims, and
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 52 fixtures. The generated
+The benchmark currently contains 53 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -136,6 +136,9 @@ specific product question:
   timing contradiction, and an unsupported immediate MFA-reset promise.
 - Support account-contact coverage tests a verified ownership check, a
   contradicted verification window, and an unrelated unsupported promise.
+- Support account-closure coverage tests the ownership control, routes a
+  conflicting completion window to review, and routes an unsupported
+  automatic-reactivation promise to review.
 - Support billing-suspension coverage tests the required payment condition for
   appeals, a premature-appeal claim routed to review, and an unsupported
   automatic reinstatement promise.
