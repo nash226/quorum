@@ -43,7 +43,7 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 48-fixture benchmark includes HR onboarding, leave-carryover,
+The checked-in 50-fixture benchmark includes HR onboarding, leave-carryover,
 benefits-enrollment, remote-work, performance-review, and
 expense-reimbursement,
 support refunds, data-export, and priority-support reviewer packets that prove
@@ -118,6 +118,9 @@ conflicting pause deadline, and flags an unsupported automatic-refund promise.
 Support payment-method coverage now verifies the pre-invoice update control,
 catches a conflicting post-invoice deadline, and flags an unsupported
 automatic-refund promise.
+Support billing-address coverage now verifies the account-owner control, catches
+a conflicting verification window, and flags an unrelated unsupported
+password-manager promise. This brings the checked-in HR and support benchmark to 50 fixtures.
 
 ## Documentation Map
 
