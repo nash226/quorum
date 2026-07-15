@@ -16,12 +16,12 @@ set covers:
 - HR bereavement leave, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   remote work, workplace accommodations, and expense reimbursement
-- support account recovery, account contact changes, account security, account suspension, billing-suspension appeals, cancellation, data retention, escalation, incident communication, live chat, password
+- support account recovery, account contact changes, account security, account suspension, billing-suspension appeals, cancellation, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, SLA, billing, service credits, warranty claims, and
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 44 fixtures. The generated
+The benchmark currently contains 45 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -154,6 +154,8 @@ specific product question:
   conflicting time limit, and an unrelated insurance promise.
 - Support warranty coverage tests a claim window, a conflicting eligibility
   deadline, and an unconditional replacement promise flagged as unsupported.
+- Support order-tracking coverage tests a verified tracking control, a conflicting
+  delivery guarantee routed for review, and an unsupported automatic shipping refund.
 - HR time-off coverage tests a notice requirement, routes partially matched
   notice and rollover claims for review, and flags an unsupported stipend.
 
