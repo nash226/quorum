@@ -109,6 +109,8 @@ specific product question:
   identity, and conflicting customer policy claims.
 - Support priority coverage tests a response-time contradiction alongside an
   unsupported account-management promise.
+- Support plan-change coverage tests billing eligibility, a conflicting
+  upgrade-timing claim, and an unsupported automatic-upgrade promise.
 - HR benefits coverage tests health-coverage eligibility timing alongside a
   verified enrollment window and an unsupported stipend promise.
 - HR remote-work coverage tests a weekly remote-work limit alongside a

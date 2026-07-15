@@ -40,6 +40,10 @@ The support benchmark now has direct regression coverage for plan changes,
 including billing eligibility, conflicting upgrade timing, and unsupported
 automatic-upgrade claims.
 
+That plan-change packet is evaluated through the same CI mismatch gate as the
+rest of the 58-fixture benchmark, so a changed support policy verdict blocks
+the build instead of silently changing reviewer output.
+
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
 queue totals and benchmark drift together. The CLI and HTTP API support targeted
