@@ -56,6 +56,8 @@ The packed smoke check also posts a reviewer CSV and fixture to the HTTP
 `/review-queue` endpoint, verifying queue totals and benchmark drift together.
 The benchmark now also covers support service-credit windows, limits, and
 unsupported automatic-credit promises.
+Claim extraction also retains short standalone policy statements such as
+`No refunds.` instead of dropping them when they appear outside a list.
 
 ## Documentation Map
 
