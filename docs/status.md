@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `460bdcb` on 2026-07-14, fix: scope reviewer queue filter to imports
+- Latest shipped change: `a2e023e` on 2026-07-14, test: smoke-test reviewer queue filtering
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -57,6 +57,7 @@
 - import filled reviewer decision CSVs into a machine-readable summary
 - filter imported reviewer decisions by `pending`, `reviewed`, or `no_claims` queue status for targeted handoffs
 - filter HTTP reviewer-import responses by `queueStatus` so integrations can request only pending, reviewed, or claim-less answer groups
+- verify the built HTTP server's `queueStatus` reviewer handoffs in the end-to-end smoke gate, including filtered queue totals and artifacts
 - advertise the supported HTTP reviewer-import `queueStatus` values in the generated OpenAPI schema for typed clients
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
 - include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
@@ -114,6 +115,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | test: smoke-test reviewer queue filtering | `a2e023e` |
 | 2026-07-14 | Direct push | fix: scope reviewer queue filter to imports | `460bdcb` |
 | 2026-07-14 | Direct push | fix: advertise reviewer queue filter in OpenAPI | `b4ca101` |
 | 2026-07-14 | Direct push | docs: explain targeted reviewer queue handoffs | `b0b8cc4` |
@@ -121,5 +123,4 @@
 | 2026-07-14 | Direct push | feat: filter reviewer imports by queue status | `03cbf03` |
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch rates | `fae6d0c` |
 | 2026-07-14 | Direct push | feat: advertise reviewer queue statuses | `2e00ee2` |
-| 2026-07-14 | Direct push | docs: explain reviewer queue workflow | `ffef62a` |
 
