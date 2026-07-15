@@ -3,6 +3,31 @@
 This guide contains the operational detail that used to make the repository
 README difficult to scan. It is the primary reference for local CLI workflows.
 
+## Capability Index
+
+This concise index is the source for the generated capability snapshot in
+`docs/status.md`. Detailed context and examples remain in this guide and the
+linked workflow documents.
+
+- read Markdown, text, HTML, PDF, and DOCX answers and approved sources
+- discover approved sources from explicit paths or directories
+- load source titles, freshness, trust levels, and durable source IDs
+- extract normalized atomic claims, including common exported-answer formats
+- classify claims as `verified`, `contradicted`, `unsupported`, or `needs_review`
+- preserve reviewer labels, answer context, evidence, and audit timestamps
+- render text, JSON, Markdown, HTML, reviewer CSV, and summary CSV artifacts
+- write report artifacts atomically for queue watchers
+- batch verify answers with explicit empty-answer routing
+- import reviewer decisions with pending, reviewed, and no-claims queue states
+- export queue summaries and combine reviewer workload with benchmark drift
+- run HR and support evaluation fixtures with mismatch and score gates
+- expose evaluation scorecards, domain rollups, and aggregate summaries
+- serve a local HTTP API for verification, claim previews, reviewer imports, queue overviews, and evaluation
+- publish discovery, capabilities, health, readiness, liveness, version, and OpenAPI contracts
+- expose request limits, CORS settings, queue statuses, and supported encodings
+- support request IDs, method negotiation, ETags, and conditional contract requests
+- export stable programmatic API paths, methods, and error response types
+
 ## Verify one answer
 
 Verify an answer against one or more approved sources:

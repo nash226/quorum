@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 // @ts-ignore Script module has no emitted TypeScript declarations.
@@ -68,4 +69,12 @@ test("renderStatusDocument includes the supplied branch and shipment summary", (
   assert.match(document, /Default branch: `main`/);
   assert.match(document, /Latest shipped change: `abc1234` on 2026-07-01, sample shipment/);
   assert.match(document, /\[#99\]\(https:\/\/github.com\/example\/quorum\/pull\/99\)/);
+});
+
+test("status refresh reads capabilities from the CLI guide", () => {
+  execFileSync("npm", ["run", "status:refresh"], { encoding: "utf8" });
+
+  const status = readFileSync("docs/status.md", "utf8");
+  assert.match(status, /^- read Markdown, text, HTML, PDF, and DOCX answers and approved sources$/m);
+  assert.doesNotMatch(status, /Missing section "What It Does"/);
 });
