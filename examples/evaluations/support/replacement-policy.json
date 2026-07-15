@@ -1,0 +1,24 @@
+{
+  "name": "Support replacement policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-replacement-answer.md",
+  "answer": "Customers may request a replacement within 30 days of delivery.\nCustomers may request a replacement within 90 days of delivery.\nCustomers receive a free annual subscription with every replacement.\n",
+  "answerLabel": "Support replacement reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-replacement-policy.md",
+      "id": "support/replacement@2026-07-15",
+      "title": "Support Replacement Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers may request a replacement within 30 days of delivery.\nSupport reviews replacement eligibility before approving a request.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
