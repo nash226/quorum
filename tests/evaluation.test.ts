@@ -1676,7 +1676,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 61);
+  assert.equal(scorecards.length, 62);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
