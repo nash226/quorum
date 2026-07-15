@@ -127,6 +127,7 @@ export {
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
+  renderReviewerDecisionImportQueueSummaryCsv,
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
 export type {

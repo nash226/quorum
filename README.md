@@ -93,6 +93,7 @@ The current CLI can:
 - preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
 - include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
 - include a top-level `queueSummary` in reviewer-import JSON reports so queue consumers can route pending, reviewed, and claim-less answers without scanning every group
+- export reviewer-import queue totals as a standalone `queue_summary_csv` artifact or `--queue-summary-csv-out` file so CSV-only handoffs do not need to parse JSON
 - show the same reviewer queue totals in polished HTML import reports so human handoffs expose pending, reviewed, and claim-less answers at a glance
 - show the imported `answer_has_claims` routing signal in text, Markdown, and HTML reviewer handoff reports
 - reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
@@ -247,6 +248,19 @@ The filtered result recomputes answer groups, claims, queue totals, and
 fail-policy matches for the selected `pending`, `reviewed`, or `no_claims`
 state. This keeps a targeted handoff self-contained instead of requiring the
 next system to filter the full import again.
+
+When a downstream queue only accepts CSV, request the overall queue totals as a
+single row instead of parsing the JSON report:
+
+```bash
+npm run dev -- import-review \
+  --review-csv reports/hr-review.csv \
+  --queue-summary-csv-out reports/hr-queue-summary.csv
+```
+
+The HTTP `POST /import-review` equivalent is
+`includeArtifacts: ["queue_summary_csv"]`; its columns include total, pending,
+reviewed, and no-claims answers plus claim verdict and fail-policy totals.
 
 Or stream the reviewer CSV directly into the import step:
 

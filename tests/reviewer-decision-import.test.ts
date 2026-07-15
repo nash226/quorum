@@ -6,6 +6,7 @@ import {
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
+  renderReviewerDecisionImportQueueSummaryCsv,
   renderReviewerDecisionImportSummaryCsv,
 } from "../src/reviewer-decision-import.js";
 
@@ -380,5 +381,22 @@ examples/answers/support-answer.md,Refunds are available within 14 days of purch
   assert.equal(
     lines[2],
     "2026-07-01T12:00:00.000Z,examples/answers/support-answer.md,examples/answers/support-answer.md,Refunds are available within 14 days of purchase.,true,reviewed,needs_review,Refunds are available within 14 days of purchase.,A closely matching approved source uses different numeric terms.,Escalate to support ops,Support Playbook,medium,2026-06-01,,,0.842,Refunds are available within 30 days of purchase.,1,1,0,1,0,0,0,1,,,matched,needs_review,Support Playbook,medium,2026-06-01,,",
+  );
+});
+
+test("renders queue totals as a standalone csv artifact", () => {
+  const rendered = renderReviewerDecisionImportQueueSummaryCsv(
+    importReviewerDecisions(`answer_label,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+pending,true,claim_1,Refunds are available.,unsupported,No evidence.,Support Policy,Refunds are available within 30 days.,,
+reviewed,true,claim_2,Employees receive leave.,verified,Supported.,HR Policy,Employees receive leave.,verified,Approved
+empty,false,,,,,,,,
+`, "2026-07-01T12:00:00.000Z"),
+    ["unsupported"],
+  );
+
+  assert.equal(
+    rendered.trim(),
+    "generated_at,total_answers,pending_answers,reviewed_answers,no_claims_answers,total_claims,reviewed_claims,pending_claims,overridden_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts\n" +
+      "2026-07-01T12:00:00.000Z,3,1,1,1,2,1,1,0,1,0,1,0,matched,unsupported",
   );
 });
