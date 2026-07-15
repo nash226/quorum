@@ -94,6 +94,9 @@ answer totals, claim workload totals, and `evaluation` metrics when fixtures
 are supplied. Omit `fixtures` when only reviewer workload is needed. This is
 the HTTP equivalent of the `review-queue` CLI overview and avoids parsing the
 separate `/import-review` and `/evaluate` responses.
+Add `queueStatus` when the overview should describe only one handoff state:
+`pending`, `reviewed`, or `no_claims`. The filter scopes the answer and claim
+totals while leaving optional evaluation metrics unchanged.
 
 ## Discover and probe the service
 

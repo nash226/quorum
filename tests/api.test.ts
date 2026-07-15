@@ -229,6 +229,14 @@ test("programmatic API can build the OpenAPI document without starting the serve
   assert.equal(openApi.paths["/verify"]?.post?.summary, "Verify one answer");
   assert.equal(openApi.paths["/evaluate"]?.post?.summary, "Evaluate fixtures");
   assert.equal(openApi.paths["/review-queue"]?.post?.summary, "Summarize reviewer queue and benchmark drift");
+  const reviewQueueRequestSchema = openApi.paths["/review-queue"]?.post?.requestBody as {
+    content: { "application/json": { schema: { properties: Record<string, { enum?: string[]; description?: string }> } } };
+  };
+  assert.deepEqual(reviewQueueRequestSchema.content["application/json"].schema.properties.queueStatus, {
+    type: "string",
+    enum: ["pending", "reviewed", "no_claims"],
+    description: "Only include answers in this reviewer queue status.",
+  });
   assert.equal(openApi.paths["/extract-claims"]?.post?.summary, "Extract normalized claims");
   const verifyRequestSchema = openApi.paths["/verify"]?.post?.requestBody as {
     content: { "application/json": { schema: { oneOf: Array<{ required: string[] }>; properties: Record<string, { contentEncoding?: string }> } } };
@@ -4327,6 +4335,39 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
     assert.equal(result.evaluation?.fixtureCount, 1);
     assert.equal(result.evaluation?.mismatchCount, 0);
     assert.equal(result.evaluation?.scoreLabel, "100%");
+  } finally {
+    await api.close();
+  }
+});
+
+test("programmatic API filters reviewer queue overview by queue status", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        queueStatus: "pending",
+        reviewCsvContent: [
+          "answer_label,answer_path,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "Pending answer,answers/pending.md,true,claim_1,Pending policy claim.,needs_review,Needs review,HR Policy,Pending policy claim.,,",
+          "Reviewed answer,answers/reviewed.md,true,claim_1,Reviewed policy claim.,verified,Matched,HR Policy,Reviewed policy claim.,verified,Approved",
+        ].join("\n"),
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as ApiReviewQueueResponse;
+    assert.deepEqual(result.review, {
+      totalAnswers: 1,
+      pendingAnswers: 1,
+      reviewedAnswers: 0,
+      noClaimsAnswers: 0,
+      totalClaims: 1,
+      pendingClaims: 1,
+      reviewedClaims: 0,
+    });
   } finally {
     await api.close();
   }
