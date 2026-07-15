@@ -3320,6 +3320,7 @@ support-answer,examples/answers/support-answer.md,clear,,claim_2,Employees recei
 
     const markdownReport = await readFile(markdownOutPath, "utf8");
     assert.match(markdownReport, /# Quorum Reviewer Decision Import/);
+    assert.match(markdownReport, /- Generated at: /);
     assert.match(markdownReport, /- Total claims: 2/);
     assert.match(markdownReport, /- Fail policy: matched \(unsupported\)/);
     assert.match(markdownReport, /## Answer Groups/);
@@ -3363,6 +3364,7 @@ support-answer,examples/answers/support-answer.md,clear,,claim_2,<Flag this answ
     const htmlReport = await readFile(htmlOutPath, "utf8");
     assert.match(htmlReport, /<!doctype html>/i);
     assert.match(htmlReport, /<title>Quorum Reviewer Decision Import<\/title>/);
+    assert.match(htmlReport, /<p class="report-generated-at">Generated at: /);
     assert.match(htmlReport, /<span>Fail policy<\/span><strong>matched \(unsupported\)<\/strong>/);
     assert.match(htmlReport, /<h2><code>hr-answer<\/code><\/h2>/);
     assert.match(htmlReport, /<p class="answer-group__path"><code>examples\/answers\/hr-answer\.md<\/code><\/p>/);
