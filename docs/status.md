@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b4ca101` on 2026-07-14, fix: advertise reviewer queue filter in OpenAPI
+- Latest shipped change: `460bdcb` on 2026-07-14, fix: scope reviewer queue filter to imports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -114,6 +114,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: scope reviewer queue filter to imports | `460bdcb` |
 | 2026-07-14 | Direct push | fix: advertise reviewer queue filter in OpenAPI | `b4ca101` |
 | 2026-07-14 | Direct push | docs: explain targeted reviewer queue handoffs | `b0b8cc4` |
 | 2026-07-14 | Direct push | feat: filter HTTP reviewer imports by queue status | `1e3a519` |
@@ -121,5 +122,4 @@
 | 2026-07-14 | Direct push | feat: expose evaluation mismatch rates | `fae6d0c` |
 | 2026-07-14 | Direct push | feat: advertise reviewer queue statuses | `2e00ee2` |
 | 2026-07-14 | Direct push | docs: explain reviewer queue workflow | `ffef62a` |
-| 2026-07-14 | Direct push | feat: expose evaluation mismatch count in summary | `f2a0b79` |
 
