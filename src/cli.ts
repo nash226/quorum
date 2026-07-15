@@ -26,6 +26,7 @@ import {
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
+  renderBatchAggregateSummaryCsv,
   renderBatchSummaryCsv,
   renderHtmlReport,
   renderMarkdownReport,
@@ -87,6 +88,7 @@ interface VerifyBatchArgs extends VerifyArgs {
   htmlOutPath?: string;
   reviewCsvOutPath?: string;
   summaryCsvOutPath?: string;
+  aggregateSummaryCsvOutPath?: string;
 }
 
 interface ImportReviewArgs {
@@ -345,6 +347,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
   const htmlReport = renderBatchHtmlReport(batchReport);
   const reviewerDecisionCsv = renderBatchReviewerDecisionCsv(batchReport);
   const summaryCsv = renderBatchSummaryCsv(batchReport);
+  const aggregateSummaryCsv = renderBatchAggregateSummaryCsv(batchReport);
   const failVerdicts = [...new Set(batchReport.answers.flatMap((answer) => answer.failVerdicts))];
   const shouldFail = failVerdicts.length > 0;
   const resultJson = JSON.stringify(
@@ -371,6 +374,10 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   if (parsed.summaryCsvOutPath) {
     await writeReportFile(parsed.summaryCsvOutPath, summaryCsv);
+  }
+
+  if (parsed.aggregateSummaryCsvOutPath) {
+    await writeReportFile(parsed.aggregateSummaryCsvOutPath, aggregateSummaryCsv);
   }
 
   if (parsed.resultJsonOutPath) {
@@ -413,6 +420,10 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
   if (parsed.summaryCsvOutPath) {
     console.log(`Batch summary CSV written to ${parsed.summaryCsvOutPath}`);
+  }
+
+  if (parsed.aggregateSummaryCsvOutPath) {
+    console.log(`Batch aggregate summary CSV written to ${parsed.aggregateSummaryCsvOutPath}`);
   }
 
   if (parsed.resultJsonOutPath) {
@@ -905,6 +916,7 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     "--html-out",
     "--review-csv-out",
     "--summary-csv-out",
+    "--aggregate-summary-csv-out",
     "--result-json-out",
   ]));
   const explicitAnswers: Array<{ path: string; label?: string }> = [];
@@ -915,6 +927,7 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
   let htmlOutPath: string | undefined;
   let reviewCsvOutPath: string | undefined;
   let summaryCsvOutPath: string | undefined;
+  let aggregateSummaryCsvOutPath: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -959,6 +972,9 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     } else if (arg === "--summary-csv-out" && next) {
       summaryCsvOutPath = next;
       index += 1;
+    } else if (arg === "--aggregate-summary-csv-out" && next) {
+      aggregateSummaryCsvOutPath = next;
+      index += 1;
     }
   }
 
@@ -984,6 +1000,7 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     htmlOutPath,
     reviewCsvOutPath,
     summaryCsvOutPath,
+    aggregateSummaryCsvOutPath,
   };
 }
 
@@ -1421,7 +1438,7 @@ Example:
     "verify-batch": `Quorum verify-batch
 
 Usage:
-  quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on <verdict>]
 
 Options:
   --answer <path|->          Answer file to include, or - to read one answer from stdin once
@@ -1441,6 +1458,8 @@ Options:
   --html-out <path>          Write a styled HTML batch report
   --review-csv-out <path>    Write a reviewer decision CSV
   --summary-csv-out <path>   Write a one-row-per-answer summary CSV
+  --aggregate-summary-csv-out <path>
+                             Write one CSV row with batch totals and source context
   --fail-on <verdict>        Exit with code 2 when the verdict appears; may repeat
 
 Example:

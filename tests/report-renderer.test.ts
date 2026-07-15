@@ -4,6 +4,7 @@ import { verifyAnswer } from "../src/claim-verifier.js";
 import type { BatchVerificationReport, SourceDocument } from "../src/domain.js";
 import {
   renderBatchHtmlReport,
+  renderBatchAggregateSummaryCsv,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
   renderBatchSummaryCsv,
@@ -731,6 +732,30 @@ test("renders a batch summary csv with per-answer verdict totals", () => {
   assert.equal(
     lines[2],
     "2026-06-29T00:00:00.000Z,hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,true,verified,Employees receive 12 weeks of paid parental leave.,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy,1.000,Employees receive 12 weeks of paid parental leave.,1,1,0,0,0,clear,,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy",
+  );
+});
+
+test("renders one aggregate batch summary csv row for queue routing", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
+    sourceCount: 1,
+    answerCount: 2,
+    answers: [],
+    summary: {
+      verified: 3,
+      contradicted: 1,
+      unsupported: 2,
+      needs_review: 1,
+      answersWithClaims: 1,
+      answersWithoutClaims: 1,
+      answersWithFailures: 2,
+    },
+  };
+
+  assert.equal(
+    renderBatchAggregateSummaryCsv(batchReport),
+    "generated_at,answer_count,answers_with_claims,answers_without_claims,answers_with_failures,total_claims,verified,contradicted,unsupported,needs_review,source_count,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids\n2026-06-29T00:00:00.000Z,2,1,1,2,7,3,1,2,1,1,HR Policy,high,2026-05-31,examples/sources/hr-policy.md,hr_policy\n",
   );
 });
 

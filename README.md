@@ -77,6 +77,7 @@ The current CLI can:
 - write requested report artifacts atomically so queue watchers only observe
   complete files during reviewer handoff
 - write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
+- write a standalone batch aggregate summary CSV with answer routing totals, verdict totals, and approved-source context for queue handoffs
 - preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
 - preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
 - include an explicit `answerHasClaims` signal in evaluation scorecards and CSVs so empty benchmark answers can be routed without recounting claims
@@ -1467,6 +1468,7 @@ Options:
 - `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
 - `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers, including an `answer_label` column for faster spreadsheet triage alongside the original `answer_path`
 - `verify-batch --summary-csv-out <path>`: write one CSV row per answer with a shared `generated_at` timestamp plus an `answer_label`, `answer_preview`, the highest-priority claim finding, primary evidence title plus trust/freshness/path metadata, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
+- `verify-batch --aggregate-summary-csv-out <path>`: write one CSV row with batch answer-routing totals, verdict totals, and approved-source context for queue dashboards and handoffs
 - `verify-batch --answer-label <label>`: apply a reviewer-facing label to the most recent explicit `--answer` input without changing the stored `answer_path`
 - `verify-batch --answer -`: pipe one generated answer into a batch run while still mixing in file-based answers for queue-style review
 - teams can use `--summary-csv-out` for queue-level routing while keeping `--review-csv-out` for claim-by-claim reviewer decisions on the same batch run
