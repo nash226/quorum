@@ -409,11 +409,11 @@ try {
     evaluationDomainSummaryCsv,
     /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n/m,
   );
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,6,0,0\.000,6,0,18,18,1(?:\.0+)?\,100%,8,4,4,2,8,4,4,2$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,7,0,0\.000,7,0,21,21,1(?:\.0+)?\,100%,9,5,5,2,9,5,5,2$/m);
   assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,10,0,0\.000,9,1,\d+,\d+,1(?:\.0+)?\,100%,10,8,6,1,10,8,6,1$/m);
   assert.match(
     evaluationAggregateSummaryCsv,
-    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,16,15,1,0,0\.000,43,43,1(?:\.0+)?,100%,hr \| support,6 \| 10,0 \| 0,0\.000 \| 0\.000,6 \| 9,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,18,12,10,3,18,12,10,3\n?$/,
+    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,17,16,1,0,0\.000,46,46,1(?:\.0+)?,100%,hr \| support,7 \| 10,0 \| 0,0\.000 \| 0\.000,7 \| 9,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,19,13,11,3,19,13,11,3\n?$/,
   );
 
   const apiSources = await api.loadSourcesFromContent({
