@@ -3710,6 +3710,47 @@ async function waitForChildExit(child: ReturnType<typeof spawn>): Promise<number
   });
 }
 
+test("review-queue combines reviewer workload and benchmark drift", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    const csvOutPath = join(tempDir, "queue.csv");
+    await runCli([
+      "verify-batch",
+      "--answer-dir",
+      "examples/answers",
+      "--source-dir",
+      "examples/sources",
+      "--review-csv-out",
+      reviewCsvPath,
+    ]);
+
+    const stdout = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--fixture-dir",
+      "examples/evaluations",
+      "--json",
+      "--csv-out",
+      csvOutPath,
+    ]);
+    const overview = JSON.parse(stdout) as {
+      review: { totalAnswers: number; pendingAnswers: number };
+      evaluation: { fixtureCount: number; mismatchCount: number };
+    };
+
+    assert.equal(overview.review.totalAnswers, 7);
+    assert.equal(overview.review.pendingAnswers, 6);
+    assert.equal(overview.evaluation.fixtureCount, 10);
+    assert.equal(overview.evaluation.mismatchCount, 0);
+    assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 async function runCliAllowFailure(
   args: string[],
   options?: { stdin?: string },

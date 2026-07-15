@@ -124,6 +124,16 @@ interface EvaluateArgs {
   generatedAt?: string;
 }
 
+interface ReviewQueueArgs {
+  reviewCsvPath: string;
+  fixturePaths: string[];
+  fixtureDirPaths: string[];
+  domains: string[];
+  json: boolean;
+  outPath?: string;
+  csvOutPath?: string;
+}
+
 interface ServeArgs {
   host?: string;
   port?: number;
@@ -143,6 +153,7 @@ type CommandName =
   | "verify-batch"
   | "extract-claims"
   | "import-review"
+  | "review-queue"
   | "evaluate"
   | "serve"
   | "openapi";
@@ -210,6 +221,16 @@ async function main(): Promise<void> {
     }
 
     await runImportReview(args);
+    return;
+  }
+
+  if (command === "review-queue") {
+    if (args.some(isHelpFlag)) {
+      printHelp("review-queue");
+      return;
+    }
+
+    await runReviewQueue(args);
     return;
   }
 
@@ -561,6 +582,111 @@ async function runImportReview(args: string[]): Promise<void> {
   if (shouldFail) {
     process.exitCode = 2;
   }
+}
+
+async function runReviewQueue(args: string[]): Promise<void> {
+  const parsed = parseReviewQueueArgs(args);
+  const reviewReport = await importReviewerDecisionFile({ reviewCsvPath: parsed.reviewCsvPath });
+  const evaluation = parsed.fixturePaths.length > 0 || parsed.fixtureDirPaths.length > 0
+    ? await evaluateFixtureFilesResult({
+        fixturePaths: parsed.fixturePaths,
+        fixtureDirPaths: parsed.fixtureDirPaths,
+        domains: parsed.domains,
+      })
+    : undefined;
+  const overview = {
+    generatedAt: new Date().toISOString(),
+    review: {
+      ...reviewReport.queueSummary,
+      totalClaims: reviewReport.summary.totalClaims,
+      pendingClaims: reviewReport.summary.pendingClaims,
+      reviewedClaims: reviewReport.summary.reviewedClaims,
+    },
+    evaluation: evaluation
+      ? {
+          fixtureCount: evaluation.summary.fixtureCount,
+          mismatchCount: evaluation.mismatchCount,
+          mismatchRate: evaluation.summary.mismatchRate,
+          score: evaluation.summary.score,
+          scoreLabel: evaluation.summary.scoreLabel,
+          scoreThresholdPassed: evaluation.scoreThresholdPassed ?? true,
+        }
+      : null,
+  };
+  const json = JSON.stringify(overview, null, 2);
+  const csv = renderReviewQueueCsv(overview);
+
+  if (parsed.outPath) await writeReportFile(parsed.outPath, json);
+  if (parsed.csvOutPath) await writeReportFile(parsed.csvOutPath, csv);
+
+  if (parsed.json) {
+    console.log(json);
+    return;
+  }
+
+  console.log(`Reviewer queue: ${overview.review.totalAnswers} answers (${overview.review.pendingAnswers} pending, ${overview.review.reviewedAnswers} reviewed, ${overview.review.noClaimsAnswers} no claims)`);
+  if (overview.evaluation) {
+    console.log(`Benchmark drift: ${overview.evaluation.mismatchCount}/${overview.evaluation.fixtureCount} mismatches (${overview.evaluation.mismatchRate === null ? "n/a" : `${Math.round(overview.evaluation.mismatchRate * 100)}%`})`);
+  }
+  if (parsed.outPath) console.log(`Review queue JSON written to ${parsed.outPath}`);
+  if (parsed.csvOutPath) console.log(`Review queue CSV written to ${parsed.csvOutPath}`);
+}
+
+function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
+  let reviewCsvPath = "";
+  const fixturePaths: string[] = [];
+  const fixtureDirPaths: string[] = [];
+  const domains: string[] = [];
+  let json = false;
+  let outPath: string | undefined;
+  let csvOutPath: string | undefined;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    const next = args[index + 1];
+    if (arg === "--review-csv" && next) { reviewCsvPath = next; index += 1; }
+    else if (arg === "--fixture" && next) { fixturePaths.push(next); index += 1; }
+    else if (arg === "--fixture-dir" && next) { fixtureDirPaths.push(next); index += 1; }
+    else if (arg === "--domain" && next) { domains.push(next); index += 1; }
+    else if (arg === "--out" && next) { outPath = next; index += 1; }
+    else if (arg === "--csv-out" && next) { csvOutPath = next; index += 1; }
+    else if (arg === "--json") json = true;
+    else throw new Error(`Unknown or incomplete argument: ${arg}`);
+  }
+
+  if (!reviewCsvPath) throw new Error("Provide --review-csv <path|->");
+  if (fixturePaths.length === 0 && fixtureDirPaths.length === 0 && domains.length > 0) {
+    throw new Error("Evaluation domains require --fixture or --fixture-dir.");
+  }
+  return { reviewCsvPath, fixturePaths, fixtureDirPaths, domains, json, outPath, csvOutPath };
+}
+
+function renderReviewQueueCsv(overview: {
+  generatedAt: string;
+  review: { totalAnswers: number; pendingAnswers: number; reviewedAnswers: number; noClaimsAnswers: number; totalClaims: number; pendingClaims: number; reviewedClaims: number };
+  evaluation: { fixtureCount: number; mismatchCount: number; mismatchRate: number | null; score: number | null; scoreLabel: string; scoreThresholdPassed: boolean } | null;
+}): string {
+  const values = [
+    overview.generatedAt,
+    overview.review.totalAnswers,
+    overview.review.pendingAnswers,
+    overview.review.reviewedAnswers,
+    overview.review.noClaimsAnswers,
+    overview.review.totalClaims,
+    overview.review.pendingClaims,
+    overview.review.reviewedClaims,
+    overview.evaluation?.fixtureCount ?? "",
+    overview.evaluation?.mismatchCount ?? "",
+    overview.evaluation?.mismatchRate ?? "",
+    overview.evaluation?.score ?? "",
+    overview.evaluation?.scoreLabel ?? "",
+    overview.evaluation?.scoreThresholdPassed ?? "",
+  ];
+  const escape = (value: string | number | boolean) => `"${String(value).replaceAll('"', '""')}"`;
+  return `${[
+    ["generated_at", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
+    values,
+  ].map((row) => row.map(escape).join(",")).join("\n")}\n`;
 }
 
 async function runEvaluate(args: string[]): Promise<void> {
@@ -1506,6 +1632,22 @@ Example:
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --result-json
 `,
+    "review-queue": `Quorum review-queue
+
+Usage:
+  quorum review-queue --review-csv <path|-> [--fixture <path> | --fixture-dir <path>]... [--domain <name>]... [--json] [--out <path>] [--csv-out <path>]
+
+Options:
+  --review-csv <path|->      Completed reviewer decision CSV to summarize
+  --fixture <path>           Evaluation fixture; may be repeated
+  --fixture-dir <path>       Directory of evaluation fixtures; may be repeated
+  --domain <name>            Limit evaluation drift to a domain; may be repeated
+  --json                     Print the queue overview as JSON
+  --out <path>               Write the queue overview JSON to disk
+  --csv-out <path>           Write the queue overview as one CSV row
+
+The overview combines reviewer queue workload with optional benchmark drift.
+`,
     evaluate: `Quorum evaluate
 
 Usage:
@@ -1603,6 +1745,7 @@ Usage:
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum extract-claims --answer <path|-> [--answer-label <label>] [--json|--result-json] [--result-json-out <path>]
   quorum import-review --review-csv <path|-> [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum review-queue --review-csv <path|-> [--fixture <path> | --fixture-dir <path>]... [--domain <name>]... [--json] [--out <path>] [--csv-out <path>]
   quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--min-score <0..1>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
   quorum serve [--host <host>] [--port <port>]
   quorum openapi [--server-url <url>] [--out <path>]
