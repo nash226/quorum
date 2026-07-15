@@ -6,105 +6,29 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `69da488` on 2026-07-15, test: cover support account security fixture
+- Latest shipped change: `d24dc5c` on 2026-07-15, docs: streamline README and separate workflow context
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
 
-- read an AI-generated answer from a Markdown, text, or exported HTML file
-- read an AI-generated answer from a PDF or DOCX file by extracting its readable text
-- batch verify multiple AI-generated answers from a directory
-- include a per-answer `answerHasClaims` flag in batch results so queue integrations can route empty drafts without recounting claims
-- include `answersWithClaims` and `answersWithoutClaims` in batch summaries so queue integrations can route claim-bearing and empty answers without recounting rows
-- read one or more approved Markdown, text, or exported HTML source documents
-- read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
-- load source metadata such as `title`, `updatedAt`, and `trustLevel`
-- preserve caller-supplied source IDs in API evidence and reports for stable audit references
-- reject duplicate API source IDs so evidence references remain unambiguous
-- preserve caller-supplied source IDs for explicit CLI sources with `--source-id`, while directory sources keep positional fallback IDs
-- override the default trust level for sources that do not include metadata
-- split the answer into atomic claims
-- split independently capitalized or numeric clauses joined by semicolons or comma conjunctions into separate claims
-- strip common Unicode numbered-list markers from exported policy answers
-- keep colon-terminated business claims such as `No refunds:` while still skipping recognized wrapper labels such as `Policy summary:`
-- ignore HTML `<code>` and `<pre>` blocks so embedded snippets are not treated as business claims
-- preserve short, explicit claims such as "No refunds." instead of dropping them during normalization
-- compare each claim against approved source snippets
-- label each claim as `verified`, `contradicted`, `unsupported`, or `needs_review`
-- print a human-readable report
-- preserve the reviewer-facing `answer_label` in text, Markdown, and HTML reports as well as machine-readable exports
-- include the report generation timestamp in text output for audit-friendly handoff
-- accept `--generated-at <timestamp>` on report-producing CLI workflows when CI retries or snapshot tests need a stable audit timestamp
-- preserve a caller-supplied `--generated-at` timestamp across `review-queue` JSON and CSV handoffs for retryable queue runs
-- validate HTTP `generatedAt` values as timestamps before producing audit reports
-- describe generated report timestamps as `date-time` values in the OpenAPI contract for typed clients
-- validate approved-source `updatedAt` values as timestamps before using freshness metadata
-- describe source freshness timestamps as `date-time` values in the OpenAPI contract for typed clients
-- keep OpenAPI freshness examples RFC 3339 date-times so generated-client fixtures validate against the published schema
-- write a JSON report for workflow automation
-- write a Markdown reviewer report for approvals and handoff
-- write a polished HTML reviewer report for demos and human review
-- write a reviewer decision CSV that teams can fill in claim by claim while preserving the original answer path and stable source IDs for audit handoff
-- write requested report artifacts atomically so queue watchers only observe complete files during reviewer handoff
-- write one-row summary CSVs for single-answer and batch verification workflows, including an explicit `answer_has_claims` routing flag plus the primary evidence score and quote
-- write a standalone batch aggregate summary CSV with answer routing totals, verdict totals, and approved-source context for queue handoffs
-- preserve stable source IDs in reviewer decision and summary CSV exports so queue rows remain linked to approved records
-- preserve stable source IDs in text, Markdown, HTML, and CSV evaluation reports so benchmark evidence remains traceable
-- include an explicit `answerHasClaims` signal in evaluation scorecards and CSVs so empty benchmark answers can be routed without recounting claims
-- include `answersWithClaims` and `answersWithoutClaims` in evaluation aggregate and domain rollups so queue integrations can route empty benchmark answers without inspecting every scorecard
-- include expected and actual verdict totals in evaluation domain and aggregate rollups so HR and support drift is visible at a glance
-- include aggregate evaluation mismatch counts in the reusable JSON summary so queue and dashboard consumers can triage benchmark drift from one object
-- include aggregate and per-domain evaluation mismatch rates in JSON summaries and CSV/report surfaces so benchmark drift is comparable without client-side calculation
-- ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
-- ship an HR leave evaluation fixture that covers verified, contradicted, and unsupported policy claims
-- ship an HR compensation-review evaluation fixture that covers verified, contradicted, and unsupported policy claims with inline approved-source metadata
-- ship a support account-security evaluation fixture that covers verified and contradicted account claims
-- ship an HR professional-development evaluation fixture that covers verified, contradicted, and unsupported policy claims with inline approved-source metadata
-- publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
-- import filled reviewer decision CSVs into a machine-readable summary
-- filter imported reviewer decisions by `pending`, `reviewed`, or `no_claims` queue status for targeted handoffs
-- filter HTTP reviewer-import responses by `queueStatus` so integrations can request only pending, reviewed, or claim-less answer groups
-- verify the built HTTP server's `queueStatus` reviewer handoffs in the end-to-end smoke gate, including filtered queue totals and artifacts
-- advertise the supported HTTP reviewer-import `queueStatus` values in the generated OpenAPI schema for typed clients
-- preserve explicit `answer_has_claims` routing decisions when importing reviewer CSVs so downstream summaries do not have to infer empty answers from claim-row counts
-- include a queue-ready `review_status` (`pending`, `reviewed`, or `no_claims`) for each imported answer group in JSON reports and summary CSVs
-- include a top-level `queueSummary` in reviewer-import JSON reports so queue consumers can route pending, reviewed, and claim-less answers without scanning every group
-- export reviewer-import queue totals as a standalone `queue_summary_csv` artifact or `--queue-summary-csv-out` file so CSV-only handoffs do not need to parse JSON
-- show the same reviewer queue totals in polished HTML import reports so human handoffs expose pending, reviewed, and claim-less answers at a glance
-- show the imported `answer_has_claims` routing signal in text, Markdown, and HTML reviewer handoff reports
-- reject duplicate reviewer CSV claim rows for the same answer so imported audit totals stay unambiguous
-- render Markdown reviewer-import reports with safe, single-line answer and claim context
-- fail a CI job when selected risky verdicts appear
-- emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
-- serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, reviewer queue overview, and evaluation workflows
-- accept `--generated-at <timestamp>` on reviewer queue overviews so JSON and CSV handoffs can share a stable audit timestamp across retries
-- expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
-- export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
-- derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift
-- return structured `405` errors with route-specific `Allow` headers when a known API route receives an unsupported method
-- reject CORS preflight requests for unknown API routes instead of advertising a route that does not exist
-- export `API_ROOT_PATH` for clients that bootstrap from the API discovery endpoint
-- expose configured request size and timeout limits in machine-readable API capabilities for integration clients
-- expose canonical correlation, discovery, cache, and method-negotiation header names in machine-readable API capabilities
-- expose the browser CORS allowlist, exposed response headers, and preflight cache duration in machine-readable API capabilities
-- expose reviewer queue statuses (`pending`, `reviewed`, and `no_claims`) in machine-readable API capabilities so integrations can route imported answers without hard-coded values
-- publish the supported `base64` binary upload encoding in the OpenAPI capabilities schema for typed clients
-- export the `ApiErrorResponse` TypeScript type for request failures with a correlation ID
-- generate OpenAPI discovery examples with the server's configured request-size and timeout limits
-- serve the generated OpenAPI contract with an `ETag`, allowing integration clients to revalidate it with `If-None-Match`
-- allow browser clients to preflight `If-None-Match` when revalidating the OpenAPI contract with its `ETag`
-- cache browser CORS preflight results for ten minutes through `Access-Control-Max-Age`
-- expose the OpenAPI `ETag` through CORS so browser clients can cache and reuse the validator
-- preview normalized claims over HTTP before loading approved sources for verification
-- include an `answerHasClaims` routing flag in HTTP claim previews so queue clients can identify empty drafts without recounting claims
-- expose the same `answerHasClaims` routing flag from CLI claim previews with opt-in result JSON
-- report the CLI and HTTP API contract version with `quorum version` or `quorum --version`
-- emit the CLI and API contract version as stable JSON with `quorum version --json`
-- revalidate the HTTP `/version` compatibility probe with a stable `ETag`
-- revalidate the HTTP `/capabilities` runtime contract with a stable `ETag`
-- revalidate the root API discovery contract with a stable `ETag`
-- revalidate the generated `/openapi.json` contract with `GET` or `HEAD` and a stable `ETag`
-- verify the built CLI's machine-readable version output in the end-to-end smoke gate
+- read Markdown, text, HTML, PDF, and DOCX answers and approved sources
+- discover approved sources from explicit paths or directories
+- load source titles, freshness, trust levels, and durable source IDs
+- extract normalized atomic claims, including common exported-answer formats
+- classify claims as `verified`, `contradicted`, `unsupported`, or `needs_review`
+- preserve reviewer labels, answer context, evidence, and audit timestamps
+- render text, JSON, Markdown, HTML, reviewer CSV, and summary CSV artifacts
+- write report artifacts atomically for queue watchers
+- batch verify answers with explicit empty-answer routing
+- import reviewer decisions with pending, reviewed, and no-claims queue states
+- export queue summaries and combine reviewer workload with benchmark drift
+- run HR and support evaluation fixtures with mismatch and score gates
+- expose evaluation scorecards, domain rollups, and aggregate summaries
+- serve a local HTTP API for verification, claim previews, reviewer imports, queue overviews, and evaluation
+- publish discovery, capabilities, health, readiness, liveness, version, and OpenAPI contracts
+- expose request limits, CORS settings, queue statuses, and supported encodings
+- support request IDs, method negotiation, ETags, and conditional contract requests
+- export stable programmatic API paths, methods, and error response types
 
 ## Roadmap Snapshot
 
@@ -124,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | docs: streamline README and separate workflow context | `d24dc5c` |
 | 2026-07-15 | [#484](https://github.com/nash226/quorum/pull/484) | test: cover support account security fixture | `69da488` |
 | 2026-07-15 | Direct push | test: add HR compensation evaluation coverage | `0fcc87c` |
 | 2026-07-15 | Direct push | test: expand support live chat evaluation coverage | `362cf89` |
@@ -131,5 +56,4 @@
 | 2026-07-15 | Direct push | test: expand support cancellation evaluation coverage | `4cfadf7` |
 | 2026-07-15 | Direct push | test: smoke test reviewer queue timestamps | `2643c88` |
 | 2026-07-14 | Direct push | feat: stabilize reviewer queue timestamps | `bd9ba74` |
-| 2026-07-14 | [#477](https://github.com/nash226/quorum/pull/477) | test: add support password reset evaluation fixture | `70f8b50` |
 
