@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9060d49` on 2026-07-15, fix: source status capabilities from CLI guide
+- Latest shipped change: `5fca3e8` on 2026-07-15, test: add support refunds evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | [#488](https://github.com/nash226/quorum/pull/488) | test: add support refunds evaluation coverage | `5fca3e8` |
 | 2026-07-15 | Direct push | fix: source status capabilities from CLI guide | `9060d49` |
 | 2026-07-15 | Direct push | test: cover HR onboarding verdict routing | `2555350` |
 | 2026-07-15 | Direct push | docs: streamline README and separate workflow context | `d24dc5c` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add HR compensation evaluation coverage | `0fcc87c` |
 | 2026-07-15 | Direct push | test: expand support live chat evaluation coverage | `362cf89` |
 | 2026-07-15 | [#481](https://github.com/nash226/quorum/pull/481) | test: expand HR professional development evaluation coverage | `6138781` |
-| 2026-07-15 | Direct push | test: expand support cancellation evaluation coverage | `4cfadf7` |
 
