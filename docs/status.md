@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `03c8819` on 2026-07-14, fix: split numeric compound claims
+- Latest shipped change: `0c4aca8` on 2026-07-14, fix: reject duplicate API source IDs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -20,6 +20,7 @@
 - read one or more approved Markdown, text, exported HTML, PDF, or DOCX source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - preserve caller-supplied source IDs in API evidence and reports for stable audit references
+- reject duplicate API source IDs so evidence references remain unambiguous
 - preserve caller-supplied source IDs for explicit CLI sources with `--source-id`, while directory sources keep positional fallback IDs
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
@@ -116,6 +117,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | fix: reject duplicate API source IDs | `0c4aca8` |
 | 2026-07-14 | Direct push | fix: split numeric compound claims | `03c8819` |
 | 2026-07-14 | Direct push | feat: export reviewer queue summary csv | `dd33591` |
 | 2026-07-14 | Direct push | test: smoke-test reviewer queue filtering | `a2e023e` |
@@ -123,5 +125,4 @@
 | 2026-07-14 | Direct push | fix: advertise reviewer queue filter in OpenAPI | `b4ca101` |
 | 2026-07-14 | Direct push | docs: explain targeted reviewer queue handoffs | `b0b8cc4` |
 | 2026-07-14 | Direct push | feat: filter HTTP reviewer imports by queue status | `1e3a519` |
-| 2026-07-14 | Direct push | feat: filter reviewer imports by queue status | `03cbf03` |
 
