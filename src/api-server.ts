@@ -19,6 +19,7 @@ import {
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
+  renderBatchAggregateSummaryCsv,
   renderBatchSummaryCsv,
   renderBatchTextReport,
   renderHtmlReport,
@@ -50,7 +51,7 @@ import {
 } from "./workflow.js";
 
 const VERIFY_ARTIFACTS = ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"] as const;
-const VERIFY_BATCH_ARTIFACTS = ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"] as const;
+const VERIFY_BATCH_ARTIFACTS = ["text", "markdown", "html", "result_json", "review_csv", "summary_csv", "aggregate_summary_csv"] as const;
 const IMPORT_REVIEW_ARTIFACTS = ["text", "markdown", "html", "result_json", "summary_csv", "queue_summary_csv"] as const;
 const EVALUATE_ARTIFACTS = [
   "text",
@@ -3400,6 +3401,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             result_json: { type: "string" },
             review_csv: { type: "string" },
             summary_csv: { type: "string" },
+            aggregate_summary_csv: { type: "string" },
           },
         },
         ApiImportReviewArtifacts: {
@@ -3963,6 +3965,7 @@ function buildVerifyBatchArtifacts(
     result_json: () => JSON.stringify(result, null, 2),
     review_csv: () => renderBatchReviewerDecisionCsv(result.report),
     summary_csv: () => renderBatchSummaryCsv(result.report),
+    aggregate_summary_csv: () => renderBatchAggregateSummaryCsv(result.report),
   });
 }
 

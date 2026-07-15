@@ -92,6 +92,7 @@ import {
   renderAnswerLabels,
   renderAnswerPreview,
   renderBatchHtmlReport,
+  renderBatchAggregateSummaryCsv,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
   renderBatchSummaryCsv,
@@ -4430,7 +4431,7 @@ Refund requests receive an initial response within one business day.
 `,
           },
         ],
-        includeArtifacts: ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"],
+        includeArtifacts: ["text", "markdown", "html", "result_json", "review_csv", "summary_csv", "aggregate_summary_csv"],
       }),
     });
     assert.equal(batchResponse.status, 200);
@@ -4445,6 +4446,7 @@ Refund requests receive an initial response within one business day.
     }
     assert.equal(batchResult.artifacts.review_csv, renderBatchReviewerDecisionCsv(batchResult.report));
     assert.equal(batchResult.artifacts.summary_csv, renderBatchSummaryCsv(batchResult.report));
+    assert.equal(batchResult.artifacts.aggregate_summary_csv, renderBatchAggregateSummaryCsv(batchResult.report));
 
     const importResponse = await fetch(`${api.url}/import-review`, {
       method: "POST",

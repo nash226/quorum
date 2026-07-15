@@ -143,6 +143,7 @@ export {
   renderBatchHtmlReport,
   renderBatchMarkdownReport,
   renderBatchReviewerDecisionCsv,
+  renderBatchAggregateSummaryCsv,
   renderBatchSummaryCsv,
   renderHtmlReport,
   renderMarkdownReport,

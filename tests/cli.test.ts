@@ -1894,6 +1894,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     const batchHtmlOutPath = join(tempDir, "reports", "batch-report.html");
     const batchReviewCsvOutPath = join(tempDir, "reports", "batch-review.csv");
     const batchSummaryCsvOutPath = join(tempDir, "reports", "batch-summary.csv");
+    const batchAggregateSummaryCsvOutPath = join(tempDir, "reports", "batch-aggregate-summary.csv");
 
     await Promise.all([
       mkdir(answerDir, { recursive: true }),
@@ -1931,6 +1932,8 @@ test("verify-batch returns an aggregate report for each answer file", async () =
       batchReviewCsvOutPath,
       "--summary-csv-out",
       batchSummaryCsvOutPath,
+      "--aggregate-summary-csv-out",
+      batchAggregateSummaryCsvOutPath,
       "--json",
     ]);
 
@@ -1981,6 +1984,10 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     assert.match(
       await readFile(batchSummaryCsvOutPath, "utf8"),
       /generated_at,answer_label,answer_path,answer_preview,answer_has_claims,primary_verdict,primary_claim,primary_reason,primary_evidence_title,primary_evidence_trust_level,primary_evidence_updated_at,primary_evidence_source_path,primary_evidence_source_id,primary_evidence_score,primary_evidence_quote,total_claims,verified,contradicted,unsupported,needs_review,fail_policy,fail_verdicts,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids/,
+    );
+    assert.match(
+      await readFile(batchAggregateSummaryCsvOutPath, "utf8"),
+      /generated_at,answer_count,answers_with_claims,answers_without_claims,answers_with_failures,total_claims,verified,contradicted,unsupported,needs_review,source_count,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids\n[^\n]+,2,2,0,0,2,2,0,0,0,2,/,
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
