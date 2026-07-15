@@ -87,6 +87,7 @@ benchmark drift in one machine-readable handoff:
 npm run dev -- review-queue \
   --review-csv reports/reviewer-queue.csv \
   --fixture-dir examples/evaluations \
+  --generated-at 2026-07-15T04:00:00.000Z \
   --json \
   --out reports/reviewer-queue-overview.json \
   --csv-out reports/reviewer-queue-overview.csv
@@ -97,4 +98,5 @@ workload totals, and optional evaluation fixture, mismatch, and score metrics.
 Add `--queue-status pending`, `--queue-status reviewed`, or
 `--queue-status no_claims` to scope the overview to one handoff state. The
 claim and answer totals are recalculated for the selected state, while optional
-benchmark metrics remain unchanged.
+benchmark metrics remain unchanged. Use `--generated-at` when a retryable
+workflow needs the JSON and CSV outputs to carry the same audit timestamp.
