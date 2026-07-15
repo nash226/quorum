@@ -1586,14 +1586,16 @@ The current foundation includes a lightweight local HTTP API for agent and
 workflow integrations plus a checked-in HR/support evaluation fixture set with
 claim-level scorecards and CI gating. Reviewer exports include queue-oriented
 summary CSVs, and imported decisions preserve answer context and source
-provenance for audit handoff. See [docs/reviewer-queue.md](docs/reviewer-queue.md)
-for the end-to-end batch verification, review, import, and benchmark-drift
-workflow.
+provenance for audit handoff. The new `review-queue` command combines reviewer
+workload with optional benchmark-drift metrics in one JSON or CSV overview. See
+[docs/reviewer-queue.md](docs/reviewer-queue.md) for the end-to-end batch
+verification, review, import, and benchmark-drift workflow.
 
 Near-term work:
 
 - expand the HR and support fixture set as policy coverage grows
-- add a reviewer queue surface for imported decisions and benchmark drift
+- expand the reviewer queue overview with durable queue backends and dashboard
+  integrations
 - document deployment and integration patterns for the local API, including
   authentication boundaries and durable source identifiers
 
