@@ -242,6 +242,7 @@ export function renderReviewerDecisionImportReport(
   const lines = [
     "Quorum Reviewer Decision Import",
     "",
+    `Generated at: ${report.generatedAt}`,
     `Claims: ${report.summary.totalClaims} total, ${report.summary.reviewedClaims} reviewed, ${report.summary.pendingClaims} pending`,
     `Queue: ${report.queueSummary.totalAnswers} answers, ${report.queueSummary.pendingAnswers} pending, ${report.queueSummary.reviewedAnswers} reviewed, ${report.queueSummary.noClaimsAnswers} with no claims`,
     `Final verdicts: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
@@ -322,6 +323,7 @@ export function renderReviewerDecisionImportMarkdownReport(
     "",
     "## Summary",
     "",
+    `- Generated at: ${report.generatedAt}`,
     `- Total claims: ${report.summary.totalClaims}`,
     `- Queue answers: ${report.queueSummary.totalAnswers}`,
     `- Queue pending: ${report.queueSummary.pendingAnswers}`,
@@ -876,6 +878,7 @@ export function renderReviewerDecisionImportHtmlReport(
         <div>
           <h1>Quorum Reviewer Decision Import</h1>
           <p>Imported reviewer decisions, final verdicts, and evidence context in a format that is easier to share during policy reviews and approval handoffs.</p>
+          <p class="report-generated-at">Generated at: ${escapeHtml(report.generatedAt)}</p>
         </div>
         <div class="summary-grid">
           <article class="summary-card"><span>Total claims</span><strong>${report.summary.totalClaims}</strong></article>
