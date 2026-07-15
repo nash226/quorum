@@ -80,7 +80,7 @@ function splitCompoundClaim(sentence: string): string[] {
   return sentence
     .split(/;\s+(?=[A-Z0-9("'])/g)
     .flatMap((part) =>
-      part.split(/,\s+(?:and|but|or)\s+(?=[A-Z])/g),
+      part.split(/,\s+(?:and|but|or)\s+(?=[A-Z0-9("'])/g),
     )
     .map((part) => part.trim())
     .filter(Boolean);
