@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b2f4dc1` on 2026-07-15, test: add support data retention evaluation coverage
+- Latest shipped change: `916ccea` on 2026-07-15, test: add support charge dispute evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | [#516](https://github.com/nash226/quorum/pull/516) | test: add support charge dispute evaluation coverage | `916ccea` |
 | 2026-07-15 | Direct push | test: add support data retention evaluation coverage | `b2f4dc1` |
 | 2026-07-15 | Direct push | test: expand support escalation evaluation coverage | `a336037` |
 | 2026-07-15 | [#513](https://github.com/nash226/quorum/pull/513) | test: add HR time-off evaluation coverage | `731a415` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add support account contact evaluation coverage | `a23dc74` |
 | 2026-07-15 | [#510](https://github.com/nash226/quorum/pull/510) | test: add support incident communication evaluation | `edf9d47` |
 | 2026-07-15 | [#509](https://github.com/nash226/quorum/pull/509) | test: cover billing suspension appeals | `b6e3ec2` |
-| 2026-07-15 | Direct push | docs: expose targeted reviewer handoffs | `fc7e67c` |
 
