@@ -1,0 +1,24 @@
+{
+  "name": "Support data export policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-data-export-answer.md",
+  "answer": "Customers can request an account data export from billing settings.\nSupport sends data exports within 3 days.\nExports are automatically emailed to managers.\n",
+  "answerLabel": "Support data export reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-data-export-policy.md",
+      "id": "support/data-export@2026-07-15",
+      "title": "Support Data Export Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can request an account data export from account settings.\nSupport sends data exports within 5 days.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
