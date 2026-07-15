@@ -69,6 +69,32 @@ artifacts describe that filtered handoff.
 If a browser client uses the wrong method, it can read the exposed `Allow`
 header on the `405` response to discover the route's supported method.
 
+## Summarize a reviewer queue
+
+Use `POST /review-queue` when a queue consumer needs reviewer workload and
+optional benchmark drift in one response. Send the completed reviewer CSV and,
+when drift metrics are needed, the fixture JSON content alongside its path:
+
+```bash
+curl -sS http://127.0.0.1:3000/review-queue \
+  -H 'content-type: application/json' \
+  -d @- <<'JSON'
+{
+  "reviewCsvContent": "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes\nHR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched,HR Policy,Employees receive 12 weeks of paid parental leave.,,",
+  "fixtures": [{
+    "fixturePath": "examples/evaluations/hr-policy.json",
+    "content": "...fixture JSON content..."
+  }]
+}
+JSON
+```
+
+The response includes `review.totalAnswers`, pending/reviewed/no-claims
+answer totals, claim workload totals, and `evaluation` metrics when fixtures
+are supplied. Omit `fixtures` when only reviewer workload is needed. This is
+the HTTP equivalent of the `review-queue` CLI overview and avoids parsing the
+separate `/import-review` and `/evaluate` responses.
+
 ## Discover and probe the service
 
 An integration can bootstrap without hard-coding the full route inventory:
