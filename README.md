@@ -296,6 +296,9 @@ The packaged `npm run smoke` check also verifies that the HTTP
 `POST /import-review` workflow preserves the exported `answer_preview` inside
 its grouped answer response, so API queue clients retain recognizable context
 even when they only submit reviewer CSV content.
+It also runs the built `review-queue` CLI with `--queue-status pending` and
+`--queue-status no_claims`, confirming that filtered answer and claim totals are
+recalculated correctly for both claim-bearing and empty-answer handoffs.
 It also verifies that the same API workflow can return `summary_csv` with the
 primary reviewer verdict and evidence title, trust level, freshness, source
 path, score, and quote needed to route a review queue row without first
