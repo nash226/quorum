@@ -3746,6 +3746,38 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("HTTP API rejects duplicate source IDs before producing ambiguous evidence", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        sources: [
+          {
+            id: "people-ops/hr-policy@2026-06-15",
+            sourcePath: "policies/hr-policy.md",
+            content: "Employees receive 12 weeks of paid parental leave.",
+          },
+          {
+            id: "people-ops/hr-policy@2026-06-15",
+            sourcePath: "policies/hr-policy-copy.md",
+            content: "Employees receive 12 weeks of paid parental leave.",
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 400);
+    const payload = await response.json() as { error: string };
+    assert.match(payload.error, /Duplicate source ID: people-ops\/hr-policy@2026-06-15/);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API answers CORS preflight requests", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
