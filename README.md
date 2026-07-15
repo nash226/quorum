@@ -54,6 +54,9 @@ Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV,
 making filtered handoffs auditable by downstream consumers.
 The packed smoke check also posts a reviewer CSV and fixture to the HTTP
 `/review-queue` endpoint, verifying queue totals and benchmark drift together.
+Queue consumers can request a targeted `pending`, `reviewed`, or `no_claims`
+handoff with the CLI or `/review-queue` API, and the filtered totals remain
+auditable in the generated JSON and CSV artifacts.
 The benchmark now also covers support service-credit windows, limits, and
 unsupported automatic-credit promises.
 It now includes a focused HR parental-leave packet that verifies leave duration,
