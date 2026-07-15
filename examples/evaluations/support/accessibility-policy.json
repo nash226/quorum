@@ -1,0 +1,24 @@
+{
+  "name": "Support accessibility policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-accessibility-answer.md",
+  "answer": "Customers can request accessibility support through the help center.\nSupport responds to accessibility requests within 2 business days.\nSupport automatically approves every accommodation without reviewing the request.\n",
+  "answerLabel": "Support accessibility reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-accessibility-policy.md",
+      "id": "support/accessibility@2026-07-15",
+      "title": "Support Accessibility Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can request accessibility support through the help center.\nSupport reviews each accommodation request before confirming available support.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "unsupported", "needs_review"]
+}

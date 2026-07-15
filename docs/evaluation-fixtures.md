@@ -23,7 +23,7 @@ set covers:
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 58 fixtures. The generated
+The benchmark currently contains 59 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -169,6 +169,8 @@ specific product question:
   conflicting time limit, and an unrelated insurance promise.
 - Support warranty coverage tests a claim window, a conflicting eligibility
   deadline, and an unconditional replacement promise flagged as unsupported.
+- Support accessibility coverage verifies the request channel, routes an
+  accommodation timing promise for review, and flags unconditional approval.
 - Support replacement coverage tests a request window, a conflicting eligibility
   deadline, and an unrelated unsupported subscription promise.
 - Support order-tracking coverage tests a verified tracking control, a conflicting
