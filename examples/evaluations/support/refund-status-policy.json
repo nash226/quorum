@@ -1,0 +1,24 @@
+{
+  "name": "Support refund status policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-refund-status-answer.md",
+  "answer": "Customers can check refund status from the billing history page.\nApproved refunds appear within 10 business days.\nSupport automatically retries every failed refund until it succeeds.\n",
+  "answerLabel": "Support refund status reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-refund-status-policy.md",
+      "id": "support/refund-status@2026-07-15",
+      "title": "Support Refund Status Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can check refund status from the billing history page.\nApproved refunds appear within 7 business days.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}
