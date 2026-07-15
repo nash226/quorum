@@ -107,6 +107,7 @@ import {
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportReport,
   renderReviewerDecisionImportMarkdownReport,
+  renderReviewerDecisionImportQueueSummaryCsv,
   renderReviewerDecisionImportSummaryCsv,
   renderReviewerDecisionCsv,
   renderSummaryCsv,
@@ -4423,7 +4424,7 @@ Refund requests receive an initial response within one business day.
 HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation
 `,
         failOn: ["needs_review"],
-        includeArtifacts: ["text", "markdown", "html", "result_json", "summary_csv"],
+        includeArtifacts: ["text", "markdown", "html", "result_json", "summary_csv", "queue_summary_csv"],
       }),
     });
     assert.equal(importResponse.status, 200);
@@ -4448,6 +4449,10 @@ HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid pare
     assert.equal(
       importResult.artifacts.summary_csv,
       renderReviewerDecisionImportSummaryCsv(importResult.report, importResult.failVerdicts),
+    );
+    assert.equal(
+      importResult.artifacts.queue_summary_csv,
+      renderReviewerDecisionImportQueueSummaryCsv(importResult.report, importResult.failVerdicts),
     );
 
     const fixtureContent = await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8");

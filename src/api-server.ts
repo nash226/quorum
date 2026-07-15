@@ -34,6 +34,7 @@ import {
   renderReviewerDecisionImportHtmlReport,
   renderReviewerDecisionImportMarkdownReport,
   renderReviewerDecisionImportReport,
+  renderReviewerDecisionImportQueueSummaryCsv,
   renderReviewerDecisionImportSummaryCsv,
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
@@ -50,7 +51,7 @@ import {
 
 const VERIFY_ARTIFACTS = ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"] as const;
 const VERIFY_BATCH_ARTIFACTS = ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"] as const;
-const IMPORT_REVIEW_ARTIFACTS = ["text", "markdown", "html", "result_json", "summary_csv"] as const;
+const IMPORT_REVIEW_ARTIFACTS = ["text", "markdown", "html", "result_json", "summary_csv", "queue_summary_csv"] as const;
 const EVALUATE_ARTIFACTS = [
   "text",
   "markdown",
@@ -3394,6 +3395,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
             html: { type: "string" },
             result_json: { type: "string" },
             summary_csv: { type: "string" },
+            queue_summary_csv: { type: "string" },
           },
         },
         ApiEvaluationArtifacts: {
@@ -3959,6 +3961,7 @@ function buildImportReviewArtifacts(
     html: () => renderReviewerDecisionImportHtmlReport(result.report, result.failVerdicts),
     result_json: () => JSON.stringify(result, null, 2),
     summary_csv: () => renderReviewerDecisionImportSummaryCsv(result.report, result.failVerdicts),
+    queue_summary_csv: () => renderReviewerDecisionImportQueueSummaryCsv(result.report, result.failVerdicts),
   });
 }
 
