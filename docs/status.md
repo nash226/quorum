@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `05253bd` on 2026-07-15, test: add support invoice correction evaluation coverage
+- Latest shipped change: `556d920` on 2026-07-15, test: add support subscription pause evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: add support subscription pause evaluation | `556d920` |
 | 2026-07-15 | Direct push | test: add support invoice correction evaluation coverage | `05253bd` |
 | 2026-07-15 | [#524](https://github.com/nash226/quorum/pull/524) | test: add support replacement evaluation coverage | `78903a7` |
 | 2026-07-15 | Direct push | docs: sync benchmark fixture inventory | `865137e` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | docs: add programmatic API integration guide | `59f49e9` |
 | 2026-07-15 | [#520](https://github.com/nash226/quorum/pull/520) | test: add support warranty evaluation coverage | `3e3a43a` |
 | 2026-07-15 | Direct push | test: add support address change evaluation coverage | `a9d1464` |
-| 2026-07-15 | Direct push | test: add support return evaluation coverage | `1d38be1` |
 
