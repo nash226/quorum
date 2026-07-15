@@ -107,6 +107,7 @@ The current CLI can:
 - fail a CI job when selected risky verdicts appear
 - emit gate-aware JSON results with `shouldFail` and `failVerdicts` for single and batch CLI workflows
 - serve a lightweight local HTTP API for single-answer, batch verification, reviewer import, reviewer queue overview, and evaluation workflows
+- accept `--generated-at <timestamp>` on reviewer queue overviews so JSON and CSV handoffs can share a stable audit timestamp across retries
 - expose stable programmatic path constants for each HTTP operation so integrations can target the API without repeating route literals
 - export the canonical `API_ALLOWED_METHODS` list so integrations can build transport checks without duplicating the HTTP contract
 - derive generated OpenAPI method enums from the canonical `API_ALLOWED_METHODS` list so discovery and typed-client contracts cannot drift

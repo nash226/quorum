@@ -190,6 +190,7 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /quorum verify-batch .*--generated-at <timestamp>.*--result-json-out <path>/);
   assert.match(result.stdout, /quorum extract-claims .*--answer-label <label>.*--result-json/);
   assert.match(result.stdout, /quorum import-review .*--generated-at <timestamp>/);
+  assert.match(result.stdout, /quorum review-queue .*--generated-at <timestamp>/);
   assert.match(result.stdout, /quorum evaluate .*--generated-at <timestamp>.*--min-score <0\.\.1>/);
   assert.match(result.stdout, /quorum version \[--json\]/);
 });
@@ -3746,6 +3747,41 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
     assert.equal(overview.evaluation.fixtureCount, 13);
     assert.equal(overview.evaluation.mismatchCount, 0);
     assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("review-queue accepts a stable generated-at timestamp for JSON and CSV handoffs", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-generated-at-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    const csvOutPath = join(tempDir, "queue.csv");
+    await runCli([
+      "verify-batch",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--review-csv-out",
+      reviewCsvPath,
+    ]);
+
+    const stdout = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--generated-at",
+      "2026-07-15T04:00:00.000Z",
+      "--json",
+      "--csv-out",
+      csvOutPath,
+    ]);
+
+    const overview = JSON.parse(stdout) as { generatedAt: string };
+    assert.equal(overview.generatedAt, "2026-07-15T04:00:00.000Z");
+    assert.match(await readFile(csvOutPath, "utf8"), /2026-07-15T04:00:00\.000Z/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
