@@ -1,0 +1,24 @@
+{
+  "name": "Support data retention policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-data-retention-answer.md",
+  "answer": "Customers can request deletion of their account data through Support.\nSupport completes deletion requests within 7 days.\nDeleted customer data is always recoverable for 90 days.\n",
+  "answerLabel": "Support data retention reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-data-retention-policy.md",
+      "id": "support/data-retention@2026-07-15",
+      "title": "Support Data Retention Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can request deletion of their account data through Support.\nSupport completes deletion requests within 30 days.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
