@@ -70,6 +70,8 @@ It now also covers HR offboarding, checking final-pay timing and access
 deprovisioning while routing an unconditional severance promise as unsupported.
 The benchmark now also covers support account recovery, verifying email-change
 and unlock controls while flagging an unsafe MFA-reset promise.
+It now also covers support plan changes, verifying the billing path while
+flagging a conflicting upgrade window and an unsupported free-month offer.
 
 ## Documentation Map
 
