@@ -16,12 +16,12 @@ set covers:
 - HR bereavement leave, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   remote work, and expense reimbursement
-- support account recovery, account security, account suspension, cancellation, escalation, live chat, password
+- support account recovery, account security, account suspension, billing-suspension appeals, cancellation, escalation, live chat, password
   reset, refunds, data export, SLA, billing, service credits, and
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 33 fixtures. The generated
+The benchmark currently contains 34 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -130,6 +130,9 @@ specific product question:
   a verified abuse-reinstatement rule, and an unsupported waiver promise.
 - Support account-recovery coverage tests an email-change control, an unlock
   timing contradiction, and an unsupported immediate MFA-reset promise.
+- Support billing-suspension coverage tests the required payment condition for
+  appeals, a premature-appeal claim routed to review, and an unsupported
+  automatic reinstatement promise.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.
