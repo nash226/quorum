@@ -48,6 +48,8 @@ and priority-support reviewer packets that prove policy claims, surface
 contradictions, and route uncertain or unsupported answers for review.
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV,
 making filtered handoffs auditable by downstream consumers.
+The packed smoke check also posts a reviewer CSV and fixture to the HTTP
+`/review-queue` endpoint, verifying queue totals and benchmark drift together.
 
 ## Documentation Map
 
