@@ -266,7 +266,7 @@ try {
   ]);
 
   assert.match(batchStdout, /Quorum Batch Verification Report/);
-  assert.equal(readJson(batchReportPath).answerCount, 27);
+  assert.equal(readJson(batchReportPath).answerCount, 28);
   assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
   const batchSummaryCsv = readFileSync(batchSummaryCsvPath, "utf8");
   assert.match(
@@ -297,7 +297,7 @@ try {
   assert.equal(timestampedQueueOverview.generatedAt, "2026-07-15T04:00:00.000Z");
   assert.match(
     readFileSync(queueOverviewCsvPath, "utf8"),
-    /^"generated_at","queue_status","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","27",/m,
+    /^"generated_at","queue_status","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","28",/m,
   );
 
   const pendingQueueOverview = JSON.parse(
@@ -311,12 +311,12 @@ try {
     ]),
   );
   assert.deepEqual(pendingQueueOverview.review, {
-    totalAnswers: 26,
-    pendingAnswers: 26,
+    totalAnswers: 27,
+    pendingAnswers: 27,
     reviewedAnswers: 0,
     noClaimsAnswers: 0,
-    totalClaims: 77,
-    pendingClaims: 77,
+    totalClaims: 80,
+    pendingClaims: 80,
     reviewedClaims: 0,
   });
 
@@ -396,7 +396,7 @@ try {
   );
 
   assert.match(importStdout, /Quorum Reviewer Decision Import/);
-    assert.equal(readJson(importReportPath).answerGroups.length, 27);
+    assert.equal(readJson(importReportPath).answerGroups.length, 28);
   assert.match(readFileSync(importSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
 
   const evaluationReportPath = join(tempDir, "evaluation-report.md");
@@ -440,10 +440,10 @@ try {
     /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n/m,
   );
   assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,20,0,0\.000,20,0,61,61,1(?:\.0+)?\,100%,25,13,16,7,25,13,16,7$/m);
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,44,0,0\.000,43,1,129,129,1(?:\.0+)?\,100%,48,30,38,13,48,30,38,13$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,45,0,0\.000,44,1,132,132,1(?:\.0+)?\,100%,49,31,38,14,49,31,38,14$/m);
   assert.match(
     evaluationAggregateSummaryCsv,
-    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,64,63,1,0,0\.000,190,190,1(?:\.0+)?,100%,hr \| support,20 \| 44,0 \| 0,0\.000 \| 0\.000,20 \| 43,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,73,43,54,20,73,43,54,20\n?$/,
+    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,65,64,1,0,0\.000,193,193,1(?:\.0+)?,100%,hr \| support,20 \| 45,0 \| 0,0\.000 \| 0\.000,20 \| 44,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,74,44,54,21,74,44,54,21\n?$/,
   );
 
   const apiSources = await api.loadSourcesFromContent({
