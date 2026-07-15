@@ -649,7 +649,8 @@ CSV artifacts in the response.
 The `POST /review-queue` endpoint now combines imported reviewer workload with
 optional benchmark mismatch and score metrics, so queue integrations can request
 the same overview as the `review-queue` CLI command without parsing multiple
-reports.
+reports. It also accepts `queueStatus` (`pending`, `reviewed`, or `no_claims`)
+to scope the returned workload totals to one reviewer handoff state.
 
 Available endpoints:
 
