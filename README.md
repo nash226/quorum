@@ -8,17 +8,11 @@ customers, employees, tickets, workflows, or downstream systems.
 
 ## Why Quorum Exists
 
-AI answers can sound confident while drifting from the policies a business has
-approved. Quorum breaks an answer into claims, compares each claim with source
-evidence, and returns one of four reviewer-ready verdicts:
-
-- `verified`
-- `contradicted`
-- `unsupported`
-- `needs_review`
-
-The first wedge is HR and customer-support policy verification, where answers
-are document-grounded, high-volume, and costly to get wrong.
+AI answers can sound confident while drifting from approved policy. Quorum
+breaks an answer into claims, compares each claim with source evidence, and
+returns reviewer-ready `verified`, `contradicted`, `unsupported`, or
+`needs_review` verdicts. The first wedge is HR and customer-support policy
+verification, where grounded answers are high-volume and costly to get wrong.
 
 ## Quick Start
 
@@ -30,129 +24,30 @@ npm run dev -- verify \
   --json
 ```
 
-For a CI gate, fail when risky verdicts appear:
-
-```bash
-npm run dev -- verify \
-  --answer examples/answers/hr-answer.md \
-  --source-dir examples/sources \
-  --fail-on contradicted \
-  --fail-on unsupported
-```
+For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 58-fixture benchmark includes HR onboarding, leave-carryover,
-benefits-enrollment, remote-work, performance-review, and
-expense-reimbursement,
-support refunds, data-export, and priority-support reviewer packets that prove
-policy claims, surface
-contradictions, and route uncertain or unsupported answers for review.
-It also covers HR performance-review cadence and promotion claims.
-Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV,
-making filtered handoffs auditable by downstream consumers.
-The packed smoke check also posts a reviewer CSV and fixture to the HTTP
-`/review-queue` endpoint, verifying queue totals and benchmark drift together.
-Queue consumers can request a targeted `pending`, `reviewed`, or `no_claims`
-handoff with the CLI or `/review-queue` API, and the filtered totals remain
-auditable in the generated JSON and CSV artifacts.
-The benchmark now also covers support service-credit windows, limits, and
-unsupported automatic-credit promises.
-It now also covers order tracking, distinguishing a verified tracking control,
-a conflicting delivery guarantee, and an unsupported automatic shipping refund.
-This brings the checked-in HR and support benchmark to 48 fixtures.
-It now includes a focused HR parental-leave packet that verifies leave duration,
-detects a conflicting duration, and routes an unrelated unsupported office-hours claim.
-It also covers support account-suspension appeals, distinguishing a conflicting
-appeal window, a verified abuse-reinstatement rule, and an unsupported waiver promise.
-Claim extraction also retains short standalone policy statements such as
-`No refunds.` instead of dropping them when they appear outside a list.
-The benchmark now also covers HR payroll-change timing, identity verification,
-and unsupported rejected-deposit promises.
-It now includes an HR bereavement-leave packet that verifies an immediate-family
-entitlement and related carryover claim while routing an unrelated stipend claim as unsupported.
-It now also covers HR offboarding, checking final-pay timing and access
-deprovisioning while routing an unconditional severance promise as unsupported.
-The benchmark now also covers support account recovery, verifying email-change
-and unlock controls while flagging an unsafe MFA-reset promise.
-It now also covers support plan changes, verifying downgrade access while
-flagging a conflicting upgrade window and an unsupported free-month offer.
-The benchmark now also covers billing-suspension appeals, verifying the
-outstanding-balance condition while routing a premature appeal to review and
-flagging an unsupported automatic reinstatement promise.
-It now also covers support account-contact changes, verifying the ownership
-check while flagging a conflicting verification window and an unrelated
-unsupported promise.
-Support account-closure coverage now verifies the ownership control and routes
-conflicting completion and automatic-reactivation promises to review.
-It now also covers support incident communications, verifying the published
-update cadence while routing a conflicting cadence to review and an unrelated
-HR carryover claim as unsupported.
-It now also covers HR workplace accommodations, verifying the request channel
-while flagging a conflicting response-time promise and an unsupported stipend.
-The benchmark now also covers HR time-off requests, verifying the notice rule,
-routing conflicting notice and rollover claims for review, and catching an
-unsupported stipend claim.
-Support escalation coverage now also spans a verified response window, a
-conflicting response claim routed for review, and an unsupported
-dedicated-engineer promise.
-Support data-retention coverage now also verifies the deletion channel, flags a
-conflicting completion window, and catches an unsupported recovery promise.
-Support delivery-delay coverage now also verifies a status-update window,
-flags a conflicting delivery guarantee, and catches an automatic replacement
-promise for reviewer follow-up.
-Support charge-dispute coverage now also verifies the dispute window, catches a
-conflicting deadline, and routes an automatic-reversal promise for review.
-Support return coverage now also verifies the return window, catches a
-conflicting deadline, and routes an automatic-approval promise for review.
-Support shipping-address coverage now verifies pre-shipment changes, catches a
-conflicting change window, and routes an unrelated insurance promise as unsupported.
-Support warranty coverage now verifies the claim window, catches a conflicting
-eligibility deadline, and flags an unconditional replacement promise as unsupported.
-Support replacement coverage now verifies the request window, catches a
-conflicting eligibility deadline, and flags an unrelated subscription promise
-as unsupported.
-Support invoice-correction coverage now verifies the reporting window, catches
-a conflicting deadline, and flags an unsupported automatic-refund promise.
-Support subscription-pause coverage now verifies the renewal window, catches a
-conflicting pause deadline, and flags an unsupported automatic-refund promise.
-Support payment-method coverage now verifies the pre-invoice update control,
-catches a conflicting post-invoice deadline, and flags an unsupported
-automatic-refund promise.
-Support billing-address coverage now verifies the account-owner control, catches
-a conflicting verification window, and flags an unrelated unsupported
-password-manager promise.
-Support order-cancellation coverage now verifies the unshipped-order window and
-routes uncertain cancellation and refund promises to review. This brings the
-checked-in HR and support benchmark to 51 fixtures.
-Support tax-exemption coverage now verifies certificate submission and review
-timing while flagging an unsupported enterprise-upgrade promise. The benchmark
-previously reached 52 fixtures.
-Support usage-limits coverage now verifies a standard request limit, routes a
-too-broad increase claim to review, and flags an unsupported automatic increase.
-It now also covers subscription renewal timing, post-expiration requests, and
-unsupported automatic-renewal promises.
-It now also covers support account merges, verifying ownership of both accounts,
-catching a conflicting merge claim, and flagging an unsupported password-manager promise.
-It now also covers support shipping protection, verifying the pre-shipment control,
-routing an unconditional approval promise to review, and flagging an unrelated
-unsupported password-manager promise.
-Evaluation regression coverage now also verifies authentication-device approval
-against a trusted-email control and routes an unsupported hardware-key promise.
-The live-chat fixture now has a focused regression test that verifies HTML policy
-ingestion still preserves verified, contradicted, and unsupported routing.
-The benchmark now also covers gift-card redemption, distinguishing an account
-ownership control, an expired-card contradiction, and an unsupported
-automatic-refund promise.
+The checked-in 58-fixture benchmark spans HR and support workflows, including
+leave, onboarding, payroll, accommodations, refunds, account security, billing,
+delivery, service levels, and gift cards. Each packet exercises reviewer-facing
+verdict routing against approved Markdown, HTML, PDF, or directory-backed
+sources. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
+the current coverage inventory and extension workflow.
+
+Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
+the packed smoke check posts reviewer artifacts to `/review-queue` to verify
+queue totals and benchmark drift together. The CLI and HTTP API support targeted
+`pending`, `reviewed`, and `no_claims` handoffs with auditable filtered totals.
 
 ## Documentation Map
 
 - [CLI guide](docs/cli-guide.md): local verification, reports, imports, and evaluation.
 - [HTTP API integration](docs/api-integration.md): server startup, discovery, requests, and artifacts.
-- [Programmatic API](docs/programmatic-api.md): embed in-memory or file-backed verification in Node.js workflows.
+- [Programmatic API](docs/programmatic-api.md): embed verification in Node.js workflows.
 - [Reviewer queue workflow](docs/reviewer-queue.md): reviewer CSV handoff and queue summaries.
-- [Evaluation fixture guide](docs/evaluation-fixtures.md): benchmark context, shipped coverage, and adding fixtures.
+- [Evaluation fixture guide](docs/evaluation-fixtures.md): benchmark context and adding fixtures.
 - [API deployment guide](docs/api-deployment.md): network boundary, limits, and durable source identity.
 - [Demo workflow](docs/demo.md): a click-through product demonstration.
 - [Roadmap](docs/roadmap.md): current product priorities and open direction.
@@ -176,20 +71,14 @@ npm run smoke
 npm run evaluate:ci
 ```
 
-`npm run check` runs the repository verification gate used by CI. It combines
-the test suite, TypeScript build, packed-package smoke check, and evaluation
-score gate.
-
-The repository is intentionally small:
+`npm run check` runs the repository verification gate used by CI.
 
 ```text
 src/          verifier, CLI, reports, workflow, and HTTP API
 tests/        unit, API, CLI, smoke, and fixture coverage
 examples/     HR and support answers, sources, and evaluation fixtures
-docs/         product, workflow, integration, roadmap, and status context
+docs/         product, workflow, integration, and status context
 ```
-
-## Product Direction
 
 Quorum is growing from a local verifier toward an evidence layer in front of
 enterprise agent workflows. Near-term work is to expand HR and support policy
