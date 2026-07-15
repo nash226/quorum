@@ -281,6 +281,46 @@ try {
     /,true,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,HR Benefits Policy,high,2026-05-31,examples\/sources\/hr-policy\.md,source_2,0\.857,Employees receive 12 weeks of paid parental leave\.,3,1,1,1,0,clear,,/,
   );
 
+  const pendingQueueOverview = JSON.parse(
+    runCli([
+      "review-queue",
+      "--review-csv",
+      batchReviewCsvPath,
+      "--queue-status",
+      "pending",
+      "--json",
+    ]),
+  );
+  assert.deepEqual(pendingQueueOverview.review, {
+    totalAnswers: 8,
+    pendingAnswers: 8,
+    reviewedAnswers: 0,
+    noClaimsAnswers: 0,
+    totalClaims: 22,
+    pendingClaims: 22,
+    reviewedClaims: 0,
+  });
+
+  const noClaimsQueueOverview = JSON.parse(
+    runCli([
+      "review-queue",
+      "--review-csv",
+      batchReviewCsvPath,
+      "--queue-status",
+      "no_claims",
+      "--json",
+    ]),
+  );
+  assert.deepEqual(noClaimsQueueOverview.review, {
+    totalAnswers: 1,
+    pendingAnswers: 0,
+    reviewedAnswers: 0,
+    noClaimsAnswers: 1,
+    totalClaims: 0,
+    pendingClaims: 0,
+    reviewedClaims: 0,
+  });
+
   const openApiStdout = runCli(["openapi", "--out", openApiPath]);
   const openApiDocument = readJson(openApiPath);
   assert.match(openApiStdout, /OpenAPI document written to/);
