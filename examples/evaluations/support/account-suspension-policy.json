@@ -1,0 +1,23 @@
+{
+  "name": "Support account suspension policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-account-suspension-answer.md",
+  "answerLabel": "Support account suspension reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-account-suspension-policy.md",
+      "id": "support/account-suspension@2026-07-15",
+      "title": "Support Account Suspension Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers may appeal an account suspension within 14 days.\nAccounts suspended for confirmed abuse are not eligible for reinstatement.\nSuspensions for billing issues can be appealed after the outstanding balance is paid.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["contradicted", "verified", "unsupported"]
+}
