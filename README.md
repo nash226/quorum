@@ -34,9 +34,10 @@ Quorum focuses on a narrow but high-value problem:
 The goal is not to replace reviewers. The goal is to give reviewers a clear,
 auditable evidence report before an agent response becomes a business action.
 
-The evaluation suite includes support password-reset and subscription-cancellation
-fixtures that exercise verified, contradicted, and unsupported claims against the
-approved playbook.
+The evaluation suite includes support password-reset, subscription-cancellation,
+and live-chat fixtures that exercise verified, contradicted, and unsupported
+claims against approved support sources, including an exported HTML help-center
+policy.
 
 ## What It Does
 

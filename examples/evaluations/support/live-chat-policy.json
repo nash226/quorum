@@ -1,0 +1,14 @@
+{
+  "name": "Support live chat policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-live-chat-answer.md",
+  "answerLabel": "Support live chat reviewer packet",
+  "sourcePaths": ["../../sources/support-billing-policy.html"],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}

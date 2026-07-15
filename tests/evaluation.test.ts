@@ -350,6 +350,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/cancellation-policy.json"),
     resolve("examples/evaluations/support/escalation-policy.json"),
     resolve("examples/evaluations/support/html-billing-policy.json"),
+    resolve("examples/evaluations/support/live-chat-policy.json"),
     resolve("examples/evaluations/support/password-reset-policy.json"),
     resolve("examples/evaluations/support/sla-policy.json"),
     resolve("examples/evaluations/support/source-directory-policy.json"),
@@ -385,7 +386,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 15);
+  assert.equal(scorecards.length, 16);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -401,6 +402,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support subscription cancellation policy example",
       "Support escalation ambiguity example",
       "Support billing HTML example",
+      "Support live chat policy example",
       "Support password reset policy example",
       "Support SLA policy example",
       "Support source directory example",
