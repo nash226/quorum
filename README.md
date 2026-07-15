@@ -86,6 +86,7 @@ The current CLI can:
 - include aggregate evaluation mismatch counts in the reusable JSON summary so queue and dashboard consumers can triage benchmark drift from one object
 - include aggregate and per-domain evaluation mismatch rates in JSON summaries and CSV/report surfaces so benchmark drift is comparable without client-side calculation
 - ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
+- ship an HR leave evaluation fixture that covers verified, contradicted, and unsupported policy claims
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
 - filter imported reviewer decisions by `pending`, `reviewed`, or `no_claims` queue status for targeted handoffs
