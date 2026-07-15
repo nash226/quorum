@@ -985,13 +985,13 @@ test("evaluates a shipped support identity verification fixture across security 
   assert.equal(scorecard.answerLabel, "Support identity verification reviewer packet");
   assert.deepEqual(scorecard.actualSummary, {
     verified: 1,
-    contradicted: 0,
+    contradicted: 1,
     unsupported: 1,
-    needs_review: 1,
+    needs_review: 0,
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
     "verified",
-    "needs_review",
+    "contradicted",
     "unsupported",
   ]);
   assert.equal(scorecard.report.sources[0]?.id, "support/identity-verification@2026-07-15");
