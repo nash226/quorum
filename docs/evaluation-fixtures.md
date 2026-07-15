@@ -21,7 +21,7 @@ set covers:
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 42 fixtures. The generated
+The benchmark currently contains 43 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -150,6 +150,8 @@ specific product question:
   contradicted delivery guarantee, and an unsupported automatic replacement claim.
 - Support return coverage tests a verified return window, a contradicted
   deadline, and an automatic-approval promise routed for review.
+- Support shipping-address coverage tests a pre-shipment change window, a
+  conflicting time limit, and an unrelated insurance promise.
 - HR time-off coverage tests a notice requirement, routes partially matched
   notice and rollover claims for review, and flags an unsupported stipend.
 
