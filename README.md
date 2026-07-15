@@ -43,11 +43,12 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 23-fixture benchmark includes HR onboarding, leave-carryover,
+The checked-in 24-fixture benchmark includes HR onboarding, leave-carryover,
 benefits-enrollment, and remote-work,
 support refunds, data-export, and priority-support reviewer packets that prove
 policy claims, surface
 contradictions, and route uncertain or unsupported answers for review.
+It also covers HR performance-review cadence and promotion claims.
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV,
 making filtered handoffs auditable by downstream consumers.
 The packed smoke check also posts a reviewer CSV and fixture to the HTTP
