@@ -138,6 +138,8 @@ catching a conflicting merge claim, and flagging an unsupported password-manager
 It now also covers support shipping protection, verifying the pre-shipment control,
 routing an unconditional approval promise to review, and flagging an unrelated
 unsupported password-manager promise.
+Evaluation regression coverage now also verifies authentication-device approval
+against a trusted-email control and routes an unsupported hardware-key promise.
 
 ## Documentation Map
 
