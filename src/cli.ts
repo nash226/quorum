@@ -601,6 +601,7 @@ async function runReviewQueue(args: string[]): Promise<void> {
     : undefined;
   const overview = {
     generatedAt: parsed.generatedAt ?? new Date().toISOString(),
+    queueStatus: parsed.queueStatus ?? null,
     review: {
       ...reviewReport.queueSummary,
       totalClaims: reviewReport.summary.totalClaims,
@@ -672,11 +673,13 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
 
 function renderReviewQueueCsv(overview: {
   generatedAt: string;
+  queueStatus: import("./reviewer-decision-import.js").ReviewerQueueStatus | null;
   review: { totalAnswers: number; pendingAnswers: number; reviewedAnswers: number; noClaimsAnswers: number; totalClaims: number; pendingClaims: number; reviewedClaims: number };
   evaluation: { fixtureCount: number; mismatchCount: number; mismatchRate: number | null; score: number | null; scoreLabel: string; scoreThresholdPassed: boolean } | null;
 }): string {
   const values = [
     overview.generatedAt,
+    overview.queueStatus ?? "",
     overview.review.totalAnswers,
     overview.review.pendingAnswers,
     overview.review.reviewedAnswers,
@@ -693,7 +696,7 @@ function renderReviewQueueCsv(overview: {
   ];
   const escape = (value: string | number | boolean) => `"${String(value).replaceAll('"', '""')}"`;
   return `${[
-    ["generated_at", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
+    ["generated_at", "queue_status", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
     values,
   ].map((row) => row.map(escape).join(",")).join("\n")}\n`;
 }

@@ -46,6 +46,8 @@ evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 The checked-in benchmark includes HR onboarding, support refunds, data-export,
 and priority-support reviewer packets that prove policy claims, surface
 contradictions, and route uncertain or unsupported answers for review.
+Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV,
+making filtered handoffs auditable by downstream consumers.
 
 ## Documentation Map
 
