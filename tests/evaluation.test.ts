@@ -126,6 +126,31 @@ test("evaluates a shipped support SLA fixture across risk verdicts", async () =>
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support live chat fixture from HTML policy", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/live-chat-policy.json"),
+    generatedAt: "2026-07-15T09:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support live chat policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support live chat reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.match(scorecard.report.sources[0]?.sourcePath ?? "", /support-billing-policy\.html$/);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped support password reset fixture across risk verdicts", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/password-reset-policy.json"),
