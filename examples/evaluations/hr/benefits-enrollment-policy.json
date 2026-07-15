@@ -1,0 +1,24 @@
+{
+  "name": "HR benefits enrollment policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-benefits-enrollment-answer.md",
+  "answer": "Employees receive health coverage after 30 days of employment.\nEmployees receive health coverage after 60 days of employment.\nEmployees receive a monthly home-office stipend.\n",
+  "answerLabel": "HR benefits enrollment reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-benefits-enrollment-policy.md",
+      "id": "people-ops/hr-benefits-enrollment@2026-07-15",
+      "title": "HR Benefits Enrollment Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees receive health coverage after 60 days of employment.\nEmployees may enroll in the company dental plan during their first 30 days.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["contradicted", "verified", "unsupported"]
+}
