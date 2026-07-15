@@ -1,0 +1,24 @@
+{
+  "name": "Support account contact change policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-contact-change-answer.md",
+  "answer": "Customers must verify the current email address before support changes the account email.\nSupport changes the account email after 2 hours of identity verification.\nCustomers can request a free password manager from support.\n",
+  "answerLabel": "Support account contact change reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-contact-change-policy.md",
+      "id": "support/contact-change@2026-07-15",
+      "title": "Support Account Contact Change Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers must verify the current email address before support changes the account email.\nSupport changes the account email only after 24 hours of identity verification.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
