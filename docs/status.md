@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `95b3d89` on 2026-07-14, feat: filter reviewer queue overview by status
+- Latest shipped change: `9ff89ca` on 2026-07-14, test: add support SLA evaluation fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -118,6 +118,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-14 | Direct push | test: add support SLA evaluation fixture | `9ff89ca` |
 | 2026-07-14 | Direct push | feat: filter reviewer queue overview by status | `95b3d89` |
 | 2026-07-14 | [#471](https://github.com/nash226/quorum/pull/471) | docs: refresh roadmap after queue foundation | `bc360c9` |
 | 2026-07-14 | Direct push | feat: expose reviewer queue overview over HTTP | `5c83701` |
@@ -125,5 +126,4 @@
 | 2026-07-14 | Direct push | feat: export batch aggregate summary csv | `d192372` |
 | 2026-07-14 | Direct push | fix: reject duplicate API source IDs | `0c4aca8` |
 | 2026-07-14 | Direct push | fix: split numeric compound claims | `03c8819` |
-| 2026-07-14 | Direct push | feat: export reviewer queue summary csv | `dd33591` |
 
