@@ -1,0 +1,24 @@
+{
+  "name": "Support priority support policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-priority-answer.md",
+  "answer": "Priority support requests require a response within 14 days of opening.\nPriority support requests require a response within 30 days of opening.\nCustomers receive a dedicated account manager.\n",
+  "answerLabel": "Support priority support reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-priority-policy.md",
+      "id": "support/priority-support@2026-07-15",
+      "title": "Support Priority Support Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Priority support requests require a response within 14 days of opening.\nPriority support requests require a response within 2 days of opening.\nPriority requests are submitted through the support portal.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}

@@ -16,8 +16,9 @@ set covers:
 - HR leave, onboarding, professional development, and compensation review
 - support account security, cancellation, escalation, live chat, password
   reset, refunds, data export, SLA, billing, and source-directory workflows
+- priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 19 fixtures. The generated
+The benchmark currently contains 20 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -99,6 +100,8 @@ specific product question:
   verified, contradicted, and unsupported customer claims.
 - Support data-export coverage tests inline source metadata, durable source
   identity, and conflicting customer policy claims.
+- Support priority coverage tests a response-time contradiction alongside an
+  unsupported account-management promise.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.
