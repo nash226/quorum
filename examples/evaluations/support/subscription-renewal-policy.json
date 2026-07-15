@@ -1,0 +1,24 @@
+{
+  "name": "Support subscription renewal policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-subscription-renewal-answer.md",
+  "answer": "Customers may renew annual plans through account billing settings up to 30 days before expiration.\nCustomers may renew annual plans up to 90 days after expiration.\nSupport automatically renews every plan without customer confirmation.\n",
+  "answerLabel": "Support subscription renewal reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-subscription-renewal-policy.md",
+      "id": "support/subscription-renewal@2026-07-15",
+      "title": "Support Subscription Renewal Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers may renew annual plans through account billing settings up to 30 days before expiration.\nCustomers must contact support to request a renewal after expiration.\nRenewal requires customer confirmation before the next billing period.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
