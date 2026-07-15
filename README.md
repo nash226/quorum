@@ -43,7 +43,7 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 55-fixture benchmark includes HR onboarding, leave-carryover,
+The checked-in 56-fixture benchmark includes HR onboarding, leave-carryover,
 benefits-enrollment, remote-work, performance-review, and
 expense-reimbursement,
 support refunds, data-export, and priority-support reviewer packets that prove
@@ -133,6 +133,8 @@ Support usage-limits coverage now verifies a standard request limit, routes a
 too-broad increase claim to review, and flags an unsupported automatic increase.
 It now also covers subscription renewal timing, post-expiration requests, and
 unsupported automatic-renewal promises.
+It now also covers support account merges, verifying ownership of both accounts,
+catching a conflicting merge claim, and flagging an unsupported password-manager promise.
 
 ## Documentation Map
 
