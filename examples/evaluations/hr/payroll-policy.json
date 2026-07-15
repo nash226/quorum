@@ -1,0 +1,14 @@
+{
+  "name": "HR payroll change policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-payroll-answer.md",
+  "sourcePaths": ["../../sources/hr-payroll-policy.md"],
+  "answerLabel": "HR payroll change reviewer packet",
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["contradicted", "verified", "unsupported"]
+}
