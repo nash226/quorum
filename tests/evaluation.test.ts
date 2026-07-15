@@ -598,6 +598,31 @@ test("evaluates the HR bereavement leave fixture across policy claims", async ()
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the HR offboarding fixture across separation claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/hr/offboarding-policy.json"),
+    generatedAt: "2026-07-15T20:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR offboarding policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.equal(scorecard.answerLabel, "HR offboarding reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 2,
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "verified",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-offboarding@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline support service credit fixture across policy claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/service-credit-policy.json"),
@@ -763,6 +788,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
       resolve("examples/evaluations/hr/expense-reimbursement-policy.json"),
       resolve("examples/evaluations/hr/leave-carryover-policy.json"),
     resolve("examples/evaluations/hr/leave-policy.json"),
+    resolve("examples/evaluations/hr/offboarding-policy.json"),
     resolve("examples/evaluations/hr/onboarding-policy.json"),
     resolve("examples/evaluations/hr/parental-leave-policy.json"),
     resolve("examples/evaluations/hr/payroll-policy.json"),
@@ -818,7 +844,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 31);
+  assert.equal(scorecards.length, 32);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -830,6 +856,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "HR expense reimbursement policy example",
       "HR leave carryover policy example",
       "HR leave policy example",
+      "HR offboarding policy example",
       "HR onboarding policy example",
       "HR parental leave policy example",
       "HR payroll change policy example",
@@ -870,7 +897,7 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 15);
+  assert.equal(scorecards.length, 16);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -881,6 +908,7 @@ test("filters evaluation fixture files by domain", async () => {
       "HR expense reimbursement policy example",
       "HR leave carryover policy example",
       "HR leave policy example",
+      "HR offboarding policy example",
       "HR onboarding policy example",
       "HR parental leave policy example",
       "HR payroll change policy example",

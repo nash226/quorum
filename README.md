@@ -43,7 +43,7 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 29-fixture benchmark includes HR onboarding, leave-carryover,
+The checked-in 32-fixture benchmark includes HR onboarding, leave-carryover,
 benefits-enrollment, remote-work, performance-review, and
 expense-reimbursement,
 support refunds, data-export, and priority-support reviewer packets that prove
@@ -66,6 +66,8 @@ The benchmark now also covers HR payroll-change timing, identity verification,
 and unsupported rejected-deposit promises.
 It now includes an HR bereavement-leave packet that verifies an immediate-family
 entitlement and related carryover claim while routing an unrelated stipend claim as unsupported.
+It now also covers HR offboarding, checking final-pay timing and access
+deprovisioning while routing an unconditional severance promise as unsupported.
 The benchmark now also covers support account recovery, verifying email-change
 and unlock controls while flagging an unsafe MFA-reset promise.
 
