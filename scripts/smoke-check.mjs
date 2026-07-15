@@ -958,6 +958,35 @@ HR reviewer packet,answers/hr.md,Employees receive 12 weeks of paid parental lea
       /HR reviewer packet,answers\/hr\.md,Employees receive 12 weeks of paid parental leave\.,true,reviewed,needs_review,Employees receive 12 weeks of paid parental leave\.,Matched approved policy,Need HR confirmation,HR Policy,high,2026-05-31,policies\/hr-policy\.md,,1\.000,Employees receive 12 weeks of paid parental leave\./,
     );
 
+    const pendingImportReviewResponse = await fetch(`${server.url}/import-review`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewCsvContent: `answer_label,answer_path,answer_preview,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_source_paths,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
+Pending HR packet,answers/pending.md,Pending policy claim.,true,claim_1,Pending policy claim.,needs_review,Needs review,HR Policy,high,2026-05-31,policies/hr-policy.md,0.900,Pending policy claim.,,
+Reviewed HR packet,answers/reviewed.md,Reviewed policy claim.,true,claim_1,Reviewed policy claim.,verified,Matched approved policy,HR Policy,high,2026-05-31,policies/hr-policy.md,1.000,Reviewed policy claim.,verified,Approved
+`,
+        queueStatus: "pending",
+        includeArtifacts: ["summary_csv"],
+      }),
+    });
+    assert.equal(pendingImportReviewResponse.status, 200);
+    const pendingImportReviewResult = await pendingImportReviewResponse.json();
+    assert.deepEqual(pendingImportReviewResult.report.queueSummary, {
+      totalAnswers: 1,
+      pendingAnswers: 1,
+      reviewedAnswers: 0,
+      noClaimsAnswers: 0,
+    });
+    assert.deepEqual(
+      pendingImportReviewResult.report.answerGroups.map((group) => [group.label, group.reviewStatus]),
+      [["Pending HR packet", "pending"]],
+    );
+    assert.match(pendingImportReviewResult.artifacts.summary_csv, /Pending HR packet,answers\/pending\.md/);
+    assert.doesNotMatch(pendingImportReviewResult.artifacts.summary_csv, /Reviewed HR packet/);
+
     const evaluationFixtureContent = readFileSync(
       join(repoRoot, "examples", "evaluations", "hr-policy.json"),
       "utf8",
