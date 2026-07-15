@@ -139,6 +139,9 @@ specific product question:
   automatic reinstatement promise.
 - Support incident-communication coverage tests a verified update cadence, a
   related cadence routed to review, and an unrelated unsupported claim.
+- Support escalation coverage tests a verified first-response window, a
+  conflicting response claim routed for review, and an unsupported dedicated-engineer
+  promise.
 - HR time-off coverage tests a notice requirement, routes partially matched
   notice and rollover claims for review, and flags an unsupported stipend.
 

@@ -69,23 +69,31 @@ test("evaluates fixture files relative to the fixture directory", async () => {
   assert.equal(scorecard.score, 1);
 });
 
-test("evaluates a support fixture that routes a partial match to review", async () => {
+test("evaluates a shipped support escalation fixture across routing verdicts", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/escalation-policy.json"),
     generatedAt: "2026-07-14T04:30:00.000Z",
   });
 
-  assert.equal(scorecard.fixtureName, "Support escalation ambiguity example");
+  assert.equal(scorecard.fixtureName, "Support escalation policy example");
   assert.equal(scorecard.domain, "support");
   assert.equal(scorecard.answerLabel, "Support escalation reviewer packet");
-  assert.equal(scorecard.answerPreview, "Support tickets receive a first response after escalation.");
+  assert.equal(
+    scorecard.answerPreview,
+    "Escalated support tickets receive a first response within 4 business hours. Escalated support tickets receive a first...",
+  );
   assert.deepEqual(scorecard.actualSummary, {
-    verified: 0,
+    verified: 1,
     contradicted: 0,
-    unsupported: 0,
+    unsupported: 1,
     needs_review: 1,
   });
-  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["needs_review"]);
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/escalation@2026-07-15");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
 });
@@ -1007,7 +1015,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support subscription cancellation policy example",
       "Support account contact change policy example",
       "Support data export policy example",
-      "Support escalation ambiguity example",
+      "Support escalation policy example",
       "Support billing HTML example",
       "Support incident communication policy example",
       "Support live chat policy example",
