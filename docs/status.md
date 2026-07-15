@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `3adeb85` on 2026-07-15, test: add support order tracking evaluation coverage
+- Latest shipped change: `865137e` on 2026-07-15, docs: sync benchmark fixture inventory
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | docs: sync benchmark fixture inventory | `865137e` |
 | 2026-07-15 | Direct push | test: add support order tracking evaluation coverage | `3adeb85` |
 | 2026-07-15 | Direct push | docs: add programmatic API integration guide | `59f49e9` |
 | 2026-07-15 | [#520](https://github.com/nash226/quorum/pull/520) | test: add support warranty evaluation coverage | `3e3a43a` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add support return evaluation coverage | `1d38be1` |
 | 2026-07-15 | Direct push | test: add support delivery delay evaluation coverage | `419c111` |
 | 2026-07-15 | [#516](https://github.com/nash226/quorum/pull/516) | test: add support charge dispute evaluation coverage | `916ccea` |
-| 2026-07-15 | Direct push | test: add support data retention evaluation coverage | `b2f4dc1` |
 
