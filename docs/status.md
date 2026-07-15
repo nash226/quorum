@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f125698` on 2026-07-15, test: cover support gift card claims
+- Latest shipped change: `10c5a09` on 2026-07-15, docs: correct README benchmark coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | [#542](https://github.com/nash226/quorum/pull/542) | docs: correct README benchmark coverage | `10c5a09` |
 | 2026-07-15 | Direct push | test: cover support gift card claims | `f125698` |
 | 2026-07-15 | Direct push | test: cover support live chat html evaluation | `0310aea` |
 | 2026-07-15 | Direct push | test: cover authentication device claims | `b0d0643` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add support account merge evaluation coverage | `36db98e` |
 | 2026-07-15 | [#533](https://github.com/nash226/quorum/pull/533) | test: add support subscription renewal evaluation coverage | `d0631e8` |
 | 2026-07-15 | Direct push | test: add support usage limits evaluation coverage | `ca0fa04` |
-| 2026-07-15 | [#531](https://github.com/nash226/quorum/pull/531) | test: add support account closure evaluation coverage | `5ab3cda` |
 
