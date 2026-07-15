@@ -94,3 +94,7 @@ npm run dev -- review-queue \
 
 The overview includes pending, reviewed, and no-claims answer totals, claim
 workload totals, and optional evaluation fixture, mismatch, and score metrics.
+Add `--queue-status pending`, `--queue-status reviewed`, or
+`--queue-status no_claims` to scope the overview to one handoff state. The
+claim and answer totals are recalculated for the selected state, while optional
+benchmark metrics remain unchanged.
