@@ -17,11 +17,11 @@ set covers:
   development, compensation review, benefits enrollment, performance review,
   remote work, workplace accommodations, and expense reimbursement
 - support account recovery, account contact changes, account security, account suspension, billing-suspension appeals, cancellation, data retention, escalation, incident communication, live chat, password
-  reset, refunds, data export, SLA, billing, service credits, and
+  reset, refunds, charge disputes, data export, SLA, billing, service credits, and
   source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 38 fixtures. The generated
+The benchmark currently contains 40 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -144,6 +144,8 @@ specific product question:
 - Support escalation coverage tests a verified first-response window, a
   conflicting response claim routed for review, and an unsupported dedicated-engineer
   promise.
+- Support charge-dispute coverage tests a verified dispute window, a conflicting
+  deadline, and an automatic-reversal promise routed for review.
 - HR time-off coverage tests a notice requirement, routes partially matched
   notice and rollover claims for review, and flags an unsupported stipend.
 
