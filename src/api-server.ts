@@ -105,6 +105,8 @@ export interface ApiReviewQueueRequest {
 export interface ApiReviewQueueResponse {
   requestId: string;
   generatedAt: string;
+  /** Queue filter applied to the workload totals, or null when unfiltered. */
+  queueStatus: ReviewerQueueStatus | null;
   review: {
     totalAnswers: number;
     pendingAnswers: number;
@@ -1619,6 +1621,7 @@ async function handleApiRequest(
     const result: ApiReviewQueueResponse = {
       requestId: requestId(response),
       generatedAt: reviewReport.generatedAt,
+      queueStatus: body.queueStatus ?? null,
       review: {
         ...reviewReport.queueSummary,
         totalClaims: reviewReport.summary.totalClaims,
@@ -3956,6 +3959,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           properties: {
             requestId: { type: "string", minLength: 1, maxLength: 128 },
             generatedAt: { type: "string", format: "date-time" },
+            queueStatus: {
+              oneOf: [
+                { type: "null" },
+                { type: "string", enum: ["pending", "reviewed", "no_claims"] },
+              ],
+            },
             review: {
               type: "object",
               properties: {
@@ -3987,7 +3996,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               ],
             },
           },
-          required: ["requestId", "generatedAt", "review", "evaluation"],
+          required: ["requestId", "generatedAt", "queueStatus", "review", "evaluation"],
         },
         EvaluationClaimScore: {
           type: "object",

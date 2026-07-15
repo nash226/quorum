@@ -4323,6 +4323,7 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
     const result = await response.json() as ApiReviewQueueResponse;
     assert.equal(result.requestId, response.headers.get("x-quorum-request-id"));
     assert.equal(result.generatedAt, generatedAt);
+    assert.equal(result.queueStatus, null);
     assert.deepEqual(result.review, {
       totalAnswers: 1,
       pendingAnswers: 1,
@@ -4359,6 +4360,7 @@ test("programmatic API filters reviewer queue overview by queue status", async (
 
     assert.equal(response.status, 200);
     const result = await response.json() as ApiReviewQueueResponse;
+    assert.equal(result.queueStatus, "pending");
     assert.deepEqual(result.review, {
       totalAnswers: 1,
       pendingAnswers: 1,
