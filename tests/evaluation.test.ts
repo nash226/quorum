@@ -715,6 +715,7 @@ test("evaluates a shipped fixture that discovers approved sources from a directo
     resolve("examples/sources/hr-policy.pdf"),
     resolve("examples/sources/support-account-suspension-policy.md"),
     resolve("examples/sources/support-billing-policy.html"),
+    resolve("examples/sources/support-plan-change-policy.md"),
     resolve("examples/sources/support-playbook.md"),
     resolve("examples/sources/support-priority-policy.md"),
     resolve("examples/sources/support-refunds-policy.md"),
@@ -807,6 +808,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/html-billing-policy.json"),
     resolve("examples/evaluations/support/live-chat-policy.json"),
     resolve("examples/evaluations/support/password-reset-policy.json"),
+    resolve("examples/evaluations/support/plan-change-policy.json"),
       resolve("examples/evaluations/support/priority-support-policy.json"),
       resolve("examples/evaluations/support/refunds-policy.json"),
       resolve("examples/evaluations/support/service-credit-policy.json"),
@@ -844,7 +846,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 32);
+  assert.equal(scorecards.length, 33);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -875,6 +877,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support billing HTML example",
       "Support live chat policy example",
       "Support password reset policy example",
+      "Support plan change policy example",
       "Support priority support policy example",
       "Support refunds policy example",
       "Support service credit policy example",
