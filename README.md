@@ -43,6 +43,9 @@ The support benchmark now has direct regression coverage for plan changes,
 including billing eligibility, conflicting upgrade timing, and unsupported
 automatic-upgrade claims.
 
+The support benchmark also verifies account-merge answers against ownership
+controls, completion timing, and unsupported service promises.
+
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
 queue totals and benchmark drift together. The CLI and HTTP API support targeted
