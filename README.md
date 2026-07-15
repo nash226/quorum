@@ -34,10 +34,9 @@ Quorum focuses on a narrow but high-value problem:
 The goal is not to replace reviewers. The goal is to give reviewers a clear,
 auditable evidence report before an agent response becomes a business action.
 
-The evaluation suite includes support password-reset, subscription-cancellation,
-and live-chat fixtures that exercise verified, contradicted, and unsupported
-claims against approved support sources, including an exported HTML help-center
-policy.
+The evaluation suite includes an HR compensation-review fixture plus support
+password-reset, subscription-cancellation, and live-chat fixtures that exercise
+verified, contradicted, and unsupported claims against approved policy sources.
 
 ## What It Does
 
@@ -94,6 +93,7 @@ The current CLI can:
 - include aggregate and per-domain evaluation mismatch rates in JSON summaries and CSV/report surfaces so benchmark drift is comparable without client-side calculation
 - ship HR and support source-directory evaluation fixtures so directory ingestion is covered across both policy domains
 - ship an HR leave evaluation fixture that covers verified, contradicted, and unsupported policy claims
+- ship an HR compensation-review evaluation fixture that covers verified, contradicted, and unsupported policy claims with inline approved-source metadata
 - ship an HR professional-development evaluation fixture that covers verified, contradicted, and unsupported policy claims with inline approved-source metadata
 - publish the evaluation scorecard `answerHasClaims` queue-routing field in the generated OpenAPI schema for typed clients
 - import filled reviewer decision CSVs into a machine-readable summary
