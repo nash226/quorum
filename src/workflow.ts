@@ -239,6 +239,8 @@ export async function loadSourceDocumentsFromContent(
     throw new Error("At least one in-memory source is required.");
   }
 
+  assertUniqueSourceIds(options.sources);
+
   return Promise.all(
     options.sources.map((source, index) => {
       if (typeof source.content === "string") {
@@ -260,6 +262,22 @@ export async function loadSourceDocumentsFromContent(
       });
     }),
   );
+}
+
+function assertUniqueSourceIds(sources: InMemorySourceInput[]): void {
+  const seen = new Set<string>();
+
+  for (const source of sources) {
+    if (source.id === undefined) {
+      continue;
+    }
+
+    if (seen.has(source.id)) {
+      throw new Error(`Duplicate source ID: ${source.id}`);
+    }
+
+    seen.add(source.id);
+  }
 }
 
 export async function verifyAnswerFile(
