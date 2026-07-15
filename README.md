@@ -43,7 +43,7 @@ npm run dev -- verify \
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 57-fixture benchmark includes HR onboarding, leave-carryover,
+The checked-in 58-fixture benchmark includes HR onboarding, leave-carryover,
 benefits-enrollment, remote-work, performance-review, and
 expense-reimbursement,
 support refunds, data-export, and priority-support reviewer packets that prove
@@ -138,6 +138,9 @@ catching a conflicting merge claim, and flagging an unsupported password-manager
 It now also covers support shipping protection, verifying the pre-shipment control,
 routing an unconditional approval promise to review, and flagging an unrelated
 unsupported password-manager promise.
+The benchmark now also covers support identity verification, verifying the
+security gate for payout destination changes, catching a conflicting timing
+promise, and flagging an unsupported fraud-monitoring benefit.
 
 ## Documentation Map
 

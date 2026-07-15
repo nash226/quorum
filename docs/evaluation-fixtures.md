@@ -16,14 +16,14 @@ set covers:
 - HR bereavement leave, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   remote work, workplace accommodations, and expense reimbursement
-- support account closure, account recovery, account contact changes, account security, account suspension, billing address changes, billing-suspension appeals, cancellation, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
+- support account closure, account recovery, account contact changes, account security, account suspension, identity verification, billing address changes, billing-suspension appeals, cancellation, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, payment method
   changes, replacement, and tax exemption
   eligibility, subscription pauses, SLA, billing, service credits, shipping protection,
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 57 fixtures. The generated
+The benchmark currently contains 58 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -185,6 +185,9 @@ specific product question:
 - Support shipping-protection coverage verifies the pre-shipment control, routes
   an unconditional approval promise to review, and flags an unrelated unsupported
   password-manager promise.
+- Support identity-verification coverage verifies the security gate for payout
+  destination changes, catches a conflicting timing promise, and flags
+  an unsupported fraud-monitoring benefit.
 - HR time-off coverage tests a notice requirement, routes partially matched
   notice and rollover claims for review, and flags an unsupported stipend.
 

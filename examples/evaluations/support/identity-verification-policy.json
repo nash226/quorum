@@ -1,0 +1,24 @@
+{
+  "name": "Support identity verification policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-identity-verification-answer.md",
+  "answer": "Customers must complete identity verification before support can change the payout destination.\nSupport changes the payout destination within 2 hours of identity verification.\nCustomers receive free fraud monitoring from support.\n",
+  "answerLabel": "Support identity verification reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-identity-verification-policy.md",
+      "id": "support/identity-verification@2026-07-15",
+      "title": "Support Identity Verification Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers must complete identity verification before support can change the payout destination.\nSupport changes the payout destination only after 24 hours following identity verification.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}

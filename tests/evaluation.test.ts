@@ -84,13 +84,13 @@ test("evaluates a shipped support escalation fixture across routing verdicts", a
   );
   assert.deepEqual(scorecard.actualSummary, {
     verified: 1,
-    contradicted: 0,
+    contradicted: 1,
     unsupported: 1,
-    needs_review: 1,
+    needs_review: 0,
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
     "verified",
-    "needs_review",
+    "contradicted",
     "unsupported",
   ]);
   assert.equal(scorecard.report.sources[0]?.id, "support/escalation@2026-07-15");
@@ -260,13 +260,13 @@ test("evaluates a shipped support usage limits fixture across rate claims", asyn
   assert.equal(scorecard.answerLabel, "Support usage limits reviewer packet");
   assert.deepEqual(scorecard.actualSummary, {
     verified: 1,
-    contradicted: 0,
+    contradicted: 1,
     unsupported: 1,
-    needs_review: 1,
+    needs_review: 0,
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
     "verified",
-    "needs_review",
+    "contradicted",
     "unsupported",
   ]);
   assert.equal(scorecard.report.sources[0]?.id, "support/usage-limits@2026-07-15");
@@ -974,6 +974,31 @@ test("evaluates a shipped support shipping protection fixture across claim routi
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support identity verification fixture across security claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/identity-verification-policy.json"),
+    generatedAt: "2026-07-15T20:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support identity verification policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support identity verification reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/identity-verification@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline support service credit fixture across policy claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/service-credit-policy.json"),
@@ -1396,6 +1421,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/delivery-delay-policy.json"),
     resolve("examples/evaluations/support/escalation-policy.json"),
     resolve("examples/evaluations/support/html-billing-policy.json"),
+    resolve("examples/evaluations/support/identity-verification-policy.json"),
     resolve("examples/evaluations/support/incident-communication-policy.json"),
     resolve("examples/evaluations/support/invoice-correction-policy.json"),
     resolve("examples/evaluations/support/live-chat-policy.json"),
@@ -1449,7 +1475,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 57);
+  assert.equal(scorecards.length, 58);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -1489,6 +1515,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support delivery delay policy example",
       "Support escalation policy example",
       "Support billing HTML example",
+      "Support identity verification policy example",
       "Support incident communication policy example",
       "Support invoice correction policy example",
       "Support live chat policy example",
