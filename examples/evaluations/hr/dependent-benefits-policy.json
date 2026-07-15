@@ -1,0 +1,24 @@
+{
+  "name": "HR dependent benefits policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-dependent-benefits-answer.md",
+  "answer": "Employees may add eligible dependents to health coverage during open enrollment.\nEmployees may add dependents within 30 days of a qualifying life event.\nEmployees receive free gym membership.\n",
+  "answerLabel": "HR dependent benefits reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-dependent-benefits-policy.md",
+      "id": "people-ops/hr-dependent-benefits@2026-07-15",
+      "title": "HR Dependent Benefits Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees may add eligible dependents to health coverage during open enrollment.\nEmployees may add dependents within 60 days of a qualifying life event with supporting documentation.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}

@@ -13,7 +13,7 @@ set covers:
 - Markdown, HTML, PDF, and source-directory ingestion
 - empty-answer queue routing
 - explicit source IDs and inline source metadata
-- HR bereavement leave, medical leave, leave, leave carryover, onboarding, offboarding, parental leave, professional
+- HR bereavement leave, dependent benefits, medical leave, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   remote work, workplace accommodations, and expense reimbursement
 - support account closure, account recovery, account contact changes, account security, account suspension, billing address changes, billing-suspension appeals, cancellation, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
@@ -23,7 +23,7 @@ set covers:
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 63 fixtures. The generated
+The benchmark currently contains 64 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -113,6 +113,9 @@ specific product question:
   unsupported account-management promise.
 - HR benefits coverage tests health-coverage eligibility timing alongside a
   verified enrollment window and an unsupported stipend promise.
+- HR dependent-benefits coverage tests open-enrollment eligibility, a
+  qualifying-event timing contradiction, and an unsupported undocumented
+  dependent promise.
 - HR remote-work coverage tests a weekly remote-work limit alongside a
   contradicted five-day claim and an unsupported home-office stipend promise.
 - HR performance-review coverage tests a review cadence contradiction alongside
