@@ -23,7 +23,7 @@ set covers:
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 62 fixtures. The generated
+The benchmark currently contains 63 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -138,6 +138,8 @@ specific product question:
   timing contradiction, and an unsupported immediate MFA-reset promise.
 - Support account-contact coverage tests a verified ownership check, a
   contradicted verification window, and an unrelated unsupported promise.
+- Support authentication-device coverage tests trusted-email approval and
+  flags an unsupported hardware-key promise.
 - Support account-closure coverage tests the ownership control, routes a
   conflicting completion window to review, and routes an unsupported
   automatic-reactivation promise to review.
