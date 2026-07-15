@@ -1,0 +1,24 @@
+{
+  "name": "Support tax exemption policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-tax-exemption-answer.md",
+  "answer": "Business customers can request tax-exempt status by submitting a valid exemption certificate.\nSupport reviews tax-exemption requests within 30 business days.\nSupport automatically upgrades every tax-exempt account to enterprise.\n",
+  "answerLabel": "Support tax exemption reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-tax-exemption-policy.md",
+      "id": "support/tax-exemption@2026-07-15",
+      "title": "Support Tax Exemption Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Business customers can request tax-exempt status by submitting a valid exemption certificate.\nSupport reviews tax-exemption requests within 5 business days.\nApproved tax-exempt customers receive refunds only for taxes charged after approval.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}
