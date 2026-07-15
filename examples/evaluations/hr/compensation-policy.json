@@ -1,0 +1,24 @@
+{
+  "name": "HR compensation review policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-compensation-answer.md",
+  "answer": "Employees receive 1 compensation review every year.\nEmployees may request a compensation review after 5 years.\nThe company operates a private airport shuttle.\n",
+  "answerLabel": "HR compensation reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-compensation-policy.md",
+      "id": "people-ops/hr-compensation@2026-07-15",
+      "title": "HR Compensation Review Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees receive 1 compensation review every year.\nEmployees may request a compensation review after 1 year.\nThe company publishes review outcomes within 30 days of the review.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
