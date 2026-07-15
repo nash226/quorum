@@ -3751,6 +3751,67 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
   }
 });
 
+test("review-queue scopes workload to a queue status", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-filter-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    await runCli([
+      "verify-batch",
+      "--answer-dir",
+      "examples/answers",
+      "--source-dir",
+      "examples/sources",
+      "--review-csv-out",
+      reviewCsvPath,
+    ]);
+
+    const pendingStdout = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--queue-status",
+      "pending",
+      "--json",
+    ]);
+    const pendingOverview = JSON.parse(pendingStdout) as {
+      review: Record<string, number>;
+    };
+    assert.deepEqual(pendingOverview.review, {
+      totalAnswers: 8,
+      pendingAnswers: 8,
+      reviewedAnswers: 0,
+      noClaimsAnswers: 0,
+      totalClaims: 22,
+      pendingClaims: 22,
+      reviewedClaims: 0,
+    });
+
+    const noClaimsStdout = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--queue-status",
+      "no_claims",
+      "--json",
+    ]);
+    const noClaimsOverview = JSON.parse(noClaimsStdout) as {
+      review: Record<string, number>;
+    };
+    assert.deepEqual(noClaimsOverview.review, {
+      totalAnswers: 1,
+      pendingAnswers: 0,
+      reviewedAnswers: 0,
+      noClaimsAnswers: 1,
+      totalClaims: 0,
+      pendingClaims: 0,
+      reviewedClaims: 0,
+    });
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 async function runCliAllowFailure(
   args: string[],
   options?: { stdin?: string },
