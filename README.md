@@ -92,6 +92,8 @@ unsupported stipend claim.
 Support escalation coverage now also spans a verified response window, a
 conflicting response claim routed for review, and an unsupported
 dedicated-engineer promise.
+Support data-retention coverage now also verifies the deletion channel, flags a
+conflicting completion window, and catches an unsupported recovery promise.
 
 ## Documentation Map
 
