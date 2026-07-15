@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ba16134` on 2026-07-15, test: cover support accessibility requests
+- Latest shipped change: `ba06ae1` on 2026-07-15, docs: explain evaluation domain filtering
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,12 +48,12 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | docs: explain evaluation domain filtering | `ba06ae1` |
+| 2026-07-15 | Direct push | test: cover support refund status evaluation | `b086888` |
 | 2026-07-15 | Direct push | test: cover support accessibility requests | `ba16134` |
 | 2026-07-15 | Direct push | test: cover support plan changes | `6fc1aad` |
 | 2026-07-15 | [#542](https://github.com/nash226/quorum/pull/542) | docs: correct README benchmark coverage | `10c5a09` |
 | 2026-07-15 | Direct push | test: cover support gift card claims | `f125698` |
 | 2026-07-15 | Direct push | test: cover support live chat html evaluation | `0310aea` |
 | 2026-07-15 | Direct push | test: cover authentication device claims | `b0d0643` |
-| 2026-07-15 | [#535](https://github.com/nash226/quorum/pull/535) | test: add support shipping protection evaluation coverage | `2d040df` |
-| 2026-07-15 | Direct push | test: add support account merge evaluation coverage | `36db98e` |
 
