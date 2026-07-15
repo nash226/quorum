@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `571a513` on 2026-07-15, test: add support account merge evaluation coverage
+- Latest shipped change: `684b0c6` on 2026-07-15, test: add support shipping protection evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | [#535](https://github.com/nash226/quorum/pull/535) | test: add support shipping protection evaluation coverage | `684b0c6` |
 | 2026-07-15 | Direct push | test: add support account merge evaluation coverage | `571a513` |
 | 2026-07-15 | [#533](https://github.com/nash226/quorum/pull/533) | test: add support subscription renewal evaluation coverage | `5faedd0` |
 | 2026-07-15 | Direct push | test: add support usage limits evaluation coverage | `de4e9ec` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: add support tax exemption evaluation coverage | `c85ad82` |
 | 2026-07-15 | Direct push | test: add support order cancellation evaluation coverage | `12db314` |
 | 2026-07-15 | Direct push | test: add support billing address evaluation coverage | `8104013` |
-| 2026-07-15 | Direct push | test: add support payment method evaluation coverage | `692746e` |
 
