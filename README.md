@@ -101,6 +101,8 @@ Support charge-dispute coverage now also verifies the dispute window, catches a
 conflicting deadline, and routes an automatic-reversal promise for review.
 Support return coverage now also verifies the return window, catches a
 conflicting deadline, and routes an automatic-approval promise for review.
+Support shipping-address coverage now verifies pre-shipment changes, catches a
+conflicting change window, and routes an unrelated insurance promise as unsupported.
 
 ## Documentation Map
 
