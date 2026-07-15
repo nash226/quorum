@@ -1,0 +1,24 @@
+{
+  "name": "HR parental leave policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-parental-leave-answer.md",
+  "answer": "Employees receive 16 weeks of paid parental leave.\nEmployees receive 12 weeks of paid parental leave.\nThe office closes on Fridays.\n",
+  "answerLabel": "HR parental leave reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-parental-leave-policy.md",
+      "id": "people-ops/hr-parental-leave@2026-07-15",
+      "title": "HR Parental Leave Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees receive 16 weeks of paid parental leave. Birth parents may take an additional 4 weeks of medical recovery leave.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
