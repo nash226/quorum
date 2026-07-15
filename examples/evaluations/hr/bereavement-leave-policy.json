@@ -1,0 +1,24 @@
+{
+  "name": "HR bereavement leave policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-bereavement-leave-answer.md",
+  "answer": "Employees receive 5 paid days of bereavement leave for an immediate family member.\nEmployees may carry over 20 unused vacation days into the next calendar year.\nEmployees receive a monthly home-office stipend.\n",
+  "answerLabel": "HR bereavement leave reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-bereavement-leave-policy.md",
+      "id": "people-ops/hr-bereavement-leave@2026-07-15",
+      "title": "HR Bereavement Leave Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Employees receive 5 paid days of bereavement leave for an immediate family member. Employees may carry over 5 unused vacation days into the next calendar year.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}
