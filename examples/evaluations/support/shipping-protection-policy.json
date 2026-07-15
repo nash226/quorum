@@ -1,0 +1,14 @@
+{
+  "name": "Support shipping protection policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-shipping-protection-answer.md",
+  "sourcePaths": ["../../sources/support-shipping-protection-policy.md"],
+  "answerLabel": "Support shipping protection reviewer packet",
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
