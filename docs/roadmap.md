@@ -10,12 +10,18 @@ front of enterprise agent workflows.
 - Make reviewer handoff artifacts easier to route, audit, and approve.
 - Expand evaluation fixtures and scorecards across HR and support policy domains.
 
+## Shipped foundation
+
+- Reviewer queue CLI and HTTP surfaces summarize imported decisions alongside
+  optional benchmark drift.
+- Deployment and integration guides document the local API's authentication
+  boundary, operational limits, and durable source identifiers.
+
 ## Next
 
-- Add a reviewer queue surface for triaging imported decisions and benchmark
-  drift.
-- Document deployment and integration patterns for the local API, including
-  authentication boundaries and durable source identifiers.
+- Choose the durable queue backend and dashboard boundary for reviewer work
+  queues and audit history.
+- Expand the HR and support fixture set as policy coverage grows.
 
 ## Later
 
