@@ -52,7 +52,8 @@ verification-sensitive card updates, keeping billing claims reviewer-visible.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
-queue totals and benchmark drift together. The CLI and HTTP API support targeted
+queue totals and benchmark drift together, including pending, reviewed, and
+no-claims handoffs. The CLI and HTTP API support targeted
 `pending`, `reviewed`, and `no_claims` handoffs with auditable filtered totals.
 
 Evaluation runs can now be scoped to one or more policy domains with repeated
