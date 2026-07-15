@@ -124,6 +124,9 @@ password-manager promise.
 Support order-cancellation coverage now verifies the unshipped-order window and
 routes uncertain cancellation and refund promises to review. This brings the
 checked-in HR and support benchmark to 51 fixtures.
+Support tax-exemption coverage now verifies certificate submission and review
+timing while flagging an unsupported enterprise-upgrade promise. The benchmark
+now contains 52 fixtures.
 
 ## Documentation Map
 
