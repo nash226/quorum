@@ -1,0 +1,24 @@
+{
+  "name": "Support order cancellation policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-order-cancellation-answer.md",
+  "answer": "Customers can cancel an unshipped order within 2 hours of purchase.\nCustomers can cancel any order within 24 hours of purchase, even after it ships.\nCanceled orders receive an automatic refund within 1 business day.\n",
+  "answerLabel": "Support order cancellation reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-order-cancellation-policy.md",
+      "id": "support/order-cancellation@2026-07-15",
+      "title": "Support Order Cancellation Policy",
+      "updatedAt": "2026-07-15",
+      "trustLevel": "high",
+      "content": "Customers can cancel an unshipped order within 2 hours of purchase.\nOrders that have shipped cannot be canceled; customers may request a return after delivery.\nCanceled orders are refunded to the original payment method within 5 business days.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 2
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "needs_review"]
+}
