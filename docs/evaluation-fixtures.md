@@ -13,13 +13,13 @@ set covers:
 - Markdown, HTML, PDF, and source-directory ingestion
 - empty-answer queue routing
 - explicit source IDs and inline source metadata
-- HR leave, onboarding, professional development, compensation review, and
-  benefits enrollment
+- HR leave, leave carryover, onboarding, professional development, compensation
+  review, and benefits enrollment
 - support account security, cancellation, escalation, live chat, password
   reset, refunds, data export, SLA, billing, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 21 fixtures. The generated
+The benchmark currently contains 22 fixtures. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -95,6 +95,8 @@ specific product question:
   and durable source identity.
 - HR compensation-review coverage tests a separate HR policy scenario while
   preserving the same reviewer-facing verdict contract.
+- HR leave-carryover coverage tests a time-bound vacation policy with durable
+  source metadata and an unsupported home-office-stipend promise.
 - Support password-reset, cancellation, SLA, and live-chat coverage expands
   the first customer-support wedge across common high-risk answers.
 - Support refunds coverage isolates a time-bound annual-plan policy with
