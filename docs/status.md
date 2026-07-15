@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `86af38d` on 2026-07-15, test: add HR offboarding evaluation coverage
+- Latest shipped change: `8874f4b` on 2026-07-15, test: add support plan change evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | test: add support plan change evaluation coverage | `8874f4b` |
 | 2026-07-15 | [#505](https://github.com/nash226/quorum/pull/505) | test: add HR offboarding evaluation coverage | `86af38d` |
 | 2026-07-15 | [#504](https://github.com/nash226/quorum/pull/504) | test: add support account recovery evaluation coverage | `8d676b4` |
 | 2026-07-15 | Direct push | test: add HR bereavement leave evaluation coverage | `3cfb1fc` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | [#501](https://github.com/nash226/quorum/pull/501) | test: add support account suspension evaluation coverage | `517b250` |
 | 2026-07-15 | Direct push | test: add HR parental leave evaluation coverage | `e8eb66e` |
 | 2026-07-15 | [#499](https://github.com/nash226/quorum/pull/499) | fix: preserve short standalone policy claims | `c399834` |
-| 2026-07-15 | Direct push | test: add support service credit evaluation coverage | `49c7dd2` |
 
