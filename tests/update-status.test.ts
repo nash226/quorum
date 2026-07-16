@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import test from "node:test";
 
 // @ts-ignore Script module has no emitted TypeScript declarations.
@@ -77,4 +78,24 @@ test("status refresh reads capabilities from the CLI guide", () => {
   const status = readFileSync("docs/status.md", "utf8");
   assert.match(status, /^- read Markdown, text, HTML, PDF, and DOCX answers and approved sources$/m);
   assert.doesNotMatch(status, /Missing section "What It Does"/);
+});
+
+test("README benchmark inventory matches checked-in evaluation fixtures", () => {
+  function countFixtures(directory: string): number {
+    return readdirSync(directory, { withFileTypes: true }).reduce(
+      (count, entry) =>
+        entry.isDirectory()
+          ? count + countFixtures(join(directory, entry.name))
+          : count + (entry.name.endsWith(".json") ? 1 : 0),
+      0,
+    );
+  }
+
+  const fixtureCount = countFixtures("examples/evaluations");
+  const readme = readFileSync("README.md", "utf8");
+
+  assert.match(
+    readme,
+    new RegExp(`The checked-in ${fixtureCount}-fixture benchmark`),
+  );
 });
