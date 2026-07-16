@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c1c4302` on 2026-07-15, test: guard benchmark domain inventory
+- Latest shipped change: `0e10824` on 2026-07-16, test: cover support address change evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-16 | Direct push | test: cover support address change evaluation | `0e10824` |
 | 2026-07-15 | Direct push | test: guard benchmark domain inventory | `c1c4302` |
 | 2026-07-15 | Direct push | docs: reconcile benchmark fixture inventory | `c5907de` |
 | 2026-07-15 | [#571](https://github.com/nash226/quorum/pull/571) | test: cover HR travel reimbursement evaluation | `90984c0` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | feat: expose review queue domain scope | `b56185a` |
 | 2026-07-15 | Direct push | fix: expose queue benchmark domain totals | `1308196` |
 | 2026-07-15 | Direct push | test: cover HR relocation evaluation | `39f58b9` |
-| 2026-07-15 | Direct push | feat: add HR jury duty evaluation coverage | `875cbff` |
 
