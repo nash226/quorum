@@ -303,8 +303,8 @@ test("evaluates a shipped support account fixture across security claims", async
   assert.equal(scorecard.answerLabel, "Support account reviewer packet");
   assert.deepEqual(scorecard.actualSummary, {
     verified: 2,
-    contradicted: 1,
-    unsupported: 0,
+    contradicted: 0,
+    unsupported: 1,
     needs_review: 0,
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
@@ -527,6 +527,27 @@ test("evaluates a shipped support usage limits fixture across rate claims", asyn
     "unsupported",
   ]);
   assert.equal(scorecard.report.sources[0]?.id, "support/usage-limits@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
+test("evaluates a shipped support holiday-hours fixture across coverage claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/holiday-hours-policy.json"),
+    generatedAt: "2026-07-16T19:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support holiday hours policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support holiday hours reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 0,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "unsupported"]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/holiday-hours@2026-07-16");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
 });
@@ -1722,6 +1743,7 @@ test("evaluates a shipped fixture that discovers approved sources from a directo
     resolve("examples/sources/support-account-merge-policy.md"),
     resolve("examples/sources/support-account-suspension-policy.md"),
     resolve("examples/sources/support-billing-policy.html"),
+    resolve("examples/sources/support-holiday-hours-policy.md"),
     resolve("examples/sources/support-plan-change-policy.md"),
     resolve("examples/sources/support-playbook.md"),
     resolve("examples/sources/support-priority-policy.md"),
@@ -1836,6 +1858,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/delivery-delay-policy.json"),
     resolve("examples/evaluations/support/escalation-policy.json"),
     resolve("examples/evaluations/support/gift-card-policy.json"),
+    resolve("examples/evaluations/support/holiday-hours-policy.json"),
     resolve("examples/evaluations/support/html-billing-policy.json"),
     resolve("examples/evaluations/support/incident-communication-policy.json"),
     resolve("examples/evaluations/support/invoice-correction-policy.json"),
@@ -1894,7 +1917,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 70);
+  assert.equal(scorecards.length, 71);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -1942,6 +1965,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support delivery delay policy example",
       "Support escalation policy example",
       "Support gift card policy example",
+      "Support holiday hours policy example",
       "Support billing HTML example",
       "Support incident communication policy example",
       "Support invoice correction policy example",

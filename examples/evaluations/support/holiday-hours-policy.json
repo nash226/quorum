@@ -1,0 +1,24 @@
+{
+  "name": "Support holiday hours policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-holiday-hours-answer.md",
+  "answer": "Support chat remains available on public holidays from 9:00 AM to 5:00 PM Eastern.\nHoliday coverage is available for every customer with no exceptions.\n",
+  "answerLabel": "Support holiday hours reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-holiday-hours-policy.md",
+      "id": "support/holiday-hours@2026-07-16",
+      "title": "Support Holiday Hours Policy",
+      "updatedAt": "2026-07-16",
+      "trustLevel": "high",
+      "content": "Support chat remains available on public holidays from 9:00 AM to 5:00 PM Eastern.\nHoliday coverage excludes enterprise accounts with a dedicated support schedule.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "unsupported"]
+}
