@@ -1930,7 +1930,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 72);
+  assert.equal(scorecards.length, 73);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2020,6 +2020,22 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       return new Set(sourceIds).size === sourceIds.length;
     }),
   );
+});
+
+test("evaluates a shipped support notification preferences fixture across account claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/notification-preferences-policy.json"),
+    generatedAt: "2026-07-16T23:30:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support notification preferences policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support notification preferences reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, { verified: 1, contradicted: 0, unsupported: 1, needs_review: 1 });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "needs_review", "unsupported"]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/notification-preferences@2026-07-16");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
 });
 
 test("filters evaluation fixture files by domain", async () => {
