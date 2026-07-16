@@ -29,7 +29,7 @@ For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 67-fixture benchmark spans HR and support workflows, including
+The checked-in 68-fixture benchmark spans HR and support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
@@ -50,6 +50,9 @@ allowance, a contradicted duration, and an unsupported meal-stipend promise.
 
 The HR benchmark now also covers dependent-benefits eligibility, including
 qualifying-event timing and unsupported undocumented-dependent claims.
+
+The HR benchmark now also covers employee referrals, including the approved
+submission path, conflicting bonus terms, and an unsupported parking promise.
 
 The support benchmark now has direct regression coverage for plan changes,
 including billing eligibility, conflicting upgrade timing, and unsupported

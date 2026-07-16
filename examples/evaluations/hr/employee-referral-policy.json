@@ -1,0 +1,23 @@
+{
+  "name": "HR employee referral policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-employee-referral-answer.md",
+  "answerLabel": "HR employee referral reviewer packet",
+  "sources": [
+    {
+      "id": "people-ops/hr-employee-referral@2026-07-16",
+      "sourcePath": "inline/hr-employee-referral-policy.md",
+      "title": "HR Employee Referral Policy",
+      "updatedAt": "2026-07-16",
+      "trustLevel": "high",
+      "content": "Employees may refer external candidates through the internal careers portal.\nEligible referrals receive a $1,500 bonus after the referred employee completes 90 days of employment.\nThe referral bonus is not available when the employee is the candidate's hiring manager.\nEmployees may request a $2,000 referral bonus after 90 days for hard-to-fill roles."
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "verified", "unsupported"]
+}
