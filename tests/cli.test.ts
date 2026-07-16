@@ -3751,6 +3751,17 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
     assert.equal(overview.evaluation.fixtureCount, 65);
     assert.equal(overview.evaluation.mismatchCount, 0);
     assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
+
+    const text = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--fixture-dir",
+      "examples/evaluations",
+    ]);
+    assert.match(text, /Reviewer queue: 28 answers \(27 pending, 0 reviewed, 1 no claims\)/);
+    assert.match(text, /Final verdicts: 24 verified, 16 contradicted, 20 unsupported, 20 needs review/);
+    assert.match(text, /Benchmark drift: 0\/65 mismatches \(0%\)/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
