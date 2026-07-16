@@ -451,6 +451,7 @@ try {
   assert.match(evaluationStdout, /Support holiday hours policy example/);
   assert.match(evaluationStdout, /Support priority support policy example/);
   assert.match(evaluationStdout, /Support usage limits policy example/);
+  assert.match(evaluationStdout, /Support data export policy example/);
   assert.match(evaluationStdout, /Support return policy example/);
   assert.match(evaluationStdout, /Support service credit policy example/);
   assert.match(evaluationStdout, /Support refunds policy example/);
