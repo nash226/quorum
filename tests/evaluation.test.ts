@@ -1590,6 +1590,31 @@ test("evaluates a shipped support service outage fixture across incident claims"
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support subscription renewal fixture across billing claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/subscription-renewal-policy.json"),
+    generatedAt: "2026-07-16T04:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support subscription renewal policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support subscription renewal reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/subscription-renewal@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates shipped HTML fixture files for exported help-center style coverage", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/html-billing-policy.json"),
