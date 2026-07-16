@@ -68,6 +68,9 @@ timing drift and unsupported manager-notification claims.
 It also verifies that support subscription-pause answers appear in the packed
 benchmark report, preserving billing eligibility and catching unsupported
 automatic-resumption claims.
+The packed smoke check also verifies payment-method answers, preserving the
+account-owner control while catching a stale invoice-window claim and an
+unsupported automatic-refund promise.
 
 The benchmark inventory is currently reconciled at 71 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
