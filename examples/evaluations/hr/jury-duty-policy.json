@@ -1,0 +1,24 @@
+{
+  "name": "HR jury duty policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-jury-duty-answer.md",
+  "answer": "Employees receive up to 5 days of paid jury-duty leave.\nEmployees receive up to 10 days of paid jury-duty leave.\nEmployees receive a daily meal stipend while serving.\n",
+  "answerLabel": "HR jury duty reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../inline/hr-jury-duty-policy.md",
+      "id": "people-ops/hr-jury-duty@2026-07-16",
+      "title": "HR Jury Duty Policy",
+      "updatedAt": "2026-07-16",
+      "trustLevel": "high",
+      "content": "Employees receive up to 5 days of paid jury-duty leave.\nEmployees should notify their manager and People Operations as soon as they receive a summons.\nAdditional leave may be approved unpaid."
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
