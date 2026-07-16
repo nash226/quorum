@@ -466,6 +466,10 @@ try {
   );
   assert.match(evaluationSummaryCsv, /^[^,\n]+,Support billing HTML example,support,/m);
   assert.match(evaluationSummaryCsv, /^[^,\n]+,HR PDF policy example,hr,/m);
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*Support guest access policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
   const evaluationDomainSummaryCsv = readFileSync(evaluationDomainSummaryCsvPath, "utf8");
   const evaluationAggregateSummaryCsv = readFileSync(evaluationAggregateSummaryCsvPath, "utf8");
   assert.match(

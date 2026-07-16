@@ -71,6 +71,9 @@ automatic-resumption claims.
 The packed smoke check also verifies support guest-access answers, preserving
 the workspace-owner invitation control while catching an incorrect access
 duration and an unsupported automatic member-conversion promise.
+It also checks the generated summary CSV for the same three-claim verdict
+breakdown, keeping the machine-readable benchmark artifact aligned with the
+reviewer-facing report.
 The packed smoke check also verifies payment-method answers, preserving the
 account-owner control while catching a stale invoice-window claim and an
 unsupported automatic-refund promise.
