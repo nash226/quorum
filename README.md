@@ -29,7 +29,7 @@ For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 69-fixture benchmark spans 24 HR and 45 support workflows, including
+The checked-in 70-fixture benchmark spans 24 HR and 46 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
@@ -42,7 +42,7 @@ The packed smoke check also verifies that tax-exemption answers appear in the
 benchmark report, covering certificate submission, review timing, and an
 unsupported enterprise-upgrade promise.
 
-The benchmark inventory is currently reconciled at 69 fixtures, including the
+The benchmark inventory is currently reconciled at 70 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
 
 The HR benchmark now includes medical-leave coverage for matched sick-day and
@@ -136,6 +136,9 @@ window, and an unsupported password-manager promise.
 The packed smoke check also confirms order-tracking answers preserve the verified
 tracking-history claim while routing delivery guarantees and automatic refunds to
 review or unsupported verdicts.
+The packed smoke check also verifies workspace-access answers, preserving the
+workspace-owner invitation control while catching an incorrect acceptance
+window and an unsupported automatic-admin promise.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
