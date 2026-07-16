@@ -75,8 +75,9 @@ The packed smoke check also verifies payment-method answers, preserving the
 account-owner control while catching a stale invoice-window claim and an
 unsupported automatic-refund promise.
 
-The benchmark inventory is currently reconciled at 71 fixtures, including the
-shipped HR travel-reimbursement coverage described below.
+The benchmark inventory is currently reconciled at 72 fixtures, including the
+shipped support guest-access coverage and HR travel-reimbursement coverage
+described below.
 
 The HR benchmark now includes medical-leave coverage for matched sick-day and
 manager-notification claims alongside an unsupported unlimited-leave promise.
