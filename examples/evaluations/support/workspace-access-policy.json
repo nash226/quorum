@@ -1,0 +1,24 @@
+{
+  "name": "Support workspace access policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-workspace-access-answer.md",
+  "answer": "Workspace owners can invite members from workspace settings.\nInvited members must accept the invitation within 30 days.\nSupport automatically grants administrator access after one request.\n",
+  "answerLabel": "Support workspace access reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-workspace-access-policy.md",
+      "id": "support/workspace-access@2026-07-16",
+      "title": "Support Workspace Access Policy",
+      "updatedAt": "2026-07-16",
+      "trustLevel": "high",
+      "content": "Workspace owners can invite members from workspace settings.\nInvited members must accept the invitation within 7 days.\nSupport cannot grant administrator access without owner approval.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "needs_review"]
+}

@@ -1729,6 +1729,7 @@ test("evaluates a shipped fixture that discovers approved sources from a directo
     resolve("examples/sources/support-service-outage-policy.md"),
     resolve("examples/sources/support-shipping-protection-policy.md"),
     resolve("examples/sources/support-usage-limits-policy.md"),
+    resolve("examples/sources/support-workspace-access-policy.md"),
   ]);
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.matchedClaims, 3);
@@ -1860,6 +1861,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/tax-exemption-policy.json"),
     resolve("examples/evaluations/support/usage-limits-policy.json"),
     resolve("examples/evaluations/support/warranty-policy.json"),
+    resolve("examples/evaluations/support/workspace-access-policy.json"),
   ]);
 });
 
@@ -1892,7 +1894,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 69);
+  assert.equal(scorecards.length, 70);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -1965,6 +1967,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support tax exemption policy example",
       "Support usage limits policy example",
       "Support warranty policy example",
+      "Support workspace access policy example",
     ],
   );
   assert.ok(
