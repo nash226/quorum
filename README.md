@@ -38,7 +38,8 @@ the current coverage inventory and extension workflow.
 Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot accurate.
 The support benchmark now also covers holiday service hours, preserving the
-published chat schedule while catching an unconditional coverage promise.
+published chat schedule while catching an unconditional coverage promise. The
+packed smoke check asserts that this evaluation remains in the generated report.
 The benchmark inventory also verifies that every approved source ID is unique,
 so evidence references remain unambiguous across the full packet set.
 
