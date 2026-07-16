@@ -215,6 +215,19 @@ test("evaluates a shipped support escalation fixture across routing verdicts", a
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support guest access fixture across membership claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/guest-access-policy.json"),
+    generatedAt: "2026-07-16T05:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support guest access policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.deepEqual(scorecard.actualSummary, { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "contradicted", "unsupported"]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/guest-access@2026-07-16");
+});
+
 test("evaluates a shipped support SLA fixture across risk verdicts", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/sla-policy.json"),
@@ -1857,6 +1870,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/delivery-delay-policy.json"),
     resolve("examples/evaluations/support/escalation-policy.json"),
     resolve("examples/evaluations/support/gift-card-policy.json"),
+    resolve("examples/evaluations/support/guest-access-policy.json"),
     resolve("examples/evaluations/support/holiday-hours-policy.json"),
     resolve("examples/evaluations/support/html-billing-policy.json"),
     resolve("examples/evaluations/support/incident-communication-policy.json"),
@@ -1916,7 +1930,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 71);
+  assert.equal(scorecards.length, 72);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -1964,6 +1978,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support delivery delay policy example",
       "Support escalation policy example",
       "Support gift card policy example",
+      "Support guest access policy example",
       "Support holiday hours policy example",
       "Support billing HTML example",
       "Support incident communication policy example",
