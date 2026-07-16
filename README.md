@@ -37,6 +37,8 @@ sources. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.
 Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot accurate.
+The benchmark inventory also verifies that every approved source ID is unique,
+so evidence references remain unambiguous across the full packet set.
 
 The packed smoke check also verifies that tax-exemption answers appear in the
 benchmark report, covering certificate submission, review timing, and an
