@@ -62,6 +62,10 @@ The packed smoke check also verifies that tax-exemption answers appear in the
 benchmark report, covering certificate submission, review timing, and an
 unsupported enterprise-upgrade promise.
 
+The packed smoke check also verifies that support data-export answers appear in
+the benchmark report, preserving the approved request path while catching
+timing drift and unsupported manager-notification claims.
+
 The benchmark inventory is currently reconciled at 71 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
 
