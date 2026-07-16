@@ -88,6 +88,9 @@ It also confirms that the gift-card evaluation is included in the packed benchma
 report alongside the other support policy workflows.
 The packed smoke check also verifies accessibility-request answers against the
 approved request channel while preserving unsupported priority-service claims.
+It also verifies that delivery-delay answers are present in the packed benchmark,
+covering status-update timing, a conflicting delivery guarantee, and an
+unsupported automatic replacement promise.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
