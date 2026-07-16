@@ -31,7 +31,7 @@ evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
 The checked-in 69-fixture benchmark spans 24 HR and 45 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
-security, billing, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
+security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
 sources. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.
