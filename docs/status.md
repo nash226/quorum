@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5730908` on 2026-07-16, docs: surface tax exemption benchmark coverage
+- Latest shipped change: `cc9d4d7` on 2026-07-16, test: smoke-check tax exemption benchmark
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-16 | [#579](https://github.com/nash226/quorum/pull/579) | test: smoke-check tax exemption benchmark | `cc9d4d7` |
 | 2026-07-16 | Direct push | docs: surface tax exemption benchmark coverage | `5730908` |
 | 2026-07-16 | Direct push | test: cover support address change evaluation | `0e10824` |
 | 2026-07-15 | Direct push | test: guard benchmark domain inventory | `c1c4302` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | [#571](https://github.com/nash226/quorum/pull/571) | test: cover HR travel reimbursement evaluation | `90984c0` |
 | 2026-07-15 | [#569](https://github.com/nash226/quorum/pull/569) | test: cover HR tuition reimbursement evaluation | `bb19e90` |
 | 2026-07-15 | Direct push | feat: expose review queue domain scope | `b56185a` |
-| 2026-07-15 | Direct push | fix: expose queue benchmark domain totals | `1308196` |
 
