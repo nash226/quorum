@@ -103,3 +103,9 @@ Add `--queue-status pending`, `--queue-status reviewed`, or
 claim and answer totals are recalculated for the selected state, while optional
 benchmark metrics remain unchanged. Use `--generated-at` when a retryable
 workflow needs the JSON and CSV outputs to carry the same audit timestamp.
+Add `--domain hr` or `--domain support` (repeatable) when the handoff should
+compare queue work with only selected policy domains. The JSON and CSV outputs
+echo the applied domain scope, and benchmark counts and drift metrics are
+calculated from that same filtered fixture set. A domain filter requires
+`--fixture` or `--fixture-dir`; the command rejects a filter that matches no
+fixtures so an empty scope cannot look like a healthy queue.
