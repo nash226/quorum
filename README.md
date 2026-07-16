@@ -51,6 +51,9 @@ an inspection-exception claim for review.
 It also verifies support service-credit answers in the packed benchmark,
 preserving the approved credit limit while catching a request-window conflict
 and an unsupported outage compensation promise.
+The packed smoke check also verifies support refund answers, preserving the
+approved refund paths while catching a conflicting annual-plan window and an
+unsupported automatic-credit promise.
 
 The packed smoke check also verifies that tax-exemption answers appear in the
 benchmark report, covering certificate submission, review timing, and an
