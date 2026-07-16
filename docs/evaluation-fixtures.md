@@ -15,7 +15,7 @@ set covers:
 - explicit source IDs and inline source metadata
 - HR bereavement leave, dependent benefits, medical leave, relocation, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
-  remote work, workplace accommodations, expense reimbursement, and tuition reimbursement
+  remote work, workplace accommodations, expense reimbursement, tuition reimbursement, and travel reimbursement
 - support account closure, account recovery, account contact changes, account security, account suspension, billing address changes, billing-suspension appeals, cancellation, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, payment method
   changes, replacement, and tax exemption
@@ -128,6 +128,8 @@ specific product question:
   a related vacation-carryover claim, and an unrelated unsupported stipend claim.
 - HR payroll-change coverage tests a payroll timing contradiction alongside
   identity-verification evidence and an unsupported rejected-deposit promise.
+- HR travel-reimbursement coverage tests an annual travel limit, a submission-
+  window contradiction, and a business-class claim routed to review.
 - HR offboarding coverage tests final-pay timing, last-day access deprovisioning,
   and an unsupported unconditional severance promise.
 - HR workplace-accommodation coverage tests the approved request channel, a
