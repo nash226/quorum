@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1a02004` on 2026-07-16, test: smoke-check service credit evaluation
+- Latest shipped change: `53d2b8f` on 2026-07-16, test: smoke-check refunds evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-16 | Direct push | test: smoke-check refunds evaluation | `53d2b8f` |
 | 2026-07-16 | Direct push | test: smoke-check service credit evaluation | `1a02004` |
 | 2026-07-16 | Direct push | test: smoke-check support return evaluation | `7cc7129` |
 | 2026-07-16 | Direct push | test: smoke-check priority support evaluation | `ebd9281` |
@@ -55,5 +56,4 @@
 | 2026-07-16 | Direct push | test: cover support holiday hours evaluation | `a71da7a` |
 | 2026-07-16 | Direct push | docs: explain fixture source ID uniqueness | `78efa57` |
 | 2026-07-16 | Direct push | test: enforce unique source IDs within fixtures | `213dafa` |
-| 2026-07-16 | Direct push | test: smoke-check workspace access benchmark | `1afc2bd` |
 
