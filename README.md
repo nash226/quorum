@@ -45,6 +45,9 @@ so evidence references remain unambiguous across the full packet set.
 The packed smoke check also verifies priority-support answers, preserving the
 14-day response commitment while catching a conflicting 30-day promise and an
 unsupported dedicated-account-manager claim.
+The packed smoke check also verifies usage-limits answers, preserving the
+standard request limit while routing broad increase claims to review and
+flagging unsupported automatic increases.
 The packed smoke check also verifies support return answers, preserving the
 30-day eligibility rule while catching a conflicting 45-day window and routing
 an inspection-exception claim for review.
