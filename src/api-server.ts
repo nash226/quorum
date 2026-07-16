@@ -12,7 +12,7 @@ import {
   type EvaluationBatchRunResult,
   type InMemoryEvaluationFixtureInput,
 } from "./evaluation.js";
-import type { BatchVerificationRunResult, SingleVerificationResult } from "./domain.js";
+import type { BatchVerificationRunResult, ClaimVerdict, SingleVerificationResult } from "./domain.js";
 import { extractClaims } from "./claim-extractor.js";
 import { CLAIM_VERDICTS, matchingFailVerdicts, parseClaimVerdict } from "./report-policy.js";
 import {
@@ -115,6 +115,7 @@ export interface ApiReviewQueueResponse {
     totalClaims: number;
     pendingClaims: number;
     reviewedClaims: number;
+    verdicts: Record<ClaimVerdict, number>;
   };
   evaluation: {
     fixtureCount: number;
@@ -1627,6 +1628,12 @@ async function handleApiRequest(
         totalClaims: reviewReport.summary.totalClaims,
         pendingClaims: reviewReport.summary.pendingClaims,
         reviewedClaims: reviewReport.summary.reviewedClaims,
+        verdicts: {
+          verified: reviewReport.summary.verified,
+          contradicted: reviewReport.summary.contradicted,
+          unsupported: reviewReport.summary.unsupported,
+          needs_review: reviewReport.summary.needs_review,
+        },
       },
       evaluation: evaluation
         ? {
@@ -3975,8 +3982,18 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                 totalClaims: { type: "integer", minimum: 0 },
                 pendingClaims: { type: "integer", minimum: 0 },
                 reviewedClaims: { type: "integer", minimum: 0 },
+                verdicts: {
+                  type: "object",
+                  properties: {
+                    verified: { type: "integer", minimum: 0 },
+                    contradicted: { type: "integer", minimum: 0 },
+                    unsupported: { type: "integer", minimum: 0 },
+                    needs_review: { type: "integer", minimum: 0 },
+                  },
+                  required: ["verified", "contradicted", "unsupported", "needs_review"],
+                },
               },
-              required: ["totalAnswers", "pendingAnswers", "reviewedAnswers", "noClaimsAnswers", "totalClaims", "pendingClaims", "reviewedClaims"],
+              required: ["totalAnswers", "pendingAnswers", "reviewedAnswers", "noClaimsAnswers", "totalClaims", "pendingClaims", "reviewedClaims", "verdicts"],
             },
             evaluation: {
               oneOf: [

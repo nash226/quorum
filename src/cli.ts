@@ -607,6 +607,12 @@ async function runReviewQueue(args: string[]): Promise<void> {
       totalClaims: reviewReport.summary.totalClaims,
       pendingClaims: reviewReport.summary.pendingClaims,
       reviewedClaims: reviewReport.summary.reviewedClaims,
+      verdicts: {
+        verified: reviewReport.summary.verified,
+        contradicted: reviewReport.summary.contradicted,
+        unsupported: reviewReport.summary.unsupported,
+        needs_review: reviewReport.summary.needs_review,
+      },
     },
     evaluation: evaluation
       ? {
@@ -674,7 +680,7 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
 function renderReviewQueueCsv(overview: {
   generatedAt: string;
   queueStatus: import("./reviewer-decision-import.js").ReviewerQueueStatus | null;
-  review: { totalAnswers: number; pendingAnswers: number; reviewedAnswers: number; noClaimsAnswers: number; totalClaims: number; pendingClaims: number; reviewedClaims: number };
+  review: { totalAnswers: number; pendingAnswers: number; reviewedAnswers: number; noClaimsAnswers: number; totalClaims: number; pendingClaims: number; reviewedClaims: number; verdicts: Record<ClaimVerdict, number> };
   evaluation: { fixtureCount: number; mismatchCount: number; mismatchRate: number | null; score: number | null; scoreLabel: string; scoreThresholdPassed: boolean } | null;
 }): string {
   const values = [
@@ -687,6 +693,10 @@ function renderReviewQueueCsv(overview: {
     overview.review.totalClaims,
     overview.review.pendingClaims,
     overview.review.reviewedClaims,
+    overview.review.verdicts.verified,
+    overview.review.verdicts.contradicted,
+    overview.review.verdicts.unsupported,
+    overview.review.verdicts.needs_review,
     overview.evaluation?.fixtureCount ?? "",
     overview.evaluation?.mismatchCount ?? "",
     overview.evaluation?.mismatchRate ?? "",
@@ -696,7 +706,7 @@ function renderReviewQueueCsv(overview: {
   ];
   const escape = (value: string | number | boolean) => `"${String(value).replaceAll('"', '""')}"`;
   return `${[
-    ["generated_at", "queue_status", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
+    ["generated_at", "queue_status", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "verified", "contradicted", "unsupported", "needs_review", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
     values,
   ].map((row) => row.map(escape).join(",")).join("\n")}\n`;
 }

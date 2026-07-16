@@ -4332,6 +4332,7 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
       totalClaims: 1,
       pendingClaims: 1,
       reviewedClaims: 0,
+      verdicts: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
     });
     assert.equal(result.evaluation?.fixtureCount, 1);
     assert.equal(result.evaluation?.mismatchCount, 0);
@@ -4369,6 +4370,7 @@ test("programmatic API filters reviewer queue overview by queue status", async (
       totalClaims: 1,
       pendingClaims: 1,
       reviewedClaims: 0,
+      verdicts: { verified: 0, contradicted: 0, unsupported: 0, needs_review: 1 },
     });
   } finally {
     await api.close();
