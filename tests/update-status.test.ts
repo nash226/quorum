@@ -99,3 +99,30 @@ test("README benchmark inventory matches checked-in evaluation fixtures", () => 
     new RegExp(`The checked-in ${fixtureCount}-fixture benchmark`),
   );
 });
+
+test("benchmark inventory keeps HR and support domain counts visible", () => {
+  function countFixtures(directory: string): Record<string, number> {
+    return readdirSync(directory, { withFileTypes: true }).reduce(
+      (counts, entry) => {
+        if (entry.isDirectory()) {
+          const nested = countFixtures(join(directory, entry.name));
+          for (const [domain, count] of Object.entries(nested)) {
+            counts[domain] = (counts[domain] ?? 0) + count;
+          }
+        } else if (entry.name.endsWith(".json")) {
+          const fixture = JSON.parse(readFileSync(join(directory, entry.name), "utf8")) as { domain?: string };
+          const domain = fixture.domain ?? "root";
+          counts[domain] = (counts[domain] ?? 0) + 1;
+        }
+        return counts;
+      },
+      {} as Record<string, number>,
+    );
+  }
+
+  const counts = countFixtures("examples/evaluations");
+  const readme = readFileSync("README.md", "utf8");
+
+  assert.deepEqual({ hr: counts.hr, support: counts.support }, { hr: 24, support: 45 });
+  assert.match(readme, /24 HR and 45 support workflows/);
+});
