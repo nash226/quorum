@@ -622,6 +622,11 @@ async function runReviewQueue(args: string[]): Promise<void> {
           score: evaluation.summary.score,
           scoreLabel: evaluation.summary.scoreLabel,
           scoreThresholdPassed: evaluation.scoreThresholdPassed ?? true,
+          domains: evaluation.summary.domains.map((domain) => ({
+            domain: domain.domain,
+            fixtureCount: domain.fixtureCount,
+            mismatchCount: domain.mismatchCount,
+          })),
         }
       : null,
   };
