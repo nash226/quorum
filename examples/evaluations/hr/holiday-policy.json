@@ -1,0 +1,17 @@
+{
+  "name": "HR holiday observance policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-holiday-answer.md",
+  "answer": "Employees receive up to 5 paid company holidays each year.\nManagers may not approve schedule adjustments for observed holidays.\nEmployees receive an automatic holiday cash bonus.\n",
+  "answerLabel": "HR holiday observance reviewer packet",
+  "sources": [{
+    "sourcePath": "../../inline/hr-holiday-policy.md",
+    "id": "people-ops/hr-holiday-observance@2026-07-16",
+    "title": "HR Holiday Observance Policy",
+    "updatedAt": "2026-07-16",
+    "trustLevel": "high",
+    "content": "Employees receive up to 5 paid company holidays each year.\nEmployees may carry over 10 unused company holidays into the next calendar year.\nManagers may approve schedule adjustments for observed holidays.\n"
+  }],
+  "expectedSummary": {"verified": 2, "contradicted": 0, "unsupported": 1, "needs_review": 0},
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}

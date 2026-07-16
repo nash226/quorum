@@ -29,7 +29,7 @@ For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 69-fixture benchmark spans 24 HR and 45 support workflows, including
+The checked-in 70-fixture benchmark spans 25 HR and 45 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
@@ -42,7 +42,7 @@ The packed smoke check also verifies that tax-exemption answers appear in the
 benchmark report, covering certificate submission, review timing, and an
 unsupported enterprise-upgrade promise.
 
-The benchmark inventory is currently reconciled at 69 fixtures, including the
+The benchmark inventory is currently reconciled at 70 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
 
 The HR benchmark now includes medical-leave coverage for matched sick-day and
@@ -67,6 +67,8 @@ annual limit, a contradicted submission deadline, and an unsupported tutoring pr
 
 The HR benchmark now also covers travel reimbursement, including a verified
 annual limit, a contradicted submission window, and a business-class claim routed to review.
+It now also covers holiday observance, verifying paid-holiday eligibility and
+observed-holiday scheduling while flagging an unsupported cash bonus.
 The packed smoke check also verifies the HR compensation review packet, including
 the annual review cadence, a conflicting eligibility window, and an unsupported
 airport-shuttle claim.
