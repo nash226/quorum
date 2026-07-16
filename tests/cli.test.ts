@@ -3897,8 +3897,8 @@ test("review-queue scopes benchmark drift to selected domains", async () => {
       evaluation: { fixtureCount: number; domains: Array<{ domain: string; fixtureCount: number; mismatchCount: number }> };
     };
 
-    assert.equal(overview.evaluation.fixtureCount, 21);
-    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 21, mismatchCount: 0 }]);
+    assert.equal(overview.evaluation.fixtureCount, 22);
+    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 22, mismatchCount: 0 }]);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
