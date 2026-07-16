@@ -98,6 +98,11 @@ Add `queueStatus` when the overview should describe only one handoff state:
 `pending`, `reviewed`, or `no_claims`. The filter scopes the answer and claim
 totals while leaving optional evaluation metrics unchanged.
 
+The `review` object also includes `verdicts` with `verified`,
+`contradicted`, `unsupported`, and `needs_review` claim totals. These counts
+use the final reviewer verdict when present, otherwise the model verdict, so
+queue consumers can prioritize work without recounting claim rows.
+
 ## Discover and probe the service
 
 An integration can bootstrap without hard-coding the full route inventory:

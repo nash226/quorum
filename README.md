@@ -67,6 +67,8 @@ and `needs_review` claim counts so dashboard consumers can prioritize review
 work without recounting individual claims. The human-readable
 `review-queue` CLI summary now prints the same verdict breakdown alongside
 reviewer workload and benchmark drift.
+The API and reviewer-queue guides document the JSON and CSV field names for
+integrators consuming these counts.
 Imported reviewer Markdown and HTML handoffs now display the same `generatedAt`
 timestamp already carried by JSON and queue-summary CSV artifacts, making
 multi-format review packets easier to reconcile.

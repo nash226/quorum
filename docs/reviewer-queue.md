@@ -103,3 +103,8 @@ Add `--queue-status pending`, `--queue-status reviewed`, or
 claim and answer totals are recalculated for the selected state, while optional
 benchmark metrics remain unchanged. Use `--generated-at` when a retryable
 workflow needs the JSON and CSV outputs to carry the same audit timestamp.
+The JSON overview also includes `verdicts` for final `verified`,
+`contradicted`, `unsupported`, and `needs_review` claim totals. CSV output
+uses matching `verified`, `contradicted`, `unsupported`, and `needs_review`
+columns so spreadsheet and dashboard consumers can
+route risky claims without rescanning the claim-level export.
