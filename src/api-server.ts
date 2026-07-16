@@ -107,6 +107,8 @@ export interface ApiReviewQueueResponse {
   generatedAt: string;
   /** Queue filter applied to the workload totals, or null when unfiltered. */
   queueStatus: ReviewerQueueStatus | null;
+  /** Policy domains included in the benchmark, or an empty array when unfiltered. */
+  domains: string[];
   review: {
     totalAnswers: number;
     pendingAnswers: number;
@@ -1623,6 +1625,7 @@ async function handleApiRequest(
       requestId: requestId(response),
       generatedAt: reviewReport.generatedAt,
       queueStatus: body.queueStatus ?? null,
+      domains: body.domains ?? [],
       review: {
         ...reviewReport.queueSummary,
         totalClaims: reviewReport.summary.totalClaims,
@@ -4013,7 +4016,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               ],
             },
           },
-          required: ["requestId", "generatedAt", "queueStatus", "review", "evaluation"],
+          required: ["requestId", "generatedAt", "queueStatus", "domains", "review", "evaluation"],
         },
         EvaluationClaimScore: {
           type: "object",
