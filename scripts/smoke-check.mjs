@@ -432,6 +432,7 @@ try {
   assert.match(evaluationStdout, /Support delivery delay policy example/);
   assert.match(evaluationStdout, /Support tax exemption policy example/);
   assert.match(evaluationStdout, /Support gift card policy example/);
+  assert.match(evaluationStdout, /Support order tracking policy example/);
   assert.match(evaluationStdout, /Support warranty policy example/);
   assert.match(evaluationStdout, /Support accessibility policy example/);
   assert.match(evaluationStdout, /Support account recovery policy example/);

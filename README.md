@@ -129,6 +129,9 @@ unsupported instant-refund promise for review.
 It also verifies account-contact-change answers in the packed benchmark,
 covering current-email verification, a conflicting identity-verification
 window, and an unsupported password-manager promise.
+The packed smoke check also confirms order-tracking answers preserve the verified
+tracking-history claim while routing delivery guarantees and automatic refunds to
+review or unsupported verdicts.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
