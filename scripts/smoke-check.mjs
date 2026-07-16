@@ -457,6 +457,7 @@ try {
   assert.match(evaluationStdout, /Support service credit policy example/);
   assert.match(evaluationStdout, /Support refunds policy example/);
   assert.match(evaluationStdout, /Support subscription pause policy example/);
+  assert.match(evaluationStdout, /Support guest access policy example/);
   assert.match(evaluationStdout, /HR compensation review policy example/);
   const evaluationSummaryCsv = readFileSync(evaluationSummaryCsvPath, "utf8");
   assert.match(
@@ -472,10 +473,10 @@ try {
     /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n/m,
   );
   assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,24,0,0\.000,24,0,73,73,1(?:\.0+)?\,100%,29,16,19,9,29,16,19,9$/m);
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,47,0,0\.000,46,1,137,137,1(?:\.0+)?\,100%,51,32,39,15,51,32,39,15$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,48,0,0\.000,47,1,140,140,1(?:\.0+)?\,100%,52,33,40,15,52,33,40,15$/m);
   assert.match(
     evaluationAggregateSummaryCsv,
-    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,71,70,1,0,0\.000,210,210,1(?:\.0+)?,100%,hr \| support,24 \| 47,0 \| 0,0\.000 \| 0\.000,24 \| 46,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,80,48,58,24,80,48,58,24\n?$/,
+    /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,72,71,1,0,0\.000,213,213,1(?:\.0+)?,100%,hr \| support,24 \| 48,0 \| 0,0\.000 \| 0\.000,24 \| 47,0 \| 1,1(?:\.0+)? \| 1(?:\.0+)?,100% \| 100%,81,49,59,24,81,49,59,24\n?$/,
   );
 
   const apiSources = await api.loadSourcesFromContent({

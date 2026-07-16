@@ -1,0 +1,17 @@
+{
+  "name": "Support guest access policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-guest-access-answer.md",
+  "answer": "Workspace owners can invite guest collaborators from workspace settings.\nGuest collaborators keep access for 90 days.\nSupport automatically converts every guest collaborator to a full member.\n",
+  "answerLabel": "Support guest access reviewer packet",
+  "sources": [{
+    "sourcePath": "../../sources/support-guest-access-policy.md",
+    "id": "support/guest-access@2026-07-16",
+    "title": "Support Guest Access Policy",
+    "updatedAt": "2026-07-16",
+    "trustLevel": "high",
+    "content": "Workspace owners can invite guest collaborators from workspace settings.\nGuest collaborators keep access for 30 days unless the owner removes them sooner.\nGuest collaborators remain guests unless a workspace owner approves a member conversion.\n"
+  }],
+  "expectedSummary": { "verified": 1, "contradicted": 1, "unsupported": 1, "needs_review": 0 },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
