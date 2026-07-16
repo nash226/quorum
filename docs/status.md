@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0301600` on 2026-07-16, test: smoke-check payment method evaluation
+- Latest shipped change: `ca3054f` on 2026-07-16, test: add support guest access benchmark fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-16 | Direct push | test: add support guest access benchmark fixture | `ca3054f` |
 | 2026-07-16 | Direct push | test: smoke-check payment method evaluation | `0301600` |
 | 2026-07-16 | Direct push | test: smoke-check subscription pause evaluation | `1867caf` |
 | 2026-07-16 | Direct push | test: smoke-check support data export evaluation | `1652906` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: smoke-check refunds evaluation | `5c2c9f8` |
 | 2026-07-15 | Direct push | test: smoke-check service credit evaluation | `b0b9d46` |
 | 2026-07-14 | Direct push | test: smoke-check support return evaluation | `62c2584` |
-| 2026-07-14 | Direct push | test: smoke-check priority support evaluation | `6a9210c` |
 
