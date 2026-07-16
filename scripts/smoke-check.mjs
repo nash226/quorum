@@ -318,6 +318,7 @@ try {
     totalClaims: 80,
     pendingClaims: 80,
     reviewedClaims: 0,
+    verdicts: { verified: 24, contradicted: 16, unsupported: 20, needs_review: 20 },
   });
 
   const noClaimsQueueOverview = JSON.parse(
@@ -338,6 +339,7 @@ try {
     totalClaims: 0,
     pendingClaims: 0,
     reviewedClaims: 0,
+    verdicts: { verified: 0, contradicted: 0, unsupported: 0, needs_review: 0 },
   });
 
   const reviewedQueueCsvPath = join(tempDir, "reviewed-queue.csv");
@@ -366,6 +368,7 @@ try {
     totalClaims: 1,
     pendingClaims: 0,
     reviewedClaims: 1,
+    verdicts: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
   });
 
   const openApiStdout = runCli(["openapi", "--out", openApiPath]);
@@ -524,6 +527,7 @@ Employees receive 12 weeks of paid parental leave.
       totalClaims: 1,
       pendingClaims: 1,
       reviewedClaims: 0,
+      verdicts: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
     });
     assert.equal(reviewQueueResult.evaluation.fixtureCount, 1);
     assert.equal(reviewQueueResult.evaluation.mismatchCount, 0);
