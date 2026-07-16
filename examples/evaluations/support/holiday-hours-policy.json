@@ -6,7 +6,7 @@
   "answerLabel": "Support holiday hours reviewer packet",
   "sources": [
     {
-      "sourcePath": "../../sources/support-holiday-hours-policy.md",
+      "sourcePath": "inline/support-holiday-hours-policy.md",
       "id": "support/holiday-hours@2026-07-16",
       "title": "Support Holiday Hours Policy",
       "updatedAt": "2026-07-16",
