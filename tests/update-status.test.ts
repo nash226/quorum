@@ -123,6 +123,6 @@ test("benchmark inventory keeps HR and support domain counts visible", () => {
   const counts = countFixtures("examples/evaluations");
   const readme = readFileSync("README.md", "utf8");
 
-  assert.deepEqual({ hr: counts.hr, support: counts.support }, { hr: 24, support: 46 });
-  assert.match(readme, /24 HR and 46 support workflows/);
+  assert.deepEqual({ hr: counts.hr, support: counts.support }, { hr: 24, support: 47 });
+  assert.match(readme, /24 HR and 47 support workflows/);
 });
