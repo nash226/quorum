@@ -48,6 +48,10 @@ shipped HR travel-reimbursement coverage described below.
 The HR benchmark now includes medical-leave coverage for matched sick-day and
 manager-notification claims alongside an unsupported unlimited-leave promise.
 
+The HR benchmark now directly regression-tests bereavement leave, preserving
+paid-leave and vacation-carryover verification while routing an unsupported
+home-office stipend claim for review.
+
 The HR benchmark now also covers relocation reimbursement, including an
 approved request path, a reimbursement-limit review, and an unsupported
 home-sale promise.
