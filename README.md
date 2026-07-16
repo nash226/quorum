@@ -35,6 +35,8 @@ security, billing, delivery, service levels, gift cards, and accessibility reque
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
 sources. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.
+The README inventory is covered by a regression test so adding a fixture keeps
+this product snapshot accurate.
 
 The HR benchmark now includes medical-leave coverage for matched sick-day and
 manager-notification claims alongside an unsupported unlimited-leave promise.
