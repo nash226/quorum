@@ -91,6 +91,9 @@ approved request channel while preserving unsupported priority-service claims.
 It also verifies that delivery-delay answers are present in the packed benchmark,
 covering status-update timing, a conflicting delivery guarantee, and an
 unsupported automatic replacement promise.
+The support benchmark also directly regression-tests data-retention answers,
+covering the approved deletion path, a conflicting completion window, and an
+unsupported recovery promise.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
