@@ -20,10 +20,12 @@ set covers:
   reset, refunds, charge disputes, delivery delays, data export, payment method
   changes, replacement, and tax exemption
   eligibility, subscription pauses, SLA, billing, gift cards, service credits, shipping protection,
-  warranty claims, usage limits, subscription renewals, and source-directory workflows
+  warranty claims, usage limits, subscription renewals, guest access, and
+  source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 71 fixtures. The generated
+The benchmark currently contains 72 fixtures, including 24 HR and 48 support
+workflows. The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
 
@@ -117,6 +119,9 @@ specific product question:
   processing-window claim, and an unsupported automatic-retry promise.
 - Support data-export coverage tests inline source metadata, durable source
   identity, and conflicting customer policy claims.
+- Support guest-access coverage tests the workspace-owner invitation control,
+  an incorrect access duration, and an unsupported automatic member-conversion
+  promise.
 - Support priority coverage tests a response-time contradiction alongside an
   unsupported account-management promise.
 - HR benefits coverage tests health-coverage eligibility timing alongside a
