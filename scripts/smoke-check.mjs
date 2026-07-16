@@ -447,8 +447,8 @@ try {
   assert.match(evaluationStdout, /Support invoice correction policy example/);
   assert.match(evaluationStdout, /Support refund status policy example/);
   assert.match(evaluationStdout, /Support account contact change policy example/);
-  assert.match(evaluationStdout, /HR compensation review policy example/);
   assert.match(evaluationStdout, /Support workspace access policy example/);
+  assert.match(evaluationStdout, /HR compensation review policy example/);
   const evaluationSummaryCsv = readFileSync(evaluationSummaryCsvPath, "utf8");
   assert.match(
     evaluationSummaryCsv,
