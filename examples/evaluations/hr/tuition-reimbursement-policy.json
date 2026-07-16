@@ -1,0 +1,24 @@
+{
+  "name": "HR tuition reimbursement policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-tuition-reimbursement-answer.md",
+  "answer": "Employees can request tuition reimbursement for approved courses up to $5,000 per calendar year.\nEmployees have 90 days after course completion to submit reimbursement requests.\nThe company provides free tutoring for every course.\n",
+  "answerLabel": "HR tuition reimbursement reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "hr-tuition-reimbursement-policy.md",
+      "id": "people-ops/hr-tuition-reimbursement@2026-07-16",
+      "title": "HR Tuition Reimbursement Policy",
+      "updatedAt": "2026-07-16",
+      "trustLevel": "high",
+      "content": "Employees can request tuition reimbursement for manager-approved courses up to $5,000 per calendar year.\nReimbursement requests must be submitted within 30 days after course completion.\nThe policy does not cover degree programs without prior manager approval."
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
