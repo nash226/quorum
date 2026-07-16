@@ -122,6 +122,10 @@ The packed smoke check also verifies invoice-correction answers, preserving
 the reporting window while catching a conflicting deadline and unsupported
 automatic-refund promise.
 
+The packed smoke check also verifies refund-status answers, preserving the
+approved status-update and processing-window claims while routing an
+unsupported instant-refund promise for review.
+
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
 queue totals and benchmark drift together, including pending, reviewed, and
