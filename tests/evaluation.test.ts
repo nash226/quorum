@@ -1843,7 +1843,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 69);
+  assert.equal(scorecards.length, 70);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -1851,6 +1851,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Empty answer example",
       "HR benefits enrollment policy example",
       "HR bereavement leave policy example",
+      "HR bonus eligibility policy example",
       "HR compensation review policy example",
       "HR dependent benefits policy example",
       "HR expense reimbursement policy example",
@@ -1933,13 +1934,14 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 24);
+  assert.equal(scorecards.length, 25);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
       "HR policy example",
       "HR benefits enrollment policy example",
       "HR bereavement leave policy example",
+      "HR bonus eligibility policy example",
       "HR compensation review policy example",
       "HR dependent benefits policy example",
       "HR expense reimbursement policy example",

@@ -29,7 +29,7 @@ For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 69-fixture benchmark spans 24 HR and 45 support workflows, including
+The checked-in 70-fixture benchmark spans 25 HR and 45 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
@@ -38,8 +38,11 @@ the current coverage inventory and extension workflow.
 Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot accurate.
 
-The benchmark inventory is currently reconciled at 69 fixtures, including the
+The benchmark inventory is currently reconciled at 70 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
+
+The HR benchmark now also covers bonus eligibility, including verified service
+timing and an unsupported guaranteed-bonus promise.
 
 The HR benchmark now includes medical-leave coverage for matched sick-day and
 manager-notification claims alongside an unsupported unlimited-leave promise.

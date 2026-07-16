@@ -1,0 +1,16 @@
+{
+  "name": "HR bonus eligibility policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-bonus-eligibility-answer.md",
+  "answerLabel": "HR bonus eligibility reviewer packet",
+  "sources": [{
+    "sourcePath": "hr/bonus-eligibility-policy@2026-07-16",
+    "id": "hr/bonus-eligibility@2026-07-16",
+    "title": "HR Bonus Eligibility Policy",
+    "updatedAt": "2026-07-16",
+    "trustLevel": "high",
+    "content": "Employees become eligible for the annual performance bonus after six months of service. The bonus is paid on the first anniversary of the employee's start date. Bonus amounts depend on individual and company performance."
+  }],
+  "expectedSummary": { "verified": 2, "contradicted": 0, "unsupported": 1, "needs_review": 0 },
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}
