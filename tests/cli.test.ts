@@ -3831,14 +3831,14 @@ test("review-queue scopes workload to a queue status", async () => {
       review: Record<string, number>;
     };
     assert.deepEqual(pendingOverview.review, {
-        totalAnswers: 29,
-        pendingAnswers: 29,
+        totalAnswers: 30,
+        pendingAnswers: 30,
       reviewedAnswers: 0,
       noClaimsAnswers: 0,
-        totalClaims: 86,
-      pendingClaims: 86,
+        totalClaims: 89,
+      pendingClaims: 89,
       reviewedClaims: 0,
-      verdicts: { verified: 24, contradicted: 16, unsupported: 22, needs_review: 24 },
+      verdicts: { verified: 24, contradicted: 16, unsupported: 24, needs_review: 25 },
     });
     assert.equal(pendingOverview.queueStatus, "pending");
 
