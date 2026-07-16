@@ -2133,7 +2133,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
       fixtureCount: 47,
       mismatchCount: 0,
       mismatchRate: 0,
-      answersWithClaims: 45,
+      answersWithClaims: 46,
       answersWithoutClaims: 1,
       matchedClaims: 137,
       totalExpectedClaims: 137,
