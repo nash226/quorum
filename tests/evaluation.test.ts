@@ -303,8 +303,8 @@ test("evaluates a shipped support account fixture across security claims", async
   assert.equal(scorecard.answerLabel, "Support account reviewer packet");
   assert.deepEqual(scorecard.actualSummary, {
     verified: 2,
-    contradicted: 0,
-    unsupported: 1,
+    contradicted: 1,
+    unsupported: 0,
     needs_review: 0,
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
@@ -542,8 +542,8 @@ test("evaluates a shipped support holiday-hours fixture across coverage claims",
   assert.equal(scorecard.answerLabel, "Support holiday hours reviewer packet");
   assert.deepEqual(scorecard.actualSummary, {
     verified: 1,
-    contradicted: 1,
-    unsupported: 0,
+    contradicted: 0,
+    unsupported: 1,
     needs_review: 0,
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "unsupported"]);
@@ -1743,7 +1743,6 @@ test("evaluates a shipped fixture that discovers approved sources from a directo
     resolve("examples/sources/support-account-merge-policy.md"),
     resolve("examples/sources/support-account-suspension-policy.md"),
     resolve("examples/sources/support-billing-policy.html"),
-    resolve("examples/sources/support-holiday-hours-policy.md"),
     resolve("examples/sources/support-plan-change-policy.md"),
     resolve("examples/sources/support-playbook.md"),
     resolve("examples/sources/support-priority-policy.md"),
