@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `afc06a8` on 2026-07-15, feat: expose verdict counts in queue overviews
+- Latest shipped change: `2d69b07` on 2026-07-15, feat: show verdict counts in queue summary
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-15 | Direct push | feat: show verdict counts in queue summary | `2d69b07` |
 | 2026-07-15 | Direct push | feat: expose verdict counts in queue overviews | `afc06a8` |
 | 2026-07-15 | Direct push | test: keep README benchmark inventory accurate | `2d5e915` |
 | 2026-07-15 | Direct push | docs: explain domain-scoped evaluations | `39d5a44` |
@@ -55,5 +56,4 @@
 | 2026-07-15 | Direct push | test: cover support service outage evaluation | `c85a2dc` |
 | 2026-07-15 | Direct push | feat: expose import handoff timestamps | `3acf6e8` |
 | 2026-07-15 | Direct push | test: cover HR dependent benefits evaluation | `e60746e` |
-| 2026-07-15 | Direct push | test: smoke check reviewed queue handoffs | `bdb2f3c` |
 
