@@ -3868,6 +3868,42 @@ test("review-queue scopes workload to a queue status", async () => {
   }
 });
 
+test("review-queue scopes benchmark drift to selected domains", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-domain-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    await runCli([
+      "verify-batch",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--review-csv-out",
+      reviewCsvPath,
+    ]);
+
+    const stdout = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--fixture-dir",
+      "examples/evaluations",
+      "--domain",
+      "hr",
+      "--json",
+    ]);
+    const overview = JSON.parse(stdout) as {
+      evaluation: { fixtureCount: number; domains: Array<{ domain: string; fixtureCount: number; mismatchCount: number }> };
+    };
+
+    assert.equal(overview.evaluation.fixtureCount, 21);
+    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 21, mismatchCount: 0 }]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 async function runCliAllowFailure(
   args: string[],
   options?: { stdin?: string },

@@ -74,6 +74,8 @@ and `needs_review` claim counts so dashboard consumers can prioritize review
 work without recounting individual claims. The human-readable
 `review-queue` CLI summary now prints the same verdict breakdown alongside
 reviewer workload and benchmark drift.
+The same queue command can scope benchmark drift to one or more policy
+domains, keeping a focused reviewer handoff from mixing HR and support totals.
 Imported reviewer Markdown and HTML handoffs now display the same `generatedAt`
 timestamp already carried by JSON and queue-summary CSV artifacts, making
 multi-format review packets easier to reconcile.
