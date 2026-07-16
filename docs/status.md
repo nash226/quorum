@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `04ca091` on 2026-07-16, test: smoke-check usage limits evaluation
+- Latest shipped change: `1652906` on 2026-07-16, test: smoke-check support data export evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,12 +48,12 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
-| 2026-07-16 | Direct push | test: smoke-check usage limits evaluation | `04ca091` |
-| 2026-07-16 | Direct push | test: smoke-check refunds evaluation | `53d2b8f` |
-| 2026-07-16 | Direct push | test: smoke-check service credit evaluation | `1a02004` |
-| 2026-07-16 | Direct push | test: smoke-check support return evaluation | `7cc7129` |
-| 2026-07-16 | Direct push | test: smoke-check priority support evaluation | `ebd9281` |
-| 2026-07-16 | Direct push | test: smoke-check support holiday hours | `8c8a779` |
-| 2026-07-16 | Direct push | test: cover support holiday hours evaluation | `a71da7a` |
-| 2026-07-16 | Direct push | docs: explain fixture source ID uniqueness | `78efa57` |
+| 2026-07-16 | Direct push | test: smoke-check support data export evaluation | `1652906` |
+| 2026-07-16 | Direct push | test: smoke-check usage limits evaluation | `0a04908` |
+| 2026-07-15 | Direct push | test: smoke-check refunds evaluation | `5c2c9f8` |
+| 2026-07-15 | Direct push | test: smoke-check service credit evaluation | `b0b9d46` |
+| 2026-07-14 | Direct push | test: smoke-check support return evaluation | `62c2584` |
+| 2026-07-14 | Direct push | test: smoke-check priority support evaluation | `6a9210c` |
+| 2026-07-13 | Direct push | test: smoke-check support holiday hours | `f7491d0` |
+| 2026-07-13 | Direct push | test: cover support holiday hours evaluation | `05200a2` |
 
