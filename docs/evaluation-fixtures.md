@@ -53,6 +53,14 @@ metadata without adding another shared example document. Inline sources should
 still provide a meaningful `sourcePath`, `id`, title, freshness, and trust
 level so their evidence looks like a real upstream record.
 
+Every source ID must be unique within a fixture. Quorum rejects duplicate IDs
+before scoring because two approved records with the same identity would make
+evidence attribution ambiguous. Treat an ID as the stable identity of one
+approved record, not as a label for a source path; include a repository key and
+revision when the same policy can change over time, such as
+`people-ops/leave-policy@2026-07-14`. If two source paths contain different
+records, give them different IDs even when their titles match.
+
 ## Adding a fixture
 
 1. Add the smallest answer/source or inline fixture that demonstrates one

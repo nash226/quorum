@@ -143,6 +143,9 @@ appear in the benchmark report, preserving the workspace-owner invitation
 control while catching an incorrect acceptance window and an unsupported
 automatic-admin promise.
 
+Evaluation fixtures now reject duplicate source IDs, keeping evidence
+attribution unambiguous when a packet includes multiple approved records.
+
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
 queue totals and benchmark drift together, including pending, reviewed, and
