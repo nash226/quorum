@@ -38,6 +38,9 @@ the current coverage inventory and extension workflow.
 The README inventory is covered by a regression test so adding a fixture keeps
 this product snapshot accurate.
 
+The benchmark inventory is currently reconciled at 69 fixtures, including the
+shipped HR travel-reimbursement coverage described below.
+
 The HR benchmark now includes medical-leave coverage for matched sick-day and
 manager-notification claims alongside an unsupported unlimited-leave promise.
 
