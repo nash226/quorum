@@ -432,6 +432,7 @@ try {
   assert.match(evaluationStdout, /Support tax exemption policy example/);
   assert.match(evaluationStdout, /Support gift card policy example/);
   assert.match(evaluationStdout, /Support warranty policy example/);
+  assert.match(evaluationStdout, /Support accessibility policy example/);
   const evaluationSummaryCsv = readFileSync(evaluationSummaryCsvPath, "utf8");
   assert.match(
     evaluationSummaryCsv,

@@ -86,6 +86,8 @@ The packed smoke check also verifies warranty answers for the 12-month claim win
 conflicting 24-month eligibility, and unsupported automatic replacement promises.
 It also confirms that the gift-card evaluation is included in the packed benchmark
 report alongside the other support policy workflows.
+The packed smoke check also verifies accessibility-request answers against the
+approved request channel while preserving unsupported priority-service claims.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify
