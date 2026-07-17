@@ -512,6 +512,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support payment method policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support password reset policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
