@@ -26,6 +26,16 @@ npm run dev -- verify \
 
 For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 
+To run the checked-in benchmark gate locally, use:
+
+```bash
+npm run evaluate:ci
+```
+
+This evaluates all 74 HR and support fixtures, requires at least a 95% score,
+and exits non-zero if any expected claim verdict changes. Use `npm run smoke`
+after `npm run build` to exercise the packed CLI and API workflow as well.
+
 Integrations can check the installed CLI and API contract version without
 starting the server:
 
