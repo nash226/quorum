@@ -143,6 +143,8 @@ Shipping address-change answers are also regression-tested for the pre-shipment
 control, conflicting timing windows, and unsupported insurance promises.
 The packed smoke check also verifies warranty answers for the 12-month claim window,
 conflicting 24-month eligibility, and unsupported automatic replacement promises.
+Its summary CSV assertion also preserves the warranty packet's complete
+claim-level match and verdict counts.
 It also confirms that the gift-card evaluation is included in the packed benchmark
 report alongside the other support policy workflows.
 The packed smoke check also verifies accessibility-request answers against the
