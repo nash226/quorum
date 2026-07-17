@@ -1,0 +1,19 @@
+{
+  "name": "HR manager notification policy example",
+  "domain": "hr",
+  "answerPath": "inline/hr-manager-notification-answer.md",
+  "answer": "Managers must notify People Operations within five business days of a qualifying employee absence.\nManagers must notify People Operations within ten business days of a qualifying employee absence.\nPeople Operations may request additional documentation after an absence lasts more than ten business days.\nManagers receive an automatic $500 stipend for every qualifying absence.",
+  "answerLabel": "HR manager notification reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "inline/hr-manager-notification-policy.md",
+      "id": "people-ops/hr-manager-notification@2026-07-17",
+      "title": "HR Manager Notification Policy",
+      "updatedAt": "2026-07-17",
+      "trustLevel": "high",
+      "content": "Managers must notify People Operations within five business days of a qualifying employee absence.\nThe notification must include the employee's name, absence dates, and leave category.\nPeople Operations may request additional documentation when the absence lasts more than ten business days."
+    }
+  ],
+  "expectedSummary": {"verified": 3, "contradicted": 0, "unsupported": 0, "needs_review": 1},
+  "expectedClaimVerdicts": ["verified", "verified", "verified", "needs_review"]
+}
