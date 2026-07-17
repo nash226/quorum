@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ba02df3` on 2026-07-17, test: smoke-check shipping protection evaluation
+- Latest shipped change: `1004d37` on 2026-07-17, test: pin subscription renewal summary output
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | Direct push | test: pin subscription renewal summary output | `1004d37` |
 | 2026-07-17 | Direct push | test: smoke-check shipping protection evaluation | `ba02df3` |
 | 2026-07-17 | Direct push | test: pin account closure summary output | `9f38332` |
 | 2026-07-17 | [#655](https://github.com/nash226/quorum/pull/655) | test: smoke-check authentication device evaluation | `6f66979` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | test: smoke-check support password reset evaluation | `57649a1` |
 | 2026-07-17 | Direct push | test: guard evaluation summary fixture coverage | `5b0d895` |
 | 2026-07-17 | Direct push | test: pin incident communication summary output | `d5e31d3` |
-| 2026-07-17 | [#649](https://github.com/nash226/quorum/pull/649) | test: smoke-check support service outage evaluation | `9446eeb` |
 
