@@ -183,6 +183,9 @@ severance promise.
 The packed smoke check also verifies this offboarding evaluation in the
 generated benchmark report, keeping separation-policy coverage in the end-to-end
 verification path.
+It also verifies the HR workplace-accommodation packet in the packed report,
+preserving its verified request channel, review-sensitive timing claim, and
+unsupported stipend claim.
 The packed smoke check also verifies the HR compensation review packet, including
 the annual review cadence, a conflicting eligibility window, and an unsupported
 airport-shuttle claim.
