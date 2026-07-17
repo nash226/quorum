@@ -233,6 +233,10 @@ The packed smoke check also verifies invoice-correction answers, preserving
 the reporting window while catching a conflicting deadline and unsupported
 automatic-refund promise.
 
+The packed smoke check also pins subscription-renewal verdicts in the summary
+CSV, preserving the approved pre-expiration path while catching conflicting
+post-expiration timing and unsupported automatic-renewal claims.
+
 The packed smoke check also verifies refund-status answers, preserving the
 approved status-update and processing-window claims while routing an
 unsupported instant-refund promise for review.
