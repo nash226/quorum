@@ -489,7 +489,7 @@ try {
   assert.equal(
     evaluationSummaryCsv.trim().split("\n").length,
     75,
-    "evaluation summary CSV should contain one row for each of the 74 benchmark fixtures",
+    "evaluation summary CSV should contain one header plus one row for each of the 74 benchmark fixtures",
   );
   assert.match(evaluationSummaryCsv, /^[^,\n]+,Support billing HTML example,support,/m);
   assert.match(evaluationSummaryCsv, /^[^,\n]+,HR PDF policy example,hr,/m);
@@ -591,6 +591,12 @@ try {
   );
   const evaluationDomainSummaryCsv = readFileSync(evaluationDomainSummaryCsvPath, "utf8");
   const evaluationAggregateSummaryCsv = readFileSync(evaluationAggregateSummaryCsvPath, "utf8");
+  const aggregateSummaryRow = evaluationAggregateSummaryCsv.trim().split("\n")[1]?.split(",");
+  assert.equal(
+    Number(aggregateSummaryRow?.[1]),
+    evaluationSummaryCsv.trim().split("\n").length - 1,
+    "aggregate and per-fixture evaluation summaries should report the same fixture count",
+  );
   assert.match(
     evaluationDomainSummaryCsv,
     /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n/m,
