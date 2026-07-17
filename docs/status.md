@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9000b72` on 2026-07-17, test: pin charge dispute benchmark summary
+- Latest shipped change: `91730e4` on 2026-07-17, test: smoke-check subscription cancellation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | Direct push | test: smoke-check subscription cancellation | `91730e4` |
 | 2026-07-17 | Direct push | test: pin charge dispute benchmark summary | `9000b72` |
 | 2026-07-17 | Direct push | test: cover conditional discovery HEAD requests | `9d2feee` |
 | 2026-07-17 | Direct push | test: cover HTTP version HEAD contract | `4bc7f52` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | [#685](https://github.com/nash226/quorum/pull/685) | test: enforce benchmark inventory contract | `8a52b9e` |
 | 2026-07-17 | [#684](https://github.com/nash226/quorum/pull/684) | test: keep benchmark summary counts consistent | `1b6df7f` |
 | 2026-07-17 | Direct push | test: smoke-check HR onboarding evaluation | `78a6b35` |
-| 2026-07-17 | Direct push | test: smoke-check HR performance review | `fffacd2` |
 
