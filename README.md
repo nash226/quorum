@@ -89,6 +89,10 @@ The packed smoke check also verifies support escalation answers, preserving the
 four-business-hour first-response commitment while routing calendar-day drift
 and unsupported dedicated-engineer promises for review.
 
+The packed smoke check now also verifies support account-recovery answers,
+preserving the email-verification control and two-hour unlock window while
+flagging an unsafe immediate multi-factor reset promise.
+
 The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
