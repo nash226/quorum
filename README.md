@@ -44,7 +44,7 @@ employee-selected holiday-calendar promise.
 The evaluator also regression-tests the support-only domain filter, keeping
 focused support scorecards aligned with the 49-fixture benchmark slice.
 The packed smoke check also verifies that the evaluation summary CSV contains
-exactly one data row for each of the 74 checked-in benchmark fixtures.
+exactly one data row for each of the 75 checked-in benchmark fixtures.
 The reviewer-queue regression also tracks the current answer handoff total, so
 fixture coverage and queue summaries stay aligned as the benchmark grows.
 The support benchmark now also covers holiday service hours, preserving the
@@ -122,7 +122,7 @@ The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
 
-The benchmark inventory is currently reconciled at 74 fixtures, including the
+The benchmark inventory is currently reconciled at 75 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
 
 The HR benchmark now also covers sabbatical leave, preserving the five-year
