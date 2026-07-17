@@ -482,8 +482,8 @@ try {
   );
   assert.equal(
     evaluationSummaryCsv.trim().split("\n").length,
-    75,
-    "evaluation summary CSV should contain one row for each of the 74 benchmark fixtures",
+    76,
+    "evaluation summary CSV should contain one row for each of the 75 benchmark fixtures",
   );
   assert.match(evaluationSummaryCsv, /^[^,\n]+,Support billing HTML example,support,/m);
   assert.match(evaluationSummaryCsv, /^[^,\n]+,HR PDF policy example,hr,/m);

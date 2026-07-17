@@ -37,7 +37,7 @@ npm run dev -- version --json
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 74-fixture benchmark spans 25 HR and 49 support workflows, including
+The checked-in 75-fixture benchmark spans 26 HR and 49 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
@@ -49,7 +49,7 @@ accurate.
 The evaluator also regression-tests the support-only domain filter, keeping
 focused support scorecards aligned with the 49-fixture benchmark slice.
 The packed smoke check also verifies that the evaluation summary CSV contains
-exactly one data row for each of the 74 checked-in benchmark fixtures.
+exactly one data row for each of the 75 checked-in benchmark fixtures.
 The reviewer-queue regression also tracks the current answer handoff total, so
 fixture coverage and queue summaries stay aligned as the benchmark grows.
 The support benchmark now also covers holiday service hours, preserving the
@@ -135,7 +135,7 @@ The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
 
-The benchmark inventory is currently reconciled at 74 fixtures, including the
+The benchmark inventory is currently reconciled at 75 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
 
 The HR benchmark now also covers sabbatical leave, preserving the five-year
@@ -288,6 +288,10 @@ automatic-admin promise.
 
 Evaluation fixtures now reject duplicate source IDs, keeping evidence
 attribution unambiguous when a packet includes multiple approved records.
+
+The HR benchmark now also covers manager absence notifications, preserving the
+five-business-day reporting rule, required report fields, documentation timing,
+and routing a conflicting deadline to reviewer attention.
 
 Reviewer queue overviews carry the applied `queueStatus` in JSON and CSV, and
 the packed smoke check posts reviewer artifacts to `/review-queue` to verify

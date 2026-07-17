@@ -143,6 +143,8 @@ specific product question:
   and an unsupported unconditional severance promise.
 - HR workplace-accommodation coverage tests the approved request channel, a
   contradictory response-time promise, and an unsupported home-office stipend.
+- HR manager-notification coverage tests the reporting deadline, required
+  report fields, documentation timing, and an unsupported stipend promise.
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
