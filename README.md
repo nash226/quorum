@@ -93,6 +93,10 @@ The packed smoke check also verifies authentication-device answers, preserving
 the trusted-email approval control while flagging unsupported hardware-key
 promises in the reviewer-facing benchmark report.
 
+The packed smoke check also verifies the gift-card summary CSV, preserving the
+account-ownership control, the one-year validity contradiction, and the
+unsupported automatic-refund promise in the reviewer handoff artifact.
+
 The packed smoke check also verifies shipping-protection answers, preserving
 the pre-shipment control while routing unconditional approval to review and
 flagging an unrelated unsupported promise in the summary CSV.
