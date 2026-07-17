@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `91730e4` on 2026-07-17, test: smoke-check subscription cancellation
+- Latest shipped change: `ff8e40b` on 2026-07-17, test: smoke-check empty answer evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | Direct push | test: smoke-check empty answer evaluation | `ff8e40b` |
 | 2026-07-17 | Direct push | test: smoke-check subscription cancellation | `91730e4` |
 | 2026-07-17 | Direct push | test: pin charge dispute benchmark summary | `9000b72` |
 | 2026-07-17 | Direct push | test: cover conditional discovery HEAD requests | `9d2feee` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | docs: explain needs-review fail policy | `7af520c` |
 | 2026-07-17 | [#685](https://github.com/nash226/quorum/pull/685) | test: enforce benchmark inventory contract | `8a52b9e` |
 | 2026-07-17 | [#684](https://github.com/nash226/quorum/pull/684) | test: keep benchmark summary counts consistent | `1b6df7f` |
-| 2026-07-17 | Direct push | test: smoke-check HR onboarding evaluation | `78a6b35` |
 
