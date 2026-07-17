@@ -168,6 +168,8 @@ eligibility and 12-week unpaid limit while catching incorrect notice and pay cla
 
 The HR benchmark now includes medical-leave coverage for matched sick-day and
 manager-notification claims alongside an unsupported unlimited-leave promise.
+The packed smoke check now also pins this medical-leave mix in the reviewer
+summary CSV, keeping a high-impact HR absence workflow in the end-to-end gate.
 
 The packed smoke check also verifies HR benefits-enrollment answers, preserving
 the approved dental enrollment window while catching conflicting health-coverage

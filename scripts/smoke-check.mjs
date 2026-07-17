@@ -440,6 +440,7 @@ try {
   assert.match(evaluationStdout, /Support shipping protection policy example/);
   assert.match(evaluationStdout, /Support order tracking policy example/);
   assert.match(evaluationStdout, /HR benefits enrollment policy example/);
+  assert.match(evaluationStdout, /HR medical leave policy example/);
   assert.match(evaluationStdout, /HR onboarding policy example/);
   assert.match(evaluationStdout, /HR parental leave policy example/);
   assert.match(evaluationStdout, /HR payroll change policy example/);
@@ -510,6 +511,10 @@ try {
   assert.match(
     evaluationSummaryCsv,
     /^.*HR workplace accommodation policy example.*?,1,0,1,1,1,0,1,1$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*HR medical leave policy example.*?,2,0,0,1,2,0,0,1$/m,
   );
   assert.match(
     evaluationSummaryCsv,
