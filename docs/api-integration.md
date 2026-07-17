@@ -69,6 +69,20 @@ artifacts describe that filtered handoff.
 If a browser client uses the wrong method, it can read the exposed `Allow`
 header on the `405` response to discover the route's supported method.
 
+## Probe the API version without a response body
+
+Use `HEAD /version` when an integration needs to validate the deployed API
+contract without downloading the JSON payload. The response has no body and
+returns the same discovery headers as `GET /version`, including
+`X-Quorum-Version`, `X-Quorum-OpenAPI-Path`, and `ETag`:
+
+```bash
+curl -i --head http://127.0.0.1:3000/version
+```
+
+Retain the `ETag` as the cache validator for the version contract; use
+`GET /version` when the JSON service and version fields are needed.
+
 ## Summarize a reviewer queue
 
 Use `POST /review-queue` when a queue consumer needs reviewer workload and
