@@ -2116,13 +2116,13 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
   assert.deepEqual(batchResult.summary.domains, [
     {
       domain: "hr",
-      fixtureCount: 25,
+      fixtureCount: 26,
       mismatchCount: 0,
       mismatchRate: 0,
-      answersWithClaims: 25,
+      answersWithClaims: 26,
       answersWithoutClaims: 0,
-      matchedClaims: 76,
-      totalExpectedClaims: 76,
+      matchedClaims: 79,
+      totalExpectedClaims: 79,
       score: 1,
       scoreLabel: "100%",
       expectedSummary: { verified: 30, contradicted: 17, unsupported: 20, needs_review: 9 },

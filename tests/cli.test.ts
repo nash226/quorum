@@ -3831,14 +3831,14 @@ test("review-queue scopes workload to a queue status", async () => {
       review: Record<string, number>;
     };
     assert.deepEqual(pendingOverview.review, {
-      totalAnswers: 33,
-      pendingAnswers: 33,
+      totalAnswers: 34,
+      pendingAnswers: 34,
       reviewedAnswers: 0,
       noClaimsAnswers: 0,
-      totalClaims: 98,
+      totalClaims: 101,
       pendingClaims: 98,
       reviewedClaims: 0,
-      verdicts: { verified: 25, contradicted: 17, unsupported: 26, needs_review: 30 },
+      verdicts: { verified: 26, contradicted: 17, unsupported: 28, needs_review: 30 },
     });
     assert.equal(pendingOverview.queueStatus, "pending");
 
@@ -3899,8 +3899,8 @@ test("review-queue scopes benchmark drift to selected domains", async () => {
     };
 
     assert.deepEqual(overview.domains, ["hr"]);
-    assert.equal(overview.evaluation.fixtureCount, 25);
-    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 25, mismatchCount: 0 }]);
+    assert.equal(overview.evaluation.fixtureCount, 26);
+    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 26, mismatchCount: 0 }]);
     const csvOutPath = join(tempDir, "queue.csv");
     const csv = await runCli([
       "review-queue",

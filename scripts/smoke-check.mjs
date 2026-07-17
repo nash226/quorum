@@ -311,14 +311,14 @@ try {
     ]),
   );
   assert.deepEqual(pendingQueueOverview.review, {
-    totalAnswers: 33,
-    pendingAnswers: 33,
+    totalAnswers: 34,
+    pendingAnswers: 34,
     reviewedAnswers: 0,
     noClaimsAnswers: 0,
-    totalClaims: 98,
+    totalClaims: 101,
     pendingClaims: 98,
     reviewedClaims: 0,
-    verdicts: { verified: 25, contradicted: 17, unsupported: 26, needs_review: 30 },
+    verdicts: { verified: 26, contradicted: 17, unsupported: 28, needs_review: 30 },
   });
 
   const noClaimsQueueOverview = JSON.parse(
