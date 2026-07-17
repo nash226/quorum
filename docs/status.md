@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7a36245` on 2026-07-17, fix: expose review queue domain scope
+- Latest shipped change: `7ae2c78` on 2026-07-17, test: smoke-check support account merge
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | [#677](https://github.com/nash226/quorum/pull/677) | test: smoke-check support account merge | `7ae2c78` |
 | 2026-07-17 | Direct push | fix: expose review queue domain scope | `7a36245` |
 | 2026-07-17 | Direct push | test: smoke-check HR workplace accommodation | `4a337e7` |
 | 2026-07-17 | [#674](https://github.com/nash226/quorum/pull/674) | test: smoke-check HR remote work evaluation | `94f816a` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | docs: document CLI contract version probe | `c0e49de` |
 | 2026-07-17 | Direct push | test: smoke-check support SLA summary | `87b9a69` |
 | 2026-07-17 | Direct push | test: pin payment method summary output | `db56593` |
-| 2026-07-17 | [#663](https://github.com/nash226/quorum/pull/663) | test: pin invoice correction summary output | `237b811` |
 
