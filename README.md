@@ -202,6 +202,9 @@ It also verifies billing-suspension appeals, preserving the payment control whil
 routing a seven-day window and automatic-reinstatement promise for review.
 It also verifies account-closure answers, preserving the verified closure
 path while routing retention and reactivation timing claims for review.
+The packed smoke check also pins the account-closure verdict mix in the summary
+CSV, keeping its verified ownership claim and two review-routed lifecycle claims
+aligned with the reviewer-facing artifact.
 The workspace-access fixture now has direct regression coverage for owner-controlled
 invitations, incorrect invitation windows, and administrator-access claims that
 require reviewer approval.

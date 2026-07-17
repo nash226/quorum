@@ -498,6 +498,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support account closure policy example.*?,1,0,0,2,1,0,0,2$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support authentication device policy example.*?,1,0,1,0,1,0,1,0$/m,
   );
   assert.match(
