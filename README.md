@@ -40,6 +40,8 @@ npm run dev -- version --json
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
+See the [API integration guide](docs/api-integration.md#probe-the-api-version-without-a-response-body)
+for a copy-pasteable `curl` probe and header details.
 
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
