@@ -4306,6 +4306,7 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
 
   try {
     const fixtureContent = await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8");
+    const supportFixtureContent = await readFile(join(process.cwd(), "examples/evaluations/support-policy.json"), "utf8");
     const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -4316,7 +4317,10 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
           "HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched,HR Policy,Employees receive 12 weeks of paid parental leave.,,",
         ].join("\n"),
         domains: ["hr"],
-        fixtures: [{ fixturePath: "examples/evaluations/hr-policy.json", content: fixtureContent }],
+        fixtures: [
+          { fixturePath: "examples/evaluations/hr-policy.json", content: fixtureContent },
+          { fixturePath: "examples/evaluations/support-policy.json", content: supportFixtureContent },
+        ],
       }),
     });
 
