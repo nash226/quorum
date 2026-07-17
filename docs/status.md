@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b3d018e` on 2026-07-17, test: pin order tracking summary output
+- Latest shipped change: `9446eeb` on 2026-07-17, test: smoke-check support service outage evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | [#649](https://github.com/nash226/quorum/pull/649) | test: smoke-check support service outage evaluation | `9446eeb` |
 | 2026-07-17 | Direct push | test: pin order tracking summary output | `b3d018e` |
 | 2026-07-17 | Direct push | test: smoke-check support replacement evaluation | `9a028a8` |
 | 2026-07-17 | [#646](https://github.com/nash226/quorum/pull/646) | test: cover support evaluation domain filtering | `5bb1152` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | test: smoke-check billing suspension evaluation | `5e4df04` |
 | 2026-07-16 | Direct push | test: smoke-check support account recovery | `03b3ebc` |
 | 2026-07-16 | [#639](https://github.com/nash226/quorum/pull/639) | test: smoke-check HR payroll evaluation | `856167b` |
-| 2026-07-16 | Direct push | test: cover HR sabbatical leave evaluation | `a13d4cb` |
 
