@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `78a6b35` on 2026-07-17, test: smoke-check HR onboarding evaluation
+- Latest shipped change: `1b6df7f` on 2026-07-17, test: keep benchmark summary counts consistent
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | [#684](https://github.com/nash226/quorum/pull/684) | test: keep benchmark summary counts consistent | `1b6df7f` |
 | 2026-07-17 | Direct push | test: smoke-check HR onboarding evaluation | `78a6b35` |
 | 2026-07-17 | Direct push | test: smoke-check HR performance review | `fffacd2` |
 | 2026-07-17 | Direct push | test: smoke-check HR professional development | `9ff50e4` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | fix: expose review queue domain scope | `7a36245` |
 | 2026-07-17 | Direct push | test: smoke-check HR workplace accommodation | `4a337e7` |
 | 2026-07-17 | [#674](https://github.com/nash226/quorum/pull/674) | test: smoke-check HR remote work evaluation | `94f816a` |
-| 2026-07-17 | [#670](https://github.com/nash226/quorum/pull/670) | test: pin live chat summary output | `169dd65` |
 
