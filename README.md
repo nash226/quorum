@@ -152,6 +152,9 @@ report, keeping this high-impact HR workflow visible in the end-to-end smoke gat
 The packed smoke check also asserts that payroll-change coverage appears in the
 evaluation report, preserving identity verification and pay-timing checks in
 the end-to-end benchmark gate.
+It also asserts that HR remote-work coverage appears in the packed evaluation
+report, keeping weekly remote-work limits and unsupported stipend claims visible
+to the end-to-end smoke gate.
 
 The HR benchmark now directly regression-tests bereavement leave, preserving
 paid-leave and vacation-carryover verification while routing an unsupported
