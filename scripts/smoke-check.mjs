@@ -462,6 +462,7 @@ try {
   assert.match(evaluationStdout, /Support guest access policy example/);
   assert.match(evaluationStdout, /HR travel reimbursement policy example/);
   assert.match(evaluationStdout, /HR compensation review policy example/);
+  assert.match(evaluationStdout, /HR offboarding policy example/);
   const evaluationSummaryCsv = readFileSync(evaluationSummaryCsvPath, "utf8");
   assert.match(
     evaluationSummaryCsv,
