@@ -52,6 +52,8 @@ Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
 exactly one data row for each of the 74 checked-in benchmark fixtures.
+It also cross-checks that row count against the aggregate summary's fixture
+count, keeping machine-readable benchmark artifacts internally consistent.
 It now also verifies that HR onboarding coverage appears in the packed report,
 keeping healthcare, equipment, and unsupported manager claims in the smoke gate.
 The reviewer-queue regression also tracks the current answer handoff total, so
