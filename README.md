@@ -26,6 +26,14 @@ npm run dev -- verify \
 
 For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 
+Integrations can check the installed CLI and API contract version without
+starting the server:
+
+```bash
+npm run dev -- version --json
+# {"service":"quorum","version":"0.1.0"}
+```
+
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 

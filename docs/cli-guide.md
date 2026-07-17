@@ -28,6 +28,18 @@ linked workflow documents.
 - support request IDs, method negotiation, ETags, and conditional contract requests
 - export stable programmatic API paths, methods, and error response types
 
+## Check the contract version
+
+The CLI exposes the same version used by the HTTP API and generated OpenAPI
+contract. Use JSON output when an integration needs a stable probe:
+
+```bash
+npm run dev -- version --json
+# {"service":"quorum","version":"0.1.0"}
+```
+
+The plain `version`, `--version`, and `-v` forms print a human-readable value.
+
 ## Verify one answer
 
 Verify an answer against one or more approved sources:
