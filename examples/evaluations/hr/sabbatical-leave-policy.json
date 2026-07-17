@@ -1,0 +1,10 @@
+{
+  "name": "HR sabbatical leave policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-sabbatical-leave-answer.md",
+  "answerLabel": "HR sabbatical leave reviewer packet",
+  "answer": "Employees with five years of service may request an unpaid sabbatical of up to 12 weeks.\nSabbatical requests must be submitted at least 30 days before the leave begins.\nThe company pays the employee's salary during sabbatical leave.\n",
+  "sources": [{"sourcePath": "hr/sabbatical-leave-policy@2026-07-17", "id": "people-ops/hr-sabbatical-leave@2026-07-17", "title": "HR Sabbatical Leave Policy", "updatedAt": "2026-07-17", "trustLevel": "high", "content": "Employees with five years of service may request an unpaid sabbatical of up to 12 weeks. Sabbatical requests must be submitted at least 60 days before the leave begins. Sabbatical leave is unpaid."}],
+  "expectedSummary": {"verified": 1, "contradicted": 1, "unsupported": 1, "needs_review": 0},
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
