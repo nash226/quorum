@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5bb1152` on 2026-07-17, test: cover support evaluation domain filtering
+- Latest shipped change: `9a028a8` on 2026-07-17, test: smoke-check support replacement evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | Direct push | test: smoke-check support replacement evaluation | `9a028a8` |
 | 2026-07-17 | [#646](https://github.com/nash226/quorum/pull/646) | test: cover support evaluation domain filtering | `5bb1152` |
 | 2026-07-17 | Direct push | docs: show HTTP no-claims queue routing | `b0cb9ca` |
 | 2026-07-17 | Direct push | test: smoke-check billing suspension evaluation | `5e4df04` |
@@ -55,5 +56,4 @@
 | 2026-07-16 | [#639](https://github.com/nash226/quorum/pull/639) | test: smoke-check HR payroll evaluation | `856167b` |
 | 2026-07-16 | Direct push | test: cover HR sabbatical leave evaluation | `a13d4cb` |
 | 2026-07-16 | Direct push | test: smoke-check HR parental leave evaluation | `2788c3f` |
-| 2026-07-16 | [#637](https://github.com/nash226/quorum/pull/637) | test: cover workspace access evaluation | `28607dc` |
 
