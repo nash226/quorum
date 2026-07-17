@@ -29,7 +29,7 @@ For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
-The checked-in 74-fixture benchmark spans 25 HR and 49 support workflows, including
+The checked-in 75-fixture benchmark spans 26 HR and 49 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
@@ -38,6 +38,9 @@ the current coverage inventory and extension workflow.
 Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
+The HR benchmark now also covers company-holiday answers, preserving the approved
+annual holiday count while catching an inflated count and an unsupported
+employee-selected holiday-calendar promise.
 The evaluator also regression-tests the support-only domain filter, keeping
 focused support scorecards aligned with the 49-fixture benchmark slice.
 The packed smoke check also verifies that the evaluation summary CSV contains
