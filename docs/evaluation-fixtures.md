@@ -213,6 +213,8 @@ specific product question:
   password-manager promise.
 - HR time-off coverage tests a notice requirement, routes partially matched
   notice and rollover claims for review, and flags an unsupported stipend.
+- HR attendance coverage tests manager notification, routes an unapproved
+  remote-work promise for review, and preserves the People Operations exception path.
 
 Keep this context near the fixture workflow instead of growing the repository
 README with another chronological capability list.
