@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d37d7a2` on 2026-07-17, test: smoke-check HR jury-duty evaluation
+- Latest shipped change: `8c6b331` on 2026-07-17, test: preserve uncertainty in compound claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | Direct push | test: preserve uncertainty in compound claims | `8c6b331` |
 | 2026-07-17 | Direct push | test: smoke-check HR jury-duty evaluation | `d37d7a2` |
 | 2026-07-17 | Direct push | test: pin subscription renewal summary output | `1004d37` |
 | 2026-07-17 | Direct push | test: smoke-check shipping protection evaluation | `ba02df3` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | [#655](https://github.com/nash226/quorum/pull/655) | test: smoke-check authentication device evaluation | `6f66979` |
 | 2026-07-17 | Direct push | test: cover authentication device evaluation | `1e05865` |
 | 2026-07-17 | Direct push | test: smoke-check support password reset evaluation | `57649a1` |
-| 2026-07-17 | Direct push | test: guard evaluation summary fixture coverage | `5b0d895` |
 
