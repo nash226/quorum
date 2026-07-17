@@ -227,6 +227,10 @@ The packed smoke check now also verifies support replacement answers, preserving
 the 30-day request window while catching a conflicting 90-day claim and an
 unsupported free-subscription promise.
 
+It now also pins the support return-policy verdict mix in the summary CSV,
+preserving the 30-day eligibility rule while catching a conflicting 90-day
+window and routing automatic approval claims for review.
+
 It also verifies account-contact-change answers in the packed benchmark,
 covering current-email verification, a conflicting identity-verification
 window, and an unsupported password-manager promise.

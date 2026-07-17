@@ -509,6 +509,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support return policy example.*?,1,1,0,1,1,1,0,1$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support order tracking policy example.*?,1,0,1,1,1,0,1,1$/m,
   );
   assert.match(
