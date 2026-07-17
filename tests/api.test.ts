@@ -2125,8 +2125,8 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
       totalExpectedClaims: 79,
       score: 1,
       scoreLabel: "100%",
-      expectedSummary: { verified: 30, contradicted: 17, unsupported: 20, needs_review: 9 },
-      actualSummary: { verified: 30, contradicted: 17, unsupported: 20, needs_review: 9 },
+      expectedSummary: { verified: 32, contradicted: 17, unsupported: 21, needs_review: 9 },
+      actualSummary: { verified: 32, contradicted: 17, unsupported: 21, needs_review: 9 },
     },
     {
       domain: "support",
