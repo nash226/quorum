@@ -453,6 +453,7 @@ try {
   assert.match(evaluationStdout, /Support usage limits policy example/);
   assert.match(evaluationStdout, /Support data export policy example/);
   assert.match(evaluationStdout, /Support payment method policy example/);
+  assert.match(evaluationStdout, /Support payment failure policy example/);
   assert.match(evaluationStdout, /Support authorized contact policy example/);
   assert.match(evaluationStdout, /Support return policy example/);
   assert.match(evaluationStdout, /Support service credit policy example/);
