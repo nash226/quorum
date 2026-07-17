@@ -112,6 +112,8 @@ annual limit, a contradicted submission deadline, and an unsupported tutoring pr
 
 The HR benchmark now also covers travel reimbursement, including a verified
 annual limit, a contradicted submission window, and a business-class claim routed to review.
+The packed smoke check also verifies this travel-reimbursement packet in the
+generated report and summary CSV, keeping its three verdict paths covered end to end.
 The packed smoke check also verifies the HR compensation review packet, including
 the annual review cadence, a conflicting eligibility window, and an unsupported
 airport-shuttle claim.
