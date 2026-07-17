@@ -103,6 +103,10 @@ The packed smoke check now also verifies the support SLA summary, preserving
 the first-response commitment while catching timing drift and unsupported
 dedicated-account-manager claims in the reviewer-facing CSV.
 
+It also pins the live-chat summary CSV, preserving business-hours coverage and
+the approved annual-refund window while catching an unconditional support
+promise.
+
 The packed smoke check also verifies authentication-device answers, preserving
 the trusted-email approval control while flagging unsupported hardware-key
 promises in the reviewer-facing benchmark report.
