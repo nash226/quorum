@@ -217,6 +217,17 @@ npm run dev -- verify \
   --fail-on unsupported
 ```
 
+Use `--fail-on needs_review` when an answer must not continue without human
+review. This also treats an answer with no extracted claims as a review-policy
+failure, so empty or unparseable handoffs cannot silently pass a gate:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/empty-answer.md \
+  --source-dir examples/sources \
+  --fail-on needs_review
+```
+
 When a selected verdict appears, the CLI exits with status code `2`. The same
 decision is available as `shouldFail` and `failVerdicts` in result JSON.
 
