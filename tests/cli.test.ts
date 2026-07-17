@@ -3797,7 +3797,7 @@ test("review-queue accepts a stable generated-at timestamp for JSON and CSV hand
     const overview = JSON.parse(stdout) as { generatedAt: string };
     assert.equal(overview.generatedAt, "2026-07-15T04:00:00.000Z");
     assert.match(await readFile(csvOutPath, "utf8"), /2026-07-15T04:00:00\.000Z/);
-    assert.match(await readFile(csvOutPath, "utf8"), /"generated_at","queue_status","total_answers"/);
+    assert.match(await readFile(csvOutPath, "utf8"), /"generated_at","queue_status","domains","total_answers"/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -3894,11 +3894,29 @@ test("review-queue scopes benchmark drift to selected domains", async () => {
       "--json",
     ]);
     const overview = JSON.parse(stdout) as {
+      domains: string[];
       evaluation: { fixtureCount: number; domains: Array<{ domain: string; fixtureCount: number; mismatchCount: number }> };
     };
 
+    assert.deepEqual(overview.domains, ["hr"]);
     assert.equal(overview.evaluation.fixtureCount, 25);
     assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 25, mismatchCount: 0 }]);
+    const csvOutPath = join(tempDir, "queue.csv");
+    const csv = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--fixture-dir",
+      "examples/evaluations",
+      "--domain",
+      "hr",
+      "--csv-out",
+      csvOutPath,
+      "--json",
+    ]);
+    assert.ok(csv);
+    assert.match(await readFile(csvOutPath, "utf8"), /"generated_at","queue_status","domains","total_answers"/);
+    assert.match(await readFile(csvOutPath, "utf8"), /"2026-.*","","hr","/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

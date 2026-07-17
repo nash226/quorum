@@ -602,6 +602,7 @@ async function runReviewQueue(args: string[]): Promise<void> {
   const overview = {
     generatedAt: parsed.generatedAt ?? new Date().toISOString(),
     queueStatus: parsed.queueStatus ?? null,
+    domains: parsed.domains,
     review: {
       ...reviewReport.queueSummary,
       totalClaims: reviewReport.summary.totalClaims,
@@ -686,12 +687,14 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
 function renderReviewQueueCsv(overview: {
   generatedAt: string;
   queueStatus: import("./reviewer-decision-import.js").ReviewerQueueStatus | null;
+  domains: string[];
   review: { totalAnswers: number; pendingAnswers: number; reviewedAnswers: number; noClaimsAnswers: number; totalClaims: number; pendingClaims: number; reviewedClaims: number; verdicts: Record<ClaimVerdict, number> };
   evaluation: { fixtureCount: number; mismatchCount: number; mismatchRate: number | null; score: number | null; scoreLabel: string; scoreThresholdPassed: boolean } | null;
 }): string {
   const values = [
     overview.generatedAt,
     overview.queueStatus ?? "",
+    overview.domains.join(";"),
     overview.review.totalAnswers,
     overview.review.pendingAnswers,
     overview.review.reviewedAnswers,
@@ -712,7 +715,7 @@ function renderReviewQueueCsv(overview: {
   ];
   const escape = (value: string | number | boolean) => `"${String(value).replaceAll('"', '""')}"`;
   return `${[
-    ["generated_at", "queue_status", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "verified", "contradicted", "unsupported", "needs_review", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
+    ["generated_at", "queue_status", "domains", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "verified", "contradicted", "unsupported", "needs_review", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
     values,
   ].map((row) => row.map(escape).join(",")).join("\n")}\n`;
 }
