@@ -41,6 +41,30 @@ test("HTTP API exposes a dedicated machine-readable version endpoint", async () 
   }
 });
 
+test("HTTP API revalidates bodyless discovery probes with conditional HEAD", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const path of [API_ROOT_PATH, "/capabilities", "/openapi.json"]) {
+      const headResponse = await fetch(`${api.url}${path}`, { method: "HEAD" });
+      assert.equal(headResponse.status, 200, path);
+      const etag = headResponse.headers.get("etag");
+      assert.match(etag ?? "", /^\"[a-f0-9]{64}\"$/, path);
+      assert.equal(await headResponse.text(), "", path);
+
+      const notModifiedResponse = await fetch(`${api.url}${path}`, {
+        method: "HEAD",
+        headers: { "if-none-match": etag ?? "" },
+      });
+      assert.equal(notModifiedResponse.status, 304, path);
+      assert.equal(notModifiedResponse.headers.get("etag"), etag, path);
+      assert.equal(await notModifiedResponse.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API scopes browser preflight methods to every discovered route", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
