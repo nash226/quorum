@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1871b37` on 2026-07-16, test: cover support authorized contacts
+- Latest shipped change: `874c148` on 2026-07-16, docs: reconcile evaluation fixture guide
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-16 | Direct push | docs: reconcile evaluation fixture guide | `874c148` |
 | 2026-07-16 | Direct push | test: cover support authorized contacts | `1871b37` |
 | 2026-07-16 | Direct push | test: assert guest access summary output | `514e2bc` |
 | 2026-07-16 | Direct push | test: add support guest access benchmark fixture | `ca3054f` |
@@ -55,5 +56,4 @@
 | 2026-07-16 | Direct push | test: smoke-check subscription pause evaluation | `1867caf` |
 | 2026-07-16 | Direct push | test: smoke-check support data export evaluation | `1652906` |
 | 2026-07-16 | Direct push | test: smoke-check usage limits evaluation | `0a04908` |
-| 2026-07-15 | Direct push | test: smoke-check refunds evaluation | `5c2c9f8` |
 
