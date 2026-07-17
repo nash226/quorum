@@ -475,6 +475,11 @@ try {
     evaluationSummaryCsv,
   /^generated_at,fixture_name,domain,fixture_path,answer_path,answer_label,answer_preview,answer_has_claims,source_dirs,source_paths,source_ids,summary_match,/,
   );
+  assert.equal(
+    evaluationSummaryCsv.trim().split("\n").length,
+    75,
+    "evaluation summary CSV should contain one row for each of the 74 benchmark fixtures",
+  );
   assert.match(evaluationSummaryCsv, /^[^,\n]+,Support billing HTML example,support,/m);
   assert.match(evaluationSummaryCsv, /^[^,\n]+,HR PDF policy example,hr,/m);
   assert.match(
