@@ -188,6 +188,9 @@ verification path.
 It also verifies the HR workplace-accommodation packet in the packed report,
 preserving its verified request channel, review-sensitive timing claim, and
 unsupported stipend claim.
+The packed smoke check also verifies HR professional-development answers,
+preserving manager approval while catching quarterly-hour drift and an
+unsupported learning-stipend claim.
 The packed smoke check also verifies the HR compensation review packet, including
 the annual review cadence, a conflicting eligibility window, and an unsupported
 airport-shuttle claim.
