@@ -40,6 +40,8 @@ this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The evaluator also regression-tests the support-only domain filter, keeping
 focused support scorecards aligned with the 49-fixture benchmark slice.
+The packed smoke check also verifies that the evaluation summary CSV contains
+exactly one data row for each of the 74 checked-in benchmark fixtures.
 The reviewer-queue regression also tracks the current answer handoff total, so
 fixture coverage and queue summaries stay aligned as the benchmark grows.
 The support benchmark now also covers holiday service hours, preserving the
