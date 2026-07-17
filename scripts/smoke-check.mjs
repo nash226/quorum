@@ -458,6 +458,7 @@ try {
   assert.match(evaluationStdout, /Support payment method policy example/);
   assert.match(evaluationStdout, /Support payment failure policy example/);
   assert.match(evaluationStdout, /Support authorized contact policy example/);
+  assert.match(evaluationStdout, /Support account recovery policy example/);
   assert.match(evaluationStdout, /Support return policy example/);
   assert.match(evaluationStdout, /Support service credit policy example/);
   assert.match(evaluationStdout, /Support refunds policy example/);
@@ -480,6 +481,10 @@ try {
   assert.match(
     evaluationSummaryCsv,
     /^.*Support guest access policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*Support account recovery policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
     evaluationSummaryCsv,
