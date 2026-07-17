@@ -54,6 +54,9 @@ The packed smoke check also verifies that the evaluation summary CSV contains
 exactly one data row for each of the 74 checked-in benchmark fixtures.
 It now also verifies that HR onboarding coverage appears in the packed report,
 keeping healthcare, equipment, and unsupported manager claims in the smoke gate.
+It also pins HR tuition-reimbursement coverage in the packed report and summary
+CSV, preserving the approved annual limit while catching timing drift and an
+unsupported tutoring promise.
 The reviewer-queue regression also tracks the current answer handoff total, so
 fixture coverage and queue summaries stay aligned as the benchmark grows.
 The support benchmark now also covers holiday service hours, preserving the
