@@ -166,6 +166,8 @@ blanket-refund promises, and incident-status confirmation.
 The packed smoke check now asserts that service-outage coverage and its
 contradicted, verified, and needs-review claim mix remain in the benchmark
 summary CSV.
+It now also asserts the incident-communication packet's verified,
+needs-review, and unsupported claim mix in that same reviewer-facing summary.
 Shipping address-change answers are also regression-tested for the pre-shipment
 control, conflicting timing windows, and unsupported insurance promises.
 The packed smoke check also verifies warranty answers for the 12-month claim window,
