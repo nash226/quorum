@@ -519,6 +519,31 @@ test("evaluates a shipped support account closure fixture across lifecycle claim
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support workspace access fixture across membership controls", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/workspace-access-policy.json"),
+    generatedAt: "2026-07-17T03:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support workspace access policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support workspace access reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 0,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "needs_review",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/workspace-access@2026-07-16");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped support data retention fixture across deletion claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/data-retention-policy.json"),
