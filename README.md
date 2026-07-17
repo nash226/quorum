@@ -38,6 +38,8 @@ the current coverage inventory and extension workflow.
 Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
+The evaluator also regression-tests the support-only domain filter, keeping
+focused support scorecards aligned with the 49-fixture benchmark slice.
 The reviewer-queue regression also tracks the current answer handoff total, so
 fixture coverage and queue summaries stay aligned as the benchmark grows.
 The support benchmark now also covers holiday service hours, preserving the
