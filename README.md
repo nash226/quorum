@@ -107,6 +107,9 @@ the approved dental enrollment window while catching conflicting health-coverage
 timing and an unsupported home-office stipend.
 It now also asserts that parental-leave coverage appears in the packed evaluation
 report, keeping this high-impact HR workflow visible in the end-to-end smoke gate.
+The packed smoke check also asserts that payroll-change coverage appears in the
+evaluation report, preserving identity verification and pay-timing checks in
+the end-to-end benchmark gate.
 
 The HR benchmark now directly regression-tests bereavement leave, preserving
 paid-leave and vacation-carryover verification while routing an unsupported
