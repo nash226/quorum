@@ -156,6 +156,8 @@ shipped HR travel-reimbursement coverage described below.
 
 The HR benchmark now also covers sabbatical leave, preserving the five-year
 eligibility and 12-week unpaid limit while catching incorrect notice and pay claims.
+The packed smoke check also verifies that sabbatical-leave coverage appears in
+the generated benchmark report, keeping this leave workflow in the end-to-end gate.
 
 The HR benchmark now includes medical-leave coverage for matched sick-day and
 manager-notification claims alongside an unsupported unlimited-leave promise.
