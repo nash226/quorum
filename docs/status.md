@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `fffacd2` on 2026-07-17, test: smoke-check HR performance review
+- Latest shipped change: `78a6b35` on 2026-07-17, test: smoke-check HR onboarding evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | Direct push | test: smoke-check HR onboarding evaluation | `78a6b35` |
 | 2026-07-17 | Direct push | test: smoke-check HR performance review | `fffacd2` |
 | 2026-07-17 | Direct push | test: smoke-check HR professional development | `9ff50e4` |
 | 2026-07-17 | [#677](https://github.com/nash226/quorum/pull/677) | test: smoke-check support account merge | `7ae2c78` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | test: smoke-check HR workplace accommodation | `4a337e7` |
 | 2026-07-17 | [#674](https://github.com/nash226/quorum/pull/674) | test: smoke-check HR remote work evaluation | `94f816a` |
 | 2026-07-17 | [#670](https://github.com/nash226/quorum/pull/670) | test: pin live chat summary output | `169dd65` |
-| 2026-07-17 | Direct push | docs: document CLI contract version probe | `c0e49de` |
 
