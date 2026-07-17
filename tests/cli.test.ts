@@ -3745,8 +3745,8 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       evaluation: { fixtureCount: number; mismatchCount: number };
     };
 
-    assert.equal(overview.review.totalAnswers, 33);
-    assert.equal(overview.review.pendingAnswers, 32);
+    assert.equal(overview.review.totalAnswers, 34);
+    assert.equal(overview.review.pendingAnswers, 33);
     assert.equal(overview.queueStatus, null);
     assert.equal(overview.evaluation.fixtureCount, 74);
     assert.equal(overview.evaluation.mismatchCount, 0);
@@ -3759,7 +3759,7 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       "--fixture-dir",
       "examples/evaluations",
     ]);
-    assert.match(text, /Reviewer queue: 33 answers \(32 pending, 0 reviewed, 1 no claims\)/);
+    assert.match(text, /Reviewer queue: 34 answers \(33 pending, 0 reviewed, 1 no claims\)/);
     assert.match(text, /Final verdicts: 25 verified, 17 contradicted, 25 unsupported, 28 needs review/);
     assert.match(text, /Benchmark drift: 0\/74 mismatches \(0%\)/);
   } finally {
