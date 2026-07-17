@@ -2705,6 +2705,17 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(headCapabilitiesResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
     assert.equal(await headCapabilitiesResponse.text(), "");
 
+    const headVersionResponse = await fetch(`${api.url}/version`, { method: "HEAD" });
+    assert.equal(headVersionResponse.status, 200);
+    assert.equal(headVersionResponse.headers.get("content-type"), "application/json; charset=utf-8");
+    assert.equal(headVersionResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(headVersionResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(headVersionResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(headVersionResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(headVersionResponse.headers.get("cache-control"), "public, max-age=0, must-revalidate");
+    assert.match(headVersionResponse.headers.get("etag") ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(await headVersionResponse.text(), "");
+
     const headHealthResponse = await fetch(`${api.url}/health`, { method: "HEAD" });
     assert.equal(headHealthResponse.status, 200);
     assert.equal(headHealthResponse.headers.get("content-type"), "application/json; charset=utf-8");
