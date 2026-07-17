@@ -3760,7 +3760,7 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       "examples/evaluations",
     ]);
     assert.match(text, /Reviewer queue: 34 answers \(33 pending, 0 reviewed, 1 no claims\)/);
-    assert.match(text, /Final verdicts: 25 verified, 17 contradicted, 25 unsupported, 28 needs review/);
+    assert.match(text, /Final verdicts: 25 verified, 17 contradicted, 26 unsupported, 30 needs review/);
     assert.match(text, /Benchmark drift: 0\/74 mismatches \(0%\)/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });

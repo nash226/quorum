@@ -266,7 +266,7 @@ try {
   ]);
 
   assert.match(batchStdout, /Quorum Batch Verification Report/);
-  assert.equal(readJson(batchReportPath).answerCount, 33);
+  assert.equal(readJson(batchReportPath).answerCount, 34);
   assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
   const batchSummaryCsv = readFileSync(batchSummaryCsvPath, "utf8");
   assert.match(
@@ -297,7 +297,7 @@ try {
   assert.equal(timestampedQueueOverview.generatedAt, "2026-07-15T04:00:00.000Z");
   assert.match(
     readFileSync(queueOverviewCsvPath, "utf8"),
-    /^"generated_at","queue_status","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","33",/m,
+    /^"generated_at","queue_status","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","34",/m,
   );
 
   const pendingQueueOverview = JSON.parse(
@@ -399,7 +399,7 @@ try {
   );
 
   assert.match(importStdout, /Quorum Reviewer Decision Import/);
-  assert.equal(readJson(importReportPath).answerGroups.length, 33);
+  assert.equal(readJson(importReportPath).answerGroups.length, 34);
   assert.match(readFileSync(importSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
 
   const evaluationReportPath = join(tempDir, "evaluation-report.md");
