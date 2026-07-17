@@ -235,6 +235,9 @@ and `needs_review` claim counts so dashboard consumers can prioritize review
 work without recounting individual claims. The human-readable
 `review-queue` CLI summary now prints the same verdict breakdown alongside
 reviewer workload and benchmark drift.
+The HTTP queue regression also preserves the `no_claims` filter as a distinct
+zero-claim handoff, so empty answers remain auditable instead of disappearing
+from programmatic reviewer routing.
 The same queue command can scope benchmark drift to one or more policy
 domains, keeping a focused reviewer handoff from mixing HR and support totals.
 The HTTP `/review-queue` response now also echoes the applied domain scope (or
