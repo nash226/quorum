@@ -103,6 +103,22 @@ applied domain scope and recalculates evaluation totals from the matching
 fixtures. If no supplied fixture matches a requested domain, the endpoint
 returns a validation error instead of silently producing an empty benchmark.
 
+For example, route an empty draft to the explicit no-claims handoff:
+
+```bash
+curl -sS http://127.0.0.1:3000/review-queue \
+  -H 'content-type: application/json' \
+  -d @- <<'JSON'
+{
+  "queueStatus": "no_claims",
+  "reviewCsvContent": "answer_label,answer_path,answer_has_claims\nEmpty draft,answers/empty.md,false\n"
+}
+JSON
+```
+
+The response echoes `queueStatus: "no_claims"` and reports the filtered
+`noClaimsAnswers` total, keeping empty drafts distinct from reviewed answers.
+
 ## Discover and probe the service
 
 An integration can bootstrap without hard-coding the full route inventory:

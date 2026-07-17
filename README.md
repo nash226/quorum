@@ -230,6 +230,8 @@ the packed smoke check posts reviewer artifacts to `/review-queue` to verify
 queue totals and benchmark drift together, including pending, reviewed, and
 no-claims handoffs. The CLI and HTTP API support targeted
 `pending`, `reviewed`, and `no_claims` handoffs with auditable filtered totals.
+The HTTP integration guide includes a copyable request for routing no-claims
+answers as a distinct reviewer handoff.
 Queue overviews can also scope benchmark drift to selected policy domains, and
 the CLI/API echo that scope while rejecting filters that match no fixtures.
 Queue overviews also expose final `verified`, `contradicted`, `unsupported`,
