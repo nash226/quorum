@@ -435,6 +435,7 @@ try {
   assert.match(evaluationStdout, /Support gift card policy example/);
   assert.match(evaluationStdout, /Support order tracking policy example/);
   assert.match(evaluationStdout, /HR benefits enrollment policy example/);
+  assert.match(evaluationStdout, /HR parental leave policy example/);
   assert.match(evaluationStdout, /Support warranty policy example/);
   assert.match(evaluationStdout, /Support accessibility policy example/);
   assert.match(evaluationStdout, /Support account recovery policy example/);
@@ -486,6 +487,10 @@ try {
   assert.match(
     evaluationSummaryCsv,
     /^.*HR travel reimbursement policy example.*?,1,1,0,1,1,1,0,1$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*HR parental leave policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   const evaluationDomainSummaryCsv = readFileSync(evaluationDomainSummaryCsvPath, "utf8");
   const evaluationAggregateSummaryCsv = readFileSync(evaluationAggregateSummaryCsvPath, "utf8");
