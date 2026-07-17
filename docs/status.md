@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b923c47` on 2026-07-16, test: cover HR offboarding evaluation
+- Latest shipped change: `2eb7521` on 2026-07-16, test: smoke-check payment failure evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-16 | [#630](https://github.com/nash226/quorum/pull/630) | test: smoke-check payment failure evaluation | `2eb7521` |
 | 2026-07-16 | Direct push | test: cover HR offboarding evaluation | `b923c47` |
 | 2026-07-16 | Direct push | test: smoke-check travel reimbursement evaluation | `03d95a4` |
 | 2026-07-16 | Direct push | docs: reconcile evaluation fixture guide | `874c148` |
@@ -55,5 +56,4 @@
 | 2026-07-16 | Direct push | test: assert guest access summary output | `514e2bc` |
 | 2026-07-16 | Direct push | test: add support guest access benchmark fixture | `ca3054f` |
 | 2026-07-16 | Direct push | test: smoke-check payment method evaluation | `0301600` |
-| 2026-07-16 | Direct push | test: smoke-check subscription pause evaluation | `1867caf` |
 
