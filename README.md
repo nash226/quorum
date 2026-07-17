@@ -131,6 +131,9 @@ The support benchmark also covers authentication-device approval against a
 trusted-email control while flagging unsupported hardware-key promises.
 The support benchmark includes payment-failure coverage for retry promises and
 verification-sensitive card updates, keeping billing claims reviewer-visible.
+The packed smoke check also verifies this payment-failure evaluation in the
+generated benchmark report, preserving the approved retry path while flagging
+unsupported automatic-retry and card-update promises.
 It now also covers service-outage answers, including update-cadence drift,
 blanket-refund promises, and incident-status confirmation.
 Shipping address-change answers are also regression-tested for the pre-shipment
