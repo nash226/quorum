@@ -162,6 +162,9 @@ The support benchmark also verifies account-merge answers against ownership
 controls, completion timing, and unsupported service promises.
 The support benchmark also covers authentication-device approval against a
 trusted-email control while flagging unsupported hardware-key promises.
+The packed smoke check also verifies this authentication-device evaluation in
+the generated report and summary CSV, preserving its verified and unsupported
+claim mix in the end-to-end gate.
 The support benchmark includes payment-failure coverage for retry promises and
 verification-sensitive card updates, keeping billing claims reviewer-visible.
 The packed smoke check also verifies this payment-failure evaluation in the
