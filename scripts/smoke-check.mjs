@@ -440,6 +440,7 @@ try {
   assert.match(evaluationStdout, /Support shipping protection policy example/);
   assert.match(evaluationStdout, /Support order tracking policy example/);
   assert.match(evaluationStdout, /HR benefits enrollment policy example/);
+  assert.match(evaluationStdout, /HR bereavement leave policy example/);
   assert.match(evaluationStdout, /HR medical leave policy example/);
   assert.match(evaluationStdout, /HR onboarding policy example/);
   assert.match(evaluationStdout, /HR parental leave policy example/);
