@@ -472,6 +472,10 @@ try {
   assert.match(evaluationSummaryCsv, /^[^,\n]+,HR PDF policy example,hr,/m);
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support warranty policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support guest access policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
