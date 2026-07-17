@@ -313,6 +313,9 @@ the claim-level summary CSV.
 It now also verifies account-merge answers in the packed report and summary CSV,
 preserving ownership verification while catching timing drift and an unsupported
 password-manager promise.
+The packed smoke check also pins charge-dispute answers in the summary CSV,
+preserving the verified payment-control claim while routing disputed timing to
+contradiction and an ambiguous exception to review.
 The packed smoke check now explicitly asserts that workspace-access answers
 appear in the benchmark report, preserving the workspace-owner invitation
 control while catching an incorrect acceptance window and an unsupported

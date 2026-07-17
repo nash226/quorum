@@ -571,6 +571,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support charge dispute policy example.*?,1,1,0,1,1,1,0,1$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support service outage policy example.*?,1,1,0,1,1,1,0,1$/m,
   );
   assert.match(
