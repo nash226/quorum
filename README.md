@@ -91,6 +91,10 @@ The packed smoke check also verifies payment-method answers, preserving the
 account-owner control while catching a stale invoice-window claim and an
 unsupported automatic-refund promise.
 
+The packed smoke check now also verifies the support SLA summary, preserving
+the first-response commitment while catching timing drift and unsupported
+dedicated-account-manager claims in the reviewer-facing CSV.
+
 The packed smoke check also verifies authentication-device answers, preserving
 the trusted-email approval control while flagging unsupported hardware-key
 promises in the reviewer-facing benchmark report.
