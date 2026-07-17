@@ -291,6 +291,10 @@ The packed smoke check also verifies HR jury-duty answers in the benchmark,
 preserving the paid-leave allowance while catching a contradicted leave duration
 and an unsupported meal-stipend promise.
 
+The packed smoke check also verifies the HR leave-carryover packet in the
+benchmark, preserving its verified carryover limit, contradicted limit, and
+unsupported cash-payout promise.
+
 The packed smoke check also verifies refund-status answers, preserving the
 approved status-update and processing-window claims while routing an
 unsupported instant-refund promise for review.
