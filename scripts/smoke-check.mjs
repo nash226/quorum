@@ -429,6 +429,7 @@ try {
   assert.match(evaluationStdout, /Support live chat policy example/);
   assert.match(evaluationStdout, /Support plan change policy example/);
   assert.match(evaluationStdout, /Support incident communication policy example/);
+  assert.match(evaluationStdout, /Support service outage policy example/);
   assert.match(evaluationStdout, /Support delivery delay policy example/);
   assert.match(evaluationStdout, /Support tax exemption policy example/);
   assert.match(evaluationStdout, /Support escalation policy example/);
@@ -499,6 +500,10 @@ try {
   assert.match(
     evaluationSummaryCsv,
     /^.*Support order tracking policy example.*?,1,0,1,1,1,0,1,1$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*Support service outage policy example.*?,1,1,0,1,1,1,0,1$/m,
   );
   assert.match(
     evaluationSummaryCsv,

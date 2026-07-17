@@ -163,6 +163,9 @@ generated benchmark report, preserving the approved retry path while flagging
 unsupported automatic-retry and card-update promises.
 It now also covers service-outage answers, including update-cadence drift,
 blanket-refund promises, and incident-status confirmation.
+The packed smoke check now asserts that service-outage coverage and its
+contradicted, verified, and needs-review claim mix remain in the benchmark
+summary CSV.
 Shipping address-change answers are also regression-tested for the pre-shipment
 control, conflicting timing windows, and unsupported insurance promises.
 The packed smoke check also verifies warranty answers for the 12-month claim window,
