@@ -157,6 +157,17 @@ OpenAPI path, configured request limits, and a request ID. Use the returned
 `X-Quorum-OpenAPI-Path` value to fetch the generated contract before building
 request payloads.
 
+For a cache-aware bodyless probe, send the previously returned validator:
+
+```bash
+curl -sSI http://127.0.0.1:3000/version \
+  -H 'If-None-Match: "<cached-etag>"'
+```
+
+The response returns `304 Not Modified` when the cached representation is
+current. A changed or missing validator returns `200 OK` with the normal
+`HEAD` headers and no response body.
+
 ## Verify an answer
 
 Send the answer and approved source content in one request:
