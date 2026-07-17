@@ -64,6 +64,8 @@ and an unsupported outage compensation promise.
 The packed smoke check also verifies support refund answers, preserving the
 approved refund paths while catching a conflicting annual-plan window and an
 unsupported automatic-credit promise.
+It also pins support invoice-correction summaries, preserving the verified
+reporting deadline while catching conflicting timing and automatic-refund claims.
 
 The packed smoke check also verifies that tax-exemption answers appear in the
 benchmark report, covering certificate submission, review timing, and an
