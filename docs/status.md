@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7af520c` on 2026-07-17, docs: explain needs-review fail policy
+- Latest shipped change: `4bc7f52` on 2026-07-17, test: cover HTTP version HEAD contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | Direct push | test: cover HTTP version HEAD contract | `4bc7f52` |
 | 2026-07-17 | Direct push | docs: explain needs-review fail policy | `7af520c` |
 | 2026-07-17 | [#685](https://github.com/nash226/quorum/pull/685) | test: enforce benchmark inventory contract | `8a52b9e` |
 | 2026-07-17 | [#684](https://github.com/nash226/quorum/pull/684) | test: keep benchmark summary counts consistent | `1b6df7f` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | test: smoke-check HR performance review | `fffacd2` |
 | 2026-07-17 | Direct push | test: smoke-check HR professional development | `9ff50e4` |
 | 2026-07-17 | [#677](https://github.com/nash226/quorum/pull/677) | test: smoke-check support account merge | `7ae2c78` |
-| 2026-07-17 | Direct push | fix: expose review queue domain scope | `7a36245` |
 
