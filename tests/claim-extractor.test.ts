@@ -712,6 +712,16 @@ test("keeps lowercase comma conjunctions together when they may be continuations
   ]);
 });
 
+test("preserves uncertainty wording in compound claims", () => {
+  const claims = extractClaims(
+    "Customers may request a refund within 30 days, and eligibility depends on plan terms.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Customers may request a refund within 30 days, and eligibility depends on plan terms.",
+  ]);
+});
+
 test("keeps wrapped parenthesized numeric markdown list items as single claims", () => {
   const claims = extractClaims(`Policy notes:
 

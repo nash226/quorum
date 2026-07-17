@@ -277,6 +277,9 @@ and `needs_review` claim counts so dashboard consumers can prioritize review
 work without recounting individual claims. The human-readable
 `review-queue` CLI summary now prints the same verdict breakdown alongside
 reviewer workload and benchmark drift.
+Claim extraction regression coverage also preserves uncertainty wording in
+compound answers, so downstream verification can review the original
+qualification instead of receiving a stronger rewritten claim.
 The same queue command can scope benchmark drift to one or more policy
 domains, keeping a focused reviewer handoff from mixing HR and support totals.
 The HTTP `/review-queue` response now also echoes the applied domain scope (or
