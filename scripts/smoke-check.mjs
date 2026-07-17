@@ -446,6 +446,7 @@ try {
   assert.match(evaluationStdout, /HR remote work policy example/);
   assert.match(evaluationStdout, /HR professional development policy example/);
   assert.match(evaluationStdout, /HR performance review policy example/);
+  assert.match(evaluationStdout, /HR tuition reimbursement policy example/);
   assert.match(evaluationStdout, /Support warranty policy example/);
   assert.match(evaluationStdout, /Support accessibility policy example/);
   assert.match(evaluationStdout, /Support password reset policy example/);
@@ -489,7 +490,7 @@ try {
   assert.equal(
     evaluationSummaryCsv.trim().split("\n").length,
     75,
-    "evaluation summary CSV should contain one row for each of the 74 benchmark fixtures",
+    "evaluation summary CSV should contain one row for each benchmark fixture",
   );
   assert.match(evaluationSummaryCsv, /^[^,\n]+,Support billing HTML example,support,/m);
   assert.match(evaluationSummaryCsv, /^[^,\n]+,HR PDF policy example,hr,/m);
@@ -588,6 +589,10 @@ try {
   assert.match(
     evaluationSummaryCsv,
     /^.*HR performance review policy example.*?,1,1,0,1,1,1,0,1$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*HR tuition reimbursement policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   const evaluationDomainSummaryCsv = readFileSync(evaluationDomainSummaryCsvPath, "utf8");
   const evaluationAggregateSummaryCsv = readFileSync(evaluationAggregateSummaryCsvPath, "utf8");
