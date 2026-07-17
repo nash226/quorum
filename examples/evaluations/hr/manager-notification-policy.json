@@ -1,0 +1,23 @@
+{
+  "name": "HR manager notification policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-manager-notification-answer.md",
+  "answerLabel": "HR manager notification reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "hr/manager-notification-policy@2026-07-17",
+      "id": "hr/manager-notification@2026-07-17",
+      "title": "HR Manager Notification Policy",
+      "updatedAt": "2026-07-17",
+      "trustLevel": "high",
+      "content": "Employees receive 5 paid sick days per calendar year. Employees must notify their manager before the start of a missed shift."
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}
