@@ -4380,6 +4380,41 @@ test("programmatic API filters reviewer queue overview by queue status", async (
   }
 });
 
+test("programmatic API filters reviewer queue overview to no-claims answers", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        queueStatus: "no_claims",
+        reviewCsvContent: [
+          "answer_label,answer_path,answer_preview,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "Pending answer,answers/pending.md,Pending.,true,claim_1,Pending policy claim.,needs_review,Needs review,HR Policy,Pending policy claim.,,",
+          "No claims answer,answers/empty.md,Empty.,false,,,,No claims were extracted from this answer.,,,,",
+        ].join("\n"),
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as ApiReviewQueueResponse;
+    assert.equal(result.queueStatus, "no_claims");
+    assert.deepEqual(result.review, {
+      totalAnswers: 1,
+      pendingAnswers: 0,
+      reviewedAnswers: 0,
+      noClaimsAnswers: 1,
+      totalClaims: 0,
+      pendingClaims: 0,
+      reviewedClaims: 0,
+      verdicts: { verified: 0, contradicted: 0, unsupported: 0, needs_review: 0 },
+    });
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves evaluation over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const generatedAt = "2026-07-07T19:25:00.000Z";
