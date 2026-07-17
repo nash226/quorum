@@ -157,6 +157,8 @@ the end-to-end benchmark gate.
 It also asserts that HR remote-work coverage appears in the packed evaluation
 report, keeping weekly remote-work limits and unsupported stipend claims visible
 to the end-to-end smoke gate.
+It now also verifies the HR performance-review packet in the generated report
+and summary CSV, preserving its cadence, eligibility, and outcome-verdict paths.
 
 The HR benchmark now directly regression-tests bereavement leave, preserving
 paid-leave and vacation-carryover verification while routing an unsupported
