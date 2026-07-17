@@ -79,6 +79,10 @@ The packed smoke check also verifies payment-method answers, preserving the
 account-owner control while catching a stale invoice-window claim and an
 unsupported automatic-refund promise.
 
+The packed smoke check also verifies support escalation answers, preserving the
+four-business-hour first-response commitment while routing calendar-day drift
+and unsupported dedicated-engineer promises for review.
+
 The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
