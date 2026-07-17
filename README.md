@@ -52,6 +52,8 @@ The packed smoke check also verifies that the evaluation summary CSV contains
 exactly one data row for each of the 74 checked-in benchmark fixtures.
 The reviewer-queue regression also tracks the current answer handoff total, so
 fixture coverage and queue summaries stay aligned as the benchmark grows.
+The HTTP reviewer-queue contract also regression-tests domain filtering, keeping
+support-only benchmark drift and reviewer workload scoped to the selected domain.
 The support benchmark now also covers holiday service hours, preserving the
 published chat schedule while catching an unconditional coverage promise. The
 packed smoke check asserts that this evaluation remains in the generated report.
