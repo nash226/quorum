@@ -289,6 +289,9 @@ window, and an unsupported password-manager promise.
 The packed smoke check also confirms order-tracking answers preserve the verified
 tracking-history claim while pinning the same review and unsupported verdicts in
 the claim-level summary CSV.
+It now also verifies account-merge answers in the packed report and summary CSV,
+preserving ownership verification while catching timing drift and an unsupported
+password-manager promise.
 The packed smoke check now explicitly asserts that workspace-access answers
 appear in the benchmark report, preserving the workspace-owner invitation
 control while catching an incorrect acceptance window and an unsupported
