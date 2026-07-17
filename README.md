@@ -199,6 +199,9 @@ require reviewer approval.
 The packed smoke check also verifies account-recovery answers against the
 email-verification and unlock-timing controls while preserving the
 multi-factor-reset claim for reviewer review.
+It also verifies password-reset answers in the generated report and summary
+CSV, preserving the approved reset path while catching conflicting and
+unsupported reset promises.
 It also verifies charge-dispute answers, covering the approved dispute window,
 a documentation conflict, and an unsupported automatic-credit promise.
 The packed smoke check also verifies billing-address answers, preserving the
