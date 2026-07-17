@@ -213,6 +213,10 @@ The packed smoke check also verifies refund-status answers, preserving the
 approved status-update and processing-window claims while routing an
 unsupported instant-refund promise for review.
 
+The packed smoke check now also verifies support replacement answers, preserving
+the 30-day request window while catching a conflicting 90-day claim and an
+unsupported free-subscription promise.
+
 It also verifies account-contact-change answers in the packed benchmark,
 covering current-email verification, a conflicting identity-verification
 window, and an unsupported password-manager promise.
