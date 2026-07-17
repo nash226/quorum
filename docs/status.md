@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2788c3f` on 2026-07-16, test: smoke-check HR parental leave evaluation
+- Latest shipped change: `a13d4cb` on 2026-07-16, test: cover HR sabbatical leave evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-16 | Direct push | test: cover HR sabbatical leave evaluation | `a13d4cb` |
 | 2026-07-16 | Direct push | test: smoke-check HR parental leave evaluation | `2788c3f` |
 | 2026-07-16 | [#637](https://github.com/nash226/quorum/pull/637) | test: cover workspace access evaluation | `28607dc` |
 | 2026-07-16 | Direct push | test: smoke-check accessibility evaluation | `a0c54ef` |
@@ -55,5 +56,4 @@
 | 2026-07-16 | Direct push | test: assert warranty summary output | `f82bd2e` |
 | 2026-07-16 | Direct push | test: smoke-check HR offboarding evaluation | `be5b52f` |
 | 2026-07-16 | [#630](https://github.com/nash226/quorum/pull/630) | test: smoke-check payment failure evaluation | `2eb7521` |
-| 2026-07-16 | Direct push | test: cover HR offboarding evaluation | `b923c47` |
 
