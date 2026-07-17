@@ -182,6 +182,8 @@ present in the generated benchmark report.
 The packed smoke check also verifies that account-suspension answers remain in
 the benchmark report, covering appeal eligibility, an abuse-related
 reinstatement contradiction, and an unsupported reinstatement promise.
+It also verifies billing-suspension appeals, preserving the payment control while
+routing a seven-day window and automatic-reinstatement promise for review.
 It also verifies account-closure answers, preserving the verified closure
 path while routing retention and reactivation timing claims for review.
 The workspace-access fixture now has direct regression coverage for owner-controlled
