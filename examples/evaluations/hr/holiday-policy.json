@@ -1,0 +1,19 @@
+{
+  "name": "HR holiday policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-holiday-answer.md",
+  "answer": "Employees receive 10 paid company holidays each year.\nEmployees receive 15 paid company holidays each year.\nEmployees may move every company holiday to any date they choose.\n",
+  "answerLabel": "HR holiday reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../inline/hr-holiday-policy.md",
+      "id": "people-ops/hr-holidays@2026-07-17",
+      "title": "HR Holiday Policy",
+      "updatedAt": "2026-07-17",
+      "trustLevel": "high",
+      "content": "Employees receive 10 paid company holidays each year.\nThe holiday calendar is published by People Operations before the start of each year.\nManagers may approve schedule adjustments when business coverage allows."
+    }
+  ],
+  "expectedSummary": { "verified": 2, "contradicted": 0, "unsupported": 1, "needs_review": 0 },
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}
