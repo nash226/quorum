@@ -443,6 +443,7 @@ try {
   assert.match(evaluationStdout, /HR payroll change policy example/);
   assert.match(evaluationStdout, /HR jury duty policy example/);
   assert.match(evaluationStdout, /HR remote work policy example/);
+  assert.match(evaluationStdout, /HR professional development policy example/);
   assert.match(evaluationStdout, /Support warranty policy example/);
   assert.match(evaluationStdout, /Support accessibility policy example/);
   assert.match(evaluationStdout, /Support password reset policy example/);
