@@ -424,6 +424,7 @@ try {
   assert.match(evaluationStdout, /Quorum Evaluation Report/);
   assert.match(readFileSync(evaluationReportPath, "utf8"), /^# Quorum Evaluation Report/);
   assert.match(evaluationStdout, /Fixtures with mismatches: 0/);
+  assert.match(evaluationStdout, /Empty answer example/);
   assert.match(evaluationStdout, /HR PDF policy example/);
   assert.match(evaluationStdout, /Support billing HTML example/);
   assert.match(evaluationStdout, /Support live chat policy example/);
@@ -494,6 +495,10 @@ try {
   );
   assert.match(evaluationSummaryCsv, /^[^,\n]+,Support billing HTML example,support,/m);
   assert.match(evaluationSummaryCsv, /^[^,\n]+,HR PDF policy example,hr,/m);
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*Empty answer example.*?,no,.*?,0,0,0,0,0,0,0,0$/m,
+  );
   assert.match(
     evaluationSummaryCsv,
     /^.*Support warranty policy example.*?,1,1,1,0,1,1,1,0$/m,
