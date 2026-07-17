@@ -1,0 +1,19 @@
+{
+  "name": "HR attendance policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-attendance-answer.md",
+  "answer": "Employees must notify their manager before missing a scheduled shift.\nEmployees may work remotely every Friday without approval.\nEmployees can request an attendance exception through People Operations.\n",
+  "answerLabel": "HR attendance reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-attendance-policy.md",
+      "id": "people-ops/hr-attendance@2026-07-17",
+      "title": "HR Attendance Policy",
+      "updatedAt": "2026-07-17",
+      "trustLevel": "high",
+      "content": "Employees must notify their manager before missing a scheduled shift.\nEmployees may work remotely on Fridays with manager approval.\nEmployees can request an attendance exception through People Operations.\n"
+    }
+  ],
+  "expectedSummary": {"verified": 2, "contradicted": 0, "unsupported": 0, "needs_review": 1},
+  "expectedClaimVerdicts": ["verified", "needs_review", "verified"]
+}
