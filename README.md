@@ -281,6 +281,9 @@ claim and an unsupported password-manager promise.
 The packed smoke check also verifies order-cancellation answers, preserving the
 two-hour unshipped-order window while routing post-shipment cancellation and
 automatic-refund promises for review.
+It also verifies subscription-cancellation answers, preserving the approved
+cancellation path while catching a conflicting timing claim and an unsupported
+automatic-cancellation promise.
 It also verifies subscription-renewal answers, preserving the self-service
 renewal window while catching a conflicting post-expiration claim and an
 unsupported automatic-renewal promise.

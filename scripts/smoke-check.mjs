@@ -457,6 +457,7 @@ try {
   assert.match(evaluationStdout, /Support charge dispute policy example/);
   assert.match(evaluationStdout, /Support billing address policy example/);
   assert.match(evaluationStdout, /Support order cancellation policy example/);
+  assert.match(evaluationStdout, /Support subscription cancellation policy example/);
   assert.match(evaluationStdout, /Support subscription renewal policy example/);
   assert.match(evaluationStdout, /Support invoice correction policy example/);
   assert.match(evaluationStdout, /Support refund status policy example/);
@@ -548,6 +549,10 @@ try {
   assert.match(
     evaluationSummaryCsv,
     /^.*Support subscription renewal policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*Support subscription cancellation policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
     evaluationSummaryCsv,
