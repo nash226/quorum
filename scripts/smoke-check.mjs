@@ -481,6 +481,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support accessibility policy example.*?,1,0,1,1,1,0,1,1$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*HR travel reimbursement policy example.*?,1,1,0,1,1,1,0,1$/m,
   );
   const evaluationDomainSummaryCsv = readFileSync(evaluationDomainSummaryCsvPath, "utf8");
