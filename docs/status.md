@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `db56593` on 2026-07-17, test: pin payment method summary output
+- Latest shipped change: `87b9a69` on 2026-07-17, test: smoke-check support SLA summary
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | Direct push | test: smoke-check support SLA summary | `87b9a69` |
 | 2026-07-17 | Direct push | test: pin payment method summary output | `db56593` |
 | 2026-07-17 | [#663](https://github.com/nash226/quorum/pull/663) | test: pin invoice correction summary output | `237b811` |
 | 2026-07-17 | Direct push | test: pin gift card summary output | `c80350f` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | test: smoke-check HR jury-duty evaluation | `d37d7a2` |
 | 2026-07-17 | Direct push | test: pin subscription renewal summary output | `1004d37` |
 | 2026-07-17 | Direct push | test: smoke-check shipping protection evaluation | `ba02df3` |
-| 2026-07-17 | Direct push | test: pin account closure summary output | `9f38332` |
 
