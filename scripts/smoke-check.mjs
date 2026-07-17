@@ -525,6 +525,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support account suspension policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support authentication device policy example.*?,1,0,1,0,1,0,1,0$/m,
   );
   assert.match(
