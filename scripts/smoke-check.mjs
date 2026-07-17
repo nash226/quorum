@@ -520,6 +520,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support gift card policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support replacement policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
