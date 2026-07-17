@@ -30,6 +30,14 @@ test("HTTP API exposes a dedicated machine-readable version endpoint", async () 
     assert.equal(headResponse.headers.get("etag"), etag);
     assert.equal(await headResponse.text(), "");
 
+    const notModifiedHeadResponse = await fetch(`${api.url}${VERSION_PATH}`, {
+      method: "HEAD",
+      headers: { "if-none-match": etag ?? "" },
+    });
+    assert.equal(notModifiedHeadResponse.status, 304);
+    assert.equal(notModifiedHeadResponse.headers.get("etag"), etag);
+    assert.equal(await notModifiedHeadResponse.text(), "");
+
     const notModifiedResponse = await fetch(`${api.url}${VERSION_PATH}`, {
       headers: { "if-none-match": etag ?? "" },
     });
