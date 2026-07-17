@@ -230,6 +230,8 @@ no-claims handoffs. The CLI and HTTP API support targeted
 `pending`, `reviewed`, and `no_claims` handoffs with auditable filtered totals.
 Queue overviews can also scope benchmark drift to selected policy domains, and
 the CLI/API echo that scope while rejecting filters that match no fixtures.
+The CLI regression suite also verifies that a partially reviewed handoff can be
+filtered to its reviewed answer and claim totals.
 Queue overviews also expose final `verified`, `contradicted`, `unsupported`,
 and `needs_review` claim counts so dashboard consumers can prioritize review
 work without recounting individual claims. The human-readable
