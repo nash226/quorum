@@ -244,6 +244,8 @@ and an unsupported meal-stipend promise.
 The packed smoke check also verifies refund-status answers, preserving the
 approved status-update and processing-window claims while routing an
 unsupported instant-refund promise for review.
+It also pins the refund-status verified and unsupported verdict counts in the
+summary CSV, keeping that reviewer-facing artifact aligned with the report.
 
 The packed smoke check now also verifies support replacement answers, preserving
 the 30-day request window while catching a conflicting 90-day claim and an
