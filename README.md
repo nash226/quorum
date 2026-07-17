@@ -170,6 +170,9 @@ the benchmark report, covering appeal eligibility, an abuse-related
 reinstatement contradiction, and an unsupported reinstatement promise.
 It also verifies account-closure answers, preserving the verified closure
 path while routing retention and reactivation timing claims for review.
+The workspace-access fixture now has direct regression coverage for owner-controlled
+invitations, incorrect invitation windows, and administrator-access claims that
+require reviewer approval.
 The packed smoke check also verifies account-recovery answers against the
 email-verification and unlock-timing controls while preserving the
 multi-factor-reset claim for reviewer review.
