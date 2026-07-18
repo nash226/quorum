@@ -48,6 +48,10 @@ includes a copy-pasteable validator example for cache-aware clients.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
+The repository check also runs a package-artifact smoke test after building,
+confirming that published output includes the README and declared CLI, library,
+and HTTP server entry points.
+
 The checked-in 74-fixture benchmark spans 25 HR and 49 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
