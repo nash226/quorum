@@ -208,6 +208,9 @@ home-office stipend claim for review.
 The HR benchmark now also covers relocation reimbursement, including an
 approved request path, a reimbursement-limit review, and an unsupported
 home-sale promise.
+The packed smoke check now verifies that relocation reimbursement coverage
+appears in the generated report and summary CSV with the same three verdict
+paths.
 
 The HR benchmark now also covers jury-duty leave, including a verified paid-leave
 allowance, a contradicted duration, and an unsupported meal-stipend promise.
