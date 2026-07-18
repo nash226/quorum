@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4f8fea1` on 2026-07-18, test: smoke-check account security evaluation
+- Latest shipped change: `8422e53` on 2026-07-18, test: pin support warranty verdicts
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-18 | Direct push | test: pin support warranty verdicts | `8422e53` |
 | 2026-07-18 | Direct push | test: smoke-check account security evaluation | `4f8fea1` |
 | 2026-07-17 | Direct push | fix: reject unknown evaluation fixture fields | `054d54b` |
 | 2026-07-17 | Direct push | fix: reject unknown evaluation summary fields | `52ebb27` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | test: pin HR medical leave summary | `a18f9c2` |
 | 2026-07-17 | Direct push | test: pin travel reimbursement summary | `4ac545e` |
 | 2026-07-17 | Direct push | test: pin account suspension summary | `662d22e` |
-| 2026-07-17 | Direct push | docs: show conditional discovery probe | `d29ead4` |
 
