@@ -1326,6 +1326,26 @@ function validateEvaluationFixture(
   }
 
   const record = value as Record<string, unknown>;
+  const allowedKeys = new Set([
+    "name",
+    "domain",
+    "answerPath",
+    "answer",
+    "answerLabel",
+    "sourcePaths",
+    "sourceDirs",
+    "sources",
+    "defaultTrustLevel",
+    "expectedSummary",
+    "expectedClaimVerdicts",
+  ]);
+  const unknownKey = Object.keys(record).find((key) => !allowedKeys.has(key));
+  if (unknownKey !== undefined) {
+    throw new EvaluationFixtureValidationError(
+      `${fixtureLabel}.${unknownKey} is not a supported fixture field.`,
+    );
+  }
+
   const sourcePaths = optionalStringArray(record.sourcePaths, `${fixtureLabel}.sourcePaths`);
   const sourceDirs = optionalStringArray(record.sourceDirs, `${fixtureLabel}.sourceDirs`);
   const sources = optionalFixtureSources(record.sources, `${fixtureLabel}.sources`);
