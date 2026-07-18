@@ -81,6 +81,9 @@ remains visible to downstream reviewer handoffs instead of looking like a
 missing benchmark result.
 The packed smoke check also pins account-suspension verdict counts in the
 summary CSV, keeping appeal, reinstatement, and billing-evidence claims stable.
+It now also asserts that account-security coverage appears in the packed
+benchmark report, keeping account-control verification and contradiction
+routing visible in the end-to-end smoke gate.
 It now also verifies that HR onboarding coverage appears in the packed report,
 keeping healthcare, equipment, and unsupported manager claims in the smoke gate.
 The reviewer-queue regression also tracks the current answer handoff total, so
