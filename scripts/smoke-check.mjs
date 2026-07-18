@@ -454,6 +454,7 @@ try {
   assert.match(evaluationStdout, /Support account recovery policy example/);
   assert.match(evaluationStdout, /Support account closure policy example/);
   assert.match(evaluationStdout, /Support data retention policy example/);
+  assert.match(evaluationStdout, /Support account policy example/);
   assert.match(evaluationStdout, /Support account suspension policy example/);
   assert.match(evaluationStdout, /Support billing suspension appeal policy example/);
   assert.match(evaluationStdout, /Support charge dispute policy example/);
