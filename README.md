@@ -86,6 +86,9 @@ benchmark report, keeping account-control verification and contradiction
 routing visible in the end-to-end smoke gate.
 Direct regression coverage now also pins the support warranty fixture's claim,
 eligibility-conflict, and unconditional-replacement verdict paths.
+The end-to-end smoke gate also preserves HR time-off routing, keeping the
+verified notice rule, two needs-review claims, and unsupported stipend claim
+visible in the generated benchmark summary.
 It now also verifies that HR onboarding coverage appears in the packed report,
 keeping healthcare, equipment, and unsupported manager claims in the smoke gate.
 The reviewer-queue regression also tracks the current answer handoff total, so
