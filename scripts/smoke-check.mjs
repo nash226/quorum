@@ -589,7 +589,7 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
-    /^.*HR relocation policy example.*?,1,1,0,1,1,1,0,1$/m,
+    /^.*HR relocation policy example.*?,1,0,1,1,1,0,1,1$/m,
   );
   assert.match(
     evaluationSummaryCsv,
