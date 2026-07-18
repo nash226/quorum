@@ -2342,6 +2342,27 @@ test("rejects unknown evaluation summary fields instead of silently ignoring the
   );
 });
 
+test("rejects unknown top-level evaluation fixture fields instead of silently ignoring them", () => {
+  assert.throws(
+    () =>
+      loadEvaluationFixtureFromContent(
+        JSON.stringify({
+          name: "Broken fixture",
+          answerPath: "answers/hr.md",
+          sourcePaths: ["sources/hr-policy.md"],
+          expectedSummary: {
+            verified: 1,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+          },
+          expectedClaimVerdict: ["verified"],
+        }),
+      ),
+    /Evaluation fixture\.expectedClaimVerdict is not a supported fixture field\./,
+  );
+});
+
 test("rejects evaluation fixtures when claim verdict expectations do not match summary totals", () => {
   assert.throws(
     () =>
