@@ -2321,6 +2321,27 @@ test("rejects invalid evaluation fixture content with a clear validation error",
   );
 });
 
+test("rejects unknown evaluation summary fields instead of silently ignoring them", () => {
+  assert.throws(
+    () =>
+      loadEvaluationFixtureFromContent(
+        JSON.stringify({
+          name: "Broken fixture",
+          answerPath: "answers/hr.md",
+          sourcePaths: ["sources/hr-policy.md"],
+          expectedSummary: {
+            verified: 1,
+            contradicted: 0,
+            unsupported: 0,
+            needs_review: 0,
+            needsReview: 1,
+          },
+        }),
+      ),
+    /Evaluation fixture\.expectedSummary\.needsReview is not a supported verdict summary field\./,
+  );
+});
+
 test("rejects evaluation fixtures when claim verdict expectations do not match summary totals", () => {
   assert.throws(
     () =>
