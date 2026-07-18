@@ -64,6 +64,8 @@ accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
 the published 74-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
+Fixture summary contracts also reject unknown verdict fields, so a typo cannot
+silently weaken a CI evaluation gate.
 The evaluator also regression-tests the support-only domain filter, keeping
 focused support scorecards aligned with the 49-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,

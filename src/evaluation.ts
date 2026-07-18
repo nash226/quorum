@@ -1498,6 +1498,14 @@ function parseExpectedSummary(
   }
 
   const record = value as Record<string, unknown>;
+  const allowedKeys = new Set(["verified", "contradicted", "unsupported", "needs_review"]);
+  const unknownKey = Object.keys(record).find((key) => !allowedKeys.has(key));
+
+  if (unknownKey !== undefined) {
+    throw new EvaluationFixtureValidationError(
+      `${fieldName}.${unknownKey} is not a supported verdict summary field.`,
+    );
+  }
 
   return {
     verified: requireNonNegativeInteger(record.verified, `${fieldName}.verified`),
