@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a18f9c2` on 2026-07-17, test: pin HR medical leave summary
+- Latest shipped change: `e7c3f0a` on 2026-07-17, test: smoke-check published package contents
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-17 | Direct push | test: smoke-check published package contents | `e7c3f0a` |
 | 2026-07-17 | Direct push | test: pin HR medical leave summary | `a18f9c2` |
 | 2026-07-17 | Direct push | test: pin travel reimbursement summary | `4ac545e` |
 | 2026-07-17 | Direct push | test: pin account suspension summary | `662d22e` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | test: smoke-check empty answer evaluation | `ff8e40b` |
 | 2026-07-17 | Direct push | test: smoke-check subscription cancellation | `91730e4` |
 | 2026-07-17 | Direct push | test: pin charge dispute benchmark summary | `9000b72` |
-| 2026-07-17 | Direct push | test: cover conditional discovery HEAD requests | `9d2feee` |
 
