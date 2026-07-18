@@ -31,10 +31,11 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "check": "npm test && npm run build && npm run smoke && npm run evaluate:ci",
+    "check": "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci",
     "dev": "tsx src/cli.ts",
     "prepublishOnly": "npm run check",
     "smoke": "node scripts/smoke-check.mjs",
+    "package:smoke": "node scripts/package-smoke-check.mjs",
     "evaluate:ci": "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch",
     "status:refresh": "node scripts/update-status.mjs",
     "test": "node --import tsx --test tests/**/*.test.ts"
