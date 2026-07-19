@@ -1,0 +1,24 @@
+{
+  "name": "HR bonus eligibility policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-bonus-eligibility-answer.md",
+  "answer": "Employees must be in good standing at the end of the performance year to be eligible for the annual bonus.\nBonus payouts are capped at 50% of annual salary.\nThe company provides free commuter parking.\n",
+  "answerLabel": "HR bonus eligibility reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-bonus-eligibility-policy.md",
+      "id": "people-ops/hr-bonus-eligibility@2026-07-19",
+      "title": "HR Bonus Eligibility Policy",
+      "updatedAt": "2026-07-19",
+      "trustLevel": "high",
+      "content": "Employees must be in good standing at the end of the performance year to be eligible for the annual bonus.\nBonus payouts are capped at 10% of annual salary.\nBonus payouts depend on company and individual performance and are not guaranteed."
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}

@@ -52,7 +52,7 @@ The repository check also runs a package-artifact smoke test after building,
 confirming that published output includes the README and declared CLI, library,
 and HTTP server entry points.
 
-The checked-in 74-fixture benchmark spans 25 HR and 49 support workflows, including
+The checked-in 75-fixture benchmark spans 26 HR and 49 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
@@ -62,7 +62,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 74-fixture total explicit, so new benchmark packets cannot drift
+the published 75-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.
@@ -84,6 +84,8 @@ summary CSV, keeping appeal, reinstatement, and billing-evidence claims stable.
 It now also asserts that account-security coverage appears in the packed
 benchmark report, keeping account-control verification and contradiction
 routing visible in the end-to-end smoke gate.
+The HR benchmark now also covers annual bonus eligibility, preserving good-standing
+verification while catching payout-timing drift and unsupported guaranteed-bonus claims.
 Direct regression coverage now also pins the support warranty fixture's claim,
 eligibility-conflict, and unconditional-replacement verdict paths.
 The end-to-end smoke gate also preserves HR time-off routing, keeping the
@@ -176,7 +178,7 @@ The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
 
-The benchmark inventory is currently reconciled at 74 fixtures, including the
+The benchmark inventory is currently reconciled at 75 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
 
 The HR benchmark now also covers sabbatical leave, preserving the five-year
