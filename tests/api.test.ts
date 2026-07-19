@@ -4319,7 +4319,10 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
     const fixtureContent = await readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8");
     const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        [API_REQUEST_ID_HEADER]: "review-queue-trace-2026-07-19",
+      },
       body: JSON.stringify({
         generatedAt,
         reviewCsvContent: [
@@ -4333,7 +4336,8 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
 
     assert.equal(response.status, 200);
     const result = await response.json() as ApiReviewQueueResponse;
-    assert.equal(result.requestId, response.headers.get("x-quorum-request-id"));
+    assert.equal(result.requestId, "review-queue-trace-2026-07-19");
+    assert.equal(response.headers.get("x-quorum-request-id"), "review-queue-trace-2026-07-19");
     assert.equal(result.generatedAt, generatedAt);
     assert.equal(result.queueStatus, null);
     assert.deepEqual(result.domains, ["hr"]);

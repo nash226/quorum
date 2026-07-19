@@ -52,6 +52,9 @@ load-balancer checks, alongside the readiness-only `/healthz` probe.
 The HTTP integration guide also includes a copy-pasteable `POST /verify-batch`
 request, including empty-answer routing and reviewer artifact output for queue
 consumers.
+The `POST /review-queue` response preserves a caller-supplied
+`X-Quorum-Request-Id` in both the JSON payload and response header, so queue
+handoffs can correlate results with an upstream trace.
 
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
