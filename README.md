@@ -45,6 +45,10 @@ The root discovery, capabilities, and OpenAPI probes also support conditional
 The [HTTP integration guide](docs/api-integration.md#discover-and-probe-the-service)
 includes a copy-pasteable validator example for cache-aware clients.
 
+The HTTP integration guide also includes a copy-pasteable `POST /verify-batch`
+request, including empty-answer routing and reviewer artifact output for queue
+consumers.
+
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 

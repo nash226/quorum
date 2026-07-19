@@ -299,9 +299,42 @@ The response includes `scorecards`, aggregate `mismatchCount` and `score`,
   `application/json` with optional parameters and vendor `application/*+json`
   types, while returning `415` for non-JSON media types.
 - `POST /verify-batch` accepts an `answers` array for queue-style workflows.
-- Batch responses include `summary.answersWithClaims` and
+  Each answer can provide inline `answer` text or a path plus `answerBase64`,
+  and the request shares one approved `sources` array across the batch:
+
+  ```bash
+  curl -sS http://127.0.0.1:3000/verify-batch \
+    -H 'content-type: application/json' \
+    -d @- <<'JSON'
+  {
+    "answers": [
+      {
+        "answer": "Employees receive 12 weeks of paid parental leave.",
+        "answerPath": "answers/hr-parental-leave.md",
+        "answerLabel": "HR answer"
+      },
+      {
+        "answer": "",
+        "answerPath": "answers/empty-draft.md",
+        "answerLabel": "Empty draft"
+      }
+    ],
+    "sources": [{
+      "sourcePath": "sources/hr-policy.md",
+      "content": "Employees receive 12 weeks of paid parental leave."
+    }],
+    "failOn": ["contradicted", "unsupported", "needs_review"],
+    "includeArtifacts": ["summary_csv", "review_csv"]
+  }
+  JSON
+  ```
+
+  Batch responses include `summary.answersWithClaims` and
   `summary.answersWithoutClaims` so queue clients can route claim-bearing and
-  empty answers without recounting the per-answer rows.
+  empty answers without recounting the per-answer rows. An empty answer is
+  retained as a `no_claims` row in the summary artifact, and `failOnStatus`
+  can turn any matching batch verdict into an HTTP `409` while preserving the
+  complete response body.
 - `POST /import-review` imports reviewer CSV content and returns grouped answer
   summaries.
 - `POST /evaluate` scores JSON fixtures and can return benchmark CSV artifacts.
