@@ -367,6 +367,9 @@ The packed smoke check now explicitly asserts that workspace-access answers
 appear in the benchmark report, preserving the workspace-owner invitation
 control while catching an incorrect acceptance window and an unsupported
 automatic-admin promise.
+It also pins the workspace-access verdict breakdown in the summary CSV, keeping
+that reviewer handoff aligned with the report's verified, contradicted, and
+needs-review claims.
 The packed smoke check also pins HR travel-reimbursement verdicts in the
 summary CSV, preserving the annual limit while catching a wrong submission
 window and an overbroad business-class reimbursement promise.
