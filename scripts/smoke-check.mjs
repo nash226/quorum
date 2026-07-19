@@ -539,6 +539,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*HR offboarding policy example.*?,2,0,1,0,2,0,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*HR medical leave policy example.*?,2,0,0,1,2,0,0,1$/m,
   );
   assert.match(
