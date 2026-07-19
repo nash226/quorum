@@ -357,6 +357,8 @@ window and an overbroad business-class reimbursement promise.
 It also preserves HR dependent-benefits coverage in the packed report and
 summary CSV, keeping qualifying-event timing and unsupported dependent claims
 visible to the end-to-end benchmark gate.
+The packed smoke check also preserves HR expense-reimbursement coverage,
+including its verified, contradicted, and unsupported claim paths.
 
 Evaluation fixtures now reject duplicate source IDs, keeping evidence
 attribution unambiguous when a packet includes multiple approved records.
