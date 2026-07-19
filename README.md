@@ -86,6 +86,8 @@ The packed smoke check also verifies that the evaluation summary CSV contains
 exactly one data row for each of the 76 checked-in benchmark fixtures.
 It also cross-checks that row count against the aggregate summary's fixture
 count, keeping machine-readable benchmark artifacts internally consistent.
+It also pins support plan-change verdicts in that CSV, preserving the verified
+plan eligibility rule while catching conflicting and unsupported upgrade claims.
 It also pins the support account-security packet's two verified controls and
 contradicted refund claim in that CSV, keeping account-policy evidence visible
 to reviewer-facing consumers.
