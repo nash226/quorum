@@ -90,6 +90,9 @@ The packed smoke check also verifies that the evaluation summary CSV contains
 exactly one data row for each of the 76 checked-in benchmark fixtures.
 It also cross-checks that row count against the aggregate summary's fixture
 count, keeping machine-readable benchmark artifacts internally consistent.
+The packed smoke check also reconciles each domain summary's fixture count
+against the per-fixture CSV, preventing HR/support scorecards from drifting
+out of sync with their underlying benchmark rows.
 It also pins the baseline HR leave packet in the report and summary CSV,
 preserving contradiction, verification, and unsupported-claim routing.
 It now also pins the support source-directory fixture in the packed report and
