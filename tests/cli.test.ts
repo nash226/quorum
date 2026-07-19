@@ -3842,6 +3842,38 @@ test("review-queue scopes workload to a queue status", async () => {
     });
     assert.equal(pendingOverview.queueStatus, "pending");
 
+    const reviewCsv = await readFile(reviewCsvPath, "utf8");
+    const reviewCsvLines = reviewCsv.trimEnd().split("\n");
+    for (let index = 1; index <= 3; index += 1) {
+      reviewCsvLines[index] = reviewCsvLines[index]?.replace(/,,$/, ",verified,Approved") ?? "";
+    }
+    const reviewedCsvPath = join(tempDir, "reviewed.csv");
+    await writeFile(reviewedCsvPath, `${reviewCsvLines.join("\n")}\n`, "utf8");
+
+    const reviewedStdout = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewedCsvPath,
+      "--queue-status",
+      "reviewed",
+      "--json",
+    ]);
+    const reviewedOverview = JSON.parse(reviewedStdout) as {
+      queueStatus: string;
+      review: Record<string, number>;
+    };
+    assert.deepEqual(reviewedOverview.review, {
+      totalAnswers: 1,
+      pendingAnswers: 0,
+      reviewedAnswers: 1,
+      noClaimsAnswers: 0,
+      totalClaims: 3,
+      pendingClaims: 0,
+      reviewedClaims: 3,
+      verdicts: { verified: 3, contradicted: 0, unsupported: 0, needs_review: 0 },
+    });
+    assert.equal(reviewedOverview.queueStatus, "reviewed");
+
     const noClaimsStdout = await runCli([
       "review-queue",
       "--review-csv",
