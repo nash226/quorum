@@ -4391,6 +4391,42 @@ test("programmatic API filters reviewer queue overview by queue status", async (
   }
 });
 
+test("programmatic API filters reviewer queue overview to reviewed answers", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        queueStatus: "reviewed",
+        reviewCsvContent: [
+          "answer_label,answer_path,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "Pending answer,answers/pending.md,true,claim_1,Pending policy claim.,needs_review,Needs review,HR Policy,Pending policy claim.,,",
+          "Reviewed answer,answers/reviewed.md,true,claim_1,Reviewed policy claim.,verified,Matched,HR Policy,Reviewed policy claim.,verified,Approved",
+        ].join("\n"),
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as ApiReviewQueueResponse;
+    assert.equal(result.queueStatus, "reviewed");
+    assert.deepEqual(result.domains, []);
+    assert.deepEqual(result.review, {
+      totalAnswers: 1,
+      pendingAnswers: 0,
+      reviewedAnswers: 1,
+      noClaimsAnswers: 0,
+      totalClaims: 1,
+      pendingClaims: 0,
+      reviewedClaims: 1,
+      verdicts: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
+    });
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves evaluation over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const generatedAt = "2026-07-07T19:25:00.000Z";
