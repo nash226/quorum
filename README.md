@@ -269,9 +269,9 @@ generated report and summary CSV, keeping its three verdict paths covered end to
 The HR benchmark now directly regression-tests offboarding answers, preserving
 final-paycheck and access-disablement verification while flagging an unsupported
 severance promise.
-The packed smoke check also verifies this offboarding evaluation in the
-generated benchmark report, keeping separation-policy coverage in the end-to-end
-verification path.
+The packed smoke check also pins this offboarding evaluation in the generated
+summary CSV, keeping final-paycheck and access-disablement controls alongside
+the unsupported severance path in the end-to-end verification handoff.
 It also verifies the HR workplace-accommodation packet in the packed report,
 preserving its verified request channel, review-sensitive timing claim, and
 unsupported stipend claim.
