@@ -30,6 +30,16 @@ human review; the CLI treats answers with no extracted claims as a review-policy
 failure too. See the [CLI guide](docs/cli-guide.md#fail-policy-gates) for the
 copy-pasteable example.
 
+To run the checked-in benchmark gate locally, use:
+
+```bash
+npm run evaluate:ci
+```
+
+This evaluates all 74 HR and support fixtures, requires at least a 95% score,
+and exits non-zero if any expected claim verdict changes. Use `npm run smoke`
+after `npm run build` to exercise the packed CLI and API workflow as well.
+
 Integrations can check the installed CLI and API contract version without
 starting the server:
 
