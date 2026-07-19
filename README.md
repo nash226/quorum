@@ -287,6 +287,8 @@ unsupported learning-stipend claim.
 The packed smoke check also verifies the HR compensation review packet, including
 the annual review cadence, a conflicting eligibility window, and an unsupported
 airport-shuttle claim.
+It also pins support data-retention answers in the summary CSV, preserving the
+account-deletion path while catching timing drift and unsafe recovery promises.
 
 The support benchmark now has direct regression coverage for plan changes,
 including billing eligibility, conflicting upgrade timing, and unsupported
