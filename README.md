@@ -90,6 +90,8 @@ benchmark report, keeping account-control verification and contradiction
 routing visible in the end-to-end smoke gate.
 The HR benchmark now also covers annual bonus eligibility, preserving good-standing
 verification while catching payout-timing drift and unsupported guaranteed-bonus claims.
+The packed smoke check also verifies this bonus-eligibility packet in the generated
+report and summary CSV, keeping its compensation verdict paths covered end to end.
 Direct regression coverage now also pins the support warranty fixture's claim,
 eligibility-conflict, and unconditional-replacement verdict paths.
 The end-to-end smoke gate also preserves HR time-off routing, keeping the
