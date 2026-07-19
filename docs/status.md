@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a70e8b6` on 2026-07-19, test: add HR bonus eligibility coverage
+- Latest shipped change: `0c32f02` on 2026-07-19, docs: correct benchmark CSV fixture count
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | docs: correct benchmark CSV fixture count | `0c32f02` |
 | 2026-07-19 | Direct push | test: add HR bonus eligibility coverage | `a70e8b6` |
 | 2026-07-19 | Direct push | test: pin HR payroll smoke verdicts | `2acb335` |
 | 2026-07-19 | [#712](https://github.com/nash226/quorum/pull/712) | test: smoke-check HR sabbatical evaluation | `579c57b` |
@@ -55,5 +56,4 @@
 | 2026-07-18 | Direct push | test: smoke-check HR relocation evaluation | `d63038b` |
 | 2026-07-18 | Direct push | test: preserve HR time-off smoke coverage | `74a2c42` |
 | 2026-07-18 | Direct push | test: pin support warranty verdicts | `8422e53` |
-| 2026-07-18 | Direct push | test: smoke-check account security evaluation | `4f8fea1` |
 
