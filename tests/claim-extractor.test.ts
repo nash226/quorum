@@ -62,13 +62,15 @@ test("strips common unicode numbered-list markers from claims", () => {
   ]);
 });
 
-test("strips Arabic-Indic numbered-list markers from claims", () => {
+test("strips Arabic-Indic and Persian numbered-list markers from claims", () => {
   const claims = extractClaims(`١. Employees receive 12 weeks of paid parental leave.
-۲) Healthcare coverage begins after 30 days of employment.`);
+۲) Healthcare coverage begins after 30 days of employment.
+۳) Employees may request remote work after onboarding.`);
 
   assert.deepEqual(claims.map((claim) => claim.text), [
     "Employees receive 12 weeks of paid parental leave.",
     "Healthcare coverage begins after 30 days of employment.",
+    "Employees may request remote work after onboarding.",
   ]);
 });
 
