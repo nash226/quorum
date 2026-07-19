@@ -635,6 +635,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support order cancellation policy example.*?,1,1,0,0,2,1,0,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support account merge policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
