@@ -497,6 +497,7 @@ try {
   assert.match(evaluationStdout, /HR compensation review policy example/);
   assert.match(evaluationStdout, /HR workplace accommodation policy example/);
   assert.match(evaluationStdout, /HR offboarding policy example/);
+  assert.match(evaluationStdout, /HR leave policy example/);
   const evaluationSummaryCsv = readFileSync(evaluationSummaryCsvPath, "utf8");
   assert.match(
     evaluationSummaryCsv,
@@ -540,6 +541,10 @@ try {
   assert.match(
     evaluationSummaryCsv,
     /^.*HR offboarding policy example.*?,2,0,1,0,2,0,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*HR leave policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
     evaluationSummaryCsv,
