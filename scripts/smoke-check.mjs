@@ -626,6 +626,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*HR payroll change policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*HR performance review policy example.*?,1,1,0,1,1,1,0,1$/m,
   );
   assert.match(

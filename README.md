@@ -195,6 +195,8 @@ report, keeping this high-impact HR workflow visible in the end-to-end smoke gat
 The packed smoke check also asserts that payroll-change coverage appears in the
 evaluation report, preserving identity verification and pay-timing checks in
 the end-to-end benchmark gate.
+It also pins the payroll-change summary CSV verdicts, keeping those three
+reviewer-routing outcomes visible in the machine-readable handoff.
 It also asserts that HR remote-work coverage appears in the packed evaluation
 report, keeping weekly remote-work limits and unsupported stipend claims visible
 to the end-to-end smoke gate.
