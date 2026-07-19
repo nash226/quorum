@@ -59,6 +59,13 @@ handoffs can correlate results with an upstream trace.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
+For reviewer handoffs, Quorum can generate claim-level decision CSVs, import
+completed reviewer verdicts, and summarize pending/reviewed/no-claims workload
+for a queue consumer. The same overview is available through `POST
+/review-queue`; see the [reviewer queue workflow](docs/reviewer-queue.md) and
+[HTTP integration guide](docs/api-integration.md#summarize-a-reviewer-queue)
+for the artifact fields and request examples.
+
 Reviewer queue imports also document the stable queue-summary CSV header and
 which fields are safe for downstream consumers to select by name; see the
 [reviewer queue workflow](docs/reviewer-queue.md#3-import-the-completed-decisions).
