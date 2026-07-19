@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4cb7acc` on 2026-07-19, docs: refresh shipped status snapshot
+- Latest shipped change: `43d580e` on 2026-07-19, docs: document batch HTTP verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | docs: document batch HTTP verification | `43d580e` |
 | 2026-07-19 | Direct push | docs: refresh shipped status snapshot | `4cb7acc` |
 | 2026-07-19 | Direct push | docs: correct benchmark CSV fixture count | `0c32f02` |
 | 2026-07-19 | Direct push | test: add HR bonus eligibility coverage | `a70e8b6` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | [#712](https://github.com/nash226/quorum/pull/712) | test: smoke-check HR sabbatical evaluation | `579c57b` |
 | 2026-07-18 | Direct push | test: preserve HR dependent benefits smoke coverage | `24a1f63` |
 | 2026-07-18 | Direct push | test: smoke-check HR relocation evaluation | `d63038b` |
-| 2026-07-18 | Direct push | test: preserve HR time-off smoke coverage | `74a2c42` |
 
