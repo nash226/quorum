@@ -52,6 +52,10 @@ consumers.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
+Reviewer queue imports also document the stable queue-summary CSV header and
+which fields are safe for downstream consumers to select by name; see the
+[reviewer queue workflow](docs/reviewer-queue.md#3-import-the-completed-decisions).
+
 The repository check also runs a package-artifact smoke test after building,
 confirming that published output includes the README and declared CLI, library,
 and HTTP server entry points.
