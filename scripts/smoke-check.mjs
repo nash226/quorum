@@ -440,6 +440,7 @@ try {
   assert.match(evaluationStdout, /Support shipping protection policy example/);
   assert.match(evaluationStdout, /Support order tracking policy example/);
   assert.match(evaluationStdout, /Support source directory example/);
+  assert.match(evaluationStdout, /HR source directory policy example/);
   assert.match(evaluationStdout, /HR benefits enrollment policy example/);
   assert.match(evaluationStdout, /HR medical leave policy example/);
   assert.match(evaluationStdout, /HR sabbatical leave policy example/);
@@ -641,6 +642,10 @@ try {
   assert.match(
     evaluationSummaryCsv,
     /^.*Support source directory example.*?,2,1,0,0,2,1,0,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*HR source directory policy example.*?,2,0,0,1,2,0,0,1$/m,
   );
   assert.match(
     evaluationSummaryCsv,
