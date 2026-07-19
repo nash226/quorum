@@ -56,6 +56,17 @@ The same limits are available as `capabilities.maxRequestBytes` and
 Queue integrations can use `capabilities.reviewQueueStatuses` to route imported
 answers without hard-coding the allowed values: `pending`, `reviewed`, and
 `no_claims`.
+
+For a compact runtime check before creating a queue handoff, read the advertised
+status values directly from the capabilities response:
+
+```bash
+curl -sS http://127.0.0.1:3000/capabilities | jq '.capabilities.reviewQueueStatuses'
+# ["pending", "reviewed", "no_claims"]
+```
+
+Treat this list as the service contract for queue routing; clients should not
+assume that every answer contains claims or has already been reviewed.
 The `POST /import-review` request also accepts an optional `queueStatus` value
 to return only matching answer groups; queue totals, artifacts, and `failOn`
 results are scoped to that filtered queue.
