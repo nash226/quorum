@@ -624,6 +624,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support data export policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*HR jury duty policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
