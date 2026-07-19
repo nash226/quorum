@@ -63,6 +63,30 @@ source-loading, and HTTP server helpers from the same public entrypoint. Use
 the [HTTP integration guide](api-integration.md) when the caller is a separate
 service or browser-facing workflow.
 
+## Route reviewer decisions in memory
+
+Node workers can import the same reviewer CSV that the CLI and HTTP API accept,
+then route only the next queue state without writing intermediate artifacts:
+
+```ts
+import {
+  filterReviewerDecisionImportReport,
+  importReviewerDecisions,
+  renderReviewerDecisionImportQueueSummaryCsv,
+} from "quorum";
+
+const report = importReviewerDecisions(reviewCsvContent);
+const pending = filterReviewerDecisionImportReport(report, "pending");
+
+console.log(pending.queueSummary.pendingAnswers);
+const queueCsv = renderReviewerDecisionImportQueueSummaryCsv(pending);
+```
+
+`pending`, `reviewed`, and `no_claims` are the supported queue states. The
+filtered report retains the original generated timestamp and recalculates claim
+totals for the selected handoff, so a worker can persist or publish one focused
+review packet while keeping the broader import report available for audit.
+
 ## Install and verify
 
 The package currently targets Node.js 22 or newer:

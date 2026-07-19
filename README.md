@@ -464,6 +464,11 @@ npm run dev -- evaluate --fixture-dir examples/evaluations \
 This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 
+Node workers can also import reviewer-decision CSV content in memory, filter it
+to `pending`, `reviewed`, or `no_claims`, and render a focused queue summary
+without starting the HTTP server. See the [programmatic API guide](docs/programmatic-api.md)
+for the reviewer handoff example.
+
 ## Documentation Map
 
 - [CLI guide](docs/cli-guide.md): local verification, reports, imports, and evaluation.
