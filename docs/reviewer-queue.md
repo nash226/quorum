@@ -48,6 +48,13 @@ consumer can route rows without recounting claims. The HTML report presents
 the same totals for human review, while the CSV keeps stable answer and source
 context for downstream handoff.
 
+The imported queue-summary CSV has one data row and a stable header. Its columns
+are `generated_at`, the four answer-status totals, the total/reviewed/pending
+claim counts, `overridden_claims`, the four final-verdict counts, and the
+`fail_policy`/`fail_verdicts` result. Consumers should select columns by name
+rather than position and treat new columns as additive; the claim-level summary
+CSV remains the one-row-per-answer artifact.
+
 For a targeted handoff, filter the import at the boundary where it is created:
 
 ```bash
