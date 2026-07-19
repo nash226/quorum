@@ -99,6 +99,22 @@ test("HTTP API scopes browser preflight methods to every discovered route", asyn
   }
 });
 
+test("HTTP API reports the allowed method for an unsupported route method", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, { method: "GET" });
+    assert.equal(response.status, 405);
+    assert.equal(response.headers.get("allow"), "POST");
+    assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8");
+    const payload = await response.json() as { error: string; requestId: string };
+    assert.equal(payload.error, "Method not allowed. Use POST.");
+    assert.equal(payload.requestId, response.headers.get("x-quorum-request-id"));
+  } finally {
+    await api.close();
+  }
+});
+
 test("OpenAPI documents the version endpoint", () => {
   const document = createOpenApiDocument() as {
     paths: Record<string, {
