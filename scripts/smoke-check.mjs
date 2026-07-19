@@ -446,6 +446,7 @@ try {
   assert.match(evaluationStdout, /HR payroll change policy example/);
   assert.match(evaluationStdout, /HR jury duty policy example/);
   assert.match(evaluationStdout, /HR dependent benefits policy example/);
+  assert.match(evaluationStdout, /HR expense reimbursement policy example/);
   assert.match(evaluationStdout, /HR remote work policy example/);
   assert.match(evaluationStdout, /HR professional development policy example/);
   assert.match(evaluationStdout, /HR performance review policy example/);
@@ -587,6 +588,10 @@ try {
   assert.match(
     evaluationSummaryCsv,
     /^.*HR dependent benefits policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*HR expense reimbursement policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
     evaluationSummaryCsv,
