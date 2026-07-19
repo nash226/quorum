@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7b835e4` on 2026-07-19, test: add HR employee referral benchmark fixture
+- Latest shipped change: `78cb8bc` on 2026-07-19, test: pin HR employee referral smoke coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | test: pin HR employee referral smoke coverage | `78cb8bc` |
 | 2026-07-19 | Direct push | test: add HR employee referral benchmark fixture | `7b835e4` |
 | 2026-07-19 | Direct push | test: pin HR tuition reimbursement smoke coverage | `8755206` |
 | 2026-07-19 | Direct push | test: pin shipping address smoke coverage | `d8b8ddd` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | test: pin HR professional development smoke coverage | `5e98960` |
 | 2026-07-19 | Direct push | test: pin support delivery delay smoke coverage | `5deeddc` |
 | 2026-07-19 | Direct push | test: pin support account security summary | `6d7e727` |
-| 2026-07-19 | Direct push | test: pin workspace access summary verdicts | `07bf9be` |
 
