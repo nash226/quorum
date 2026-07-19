@@ -632,6 +632,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support delivery delay policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support incident communication policy example.*?,1,0,1,1,1,0,1,1$/m,
   );
   assert.match(

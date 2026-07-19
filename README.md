@@ -187,6 +187,10 @@ The packed smoke check now also verifies support account-recovery answers,
 preserving the email-verification control and two-hour unlock window while
 flagging an unsafe immediate multi-factor reset promise.
 
+The packed smoke check now also pins support delivery-delay verdicts, preserving
+the approved status-update window while catching delivery guarantees and
+unsupported automatic replacements in the reviewer-facing benchmark report.
+
 The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
