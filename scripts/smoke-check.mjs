@@ -813,7 +813,10 @@ Employees receive 12 weeks of paid parental leave.
   try {
     const reviewQueueResponse = await fetch(`${server.url}/review-queue`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        "X-Quorum-Request-Id": "packed-review-queue-contract",
+      },
       body: JSON.stringify({
         generatedAt: "2026-07-15T04:00:00.000Z",
         reviewCsvContent: [
@@ -830,7 +833,9 @@ Employees receive 12 weeks of paid parental leave.
     });
     const reviewQueueBody = await reviewQueueResponse.text();
     assert.equal(reviewQueueResponse.status, 200, reviewQueueBody);
+    assert.equal(reviewQueueResponse.headers.get("x-quorum-request-id"), "packed-review-queue-contract");
     const reviewQueueResult = JSON.parse(reviewQueueBody);
+    assert.equal(reviewQueueResult.requestId, "packed-review-queue-contract");
     assert.equal(reviewQueueResult.generatedAt, "2026-07-15T04:00:00.000Z");
     assert.deepEqual(reviewQueueResult.review, {
       totalAnswers: 1,
