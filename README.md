@@ -65,6 +65,9 @@ that `queueStatus: "pending"` filters the reviewer totals without changing
 optional benchmark metrics.
 It also verifies that `/capabilities` advertises the complete reviewer routing
 contract (`pending`, `reviewed`, and `no_claims`) for queue consumers.
+The same packaged smoke check now exercises the `/review-queue` browser
+preflight, pinning its allowed origin, request headers, methods, and ten-minute
+cache lifetime for web-based reviewer handoffs.
 
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).

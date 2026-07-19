@@ -1209,6 +1209,23 @@ Employees receive 12 weeks of paid parental leave.
       "Content-Type, X-Quorum-Request-Id, If-None-Match",
     );
 
+    const reviewQueuePreflightResponse = await fetch(`${server.url}/review-queue`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "https://console.example.com",
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
+      },
+    });
+    assert.equal(reviewQueuePreflightResponse.status, 204);
+    assert.equal(reviewQueuePreflightResponse.headers.get("access-control-allow-origin"), "https://console.example.com");
+    assert.equal(reviewQueuePreflightResponse.headers.get("access-control-allow-methods"), "POST, OPTIONS");
+    assert.equal(
+      reviewQueuePreflightResponse.headers.get("access-control-allow-headers"),
+      "Content-Type, X-Quorum-Request-Id, If-None-Match",
+    );
+    assert.equal(reviewQueuePreflightResponse.headers.get("access-control-max-age"), "600");
+
     const preflightResponse = await fetch(`${server.url}/verify`, {
       method: "OPTIONS",
       headers: {
