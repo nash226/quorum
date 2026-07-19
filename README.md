@@ -73,7 +73,7 @@ focused support scorecards aligned with the 49-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
-exactly one data row for each of the 74 checked-in benchmark fixtures.
+exactly one data row for each of the 75 checked-in benchmark fixtures.
 It also cross-checks that row count against the aggregate summary's fixture
 count, keeping machine-readable benchmark artifacts internally consistent.
 It also pins the empty-answer fixture as a zero-claim CSV row, so an empty draft
