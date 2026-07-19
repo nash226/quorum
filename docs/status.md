@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c434ed0` on 2026-07-19, test: pin HR compensation summary coverage
+- Latest shipped change: `699a10d` on 2026-07-19, test: pin HR source directory smoke coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | test: pin HR source directory smoke coverage | `699a10d` |
 | 2026-07-19 | Direct push | test: pin HR compensation summary coverage | `c434ed0` |
 | 2026-07-19 | [#735](https://github.com/nash226/quorum/pull/735) | test: pin support source-directory smoke coverage | `4626369` |
 | 2026-07-19 | Direct push | test: pin HR employee referral smoke coverage | `78cb8bc` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | test: pin HR tuition reimbursement smoke coverage | `8755206` |
 | 2026-07-19 | Direct push | test: pin shipping address smoke coverage | `d8b8ddd` |
 | 2026-07-19 | Direct push | docs: document HTTP liveness probe | `b2d5820` |
-| 2026-07-19 | Direct push | test: pin HR professional development smoke coverage | `5e98960` |
 
