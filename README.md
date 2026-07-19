@@ -306,6 +306,8 @@ The packed smoke check also verifies warranty answers for the 12-month claim win
 conflicting 24-month eligibility, and unsupported automatic replacement promises.
 Its summary CSV assertion also preserves the warranty packet's complete
 claim-level match and verdict counts.
+It also keeps the HR source-directory packet visible in the packed report and
+pins its two verified claims plus one needs-review claim in the summary CSV.
 It also pins the HR compensation-review summary CSV, preserving the annual review
 control while catching the conflicting request window and unsupported shuttle claim.
 It also confirms that the gift-card evaluation is included in the packed benchmark
