@@ -60,7 +60,9 @@ guessing the API contract.
 The `POST /review-queue` response preserves a caller-supplied
 `X-Quorum-Request-Id` in both the JSON payload and response header, so queue
 handoffs can correlate results with an upstream trace.
-The packaged smoke check pins that correlation contract end to end.
+The packaged smoke check pins that correlation contract end to end and verifies
+that `queueStatus: "pending"` filters the reviewer totals without changing
+optional benchmark metrics.
 
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).

@@ -851,6 +851,35 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(reviewQueueResult.evaluation.mismatchCount, 0);
     assert.equal(reviewQueueResult.evaluation.scoreLabel, "100%");
 
+    const pendingReviewQueueResponse = await fetch(`${server.url}/review-queue`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "X-Quorum-Request-Id": "packed-review-queue-pending-contract",
+      },
+      body: JSON.stringify({
+        generatedAt: "2026-07-15T04:00:00.000Z",
+        queueStatus: "pending",
+        reviewCsvContent: [
+          "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched,HR Policy,Employees receive 12 weeks of paid parental leave.,,",
+        ].join("\n"),
+        fixtures: [
+          {
+            fixturePath: join(repoRoot, "examples", "evaluations", "hr-policy.json"),
+            content: readFileSync(join(repoRoot, "examples", "evaluations", "hr-policy.json"), "utf8"),
+          },
+        ],
+      }),
+    });
+    const pendingReviewQueueBody = await pendingReviewQueueResponse.text();
+    assert.equal(pendingReviewQueueResponse.status, 200, pendingReviewQueueBody);
+    assert.equal(pendingReviewQueueResponse.headers.get("x-quorum-request-id"), "packed-review-queue-pending-contract");
+    const pendingReviewQueueResult = JSON.parse(pendingReviewQueueBody);
+    assert.equal(pendingReviewQueueResult.queueStatus, "pending");
+    assert.deepEqual(pendingReviewQueueResult.review, reviewQueueResult.review);
+    assert.deepEqual(pendingReviewQueueResult.evaluation, reviewQueueResult.evaluation);
+
     const indexResponse = await fetch(server.url);
     assert.equal(indexResponse.status, 200);
     const indexEtag = indexResponse.headers.get("etag");
