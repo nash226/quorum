@@ -59,6 +59,9 @@ which fields are safe for downstream consumers to select by name; see the
 The repository check also runs a package-artifact smoke test after building,
 confirming that published output includes the README and declared CLI, library,
 and HTTP server entry points.
+Run the complete local gate with `npm run check`; it runs the unit tests, TypeScript
+build, runtime smoke checks, package-artifact check, and the 75-fixture evaluation
+benchmark with mismatch and score thresholds.
 
 The checked-in 75-fixture benchmark spans 26 HR and 49 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
