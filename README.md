@@ -86,6 +86,9 @@ The packed smoke check also verifies that the evaluation summary CSV contains
 exactly one data row for each of the 76 checked-in benchmark fixtures.
 It also cross-checks that row count against the aggregate summary's fixture
 count, keeping machine-readable benchmark artifacts internally consistent.
+It now also pins the support source-directory fixture in the packed report and
+summary CSV, preserving directory-backed source discovery as an end-to-end
+reviewer handoff behavior.
 It also pins the support account-security packet's two verified controls and
 contradicted refund claim in that CSV, keeping account-policy evidence visible
 to reviewer-facing consumers.
