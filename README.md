@@ -211,6 +211,9 @@ summary CSV, keeping a high-impact HR absence workflow in the end-to-end gate.
 The packed smoke check also verifies HR benefits-enrollment answers, preserving
 the approved dental enrollment window while catching conflicting health-coverage
 timing and an unsupported home-office stipend.
+It also pins HR professional-development verdicts in the generated summary CSV,
+preserving manager-approved learning hours while catching an inflated allowance
+and an unsupported monthly stipend claim.
 It now also asserts that parental-leave coverage appears in the packed evaluation
 report, keeping this high-impact HR workflow visible in the end-to-end smoke gate.
 The packed smoke check also asserts that payroll-change coverage appears in the

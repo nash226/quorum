@@ -600,6 +600,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*HR professional development policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*HR bonus eligibility policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
