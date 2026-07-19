@@ -89,6 +89,9 @@ count, keeping machine-readable benchmark artifacts internally consistent.
 It now also pins the support source-directory fixture in the packed report and
 summary CSV, preserving directory-backed source discovery as an end-to-end
 reviewer handoff behavior.
+The packed smoke check also pins the root support-policy fixture in the report
+and summary CSV, preserving the baseline support verdict mix in the packaged
+evaluation gate.
 It also pins the support account-security packet's two verified controls and
 contradicted refund claim in that CSV, keeping account-policy evidence visible
 to reviewer-facing consumers.
