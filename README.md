@@ -133,6 +133,10 @@ unsupported automatic-credit promise.
 It also pins support invoice-correction summaries, preserving the verified
 reporting deadline while catching conflicting timing and automatic-refund claims.
 
+The packed smoke check also pins support order-cancellation summaries, preserving
+the unshipped-order control while keeping shipped-order and refund-timing claims
+in the reviewer-facing CSV.
+
 The packed smoke check also verifies that tax-exemption answers appear in the
 benchmark report, covering certificate submission, review timing, and an
 unsupported enterprise-upgrade promise.
