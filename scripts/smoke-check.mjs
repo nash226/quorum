@@ -604,6 +604,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support data retention policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support subscription renewal policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
