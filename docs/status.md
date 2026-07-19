@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6c0f557` on 2026-07-19, test: pin operational probe head contract
+- Latest shipped change: `9738dd7` on 2026-07-19, test: pin support contact change smoke coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | test: pin support contact change smoke coverage | `9738dd7` |
 | 2026-07-19 | Direct push | test: pin operational probe head contract | `6c0f557` |
 | 2026-07-19 | Direct push | test: pin unsupported API method contract | `ce0056c` |
 | 2026-07-19 | Direct push | docs: expose reviewer queue workflow | `78d12ce` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | [#751](https://github.com/nash226/quorum/pull/751) | test: reconcile evaluation domain fixture counts | `c812fea` |
 | 2026-07-19 | Direct push | test: pin support data export smoke coverage | `52a233c` |
 | 2026-07-19 | Direct push | test: pin support data-retention smoke coverage | `939209d` |
-| 2026-07-19 | Direct push | test: cover Persian numbered claims | `454a8a4` |
 
