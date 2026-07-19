@@ -44,6 +44,8 @@ The root discovery, capabilities, and OpenAPI probes also support conditional
 `HEAD` requests, returning `304 Not Modified` when their `ETag` is current.
 The [HTTP integration guide](docs/api-integration.md#discover-and-probe-the-service)
 includes a copy-pasteable validator example for cache-aware clients.
+It also documents the separate `/livez` liveness probe for container and
+load-balancer checks, alongside the readiness-only `/healthz` probe.
 
 The HTTP integration guide also includes a copy-pasteable `POST /verify-batch`
 request, including empty-answer routing and reviewer artifact output for queue

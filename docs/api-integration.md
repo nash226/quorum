@@ -12,7 +12,19 @@ npm run dev -- serve --port 3000
 
 The service publishes its machine-readable contract at
 `http://127.0.0.1:3000/openapi.json`. Use `GET /capabilities` for a compact
-runtime description, or `GET /healthz` for a readiness probe.
+runtime description, `GET /healthz` for a readiness probe, or `GET /livez` for
+a liveness probe that confirms the process is serving requests.
+
+For container or load-balancer probes, the liveness endpoint is intentionally
+independent of source loading and reviewer queue state:
+
+```bash
+curl -fsS http://127.0.0.1:3000/livez
+# {"status":"ok"}
+```
+
+Use `/healthz` when the caller needs readiness semantics instead; it can report
+that the service is not ready even while the process remains alive.
 
 Every response includes discovery headers that let an integration confirm the
 service contract without parsing the response body:
