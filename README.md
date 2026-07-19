@@ -52,6 +52,9 @@ load-balancer checks, alongside the readiness-only `/healthz` probe.
 The HTTP integration guide also includes a copy-pasteable `POST /verify-batch`
 request, including empty-answer routing and reviewer artifact output for queue
 consumers.
+Unsupported methods now return a structured 405 response with the route's
+`Allow` header, so HTTP clients can recover from method mismatches without
+guessing the API contract.
 The `POST /review-queue` response preserves a caller-supplied
 `X-Quorum-Request-Id` in both the JSON payload and response header, so queue
 handoffs can correlate results with an upstream trace.
