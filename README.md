@@ -40,6 +40,17 @@ npm run dev -- version --json
 # {"service":"quorum","version":"0.1.0"}
 ```
 
+Client tooling can export the same machine-readable HTTP contract without
+starting the server:
+
+```bash
+npm run dev -- openapi --out reports/quorum-openapi.json
+```
+
+Use `--server-url` when the generated document should point at a deployed
+Quorum endpoint; the [HTTP integration guide](docs/api-integration.md) covers
+the corresponding discovery and request contracts.
+
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
 The root discovery, capabilities, and OpenAPI probes also support conditional
