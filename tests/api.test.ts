@@ -392,6 +392,22 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
   }
 });
 
+test("HTTP API serves bodyless HEAD responses for operational probes", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const path of ["/health", "/healthz", "/readyz", "/livez"]) {
+      const response = await fetch(`${api.url}${path}`, { method: "HEAD" });
+
+      assert.equal(response.status, 200, path);
+      assert.equal(response.headers.get("cache-control"), "no-store", path);
+      assert.equal(await response.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API rejects CORS preflight requests for unknown routes", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
