@@ -4391,6 +4391,43 @@ test("programmatic API filters reviewer queue overview by queue status", async (
   }
 });
 
+test("programmatic API filters reviewer queue benchmark drift by domain", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const [hrFixtureContent, supportFixtureContent] = await Promise.all([
+      readFile(join(process.cwd(), "examples/evaluations/hr-policy.json"), "utf8"),
+      readFile(join(process.cwd(), "examples/evaluations/support-policy.json"), "utf8"),
+    ]);
+    const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        domains: ["support"],
+        reviewCsvContent: [
+          "answer_label,answer_path,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "Support answer,answers/support.md,true,claim_1,Support teams respond within four hours.,verified,Matched,Support Policy,Support teams respond within four hours.,,",
+        ].join("\\n"),
+        fixtures: [
+          { fixturePath: "examples/evaluations/hr-policy.json", content: hrFixtureContent },
+          { fixturePath: "examples/evaluations/support-policy.json", content: supportFixtureContent },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as ApiReviewQueueResponse;
+    assert.deepEqual(result.domains, ["support"]);
+    assert.equal(result.review.totalAnswers, 1);
+    assert.equal(result.review.pendingAnswers, 1);
+    assert.equal(result.review.totalClaims, 1);
+    assert.equal(result.evaluation?.fixtureCount, 1);
+    assert.equal(result.evaluation?.scoreLabel, "100%");
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves evaluation over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const generatedAt = "2026-07-07T19:25:00.000Z";
