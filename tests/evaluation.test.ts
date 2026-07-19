@@ -2532,6 +2532,21 @@ test("renders mismatch details in evaluation scorecards", () => {
   assert.match(rendered, /expected verified, got contradicted/);
 });
 
+test("fails closed when a scorecard has summary or claim-count drift", () => {
+  const scorecard = {
+    summaryMatches: true,
+    matchedClaims: 2,
+    totalExpectedClaims: 2,
+  } as Parameters<typeof hasEvaluationMismatch>[0];
+
+  assert.equal(hasEvaluationMismatch(scorecard), false);
+  scorecard.summaryMatches = false;
+  assert.equal(hasEvaluationMismatch(scorecard), true);
+  scorecard.summaryMatches = true;
+  scorecard.totalExpectedClaims = 3;
+  assert.equal(hasEvaluationMismatch(scorecard), true);
+});
+
 test("renders evaluation text report totals and mismatch detection", () => {
   const scorecards = [
     {
