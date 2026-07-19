@@ -13,7 +13,7 @@ set covers:
 - Markdown, HTML, PDF, and source-directory ingestion
 - empty-answer queue routing
 - explicit source IDs and inline source metadata
-- HR bereavement leave, dependent benefits, medical leave, relocation, leave, leave carryover, onboarding, offboarding, parental leave, professional
+- HR bonus eligibility, bereavement leave, dependent benefits, medical leave, relocation, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   remote work, workplace accommodations, expense reimbursement, tuition reimbursement, and travel reimbursement
 - support account closure, account recovery, account contact changes, account security, account suspension, authorized contacts, billing address changes, billing-suspension appeals, cancellation, guest access, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
@@ -23,7 +23,7 @@ set covers:
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
 
-The benchmark currently contains 74 fixtures: 25 HR and 49 support workflows.
+The benchmark currently contains 75 fixtures: 26 HR and 49 support workflows.
 The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
@@ -143,6 +143,8 @@ specific product question:
   and an unsupported unconditional severance promise.
 - HR workplace-accommodation coverage tests the approved request channel, a
   contradictory response-time promise, and an unsupported home-office stipend.
+- HR bonus-eligibility coverage tests good-standing eligibility, a payout-timing
+  contradiction, and an unsupported guaranteed-bonus claim.
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
