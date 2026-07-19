@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5e98960` on 2026-07-19, test: pin HR professional development smoke coverage
+- Latest shipped change: `b2d5820` on 2026-07-19, docs: document HTTP liveness probe
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | docs: document HTTP liveness probe | `b2d5820` |
 | 2026-07-19 | Direct push | test: pin HR professional development smoke coverage | `5e98960` |
 | 2026-07-19 | Direct push | test: pin support delivery delay smoke coverage | `5deeddc` |
 | 2026-07-19 | Direct push | test: pin support account security summary | `6d7e727` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | docs: document reviewer queue csv contract | `b309de6` |
 | 2026-07-19 | Direct push | test: smoke-check HR bonus eligibility | `50ac159` |
 | 2026-07-19 | Direct push | docs: document batch HTTP verification | `43d580e` |
-| 2026-07-19 | Direct push | docs: refresh shipped status snapshot | `4cb7acc` |
 
