@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5c0e7bb` on 2026-07-19, test: pin review queue request tracing
+- Latest shipped change: `78d12ce` on 2026-07-19, docs: expose reviewer queue workflow
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | docs: expose reviewer queue workflow | `78d12ce` |
 | 2026-07-19 | Direct push | test: pin review queue request tracing | `5c0e7bb` |
 | 2026-07-19 | [#751](https://github.com/nash226/quorum/pull/751) | test: reconcile evaluation domain fixture counts | `c812fea` |
 | 2026-07-19 | Direct push | test: pin support data export smoke coverage | `52a233c` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | test: cover Persian numbered claims | `454a8a4` |
 | 2026-07-19 | Direct push | fix: normalize Arabic numbered claims | `096ee80` |
 | 2026-07-19 | Direct push | test: guard evaluation mismatch failures | `ab64269` |
-| 2026-07-19 | Direct push | test: pin HR leave smoke coverage | `8e814bd` |
 
