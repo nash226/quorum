@@ -158,6 +158,8 @@ unsupported accommodation claims correctly.
 The packed smoke check also verifies that support data-export answers appear in
 the benchmark report, preserving the approved request path while catching
 timing drift and unsupported manager-notification claims.
+It also pins the data-export verdict mix in the summary CSV, keeping that
+reviewer-facing handoff aligned with the report.
 It also verifies that support subscription-pause answers appear in the packed
 benchmark report, preserving billing eligibility and catching unsupported
 automatic-resumption claims.
