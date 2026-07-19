@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `fcf7231` on 2026-07-19, test: pin reviewer queue status filter in smoke
+- Latest shipped change: `b05d101` on 2026-07-19, docs: document queue capability discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | docs: document queue capability discovery | `b05d101` |
 | 2026-07-19 | Direct push | test: pin reviewer queue status filter in smoke | `fcf7231` |
 | 2026-07-19 | Direct push | test: pin review queue request tracing in smoke | `0d84fe7` |
 | 2026-07-19 | Direct push | test: pin support contact change smoke coverage | `9738dd7` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | test: pin unsupported API method contract | `ce0056c` |
 | 2026-07-19 | Direct push | docs: expose reviewer queue workflow | `78d12ce` |
 | 2026-07-19 | Direct push | test: pin review queue request tracing | `5c0e7bb` |
-| 2026-07-19 | [#751](https://github.com/nash226/quorum/pull/751) | test: reconcile evaluation domain fixture counts | `c812fea` |
 
