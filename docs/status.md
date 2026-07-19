@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `50ac159` on 2026-07-19, test: smoke-check HR bonus eligibility
+- Latest shipped change: `b309de6` on 2026-07-19, docs: document reviewer queue csv contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | docs: document reviewer queue csv contract | `b309de6` |
 | 2026-07-19 | Direct push | test: smoke-check HR bonus eligibility | `50ac159` |
 | 2026-07-19 | Direct push | docs: document batch HTTP verification | `43d580e` |
 | 2026-07-19 | Direct push | docs: refresh shipped status snapshot | `4cb7acc` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | test: add HR bonus eligibility coverage | `a70e8b6` |
 | 2026-07-19 | Direct push | test: pin HR payroll smoke verdicts | `2acb335` |
 | 2026-07-19 | [#712](https://github.com/nash226/quorum/pull/712) | test: smoke-check HR sabbatical evaluation | `579c57b` |
-| 2026-07-18 | Direct push | test: preserve HR dependent benefits smoke coverage | `24a1f63` |
 
