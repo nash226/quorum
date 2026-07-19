@@ -248,6 +248,9 @@ qualifying-event timing and unsupported undocumented-dependent claims.
 
 The HR benchmark now also covers tuition reimbursement, including an approved
 annual limit, a contradicted submission deadline, and an unsupported tutoring promise.
+The packed smoke check also pins this tuition-reimbursement verdict mix in the
+summary CSV, keeping reimbursement limits and submission timing visible to
+reviewer-facing consumers.
 
 The HR benchmark now also covers travel reimbursement, including a verified
 annual limit, a contradicted submission window, and a business-class claim routed to review.
