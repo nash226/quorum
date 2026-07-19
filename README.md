@@ -119,6 +119,8 @@ evaluation gate.
 It also pins the support account-security packet's two verified controls and
 contradicted refund claim in that CSV, keeping account-policy evidence visible
 to reviewer-facing consumers.
+The packed smoke check now pins account contact-change verification, contradiction,
+and unsupported routing in the summary CSV as well.
 The packed smoke check now also pins authorized-contact coverage, preserving the
 account-owner confirmation control before support discussions or billing changes.
 It also pins the empty-answer fixture as a zero-claim CSV row, so an empty draft
