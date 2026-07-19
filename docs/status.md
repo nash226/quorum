@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d63038b` on 2026-07-18, test: smoke-check HR relocation evaluation
+- Latest shipped change: `24a1f63` on 2026-07-18, test: preserve HR dependent benefits smoke coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-18 | Direct push | test: preserve HR dependent benefits smoke coverage | `24a1f63` |
 | 2026-07-18 | Direct push | test: smoke-check HR relocation evaluation | `d63038b` |
 | 2026-07-18 | Direct push | test: preserve HR time-off smoke coverage | `74a2c42` |
 | 2026-07-18 | Direct push | test: pin support warranty verdicts | `8422e53` |
@@ -55,5 +56,4 @@
 | 2026-07-17 | Direct push | fix: reject unknown evaluation fixture fields | `054d54b` |
 | 2026-07-17 | Direct push | fix: reject unknown evaluation summary fields | `52ebb27` |
 | 2026-07-17 | Direct push | test: smoke-check published package contents | `e7c3f0a` |
-| 2026-07-17 | Direct push | test: pin HR medical leave summary | `a18f9c2` |
 
