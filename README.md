@@ -84,6 +84,9 @@ The packed smoke check also verifies that the evaluation summary CSV contains
 exactly one data row for each of the 75 checked-in benchmark fixtures.
 It also cross-checks that row count against the aggregate summary's fixture
 count, keeping machine-readable benchmark artifacts internally consistent.
+It also pins the support account-security packet's two verified controls and
+contradicted refund claim in that CSV, keeping account-policy evidence visible
+to reviewer-facing consumers.
 It also pins the empty-answer fixture as a zero-claim CSV row, so an empty draft
 remains visible to downstream reviewer handoffs instead of looking like a
 missing benchmark result.
