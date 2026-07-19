@@ -354,6 +354,9 @@ automatic-admin promise.
 The packed smoke check also pins HR travel-reimbursement verdicts in the
 summary CSV, preserving the annual limit while catching a wrong submission
 window and an overbroad business-class reimbursement promise.
+It also preserves HR dependent-benefits coverage in the packed report and
+summary CSV, keeping qualifying-event timing and unsupported dependent claims
+visible to the end-to-end benchmark gate.
 
 Evaluation fixtures now reject duplicate source IDs, keeping evidence
 attribution unambiguous when a packet includes multiple approved records.
