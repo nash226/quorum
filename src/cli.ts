@@ -1746,6 +1746,7 @@ Options:
   POST /extract-claims      Extract normalized claims from answer content
   POST /verify-batch        Verify multiple answers from JSON request content
   POST /import-review       Import reviewer CSV content from JSON request content
+  POST /review-queue        Summarize reviewer queue and benchmark drift
   POST /evaluate            Evaluate fixture JSON content from request payloads
 
 Example:
