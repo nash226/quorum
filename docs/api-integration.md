@@ -195,7 +195,9 @@ OpenAPI path, configured request limits, and a request ID. Use the returned
 `X-Quorum-OpenAPI-Path` value to fetch the generated contract before building
 request payloads.
 
-For a cache-aware bodyless probe, send the previously returned validator:
+For a cache-aware bodyless probe, send the previously returned validator. The
+same pattern works for `/capabilities` and `/openapi.json`; use the endpoint's
+ETag from the initial `GET` or `HEAD` response:
 
 ```bash
 curl -sSI http://127.0.0.1:3000/version \
@@ -204,7 +206,17 @@ curl -sSI http://127.0.0.1:3000/version \
 
 The response returns `304 Not Modified` when the cached representation is
 current. A changed or missing validator returns `200 OK` with the normal
-`HEAD` headers and no response body.
+`HEAD` headers and no response body. For example, a browser or workflow
+runner can revalidate the capabilities contract without downloading it again:
+
+```bash
+curl -sSI http://127.0.0.1:3000/capabilities \
+  -H 'If-None-Match: "<cached-capabilities-etag>"'
+```
+
+Use `GET` instead of `HEAD` when a changed representation is needed in the
+same request. All three cacheable contract endpoints preserve the validator
+on `304` responses.
 
 ## Verify an answer
 
