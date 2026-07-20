@@ -144,7 +144,10 @@ publication if its declared API surface is missing.
 
 The checked-in 76-fixture benchmark spans 27 HR and 49 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
-security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Each packet exercises reviewer-facing
+security, account-merge ownership verification, billing, tax exemption, delivery,
+service levels, gift cards, and accessibility requests. The account-merge packet
+preserves the ownership check, catches a conflicting completion window, and flags
+an unsupported password-manager promise. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
 sources. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.

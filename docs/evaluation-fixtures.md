@@ -17,7 +17,7 @@ set covers:
   development, compensation review, benefits enrollment, performance review,
   employee referrals,
   remote work, workplace accommodations, expense reimbursement, tuition reimbursement, and travel reimbursement
-- support account closure, account recovery, account contact changes, account security, account suspension, authorized contacts, billing address changes, billing-suspension appeals, cancellation, guest access, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
+- support account closure, account recovery, account contact changes, account merge ownership verification, account security, account suspension, authorized contacts, billing address changes, billing-suspension appeals, cancellation, guest access, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, payment method
   changes, replacement, and tax exemption
   eligibility, subscription pauses, SLA, billing, gift cards, service credits, shipping protection,
