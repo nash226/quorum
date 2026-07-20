@@ -64,6 +64,8 @@ load balancers can check status headers without downloading a JSON payload.
 All JSON POST endpoints enforce the advertised request-size limit and return a
 structured `413` error when a payload is too large, so adding a new route cannot
 silently bypass the operational guard.
+Malformed JSON POST bodies also return a structured `400` error with the caller's
+request ID, and the packaged smoke check pins that contract on `/verify`.
 
 The HTTP integration guide also includes a copy-pasteable `POST /verify-batch`
 request, including empty-answer routing and reviewer artifact output for queue
