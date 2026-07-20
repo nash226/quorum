@@ -557,6 +557,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*HR remote work policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*HR sabbatical leave policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
