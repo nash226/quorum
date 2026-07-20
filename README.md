@@ -79,6 +79,8 @@ request ID, and the packaged smoke check pins that contract on `/verify`.
 The packaged smoke check also covers the same malformed-body contract across
 `/verify-batch`, `/import-review`, `/review-queue`, and `/evaluate`, so each JSON
 POST route preserves the same safe client-error boundary.
+It also verifies that every JSON POST route rejects non-JSON content types with
+the same structured `415` response and preserves caller-supplied request IDs.
 The packaged smoke check also exercises browser preflight across every POST
 route, keeping CORS method, header, origin, cache, and bodyless-response
 contracts aligned as new JSON endpoints are added.

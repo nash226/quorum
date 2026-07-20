@@ -1439,6 +1439,22 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(invalidContentTypePayload.error, "Content-Type must be JSON.");
     assert.match(invalidContentTypePayload.requestId, /^[0-9a-f-]{36}$/);
 
+    for (const path of ["/verify-batch", "/import-review", "/review-queue", "/evaluate"]) {
+      const response = await fetch(`${server.url}${path}`, {
+        method: "POST",
+        headers: {
+          "content-type": "text/plain",
+          "X-Quorum-Request-Id": `invalid-content-type-${path.slice(1)}`,
+        },
+        body: "{}",
+      });
+      assert.equal(response.status, 415, path);
+      const payload = await response.json();
+      assert.equal(payload.error, "Content-Type must be JSON.", path);
+      assert.equal(payload.requestId, `invalid-content-type-${path.slice(1)}`, path);
+      assert.equal(response.headers.get("x-quorum-request-id"), payload.requestId, path);
+    }
+
     const batchVerifyResponse = await fetch(`${server.url}/verify-batch`, {
       method: "POST",
       headers: {
