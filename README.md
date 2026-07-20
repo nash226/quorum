@@ -130,7 +130,8 @@ The repository check also runs a package-artifact smoke test after building,
 confirming that published output includes the README and every file declared by
 the package `main`, `types`, `exports`, and `bin` fields, as well as the CLI,
 library, and HTTP server entry points. It also imports the root and server entry points
-and checks their required runtime exports, so a package can fail closed before
+and checks the core verification, extraction, evaluation, reviewer-import, report,
+source-loading, and server runtime exports, so a package can fail closed before
 publication if its declared API surface is missing.
 
 The checked-in 76-fixture benchmark spans 27 HR and 49 support workflows, including

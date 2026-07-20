@@ -21,8 +21,26 @@ const packageRoot = new URL("../", import.meta.url);
 const libraryEntry = await import(new URL("dist/src/index.js", packageRoot));
 const serverEntry = await import(new URL("dist/src/api-server.js", packageRoot));
 
-if (typeof libraryEntry.verifyAnswer !== "function" || typeof libraryEntry.createApiServer !== "function") {
-  throw new Error("Package artifact root entry point is missing required library exports.");
+const requiredLibraryFunctions = [
+  "verifyAnswer",
+  "extractClaims",
+  "verifyAnswerContentsResult",
+  "verifyAnswersResult",
+  "evaluateFixturesResult",
+  "importReviewerDecisionsResult",
+  "renderTextReport",
+  "renderSummaryCsv",
+  "parseSource",
+];
+const missingLibraryFunctions = requiredLibraryFunctions.filter((name) => typeof libraryEntry[name] !== "function");
+
+if (missingLibraryFunctions.length > 0 || typeof libraryEntry.createApiServer !== "function") {
+  throw new Error(
+    `Package artifact root entry point is missing required library exports: ${[
+      ...missingLibraryFunctions,
+      ...(typeof libraryEntry.createApiServer === "function" ? [] : ["createApiServer"]),
+    ].join(", ")}`,
+  );
 }
 
 if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.startApiServer !== "function") {
