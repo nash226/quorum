@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `09a0c64` on 2026-07-20, test: smoke-check malformed JSON responses
+- Latest shipped change: `91f4607` on 2026-07-20, docs: explain malformed JSON API errors
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | docs: explain malformed JSON API errors | `91f4607` |
 | 2026-07-20 | Direct push | test: smoke-check malformed JSON responses | `09a0c64` |
 | 2026-07-19 | Direct push | test: enforce request limits across POST routes | `be7264e` |
 | 2026-07-19 | [#768](https://github.com/nash226/quorum/pull/768) | test: pin invalid reviewer queue status contract | `af31237` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | docs: document auditable reviewer imports | `b798cd8` |
 | 2026-07-19 | [#764](https://github.com/nash226/quorum/pull/764) | test: validate declared package artifact files | `d2cfc48` |
 | 2026-07-19 | Direct push | test: verify published package entrypoints | `cedeb83` |
-| 2026-07-19 | [#760](https://github.com/nash226/quorum/pull/760) | docs: document OpenAPI export workflow | `fdc2f3c` |
 
