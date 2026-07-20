@@ -58,6 +58,10 @@ The root discovery, capabilities, and OpenAPI probes also support conditional
 `HEAD` requests, returning `304 Not Modified` when their `ETag` is current.
 The [HTTP integration guide](docs/api-integration.md#discover-and-probe-the-service)
 includes a copy-pasteable validator example for cache-aware clients.
+The same discovery responses advertise the configured JSON request-size and
+request-timeout limits; operators can tune them with `--max-request-bytes` and
+`--request-timeout-ms`, while clients can read the corresponding capability
+fields before submitting larger or slower requests.
 It also documents the separate `/livez` liveness probe for container and
 load-balancer checks, alongside the readiness-only `/healthz` probe.
 The liveness response is a request-correlated health envelope, and its
