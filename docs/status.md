@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `af31237` on 2026-07-19, test: pin invalid reviewer queue status contract
+- Latest shipped change: `be7264e` on 2026-07-19, test: enforce request limits across POST routes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | test: enforce request limits across POST routes | `be7264e` |
 | 2026-07-19 | [#768](https://github.com/nash226/quorum/pull/768) | test: pin invalid reviewer queue status contract | `af31237` |
 | 2026-07-19 | Direct push | fix: reject invalid reviewer queue statuses | `d4b20cd` |
 | 2026-07-19 | Direct push | docs: document auditable reviewer imports | `b798cd8` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | test: verify published package entrypoints | `cedeb83` |
 | 2026-07-19 | [#760](https://github.com/nash226/quorum/pull/760) | docs: document OpenAPI export workflow | `fdc2f3c` |
 | 2026-07-19 | [#762](https://github.com/nash226/quorum/pull/762) | test: pin review queue preflight contract | `0497079` |
-| 2026-07-19 | Direct push | docs: document queue capability discovery | `b05d101` |
 
