@@ -2694,6 +2694,24 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(notModifiedCapabilitiesResponse.headers.get("etag"), capabilitiesEtag);
     assert.equal(await notModifiedCapabilitiesResponse.text(), "");
 
+    const versionResponse = await fetch(`${api.url}/version`);
+    assert.equal(versionResponse.status, 200);
+    const versionEtag = versionResponse.headers.get("etag");
+    assert.match(versionEtag ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(versionResponse.headers.get("cache-control"), "public, max-age=0, must-revalidate");
+    assert.deepEqual(await versionResponse.json(), {
+      requestId: versionResponse.headers.get("x-quorum-request-id"),
+      service: "quorum",
+      version: "0.1.0",
+    });
+
+    const notModifiedVersionResponse = await fetch(`${api.url}/version`, {
+      headers: { "if-none-match": versionEtag ?? "" },
+    });
+    assert.equal(notModifiedVersionResponse.status, 304);
+    assert.equal(notModifiedVersionResponse.headers.get("etag"), versionEtag);
+    assert.equal(await notModifiedVersionResponse.text(), "");
+
     const healthResponse = await fetch(`${api.url}/health`);
     assert.equal(healthResponse.status, 200);
     assert.equal(healthResponse.headers.get("x-quorum-service"), "quorum");
