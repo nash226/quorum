@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `93bf34c` on 2026-07-20, test: cover operational probe preflight contracts
+- Latest shipped change: `6336558` on 2026-07-20, test: pin JSON content type rejection across routes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | [#783](https://github.com/nash226/quorum/pull/783) | test: pin JSON content type rejection across routes | `6336558` |
 | 2026-07-20 | [#777](https://github.com/nash226/quorum/pull/777) | test: cover operational probe preflight contracts | `93bf34c` |
 | 2026-07-20 | Direct push | test: fail closed on empty queue domain filters | `3572e3e` |
 | 2026-07-20 | [#779](https://github.com/nash226/quorum/pull/779) | test: cover conditional version probes | `c1463b7` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | docs: surface HTTP claim preview workflow | `7b30383` |
 | 2026-07-20 | Direct push | test: cover POST route preflight contracts | `087b323` |
 | 2026-07-20 | Direct push | test: cover malformed JSON across POST routes | `00a9fe1` |
-| 2026-07-20 | Direct push | docs: correct liveness probe response contract | `f3047e5` |
 
