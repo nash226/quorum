@@ -66,6 +66,9 @@ The root discovery, capabilities, and OpenAPI probes also support conditional
 `HEAD` requests, returning `304 Not Modified` when their `ETag` is current.
 The [HTTP integration guide](docs/api-integration.md#discover-and-probe-the-service)
 includes a copy-pasteable validator example for cache-aware clients.
+That same conditional probe works for `/capabilities` and `/openapi.json`, so
+clients can refresh runtime limits or the machine-readable schema only when
+their cached contract ETag is stale.
 The same discovery responses advertise the configured JSON request-size and
 request-timeout limits; operators can tune them with `--max-request-bytes` and
 `--request-timeout-ms`, while clients can read the corresponding capability
