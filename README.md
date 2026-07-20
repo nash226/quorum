@@ -54,6 +54,9 @@ the corresponding discovery and request contracts.
 The package smoke check also executes the published `quorum version --json`
 entrypoint, keeping the installed CLI contract aligned with the package
 manifest and library exports.
+It also executes `quorum --help` from the built package artifact and checks the
+primary `verify` and `serve` commands, so a published CLI remains discoverable
+before installation into an integration environment.
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
