@@ -36,6 +36,13 @@ if (cliVersion.service !== "quorum" || cliVersion.version !== packageJson.versio
   throw new Error("Package artifact CLI did not return the expected version contract.");
 }
 
+for (const versionFlag of ["--version", "-v"]) {
+  const versionOutput = execFileSync(process.execPath, [fileURLToPath(cliPath), versionFlag], { encoding: "utf8" });
+  if (versionOutput !== `quorum ${packageJson.version}\n`) {
+    throw new Error(`Package artifact CLI did not preserve the ${versionFlag} version alias.`);
+  }
+}
+
 const cliHelp = execFileSync(process.execPath, [fileURLToPath(cliPath), "--help"], { encoding: "utf8" });
 if (!cliHelp.startsWith("Quorum\n\nUsage:") || !cliHelp.includes("quorum verify") || !cliHelp.includes("quorum serve")) {
   throw new Error("Package artifact CLI did not return the expected help contract.");

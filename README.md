@@ -54,6 +54,8 @@ the corresponding discovery and request contracts.
 The package smoke check also executes the published `quorum version --json`
 entrypoint, keeping the installed CLI contract aligned with the package
 manifest and library exports.
+It also checks the published `quorum --version` and `quorum -v` aliases, so
+short-form version probes remain compatible with installed integrations.
 It also executes `quorum --help` from the built package artifact and checks the
 primary `verify` and `serve` commands, so a published CLI remains discoverable
 before installation into an integration environment.
