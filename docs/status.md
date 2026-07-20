@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ebfe0f6` on 2026-07-20, test: pin empty claim preview smoke coverage
+- Latest shipped change: `08c0f6d` on 2026-07-20, test: smoke-check packaged CLI entrypoint
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | test: smoke-check packaged CLI entrypoint | `08c0f6d` |
 | 2026-07-20 | Direct push | test: pin empty claim preview smoke coverage | `ebfe0f6` |
 | 2026-07-20 | Direct push | docs: document API runtime limits | `a593cac` |
 | 2026-07-20 | Direct push | fix: normalize bracketed ordered lists | `bf1730e` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | [#783](https://github.com/nash226/quorum/pull/783) | test: pin JSON content type rejection across routes | `6336558` |
 | 2026-07-20 | [#777](https://github.com/nash226/quorum/pull/777) | test: cover operational probe preflight contracts | `93bf34c` |
 | 2026-07-20 | Direct push | test: fail closed on empty queue domain filters | `3572e3e` |
-| 2026-07-20 | [#779](https://github.com/nash226/quorum/pull/779) | test: cover conditional version probes | `c1463b7` |
 
