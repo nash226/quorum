@@ -96,7 +96,9 @@ which fields are safe for downstream consumers to select by name; see the
 
 The repository check also runs a package-artifact smoke test after building,
 confirming that published output includes the README and declared CLI, library,
-and HTTP server entry points.
+and HTTP server entry points. It also imports the root and server entry points
+and checks their required runtime exports, so a package can fail closed before
+publication if its declared API surface is missing.
 
 The checked-in 76-fixture benchmark spans 27 HR and 49 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
