@@ -82,6 +82,9 @@ Use `POST /extract-claims` when a workflow needs to preview normalized claim IDs
 and route empty drafts before loading approved sources; the [HTTP integration
 guide](docs/api-integration.md#preview-claims-before-verification) includes the
 request shape and base64 document example.
+The public Node package exposes the same preview as `extractClaimsResult`,
+including an `answerHasClaims` flag so in-memory workflows can route empty
+drafts without starting the HTTP server.
 The packaged HTTP smoke gate also pins the claim-less preview response, keeping
 empty drafts visible for reviewer routing instead of treating them as missing.
 All JSON POST endpoints enforce the advertised request-size limit and return a

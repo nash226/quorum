@@ -5,6 +5,7 @@ import {
   API_CAPABILITIES,
   API_REQUEST_CONTENT_TYPES,
   extractClaims,
+  extractClaimsResult,
   verifyAnswerContentsResult,
   type ApiErrorResponse,
 } from "../src/index.js";
@@ -14,6 +15,17 @@ test("public package entrypoint exports the claim extractor", () => {
     extractClaims(`# Policy\n\n- Employees receive 12 weeks of paid parental leave.`),
     [{ id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." }],
   );
+});
+
+test("public package entrypoint exports the claim-preview routing result", () => {
+  assert.deepEqual(extractClaimsResult("# Draft notes\n\n---"), {
+    answerHasClaims: false,
+    claims: [],
+  });
+  assert.deepEqual(extractClaimsResult("Refunds are available for 30 days."), {
+    answerHasClaims: true,
+    claims: [{ id: "claim_1", text: "Refunds are available for 30 days." }],
+  });
 });
 
 test("public package entrypoint exports in-memory verification for Node workflows", async () => {
