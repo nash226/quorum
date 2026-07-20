@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d4b20cd` on 2026-07-19, fix: reject invalid reviewer queue statuses
+- Latest shipped change: `af31237` on 2026-07-19, test: pin invalid reviewer queue status contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | [#768](https://github.com/nash226/quorum/pull/768) | test: pin invalid reviewer queue status contract | `af31237` |
 | 2026-07-19 | Direct push | fix: reject invalid reviewer queue statuses | `d4b20cd` |
 | 2026-07-19 | Direct push | docs: document auditable reviewer imports | `b798cd8` |
 | 2026-07-19 | [#764](https://github.com/nash226/quorum/pull/764) | test: validate declared package artifact files | `d2cfc48` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | [#760](https://github.com/nash226/quorum/pull/760) | docs: document OpenAPI export workflow | `fdc2f3c` |
 | 2026-07-19 | [#762](https://github.com/nash226/quorum/pull/762) | test: pin review queue preflight contract | `0497079` |
 | 2026-07-19 | Direct push | docs: document queue capability discovery | `b05d101` |
-| 2026-07-19 | Direct push | test: pin reviewer queue status filter in smoke | `fcf7231` |
 
