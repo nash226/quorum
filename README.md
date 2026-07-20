@@ -120,6 +120,10 @@ without relying on generated-at wall-clock differences.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
+Node.js consumers can use the published `quorum` package root for verification,
+`quorum/server` for embedded HTTP helpers, and `quorum/cli` for the CLI entrypoint;
+see the [programmatic API guide](docs/programmatic-api.md#choose-an-entrypoint).
+
 For reviewer handoffs, Quorum can generate claim-level decision CSVs, import
 completed reviewer verdicts, and summarize pending/reviewed/no-claims workload
 for a queue consumer. The same overview is available through `POST
