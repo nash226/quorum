@@ -37,8 +37,22 @@ if (cliVersion.service !== "quorum" || cliVersion.version !== packageJson.versio
 }
 
 const cliHelp = execFileSync(process.execPath, [fileURLToPath(cliPath), "--help"], { encoding: "utf8" });
-if (!cliHelp.startsWith("Quorum\n\nUsage:") || !cliHelp.includes("quorum verify") || !cliHelp.includes("quorum serve")) {
-  throw new Error("Package artifact CLI did not return the expected help contract.");
+const expectedCommands = [
+  "verify",
+  "verify-batch",
+  "extract-claims",
+  "import-review",
+  "review-queue",
+  "evaluate",
+  "serve",
+  "openapi",
+  "version",
+];
+const missingCommands = expectedCommands.filter((command) => !cliHelp.includes(`quorum ${command}`));
+
+if (!cliHelp.startsWith("Quorum\n\nUsage:") || missingCommands.length > 0) {
+  const detail = missingCommands.length > 0 ? ` Missing commands: ${missingCommands.join(", ")}.` : "";
+  throw new Error(`Package artifact CLI did not return the expected help contract.${detail}`);
 }
 
 console.log(`Package smoke check passed: ${packageResult.filename} contains ${files.size} files.`);
