@@ -79,6 +79,9 @@ contract (`pending`, `reviewed`, and `no_claims`) for queue consumers.
 The same packaged smoke check now exercises the `/review-queue` browser
 preflight, pinning its allowed origin, request headers, methods, and ten-minute
 cache lifetime for web-based reviewer handoffs.
+HTTP reviewer imports also document stable request IDs and caller-supplied
+audit timestamps, so retried queue handoffs can be correlated and compared
+without relying on generated-at wall-clock differences.
 
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
