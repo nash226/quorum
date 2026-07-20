@@ -61,6 +61,9 @@ It also documents the separate `/livez` liveness probe for container and
 load-balancer checks, alongside the readiness-only `/healthz` probe.
 Operational probes support bodyless `HEAD` requests as well as `GET`, so
 load balancers can check status headers without downloading a JSON payload.
+All JSON POST endpoints enforce the advertised request-size limit and return a
+structured `413` error when a payload is too large, so adding a new route cannot
+silently bypass the operational guard.
 
 The HTTP integration guide also includes a copy-pasteable `POST /verify-batch`
 request, including empty-answer routing and reviewer artifact output for queue

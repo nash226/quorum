@@ -4006,6 +4006,31 @@ test("programmatic API advertises and enforces a configured request size limit",
   }
 });
 
+test("every JSON POST endpoint enforces the configured request size limit", async () => {
+  const maxRequestBytes = 512;
+  const api = await startApiServer({ host: "127.0.0.1", port: 0, maxRequestBytes });
+  const postPaths = [...new Set(API_ENDPOINTS.filter((endpoint) => endpoint.method === "POST").map((endpoint) => endpoint.path))];
+
+  try {
+    for (const path of postPaths) {
+      const response = await fetch(`${api.url}${path}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ answer: "x".repeat(maxRequestBytes), sources: [] }),
+      });
+
+      assert.equal(response.status, 413, path);
+      assert.equal(
+        (await response.json() as { error: string }).error,
+        `Request body must not exceed ${maxRequestBytes} bytes.`,
+        path,
+      );
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API rejects invalid request timeout configuration", () => {
   for (const requestTimeoutMs of [0, -1, Number.NaN, 1.5, Number.POSITIVE_INFINITY]) {
     assert.throws(
