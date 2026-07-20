@@ -60,6 +60,8 @@ before installation into an integration environment.
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
+The core API regression suite also pins conditional `GET /version` revalidation,
+so cache-aware clients can receive `304 Not Modified` without a body.
 The root discovery, capabilities, and OpenAPI probes also support conditional
 `HEAD` requests, returning `304 Not Modified` when their `ETag` is current.
 The [HTTP integration guide](docs/api-integration.md#discover-and-probe-the-service)
@@ -142,8 +144,6 @@ for a queue consumer. The same overview is available through `POST
 /review-queue`; see the [reviewer queue workflow](docs/reviewer-queue.md) and
 [HTTP integration guide](docs/api-integration.md#summarize-a-reviewer-queue)
 for the artifact fields and request examples.
-Queue summaries also accept a caller-supplied `generatedAt` timestamp, making
-retried handoffs auditable without comparing generated-at wall-clock times.
 Domain-scoped queue overviews fail closed when the selected domain has no
 fixtures, so an empty benchmark scope cannot appear healthy to a dashboard or
 handoff consumer.
