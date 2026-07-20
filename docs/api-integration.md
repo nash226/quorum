@@ -76,10 +76,12 @@ For example, request only pending answers for the next reviewer step:
 ```bash
 curl -sS http://127.0.0.1:3000/import-review \
   -H 'content-type: application/json' \
+  -H 'X-Quorum-Request-Id: hr-review-retry-2026-07-20' \
   -d @- <<'JSON'
 {
   "reviewCsvContent": "...csv content...",
   "queueStatus": "pending",
+  "generatedAt": "2026-07-20T02:00:00.000Z",
   "includeArtifacts": ["result_json", "summary_csv"]
 }
 JSON
@@ -89,6 +91,10 @@ The accepted values are `pending`, `reviewed`, and `no_claims`; integrations
 can discover the same list from `capabilities.reviewQueueStatuses`. The
 response contains only matching answer groups, and its queue totals and
 artifacts describe that filtered handoff.
+The supplied request ID is echoed in the response body and
+`X-Quorum-Request-Id` response header. `generatedAt` gives the imported
+artifacts a stable audit timestamp, which is useful when a queue worker retries
+the same handoff; omit it when the service should stamp the request time.
 If a browser client uses the wrong method, it can read the exposed `Allow`
 header on the `405` response to discover the route's supported method.
 
