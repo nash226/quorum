@@ -121,6 +121,9 @@ handoffs can correlate results with an upstream trace.
 The packaged smoke check pins that correlation contract end to end and verifies
 that `queueStatus: "pending"` filters the reviewer totals without changing
 optional benchmark metrics.
+It also pins caller-supplied request-ID correlation on `POST /evaluate`, so
+benchmark runs can join result payloads and response headers to an upstream
+trace.
 It also verifies that `/capabilities` advertises the complete reviewer routing
 contract (`pending`, `reviewed`, and `no_claims`) for queue consumers.
 The same packaged smoke check now exercises the `/review-queue` browser
