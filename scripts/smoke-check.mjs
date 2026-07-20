@@ -980,6 +980,20 @@ Employees receive 12 weeks of paid parental leave.
       requestId: oversizedRequestResponse.headers.get("x-quorum-request-id"),
     });
 
+    const malformedJsonResponse = await fetch(`${server.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "X-Quorum-Request-Id": "packed-malformed-json-contract",
+      },
+      body: "{\"answer\":",
+    });
+    assert.equal(malformedJsonResponse.status, 400);
+    assert.deepEqual(await malformedJsonResponse.json(), {
+      error: "Request body must be valid JSON.",
+      requestId: "packed-malformed-json-contract",
+    });
+
     const discoveryOpenApiResponse = await fetch(`${server.url}/openapi.json`);
     assert.equal(discoveryOpenApiResponse.status, 200);
     assert.match(discoveryOpenApiResponse.headers.get("etag") ?? "", /^\"[a-f0-9]{64}\"$/);
