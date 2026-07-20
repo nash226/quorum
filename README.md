@@ -460,6 +460,9 @@ password-manager promise.
 The packed smoke check also pins charge-dispute answers in the summary CSV,
 preserving the verified payment-control claim while routing disputed timing to
 contradiction and an ambiguous exception to review.
+Direct evaluation coverage also pins support subscription-renewal routing,
+preserving the verified pre-expiration renewal window while catching a
+post-expiration timing conflict and an unsupported automatic-renewal promise.
 The packed smoke check now explicitly asserts that workspace-access answers
 appear in the benchmark report, preserving the workspace-owner invitation
 control while catching an incorrect acceptance window and an unsupported
