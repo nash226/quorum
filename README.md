@@ -95,8 +95,9 @@ which fields are safe for downstream consumers to select by name; see the
 [reviewer queue workflow](docs/reviewer-queue.md#3-import-the-completed-decisions).
 
 The repository check also runs a package-artifact smoke test after building,
-confirming that published output includes the README and declared CLI, library,
-and HTTP server entry points. It also imports the root and server entry points
+confirming that published output includes the README and every file declared by
+the package `main`, `types`, `exports`, and `bin` fields, as well as the CLI,
+library, and HTTP server entry points. It also imports the root and server entry points
 and checks their required runtime exports, so a package can fail closed before
 publication if its declared API surface is missing.
 

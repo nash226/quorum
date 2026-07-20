@@ -1,13 +1,20 @@
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+
+const packageJson = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
 
 const output = execFileSync("npm", ["pack", "--dry-run", "--json"], { encoding: "utf8" });
 const [packageResult] = JSON.parse(output);
 const files = new Set(packageResult?.files?.map(({ path }) => path) ?? []);
-const requiredFiles = ["README.md", "dist/src/index.js", "dist/src/api-server.js", "dist/src/cli.js"];
+const binFiles = typeof packageJson.bin === "string" ? [packageJson.bin] : Object.values(packageJson.bin ?? {});
+const declaredFiles = [packageJson.main, packageJson.types, ...Object.values(packageJson.exports ?? {}).flatMap((entry) =>
+  typeof entry === "string" ? [entry] : Object.values(entry),
+), ...binFiles];
+const requiredFiles = ["README.md", ...declaredFiles.map((file) => file.replace(/^\.\//, ""))];
 const missingFiles = requiredFiles.filter((file) => !files.has(file));
 
 if (missingFiles.length > 0) {
-  throw new Error(`Package artifact is missing required files: ${missingFiles.join(", ")}`);
+  throw new Error(`Package artifact is missing declared files: ${missingFiles.join(", ")}`);
 }
 
 const packageRoot = new URL("../", import.meta.url);
