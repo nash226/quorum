@@ -1275,6 +1275,22 @@ Employees receive 12 weeks of paid parental leave.
       { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
     ]);
 
+    const emptyExtractClaimsResponse = await fetch(`${server.url}/extract-claims`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "X-Quorum-Request-Id": "packed-empty-claim-preview-contract",
+      },
+      body: JSON.stringify({ answer: "Thanks!" }),
+    });
+    assert.equal(emptyExtractClaimsResponse.status, 200);
+    assert.deepEqual(await emptyExtractClaimsResponse.json(), {
+      requestId: "packed-empty-claim-preview-contract",
+      answerPreview: "Thanks!",
+      answerHasClaims: false,
+      claims: [],
+    });
+
     const extractClaimsPreflightResponse = await fetch(`${server.url}/extract-claims`, {
       method: "OPTIONS",
       headers: {
