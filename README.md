@@ -68,6 +68,9 @@ consumers.
 Unsupported methods now return a structured 405 response with the route's
 `Allow` header, so HTTP clients can recover from method mismatches without
 guessing the API contract.
+The packaged smoke check also verifies that an invalid reviewer queue status
+returns a structured 400 error with its request ID, keeping queue consumers
+from silently falling back to an unfiltered overview.
 The `POST /review-queue` response preserves a caller-supplied
 `X-Quorum-Request-Id` in both the JSON payload and response header, so queue
 handoffs can correlate results with an upstream trace.

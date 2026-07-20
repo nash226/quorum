@@ -880,6 +880,24 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(pendingReviewQueueResult.review, reviewQueueResult.review);
     assert.deepEqual(pendingReviewQueueResult.evaluation, reviewQueueResult.evaluation);
 
+    const invalidReviewQueueResponse = await fetch(`${server.url}/review-queue`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "X-Quorum-Request-Id": "packed-review-queue-invalid-status-contract",
+      },
+      body: JSON.stringify({
+        queueStatus: "in_progress",
+        reviewCsvContent: "answer_label,answer_path,answer_has_claims\nEmpty draft,answers/empty.md,false\n",
+      }),
+    });
+    const invalidReviewQueueBody = await invalidReviewQueueResponse.text();
+    assert.equal(invalidReviewQueueResponse.status, 400, invalidReviewQueueBody);
+    assert.deepEqual(JSON.parse(invalidReviewQueueBody), {
+      error: "Invalid reviewer queue status: in_progress. Expected pending, reviewed, or no_claims.",
+      requestId: "packed-review-queue-invalid-status-contract",
+    });
+
     const indexResponse = await fetch(server.url);
     assert.equal(indexResponse.status, 200);
     const indexEtag = indexResponse.headers.get("etag");
