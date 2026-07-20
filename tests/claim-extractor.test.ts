@@ -391,6 +391,13 @@ test("ignores collapsed html details summaries without visible claim bodies", ()
   assert.deepEqual(claims, []);
 });
 
+test("keeps expanded html details bodies while excluding collapsed policy sections", () => {
+  const claims = extractClaims(`<details open="true"><summary>Shipping policy</summary><p>Tracked delivery arrives within five business days.</p></details><details><p>Legacy delivery arrives whenever capacity permits.</p></details>`);
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Tracked delivery arrives within five business days.",
+  ]);
+});
+
 test("keeps escaped pipes inside markdown table cells", () => {
   const claims = extractClaims(`| Policy | Details |
 | --- | --- |

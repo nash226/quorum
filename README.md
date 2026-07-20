@@ -160,6 +160,8 @@ The evaluation mismatch guard also fails closed when either verdict totals or
 matched-claim counts drift, keeping scorecard and aggregate gates reviewable.
 The fixture loader now applies the same fail-closed rule to unknown top-level
 fields, so misspelled answer, source, or expectation keys fail before scoring.
+HTML answer exports keep expanded `<details>` policy content while ignoring
+collapsed sections, preventing hidden legacy guidance from becoming claims.
 The evaluator also regression-tests the support-only domain filter, keeping
 focused support scorecards aligned with the 49-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
