@@ -1223,6 +1223,7 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(await headVersionResponse.text(), "");
 
     const notModifiedVersionResponse = await fetch(`${server.url}/version`, {
+      method: "HEAD",
       headers: { "if-none-match": versionEtag ?? "" },
     });
     assert.equal(notModifiedVersionResponse.status, 304);

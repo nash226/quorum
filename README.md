@@ -79,6 +79,8 @@ POST route preserves the same safe client-error boundary.
 The packaged smoke check also exercises browser preflight across every POST
 route, keeping CORS method, header, origin, cache, and bodyless-response
 contracts aligned as new JSON endpoints are added.
+It also verifies the version endpoint's JSON response, bodyless `HEAD` probe,
+and conditional `304` response in the packaged HTTP smoke gate.
 The [HTTP integration guide](docs/api-integration.md#handle-malformed-json)
 includes a copy-pasteable malformed-body example and distinguishes this client
 error from route validation (`400`) and request-size (`413`) failures.
