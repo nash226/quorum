@@ -51,6 +51,10 @@ Use `--server-url` when the generated document should point at a deployed
 Quorum endpoint; the [HTTP integration guide](docs/api-integration.md) covers
 the corresponding discovery and request contracts.
 
+Node.js integrations can use the public `extractClaimsResult` helper to preview
+normalized claims and receive an explicit `answerHasClaims` signal for routing
+empty drafts to review; see the [programmatic API guide](docs/programmatic-api.md).
+
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
 The root discovery, capabilities, and OpenAPI probes also support conditional

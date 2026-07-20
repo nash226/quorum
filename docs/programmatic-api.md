@@ -34,7 +34,21 @@ the content is PDF or DOCX bytes. Use `verifyAnswerContents` when a plain
 `VerificationReport` is enough, `verifyAnswer` when sources are already loaded
 as `SourceDocument` values, or `verifyAnswers` for multiple string answers
 sharing those sources. The exported `extractClaims` helper can preview claims
-before verification when a workflow needs to route or annotate them.
+before verification when a workflow needs to route or annotate them. Use
+`extractClaimsResult` when the caller also needs the explicit `answerHasClaims`
+signal for empty-draft routing:
+
+```ts
+import { extractClaimsResult } from "quorum";
+
+const preview = extractClaimsResult("# Draft notes\n\n---");
+if (!preview.answerHasClaims) {
+  console.log("Route this answer to review; it contains no claims.");
+}
+```
+
+The result keeps normalized claim IDs and texts in `claims`, so callers do not
+need to infer queue routing from an array length or duplicate normalization rules.
 
 ## Use file-backed workflows
 
