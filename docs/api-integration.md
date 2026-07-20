@@ -227,6 +227,26 @@ HTTP `409`; the same result is still available in the JSON body. Every response
 also includes `X-Quorum-Request-Id`, which can be supplied by the caller for
 log correlation.
 
+### Handle malformed JSON
+
+Every JSON POST route rejects an empty or syntactically invalid body with HTTP
+`400`. The response is a small, stable JSON object containing the error and the
+request ID, so clients can report a payload-encoding problem without trying to
+interpret a verification result:
+
+```bash
+curl -sS http://127.0.0.1:3000/verify \
+  -H 'content-type: application/json' \
+  -H 'x-quorum-request-id: malformed-json-demo' \
+  --data-binary '{"answer":'
+# {"error":"Request body must be valid JSON.","requestId":"malformed-json-demo"}
+```
+
+This is distinct from a syntactically valid but invalid request, which returns
+the route-specific validation error, and from an oversized body, which returns
+HTTP `413`. A caller-supplied `X-Quorum-Request-Id` is echoed in the error
+payload and response header; otherwise Quorum generates one.
+
 Set `sources[].id` when the workflow already has a durable policy or document
 identifier. Quorum preserves that value in `report.sources` and claim evidence;
 when it is omitted, the response keeps the positional `source_1`-style fallback.
