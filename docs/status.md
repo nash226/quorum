@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `00a9fe1` on 2026-07-20, test: cover malformed JSON across POST routes
+- Latest shipped change: `087b323` on 2026-07-20, test: cover POST route preflight contracts
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | test: cover POST route preflight contracts | `087b323` |
 | 2026-07-20 | Direct push | test: cover malformed JSON across POST routes | `00a9fe1` |
 | 2026-07-20 | Direct push | docs: correct liveness probe response contract | `f3047e5` |
 | 2026-07-20 | Direct push | test: pin subscription renewal evaluation | `1ac1059` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | test: smoke-check malformed JSON responses | `09a0c64` |
 | 2026-07-19 | Direct push | test: enforce request limits across POST routes | `be7264e` |
 | 2026-07-19 | [#768](https://github.com/nash226/quorum/pull/768) | test: pin invalid reviewer queue status contract | `af31237` |
-| 2026-07-19 | Direct push | fix: reject invalid reviewer queue statuses | `d4b20cd` |
 
