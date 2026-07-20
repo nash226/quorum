@@ -20,8 +20,14 @@ independent of source loading and reviewer queue state:
 
 ```bash
 curl -fsS http://127.0.0.1:3000/livez
-# {"status":"ok"}
+# {"ok":true,"requestId":"...","service":"quorum","version":"0.1.0"}
 ```
+
+The response includes a generated `requestId` that is also returned in the
+`X-Quorum-Request-Id` header, so probe logs can be correlated with service
+logs. The `/livez` body is intentionally the same health envelope as
+`/healthz`; the distinction is operational: liveness confirms only that the
+process is serving requests, while readiness may account for dependencies.
 
 Use `/healthz` when the caller needs readiness semantics instead; it can report
 that the service is not ready even while the process remains alive.
