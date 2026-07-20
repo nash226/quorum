@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b85732e` on 2026-07-20, test: preserve fixture source identity in smoke gate
+- Latest shipped change: `bf1730e` on 2026-07-20, fix: normalize bracketed ordered lists
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | fix: normalize bracketed ordered lists | `bf1730e` |
 | 2026-07-20 | Direct push | test: preserve fixture source identity in smoke gate | `b85732e` |
 | 2026-07-20 | [#783](https://github.com/nash226/quorum/pull/783) | test: pin JSON content type rejection across routes | `6336558` |
 | 2026-07-20 | [#777](https://github.com/nash226/quorum/pull/777) | test: cover operational probe preflight contracts | `93bf34c` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | [#779](https://github.com/nash226/quorum/pull/779) | test: cover conditional version probes | `c1463b7` |
 | 2026-07-20 | Direct push | test: cover discovery route preflight smoke | `ac7e073` |
 | 2026-07-20 | Direct push | docs: surface HTTP claim preview workflow | `7b30383` |
-| 2026-07-20 | Direct push | test: cover POST route preflight contracts | `087b323` |
 
