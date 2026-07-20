@@ -51,6 +51,9 @@ npm run dev -- openapi --out reports/quorum-openapi.json
 Use `--server-url` when the generated document should point at a deployed
 Quorum endpoint; the [HTTP integration guide](docs/api-integration.md) covers
 the corresponding discovery and request contracts.
+The package smoke check also executes the published `quorum version --json`
+entrypoint, keeping the installed CLI contract aligned with the package
+manifest and library exports.
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
