@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `3572e3e` on 2026-07-20, test: fail closed on empty queue domain filters
+- Latest shipped change: `93bf34c` on 2026-07-20, test: cover operational probe preflight contracts
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | [#777](https://github.com/nash226/quorum/pull/777) | test: cover operational probe preflight contracts | `93bf34c` |
 | 2026-07-20 | Direct push | test: fail closed on empty queue domain filters | `3572e3e` |
 | 2026-07-20 | [#779](https://github.com/nash226/quorum/pull/779) | test: cover conditional version probes | `c1463b7` |
 | 2026-07-20 | Direct push | test: cover discovery route preflight smoke | `ac7e073` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | test: cover POST route preflight contracts | `087b323` |
 | 2026-07-20 | Direct push | test: cover malformed JSON across POST routes | `00a9fe1` |
 | 2026-07-20 | Direct push | docs: correct liveness probe response contract | `f3047e5` |
-| 2026-07-20 | Direct push | test: pin subscription renewal evaluation | `1ac1059` |
 
