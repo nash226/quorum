@@ -1617,6 +1617,7 @@ Reviewed HR packet,answers/reviewed.md,Reviewed policy claim.,true,claim_1,Revie
       method: "POST",
       headers: {
         "content-type": "application/json",
+        "X-Quorum-Request-Id": "packed-evaluate-contract",
       },
       body: JSON.stringify({
         fixtures: [
@@ -1630,6 +1631,8 @@ Reviewed HR packet,answers/reviewed.md,Reviewed policy claim.,true,claim_1,Revie
     });
     assert.equal(evaluateResponse.status, 200);
     const evaluateResult = await evaluateResponse.json();
+    assert.equal(evaluateResult.requestId, "packed-evaluate-contract");
+    assert.equal(evaluateResponse.headers.get("x-quorum-request-id"), "packed-evaluate-contract");
     assert.equal(evaluateResult.shouldFail, false);
     assert.equal(evaluateResult.mismatchCount, 0);
     assert.equal(evaluateResult.scorecards[0]?.fixtureName, "HR policy example");
