@@ -8,6 +8,7 @@ const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
 const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 const UNICODE_BULLET_PREFIX = /^(?:[\u2022\u2023\u25E6\u2043\u2219])\s+/;
 const UNICODE_NUMBER_PREFIX = /^[\u2460-\u2473\u24F5-\u24FE\u2776-\u277F\u2780-\u2789\u278A-\u2793]\s+/;
+const UNICODE_DECIMAL_NUMBER_PREFIX = /^\p{Decimal_Number}+[.)]\s+/u;
 const ARABIC_NUMBER_PREFIX = /^[\u0660-\u0669\u06F0-\u06F9]+[.)]\s+/;
 const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
 const DEFINITION_LIST_PREFIX = /^:\s+/;
@@ -540,6 +541,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     /^[-*+]\s+/,
     UNICODE_BULLET_PREFIX,
     UNICODE_NUMBER_PREFIX,
+    UNICODE_DECIMAL_NUMBER_PREFIX,
     ARABIC_NUMBER_PREFIX,
     DASH_BULLET_PREFIX,
     /^\d+[.)]\s+/,
