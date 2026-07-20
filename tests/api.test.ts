@@ -408,6 +408,32 @@ test("HTTP API serves bodyless HEAD responses for operational probes", async () 
   }
 });
 
+test("HTTP API exposes CORS preflight metadata for operational probes", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const path of ["/health", "/healthz", "/readyz", "/livez"]) {
+      const response = await fetch(`${api.url}${path}`, {
+        method: "OPTIONS",
+        headers: {
+          origin: "https://console.example.com",
+          "access-control-request-method": "GET",
+          "access-control-request-headers": "x-quorum-request-id",
+        },
+      });
+
+      assert.equal(response.status, 204, path);
+      assert.equal(response.headers.get("access-control-allow-origin"), "https://console.example.com", path);
+      assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, OPTIONS", path);
+      assert.equal(response.headers.get("access-control-allow-headers"), "X-Quorum-Request-Id", path);
+      assert.equal(response.headers.get("access-control-max-age"), "600", path);
+      assert.equal(await response.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API rejects CORS preflight requests for unknown routes", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
