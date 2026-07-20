@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a593cac` on 2026-07-20, docs: document API runtime limits
+- Latest shipped change: `ebfe0f6` on 2026-07-20, test: pin empty claim preview smoke coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | test: pin empty claim preview smoke coverage | `ebfe0f6` |
 | 2026-07-20 | Direct push | docs: document API runtime limits | `a593cac` |
 | 2026-07-20 | Direct push | fix: normalize bracketed ordered lists | `bf1730e` |
 | 2026-07-20 | Direct push | test: preserve fixture source identity in smoke gate | `b85732e` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | [#777](https://github.com/nash226/quorum/pull/777) | test: cover operational probe preflight contracts | `93bf34c` |
 | 2026-07-20 | Direct push | test: fail closed on empty queue domain filters | `3572e3e` |
 | 2026-07-20 | [#779](https://github.com/nash226/quorum/pull/779) | test: cover conditional version probes | `c1463b7` |
-| 2026-07-20 | Direct push | test: cover discovery route preflight smoke | `ac7e073` |
 
