@@ -507,6 +507,9 @@ and `needs_review` claim counts so dashboard consumers can prioritize review
 work without recounting individual claims. The human-readable
 `review-queue` CLI summary now prints the same verdict breakdown alongside
 reviewer workload and benchmark drift.
+The packaged HTTP smoke gate also verifies browser preflight responses for the
+GET-only `/capabilities`, `/version`, and `/openapi.json` discovery routes,
+including their allowed headers, origin, cache lifetime, and empty body.
 The HTTP queue overview also rejects unknown `queueStatus` values with a
 structured 400 response, keeping pending, reviewed, and no-claims routing
 explicit for downstream consumers.
