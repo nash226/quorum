@@ -3922,6 +3922,40 @@ test("review-queue scopes benchmark drift to selected domains", async () => {
   }
 });
 
+test("review-queue fails closed when a domain filter matches no fixtures", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-domain-empty-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    await runCli([
+      "verify-batch",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--review-csv-out",
+      reviewCsvPath,
+    ]);
+
+    const result = await runCliAllowFailure([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--fixture-dir",
+      "examples/evaluations",
+      "--domain",
+      "finance",
+      "--json",
+    ]);
+
+    assert.equal(result.code, 1);
+    assert.match(result.stderr, /No evaluation fixtures matched domain filter: finance/);
+    assert.equal(result.stdout, "");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 async function runCliAllowFailure(
   args: string[],
   options?: { stdin?: string },
