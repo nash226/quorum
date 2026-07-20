@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b2db33a` on 2026-07-20, docs: explain cacheable contract probes
+- Latest shipped change: `13d16b8` on 2026-07-20, test: preserve packaged version aliases
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | test: preserve packaged version aliases | `13d16b8` |
 | 2026-07-20 | Direct push | docs: explain cacheable contract probes | `b2db33a` |
 | 2026-07-20 | Direct push | docs: document workspace access fixture | `46ac76c` |
 | 2026-07-20 | Direct push | test: cover conditional version revalidation | `c28fdde` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | test: pin evaluate request correlation | `49c1d91` |
 | 2026-07-20 | Direct push | test: smoke-check packaged CLI help | `f951d6b` |
 | 2026-07-20 | Direct push | test: smoke-check packaged CLI entrypoint | `08c0f6d` |
-| 2026-07-20 | Direct push | test: pin empty claim preview smoke coverage | `ebfe0f6` |
 
