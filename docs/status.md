@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d2cfc48` on 2026-07-19, test: validate declared package artifact files
+- Latest shipped change: `b798cd8` on 2026-07-19, docs: document auditable reviewer imports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | docs: document auditable reviewer imports | `b798cd8` |
 | 2026-07-19 | [#764](https://github.com/nash226/quorum/pull/764) | test: validate declared package artifact files | `d2cfc48` |
 | 2026-07-19 | Direct push | test: verify published package entrypoints | `cedeb83` |
 | 2026-07-19 | [#760](https://github.com/nash226/quorum/pull/760) | docs: document OpenAPI export workflow | `fdc2f3c` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | docs: document queue capability discovery | `b05d101` |
 | 2026-07-19 | Direct push | test: pin reviewer queue status filter in smoke | `fcf7231` |
 | 2026-07-19 | Direct push | test: pin review queue request tracing in smoke | `0d84fe7` |
-| 2026-07-19 | Direct push | test: pin support contact change smoke coverage | `9738dd7` |
 
