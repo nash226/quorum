@@ -120,6 +120,9 @@ separate `/import-review` and `/evaluate` responses.
 Add `queueStatus` when the overview should describe only one handoff state:
 `pending`, `reviewed`, or `no_claims`. The filter scopes the answer and claim
 totals while leaving optional evaluation metrics unchanged.
+An unknown `queueStatus` returns HTTP 400 with a structured error, so callers
+must use one of those three values instead of silently receiving an unfiltered
+overview.
 Add `domains` when benchmark drift should be limited to selected policy
 domains, for example `"domains": ["support"]`. The response echoes the
 applied domain scope and recalculates evaluation totals from the matching

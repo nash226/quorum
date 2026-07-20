@@ -477,6 +477,9 @@ and `needs_review` claim counts so dashboard consumers can prioritize review
 work without recounting individual claims. The human-readable
 `review-queue` CLI summary now prints the same verdict breakdown alongside
 reviewer workload and benchmark drift.
+The HTTP queue overview also rejects unknown `queueStatus` values with a
+structured 400 response, keeping pending, reviewed, and no-claims routing
+explicit for downstream consumers.
 Claim extraction regression coverage also preserves uncertainty wording in
 compound answers, so downstream verification can review the original
 qualification instead of receiving a stronger rewritten claim.

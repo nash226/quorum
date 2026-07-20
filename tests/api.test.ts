@@ -4411,6 +4411,28 @@ test("programmatic API filters reviewer queue overview by queue status", async (
   }
 });
 
+test("programmatic API rejects invalid reviewer queue statuses", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        queueStatus: "in_progress",
+        reviewCsvContent: "claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes\n",
+      }),
+    });
+
+    assert.equal(response.status, 400);
+    const result = await response.json() as { error: string; requestId: string };
+    assert.equal(result.error, "Invalid reviewer queue status: in_progress. Expected pending, reviewed, or no_claims.");
+    assert.match(result.requestId, /^[0-9a-f-]{36}$/);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves evaluation over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const generatedAt = "2026-07-07T19:25:00.000Z";

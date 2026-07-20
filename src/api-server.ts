@@ -1826,7 +1826,7 @@ function parseImportReviewRequest(value: unknown): {
     failOn: parseOptionalFailOn(record.failOn),
     queueStatus: record.queueStatus === undefined
       ? undefined
-      : parseReviewerQueueStatus(requireString(record.queueStatus, "queueStatus")),
+      : parseApiReviewerQueueStatus(record.queueStatus),
     includeArtifacts: parseOptionalArtifacts(record.includeArtifacts, IMPORT_REVIEW_ARTIFACTS, "includeArtifacts"),
     failOnStatus: optionalBoolean(record.failOnStatus, "failOnStatus"),
   };
@@ -1847,8 +1847,18 @@ function parseReviewQueueRequest(value: unknown): ApiReviewQueueRequest {
     generatedAt: parseOptionalGeneratedAt(record.generatedAt),
     queueStatus: record.queueStatus === undefined
       ? undefined
-      : parseReviewerQueueStatus(requireString(record.queueStatus, "queueStatus")),
+      : parseApiReviewerQueueStatus(record.queueStatus),
   };
+}
+
+function parseApiReviewerQueueStatus(value: unknown): ReviewerQueueStatus {
+  const queueStatus = requireString(value, "queueStatus");
+
+  try {
+    return parseReviewerQueueStatus(queueStatus);
+  } catch (error: unknown) {
+    throw requestError(error instanceof Error ? error.message : "Invalid queueStatus.");
+  }
 }
 
 function parseEvaluateRequest(value: unknown): {
