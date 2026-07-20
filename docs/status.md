@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0693e60` on 2026-07-20, docs: explain queue audit timestamps
+- Latest shipped change: `c28fdde` on 2026-07-20, test: cover conditional version revalidation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | test: cover conditional version revalidation | `c28fdde` |
 | 2026-07-20 | Direct push | docs: explain queue audit timestamps | `0693e60` |
 | 2026-07-20 | Direct push | test: pin evaluate request correlation | `49c1d91` |
 | 2026-07-20 | Direct push | test: smoke-check packaged CLI help | `f951d6b` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | test: pin empty claim preview smoke coverage | `ebfe0f6` |
 | 2026-07-20 | Direct push | docs: document API runtime limits | `a593cac` |
 | 2026-07-20 | Direct push | fix: normalize bracketed ordered lists | `bf1730e` |
-| 2026-07-20 | Direct push | test: preserve fixture source identity in smoke gate | `b85732e` |
 
