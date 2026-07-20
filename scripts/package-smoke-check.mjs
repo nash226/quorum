@@ -10,7 +10,7 @@ const binFiles = typeof packageJson.bin === "string" ? [packageJson.bin] : Objec
 const declaredFiles = [packageJson.main, packageJson.types, ...Object.values(packageJson.exports ?? {}).flatMap((entry) =>
   typeof entry === "string" ? [entry] : Object.values(entry),
 ), ...binFiles];
-const requiredFiles = ["README.md", ...declaredFiles];
+const requiredFiles = ["README.md", ...declaredFiles.map((file) => file.replace(/^\.\//, ""))];
 const missingFiles = requiredFiles.filter((file) => !files.has(file));
 
 if (missingFiles.length > 0) {
