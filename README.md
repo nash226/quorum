@@ -272,6 +272,9 @@ reviewer-facing report.
 The packed smoke check also verifies payment-method answers, preserving the
 account-owner control while catching a stale invoice-window claim and an
 unsupported automatic-refund promise.
+The fixture guide now also lists the support workspace-access workflow, whose
+packed smoke coverage preserves owner-controlled invitations and routes
+conflicting access claims for reviewer attention.
 
 The packed smoke check now also verifies the support SLA summary, preserving
 the first-response commitment while catching timing drift and unsupported
