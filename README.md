@@ -331,6 +331,8 @@ and summary CSV, preserving its cadence, eligibility, and outcome-verdict paths.
 The HR benchmark now directly regression-tests bereavement leave, preserving
 paid-leave and vacation-carryover verification while routing an unsupported
 home-office stipend claim for review.
+The packed smoke check now also pins this bereavement-leave evaluation in the
+generated benchmark report, keeping the HR leave workflow in the end-to-end gate.
 
 The HR benchmark now also covers relocation reimbursement, including an
 approved request path, a reimbursement-limit review, and an unsupported

@@ -442,6 +442,7 @@ try {
   assert.match(evaluationStdout, /Support source directory example/);
   assert.match(evaluationStdout, /HR source directory policy example/);
   assert.match(evaluationStdout, /HR benefits enrollment policy example/);
+  assert.match(evaluationStdout, /HR bereavement leave policy example/);
   assert.match(evaluationStdout, /HR medical leave policy example/);
   assert.match(evaluationStdout, /HR sabbatical leave policy example/);
   assert.match(evaluationStdout, /HR onboarding policy example/);
