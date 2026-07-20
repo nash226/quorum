@@ -64,6 +64,9 @@ The liveness response is a request-correlated health envelope, and its
 independent of source loading and reviewer queue state.
 Operational probes support bodyless `HEAD` requests as well as `GET`, so
 load balancers can check status headers without downloading a JSON payload.
+Browser-based monitors can also preflight `/health`, `/healthz`, `/readyz`, and
+`/livez`; each route preserves the advertised origin, `GET, HEAD, OPTIONS`
+methods, request-ID header, and ten-minute preflight cache contract.
 Use `POST /extract-claims` when a workflow needs to preview normalized claim IDs
 and route empty drafts before loading approved sources; the [HTTP integration
 guide](docs/api-integration.md#preview-claims-before-verification) includes the
