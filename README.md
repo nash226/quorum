@@ -84,6 +84,9 @@ the same structured `415` response and preserves caller-supplied request IDs.
 The packaged smoke check also exercises browser preflight across every POST
 route, keeping CORS method, header, origin, cache, and bodyless-response
 contracts aligned as new JSON endpoints are added.
+The same end-to-end benchmark smoke check now preserves the durable source ID
+for the support guest-access fixture, so reviewer artifacts remain traceable
+to the approved policy snapshot.
 It also verifies the version endpoint's JSON response, bodyless `HEAD` probe,
 and conditional `304` response in the packaged HTTP smoke gate.
 The [HTTP integration guide](docs/api-integration.md#handle-malformed-json)
