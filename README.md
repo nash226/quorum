@@ -13,8 +13,9 @@ breaks an answer into claims, compares each claim with source evidence, and
 returns reviewer-ready `verified`, `contradicted`, `unsupported`, or
 `needs_review` verdicts. The first wedge is HR and customer-support policy
 verification, where grounded answers are high-volume and costly to get wrong.
-Claim extraction also normalizes Arabic-Indic and Persian ordered-list markers,
-keeping localized numbered answers clean before evidence matching.
+Claim extraction also normalizes bracketed, Arabic-Indic, and Persian ordered-list
+markers, keeping exported and localized numbered answers clean before evidence
+matching.
 
 ## Quick Start
 
