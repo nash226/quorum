@@ -1,5 +1,7 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 const packageJson = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
@@ -46,6 +48,18 @@ for (const versionFlag of ["--version", "-v"]) {
 const cliHelp = execFileSync(process.execPath, [fileURLToPath(cliPath), "--help"], { encoding: "utf8" });
 if (!cliHelp.startsWith("Quorum\n\nUsage:") || !cliHelp.includes("quorum verify") || !cliHelp.includes("quorum serve")) {
   throw new Error("Package artifact CLI did not return the expected help contract.");
+}
+
+const openApiTempDir = mkdtempSync(join(tmpdir(), "quorum-package-openapi-"));
+try {
+  const openApiPath = join(openApiTempDir, "openapi.json");
+  execFileSync(process.execPath, [fileURLToPath(cliPath), "openapi", "--out", openApiPath], { encoding: "utf8" });
+  const openApiDocument = JSON.parse(readFileSync(openApiPath, "utf8"));
+  if (openApiDocument.openapi !== "3.1.0" || openApiDocument.info?.title !== "Quorum Local API" || !openApiDocument.paths?.["/verify"]) {
+    throw new Error("Package artifact CLI did not write the expected OpenAPI contract.");
+  }
+} finally {
+  rmSync(openApiTempDir, { recursive: true, force: true });
 }
 
 console.log(`Package smoke check passed: ${packageResult.filename} contains ${files.size} files.`);
