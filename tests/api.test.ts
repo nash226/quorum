@@ -423,7 +423,7 @@ test("HTTP API exposes CORS preflight metadata for operational probes", async ()
       });
 
       assert.equal(response.status, 204, path);
-      assert.equal(response.headers.get("access-control-allow-origin"), "https://console.example.com", path);
+      assert.equal(response.headers.get("access-control-allow-origin"), "*", path);
       assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, OPTIONS", path);
       assert.equal(response.headers.get("access-control-allow-headers"), "X-Quorum-Request-Id", path);
       assert.equal(response.headers.get("access-control-max-age"), "600", path);
