@@ -142,6 +142,8 @@ for a queue consumer. The same overview is available through `POST
 /review-queue`; see the [reviewer queue workflow](docs/reviewer-queue.md) and
 [HTTP integration guide](docs/api-integration.md#summarize-a-reviewer-queue)
 for the artifact fields and request examples.
+Queue summaries also accept a caller-supplied `generatedAt` timestamp, making
+retried handoffs auditable without comparing generated-at wall-clock times.
 Domain-scoped queue overviews fail closed when the selected domain has no
 fixtures, so an empty benchmark scope cannot appear healthy to a dashboard or
 handoff consumer.
