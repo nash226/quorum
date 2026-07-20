@@ -508,6 +508,11 @@ try {
     77,
     "evaluation summary CSV should contain one header plus one row for each of the 76 benchmark fixtures",
   );
+  assert.match(
+    evaluationSummaryCsv,
+    /^.*Support guest access policy example.*support\/guest-access@2026-07-16.*$/m,
+    "evaluation smoke output should preserve the guest-access source identity",
+  );
   assert.match(evaluationSummaryCsv, /^[^,\n]+,Support billing HTML example,support,/m);
   assert.match(evaluationSummaryCsv, /^[^,\n]+,HR PDF policy example,hr,/m);
   assert.match(
