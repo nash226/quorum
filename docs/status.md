@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `fdc2f3c` on 2026-07-19, docs: document OpenAPI export workflow
+- Latest shipped change: `cedeb83` on 2026-07-19, test: verify published package entrypoints
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-19 | Direct push | test: verify published package entrypoints | `cedeb83` |
 | 2026-07-19 | [#760](https://github.com/nash226/quorum/pull/760) | docs: document OpenAPI export workflow | `fdc2f3c` |
 | 2026-07-19 | [#762](https://github.com/nash226/quorum/pull/762) | test: pin review queue preflight contract | `0497079` |
 | 2026-07-19 | Direct push | docs: document queue capability discovery | `b05d101` |
@@ -55,5 +56,4 @@
 | 2026-07-19 | Direct push | test: pin review queue request tracing in smoke | `0d84fe7` |
 | 2026-07-19 | Direct push | test: pin support contact change smoke coverage | `9738dd7` |
 | 2026-07-19 | Direct push | test: pin operational probe head contract | `6c0f557` |
-| 2026-07-19 | Direct push | test: pin unsupported API method contract | `ce0056c` |
 
