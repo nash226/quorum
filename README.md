@@ -64,6 +64,10 @@ The liveness response is a request-correlated health envelope, and its
 independent of source loading and reviewer queue state.
 Operational probes support bodyless `HEAD` requests as well as `GET`, so
 load balancers can check status headers without downloading a JSON payload.
+Use `POST /extract-claims` when a workflow needs to preview normalized claim IDs
+and route empty drafts before loading approved sources; the [HTTP integration
+guide](docs/api-integration.md#preview-claims-before-verification) includes the
+request shape and base64 document example.
 All JSON POST endpoints enforce the advertised request-size limit and return a
 structured `413` error when a payload is too large, so adding a new route cannot
 silently bypass the operational guard.
