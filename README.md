@@ -118,6 +118,9 @@ for a queue consumer. The same overview is available through `POST
 /review-queue`; see the [reviewer queue workflow](docs/reviewer-queue.md) and
 [HTTP integration guide](docs/api-integration.md#summarize-a-reviewer-queue)
 for the artifact fields and request examples.
+Domain-scoped queue overviews fail closed when the selected domain has no
+fixtures, so an empty benchmark scope cannot appear healthy to a dashboard or
+handoff consumer.
 
 Reviewer queue imports also document the stable queue-summary CSV header and
 which fields are safe for downstream consumers to select by name; see the
