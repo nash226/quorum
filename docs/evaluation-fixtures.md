@@ -19,7 +19,7 @@ set covers:
   remote work, workplace accommodations, expense reimbursement, tuition reimbursement, and travel reimbursement
 - support account closure, account recovery, account contact changes, account security, account suspension, authorized contacts, billing address changes, billing-suspension appeals, cancellation, guest access, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, payment method
-  changes, replacement, and tax exemption
+  changes, replacement, workspace access, and tax exemption
   eligibility, subscription pauses, SLA, billing, gift cards, service credits, shipping protection,
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
@@ -115,6 +115,8 @@ specific product question:
   the first customer-support wedge across common high-risk answers.
 - Support refunds coverage isolates a time-bound annual-plan policy with
   verified, contradicted, and unsupported customer claims.
+- Support workspace-access coverage tests the workspace-owner invitation control,
+  a contradictory access-duration claim, and a needs-review membership claim.
 - Support refund-status coverage tests a billing-history control, a matched
   processing-window claim, and an unsupported automatic-retry promise.
 - Support data-export coverage tests inline source metadata, durable source
