@@ -1073,6 +1073,28 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(headCapabilitiesResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
     assert.equal(await headCapabilitiesResponse.text(), "");
 
+    for (const path of ["/capabilities", "/version", "/openapi.json"]) {
+      const preflightResponse = await fetch(`${server.url}${path}`, {
+        method: "OPTIONS",
+        headers: {
+          origin: "https://console.example.com",
+          "access-control-request-method": "GET",
+          "access-control-request-headers": "x-quorum-request-id, if-none-match",
+        },
+      });
+
+      assert.equal(preflightResponse.status, 204, path);
+      assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "https://console.example.com", path);
+      assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "GET, HEAD, OPTIONS", path);
+      assert.equal(
+        preflightResponse.headers.get("access-control-allow-headers"),
+        "Content-Type, X-Quorum-Request-Id, If-None-Match",
+        path,
+      );
+      assert.equal(preflightResponse.headers.get("access-control-max-age"), "600", path);
+      assert.equal(await preflightResponse.text(), "", path);
+    }
+
     const notModifiedCapabilitiesResponse = await fetch(`${server.url}/capabilities`, {
       headers: { "if-none-match": capabilitiesEtag ?? "" },
     });
