@@ -59,6 +59,9 @@ The [HTTP integration guide](docs/api-integration.md#discover-and-probe-the-serv
 includes a copy-pasteable validator example for cache-aware clients.
 It also documents the separate `/livez` liveness probe for container and
 load-balancer checks, alongside the readiness-only `/healthz` probe.
+The liveness response is a request-correlated health envelope, and its
+`X-Quorum-Request-Id` header can be joined with service logs; liveness remains
+independent of source loading and reviewer queue state.
 Operational probes support bodyless `HEAD` requests as well as `GET`, so
 load balancers can check status headers without downloading a JSON payload.
 All JSON POST endpoints enforce the advertised request-size limit and return a
