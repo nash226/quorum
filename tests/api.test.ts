@@ -617,6 +617,27 @@ test("HTTP API routes valid requests with query strings by pathname", async () =
   }
 });
 
+test("HTTP API serves the Kubernetes readiness alias as a JSON probe", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/readyz?probe=kubernetes`);
+
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("cache-control"), "no-store");
+    const payload = await response.json() as ApiHealthResponse;
+    assert.deepEqual({ ...payload, requestId: "" }, {
+      ok: true,
+      requestId: "",
+      service: "quorum",
+      version: "0.1.0",
+    });
+    assert.equal(payload.requestId, response.headers.get("x-quorum-request-id"));
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API verifies an answer file against loaded sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-"));
 
