@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ac7e073` on 2026-07-20, test: cover discovery route preflight smoke
+- Latest shipped change: `c1463b7` on 2026-07-20, test: cover conditional version probes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | [#779](https://github.com/nash226/quorum/pull/779) | test: cover conditional version probes | `c1463b7` |
 | 2026-07-20 | Direct push | test: cover discovery route preflight smoke | `ac7e073` |
 | 2026-07-20 | Direct push | docs: surface HTTP claim preview workflow | `7b30383` |
 | 2026-07-20 | Direct push | test: cover POST route preflight contracts | `087b323` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | docs: correct liveness probe response contract | `f3047e5` |
 | 2026-07-20 | Direct push | test: pin subscription renewal evaluation | `1ac1059` |
 | 2026-07-20 | Direct push | docs: explain malformed JSON API errors | `91f4607` |
-| 2026-07-20 | Direct push | test: smoke-check malformed JSON responses | `09a0c64` |
 
