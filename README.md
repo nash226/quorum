@@ -72,6 +72,9 @@ request ID, and the packaged smoke check pins that contract on `/verify`.
 The packaged smoke check also covers the same malformed-body contract across
 `/verify-batch`, `/import-review`, `/review-queue`, and `/evaluate`, so each JSON
 POST route preserves the same safe client-error boundary.
+The packaged smoke check also exercises browser preflight across every POST
+route, keeping CORS method, header, origin, cache, and bodyless-response
+contracts aligned as new JSON endpoints are added.
 The [HTTP integration guide](docs/api-integration.md#handle-malformed-json)
 includes a copy-pasteable malformed-body example and distinguishes this client
 error from route validation (`400`) and request-size (`413`) failures.
