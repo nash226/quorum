@@ -63,7 +63,8 @@ or `--review-csv -` to stream one input from stdin.
 
 The packaged CLI smoke gate probes representative `quorum help <command>`
 topics after building, keeping the documented onboarding alias executable in
-published artifacts.
+published artifacts. It also probes the published `help version` topic, keeping
+CLI contract discovery covered after packaging.
 
 It also checks that packaged `/health`, `/healthz`, `/readyz`, and `/livez`
 endpoints support bodyless `HEAD` probes for deployment health checks.

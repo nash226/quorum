@@ -361,6 +361,7 @@ for (const command of [
   "evaluate",
   "serve",
   "openapi",
+  "version",
 ]) {
   const topicHelp = execFileSync(process.execPath, [fileURLToPath(cliPath), "help", command], { encoding: "utf8" });
   if (!topicHelp.startsWith(`Quorum ${command}\n\nUsage:`) || !topicHelp.includes(`quorum ${command}`)) {
