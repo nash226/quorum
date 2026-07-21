@@ -593,4 +593,32 @@ try {
   rmSync(stdinAnswerTempDir, { recursive: true, force: true });
 }
 
+const batchStdinTempDir = mkdtempSync(join(tmpdir(), "quorum-package-batch-stdin-answer-"));
+try {
+  const batchSourceDir = join(batchStdinTempDir, "sources");
+  const batchFileAnswerPath = join(batchStdinTempDir, "support-answer.md");
+  mkdirSync(batchSourceDir);
+  writeFileSync(batchFileAnswerPath, "Refunds are available within 30 days of purchase.\n");
+  writeFileSync(join(batchSourceDir, "hr-policy.md"), "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(join(batchSourceDir, "support-playbook.md"), "Refunds are available within 30 days of purchase.\n");
+
+  const batchStdinResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch", "--answer", "-", "--answer", batchFileAnswerPath,
+    "--source-dir", batchSourceDir, "--json",
+  ], {
+    encoding: "utf8",
+    input: "Employees receive 12 weeks of paid parental leave.\n",
+  }));
+  if (
+    batchStdinResult.answerCount !== 2 ||
+    batchStdinResult.answers?.[0]?.answerPath !== "<stdin>" ||
+    batchStdinResult.answers?.[1]?.answerPath !== batchFileAnswerPath ||
+    batchStdinResult.summary?.verified !== 2
+  ) {
+    throw new Error("Package artifact CLI did not preserve the batch stdin answer contract.");
+  }
+} finally {
+  rmSync(batchStdinTempDir, { recursive: true, force: true });
+}
+
 console.log(`Package smoke check passed: ${packageResult.filename} contains ${files.size} files.`);
