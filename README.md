@@ -319,6 +319,9 @@ which fields are safe for downstream consumers to select by name; see the
 The packaged HTTP smoke gate also imports a completed reviewer CSV, preserving
 request-ID correlation, fail-policy routing, queue totals, and the summary CSV
 artifact in the published server.
+It also exercises the no-claims queue filter with an empty draft, keeping
+reviewer handoff routing for answers that need human review without extracted
+claims executable after publication.
 
 The repository check also runs a package-artifact smoke test after building,
 confirming that published output includes the README and every file declared by
