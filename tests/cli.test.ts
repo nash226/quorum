@@ -1582,6 +1582,27 @@ test("verify reads the answer from stdin when --answer - is used", async () => {
   }
 });
 
+test("verify reads an approved source from stdin when --source - is used", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-stdin-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    const stdout = await runCli(
+      ["verify", "--answer", answerPath, "--source", "-", "--json"],
+      { stdin: "Employees receive 12 weeks of paid parental leave.\n" },
+    );
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: Record<string, number>;
+    };
+    assert.deepEqual(report.sources, [{ id: "source_1", sourcePath: "-", title: "-", trustLevel: "medium" }]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects empty resolved source sets", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-sources-"));
 

@@ -53,11 +53,13 @@ import { renderAnswerPreview, stripByteOrderMark } from "./text.js";
 import {
   importReviewerDecisionFile,
   loadSourceDocuments,
+  loadSourceDocumentsFromContent,
   verifyAnswerFile,
   verifyBatchAnswers,
 } from "./workflow.js";
 
 interface VerifyArgs {
+  answerPath?: string;
   sourcePaths: string[];
   sourceDirs: string[];
   sourceIdsByPath?: Record<string, string>;
@@ -1413,6 +1415,20 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
 }
 
 async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
+  const stdinSources = args.sourcePaths.filter((sourcePath) => sourcePath === "-");
+  if (stdinSources.length > 0) {
+    if (args.sourcePaths.length !== 1 || args.sourceDirs.length > 0) {
+      throw new Error("--source - cannot be combined with other sources because stdin can only be consumed once.");
+    }
+    if (args.answerPath === "-") {
+      throw new Error("--answer - and --source - cannot be used together because stdin can only be consumed once.");
+    }
+    return loadSourceDocumentsFromContent({
+      sources: [{ sourcePath: "-", content: await readStdin() }],
+      defaultTrustLevel: args.defaultTrustLevel,
+    });
+  }
+
   return loadSourceDocuments({
     sourcePaths: args.sourcePaths,
     sourceDirs: args.sourceDirs,
