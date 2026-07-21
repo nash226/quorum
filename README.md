@@ -56,6 +56,10 @@ available for scripted onboarding. Use `--result-json` when an integration
 needs `shouldFail` and `failVerdicts` alongside a report, and use `--answer -`
 or `--review-csv -` to stream one input from stdin.
 
+The packaged CLI smoke gate probes representative `quorum help <command>`
+topics after building, keeping the documented onboarding alias executable in
+published artifacts.
+
 For a single answer, `--summary-csv-out` writes the same queue-oriented
 one-row summary used by batch verification, including verdict totals, the
 primary finding, and fail-policy status. This is useful when a workflow wants
