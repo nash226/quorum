@@ -78,6 +78,11 @@ try {
     capabilitiesPayload.service !== "quorum" ||
     capabilitiesPayload.capabilities?.maxRequestBytes !== 1_048_576 ||
     capabilitiesPayload.capabilities?.requestTimeoutMs !== 30_000 ||
+    JSON.stringify(capabilitiesPayload.capabilities?.sourceExtensions) !==
+      JSON.stringify([".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx"]) ||
+    JSON.stringify(capabilitiesPayload.capabilities?.answerExtensions) !==
+      JSON.stringify([".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx"]) ||
+    JSON.stringify(capabilitiesPayload.capabilities?.trustLevels) !== JSON.stringify(["low", "medium", "high"]) ||
     !Array.isArray(capabilitiesPayload.capabilities?.reviewQueueStatuses) ||
     !capabilitiesPayload.capabilities.reviewQueueStatuses.includes("no_claims")
   ) {

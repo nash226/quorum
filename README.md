@@ -218,6 +218,9 @@ guide](docs/api-integration.md#preview-claims-before-verification) includes the
 request shape and base64 document example.
 The packaged HTTP smoke gate verifies both plain-text and base64 answer preview
 inputs, keeping uploaded answer integrations aligned with the published artifact.
+It also verifies that the packaged `/capabilities` response advertises every
+supported source and answer format plus the complete source trust-level set, so
+client integrations can configure ingestion from the published contract.
 The packaged HTTP smoke gate also pins the claim-less preview response, keeping
 empty drafts visible for reviewer routing instead of treating them as missing.
 It also exercises a claim-bearing `/extract-claims` request from the packaged
