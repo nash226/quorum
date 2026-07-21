@@ -565,7 +565,12 @@ try {
     encoding: "utf8",
     input: "---\ntitle: Streamed HR Policy\ntrustLevel: high\n---\nEmployees receive 12 weeks of paid parental leave.\n",
   }));
-  if (stdinSourceResult.summary?.verified !== 1 || stdinSourceResult.sources?.[0]?.title !== "Streamed HR Policy") {
+  if (
+    stdinSourceResult.summary?.verified !== 1 ||
+    stdinSourceResult.sources?.[0]?.id !== "source_1" ||
+    stdinSourceResult.sources?.[0]?.title !== "Streamed HR Policy" ||
+    stdinSourceResult.sources?.[0]?.trustLevel !== "high"
+  ) {
     throw new Error("Package artifact CLI did not verify the expected streamed source contract.");
   }
 } finally {
