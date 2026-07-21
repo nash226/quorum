@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `99e611f` on 2026-07-21, test: smoke-check packaged probe HEAD requests
+- Latest shipped change: `8d1fbb0` on 2026-07-21, docs: explain jury duty evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | docs: explain jury duty evaluation coverage | `8d1fbb0` |
 | 2026-07-21 | Direct push | test: smoke-check packaged probe HEAD requests | `99e611f` |
 | 2026-07-21 | Direct push | test: smoke-check packaged evaluation gate metadata | `09b52aa` |
 | 2026-07-21 | Direct push | test: smoke-check every CLI help topic | `2a5a579` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | docs: map packaged CLI commands | `d05b4ed` |
 | 2026-07-21 | Direct push | docs: explain single-answer summary handoff | `9cdeacd` |
 | 2026-07-21 | Direct push | docs: show DOCX verification workflow | `6d54724` |
-| 2026-07-21 | Direct push | test: pin packaged API version export | `d535db3` |
 
