@@ -275,9 +275,12 @@ docs/                  product notes, demo, roadmap, decision queue
 ```bash
 npm test
 npm run build
+npm run smoke
 ```
 
-The CI workflow runs both commands on pushes and pull requests.
+`npm run smoke` builds the packaged CLI, verifies the HR example, writes a
+temporary JSON report, and checks its verified/contradicted summary. The CI
+workflow runs the test and build commands on pushes and pull requests.
 
 ## Product Direction
 

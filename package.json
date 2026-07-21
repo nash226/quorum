@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/cli.ts",
+    "smoke": "npm run build && node scripts/smoke.mjs",
     "status:refresh": "node scripts/update-status.mjs",
     "test": "node --import tsx --test tests/**/*.test.ts"
   },
