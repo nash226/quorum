@@ -724,6 +724,9 @@ Evaluation runs can now be scoped to one or more policy domains with repeated
 `--domain` flags; filtered scorecards and aggregate CSVs describe only the
 selected fixtures, while the CI command remains the repository-wide gate.
 
+The packaged CLI smoke check now covers `quorum help <topic>` for every shipped
+command, keeping topic-based onboarding aligned with the executable interface.
+
 For a focused local scorecard, pass one or more domains to the evaluator:
 
 ```bash
