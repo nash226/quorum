@@ -65,6 +65,8 @@ It also submits a claim-bearing answer and an empty draft to packaged
 claim-bearing and no-claims totals.
 The same packaged check now probes `/health`, `/readyz`, and `/livez`, keeping
 published operational health, readiness, and liveness responses verified.
+It also probes the packaged root discovery document and bodyless `HEAD /` route,
+keeping the first integration handshake and request-correlation contract executable.
 It also checks the published `quorum --version` and `quorum -v` aliases, so
 short-form version probes remain compatible with installed integrations.
 It also executes `quorum --help` from the built package artifact and checks the
