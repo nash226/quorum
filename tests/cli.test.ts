@@ -165,6 +165,32 @@ test("verify uses a caller-supplied generated timestamp", async () => {
   assert.equal(report.generatedAt, "2026-07-10T12:34:56.000Z");
 });
 
+test("verify-batch uses a caller-supplied generated timestamp for every answer", async () => {
+  const stdout = await runCli([
+    "verify-batch",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--answer",
+    "examples/answers/support-answer.md",
+    "--source-dir",
+    "examples/sources",
+    "--generated-at",
+    "2026-07-10T12:34:56.000Z",
+    "--json",
+  ]);
+
+  const report = JSON.parse(stdout) as {
+    generatedAt: string;
+    answers: Array<{ report: { generatedAt: string } }>;
+  };
+
+  assert.equal(report.generatedAt, "2026-07-10T12:34:56.000Z");
+  assert.deepEqual(
+    report.answers.map((answer) => answer.report.generatedAt),
+    ["2026-07-10T12:34:56.000Z", "2026-07-10T12:34:56.000Z"],
+  );
+});
+
 test("generated-at rejects invalid timestamps", async () => {
   await assert.rejects(
     runCli([

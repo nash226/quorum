@@ -41,6 +41,8 @@ approved sources. Use `--source-dir` for a mixed directory of policy files;
 answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
+Use `--generated-at <timestamp>` when a batch run needs one caller-owned audit
+timestamp across every answer and exported reviewer artifact.
 
 For an agent or workflow runner that needs JSON over HTTP, start the local API
 and probe its published capability contract:
