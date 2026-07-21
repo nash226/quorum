@@ -525,6 +525,9 @@ a documentation conflict, and an unsupported automatic-credit promise.
 The packed smoke check also verifies billing-address answers, preserving the
 account-owner verification control while catching an incorrect one-hour timing
 claim and an unsupported password-manager promise.
+The packed smoke check now also pins that billing-address verdict mix in the
+reviewer handoff CSV, so owner verification, timing drift, and unsupported
+promotional claims remain visible to downstream consumers.
 The packed smoke check also verifies order-cancellation answers, preserving the
 two-hour unshipped-order window while routing post-shipment cancellation and
 automatic-refund promises for review.
