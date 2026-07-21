@@ -234,7 +234,7 @@ The packaged smoke check also covers the same malformed-body contract across
 POST route preserves the same safe client-error boundary.
 It also verifies that every JSON POST route rejects non-JSON content types with
 the same structured `415` response and preserves caller-supplied request IDs.
-The packaged smoke check also exercises browser preflight across every POST
+The packaged smoke check exercises browser preflight across all six POST
 route, keeping CORS method, header, origin, cache, and bodyless-response
 contracts aligned as new JSON endpoints are added.
 The same end-to-end benchmark smoke check now preserves the durable source ID
