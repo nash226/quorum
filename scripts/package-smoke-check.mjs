@@ -67,6 +67,19 @@ try {
     throw new Error("Package artifact server did not serve the expected OpenAPI contract.");
   }
 
+  const capabilitiesResponse = await fetch(`${packagedServer.url}/capabilities`);
+  const capabilitiesPayload = await capabilitiesResponse.json();
+  if (
+    capabilitiesResponse.status !== 200 ||
+    capabilitiesPayload.service !== "quorum" ||
+    capabilitiesPayload.capabilities?.maxRequestBytes !== 1_048_576 ||
+    capabilitiesPayload.capabilities?.requestTimeoutMs !== 30_000 ||
+    !Array.isArray(capabilitiesPayload.capabilities?.reviewQueueStatuses) ||
+    !capabilitiesPayload.capabilities.reviewQueueStatuses.includes("no_claims")
+  ) {
+    throw new Error("Package artifact server did not serve the expected capabilities contract.");
+  }
+
   for (const path of ["/health", "/readyz", "/livez"]) {
     const probeResponse = await fetch(`${packagedServer.url}${path}`);
     const probePayload = await probeResponse.json();
