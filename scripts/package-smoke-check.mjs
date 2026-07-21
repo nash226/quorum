@@ -138,6 +138,30 @@ try {
   ) {
     throw new Error("Package artifact server did not serve the expected reviewer import contract.");
   }
+
+  const reviewQueueResponse = await fetch(`${packagedServer.url}/review-queue`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      reviewCsvContent: [
+        "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+        "Packaged queue packet,answers/queue.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,,",
+        "",
+      ].join("\n"),
+      queueStatus: "pending",
+    }),
+  });
+  const reviewQueuePayload = await reviewQueueResponse.json();
+  if (
+    reviewQueueResponse.status !== 200 ||
+    reviewQueuePayload.queueStatus !== "pending" ||
+    reviewQueuePayload.review?.totalAnswers !== 1 ||
+    reviewQueuePayload.review?.pendingAnswers !== 1 ||
+    reviewQueuePayload.review?.reviewedAnswers !== 0 ||
+    reviewQueuePayload.review?.verdicts?.verified !== 1
+  ) {
+    throw new Error("Package artifact server did not serve the expected reviewer queue contract.");
+  }
 } finally {
   await packagedServer.close();
 }
