@@ -392,6 +392,34 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
   }
 });
 
+test("HTTP API exposes reviewer queue CORS preflight metadata", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/review-queue`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "https://console.example.com",
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type, x-quorum-request-id",
+      },
+    });
+
+    assert.equal(response.status, 204);
+    assert.equal(response.headers.get("access-control-allow-origin"), "*");
+    assert.equal(response.headers.get("access-control-allow-methods"), "POST, OPTIONS");
+    assert.equal(
+      response.headers.get("access-control-allow-headers"),
+      "Content-Type, X-Quorum-Request-Id, If-None-Match",
+    );
+    assert.equal(response.headers.get("access-control-max-age"), "600");
+    assert.equal(response.headers.get("access-control-expose-headers"), API_CORS_EXPOSED_HEADERS);
+    assert.equal(await response.text(), "");
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API serves bodyless HEAD responses for operational probes", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
