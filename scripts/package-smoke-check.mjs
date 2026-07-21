@@ -142,4 +142,16 @@ try {
   rmSync(openApiTempDir, { recursive: true, force: true });
 }
 
+const evaluationResult = JSON.parse(execFileSync(process.execPath, [
+  fileURLToPath(cliPath),
+  "evaluate",
+  "--fixture",
+  fileURLToPath(new URL("examples/evaluations/hr-policy.json", packageRoot)),
+  "--json",
+  "--fail-on-mismatch",
+], { encoding: "utf8" }));
+if (evaluationResult.fixtureName !== "HR policy example" || evaluationResult.summaryMatches !== true || evaluationResult.score !== 1) {
+  throw new Error("Package artifact CLI did not evaluate the expected fixture contract.");
+}
+
 console.log(`Package smoke check passed: ${packageResult.filename} contains ${files.size} files.`);

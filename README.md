@@ -72,6 +72,9 @@ before installation into an integration environment.
 The same packaged smoke gate exports `quorum openapi --out` and validates the
 written document, keeping offline contract generation aligned with the
 published CLI.
+It also runs the packaged `quorum evaluate --fixture` command against the
+checked-in HR fixture with `--fail-on-mismatch`, keeping published benchmark
+execution and its zero-mismatch gate executable after packaging.
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
