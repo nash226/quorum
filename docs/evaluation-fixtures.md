@@ -207,6 +207,8 @@ specific product question:
   deadline, and an unrelated unsupported subscription promise.
 - Support order-tracking coverage tests a verified tracking control, a conflicting
   delivery guarantee routed for review, and an unsupported automatic shipping refund.
+- Support shipping-address coverage tests the pre-shipment change control, a
+  conflicting time limit, and an unrelated insurance promise.
 - Support order-cancellation coverage verifies the unshipped-order cancellation
   window and routes uncertain cancellation and refund promises to review.
 - Support tax-exemption coverage verifies certificate submission and review
