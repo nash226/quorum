@@ -290,6 +290,29 @@ try {
   ) {
     throw new Error("Package artifact server did not serve the expected reviewer queue contract.");
   }
+
+  const noClaimsQueueResponse = await fetch(`${packagedServer.url}/review-queue`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      reviewCsvContent: [
+        "answer_label,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+        "Packaged empty draft,false,,,,,,,,",
+        "",
+      ].join("\n"),
+      queueStatus: "no_claims",
+    }),
+  });
+  const noClaimsQueuePayload = await noClaimsQueueResponse.json();
+  if (
+    noClaimsQueueResponse.status !== 200 ||
+    noClaimsQueuePayload.review?.totalAnswers !== 1 ||
+    noClaimsQueuePayload.review?.noClaimsAnswers !== 1 ||
+    noClaimsQueuePayload.review?.totalClaims !== 0 ||
+    noClaimsQueuePayload.queueStatus !== "no_claims"
+  ) {
+    throw new Error("Package artifact server did not preserve no-claims reviewer queue routing.");
+  }
 } finally {
   await packagedServer.close();
 }
