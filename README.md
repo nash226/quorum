@@ -103,6 +103,9 @@ published CLI.
 It also runs the packaged `quorum evaluate --fixture` command against the
 checked-in HR fixture with `--fail-on-mismatch`, keeping published benchmark
 execution and its zero-mismatch gate executable after packaging.
+It also executes the packaged `quorum extract-claims --result-json` workflow,
+keeping normalized claim IDs and the `answerHasClaims` routing signal aligned
+with the published CLI artifact.
 It also runs the packaged `quorum import-review` command against a completed
 review CSV, keeping reviewer verdict routing and fail-policy output executable
 after packaging. It also streams that CSV into the packaged `quorum review-queue`

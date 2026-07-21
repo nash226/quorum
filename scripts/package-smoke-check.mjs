@@ -229,6 +229,29 @@ for (const command of [
   }
 }
 
+const extractClaimsTempDir = mkdtempSync(join(tmpdir(), "quorum-package-extract-claims-"));
+try {
+  const extractClaimsAnswerPath = join(extractClaimsTempDir, "answer.md");
+  writeFileSync(extractClaimsAnswerPath, "1. Employees receive 12 weeks of paid parental leave.\n");
+  const extractClaimsResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath),
+    "extract-claims",
+    "--answer",
+    extractClaimsAnswerPath,
+    "--result-json",
+  ], { encoding: "utf8" }));
+  if (
+    extractClaimsResult.answerHasClaims !== true ||
+    extractClaimsResult.claims?.length !== 1 ||
+    extractClaimsResult.claims[0]?.id !== "claim_1" ||
+    extractClaimsResult.claims[0]?.text !== "Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact CLI did not preserve the expected claim extraction contract.");
+  }
+} finally {
+  rmSync(extractClaimsTempDir, { recursive: true, force: true });
+}
+
 const openApiTempDir = mkdtempSync(join(tmpdir(), "quorum-package-openapi-"));
 try {
   const openApiPath = join(openApiTempDir, "openapi.json");
