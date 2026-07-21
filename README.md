@@ -15,7 +15,10 @@ returns reviewer-ready `verified`, `contradicted`, `unsupported`, or
 verification, where grounded answers are high-volume and costly to get wrong.
 Claim extraction also normalizes bracketed, Arabic-Indic, Persian, and fullwidth ordered-list
 markers plus common Unicode bullets such as middle dots and square bullets,
-keeping exported and localized answers clean before evidence matching.
+keeping exported and localized answers clean before evidence matching. It also
+splits conservative sentence-level `and`, `but`, and `or` conjunctions when the
+next clause begins like a new claim, so evidence and reviewer routing stay
+atomic without splitting ordinary lowercase continuations.
 
 ## Quick Start
 
