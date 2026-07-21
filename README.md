@@ -117,6 +117,10 @@ contracts aligned as new JSON endpoints are added.
 The same end-to-end benchmark smoke check now preserves the durable source ID
 for the support guest-access fixture, so reviewer artifacts remain traceable
 to the approved policy snapshot.
+The API regression suite also pins the reviewer queue's browser preflight,
+including its allowed POST method, request headers, exposed headers, and
+bodyless 204 response, so web-based queue consumers keep the same CORS contract
+as the packaged smoke gate.
 It also verifies the version endpoint's JSON response, bodyless `HEAD` probe,
 and conditional `304` response in the packaged HTTP smoke gate.
 The [HTTP integration guide](docs/api-integration.md#handle-malformed-json)
