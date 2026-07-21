@@ -147,6 +147,9 @@ CLI command, keeping command-specific onboarding available to shell users and
 integration setup scripts.
 The equivalent `quorum help <command>` form is also supported for scripted
 onboarding and terminal users who prefer an explicit help subcommand.
+The packaged evaluation smoke gate also runs the published CLI with
+`--fixture-dir examples/evaluations --domain hr`, keeping repeated domain
+filtering and its zero-mismatch gate executable after packaging.
 The same packaged smoke gate exports `quorum openapi --out` and validates the
 written document, keeping offline contract generation aligned with the
 published CLI.
