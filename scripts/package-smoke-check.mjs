@@ -198,6 +198,24 @@ try {
     throw new Error("Package artifact server did not serve the expected claim preview contract.");
   }
 
+  const extractClaimsBase64Response = await fetch(`${packagedServer.url}/extract-claims`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answerBase64: Buffer.from("Employees receive 12 weeks of paid parental leave.").toString("base64"),
+      answerPath: "answers/hr-answer.txt",
+    }),
+  });
+  const extractClaimsBase64Payload = await extractClaimsBase64Response.json();
+  if (
+    extractClaimsBase64Response.status !== 200 ||
+    extractClaimsBase64Payload.claims?.length !== 1 ||
+    extractClaimsBase64Payload.claims[0]?.id !== "claim_1" ||
+    extractClaimsBase64Payload.claims[0]?.text !== "Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact server did not preserve base64 claim preview input.");
+  }
+
   const emptyExtractClaimsResponse = await fetch(`${packagedServer.url}/extract-claims`, {
     method: "POST",
     headers: {
