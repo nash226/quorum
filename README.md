@@ -32,7 +32,7 @@ For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 Use `--fail-on needs_review` when empty or uncertain answers must stop for
 human review; the CLI treats answers with no extracted claims as a review-policy
 failure too. See the [CLI guide](docs/cli-guide.md#fail-policy-gates) for the
-copy-pasteable example and command overview.
+copy-pasteable example.
 
 Integrations can check the installed CLI and API contract version without
 starting the server:
