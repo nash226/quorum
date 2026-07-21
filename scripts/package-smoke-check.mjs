@@ -129,6 +129,28 @@ try {
     throw new Error("Package artifact server did not serve the expected batch verification contract.");
   }
 
+  const failPolicyResponse = await fetch(`${packagedServer.url}/verify`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answer: "Employees receive 18 weeks of paid parental leave.",
+      sources: [{
+        sourcePath: "policies/hr-policy.md",
+        content: "Employees receive 12 weeks of paid parental leave.\n",
+      }],
+      failOn: ["contradicted"],
+      failOnStatus: true,
+    }),
+  });
+  const failPolicyPayload = await failPolicyResponse.json();
+  if (
+    failPolicyResponse.status !== 409 ||
+    failPolicyPayload.shouldFail !== true ||
+    failPolicyPayload.failVerdicts?.join(",") !== "contradicted"
+  ) {
+    throw new Error("Package artifact server did not preserve the fail-policy conflict contract.");
+  }
+
   const extractClaimsResponse = await fetch(`${packagedServer.url}/extract-claims`, {
     method: "POST",
     headers: { "content-type": "application/json" },
