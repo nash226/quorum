@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1f4e60f` on 2026-07-21, test: preserve batch audit timestamps
+- Latest shipped change: `a61cbec` on 2026-07-21, test: smoke-check packaged batch stdin answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | test: smoke-check packaged batch stdin answers | `a61cbec` |
 | 2026-07-21 | Direct push | test: preserve batch audit timestamps | `1f4e60f` |
 | 2026-07-21 | Direct push | docs: show direct package verification | `f440a11` |
 | 2026-07-21 | Direct push | docs: explain direct package integrations | `3447a0a` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | test: cover packaged version help topic | `3e90830` |
 | 2026-07-21 | Direct push | test: cover recursive batch inputs | `8c4e90f` |
 | 2026-07-21 | Direct push | test: smoke-check packaged batch CLI | `24b5858` |
-| 2026-07-21 | Direct push | test: smoke-check packaged no-claims queue | `f3a9a10` |
 
