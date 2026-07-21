@@ -353,6 +353,8 @@ The same pipeline path accepts one Markdown or text policy from stdin; use a
 file path or `--source-dir` for additional or binary-format sources.
 The packaged smoke gate also verifies the published `quorum verify --answer -`
 path, so integrations can stream an answer directly without a temporary file.
+It also verifies that packaged `verify-batch` can combine one streamed answer
+with explicit answer files while preserving input order and `<stdin>` provenance.
 
 For reviewer handoffs, Quorum can generate claim-level decision CSVs, import
 completed reviewer verdicts, and summarize pending/reviewed/no-claims workload
