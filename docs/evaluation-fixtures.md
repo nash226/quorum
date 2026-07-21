@@ -23,8 +23,9 @@ set covers:
   eligibility, subscription pauses, SLA, billing, gift cards, service credits, shipping protection,
   warranty claims, usage limits, subscription renewals, and source-directory workflows
 - priority support response-time and unsupported-account-management claims
+- phone-support availability, callback timing, and unsupported universal-access claims
 
-The benchmark currently contains 76 fixtures: 27 HR and 49 support workflows.
+The benchmark currently contains 77 fixtures: 27 HR and 50 support workflows.
 The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.

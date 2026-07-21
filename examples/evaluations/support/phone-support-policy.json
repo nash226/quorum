@@ -1,0 +1,19 @@
+{
+  "name": "Support phone support policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-phone-support-answer.md",
+  "answer": "Phone support is available for all customers.\nEnterprise customers can request a callback during business hours.\nSupport will always call back within 15 minutes.\n",
+  "answerLabel": "Support phone support reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-phone-support-policy.md",
+      "id": "support/phone-support@2026-07-21",
+      "title": "Support Phone Support Policy",
+      "updatedAt": "2026-07-21",
+      "trustLevel": "high",
+      "content": "Phone support is available to enterprise customers during business hours. Callback requests are answered within one business day.\n"
+    }
+  ],
+  "expectedSummary": { "verified": 1, "contradicted": 0, "unsupported": 1, "needs_review": 1 },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
