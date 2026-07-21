@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { dirname, extname, join, resolve } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import type {
@@ -75,9 +76,27 @@ interface ImportReviewArgs {
 
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
 const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
+const require = createRequire(import.meta.url);
+const packageMetadata = loadPackageMetadata();
+
+function loadPackageMetadata(): { version: string } {
+  try {
+    return require("../package.json") as { version: string };
+  } catch (error: unknown) {
+    if (!(error instanceof Error) || !error.message.includes("Cannot find module")) {
+      throw error;
+    }
+    return require("../../package.json") as { version: string };
+  }
+}
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
+
+  if (command === "--version" || command === "-v" || command === "version") {
+    console.log(packageMetadata.version);
+    return;
+  }
 
   if (command === "verify") {
     await runVerify(args);
@@ -762,6 +781,7 @@ function printHelp(): void {
   console.log(`Quorum
 
 Usage:
+  quorum --version
   quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
