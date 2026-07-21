@@ -2041,6 +2041,24 @@ try {
     throw new Error("Expected packed quorum root export to preserve API discovery metadata.");
   }
 
+  const unknownRouteResponse = await fetch(\`\${api.url}/not-a-quorum-route\`, {
+    headers: {
+      "X-Quorum-Request-Id": "packed-unknown-route-contract",
+    },
+  });
+
+  if (unknownRouteResponse.status !== 404) {
+    throw new Error("Expected packed quorum root export to reject unknown routes with 404.");
+  }
+
+  const unknownRouteResult = await unknownRouteResponse.json();
+
+  assert.deepEqual(unknownRouteResult, {
+    error: "Not found.",
+    requestId: "packed-unknown-route-contract",
+  });
+  assert.equal(unknownRouteResponse.headers.get("x-quorum-request-id"), "packed-unknown-route-contract");
+
   const verifyResponse = await fetch(\`\${api.url}/verify\`, {
     method: "POST",
     headers: {
