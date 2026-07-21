@@ -37,6 +37,11 @@ approved sources. Use `--source-dir` for a mixed directory of policy files;
 the [CLI guide](docs/cli-guide.md) documents format-specific and streaming
 details.
 
+For a single answer, `--summary-csv-out` writes the same queue-oriented
+one-row summary used by batch verification, including verdict totals, the
+primary finding, and fail-policy status. This is useful when a workflow wants
+to route one answer without parsing the full JSON report.
+
 Word-based workflows use the same command and report formats:
 
 ```bash
