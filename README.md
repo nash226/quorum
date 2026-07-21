@@ -102,6 +102,8 @@ before installation into an integration environment.
 The same packaged smoke gate probes both `--help` and `-h` for every published
 CLI command, keeping command-specific onboarding available to shell users and
 integration setup scripts.
+The equivalent `quorum help <command>` form is also supported for scripted
+onboarding and terminal users who prefer an explicit help subcommand.
 The same packaged smoke gate exports `quorum openapi --out` and validates the
 written document, keeping offline contract generation aligned with the
 published CLI.
