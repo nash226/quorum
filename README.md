@@ -53,6 +53,11 @@ curl -fsS http://127.0.0.1:3000/capabilities
 The [HTTP integration guide](docs/api-integration.md) covers verification,
 reviewer-queue, health, readiness, liveness, and OpenAPI discovery endpoints.
 
+Node.js workers can use the built package directly when starting an HTTP server
+would add unnecessary overhead. The public `quorum` entrypoint exposes the same
+in-memory and file-backed verification helpers used by the CLI; see the
+[programmatic API guide](docs/programmatic-api.md) for both patterns.
+
 The packaged CLI command map is:
 
 | Command | Use it to |
