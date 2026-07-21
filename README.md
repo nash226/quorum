@@ -389,6 +389,8 @@ verified notice rule, two needs-review claims, and unsupported stipend claim
 visible in the generated benchmark summary.
 It now also verifies that HR onboarding coverage appears in the packed report,
 keeping healthcare, equipment, and unsupported manager claims in the smoke gate.
+The HR benchmark also includes jury-duty leave coverage, keeping a verified
+entitlement, conflicting duration, and unsupported stipend claim reviewable.
 The reviewer-queue regression also tracks the current answer handoff total, so
 fixture coverage and queue summaries stay aligned as the benchmark grows.
 The support benchmark now also covers holiday service hours, preserving the

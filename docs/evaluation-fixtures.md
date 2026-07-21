@@ -15,7 +15,7 @@ set covers:
 - explicit source IDs and inline source metadata
 - HR bonus eligibility, bereavement leave, dependent benefits, medical leave, relocation, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
-  employee referrals,
+  employee referrals, jury duty,
   remote work, workplace accommodations, expense reimbursement, tuition reimbursement, and travel reimbursement
 - support account closure, account recovery, account contact changes, account security, account suspension, authorized contacts, billing address changes, billing-suspension appeals, cancellation, guest access, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, payment method
@@ -153,6 +153,8 @@ specific product question:
   contradiction, and an unsupported guaranteed-bonus claim.
 - HR employee-referral coverage tests a verified referral bonus, a conflicting
   bonus amount, and an unsupported automatic-payment promise.
+- HR jury-duty coverage tests a verified paid-leave entitlement, a conflicting
+  leave duration, and an unsupported meal-stipend promise.
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
