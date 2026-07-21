@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `654e5e9` on 2026-07-20, test: cover packaged batch verification
+- Latest shipped change: `e14c2d0` on 2026-07-20, test: cover packaged claim preview
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | test: cover packaged claim preview | `e14c2d0` |
 | 2026-07-20 | Direct push | test: cover packaged batch verification | `654e5e9` |
 | 2026-07-20 | Direct push | test: cover packaged verification requests | `9c1c196` |
 | 2026-07-20 | Direct push | test: cover packaged operational probes | `1b45447` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | test: cover packaged CORS preflights | `df03260` |
 | 2026-07-20 | Direct push | docs: show evaluation score gate example | `4e09e85` |
 | 2026-07-20 | Direct push | test: make authentication fixture portable | `1bb87ab` |
-| 2026-07-20 | Direct push | test: pin packaged unknown route contract | `cfadcd7` |
 
