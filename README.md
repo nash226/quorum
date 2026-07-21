@@ -59,6 +59,9 @@ It also starts the packaged server entrypoint and probes `/version` and
 having importable exports while its HTTP contract is broken.
 The same packaged smoke check submits a minimal `/verify` request and expects a
 verified claim, keeping the published server's core evidence path executable.
+It also submits a claim-bearing answer and an empty draft to packaged
+`/verify-batch`, verifying that queue consumers receive the expected
+claim-bearing and no-claims totals.
 The same packaged check now probes `/health`, `/readyz`, and `/livez`, keeping
 published operational health, readiness, and liveness responses verified.
 It also checks the published `quorum --version` and `quorum -v` aliases, so
