@@ -489,6 +489,18 @@ test("HTTP API rejects CORS preflight requests for unknown routes", async () => 
   }
 });
 
+test("OpenAPI documents the shared unknown-route error for every operation", async () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, Record<string, { responses?: Record<string, { description?: string }> }>>;
+  };
+
+  for (const [path, pathItem] of Object.entries(document.paths)) {
+    for (const [method, operation] of Object.entries(pathItem)) {
+      assert.equal(operation.responses?.["404"]?.description, "The requested route does not exist.", `${method.toUpperCase()} ${path}`);
+    }
+  }
+});
+
 test("HTTP API extracts claims from base64 text and document answers", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
