@@ -973,6 +973,24 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(discoveryPreflightResponse.headers.get("access-control-expose-headers"), "X-Quorum-Service, X-Quorum-Version, X-Quorum-OpenAPI-Path, X-Quorum-Max-Request-Bytes, X-Quorum-Request-Timeout-Ms, X-Quorum-Request-Id, Cache-Control, ETag, Allow");
     assert.equal(discoveryPreflightResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
 
+    for (const endpoint of indexPayload.endpoints.filter((candidate) => candidate.method === "OPTIONS")) {
+      const preflightMethod = indexPayload.endpoints.find(
+        (candidate) => candidate.path === endpoint.path && candidate.method !== "OPTIONS",
+      )?.method;
+      assert.ok(preflightMethod, `Missing preflight target for ${endpoint.path}`);
+      const response = await fetch(`${server.url}${endpoint.path}`, {
+        method: "OPTIONS",
+        headers: {
+          origin: "https://console.example.com",
+          "access-control-request-method": preflightMethod,
+        },
+      });
+      assert.equal(response.status, 204, `Unexpected preflight status for ${endpoint.path}`);
+      assert.equal(response.headers.get("access-control-allow-origin"), "https://console.example.com");
+      assert.match(response.headers.get("access-control-allow-methods") ?? "", new RegExp(`\\b${preflightMethod}\\b`));
+      assert.equal(response.headers.get("access-control-max-age"), "600");
+    }
+
     const oversizedRequestResponse = await fetch(`${server.url}/verify`, {
       method: "POST",
       headers: { "content-type": "application/json" },
