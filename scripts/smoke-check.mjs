@@ -766,6 +766,7 @@ try {
     evaluationAggregateSummaryCsv,
     /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n[^,\n]+,75,74,1,0,0\.000,222,222,1(?:\.0+)?,100%,hr \\| support,26 \\| 49,0 \\| 0,0\.000 \| 0\.000,26 \| 48,0 \| 1,1(?:\.0+)? \\| 1(?:\.0+)?,100% \| 100%,85,51,62,24,85,51,62,24\n?$/,
   );
+  assert.match(evaluationAggregateSummaryCsv, /\n[^,\n]+,76,75,1,0,0\.000,225,225,1(?:\.0+)?,100%,hr \\| support,27 \\| 49,/);
 
   const apiSources = await api.loadSourcesFromContent({
     sources: [
