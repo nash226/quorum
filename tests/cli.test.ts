@@ -205,6 +205,14 @@ test("help accepts a command topic", async () => {
   assert.match(result.stdout, /--answer <path\|->/);
 });
 
+test("help exposes the version command topic", async () => {
+  const result = await runCliAllowFailure(["help", "version"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /^Quorum version\n\nUsage:\n  quorum version \[--json\]/);
+});
+
 test("help rejects unknown or multiple topics", async () => {
   for (const args of [["help", "missing"], ["help", "verify", "serve"]]) {
     const result = await runCliAllowFailure(args);

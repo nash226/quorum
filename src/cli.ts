@@ -160,7 +160,8 @@ type CommandName =
   | "review-queue"
   | "evaluate"
   | "serve"
-  | "openapi";
+  | "openapi"
+  | "version";
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -1579,6 +1580,7 @@ function isCommandName(value: string): value is CommandName {
     "evaluate",
     "serve",
     "openapi",
+    "version",
   ].includes(value);
 }
 
@@ -1803,6 +1805,14 @@ Options:
 Example:
   npm run dev -- openapi --out reports/openapi.json
   npm run dev -- openapi --server-url https://quorum.internal.example
+`,
+    version: `Quorum version
+
+Usage:
+  quorum version [--json]
+
+Options:
+  --json                     Print the service and API contract version as JSON
 `,
   };
 
