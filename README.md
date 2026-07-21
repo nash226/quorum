@@ -212,6 +212,9 @@ Browser-based monitors can also preflight `/health`, `/healthz`, `/readyz`, and
 methods, request-ID header, and ten-minute preflight cache contract.
 The packaged HTTP smoke gate also preflights every advertised endpoint, keeping
 browser clients aligned with the discovery and CORS contract.
+It also submits a reviewed CSV to the packaged `/review-queue` endpoint and
+checks its filtered workload totals, keeping reviewer queue handoff executable
+after publication.
 Use `POST /extract-claims` when a workflow needs to preview normalized claim IDs
 and route empty drafts before loading approved sources; the [HTTP integration
 guide](docs/api-integration.md#preview-claims-before-verification) includes the
