@@ -63,6 +63,24 @@ source-loading, and HTTP server helpers from the same public entrypoint. Use
 the [HTTP integration guide](api-integration.md) when the caller is a separate
 service or browser-facing workflow.
 
+## Choose an entrypoint
+
+Use the package root for verification and reporting helpers, `quorum/server`
+when an embedded workflow needs to create or start the HTTP API, and
+`quorum/cli` for the published command-line entrypoint without resolving an
+internal `src/` path:
+
+```ts
+import { verifyAnswerContentsResult } from "quorum";
+import { createApiServer } from "quorum/server";
+```
+
+The `quorum/cli` subpath is wired to the `quorum` executable; consumers should
+invoke the executable for CLI workflows rather than import it as a library.
+
+These subpaths are part of the published package contract and are available
+after `npm run build` in a checked-out repository.
+
 ## Install and verify
 
 The package currently targets Node.js 22 or newer:
