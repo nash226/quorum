@@ -208,6 +208,13 @@ without relying on generated-at wall-clock differences.
 The full CLI workflow, report options, source metadata, reviewer import, and
 evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 
+Pipeline integrations can also stream one approved Markdown or text source via
+`--source -` when the answer is supplied from a file:
+
+```bash
+cat approved-policy.md | npm run dev -- verify --answer generated-answer.md --source - --json
+```
+
 For reviewer handoffs, Quorum can generate claim-level decision CSVs, import
 completed reviewer verdicts, and summarize pending/reviewed/no-claims workload
 for a queue consumer. The same overview is available through `POST
