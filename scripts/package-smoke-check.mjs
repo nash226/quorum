@@ -366,6 +366,25 @@ if (evaluationResult.fixtureName !== "HR policy example" || evaluationResult.sum
   throw new Error("Package artifact CLI did not evaluate the expected fixture contract.");
 }
 
+const filteredEvaluationResult = JSON.parse(execFileSync(process.execPath, [
+  fileURLToPath(cliPath),
+  "evaluate",
+  "--fixture-dir",
+  fileURLToPath(new URL("examples/evaluations", packageRoot)),
+  "--domain",
+  "hr",
+  "--json",
+  "--fail-on-mismatch",
+], { encoding: "utf8" }));
+if (
+  !Array.isArray(filteredEvaluationResult) ||
+  filteredEvaluationResult.length !== 27 ||
+  filteredEvaluationResult.some(({ domain }) => domain !== "hr") ||
+  filteredEvaluationResult.some(({ summaryMatches }) => summaryMatches !== true)
+) {
+  throw new Error("Package artifact CLI did not preserve evaluation domain filtering.");
+}
+
 const pdfTempDir = mkdtempSync(join(tmpdir(), "quorum-package-pdf-"));
 try {
   const pdfAnswerPath = join(pdfTempDir, "answer.md");
