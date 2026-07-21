@@ -558,8 +558,16 @@ async function verifySingleAnswer(
   answerPath: string,
   sources: SourceDocument[],
 ): Promise<VerificationReport> {
-  const answer = await readFile(answerPath, "utf8");
+  const answer = answerPath === "-" ? await readStdin() : await readFile(answerPath, "utf8");
   return verifyAnswer(answer, sources, undefined, answerPath);
+}
+
+async function readStdin(): Promise<string> {
+  let answer = "";
+  for await (const chunk of process.stdin) {
+    answer += chunk.toString();
+  }
+  return answer;
 }
 
 async function listSourceFiles(sourceDir: string): Promise<string[]> {
@@ -762,7 +770,7 @@ function printHelp(): void {
   console.log(`Quorum
 
 Usage:
-  quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+  quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 

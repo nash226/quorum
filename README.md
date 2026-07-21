@@ -54,6 +54,13 @@ The current CLI can:
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 
+For pipeline integrations, `verify` can read the generated answer from stdin
+with `--answer -`, while retaining `-` as the answer provenance in reports:
+
+```bash
+printf '%s\n' 'Employees receive 12 weeks of paid parental leave.' | npm run dev -- verify --answer - --source examples/sources/hr-policy.md --json
+```
+
 ## Example
 
 ```bash
@@ -202,7 +209,7 @@ npm run dev -- verify \
 ## CLI Usage
 
 ```text
-quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
+ quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
 quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
 ```
@@ -210,6 +217,7 @@ quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out
 Options:
 
 - `--answer <path>`: AI-generated answer to verify
+- `--answer -`: read the AI-generated answer from stdin for pipeline use
 - `--source <path>`: approved source document; may be repeated
 - `--source-dir <path>`: directory of approved source documents
 - `--answer <path>`: answer file to include in a batch run; may be repeated
