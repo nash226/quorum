@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cfadcd7` on 2026-07-20, test: pin packaged unknown route contract
+- Latest shipped change: `1bb87ab` on 2026-07-20, test: make authentication fixture portable
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | test: make authentication fixture portable | `1bb87ab` |
 | 2026-07-20 | Direct push | test: pin packaged unknown route contract | `cfadcd7` |
 | 2026-07-20 | [#806](https://github.com/nash226/quorum/pull/806) | test: pin reviewer queue preflight contract | `5587632` |
 | 2026-07-20 | Direct push | test: preserve liveness probe CLI help | `47613cf` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | docs: clarify generated status page | `61996d7` |
 | 2026-07-20 | Direct push | test: smoke-check packaged OpenAPI export | `44c98c3` |
 | 2026-07-20 | Direct push | test: cover Kubernetes readiness probe | `3a48c68` |
-| 2026-07-20 | Direct push | test: preserve packaged version aliases | `13d16b8` |
 
