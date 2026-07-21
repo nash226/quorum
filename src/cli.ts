@@ -183,7 +183,18 @@ async function main(): Promise<void> {
     return;
   }
 
-  if (command === "help" || isHelpFlag(command)) {
+  if (command === "help") {
+    const helpCommand = args[0];
+
+    if (args.length > 1 || (helpCommand !== undefined && !isCommandName(helpCommand))) {
+      throw new Error(`Unknown help topic: ${helpCommand ?? args[1] ?? ""}`);
+    }
+
+    printHelp(helpCommand as CommandName | undefined);
+    return;
+  }
+
+  if (isHelpFlag(command)) {
     printHelp();
     return;
   }
@@ -1556,6 +1567,19 @@ async function writeReportFile(
 
 function isHelpFlag(value: string): boolean {
   return HELP_FLAGS.has(value);
+}
+
+function isCommandName(value: string): value is CommandName {
+  return [
+    "verify",
+    "verify-batch",
+    "extract-claims",
+    "import-review",
+    "review-queue",
+    "evaluate",
+    "serve",
+    "openapi",
+  ].includes(value);
 }
 
 function parseGeneratedAt(value: string): string {

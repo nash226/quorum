@@ -196,6 +196,24 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /quorum version \[--json\]/);
 });
 
+test("help accepts a command topic", async () => {
+  const result = await runCliAllowFailure(["help", "verify"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /^Quorum verify\n\nUsage:/);
+  assert.match(result.stdout, /--answer <path\|->/);
+});
+
+test("help rejects unknown or multiple topics", async () => {
+  for (const args of [["help", "missing"], ["help", "verify", "serve"]]) {
+    const result = await runCliAllowFailure(args);
+
+    assert.equal(result.code, 1);
+    assert.match(result.stderr, /Unknown help topic:/);
+  }
+});
+
 test("version reports the CLI and API contract version", async () => {
   for (const args of [["version"], ["--version"], ["-v"]]) {
     const result = await runCliAllowFailure(args);
