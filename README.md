@@ -38,8 +38,9 @@ checked-in evaluation score and mismatch thresholds.
 
 Verification accepts Markdown, text, exported HTML, PDF, and DOCX answers and
 approved sources. Use `--source-dir` for a mixed directory of policy files;
-the [CLI guide](docs/cli-guide.md) documents format-specific and streaming
-details.
+answer and source directories are searched recursively, so nested policy or
+queue folders can be verified without flattening the approved file layout. The
+[CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
 
 The packaged CLI command map is:
 
