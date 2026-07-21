@@ -226,7 +226,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 76-fixture total explicit, so new benchmark packets cannot drift
+the published 77-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.
@@ -239,7 +239,7 @@ focused support scorecards aligned with the 50-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
-exactly one data row for each of the 76 checked-in benchmark fixtures.
+exactly one data row for each of the 77 checked-in benchmark fixtures.
 It also cross-checks that row count against the aggregate summary's fixture
 count, keeping machine-readable benchmark artifacts internally consistent.
 The packed smoke check also reconciles each domain summary's fixture count
