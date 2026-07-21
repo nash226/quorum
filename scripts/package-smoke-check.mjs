@@ -53,6 +53,23 @@ try {
       throw new Error(`Package artifact server did not serve the expected ${path} probe contract.`);
     }
   }
+
+  const verifyResponse = await fetch(`${packagedServer.url}/verify`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answer: "Employees receive 12 weeks of paid parental leave.",
+      answerLabel: "Packaged verification packet",
+      sources: [{
+        sourcePath: "policies/hr-policy.md",
+        content: "---\ntitle: HR Policy\ntrustLevel: high\n---\nEmployees receive 12 weeks of paid parental leave.\n",
+      }],
+    }),
+  });
+  const verifyPayload = await verifyResponse.json();
+  if (verifyResponse.status !== 200 || verifyPayload.shouldFail !== false || verifyPayload.report?.summary?.verified !== 1) {
+    throw new Error("Package artifact server did not verify the expected answer contract.");
+  }
 } finally {
   await packagedServer.close();
 }
