@@ -41,8 +41,9 @@
 
 ### Next In docs/roadmap.md
 
-- Choose the durable queue backend and dashboard boundary for reviewer work queues and audit history.
 - Expand the HR and support fixture set as policy coverage grows.
+- Keep the local HTTP API and reviewer handoff contracts stable for integrations.
+- Choose the durable queue backend and dashboard boundary for reviewer work queues and audit history.
 
 ## Recently Shipped
 
