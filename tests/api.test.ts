@@ -2760,14 +2760,26 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
 
     const readyzResponse = await fetch(`${api.url}/readyz`);
     assert.equal(readyzResponse.status, 200);
+    assert.equal(readyzResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(readyzResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(readyzResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(readyzResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(readyzResponse.headers.get("x-quorum-request-timeout-ms"), "30000");
     assert.equal(readyzResponse.headers.get("cache-control"), "no-store");
+    assert.match(readyzResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
     const readyzPayload = await readyzResponse.json() as ApiHealthResponse;
     assert.equal(readyzPayload.requestId, readyzResponse.headers.get("x-quorum-request-id"));
     assert.deepEqual({ ...readyzPayload, requestId: "" }, { ...expectedHealthResponse, requestId: "" });
 
     const livezResponse = await fetch(`${api.url}/livez`);
     assert.equal(livezResponse.status, 200);
+    assert.equal(livezResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal(livezResponse.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(livezResponse.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(livezResponse.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(livezResponse.headers.get("x-quorum-request-timeout-ms"), "30000");
     assert.equal(livezResponse.headers.get("cache-control"), "no-store");
+    assert.match(livezResponse.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
     const livezPayload = await livezResponse.json() as ApiHealthResponse;
     assert.equal(livezPayload.requestId, livezResponse.headers.get("x-quorum-request-id"));
     assert.deepEqual({ ...livezPayload, requestId: "" }, { ...expectedHealthResponse, requestId: "" });

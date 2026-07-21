@@ -83,6 +83,9 @@ load-balancer checks, alongside the readiness-only `/healthz` probe.
 The liveness response is a request-correlated health envelope, and its
 `X-Quorum-Request-Id` header can be joined with service logs; liveness remains
 independent of source loading and reviewer queue state.
+The API regression suite also verifies that `/readyz` and `/livez` publish the
+same discovery, limit, and request-correlation headers, keeping container probes
+observable as well as bodyless.
 Operational probes support bodyless `HEAD` requests as well as `GET`, so
 load balancers can check status headers without downloading a JSON payload.
 The API regression suite also verifies that Kubernetes-style `GET /readyz`
