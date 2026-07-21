@@ -37,6 +37,25 @@ approved sources. Use `--source-dir` for a mixed directory of policy files;
 the [CLI guide](docs/cli-guide.md) documents format-specific and streaming
 details.
 
+The packaged CLI command map is:
+
+| Command | Use it to |
+| --- | --- |
+| `verify` | Verify one answer and render reviewer artifacts. |
+| `verify-batch` | Verify multiple answers and create queue summaries. |
+| `extract-claims` | Preview normalized claims before verification. |
+| `import-review` | Import reviewer decisions and apply fail policies. |
+| `review-queue` | Summarize reviewer workload with optional benchmark drift. |
+| `evaluate` | Run fixture scorecards and mismatch gates. |
+| `serve` | Start the local HTTP API. |
+| `openapi` | Export the machine-readable API contract. |
+| `version` | Probe the CLI and API contract version. |
+
+Every command supports `--help` and `-h`; `quorum help <command>` is also
+available for scripted onboarding. Use `--result-json` when an integration
+needs `shouldFail` and `failVerdicts` alongside a report, and use `--answer -`
+or `--review-csv -` to stream one input from stdin.
+
 For a single answer, `--summary-csv-out` writes the same queue-oriented
 one-row summary used by batch verification, including verdict totals, the
 primary finding, and fail-policy status. This is useful when a workflow wants
