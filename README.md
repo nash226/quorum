@@ -76,6 +76,9 @@ npm run dev -- verify \
 
 The packaged CLI smoke gate verifies DOCX answers and approved sources after
 build, so this integration path stays covered for published artifacts.
+The packaged evaluation smoke gate also checks the `--result-json` response,
+keeping `shouldFail`, mismatch totals, and fail-policy metadata available to CI
+callers after installation.
 
 For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 Use `--fail-on needs_review` when empty or uncertain answers must stop for
