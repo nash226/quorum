@@ -45,6 +45,14 @@ try {
   if (openApiResponse.status !== 200 || openApiDocument.openapi !== "3.1.0" || !openApiDocument.paths?.["/verify"]) {
     throw new Error("Package artifact server did not serve the expected OpenAPI contract.");
   }
+
+  for (const path of ["/health", "/readyz", "/livez"]) {
+    const probeResponse = await fetch(`${packagedServer.url}${path}`);
+    const probePayload = await probeResponse.json();
+    if (probeResponse.status !== 200 || probePayload.service !== "quorum" || probePayload.ok !== true) {
+      throw new Error(`Package artifact server did not serve the expected ${path} probe contract.`);
+    }
+  }
 } finally {
   await packagedServer.close();
 }

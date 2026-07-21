@@ -57,6 +57,8 @@ manifest and library exports.
 It also starts the packaged server entrypoint and probes `/version` and
 `/openapi.json`, so a published server cannot pass packaging checks merely by
 having importable exports while its HTTP contract is broken.
+The same packaged check now probes `/health`, `/readyz`, and `/livez`, keeping
+published operational health, readiness, and liveness responses verified.
 It also checks the published `quorum --version` and `quorum -v` aliases, so
 short-form version probes remain compatible with installed integrations.
 It also executes `quorum --help` from the built package artifact and checks the
