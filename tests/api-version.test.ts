@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
   API_CORS_ALLOWED_HEADERS,
@@ -11,6 +12,14 @@ import {
   createOpenApiDocument,
   startApiServer,
 } from "../src/index.js";
+
+test("HTTP API version follows package metadata", async () => {
+  const packageVersion = (JSON.parse(
+    await readFile(new URL("../package.json", import.meta.url), "utf8"),
+  ) as { version: string }).version;
+
+  assert.equal(API_VERSION, packageVersion);
+});
 
 test("HTTP API exposes a dedicated machine-readable version endpoint", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });

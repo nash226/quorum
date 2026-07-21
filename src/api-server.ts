@@ -1,5 +1,6 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { createHash, randomUUID } from "node:crypto";
+import { createRequire } from "node:module";
 import {
   EvaluationFixtureValidationError,
   renderEvaluationAggregateSummaryCsv,
@@ -289,7 +290,20 @@ export const API_REQUEST_TIMEOUT_MS: number = 30_000;
 export const API_ALLOWED_METHODS = ["GET", "HEAD", "POST", "OPTIONS"] as const;
 const ALLOWED_METHODS = API_ALLOWED_METHODS.join(", ");
 export const API_SERVICE_NAME = "quorum";
-export const API_VERSION = "0.1.0";
+const require = createRequire(import.meta.url);
+
+function loadPackageVersion(): string {
+  try {
+    return (require("../package.json") as { version: string }).version;
+  } catch (error: unknown) {
+    if (!(error instanceof Error) || !error.message.includes("Cannot find module")) {
+      throw error;
+    }
+    return (require("../../package.json") as { version: string }).version;
+  }
+}
+
+export const API_VERSION = loadPackageVersion();
 export const API_DISCOVERY_HEADERS = {
   service: "X-Quorum-Service",
   version: "X-Quorum-Version",
