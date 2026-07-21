@@ -35,6 +35,27 @@ if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.star
 
 const packagedServer = await serverEntry.startApiServer({ port: 0 });
 try {
+  const discoveryResponse = await fetch(packagedServer.url, {
+    headers: { "X-Quorum-Request-Id": "packaged-discovery" },
+  });
+  const discoveryPayload = await discoveryResponse.json();
+  if (
+    discoveryResponse.status !== 200 ||
+    discoveryPayload.requestId !== "packaged-discovery" ||
+    discoveryResponse.headers.get("x-quorum-request-id") !== "packaged-discovery" ||
+    discoveryPayload.service !== "quorum" ||
+    discoveryPayload.openapiPath !== "/openapi.json" ||
+    !Array.isArray(discoveryPayload.endpoints) ||
+    !discoveryPayload.endpoints.some(({ method, path }) => method === "POST" && path === "/verify")
+  ) {
+    throw new Error("Package artifact server did not serve the expected discovery contract.");
+  }
+
+  const discoveryHeadResponse = await fetch(packagedServer.url, { method: "HEAD" });
+  if (discoveryHeadResponse.status !== 200 || (await discoveryHeadResponse.text()) !== "") {
+    throw new Error("Package artifact server did not preserve the bodyless discovery HEAD contract.");
+  }
+
   const versionResponse = await fetch(`${packagedServer.url}/version`);
   if (versionResponse.status !== 200 || (await versionResponse.json()).service !== "quorum") {
     throw new Error("Package artifact server did not serve the expected version contract.");
