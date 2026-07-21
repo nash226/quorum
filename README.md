@@ -58,6 +58,33 @@ would add unnecessary overhead. The public `quorum` entrypoint exposes the same
 in-memory and file-backed verification helpers used by the CLI; see the
 [programmatic API guide](docs/programmatic-api.md) for both patterns.
 
+For example, an agent worker can verify content in memory and fail closed on
+risky verdicts without starting a second process:
+
+```ts
+import { verifyAnswerContentsResult } from "quorum";
+
+const result = await verifyAnswerContentsResult({
+  answer: "Refunds are available for 30 days from purchase.",
+  answerLabel: "support-agent draft",
+  sources: [{
+    id: "support/refunds@2026-07-15",
+    sourcePath: "policies/refunds.md",
+    content: "Refunds are available for 30 days from the purchase date.",
+    title: "Refund Policy",
+    trustLevel: "high",
+  }],
+  failOn: ["contradicted", "unsupported"],
+});
+
+if (result.shouldFail) {
+  throw new Error(`Policy verification failed: ${result.failVerdicts.join(", ")}`);
+}
+```
+
+The stable source `id` is carried into evidence and reviewer artifacts, so
+workers can keep audit identity independent of temporary file paths.
+
 The packaged CLI command map is:
 
 | Command | Use it to |
