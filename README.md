@@ -6,6 +6,10 @@ Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
+The packaged-artifact smoke check posts a pending reviewer CSV to
+`/review-queue` and verifies the filtered workload and verdict totals, keeping
+the distributable HTTP queue contract covered alongside the CLI and library.
+
 ## Why Quorum Exists
 
 AI answers can sound confident while drifting from approved policy. Quorum
