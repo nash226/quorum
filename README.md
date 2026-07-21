@@ -51,6 +51,9 @@ npm run dev -- version --json
 # {"service":"quorum","version":"0.1.0"}
 ```
 
+The CLI and HTTP API read this version from `package.json`, keeping published
+package metadata and integration discovery responses aligned.
+
 Client tooling can export the same machine-readable HTTP contract without
 starting the server:
 
