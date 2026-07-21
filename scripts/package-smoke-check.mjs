@@ -33,6 +33,22 @@ if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.star
   throw new Error("Package artifact server entry point is missing required server exports.");
 }
 
+const packagedServer = await serverEntry.startApiServer({ port: 0 });
+try {
+  const versionResponse = await fetch(`${packagedServer.url}/version`);
+  if (versionResponse.status !== 200 || (await versionResponse.json()).service !== "quorum") {
+    throw new Error("Package artifact server did not serve the expected version contract.");
+  }
+
+  const openApiResponse = await fetch(`${packagedServer.url}/openapi.json`);
+  const openApiDocument = await openApiResponse.json();
+  if (openApiResponse.status !== 200 || openApiDocument.openapi !== "3.1.0" || !openApiDocument.paths?.["/verify"]) {
+    throw new Error("Package artifact server did not serve the expected OpenAPI contract.");
+  }
+} finally {
+  await packagedServer.close();
+}
+
 const cliVersion = JSON.parse(execFileSync(process.execPath, [fileURLToPath(cliPath), "version", "--json"], { encoding: "utf8" }));
 if (cliVersion.service !== "quorum" || cliVersion.version !== packageJson.version) {
   throw new Error("Package artifact CLI did not return the expected version contract.");
