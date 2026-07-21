@@ -63,6 +63,10 @@ The same packaged smoke gate exports `quorum openapi --out` and validates the
 written document, keeping offline contract generation aligned with the
 published CLI.
 
+Node.js integrations can use the public `extractClaimsResult` helper to preview
+normalized claims and receive an explicit `answerHasClaims` signal for routing
+empty drafts to review; see the [programmatic API guide](docs/programmatic-api.md).
+
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
 The core API regression suite also pins conditional `GET /version` revalidation,
