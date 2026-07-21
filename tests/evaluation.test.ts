@@ -2026,9 +2026,10 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/order-cancellation-policy.json"),
     resolve("examples/evaluations/support/order-tracking-policy.json"),
     resolve("examples/evaluations/support/password-reset-policy.json"),
-    resolve("examples/evaluations/support/payment-failure-policy.json"),
-    resolve("examples/evaluations/support/payment-method-policy.json"),
-    resolve("examples/evaluations/support/plan-change-policy.json"),
+      resolve("examples/evaluations/support/payment-failure-policy.json"),
+      resolve("examples/evaluations/support/payment-method-policy.json"),
+      resolve("examples/evaluations/support/phone-support-policy.json"),
+      resolve("examples/evaluations/support/plan-change-policy.json"),
     resolve("examples/evaluations/support/priority-support-policy.json"),
     resolve("examples/evaluations/support/refund-status-policy.json"),
     resolve("examples/evaluations/support/refunds-policy.json"),
@@ -2100,7 +2101,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 76);
+  assert.equal(scorecards.length, 77);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2163,6 +2164,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support password reset policy example",
       "Support payment failure policy example",
       "Support payment method policy example",
+      "Support phone support policy example",
       "Support plan change policy example",
       "Support priority support policy example",
       "Support refund status policy example",
@@ -2248,7 +2250,7 @@ test("filters the support evaluation fixture set by domain", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 49);
+  assert.equal(scorecards.length, 50);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "support"));
 });
 
