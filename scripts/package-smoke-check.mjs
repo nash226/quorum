@@ -84,6 +84,29 @@ try {
     throw new Error("Package artifact server did not serve the expected capabilities contract.");
   }
 
+  const postPaths = ["/extract-claims", "/verify", "/verify-batch", "/import-review", "/review-queue", "/evaluate"];
+  for (const path of postPaths) {
+    const preflightResponse = await fetch(`${packagedServer.url}${path}`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "https://browser.example",
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
+      },
+    });
+    if (
+      preflightResponse.status !== 204 ||
+      preflightResponse.headers.get("access-control-allow-origin") !== "*" ||
+      preflightResponse.headers.get("access-control-allow-methods") !== "POST, OPTIONS" ||
+      preflightResponse.headers.get("access-control-allow-headers") !== "Content-Type, X-Quorum-Request-Id, If-None-Match" ||
+      preflightResponse.headers.get("access-control-expose-headers")?.includes("X-Quorum-Request-Id") !== true ||
+      preflightResponse.headers.get("access-control-max-age") !== "600" ||
+      (await preflightResponse.text()) !== ""
+    ) {
+      throw new Error(`Package artifact server did not preserve the ${path} CORS preflight contract.`);
+    }
+  }
+
   for (const path of ["/health", "/readyz", "/livez"]) {
     const probeResponse = await fetch(`${packagedServer.url}${path}`);
     const probePayload = await probeResponse.json();
