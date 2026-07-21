@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ea3206f` on 2026-07-21, docs: expose aggregate benchmark gate
+- Latest shipped change: `40232e9` on 2026-07-21, docs: clarify the full local verification gate
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | [#847](https://github.com/nash226/quorum/pull/847) | docs: clarify the full local verification gate | `40232e9` |
 | 2026-07-21 | Direct push | docs: expose aggregate benchmark gate | `ea3206f` |
 | 2026-07-21 | Direct push | fix: normalize fullwidth ordered-list markers | `907c750` |
 | 2026-07-21 | Direct push | test: smoke-check packaged claim extraction | `c5308e6` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | test: cover packaged DOCX ingestion | `f0bf251` |
 | 2026-07-21 | [#841](https://github.com/nash226/quorum/pull/841) | docs: document supported document formats | `4ba3b4c` |
 | 2026-07-21 | Direct push | docs: fix quick start verification command | `9c18415` |
-| 2026-07-21 | Direct push | test: smoke-check packaged answer stdin | `4c33c0c` |
 
