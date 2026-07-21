@@ -60,6 +60,9 @@ The packaged CLI smoke gate probes representative `quorum help <command>`
 topics after building, keeping the documented onboarding alias executable in
 published artifacts.
 
+It also checks that packaged `/health`, `/healthz`, `/readyz`, and `/livez`
+endpoints support bodyless `HEAD` probes for deployment health checks.
+
 For a single answer, `--summary-csv-out` writes the same queue-oriented
 one-row summary used by batch verification, including verdict totals, the
 primary finding, and fail-policy status. This is useful when a workflow wants

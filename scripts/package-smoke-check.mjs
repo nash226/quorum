@@ -90,6 +90,11 @@ try {
     if (probeResponse.status !== 200 || probePayload.service !== "quorum" || probePayload.ok !== true) {
       throw new Error(`Package artifact server did not serve the expected ${path} probe contract.`);
     }
+
+    const headProbeResponse = await fetch(`${packagedServer.url}${path}`, { method: "HEAD" });
+    if (headProbeResponse.status !== 200 || (await headProbeResponse.text()) !== "") {
+      throw new Error(`Package artifact server did not preserve the bodyless ${path} HEAD contract.`);
+    }
   }
 
   const verifyResponse = await fetch(`${packagedServer.url}/verify`, {
