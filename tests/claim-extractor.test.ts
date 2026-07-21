@@ -824,6 +824,22 @@ within four business hours.
   );
 });
 
+test("strips square bullets from exported policy answers", () => {
+  const claims = extractClaims(`Policy notes:
+
+▪ Employees receive 12 weeks of paid parental leave
+▫ Healthcare coverage begins after 30 days of employment
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave",
+      "Healthcare coverage begins after 30 days of employment",
+    ],
+  );
+});
+
 test("extracts clean claims from em dash bullet list answers", () => {
   const claims = extractClaims(`Policy notes:
 
