@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `61996d7` on 2026-07-20, docs: clarify generated status page
+- Latest shipped change: `b6ac0b8` on 2026-07-20, test: preserve operational probe headers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | test: preserve operational probe headers | `b6ac0b8` |
 | 2026-07-20 | Direct push | docs: clarify generated status page | `61996d7` |
 | 2026-07-20 | Direct push | test: smoke-check packaged OpenAPI export | `44c98c3` |
 | 2026-07-20 | Direct push | test: cover Kubernetes readiness probe | `3a48c68` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | docs: explain cacheable contract probes | `b2db33a` |
 | 2026-07-20 | Direct push | docs: document workspace access fixture | `46ac76c` |
 | 2026-07-20 | Direct push | test: cover conditional version revalidation | `c28fdde` |
-| 2026-07-20 | Direct push | docs: explain queue audit timestamps | `0693e60` |
 
