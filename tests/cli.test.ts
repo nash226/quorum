@@ -428,6 +428,47 @@ test("verify-batch result-json reports aggregate gate metadata", async () => {
   assert.equal(parsed.report.summary.answersWithFailures, 1);
 });
 
+test("verify-batch discovers answer and source files in nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-nested-inputs-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "hr");
+    const sourceDir = join(tempDir, "sources", "policies");
+    const answerPath = join(answerDir, "leave.md");
+    const sourcePath = join(sourceDir, "leave-policy.md");
+
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      join(tempDir, "answers"),
+      "--source-dir",
+      join(tempDir, "sources"),
+      "--result-json",
+    ]);
+    const result = JSON.parse(stdout) as {
+      report: {
+        answerCount: number;
+        sourceCount: number;
+        answers: Array<{ answerPath: string; report: { summary: { verified: number } } }>;
+      };
+    };
+
+    assert.equal(result.report.answerCount, 1);
+    assert.equal(result.report.sourceCount, 1);
+    assert.equal(result.report.answers[0]?.answerPath, answerPath);
+    assert.equal(result.report.answers[0]?.report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("import-review --help prints import usage without requiring a csv path", async () => {
   const result = await runCliAllowFailure(["import-review", "--help"]);
 
