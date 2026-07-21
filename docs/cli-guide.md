@@ -246,6 +246,10 @@ decision is available as `shouldFail` and `failVerdicts` in result JSON.
 
 ## Commands at a glance
 
+Use `quorum --help` for the top-level command list. Every command also accepts
+`--help` (or `-h`) and prints its usage without reading input files or starting
+the server, which makes the flag safe for install and integration probes.
+
 | Command | Purpose |
 | --- | --- |
 | `verify` | Verify one answer and render reports. |
