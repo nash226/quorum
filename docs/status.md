@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `09b52aa` on 2026-07-21, test: smoke-check packaged evaluation gate metadata
+- Latest shipped change: `99e611f` on 2026-07-21, test: smoke-check packaged probe HEAD requests
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | test: smoke-check packaged probe HEAD requests | `99e611f` |
 | 2026-07-21 | Direct push | test: smoke-check packaged evaluation gate metadata | `09b52aa` |
 | 2026-07-21 | Direct push | test: smoke-check every CLI help topic | `2a5a579` |
 | 2026-07-21 | Direct push | test: smoke-check CLI help topics | `806e65c` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | docs: explain single-answer summary handoff | `9cdeacd` |
 | 2026-07-21 | Direct push | docs: show DOCX verification workflow | `6d54724` |
 | 2026-07-21 | Direct push | test: pin packaged API version export | `d535db3` |
-| 2026-07-21 | Direct push | fix: derive API version from package metadata | `2e5e775` |
 
