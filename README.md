@@ -75,6 +75,9 @@ published CLI.
 It also runs the packaged `quorum evaluate --fixture` command against the
 checked-in HR fixture with `--fail-on-mismatch`, keeping published benchmark
 execution and its zero-mismatch gate executable after packaging.
+The packaged HTTP smoke gate also submits that fixture to `POST /evaluate`,
+keeping the published server's benchmark response and summary CSV artifact
+aligned with the CLI evaluation contract.
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.

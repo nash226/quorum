@@ -138,6 +138,29 @@ try {
   ) {
     throw new Error("Package artifact server did not serve the expected reviewer import contract.");
   }
+
+  const evaluateResponse = await fetch(`${packagedServer.url}/evaluate`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      fixtures: [{
+        fixturePath: "examples/evaluations/hr-policy.json",
+        content: readFileSync(new URL("../examples/evaluations/hr-policy.json", import.meta.url), "utf8"),
+      }],
+      minScore: 0.95,
+      includeArtifacts: ["summary_csv"],
+    }),
+  });
+  const evaluatePayload = await evaluateResponse.json();
+  if (
+    evaluateResponse.status !== 200 ||
+    evaluatePayload.summary?.fixtureCount !== 1 ||
+    evaluatePayload.mismatchCount !== 0 ||
+    evaluatePayload.summary?.score !== 1 ||
+    evaluatePayload.artifacts?.summary_csv?.includes("HR policy example") !== true
+  ) {
+    throw new Error("Package artifact server did not serve the expected evaluation contract.");
+  }
 } finally {
   await packagedServer.close();
 }
