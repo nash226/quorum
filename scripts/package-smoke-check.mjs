@@ -313,4 +313,21 @@ try {
   rmSync(pdfTempDir, { recursive: true, force: true });
 }
 
+const stdinSourceTempDir = mkdtempSync(join(tmpdir(), "quorum-package-stdin-source-"));
+try {
+  const stdinAnswerPath = join(stdinSourceTempDir, "answer.md");
+  writeFileSync(stdinAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  const stdinSourceResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", stdinAnswerPath, "--source", "-", "--json",
+  ], {
+    encoding: "utf8",
+    input: "---\ntitle: Streamed HR Policy\ntrustLevel: high\n---\nEmployees receive 12 weeks of paid parental leave.\n",
+  }));
+  if (stdinSourceResult.summary?.verified !== 1 || stdinSourceResult.sources?.[0]?.title !== "Streamed HR Policy") {
+    throw new Error("Package artifact CLI did not verify the expected streamed source contract.");
+  }
+} finally {
+  rmSync(stdinSourceTempDir, { recursive: true, force: true });
+}
+
 console.log(`Package smoke check passed: ${packageResult.filename} contains ${files.size} files.`);
