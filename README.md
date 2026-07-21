@@ -42,6 +42,10 @@ answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
 
+The packaged smoke gate verifies both PDF and DOCX ingestion for answers and
+approved sources after every build, so binary policy workflows have the same
+release-level coverage as Markdown and HTML inputs.
+
 For an agent or workflow runner that needs JSON over HTTP, start the local API
 and probe its published capability contract:
 
