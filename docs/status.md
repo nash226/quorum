@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4c33c0c` on 2026-07-21, test: smoke-check packaged answer stdin
+- Latest shipped change: `9c18415` on 2026-07-21, docs: fix quick start verification command
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | docs: fix quick start verification command | `9c18415` |
 | 2026-07-21 | Direct push | test: smoke-check packaged answer stdin | `4c33c0c` |
 | 2026-07-21 | Direct push | test: smoke-check packaged reviewer queue stdin | `76c3f25` |
 | 2026-07-21 | Direct push | test: smoke-check packaged stdin sources | `2d190ff` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | feat: accept approved sources from stdin | `a39fde5` |
 | 2026-07-21 | Direct push | test: smoke-check packaged CLI help | `77c2a0a` |
 | 2026-07-21 | Direct push | feat: normalize square claim bullets | `add76fb` |
-| 2026-07-21 | Direct push | feat: normalize middle-dot claim bullets | `6193d6f` |
 
