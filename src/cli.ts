@@ -1706,7 +1706,7 @@ Options:
   --min-score <0..1>        Exit with code 2 when the aggregate claim score is below this threshold
 
 Example:
-  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --aggregate-summary-csv-out reports/evaluation-aggregate-summary.csv --fail-on-mismatch
+  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --aggregate-summary-csv-out reports/evaluation-aggregate-summary.csv --min-score 0.95 --fail-on-mismatch
   npm run dev -- evaluate --fixture-dir examples/evaluations --domain hr --fail-on-mismatch
   npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --json
 `,
@@ -1792,7 +1792,7 @@ Example:
   npm run dev -- extract-claims --answer examples/answers/hr-answer.md --json
   npm run dev -- import-review --review-csv reports/hr-review.csv --out reports/hr-review-import.json --markdown-out reports/hr-review-import.md --html-out reports/hr-review-import.html --summary-csv-out reports/hr-review-import-summary.csv --fail-on needs_review
   cat reports/hr-review.csv | npm run dev -- import-review --review-csv - --result-json
-  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --aggregate-summary-csv-out reports/evaluation-aggregate-summary.csv --fail-on-mismatch
+  npm run dev -- evaluate --fixture examples/evaluations/hr-policy.json --fixture examples/evaluations/support-policy.json --markdown-out reports/evaluation-report.md --html-out reports/evaluation-report.html --summary-csv-out reports/evaluation-summary.csv --domain-summary-csv-out reports/evaluation-domain-summary.csv --aggregate-summary-csv-out reports/evaluation-aggregate-summary.csv --min-score 0.95 --fail-on-mismatch
   npm run dev -- evaluate --fixture-dir examples/evaluations --domain hr --fail-on-mismatch
   npm run dev -- serve --port 3000
   npm run dev -- openapi --out reports/openapi.json

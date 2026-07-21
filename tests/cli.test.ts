@@ -192,6 +192,7 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /quorum import-review .*--generated-at <timestamp>/);
   assert.match(result.stdout, /quorum review-queue .*--generated-at <timestamp>/);
   assert.match(result.stdout, /quorum evaluate .*--generated-at <timestamp>.*--min-score <0\.\.1>/);
+  assert.match(result.stdout, /npm run dev -- evaluate .*--min-score 0\.95 --fail-on-mismatch/);
   assert.match(result.stdout, /quorum version \[--json\]/);
 });
 

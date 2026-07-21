@@ -594,6 +594,8 @@ npm run dev -- evaluate --fixture-dir examples/evaluations \
 
 This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
+The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
+command to fail closed when aggregate claim quality falls below the threshold.
 
 ## Documentation Map
 
