@@ -270,6 +270,9 @@ the package `main`, `types`, `exports`, and `bin` fields, as well as the CLI,
 library, and HTTP server entry points. It also imports the root and server entry points
 and checks their required runtime exports, so a package can fail closed before
 publication if its declared API surface is missing.
+The same packaged check verifies that the public `API_VERSION` export matches
+the package version, keeping library callers and HTTP/CLI discovery on one
+contract version.
 
 The checked-in 77-fixture benchmark spans 27 HR and 50 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
