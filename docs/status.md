@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1b45447` on 2026-07-20, test: cover packaged operational probes
+- Latest shipped change: `9c1c196` on 2026-07-20, test: cover packaged verification requests
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-20 | Direct push | test: cover packaged verification requests | `9c1c196` |
 | 2026-07-20 | Direct push | test: cover packaged operational probes | `1b45447` |
 | 2026-07-20 | Direct push | test: smoke-check packaged HTTP server | `faf96bd` |
 | 2026-07-20 | Direct push | test: cover packaged CORS preflights | `df03260` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | test: make authentication fixture portable | `1bb87ab` |
 | 2026-07-20 | Direct push | test: pin packaged unknown route contract | `cfadcd7` |
 | 2026-07-20 | [#806](https://github.com/nash226/quorum/pull/806) | test: pin reviewer queue preflight contract | `5587632` |
-| 2026-07-20 | Direct push | test: preserve liveness probe CLI help | `47613cf` |
 
