@@ -113,6 +113,9 @@ guide](docs/api-integration.md#preview-claims-before-verification) includes the
 request shape and base64 document example.
 The packaged HTTP smoke gate also pins the claim-less preview response, keeping
 empty drafts visible for reviewer routing instead of treating them as missing.
+It also exercises a claim-bearing `/extract-claims` request from the packaged
+server, keeping preview claim IDs and normalized text aligned with the
+published artifact.
 All JSON POST endpoints enforce the advertised request-size limit and return a
 structured `413` error when a payload is too large, so adding a new route cannot
 silently bypass the operational guard.

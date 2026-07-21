@@ -94,6 +94,21 @@ try {
   ) {
     throw new Error("Package artifact server did not serve the expected batch verification contract.");
   }
+
+  const extractClaimsResponse = await fetch(`${packagedServer.url}/extract-claims`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ answer: "1. Employees receive 12 weeks of paid parental leave." }),
+  });
+  const extractClaimsPayload = await extractClaimsResponse.json();
+  if (
+    extractClaimsResponse.status !== 200 ||
+    extractClaimsPayload.claims?.length !== 1 ||
+    extractClaimsPayload.claims[0]?.id !== "claim_1" ||
+    extractClaimsPayload.claims[0]?.text !== "Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact server did not serve the expected claim preview contract.");
+  }
 } finally {
   await packagedServer.close();
 }
