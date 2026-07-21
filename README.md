@@ -593,8 +593,7 @@ benchmark check used by CI.
 - [API deployment guide](docs/api-deployment.md): network boundary, limits, and durable source identity.
 - [Demo workflow](docs/demo.md): a click-through product demonstration.
 - [Roadmap](docs/roadmap.md): current product priorities and open direction.
-- [Status](docs/status.md) is regenerated from the default branch so the latest shipped change and recent history stay reviewable.
-- [Status](docs/status.md): generated snapshot of shipped behavior and recent changes.
+- [Status](docs/status.md) is regenerated from the default branch with the current capability, roadmap, and recent-change snapshot.
 - [Product brief](docs/product-brief.md): problem, initial user, and product principles.
 
 ## Demo Video
