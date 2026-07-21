@@ -391,6 +391,33 @@ try {
   rmSync(extractClaimsTempDir, { recursive: true, force: true });
 }
 
+const batchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-batch-"));
+try {
+  const answerDir = join(batchTempDir, "answers");
+  mkdirSync(answerDir);
+  writeFileSync(join(answerDir, "verified.md"), "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(join(answerDir, "empty.md"), "Thanks!\n");
+  const batchResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath),
+    "verify-batch",
+    "--answer-dir",
+    answerDir,
+    "--source",
+    fileURLToPath(new URL("examples/sources/hr-policy.md", packageRoot)),
+    "--result-json",
+  ], { encoding: "utf8" }));
+  if (
+    batchResult.shouldFail !== false ||
+    batchResult.report?.summary?.answersWithClaims !== 1 ||
+    batchResult.report?.summary?.answersWithoutClaims !== 1 ||
+    batchResult.report?.summary?.verified !== 1
+  ) {
+    throw new Error("Package artifact CLI did not preserve the expected batch verification contract.");
+  }
+} finally {
+  rmSync(batchTempDir, { recursive: true, force: true });
+}
+
 const openApiTempDir = mkdtempSync(join(tmpdir(), "quorum-package-openapi-"));
 try {
   const openApiPath = join(openApiTempDir, "openapi.json");

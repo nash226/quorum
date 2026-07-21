@@ -19,6 +19,10 @@ keeping exported and localized answers clean before evidence matching.
 
 ## Quick Start
 
+The published package smoke check also runs the CLI `verify-batch` contract,
+including a verified answer alongside an empty draft so batch routing stays
+machine-readable after packaging.
+
 ```bash
 npm install
 npm run check
