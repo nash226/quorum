@@ -42,6 +42,17 @@ answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
 
+For an agent or workflow runner that needs JSON over HTTP, start the local API
+and probe its published capability contract:
+
+```bash
+npm run dev -- serve --port 3000
+curl -fsS http://127.0.0.1:3000/capabilities
+```
+
+The [HTTP integration guide](docs/api-integration.md) covers verification,
+reviewer-queue, health, readiness, liveness, and OpenAPI discovery endpoints.
+
 The packaged CLI command map is:
 
 | Command | Use it to |
