@@ -60,6 +60,9 @@ The packaged CLI smoke gate probes representative `quorum help <command>`
 topics after building, keeping the documented onboarding alias executable in
 published artifacts.
 
+Source frontmatter with an invalid `trustLevel` is rejected instead of silently
+falling back to the default, keeping malformed evidence metadata fail-closed.
+
 It also checks that packaged `/health`, `/healthz`, `/readyz`, and `/livez`
 endpoints support bodyless `HEAD` probes for deployment health checks.
 
