@@ -122,6 +122,9 @@ empty drafts visible for reviewer routing instead of treating them as missing.
 It also exercises a claim-bearing `/extract-claims` request from the packaged
 server, keeping preview claim IDs and normalized text aligned with the
 published artifact.
+It also preserves a claim-less packaged preview with its request ID and empty
+claim list, keeping drafts such as acknowledgements visible for reviewer
+routing after publication.
 All JSON POST endpoints enforce the advertised request-size limit and return a
 structured `413` error when a payload is too large, so adding a new route cannot
 silently bypass the operational guard.

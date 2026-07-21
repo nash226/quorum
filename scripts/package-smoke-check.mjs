@@ -131,6 +131,24 @@ try {
     throw new Error("Package artifact server did not serve the expected claim preview contract.");
   }
 
+  const emptyExtractClaimsResponse = await fetch(`${packagedServer.url}/extract-claims`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "X-Quorum-Request-Id": "packaged-empty-claim-preview-contract",
+    },
+    body: JSON.stringify({ answer: "Thanks!" }),
+  });
+  const emptyExtractClaimsPayload = await emptyExtractClaimsResponse.json();
+  if (
+    emptyExtractClaimsResponse.status !== 200 ||
+    emptyExtractClaimsPayload.requestId !== "packaged-empty-claim-preview-contract" ||
+    emptyExtractClaimsPayload.answerHasClaims !== false ||
+    emptyExtractClaimsPayload.claims?.length !== 0
+  ) {
+    throw new Error("Package artifact server did not preserve claim-less preview routing.");
+  }
+
   const importReviewResponse = await fetch(`${packagedServer.url}/import-review`, {
     method: "POST",
     headers: {
