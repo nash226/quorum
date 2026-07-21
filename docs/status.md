@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8456424` on 2026-07-21, test: cover packaged capabilities contract
+- Latest shipped change: `b24e6a8` on 2026-07-21, test: add phone support benchmark fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | test: add phone support benchmark fixture | `b24e6a8` |
 | 2026-07-21 | [#828](https://github.com/nash226/quorum/pull/828) | test: cover packaged capabilities contract | `8456424` |
 | 2026-07-21 | Direct push | test: smoke-check packaged reviewer import CLI | `74fb279` |
 | 2026-07-21 | Direct push | test: preserve packaged empty claim previews | `36dffa3` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | docs: standardize the repository verification gate | `c77fe5b` |
 | 2026-07-21 | Direct push | test: smoke-check packaged reviewer imports | `81b731a` |
 | 2026-07-20 | Direct push | test: smoke-check packaged evaluation | `eae95e7` |
-| 2026-07-20 | Direct push | test: cover packaged claim preview | `e14c2d0` |
 
