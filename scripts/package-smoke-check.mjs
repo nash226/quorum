@@ -272,4 +272,27 @@ if (evaluationResult.fixtureName !== "HR policy example" || evaluationResult.sum
   throw new Error("Package artifact CLI did not evaluate the expected fixture contract.");
 }
 
+const pdfTempDir = mkdtempSync(join(tmpdir(), "quorum-package-pdf-"));
+try {
+  const pdfAnswerPath = join(pdfTempDir, "answer.md");
+  const pdfReportPath = join(pdfTempDir, "report.json");
+  writeFileSync(pdfAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath),
+    "verify",
+    "--answer",
+    pdfAnswerPath,
+    "--source",
+    fileURLToPath(new URL("examples/sources/hr-policy.pdf", packageRoot)),
+    "--out",
+    pdfReportPath,
+  ], { encoding: "utf8" });
+  const pdfReport = JSON.parse(readFileSync(pdfReportPath, "utf8"));
+  if (pdfReport.summary?.verified !== 1 || pdfReport.sources?.[0]?.title !== "HR Benefits Policy PDF") {
+    throw new Error("Package artifact CLI did not verify the expected PDF source contract.");
+  }
+} finally {
+  rmSync(pdfTempDir, { recursive: true, force: true });
+}
+
 console.log(`Package smoke check passed: ${packageResult.filename} contains ${files.size} files.`);

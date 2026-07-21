@@ -83,6 +83,8 @@ execution and its zero-mismatch gate executable after packaging.
 It also runs the packaged `quorum import-review` command against a completed
 review CSV, keeping reviewer verdict routing and fail-policy output executable
 after packaging.
+It also verifies a text answer against the packaged PDF policy fixture, keeping
+the published CLI's PDF source-ingestion path executable after packaging.
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
