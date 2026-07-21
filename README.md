@@ -21,7 +21,8 @@ keeping exported and localized answers clean before evidence matching.
 
 ```bash
 npm install
-npm run check
+npm test
+npm run build
 npm run dev -- verify \
   --answer examples/answers/hr-answer.md \
   --source-dir examples/sources \
