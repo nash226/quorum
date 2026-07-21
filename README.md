@@ -21,6 +21,7 @@ matching.
 
 ```bash
 npm install
+npm run check
 npm run dev -- verify \
   --answer examples/answers/hr-answer.md \
   --source-dir examples/sources \
@@ -642,13 +643,13 @@ command to fail closed when aggregate claim quality falls below the threshold.
 ## Development
 
 ```bash
-npm test
-npm run build
-npm run smoke
-npm run evaluate:ci
+npm run check
 ```
 
-`npm run check` runs the repository verification gate used by CI.
+`npm run check` runs the repository verification gate used by CI: unit tests,
+the TypeScript build, local HTTP smoke checks, packaged-entrypoint smoke checks,
+and the evaluation score gate. Run the individual commands when narrowing down
+a failure.
 
 ```text
 src/          verifier, CLI, reports, workflow, and HTTP API

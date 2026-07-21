@@ -77,7 +77,9 @@ records, give them different IDs even when their titles match.
 5. Add a concise README note only when the user-facing product surface changed;
    otherwise document the fixture's context here and let `docs/status.md`
    record the generated shipped inventory.
-6. Run `npm test`, `npm run build`, `npm run smoke`, and `npm run evaluate:ci`.
+6. Run `npm run check` to execute the full repository gate, including tests,
+   the TypeScript build, HTTP and packaged-entrypoint smoke checks, and the
+   evaluation score gate.
 
 ## CI contract
 
