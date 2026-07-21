@@ -366,6 +366,23 @@ if (evaluationResult.fixtureName !== "HR policy example" || evaluationResult.sum
   throw new Error("Package artifact CLI did not evaluate the expected fixture contract.");
 }
 
+const evaluationGateResult = JSON.parse(execFileSync(process.execPath, [
+  fileURLToPath(cliPath),
+  "evaluate",
+  "--fixture",
+  fileURLToPath(new URL("examples/evaluations/hr-policy.json", packageRoot)),
+  "--result-json",
+  "--fail-on-mismatch",
+], { encoding: "utf8" }));
+if (
+  evaluationGateResult.shouldFail !== false ||
+  evaluationGateResult.mismatchCount !== 0 ||
+  evaluationGateResult.summary?.score !== 1 ||
+  evaluationGateResult.summary?.scoreLabel !== "100%"
+) {
+  throw new Error("Package artifact CLI did not preserve the evaluation result-json gate contract.");
+}
+
 const pdfTempDir = mkdtempSync(join(tmpdir(), "quorum-package-pdf-"));
 try {
   const pdfAnswerPath = join(pdfTempDir, "answer.md");
