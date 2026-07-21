@@ -78,6 +78,9 @@ published CLI.
 It also runs the packaged `quorum evaluate --fixture` command against the
 checked-in HR fixture with `--fail-on-mismatch`, keeping published benchmark
 execution and its zero-mismatch gate executable after packaging.
+It also runs the packaged `quorum import-review` command against a completed
+review CSV, keeping reviewer verdict routing and fail-policy output executable
+after packaging.
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
