@@ -21,13 +21,16 @@ keeping exported and localized answers clean before evidence matching.
 
 ```bash
 npm install
-npm test
-npm run build
+npm run check
 npm run dev -- verify \
   --answer examples/answers/hr-answer.md \
   --source-dir examples/sources \
   --json
 ```
+
+`npm run check` is the full local release gate: it runs tests and the TypeScript
+build, then smoke-checks the HTTP API and packaged CLI before enforcing the
+checked-in evaluation score and mismatch thresholds.
 
 Verification accepts Markdown, text, exported HTML, PDF, and DOCX answers and
 approved sources. Use `--source-dir` for a mixed directory of policy files;
