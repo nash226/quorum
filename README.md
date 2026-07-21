@@ -99,6 +99,8 @@ npm run dev -- version --json
 
 The CLI and HTTP API read this version from `package.json`, keeping published
 package metadata and integration discovery responses aligned.
+Use `quorum help version` when onboarding a script that needs the exact version
+probe syntax.
 
 Client tooling can export the same machine-readable HTTP contract without
 starting the server:
