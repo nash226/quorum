@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9cdeacd` on 2026-07-21, docs: explain single-answer summary handoff
+- Latest shipped change: `d05b4ed` on 2026-07-21, docs: map packaged CLI commands
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | docs: map packaged CLI commands | `d05b4ed` |
 | 2026-07-21 | Direct push | docs: explain single-answer summary handoff | `9cdeacd` |
 | 2026-07-21 | Direct push | docs: show DOCX verification workflow | `6d54724` |
 | 2026-07-21 | Direct push | test: pin packaged API version export | `d535db3` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | fix: support command-specific help topics | `7fbe00c` |
 | 2026-07-21 | Direct push | test: smoke-check packaged fail policy status | `726d4c5` |
 | 2026-07-21 | [#847](https://github.com/nash226/quorum/pull/847) | docs: clarify the full local verification gate | `40232e9` |
-| 2026-07-21 | Direct push | docs: expose aggregate benchmark gate | `ea3206f` |
 
