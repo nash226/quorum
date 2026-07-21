@@ -168,6 +168,8 @@ It also runs the packaged `quorum import-review` command against a completed
 review CSV, keeping reviewer verdict routing and fail-policy output executable
 after packaging. It also streams that CSV into the packaged `quorum review-queue`
 command, keeping pipe-friendly queue summaries executable after packaging.
+It also filters a claim-less CSV through `--queue-status no_claims`, keeping
+empty drafts visible in packaged reviewer handoffs.
 It also verifies a text answer against the packaged PDF policy fixture, keeping
 the published CLI's PDF source-ingestion path executable after packaging.
 It also verifies a DOCX answer and source through the packaged CLI, keeping the

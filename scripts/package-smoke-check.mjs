@@ -447,6 +447,25 @@ try {
   ) {
     throw new Error("Package artifact CLI did not preserve reviewer queue stdin routing.");
   }
+  const noClaimsQueueOutput = execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "review-queue", "--review-csv", "-", "--queue-status", "no_claims", "--json",
+  ], {
+    encoding: "utf8",
+    input: [
+      "answer_label,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+      "Packaged empty draft,false,,,,,,,,",
+      "",
+    ].join("\n"),
+  });
+  const noClaimsQueueResult = JSON.parse(noClaimsQueueOutput);
+  if (
+    noClaimsQueueResult.queueStatus !== "no_claims" ||
+    noClaimsQueueResult.review?.totalAnswers !== 1 ||
+    noClaimsQueueResult.review?.noClaimsAnswers !== 1 ||
+    noClaimsQueueResult.review?.totalClaims !== 0
+  ) {
+    throw new Error("Package artifact CLI did not preserve no-claims reviewer queue routing.");
+  }
 } finally {
   rmSync(reviewerTempDir, { recursive: true, force: true });
 }
