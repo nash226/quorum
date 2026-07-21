@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6193d6f` on 2026-07-21, feat: normalize middle-dot claim bullets
+- Latest shipped change: `add76fb` on 2026-07-21, feat: normalize square claim bullets
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | feat: normalize square claim bullets | `add76fb` |
 | 2026-07-21 | Direct push | feat: normalize middle-dot claim bullets | `6193d6f` |
 | 2026-07-21 | Direct push | docs: show local API integration path | `7f35559` |
 | 2026-07-21 | Direct push | test: smoke-check packaged PDF verification | `70dbe66` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | test: add phone support benchmark fixture | `b24e6a8` |
 | 2026-07-21 | [#828](https://github.com/nash226/quorum/pull/828) | test: cover packaged capabilities contract | `8456424` |
 | 2026-07-21 | Direct push | test: smoke-check packaged reviewer import CLI | `74fb279` |
-| 2026-07-21 | Direct push | test: preserve packaged empty claim previews | `36dffa3` |
 
