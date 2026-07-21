@@ -29,6 +29,11 @@ npm run dev -- verify \
   --json
 ```
 
+Verification accepts Markdown, text, exported HTML, PDF, and DOCX answers and
+approved sources. Use `--source-dir` for a mixed directory of policy files;
+the [CLI guide](docs/cli-guide.md) documents format-specific and streaming
+details.
+
 For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 Use `--fail-on needs_review` when empty or uncertain answers must stop for
 human review; the CLI treats answers with no extracted claims as a review-policy
