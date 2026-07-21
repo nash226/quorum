@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `36dffa3` on 2026-07-21, test: preserve packaged empty claim previews
+- Latest shipped change: `74fb279` on 2026-07-21, test: smoke-check packaged reviewer import CLI
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | test: smoke-check packaged reviewer import CLI | `74fb279` |
 | 2026-07-21 | Direct push | test: preserve packaged empty claim previews | `36dffa3` |
 | 2026-07-21 | Direct push | test: smoke-check packaged root discovery | `c2ae886` |
 | 2026-07-21 | Direct push | docs: standardize the repository verification gate | `c77fe5b` |
@@ -55,5 +56,4 @@
 | 2026-07-20 | Direct push | test: smoke-check packaged evaluation | `eae95e7` |
 | 2026-07-20 | Direct push | test: cover packaged claim preview | `e14c2d0` |
 | 2026-07-20 | Direct push | test: cover packaged batch verification | `654e5e9` |
-| 2026-07-20 | Direct push | test: cover packaged verification requests | `9c1c196` |
 
