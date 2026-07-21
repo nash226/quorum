@@ -267,6 +267,9 @@ security, billing, tax exemption, delivery, service levels, gift cards, and acce
 verdict routing against approved Markdown, HTML, PDF, or directory-backed
 sources. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.
+Run `npm run evaluate:ci` to execute the full checked-in benchmark with the
+aggregate score and mismatch gates enabled; it is the same fail-closed check
+used before publishing the package.
 The benchmark also covers phone-support availability boundaries and callback
 timing, so universal access and urgent-response promises are checked against
 approved support policy before they reach a customer.
