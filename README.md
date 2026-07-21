@@ -85,6 +85,8 @@ The same packaged check probes `/capabilities`, preserving the published
 request limits and reviewer queue status vocabulary used by integrations.
 The same packaged smoke check submits a minimal `/verify` request and expects a
 verified claim, keeping the published server's core evidence path executable.
+It also submits a contradictory `/verify` request with `failOnStatus`, keeping
+the published server's `409` fail-policy contract executable for CI callers.
 It also submits a claim-bearing answer and an empty draft to packaged
 `/verify-batch`, verifying that queue consumers receive the expected
 claim-bearing and no-claims totals.
