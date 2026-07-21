@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `16f70d7` on 2026-07-21, docs: add HTTP API quick start
+- Latest shipped change: `3447a0a` on 2026-07-21, docs: explain direct package integrations
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | docs: explain direct package integrations | `3447a0a` |
 | 2026-07-21 | Direct push | docs: add HTTP API quick start | `16f70d7` |
 | 2026-07-21 | Direct push | test: cover packaged version help topic | `3e90830` |
 | 2026-07-21 | Direct push | test: cover recursive batch inputs | `8c4e90f` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | test: smoke-check packaged no-claims queue | `f3a9a10` |
 | 2026-07-21 | [#870](https://github.com/nash226/quorum/pull/870) | test: smoke-check packaged reviewer queue | `6ed7eef` |
 | 2026-07-21 | Direct push | test: smoke-check packaged capabilities metadata | `8cbca33` |
-| 2026-07-21 | Direct push | test: smoke-check packaged base64 claim previews | `1405d41` |
 
