@@ -255,6 +255,13 @@ for (const command of [
   }
 }
 
+for (const command of ["verify", "serve", "openapi"]) {
+  const topicHelp = execFileSync(process.execPath, [fileURLToPath(cliPath), "help", command], { encoding: "utf8" });
+  if (!topicHelp.startsWith(`Quorum ${command}\n\nUsage:`) || !topicHelp.includes(`quorum ${command}`)) {
+    throw new Error(`Package artifact CLI did not preserve the help ${command} topic contract.`);
+  }
+}
+
 const extractClaimsTempDir = mkdtempSync(join(tmpdir(), "quorum-package-extract-claims-"));
 try {
   const extractClaimsAnswerPath = join(extractClaimsTempDir, "answer.md");
