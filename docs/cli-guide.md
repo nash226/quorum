@@ -70,6 +70,19 @@ cat examples/answers/hr-answer.md | npm run dev -- verify \
   --answer - --source-dir examples/sources --json
 ```
 
+Approved Markdown or text sources can also be streamed from a pipeline when
+the policy content is generated or retrieved without a temporary file:
+
+```bash
+cat approved-policy.md | npm run dev -- verify \
+  --answer generated-answer.md --source - --json
+```
+
+Use exactly one `--source -`; stdin is consumed once, so it cannot be combined
+with another `--source`, `--source-dir`, or `--answer -` in the same command.
+PDF, DOCX, and HTML sources should use a file path or `--source-dir` so Quorum
+can identify their format from the file.
+
 ## Preview claims
 
 Preview normalized claims without loading sources:
