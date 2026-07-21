@@ -2,6 +2,7 @@
   "name": "Support authentication device policy example",
   "domain": "support",
   "answerPath": "../../answers/support-authentication-device-answer.md",
+  "answer": "Customers must approve a new sign-in device from their verified email address.\nSupport can provide a free hardware security key to every customer.\n",
   "answerLabel": "Support authentication device reviewer packet",
   "sources": [{
     "sourcePath": "support-authentication-device-policy.md",
