@@ -452,6 +452,8 @@ test("serve --help prints API usage without starting the server", async () => {
   assert.match(result.stdout, /GET  \/health\s+Return a simple readiness response/);
   assert.match(result.stdout, /GET  \/readyz\s+Return a simple readiness response using the Kubernetes probe alias/);
   assert.match(result.stdout, /HEAD \/readyz\s+Return readiness headers on the Kubernetes probe alias without a response body/);
+  assert.match(result.stdout, /GET  \/livez\s+Return a simple liveness response using the Kubernetes probe alias/);
+  assert.match(result.stdout, /HEAD \/livez\s+Return liveness headers on the Kubernetes probe alias without a response body/);
   assert.match(result.stdout, /GET  \/version\s+Return the service and HTTP contract version/);
   assert.match(result.stdout, /HEAD \/version\s+Return version headers without a response body/);
   assert.match(result.stdout, /GET  \/openapi\.json\s+Return the machine-readable API description/);
