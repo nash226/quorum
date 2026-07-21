@@ -109,6 +109,35 @@ try {
   ) {
     throw new Error("Package artifact server did not serve the expected claim preview contract.");
   }
+
+  const importReviewResponse = await fetch(`${packagedServer.url}/import-review`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "X-Quorum-Request-Id": "packaged-review-import",
+    },
+    body: JSON.stringify({
+      reviewCsvContent: [
+        "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+        "Packaged reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation",
+        "",
+      ].join("\n"),
+      failOn: ["needs_review"],
+      includeArtifacts: ["summary_csv"],
+    }),
+  });
+  const importReviewPayload = await importReviewResponse.json();
+  if (
+    importReviewResponse.status !== 200 ||
+    importReviewPayload.requestId !== "packaged-review-import" ||
+    importReviewResponse.headers.get("x-quorum-request-id") !== "packaged-review-import" ||
+    importReviewPayload.shouldFail !== true ||
+    importReviewPayload.report?.queueSummary?.reviewedAnswers !== 1 ||
+    importReviewPayload.report?.summary?.needs_review !== 1 ||
+    importReviewPayload.artifacts?.summary_csv?.includes("Packaged reviewer packet") !== true
+  ) {
+    throw new Error("Package artifact server did not serve the expected reviewer import contract.");
+  }
 } finally {
   await packagedServer.close();
 }
