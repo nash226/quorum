@@ -70,6 +70,30 @@ try {
   if (verifyResponse.status !== 200 || verifyPayload.shouldFail !== false || verifyPayload.report?.summary?.verified !== 1) {
     throw new Error("Package artifact server did not verify the expected answer contract.");
   }
+
+  const verifyBatchResponse = await fetch(`${packagedServer.url}/verify-batch`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answers: [
+        { answer: "Employees receive 12 weeks of paid parental leave.", answerLabel: "Batch answer" },
+        { answer: "   ", answerLabel: "Empty draft" },
+      ],
+      sources: [{
+        sourcePath: "policies/hr-policy.md",
+        content: "Employees receive 12 weeks of paid parental leave.\n",
+      }],
+    }),
+  });
+  const verifyBatchPayload = await verifyBatchResponse.json();
+  if (
+    verifyBatchResponse.status !== 200 ||
+    verifyBatchPayload.shouldFail !== false ||
+    verifyBatchPayload.report?.summary?.answersWithClaims !== 1 ||
+    verifyBatchPayload.report?.summary?.answersWithoutClaims !== 1
+  ) {
+    throw new Error("Package artifact server did not serve the expected batch verification contract.");
+  }
 } finally {
   await packagedServer.close();
 }
