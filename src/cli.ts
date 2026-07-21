@@ -1580,6 +1580,7 @@ function isCommandName(value: string): value is CommandName {
     "evaluate",
     "serve",
     "openapi",
+    "version",
   ].includes(value);
 }
 
