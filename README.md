@@ -354,6 +354,8 @@ unsupported automatic-refund promise in the reviewer handoff artifact.
 The packed smoke check also pins payment-method summary CSV verdicts, preserving
 the verified account-owner control, contradicted invoice timing, and unsupported
 automatic-refund claim in the reviewer handoff artifact.
+It also pins payment-failure summary CSV verdicts, preserving the retry control
+while keeping automatic retry and unverified card-change claims unsupported.
 
 The packed smoke check also verifies shipping-protection answers, preserving
 the pre-shipment control while routing unconditional approval to review and
