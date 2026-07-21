@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -208,6 +208,43 @@ try {
   }
 } finally {
   rmSync(openApiTempDir, { recursive: true, force: true });
+}
+
+const reviewerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-review-"));
+try {
+  const reviewCsvPath = join(reviewerTempDir, "review.csv");
+  writeFileSync(reviewCsvPath, [
+    "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "Packaged CLI packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched approved policy,HR Policy,Employees receive 12 weeks of paid parental leave.,needs_review,Need HR confirmation",
+    "",
+  ].join("\n"));
+  let importReviewOutput;
+  try {
+    execFileSync(process.execPath, [
+      fileURLToPath(cliPath),
+      "import-review",
+      "--review-csv",
+      reviewCsvPath,
+      "--result-json",
+      "--fail-on",
+      "needs_review",
+    ], { encoding: "utf8" });
+  } catch (error) {
+    if (error.status !== 2) {
+      throw error;
+    }
+    importReviewOutput = error.stdout;
+  }
+  const importReviewResult = JSON.parse(importReviewOutput ?? "null");
+  if (
+    importReviewResult.shouldFail !== true ||
+    importReviewResult.report?.queueSummary?.reviewedAnswers !== 1 ||
+    importReviewResult.report?.summary?.needs_review !== 1
+  ) {
+    throw new Error("Package artifact CLI did not preserve the expected reviewer import contract.");
+  }
+} finally {
+  rmSync(reviewerTempDir, { recursive: true, force: true });
 }
 
 const evaluationResult = JSON.parse(execFileSync(process.execPath, [
