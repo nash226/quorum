@@ -355,6 +355,10 @@ The packed smoke check also pins payment-method summary CSV verdicts, preserving
 the verified account-owner control, contradicted invoice timing, and unsupported
 automatic-refund claim in the reviewer handoff artifact.
 
+The packed smoke check also pins support holiday-hours summary CSV verdicts,
+preserving the verified holiday schedule, contradicted coverage promise, and
+unsupported account exception in the reviewer handoff artifact.
+
 The packed smoke check also verifies shipping-protection answers, preserving
 the pre-shipment control while routing unconditional approval to review and
 flagging an unrelated unsupported promise in the summary CSV.
