@@ -324,6 +324,30 @@ try {
   rmSync(pdfTempDir, { recursive: true, force: true });
 }
 
+const docxTempDir = mkdtempSync(join(tmpdir(), "quorum-package-docx-"));
+try {
+  const docxAnswerPath = join(docxTempDir, "answer.docx");
+  const docxReportPath = join(docxTempDir, "report.json");
+  const docxFixture = readFileSync(new URL("../node_modules/mammoth/test/test-data/single-paragraph.docx", import.meta.url));
+  writeFileSync(docxAnswerPath, docxFixture);
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath),
+    "verify",
+    "--answer",
+    docxAnswerPath,
+    "--source",
+    docxAnswerPath,
+    "--out",
+    docxReportPath,
+  ], { encoding: "utf8" });
+  const docxReport = JSON.parse(readFileSync(docxReportPath, "utf8"));
+  if (docxReport.summary?.verified !== 1 || docxReport.sources?.[0]?.sourcePath !== docxAnswerPath) {
+    throw new Error("Package artifact CLI did not verify the expected DOCX source contract.");
+  }
+} finally {
+  rmSync(docxTempDir, { recursive: true, force: true });
+}
+
 const stdinSourceTempDir = mkdtempSync(join(tmpdir(), "quorum-package-stdin-source-"));
 try {
   const stdinAnswerPath = join(stdinSourceTempDir, "answer.md");

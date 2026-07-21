@@ -109,6 +109,8 @@ after packaging. It also streams that CSV into the packaged `quorum review-queue
 command, keeping pipe-friendly queue summaries executable after packaging.
 It also verifies a text answer against the packaged PDF policy fixture, keeping
 the published CLI's PDF source-ingestion path executable after packaging.
+It also verifies a DOCX answer and source through the packaged CLI, keeping the
+published artifact's DOCX ingestion path executable after packaging.
 It also streams an approved Markdown source through `--source -`, keeping the
 published CLI's pipe-friendly source-ingestion path executable after packaging.
 
