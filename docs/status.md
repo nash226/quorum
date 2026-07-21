@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `77c2a0a` on 2026-07-21, test: smoke-check packaged CLI help
+- Latest shipped change: `a39fde5` on 2026-07-21, feat: accept approved sources from stdin
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | feat: accept approved sources from stdin | `a39fde5` |
 | 2026-07-21 | Direct push | test: smoke-check packaged CLI help | `77c2a0a` |
 | 2026-07-21 | Direct push | feat: normalize square claim bullets | `add76fb` |
 | 2026-07-21 | Direct push | feat: normalize middle-dot claim bullets | `6193d6f` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | test: smoke-check packaged PDF verification | `70dbe66` |
 | 2026-07-21 | Direct push | docs: correct benchmark fixture totals | `634087c` |
 | 2026-07-21 | Direct push | test: add phone support benchmark fixture | `b24e6a8` |
-| 2026-07-21 | [#828](https://github.com/nash226/quorum/pull/828) | test: cover packaged capabilities contract | `8456424` |
 
