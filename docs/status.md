@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7fbe00c` on 2026-07-21, fix: support command-specific help topics
+- Latest shipped change: `2e5e775` on 2026-07-21, fix: derive API version from package metadata
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | fix: derive API version from package metadata | `2e5e775` |
 | 2026-07-21 | Direct push | fix: support command-specific help topics | `7fbe00c` |
 | 2026-07-21 | Direct push | test: smoke-check packaged fail policy status | `726d4c5` |
 | 2026-07-21 | [#847](https://github.com/nash226/quorum/pull/847) | docs: clarify the full local verification gate | `40232e9` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | fix: normalize fullwidth ordered-list markers | `907c750` |
 | 2026-07-21 | Direct push | test: smoke-check packaged claim extraction | `c5308e6` |
 | 2026-07-21 | Direct push | docs: record packaged document coverage | `baeff30` |
-| 2026-07-21 | Direct push | test: cover packaged DOCX ingestion | `f0bf251` |
 
