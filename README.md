@@ -215,6 +215,9 @@ Pipeline integrations can also stream one approved Markdown or text source via
 cat approved-policy.md | npm run dev -- verify --answer generated-answer.md --source - --json
 ```
 
+The same pipeline path accepts one Markdown or text policy from stdin; use a
+file path or `--source-dir` for additional or binary-format sources.
+
 For reviewer handoffs, Quorum can generate claim-level decision CSVs, import
 completed reviewer verdicts, and summarize pending/reviewed/no-claims workload
 for a queue consumer. The same overview is available through `POST
