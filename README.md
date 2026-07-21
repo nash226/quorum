@@ -52,6 +52,20 @@ npm run dev -- openapi --out reports/quorum-openapi.json
 Use `--server-url` when the generated document should point at a deployed
 Quorum endpoint; the [HTTP integration guide](docs/api-integration.md) covers
 the corresponding discovery and request contracts.
+
+To run those contracts locally for an agent or workflow runner:
+
+```bash
+npm run dev -- serve --host 127.0.0.1 --port 3000
+curl http://127.0.0.1:3000/capabilities
+curl http://127.0.0.1:3000/openapi.json
+```
+
+The service exposes the same verification, reviewer-import, queue, and
+evaluation surfaces as the CLI. Node.js callers can use the public
+`quorum` package entrypoint instead of starting a server; see the
+[programmatic API guide](docs/programmatic-api.md) for that integration path.
+
 The package smoke check also executes the published `quorum version --json`
 entrypoint, keeping the installed CLI contract aligned with the package
 manifest and library exports.
