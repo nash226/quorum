@@ -274,6 +274,17 @@ try {
   ) {
     throw new Error("Package artifact CLI did not preserve the expected reviewer import contract.");
   }
+  const reviewQueueOutput = execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "review-queue", "--review-csv", "-", "--json",
+  ], { encoding: "utf8", input: readFileSync(reviewCsvPath) });
+  const reviewQueueResult = JSON.parse(reviewQueueOutput);
+  if (
+    reviewQueueResult.review?.totalAnswers !== 1 ||
+    reviewQueueResult.review?.reviewedAnswers !== 1 ||
+    reviewQueueResult.review?.verdicts?.needs_review !== 1
+  ) {
+    throw new Error("Package artifact CLI did not preserve reviewer queue stdin routing.");
+  }
 } finally {
   rmSync(reviewerTempDir, { recursive: true, force: true });
 }
