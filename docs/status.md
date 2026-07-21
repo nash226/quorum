@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4ba3b4c` on 2026-07-21, docs: document supported document formats
+- Latest shipped change: `f0bf251` on 2026-07-21, test: cover packaged DOCX ingestion
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-21 | Direct push | test: cover packaged DOCX ingestion | `f0bf251` |
 | 2026-07-21 | [#841](https://github.com/nash226/quorum/pull/841) | docs: document supported document formats | `4ba3b4c` |
 | 2026-07-21 | Direct push | docs: fix quick start verification command | `9c18415` |
 | 2026-07-21 | Direct push | test: smoke-check packaged answer stdin | `4c33c0c` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | test: smoke-check packaged stdin sources | `2d190ff` |
 | 2026-07-21 | Direct push | docs: explain streaming approved sources | `2b68081` |
 | 2026-07-21 | Direct push | feat: accept approved sources from stdin | `a39fde5` |
-| 2026-07-21 | Direct push | test: smoke-check packaged CLI help | `77c2a0a` |
 
