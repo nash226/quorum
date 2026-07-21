@@ -88,6 +88,9 @@ short-form version probes remain compatible with installed integrations.
 It also executes `quorum --help` from the built package artifact and checks the
 primary `verify` and `serve` commands, so a published CLI remains discoverable
 before installation into an integration environment.
+The same packaged smoke gate probes both `--help` and `-h` for every published
+CLI command, keeping command-specific onboarding available to shell users and
+integration setup scripts.
 The same packaged smoke gate exports `quorum openapi --out` and validates the
 written document, keeping offline contract generation aligned with the
 published CLI.

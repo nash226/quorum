@@ -211,6 +211,24 @@ if (!cliHelp.startsWith("Quorum\n\nUsage:") || !cliHelp.includes("quorum verify"
   throw new Error("Package artifact CLI did not return the expected help contract.");
 }
 
+for (const command of [
+  "verify",
+  "verify-batch",
+  "extract-claims",
+  "import-review",
+  "review-queue",
+  "evaluate",
+  "serve",
+  "openapi",
+]) {
+  for (const helpFlag of ["--help", "-h"]) {
+    const commandHelp = execFileSync(process.execPath, [fileURLToPath(cliPath), command, helpFlag], { encoding: "utf8" });
+    if (!commandHelp.startsWith(`Quorum ${command}\n\nUsage:`) || !commandHelp.includes(`quorum ${command}`)) {
+      throw new Error(`Package artifact CLI did not preserve the ${command} ${helpFlag} contract.`);
+    }
+  }
+}
+
 const openApiTempDir = mkdtempSync(join(tmpdir(), "quorum-package-openapi-"));
 try {
   const openApiPath = join(openApiTempDir, "openapi.json");
