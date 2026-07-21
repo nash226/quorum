@@ -220,6 +220,8 @@ cat approved-policy.md | npm run dev -- verify --answer generated-answer.md --so
 
 The same pipeline path accepts one Markdown or text policy from stdin; use a
 file path or `--source-dir` for additional or binary-format sources.
+The packaged smoke gate also verifies the published `quorum verify --answer -`
+path, so integrations can stream an answer directly without a temporary file.
 
 For reviewer handoffs, Quorum can generate claim-level decision CSVs, import
 completed reviewer verdicts, and summarize pending/reviewed/no-claims workload

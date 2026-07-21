@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -339,6 +339,27 @@ try {
   }
 } finally {
   rmSync(stdinSourceTempDir, { recursive: true, force: true });
+}
+
+const stdinAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-stdin-answer-"));
+try {
+  const stdinAnswerSourceDir = join(stdinAnswerTempDir, "sources");
+  mkdirSync(stdinAnswerSourceDir);
+  writeFileSync(
+    join(stdinAnswerSourceDir, "policy.md"),
+    "---\ntitle: Streamed Answer Policy\ntrustLevel: high\n---\nEmployees receive 12 weeks of paid parental leave.\n",
+  );
+  const stdinAnswerResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", "-", "--source-dir", stdinAnswerSourceDir, "--json",
+  ], {
+    encoding: "utf8",
+    input: "Employees receive 12 weeks of paid parental leave.\n",
+  }));
+  if (stdinAnswerResult.summary?.verified !== 1 || stdinAnswerResult.answerPath !== "<stdin>") {
+    throw new Error("Package artifact CLI did not preserve the expected streamed answer contract.");
+  }
+} finally {
+  rmSync(stdinAnswerTempDir, { recursive: true, force: true });
 }
 
 console.log(`Package smoke check passed: ${packageResult.filename} contains ${files.size} files.`);
