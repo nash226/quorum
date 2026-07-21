@@ -95,6 +95,8 @@ readiness probes return the same request-correlated, no-store health envelope.
 Browser-based monitors can also preflight `/health`, `/healthz`, `/readyz`, and
 `/livez`; each route preserves the advertised origin, `GET, HEAD, OPTIONS`
 methods, request-ID header, and ten-minute preflight cache contract.
+The packaged HTTP smoke gate also preflights every advertised endpoint, keeping
+browser clients aligned with the discovery and CORS contract.
 Use `POST /extract-claims` when a workflow needs to preview normalized claim IDs
 and route empty drafts before loading approved sources; the [HTTP integration
 guide](docs/api-integration.md#preview-claims-before-verification) includes the
