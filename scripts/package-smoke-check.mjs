@@ -142,6 +142,26 @@ try {
     throw new Error("Package artifact server did not verify the expected answer contract.");
   }
 
+  const vendorJsonVerifyResponse = await fetch(`${packagedServer.url}/verify`, {
+    method: "POST",
+    headers: { "content-type": "application/vnd.quorum+json" },
+    body: JSON.stringify({
+      answer: "Employees receive 12 weeks of paid parental leave.",
+      sources: [{
+        sourcePath: "policies/hr-policy.md",
+        content: "Employees receive 12 weeks of paid parental leave.\n",
+      }],
+    }),
+  });
+  const vendorJsonVerifyPayload = await vendorJsonVerifyResponse.json();
+  if (
+    vendorJsonVerifyResponse.status !== 200 ||
+    vendorJsonVerifyPayload.shouldFail !== false ||
+    vendorJsonVerifyPayload.report?.summary?.verified !== 1
+  ) {
+    throw new Error("Package artifact server did not preserve the application/*+json request contract.");
+  }
+
   const verifyBatchResponse = await fetch(`${packagedServer.url}/verify-batch`, {
     method: "POST",
     headers: { "content-type": "application/json" },
