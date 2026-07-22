@@ -180,6 +180,8 @@ evaluation surfaces as the CLI. Node.js callers can use the public
 The package smoke check also executes the published `quorum version --json`
 entrypoint, keeping the installed CLI contract aligned with the package
 manifest and library exports.
+It also imports a completed review CSV from stdin with `--result-json`, keeping
+pipe-friendly reviewer fail-policy handoff executable after packaging.
 It also starts the packaged server entrypoint and probes `/version` and
 `/openapi.json`, so a published server cannot pass packaging checks merely by
 having importable exports while its HTTP contract is broken.

@@ -475,6 +475,27 @@ try {
   ) {
     throw new Error("Package artifact CLI did not preserve reviewer queue stdin routing.");
   }
+
+  let importReviewStdinOutput;
+  try {
+    execFileSync(process.execPath, [
+      fileURLToPath(cliPath), "import-review", "--review-csv", "-", "--result-json", "--fail-on", "needs_review",
+    ], { encoding: "utf8", input: readFileSync(reviewCsvPath) });
+  } catch (error) {
+    if (error.status !== 2) {
+      throw error;
+    }
+    importReviewStdinOutput = error.stdout;
+  }
+  const importReviewStdinResult = JSON.parse(importReviewStdinOutput ?? "null");
+  if (
+    importReviewStdinResult.shouldFail !== true ||
+    importReviewStdinResult.failVerdicts?.join(",") !== "needs_review" ||
+    importReviewStdinResult.report?.queueSummary?.reviewedAnswers !== 1 ||
+    importReviewStdinResult.report?.summary?.needs_review !== 1
+  ) {
+    throw new Error("Package artifact CLI did not preserve reviewer import stdin routing.");
+  }
 } finally {
   rmSync(reviewerTempDir, { recursive: true, force: true });
 }
