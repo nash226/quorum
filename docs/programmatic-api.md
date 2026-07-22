@@ -33,8 +33,31 @@ Use `answerPath` and `sourcePath` to keep document extensions available when
 the content is PDF or DOCX bytes. Use `verifyAnswerContents` when a plain
 `VerificationReport` is enough, `verifyAnswer` when sources are already loaded
 as `SourceDocument` values, or `verifyAnswers` for multiple string answers
-sharing those sources. The exported `extractClaims` helper can preview claims
-before verification when a workflow needs to route or annotate them.
+sharing those sources. For queue workers that receive several answers and
+sources as in-memory content, use `verifyAnswerBatchContentsResult` to keep
+the gate result (`shouldFail` and `failVerdicts`) alongside the batch report:
+
+```ts
+import { verifyAnswerBatchContentsResult } from "quorum";
+
+const result = await verifyAnswerBatchContentsResult({
+  answers: [
+    { answer: "Refunds are available for 30 days.", answerLabel: "refunds" },
+    { answer: "Refunds are always available.", answerLabel: "draft" },
+  ],
+  sources: [{
+    sourcePath: "policies/refunds.md",
+    content: "Refunds are available for 30 days.",
+  }],
+  failOn: ["contradicted", "unsupported"],
+});
+
+console.log(result.report.answers.length); // 2
+console.log(result.shouldFail, result.failVerdicts);
+```
+
+The exported `extractClaims` helper can preview claims before verification when
+a workflow needs to route or annotate them.
 
 ## Use file-backed workflows
 

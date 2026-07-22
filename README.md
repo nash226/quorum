@@ -61,6 +61,8 @@ Node.js workers can use the built package directly when starting an HTTP server
 would add unnecessary overhead. The public `quorum` entrypoint exposes the same
 in-memory and file-backed verification helpers used by the CLI; see the
 [programmatic API guide](docs/programmatic-api.md) for both patterns.
+The guide also documents the in-memory batch result contract for queue workers,
+including its `shouldFail` and `failVerdicts` gate metadata.
 
 For example, an agent worker can verify content in memory and fail closed on
 risky verdicts without starting a second process:
