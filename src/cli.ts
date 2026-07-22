@@ -1830,7 +1830,7 @@ Usage:
   quorum import-review --review-csv <path|-> [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum review-queue --review-csv <path|-> [--queue-status <status>] [--generated-at <timestamp>] [--fixture <path> | --fixture-dir <path>]... [--domain <name>]... [--json] [--out <path>] [--csv-out <path>]
   quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--min-score <0..1>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
-  quorum serve [--host <host>] [--port <port>]
+  quorum serve [--host <host>] [--port <port>] [--max-request-bytes <bytes>] [--request-timeout-ms <milliseconds>] [--cors-origin <origin>]
   quorum openapi [--server-url <url>] [--out <path>]
   quorum version [--json]
 
