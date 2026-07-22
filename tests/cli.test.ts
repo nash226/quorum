@@ -6,6 +6,15 @@ import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 
+test("help --help reuses the top-level usage contract", async () => {
+  const result = await runCliAllowFailure(["help", "--help"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /Usage:/);
+  assert.match(result.stdout, /quorum verify-batch/);
+});
+
 test("verify applies the default trust override only to sources without metadata", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-"));
 
