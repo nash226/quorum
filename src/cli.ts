@@ -685,9 +685,9 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
     else if (arg === "--domain" && next) { domains.push(next); index += 1; }
     else if (arg === "--queue-status" && next) { queueStatus = parseReviewerQueueStatus(next); index += 1; }
     else if (arg === "--generated-at" && next) { generatedAt = parseGeneratedAt(next); index += 1; }
-    else if (arg === "--out" && next) { outPath = next; index += 1; }
+    else if ((arg === "--out" || arg === "--result-json-out") && next) { outPath = next; index += 1; }
     else if (arg === "--csv-out" && next) { csvOutPath = next; index += 1; }
-    else if (arg === "--json") json = true;
+    else if (arg === "--json" || arg === "--result-json") json = true;
     else throw new Error(`Unknown or incomplete argument: ${arg}`);
   }
 
@@ -1708,7 +1708,7 @@ Example:
     "review-queue": `Quorum review-queue
 
 Usage:
-  quorum review-queue --review-csv <path|-> [--queue-status <status>] [--generated-at <timestamp>] [--fixture <path> | --fixture-dir <path>]... [--domain <name>]... [--json] [--out <path>] [--csv-out <path>]
+  quorum review-queue --review-csv <path|-> [--queue-status <status>] [--generated-at <timestamp>] [--fixture <path> | --fixture-dir <path>]... [--domain <name>]... [--json|--result-json] [--out <path>|--result-json-out <path>] [--csv-out <path>]
 
 Options:
   --review-csv <path|->      Completed reviewer decision CSV to summarize
@@ -1717,8 +1717,9 @@ Options:
   --fixture <path>           Evaluation fixture; may be repeated
   --fixture-dir <path>       Directory of evaluation fixtures; may be repeated
   --domain <name>            Limit evaluation drift to a domain; may be repeated
-  --json                     Print the queue overview as JSON
-  --out <path>               Write the queue overview JSON to disk
+  --json|--result-json       Print the queue overview as JSON
+  --out|--result-json-out <path>
+                             Write the queue overview JSON to disk
   --csv-out <path>           Write the queue overview as one CSV row
 
 The overview combines reviewer queue workload with optional benchmark drift.
