@@ -74,6 +74,24 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("verify rejects an empty source directory before producing an ungrounded report", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-source-"));
+  const answerPath = join(tempDir, "answer.md");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await mkdir(sourceDir);
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+
+    await assert.rejects(
+      runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir]),
+      /No approved source files found in the provided source locations/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 

@@ -54,6 +54,10 @@ The current CLI can:
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 
+Verification now stops with a clear error when the supplied source files or
+source directories contain no approved sources, preventing an ungrounded
+report from being mistaken for an evidence check.
+
 ## Example
 
 ```bash
