@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `3cfec9c` on 2026-07-22, docs: document in-memory batch verification results
+- Latest shipped change: `8928584` on 2026-07-22, fix: accept help flag for help topic
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-22 | Direct push | fix: accept help flag for help topic | `8928584` |
 | 2026-07-22 | Direct push | docs: document in-memory batch verification results | `3cfec9c` |
 | 2026-07-22 | Direct push | docs: clarify operational probe readiness | `6bfefa1` |
 | 2026-07-22 | Direct push | test: deduplicate repeated source inputs | `c42a95c` |
@@ -55,5 +56,4 @@
 | 2026-07-22 | Direct push | test: preserve packaged source audit metadata | `4a80e35` |
 | 2026-07-22 | Direct push | test: smoke-check packaged reviewer import stdin | `69719df` |
 | 2026-07-21 | Direct push | test: smoke-check packaged batch stdin answers | `a61cbec` |
-| 2026-07-21 | Direct push | test: preserve batch audit timestamps | `1f4e60f` |
 
