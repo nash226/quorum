@@ -314,6 +314,8 @@ error from route validation (`400`) and request-size (`413`) failures.
 The HTTP integration guide also includes a copy-pasteable `POST /verify-batch`
 request, including empty-answer routing and reviewer artifact output for queue
 consumers.
+The generated OpenAPI document now describes the shared `404` unknown-route
+error on every operation, keeping client handling aligned with the live API.
 Unsupported methods now return a structured 405 response with the route's
 `Allow` header, so HTTP clients can recover from method mismatches without
 guessing the API contract.
