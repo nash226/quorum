@@ -5036,6 +5036,38 @@ test("HTTP API verifies PDF answer and source bytes sent as base64 JSON content"
   }
 });
 
+test("HTTP API verifies DOCX answer and source bytes sent as base64 JSON content", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const docxBytes = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answerBase64: docxBytes.toString("base64"),
+        answerPath: "answers/docx-answer.docx",
+        sources: [
+          {
+            sourcePath: "policies/docx-policy.docx",
+            contentBase64: docxBytes.toString("base64"),
+            title: "DOCX policy",
+            trustLevel: "high",
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as Awaited<ReturnType<typeof verifyAnswerContentsResult>>;
+    assert.equal(result.report.answerPath, "answers/docx-answer.docx");
+    assert.equal(result.report.sources[0]?.title, "DOCX policy");
+    assert.equal(result.report.summary.verified, 1);
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API rejects malformed or ambiguous base64 content fields", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

@@ -43,6 +43,8 @@ queue folders can be verified without flattening the approved file layout. The
 CLI also deduplicates repeated source paths, keeping each approved document
 represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
+The HTTP `verify` endpoint accepts PDF and DOCX answer/source bytes as base64
+JSON content, preserving the supplied paths and source metadata in its result.
 Use `--generated-at <timestamp>` when a batch run needs one caller-owned audit
 timestamp across every answer and exported reviewer artifact.
 
