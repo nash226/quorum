@@ -796,6 +796,24 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("programmatic API rejects an empty file-backed source directory", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-empty-sources-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(sourceDir, { recursive: true });
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+
+    await assert.rejects(
+      verifyAnswerFileInputs({ answerPath, sourcePaths: [], sourceDirs: [sourceDir] }),
+      /No approved source files found in/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("programmatic API applies an explicit answer label to file verification helpers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-file-label-"));
 

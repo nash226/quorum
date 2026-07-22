@@ -63,6 +63,8 @@ in-memory and file-backed verification helpers used by the CLI; see the
 [programmatic API guide](docs/programmatic-api.md) for both patterns.
 The guide also documents the in-memory batch result contract for queue workers,
 including its `shouldFail` and `failVerdicts` gate metadata.
+File-backed programmatic verification also rejects empty source directories,
+so API and CLI workflows share the same fail-closed evidence requirement.
 
 For example, an agent worker can verify content in memory and fail closed on
 risky verdicts without starting a second process:
