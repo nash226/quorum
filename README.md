@@ -104,9 +104,11 @@ The packaged CLI command map is:
 | `version` | Probe the CLI and API contract version. |
 
 Every command supports `--help` and `-h`; `quorum help <command>` is also
-available for scripted onboarding. Use `--result-json` when an integration
-needs `shouldFail` and `failVerdicts` alongside a report, and use `--answer -`
-or `--review-csv -` to stream one input from stdin.
+available for scripted onboarding. Use `--result-json` to print
+`shouldFail` and `failVerdicts` alongside a report, or use
+`--result-json-out <path>` to write that wrapper to disk without mixing it
+with human-readable output. Use `--answer -` or `--review-csv -` to stream one
+input from stdin.
 
 The packaged CLI smoke gate probes representative `quorum help <command>`
 topics after building, keeping the documented onboarding alias executable in
@@ -140,7 +142,8 @@ update timestamps, and trust levels in verification reports, keeping audit
 metadata stable for downstream consumers.
 The packaged evaluation smoke gate also checks the `--result-json` response,
 keeping `shouldFail`, mismatch totals, and fail-policy metadata available to CI
-callers after installation.
+callers after installation. The same result wrapper can be written with
+`--result-json-out` when a pipeline needs separate report and gate artifacts.
 
 For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 Use `--fail-on needs_review` when empty or uncertain answers must stop for
