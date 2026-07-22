@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cf464f6` on 2026-07-22, test: cover HTTP DOCX base64 verification
+- Latest shipped change: `3e2c16a` on 2026-07-22, test: cover malformed JSON API errors
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-22 | Direct push | test: cover malformed JSON API errors | `3e2c16a` |
 | 2026-07-22 | Direct push | test: cover HTTP DOCX base64 verification | `cf464f6` |
 | 2026-07-22 | Direct push | test: cover empty API source directories | `75a3384` |
 | 2026-07-22 | Direct push | test: cover packaged discovery preflight | `1ef8a82` |
@@ -55,5 +56,4 @@
 | 2026-07-22 | Direct push | docs: document in-memory batch verification results | `3cfec9c` |
 | 2026-07-22 | Direct push | docs: clarify operational probe readiness | `6bfefa1` |
 | 2026-07-22 | Direct push | test: deduplicate repeated source inputs | `c42a95c` |
-| 2026-07-22 | [#889](https://github.com/nash226/quorum/pull/889) | test: smoke-check packaged batch timestamps | `6809b9e` |
 
