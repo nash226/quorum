@@ -115,6 +115,9 @@ CLI contract discovery covered after packaging.
 
 It also checks that packaged `/health`, `/healthz`, `/readyz`, and `/livez`
 endpoints support bodyless `HEAD` probes for deployment health checks.
+These four operational routes currently share the same process-health
+envelope; readiness is not dependency-aware yet, so integrations should treat
+them as serving probes until a durable dependency boundary is shipped.
 
 For a single answer, `--summary-csv-out` writes the same queue-oriented
 one-row summary used by batch verification, including verdict totals, the

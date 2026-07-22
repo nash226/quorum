@@ -29,8 +29,11 @@ logs. The `/livez` body is intentionally the same health envelope as
 `/healthz`; the distinction is operational: liveness confirms only that the
 process is serving requests, while readiness may account for dependencies.
 
-Use `/healthz` when the caller needs readiness semantics instead; it can report
-that the service is not ready even while the process remains alive.
+Use `/healthz` when the caller wants the conventional readiness route. In the
+current local-first service, `/health`, `/healthz`, and `/readyz` all return the
+same process-health envelope as `/livez`; they do not yet perform dependency
+checks or report a separate not-ready state. Treat these routes as serving
+probes until a durable dependency boundary is introduced.
 
 Every response includes discovery headers that let an integration confirm the
 service contract without parsing the response body:
