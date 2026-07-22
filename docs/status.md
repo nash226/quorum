@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c42a95c` on 2026-07-22, test: deduplicate repeated source inputs
+- Latest shipped change: `6bfefa1` on 2026-07-22, docs: clarify operational probe readiness
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-22 | Direct push | docs: clarify operational probe readiness | `6bfefa1` |
 | 2026-07-22 | Direct push | test: deduplicate repeated source inputs | `c42a95c` |
 | 2026-07-22 | [#889](https://github.com/nash226/quorum/pull/889) | test: smoke-check packaged batch timestamps | `6809b9e` |
 | 2026-07-22 | Direct push | test: preserve packaged source audit metadata | `4a80e35` |
@@ -55,5 +56,4 @@
 | 2026-07-21 | Direct push | test: smoke-check packaged batch stdin answers | `a61cbec` |
 | 2026-07-21 | Direct push | test: preserve batch audit timestamps | `1f4e60f` |
 | 2026-07-21 | Direct push | docs: show direct package verification | `f440a11` |
-| 2026-07-21 | Direct push | docs: explain direct package integrations | `3447a0a` |
 
