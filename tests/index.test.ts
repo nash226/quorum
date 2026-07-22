@@ -45,11 +45,21 @@ test("public package entrypoint exports in-memory verification for Node workflow
 test("public package entrypoint exports the in-memory batch gate result", async () => {
   const result = await verifyAnswerBatchContentsResult({
     answers: [{ answer: "The office provides free helicopter rides.", answerLabel: "draft" }],
-    sources: [{ sourcePath: "policies/refunds.md", content: "Refunds are available for 30 days." }],
+    sources: [{
+      sourcePath: "policies/refunds.md",
+      content: "Refunds are available for 30 days.",
+      id: "support/refunds@2026-07-15",
+    }],
     failOn: ["unsupported"],
   });
 
   assert.equal(result.report.answers.length, 1);
+  assert.deepEqual(result.report.sources.map((source) => source.id), [
+    "support/refunds@2026-07-15",
+  ]);
+  assert.deepEqual(result.report.answers[0]?.report.sources.map((source) => source.id), [
+    "support/refunds@2026-07-15",
+  ]);
   assert.equal(result.shouldFail, true);
   assert.deepEqual(result.failVerdicts, ["unsupported"]);
 });
