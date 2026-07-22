@@ -40,6 +40,8 @@ Verification accepts Markdown, text, exported HTML, PDF, and DOCX answers and
 approved sources. Use `--source-dir` for a mixed directory of policy files;
 answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
+CLI also deduplicates repeated source paths, keeping each approved document
+represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
 Use `--generated-at <timestamp>` when a batch run needs one caller-owned audit
 timestamp across every answer and exported reviewer artifact.
