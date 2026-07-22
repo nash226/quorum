@@ -639,7 +639,7 @@ try {
 
   const batchStdinResult = JSON.parse(execFileSync(process.execPath, [
     fileURLToPath(cliPath), "verify-batch", "--answer", "-", "--answer", batchFileAnswerPath,
-    "--source-dir", batchSourceDir, "--json",
+    "--source-dir", batchSourceDir, "--generated-at", "2026-07-22T00:00:00.000Z", "--json",
   ], {
     encoding: "utf8",
     input: "Employees receive 12 weeks of paid parental leave.\n",
@@ -648,9 +648,11 @@ try {
     batchStdinResult.answerCount !== 2 ||
     batchStdinResult.answers?.[0]?.answerPath !== "<stdin>" ||
     batchStdinResult.answers?.[1]?.answerPath !== batchFileAnswerPath ||
-    batchStdinResult.summary?.verified !== 2
+    batchStdinResult.summary?.verified !== 2 ||
+    batchStdinResult.generatedAt !== "2026-07-22T00:00:00.000Z" ||
+    batchStdinResult.answers?.some(({ report }) => report?.generatedAt !== "2026-07-22T00:00:00.000Z")
   ) {
-    throw new Error("Package artifact CLI did not preserve the batch stdin answer contract.");
+    throw new Error("Package artifact CLI did not preserve the batch stdin or generated-at contract.");
   }
 } finally {
   rmSync(batchStdinTempDir, { recursive: true, force: true });

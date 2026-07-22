@@ -360,6 +360,8 @@ The packaged smoke gate also verifies the published `quorum verify --answer -`
 path, so integrations can stream an answer directly without a temporary file.
 It also verifies that packaged `verify-batch` can combine one streamed answer
 with explicit answer files while preserving input order and `<stdin>` provenance.
+That packaged batch smoke also pins a caller-supplied `--generated-at` timestamp
+through the aggregate and per-answer reports for reproducible audit handoffs.
 
 For reviewer handoffs, Quorum can generate claim-level decision CSVs, import
 completed reviewer verdicts, and summarize pending/reviewed/no-claims workload
