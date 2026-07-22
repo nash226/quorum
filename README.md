@@ -87,6 +87,12 @@ if (result.shouldFail) {
 The stable source `id` is carried into evidence and reviewer artifacts, so
 workers can keep audit identity independent of temporary file paths.
 
+Reviewer queues currently remain a local, auditable handoff: Quorum exports
+CSV/JSON artifacts and serves queue summaries over HTTP, but does not yet claim
+to provide shared durable queue storage or a dashboard. Those boundaries are
+tracked in the [human decision queue](docs/decision-queue.md) before a
+multi-user backend is selected.
+
 The packaged CLI command map is:
 
 | Command | Use it to |

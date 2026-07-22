@@ -25,6 +25,12 @@ front of enterprise agent workflows.
   queues and audit history.
 - Expand the HR and support fixture set as policy coverage grows.
 
+The shipped reviewer queue is intentionally local: CSV/JSON artifacts and the
+HTTP queue endpoints provide a reviewable handoff without claiming to be a
+durable multi-user system. Moving queue state into shared storage and defining
+dashboard ownership requires the decision recorded in the human decision
+queue.
+
 ## Later
 
 - Add a dashboard for review queues and audit history.
