@@ -46,12 +46,12 @@ test("public package entrypoint exports the in-memory batch gate result", async 
   const result = await verifyAnswerBatchContentsResult({
     answers: [{ answer: "Refunds are always available.", answerLabel: "draft" }],
     sources: [{ sourcePath: "policies/refunds.md", content: "Refunds are available for 30 days." }],
-    failOn: ["unsupported"],
+    failOn: ["contradicted"],
   });
 
   assert.equal(result.report.answers.length, 1);
   assert.equal(result.shouldFail, true);
-  assert.deepEqual(result.failVerdicts, ["unsupported"]);
+  assert.deepEqual(result.failVerdicts, ["contradicted"]);
 });
 
 test("public package entrypoint exports the canonical HTTP method contract", () => {
