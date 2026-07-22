@@ -5,6 +5,7 @@ import {
   API_CAPABILITIES,
   API_REQUEST_CONTENT_TYPES,
   extractClaims,
+  verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
   type ApiErrorResponse,
 } from "../src/index.js";
@@ -39,6 +40,18 @@ test("public package entrypoint exports in-memory verification for Node workflow
   });
   assert.equal(result.shouldFail, false);
   assert.deepEqual(result.failVerdicts, []);
+});
+
+test("public package entrypoint exports the in-memory batch gate result", async () => {
+  const result = await verifyAnswerBatchContentsResult({
+    answers: [{ answer: "The office provides free helicopter rides.", answerLabel: "draft" }],
+    sources: [{ sourcePath: "policies/refunds.md", content: "Refunds are available for 30 days." }],
+    failOn: ["unsupported"],
+  });
+
+  assert.equal(result.report.answers.length, 1);
+  assert.equal(result.shouldFail, true);
+  assert.deepEqual(result.failVerdicts, ["unsupported"]);
 });
 
 test("public package entrypoint exports the canonical HTTP method contract", () => {
