@@ -260,6 +260,15 @@ test("help accepts a command topic", async () => {
   assert.match(result.stdout, /--answer <path\|->/);
 });
 
+test("help accepts a topic followed by the help flag", async () => {
+  const result = await runCliAllowFailure(["help", "verify", "--help"]);
+
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /^Quorum verify\n\nUsage:/);
+  assert.match(result.stdout, /--source <path>/);
+});
+
 test("help exposes the version command topic", async () => {
   const result = await runCliAllowFailure(["help", "version"]);
 
