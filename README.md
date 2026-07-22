@@ -296,8 +296,10 @@ POST route preserves the same safe client-error boundary.
 It also verifies that every JSON POST route rejects non-JSON content types with
 the same structured `415` response and preserves caller-supplied request IDs.
 The packaged smoke check exercises browser preflight across all six POST
-route, keeping CORS method, header, origin, cache, and bodyless-response
+routes, keeping CORS method, header, origin, cache, and bodyless-response
 contracts aligned as new JSON endpoints are added.
+The evaluation guide also records the shipping-address scenario, so reviewers
+can find the pre-shipment control and its conflicting time-limit coverage.
 The same end-to-end benchmark smoke check now preserves the durable source ID
 for the support guest-access fixture, so reviewer artifacts remain traceable
 to the approved policy snapshot.
