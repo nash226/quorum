@@ -125,6 +125,25 @@ try {
     }
   }
 
+  const malformedJsonResponse = await fetch(`${packagedServer.url}/verify`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "X-Quorum-Request-Id": "packaged-malformed-json-contract",
+    },
+    body: "{\"answer\":",
+  });
+  if (
+    malformedJsonResponse.status !== 400 ||
+    malformedJsonResponse.headers.get("x-quorum-request-id") !== "packaged-malformed-json-contract" ||
+    JSON.stringify(await malformedJsonResponse.json()) !== JSON.stringify({
+      error: "Request body must be valid JSON.",
+      requestId: "packaged-malformed-json-contract",
+    })
+  ) {
+    throw new Error("Package artifact server did not preserve the malformed JSON error contract.");
+  }
+
   const verifyResponse = await fetch(`${packagedServer.url}/verify`, {
     method: "POST",
     headers: { "content-type": "application/json" },

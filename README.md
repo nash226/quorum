@@ -803,6 +803,9 @@ selected fixtures, while the CI command remains the repository-wide gate.
 The packaged CLI smoke check now covers `quorum help <topic>` for every shipped
 command, keeping topic-based onboarding aligned with the executable interface.
 
+The packaged HTTP smoke check also verifies that malformed JSON is rejected with
+a stable 400 error and caller request ID, matching the documented API contract.
+
 For a focused local scorecard, pass one or more domains to the evaluator:
 
 ```bash
