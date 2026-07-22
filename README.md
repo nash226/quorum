@@ -130,6 +130,9 @@ npm run dev -- verify \
 
 The packaged CLI smoke gate verifies DOCX answers and approved sources after
 build, so this integration path stays covered for published artifacts.
+The packaged HTTP smoke gate also preserves caller-supplied source IDs, titles,
+update timestamps, and trust levels in verification reports, keeping audit
+metadata stable for downstream consumers.
 The packaged evaluation smoke gate also checks the `--result-json` response,
 keeping `shouldFail`, mismatch totals, and fail-policy metadata available to CI
 callers after installation.

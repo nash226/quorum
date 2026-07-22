@@ -132,13 +132,27 @@ try {
       answer: "Employees receive 12 weeks of paid parental leave.",
       answerLabel: "Packaged verification packet",
       sources: [{
+        id: "hr-policy@2026-07-15",
         sourcePath: "policies/hr-policy.md",
+        updatedAt: "2026-07-15",
+        title: "HR Policy",
+        trustLevel: "high",
         content: "---\ntitle: HR Policy\ntrustLevel: high\n---\nEmployees receive 12 weeks of paid parental leave.\n",
       }],
     }),
   });
   const verifyPayload = await verifyResponse.json();
-  if (verifyResponse.status !== 200 || verifyPayload.shouldFail !== false || verifyPayload.report?.summary?.verified !== 1) {
+  const packagedSource = verifyPayload.report?.sources?.[0];
+  if (
+    verifyResponse.status !== 200 ||
+    verifyPayload.shouldFail !== false ||
+    verifyPayload.report?.summary?.verified !== 1 ||
+    packagedSource?.id !== "hr-policy@2026-07-15" ||
+    packagedSource?.sourcePath !== "policies/hr-policy.md" ||
+    packagedSource?.title !== "HR Policy" ||
+    packagedSource?.updatedAt !== "2026-07-15" ||
+    packagedSource?.trustLevel !== "high"
+  ) {
     throw new Error("Package artifact server did not verify the expected answer contract.");
   }
 
