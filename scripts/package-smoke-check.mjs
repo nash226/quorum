@@ -28,10 +28,27 @@ const cliPath = new URL("dist/src/cli.js", packageRoot);
 
 if (
   typeof libraryEntry.verifyAnswer !== "function" ||
+  typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
   typeof libraryEntry.createApiServer !== "function" ||
   libraryEntry.API_VERSION !== packageJson.version
 ) {
   throw new Error("Package artifact root entry point is missing required library exports or version contract.");
+}
+
+const emptySourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-empty-sources-"));
+try {
+  const answerPath = join(emptySourcePackageDir, "answer.md");
+  const sourceDir = join(emptySourcePackageDir, "sources");
+  mkdirSync(sourceDir);
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  await libraryEntry.verifyAnswerFileInputs({ answerPath, sourcePaths: [], sourceDirs: [sourceDir] });
+  throw new Error("Package artifact accepted an empty approved source directory.");
+} catch (error) {
+  if (!String(error?.message ?? error).includes("No approved source files found in")) {
+    throw error;
+  }
+} finally {
+  rmSync(emptySourcePackageDir, { recursive: true, force: true });
 }
 
 if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.startApiServer !== "function") {
