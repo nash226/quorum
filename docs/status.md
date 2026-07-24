@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `14fc8be` on 2026-07-24, test: cover contract discovery HEAD probes
+- Latest shipped change: `b088bef` on 2026-07-24, test: verify packaged conditional discovery probes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | test: verify packaged conditional discovery probes | `b088bef` |
 | 2026-07-24 | Direct push | test: cover contract discovery HEAD probes | `14fc8be` |
 | 2026-07-24 | Direct push | test: smoke-check packaged HTTP evaluation | `2f252f8` |
 | 2026-07-24 | Direct push | test: smoke-check batch HTTP fail policy | `4429572` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: smoke-check packaged empty source rejection | `ca56ae6` |
 | 2026-07-24 | Direct push | test: cover packaged queue domain filters | `bccdfe6` |
 | 2026-07-24 | Direct push | fix: make version help flags consistent | `5a9caba` |
-| 2026-07-24 | Direct push | docs: document CLI version aliases | `f08ffa6` |
 
