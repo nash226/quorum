@@ -129,6 +129,9 @@ The top-level alias also accepts `quorum help --help`, which is useful for
 wrappers that append a help flag consistently.
 The top-level help now lists the full shipped command map, including the
 review-queue, evaluation, API, and contract-version entry points.
+It also keeps source IDs, aggregate CSV exports, and reviewer queue filters
+visible in the one-screen command synopsis so integration setup does not need
+to guess which command-specific options are available.
 
 The packaged CLI smoke gate probes representative `quorum help <command>`
 topics after building, keeping the documented onboarding alias executable in
