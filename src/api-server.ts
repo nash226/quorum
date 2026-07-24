@@ -2288,6 +2288,12 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       },
     }),
   };
+  const notFoundResponse = errorResponse("The requested route does not exist.", {
+    unknownRoute: {
+      summary: "A request used an unknown path",
+      value: { error: "Not found." },
+    },
+  });
   const corsPreflightResponse = {
     "204": {
       description: "CORS preflight succeeded for a local browser-style client.",
@@ -4185,6 +4191,14 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         { $ref: "#/components/parameters/RequestIdHeader" },
         ...(Array.isArray(operationRecord.parameters) ? operationRecord.parameters : []),
       ];
+    }
+  }
+
+  for (const pathItem of Object.values(document.paths)) {
+    for (const operation of Object.values(pathItem as Record<string, { responses?: Record<string, unknown> }>)) {
+      if (operation?.responses) {
+        operation.responses["404"] = notFoundResponse;
+      }
     }
   }
 
