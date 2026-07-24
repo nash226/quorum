@@ -48,6 +48,9 @@ represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
 The HTTP `verify` endpoint accepts PDF and DOCX answer/source bytes as base64
 JSON content, preserving the supplied paths and source metadata in its result.
+The HTTP `verify-batch` endpoint also preserves caller-supplied source IDs in
+both the batch and per-answer reports, keeping evidence references durable for
+multi-answer workflow consumers.
 Malformed JSON requests fail closed with a 400 response containing the same
 structured `error` and `requestId` fields as other HTTP validation failures.
 Use `--generated-at <timestamp>` when a batch run needs one caller-owned audit
