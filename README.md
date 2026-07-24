@@ -80,6 +80,8 @@ The guide also documents the in-memory batch result contract for queue workers,
 including its `shouldFail` and `failVerdicts` gate metadata.
 File-backed programmatic verification also rejects empty source directories,
 so API and CLI workflows share the same fail-closed evidence requirement.
+The packaged programmatic API smoke gate exercises that rejection after build,
+so published workers cannot silently run without an approved source set.
 
 For example, an agent worker can verify content in memory and fail closed on
 risky verdicts without starting a second process:
