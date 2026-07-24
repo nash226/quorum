@@ -70,6 +70,20 @@ queue folders can be verified without flattening the approved file layout. The
 CLI also deduplicates repeated source paths, keeping each approved document
 represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
+When a workflow has an explicit source set, repeat `--source` instead of
+creating a temporary directory:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source examples/sources/hr-benefits.md \
+  --source examples/sources/support-playbook.md \
+  --json
+```
+
+This direct-source form and `--source-dir` can be combined; explicit sources
+are evaluated first and directory-discovered sources are appended. That keeps
+curated policy order stable while still allowing a shared source directory.
 The HTTP `verify` endpoint accepts PDF and DOCX answer/source bytes as base64
 JSON content, preserving the supplied paths and source metadata in its result.
 The HTTP `verify-batch` endpoint also preserves caller-supplied source IDs in
