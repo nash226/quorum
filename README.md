@@ -98,6 +98,8 @@ The [HTTP integration guide](docs/api-integration.md) covers verification,
 reviewer-queue, health, readiness, liveness, and OpenAPI discovery endpoints.
 The packaged HTTP smoke gate also evaluates an inline HR fixture with a domain
 filter, keeping published scorecard and generated-timestamp behavior covered.
+It also submits a deliberately mismatched fixture with `failOnStatus`, keeping
+the published HTTP evaluation gate fail closed with a `409` response.
 
 Node.js workers can use the built package directly when starting an HTTP server
 would add unnecessary overhead. The public `quorum` entrypoint exposes the same
