@@ -486,6 +486,10 @@ contracts aligned as new JSON endpoints are added.
 The same end-to-end benchmark smoke check now preserves the durable source ID
 for the support guest-access fixture, so reviewer artifacts remain traceable
 to the approved policy snapshot.
+The packaged HTTP smoke check also verifies a JSON source export end to end,
+including its title, freshness, trust level, durable source ID, and verified
+claim result. This keeps the published server artifact aligned with the JSON
+source capability advertised by `/capabilities`.
 The API regression suite also pins the reviewer queue's browser preflight,
 including its allowed POST method, request headers, exposed headers, and
 bodyless 204 response, so web-based queue consumers keep the same CORS contract
