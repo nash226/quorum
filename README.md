@@ -120,6 +120,8 @@ needs `shouldFail` and `failVerdicts` alongside a report, and use `--answer -`
 or `--review-csv -` to stream one input from stdin.
 The top-level alias also accepts `quorum help --help`, which is useful for
 wrappers that append a help flag consistently.
+The top-level help now lists the full shipped command map, including the
+review-queue, evaluation, API, and contract-version entry points.
 
 The packaged CLI smoke gate probes representative `quorum help <command>`
 topics after building, keeping the documented onboarding alias executable in
