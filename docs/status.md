@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `66a9027` on 2026-07-24, test: smoke-check packaged reviewer queue filters
+- Latest shipped change: `ce05b79` on 2026-07-24, test: preserve claim preview provenance
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | test: preserve claim preview provenance | `ce05b79` |
 | 2026-07-24 | Direct push | test: smoke-check packaged reviewer queue filters | `66a9027` |
 | 2026-07-24 | Direct push | test: cover packaged top-level help alias | `d1c2127` |
 | 2026-07-24 | Direct push | docs: clarify roadmap foundations | `d83dd82` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: preserve packaged OpenAPI server URLs | `79021a5` |
 | 2026-07-24 | Direct push | test: cover packaged version aliases | `ffbe60b` |
 | 2026-07-24 | Direct push | docs: explain the CI verification gate | `4f9ca02` |
-| 2026-07-24 | Direct push | docs: list supported document formats | `f156e93` |
 
