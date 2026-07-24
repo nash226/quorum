@@ -39,6 +39,9 @@ The shipped product surface now covers the full review loop:
 - `serve` exposes the same workflows through a local HTTP API, while `openapi`
   exports its integration contract.
 
+Batch verification and the local HTTP API are shipped foundations; the next
+roadmap step is a durable API service boundary for agent integrations.
+
 ## Quick Start
 
 The published package smoke check also runs the CLI `verify-batch` contract,
