@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5a9caba` on 2026-07-24, fix: make version help flags consistent
+- Latest shipped change: `bccdfe6` on 2026-07-24, test: cover packaged queue domain filters
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | test: cover packaged queue domain filters | `bccdfe6` |
 | 2026-07-24 | Direct push | fix: make version help flags consistent | `5a9caba` |
 | 2026-07-24 | Direct push | docs: document CLI version aliases | `f08ffa6` |
 | 2026-07-24 | [#917](https://github.com/nash226/quorum/pull/917) | docs: expose complete top-level CLI options | `e7d1265` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: smoke-check batch aggregate summary | `a6046e9` |
 | 2026-07-24 | Direct push | fix: parse markdown tables without outer pipes | `726f643` |
 | 2026-07-24 | Direct push | test: preserve HTTP batch source IDs | `1efa4fc` |
-| 2026-07-24 | Direct push | style: preserve CLI help indentation | `00bc77a` |
 
