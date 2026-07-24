@@ -49,7 +49,7 @@ export function renderTextReport(
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
-export function renderBatchTextReport(report: BatchVerificationReport): string {
+export function renderBatchTextReport(report: BatchVerificationReport, failOn: ClaimVerdict[] = []): string {
   const noClaimsReason = "No claims were extracted from this answer.";
   const orderedAnswers = orderBatchAnswersForReview(report.answers);
   const lines = [
@@ -62,6 +62,7 @@ export function renderBatchTextReport(report: BatchVerificationReport): string {
     ...report.sources.map((source) => `- ${renderTextSourceLabel(source)}`),
     `Summary: ${report.summary.verified} verified, ${report.summary.contradicted} contradicted, ${report.summary.unsupported} unsupported, ${report.summary.needs_review} needs review`,
     `Answers with no extracted claims: ${report.summary.answersWithoutClaims}`,
+    `Fail policy: ${failOn.length > 0 ? failOn.join(", ") : "none"}`,
     `Answers matching fail policy: ${report.summary.answersWithFailures}`,
     "",
   ];
@@ -179,7 +180,7 @@ export function renderMarkdownReport(
   return `${trimTrailingBlankLines(lines).join("\n")}\n`;
 }
 
-export function renderBatchMarkdownReport(report: BatchVerificationReport): string {
+export function renderBatchMarkdownReport(report: BatchVerificationReport, failOn: ClaimVerdict[] = []): string {
   const orderedAnswers = orderBatchAnswersForReview(report.answers);
   const lines = [
     "# Quorum Batch Verification Report",
@@ -195,6 +196,7 @@ export function renderBatchMarkdownReport(report: BatchVerificationReport): stri
     `- Unsupported: ${report.summary.unsupported}`,
     `- Needs review: ${report.summary.needs_review}`,
     `- Answers with no extracted claims: ${report.summary.answersWithoutClaims}`,
+    `- Fail policy: ${failOn.length > 0 ? failOn.join(", ") : "none"}`,
     `- Answers matching fail policy: ${report.summary.answersWithFailures}`,
     "",
     "## Sources",
@@ -1379,7 +1381,7 @@ function renderReviewConsoleHtmlReport(
 `;
 }
 
-export function renderBatchHtmlReport(report: BatchVerificationReport): string {
+export function renderBatchHtmlReport(report: BatchVerificationReport, failOn: ClaimVerdict[] = []): string {
   const sourceList = report.sources
     .map((source) => {
       const metadata = [`${source.trustLevel} trust`];
@@ -1978,6 +1980,10 @@ export function renderBatchHtmlReport(report: BatchVerificationReport): string {
           <section class="hero__meta-card">
             <span>Fail policy matches</span>
             <strong>${report.summary.answersWithFailures} answers</strong>
+          </section>
+          <section class="hero__meta-card">
+            <span>Fail policy</span>
+            <strong>${escapeHtml(failOn.length > 0 ? failOn.join(", ") : "none")}</strong>
           </section>
           <section class="hero__meta-card">
             <span>No extracted claims</span>

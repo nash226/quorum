@@ -313,11 +313,12 @@ test("renders a markdown batch report with per-answer summaries", () => {
     },
   };
 
-  const rendered = renderBatchMarkdownReport(batchReport);
+  const rendered = renderBatchMarkdownReport(batchReport, ["unsupported"]);
 
   assert.match(rendered, /# Quorum Batch Verification Report/);
   assert.match(rendered, /- Answers reviewed: 2/);
   assert.match(rendered, /- Answers with no extracted claims: 0/);
+  assert.match(rendered, /- Fail policy: unsupported/);
   assert.match(rendered, /- Answers matching fail policy: 1/);
   assert.match(rendered, /## Sources/);
   assert.match(rendered, /\*\*HR Policy\*\* \(trust: high, updated: 2026-05-31, path: examples\/sources\/hr-policy\.md\)/);
@@ -375,7 +376,7 @@ test("prioritizes fail-policy matches first in batch html reports", () => {
     },
   };
 
-  const rendered = renderBatchHtmlReport(batchReport);
+  const rendered = renderBatchHtmlReport(batchReport, ["unsupported"]);
 
   assert.match(
     rendered,
@@ -409,7 +410,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
     },
   };
 
-  const rendered = renderBatchHtmlReport(batchReport);
+  const rendered = renderBatchHtmlReport(batchReport, ["unsupported"]);
 
   assert.match(rendered, /<!doctype html>/i);
   assert.match(rendered, /<title>Quorum Batch Verification Report<\/title>/);
@@ -417,6 +418,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
   assert.match(rendered, /HR Policy<\/strong><span>high trust - updated 2026-05-31 - path examples\/sources\/hr-policy\.md<\/span>/);
   assert.match(rendered, /No extracted claims<\/span>\s*<strong>0 answers<\/strong>/);
   assert.match(rendered, /Fail policy matched/);
+  assert.match(rendered, /<span>Fail policy<\/span>\s*<strong>unsupported<\/strong>/);
   assert.match(rendered, /<dt>Primary finding<\/dt><dd>unsupported<\/dd>/);
   assert.match(rendered, /<span class="answer-card__section-label">Primary finding<\/span>/);
   assert.match(rendered, /<span class="answer-card__section-label">Answer preview<\/span>/);

@@ -60,6 +60,9 @@ Malformed JSON requests fail closed with a 400 response containing the same
 structured `error` and `requestId` fields as other HTTP validation failures.
 Use `--generated-at <timestamp>` when a batch run needs one caller-owned audit
 timestamp across every answer and exported reviewer artifact.
+Batch text, Markdown, and HTML reports also show the configured `--fail-on`
+verdicts alongside each answer's match status, preserving the CI policy in
+exported review artifacts.
 
 For an agent or workflow runner that needs JSON over HTTP, start the local API
 and probe its published capability contract:
