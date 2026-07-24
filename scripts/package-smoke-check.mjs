@@ -466,6 +466,28 @@ try {
   ) {
     throw new Error("Package artifact server did not preserve the expected evaluation contract.");
   }
+
+  const mismatchedFixture = JSON.parse(readFileSync(evaluationFixturePath, "utf8"));
+  mismatchedFixture.expectedClaimVerdicts = ["verified", "verified", "unsupported"];
+  mismatchedFixture.expectedSummary = { verified: 2, contradicted: 0, unsupported: 1, needs_review: 0 };
+  const evaluationFailureResponse = await fetch(`${packagedServer.url}/evaluate`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      fixtures: [{ fixturePath: evaluationFixturePath, content: JSON.stringify(mismatchedFixture) }],
+      failOnStatus: true,
+    }),
+  });
+  const evaluationFailurePayload = await evaluationFailureResponse.json();
+  if (
+    evaluationFailureResponse.status !== 409 ||
+    evaluationFailurePayload.shouldFail !== true ||
+    evaluationFailurePayload.failureReasons?.join(",") !== "mismatch" ||
+    evaluationFailurePayload.mismatchCount !== 1 ||
+    evaluationFailurePayload.summary?.mismatchCount !== 1
+  ) {
+    throw new Error("Package artifact server did not preserve the evaluation mismatch gate contract.");
+  }
 } finally {
   await packagedServer.close();
 }
