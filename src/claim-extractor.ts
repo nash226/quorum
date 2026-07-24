@@ -886,7 +886,7 @@ function parseMarkdownTableCells(line: string): string[] | undefined {
   }
 
   const segments = splitMarkdownTableSegments(line);
-  if (segments.length < 3) {
+  if (segments.length < 2) {
     return undefined;
   }
 
