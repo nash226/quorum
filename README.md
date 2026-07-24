@@ -25,6 +25,17 @@ concise localized answers remain available for verification and review.
 Unicode checkbox markers (`☐`, `☑`, and `☒`) are also normalized when answers
 come from exported task lists.
 
+The shipped product surface now covers the full review loop:
+
+- `extract-claims` previews normalized claims before evidence matching.
+- `verify` and `verify-batch` produce reviewer reports and machine-readable
+  fail-policy results.
+- `import-review` and `review-queue` turn reviewer decisions into queue-ready
+  summaries, with optional benchmark drift context.
+- `evaluate` runs checked-in policy fixtures as a CI mismatch and score gate.
+- `serve` exposes the same workflows through a local HTTP API, while `openapi`
+  exports its integration contract.
+
 ## Quick Start
 
 The published package smoke check also runs the CLI `verify-batch` contract,
