@@ -390,8 +390,8 @@ async function runVerifyBatch(args: string[]): Promise<void> {
     generatedAt: parsed.generatedAt,
   });
   const jsonReport = JSON.stringify(batchReport, null, 2);
-  const markdownReport = renderBatchMarkdownReport(batchReport);
-  const htmlReport = renderBatchHtmlReport(batchReport);
+  const markdownReport = renderBatchMarkdownReport(batchReport, parsed.failOn);
+  const htmlReport = renderBatchHtmlReport(batchReport, parsed.failOn);
   const reviewerDecisionCsv = renderBatchReviewerDecisionCsv(batchReport);
   const summaryCsv = renderBatchSummaryCsv(batchReport);
   const aggregateSummaryCsv = renderBatchAggregateSummaryCsv(batchReport);
@@ -447,7 +447,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
     return;
   }
 
-  process.stdout.write(renderBatchTextReport(batchReport));
+  process.stdout.write(renderBatchTextReport(batchReport, parsed.failOn));
 
   if (parsed.outPath) {
     console.log(`Batch report written to ${parsed.outPath}`);
