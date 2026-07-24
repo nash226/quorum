@@ -115,6 +115,10 @@ The same batch fail policy is available over HTTP: with `failOn` and
 `failOnStatus`, a risky batch returns HTTP `409` plus `shouldFail` and
 `failVerdicts` metadata for workflow gating.
 
+The packaged smoke gate verifies both PDF and DOCX ingestion for answers and
+approved sources after every build, so binary policy workflows have the same
+release-level coverage as Markdown and HTML inputs.
+
 For an agent or workflow runner that needs JSON over HTTP, start the local API
 and probe its published capability contract:
 
