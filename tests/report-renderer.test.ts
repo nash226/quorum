@@ -12,6 +12,7 @@ import {
   renderMarkdownReport,
   renderReviewerDecisionCsv,
   renderSummaryCsv,
+  renderBatchTextReport,
   renderTextReport,
 } from "../src/report-renderer.js";
 import { importReviewerDecisions } from "../src/reviewer-decision-import.js";
@@ -341,6 +342,38 @@ test("renders a markdown batch report with per-answer summaries", () => {
   assert.match(rendered, /#### Claim Assessments/);
   assert.match(rendered, /##### 1\. Employees receive 12 weeks of paid parental leave\./);
   assert.match(rendered, /- Verdict: `verified`/);
+});
+
+test("renders source context inside each batch answer section", () => {
+  const batchReport: BatchVerificationReport = {
+    generatedAt: "2026-06-29T00:00:00.000Z",
+    sources: batchSources,
+    sourceCount: 1,
+    answerCount: 1,
+    answers: [{
+      answerLabel: "hr-answer",
+      answerPath: "examples/answers/hr-answer.md",
+      report: verifyAnswer("Employees receive 12 weeks of paid parental leave.", [hrPolicy]),
+      shouldFail: false,
+      failVerdicts: [],
+    }],
+    summary: {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithClaims: 1,
+      answersWithoutClaims: 0,
+      answersWithFailures: 0,
+    },
+  };
+
+  const rendered = renderBatchTextReport(batchReport);
+
+  assert.match(
+    rendered,
+    /hr-answer[\s\S]*Sources:\n  - HR Policy \(high trust, updated 2026-05-31, path examples\/sources\/hr-policy\.md\)/,
+  );
 });
 
 test("prioritizes fail-policy matches first in batch html reports", () => {

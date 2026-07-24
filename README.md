@@ -51,6 +51,9 @@ The CLI `extract-claims --result-json` and `--result-json-out` formats now carry
 the same answer provenance while keeping the legacy `--json` claims-only format.
 The packaged CLI smoke gate checks both machine-readable forms, including the
 answer path and reviewer-facing label in the saved result artifact.
+The plain-text batch report also repeats source titles, trust, freshness, and
+paths inside each answer section, so copied reviewer findings retain their
+evidence provenance without needing the full report header.
 
 ```bash
 npm install
