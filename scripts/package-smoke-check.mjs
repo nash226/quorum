@@ -304,6 +304,24 @@ try {
     throw new Error("Package artifact server did not serve the expected claim preview contract.");
   }
 
+  const markdownTableClaimsResponse = await fetch(`${packagedServer.url}/extract-claims`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answer: "| Policy | Details |\n| --- | --- |\n| Parental leave | Employees receive 12 weeks of paid parental leave. |",
+      answerPath: "answers/hr-table.md",
+    }),
+  });
+  const markdownTableClaimsPayload = await markdownTableClaimsResponse.json();
+  if (
+    markdownTableClaimsResponse.status !== 200 ||
+    markdownTableClaimsPayload.claims?.length !== 1 ||
+    markdownTableClaimsPayload.claims[0]?.text !==
+      "Parental leave: Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact server did not preserve Markdown table claim extraction.");
+  }
+
   const extractClaimsBase64Response = await fetch(`${packagedServer.url}/extract-claims`, {
     method: "POST",
     headers: { "content-type": "application/json" },
