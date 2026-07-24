@@ -406,6 +406,32 @@ try {
   ) {
     throw new Error("Package artifact server did not preserve no-claims reviewer queue routing.");
   }
+
+  const evaluationFixturePath = join(repoRoot, "examples", "evaluations", "hr-policy.json");
+  const evaluationResponse = await fetch(`${packagedServer.url}/evaluate`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      fixtures: [{
+        fixturePath: evaluationFixturePath,
+        content: readFileSync(evaluationFixturePath, "utf8"),
+      }],
+      domains: ["hr"],
+      generatedAt: "2026-07-15T12:00:00.000Z",
+    }),
+  });
+  const evaluationPayload = await evaluationResponse.json();
+  if (
+    evaluationResponse.status !== 200 ||
+    evaluationPayload.scorecards?.length !== 1 ||
+    evaluationPayload.scorecards[0]?.domain !== "hr" ||
+    evaluationPayload.scorecards[0]?.score !== 1 ||
+    evaluationPayload.summary?.fixtureCount !== 1 ||
+    evaluationPayload.summary?.mismatchCount !== 0 ||
+    evaluationPayload.scorecards[0]?.report?.generatedAt !== "2026-07-15T12:00:00.000Z"
+  ) {
+    throw new Error("Package artifact server did not preserve the expected evaluation contract.");
+  }
 } finally {
   await packagedServer.close();
 }
