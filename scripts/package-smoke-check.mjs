@@ -520,6 +520,36 @@ try {
     throw new Error("Package artifact CLI did not preserve reviewer queue stdin routing.");
   }
 
+  const queueSummaryCsvPath = join(reviewerTempDir, "queue-summary.csv");
+  let queueSummaryOutput;
+  try {
+    execFileSync(process.execPath, [
+      fileURLToPath(cliPath),
+      "import-review",
+      "--review-csv",
+      reviewCsvPath,
+      "--queue-summary-csv-out",
+      queueSummaryCsvPath,
+      "--fail-on",
+      "needs_review",
+    ], { encoding: "utf8" });
+  } catch (error) {
+    if (error.status !== 2) {
+      throw error;
+    }
+    queueSummaryOutput = error.stdout;
+  }
+  if (!queueSummaryOutput?.includes(`Reviewer queue summary CSV written to ${queueSummaryCsvPath}`)) {
+    throw new Error("Package artifact CLI did not report the reviewer queue summary CSV output.");
+  }
+  const queueSummaryCsv = readFileSync(queueSummaryCsvPath, "utf8");
+  if (
+    !queueSummaryCsv.startsWith("generated_at,total_answers,pending_answers,reviewed_answers") ||
+    !queueSummaryCsv.includes(",1,0,1,0,1,1,0,1,0,0,0,1,matched,needs_review")
+  ) {
+    throw new Error("Package artifact CLI did not preserve the reviewer queue summary CSV contract.");
+  }
+
   let importReviewStdinOutput;
   try {
     execFileSync(process.execPath, [
