@@ -107,6 +107,11 @@ try {
     throw new Error("Package artifact server did not serve the expected capabilities contract.");
   }
 
+  const capabilitiesHeadResponse = await fetch(`${packagedServer.url}/capabilities`, { method: "HEAD" });
+  if (capabilitiesHeadResponse.status !== 200 || (await capabilitiesHeadResponse.text()) !== "") {
+    throw new Error("Package artifact server did not preserve the bodyless capabilities HEAD contract.");
+  }
+
   for (const path of ["/", "/capabilities", "/health", "/readyz", "/livez", "/version", "/openapi.json"]) {
     const preflightResponse = await fetch(`${packagedServer.url}${path}`, {
       method: "OPTIONS",
