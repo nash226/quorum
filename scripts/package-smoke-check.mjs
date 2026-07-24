@@ -958,6 +958,7 @@ const reviewQueueTempDir = mkdtempSync(join(tmpdir(), "quorum-package-review-que
 try {
   const reviewCsvPath = join(reviewQueueTempDir, "review.csv");
   const queueJsonPath = join(reviewQueueTempDir, "queue.json");
+  const pendingQueueJsonPath = join(reviewQueueTempDir, "pending-queue.json");
   const queueCsvPath = join(reviewQueueTempDir, "queue.csv");
   execFileSync(process.execPath, [
     fileURLToPath(cliPath), "verify", "--answer", "-", "--source",
@@ -972,13 +973,22 @@ try {
     "--generated-at", "2026-07-24T00:00:00.000Z", "--json", "--out", queueJsonPath,
     "--csv-out", queueCsvPath,
   ], { encoding: "utf8" });
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "review-queue", "--review-csv", reviewCsvPath,
+    "--queue-status", "pending", "--generated-at", "2026-07-24T00:00:00.000Z",
+    "--json", "--out", pendingQueueJsonPath,
+  ], { encoding: "utf8" });
   const queueJson = JSON.parse(readFileSync(queueJsonPath, "utf8"));
+  const pendingQueueJson = JSON.parse(readFileSync(pendingQueueJsonPath, "utf8"));
   const queueCsv = readFileSync(queueCsvPath, "utf8");
   if (
     queueJson.generatedAt !== "2026-07-24T00:00:00.000Z" ||
     queueJson.review?.totalAnswers !== 1 ||
     queueJson.review?.pendingAnswers !== 1 ||
     queueJson.review?.totalClaims !== 1 ||
+    pendingQueueJson.queueStatus !== "pending" ||
+    pendingQueueJson.review?.totalAnswers !== 1 ||
+    pendingQueueJson.review?.pendingAnswers !== 1 ||
     !queueCsv.startsWith('"generated_at","queue_status","domains","total_answers",') ||
     !queueCsv.includes('"1","1","0","0","1","1","0","1","0","0","0"')
   ) {

@@ -49,6 +49,9 @@ tests and build, then exercises the local HTTP API, packaged CLI artifact, and
 evaluation fixtures before a change is ready to publish.
 The packaged smoke check also keeps `quorum help --help` identical to the
 top-level `quorum --help` output for wrappers that append help flags.
+It also verifies that the packaged reviewer queue can scope its JSON handoff to
+pending answers with `--queue-status pending`, keeping queue workers from
+receiving already reviewed or no-claim answers.
 
 For agent integrations, run the local HTTP service and use its discovery
 contract before sending verification requests:
