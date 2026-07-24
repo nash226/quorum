@@ -58,6 +58,41 @@ try {
   rmSync(emptySourcePackageDir, { recursive: true, force: true });
 }
 
+const cliBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-batch-"));
+try {
+  const answerDir = join(cliBatchPackageDir, "answers", "nested");
+  const sourceDir = join(cliBatchPackageDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  writeFileSync(join(answerDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n");
+
+  const batchOutput = execFileSync(
+    "node",
+    [
+      fileURLToPath(cliPath),
+      "verify-batch",
+      "--answer-dir",
+      join(cliBatchPackageDir, "answers"),
+      "--source-dir",
+      join(cliBatchPackageDir, "sources"),
+      "--json",
+    ],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const batchPayload = JSON.parse(batchOutput);
+  if (
+    batchPayload.summary?.answersWithClaims !== 1 ||
+    batchPayload.summary?.answersWithoutClaims !== 0 ||
+    batchPayload.answers?.[0]?.answerPath !== join(answerDir, "answer.md") ||
+    batchPayload.answers?.[0]?.report?.sources?.[0]?.sourcePath !== join(sourceDir, "policy.md")
+  ) {
+    throw new Error("Package artifact did not preserve the packaged CLI batch verification contract.");
+  }
+} finally {
+  rmSync(cliBatchPackageDir, { recursive: true, force: true });
+}
+
 if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.startApiServer !== "function") {
   throw new Error("Package artifact server entry point is missing required server exports.");
 }
