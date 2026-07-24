@@ -32,6 +32,17 @@ test("preserves short standalone policy statements", () => {
   assert.deepEqual(claims.map((claim) => claim.text), ["No refunds."]);
 });
 
+test("splits ordinary sentences into atomic conjunction claims", () => {
+  const claims = extractClaims(
+    "Employees receive 12 weeks of paid leave and Managers approve exceptions within five business days.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid leave",
+    "Managers approve exceptions within five business days.",
+  ]);
+});
+
 test("extracts clean claims from markdown list answers", () => {
   const claims = extractClaims(`# HR Policy Summary
 
