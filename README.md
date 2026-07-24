@@ -20,6 +20,8 @@ policy tables are also reduced to row-level claims, including tables that omit
 the optional outer pipe characters.
 Short punctuated policy claims are also preserved across Unicode scripts, so
 concise localized answers remain available for verification and review.
+Unicode checkbox markers (`☐`, `☑`, and `☒`) are also normalized when answers
+come from exported task lists.
 
 ## Quick Start
 
