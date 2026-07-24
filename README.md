@@ -256,6 +256,9 @@ The shipped CLI artifact now has an executable smoke gate for DOCX answers and
 approved sources, alongside the existing Markdown, HTML, and PDF paths.
 The same packaged gate pins `verify --generated-at` for a single answer, so
 caller-owned audit timestamps stay deterministic outside batch workflows too.
+It also checks that packaged single-answer verification writes a queue-oriented
+summary CSV, including the streamed answer path and verified verdict, so a
+workflow can route one answer without parsing the full report.
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.

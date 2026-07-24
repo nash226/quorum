@@ -680,6 +680,27 @@ try {
   rmSync(generatedAtTempDir, { recursive: true, force: true });
 }
 
+const singleSummaryTempDir = mkdtempSync(join(tmpdir(), "quorum-package-single-summary-"));
+try {
+  const singleSummarySourceDir = join(singleSummaryTempDir, "sources");
+  const singleSummaryPath = join(singleSummaryTempDir, "summary.csv");
+  mkdirSync(singleSummarySourceDir);
+  writeFileSync(join(singleSummarySourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n");
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", "-", "--source-dir", singleSummarySourceDir,
+    "--summary-csv-out", singleSummaryPath, "--fail-on", "contradicted",
+  ], {
+    encoding: "utf8",
+    input: "Employees receive 12 weeks of paid parental leave.\n",
+  });
+  const singleSummary = readFileSync(singleSummaryPath, "utf8");
+  if (!singleSummary.includes("answer_path") || !singleSummary.includes("<stdin>") || !singleSummary.includes(",verified,")) {
+    throw new Error("Package artifact CLI did not preserve the single-answer summary CSV contract.");
+  }
+} finally {
+  rmSync(singleSummaryTempDir, { recursive: true, force: true });
+}
+
 const batchStdinTempDir = mkdtempSync(join(tmpdir(), "quorum-package-batch-stdin-answer-"));
 try {
   const batchSourceDir = join(batchStdinTempDir, "sources");
