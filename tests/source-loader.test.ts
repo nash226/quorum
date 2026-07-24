@@ -143,6 +143,13 @@ Employees get 12 weeks.
   );
 });
 
+test("rejects invalid frontmatter trust metadata instead of downgrading it", () => {
+  assert.throws(
+    () => parseSource("docs/hr-policy.md", `---\ntrustLevel: critical\n---\nEmployees get 12 weeks.\n`),
+    /Unsupported trust level: critical/,
+  );
+});
+
 test("prefers explicit source metadata overrides over parsed metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",

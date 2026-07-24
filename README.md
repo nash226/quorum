@@ -131,6 +131,9 @@ topics after building, keeping the documented onboarding alias executable in
 published artifacts. It also probes the published `help version` topic, keeping
 CLI contract discovery covered after packaging.
 
+Source frontmatter with an invalid `trustLevel` is rejected instead of silently
+falling back to the default, keeping malformed evidence metadata fail-closed.
+
 It also checks that packaged `/health`, `/healthz`, `/readyz`, and `/livez`
 endpoints support bodyless `HEAD` probes for deployment health checks.
 The same packaged HTTP gate exercises the readiness query aliases
