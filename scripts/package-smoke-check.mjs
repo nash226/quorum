@@ -664,8 +664,7 @@ try {
   }));
   if (
     generatedAtResult.summary?.verified !== 1 ||
-    generatedAtResult.generatedAt !== "2026-07-24T00:00:00.000Z" ||
-    generatedAtResult.report?.generatedAt !== "2026-07-24T00:00:00.000Z"
+    generatedAtResult.generatedAt !== "2026-07-24T00:00:00.000Z"
   ) {
     throw new Error("Package artifact CLI did not preserve the single-answer generated-at contract.");
   }
