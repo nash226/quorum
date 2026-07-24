@@ -201,6 +201,9 @@ evaluation surfaces as the CLI. Node.js callers can use the public
 The package smoke check also executes the published `quorum version --json`
 entrypoint, keeping the installed CLI contract aligned with the package
 manifest and library exports.
+The public in-memory batch API preserves caller-supplied source IDs in both
+the batch-level and per-answer reports, so downstream evidence records can
+keep durable source references across multi-answer verification.
 It also imports a completed review CSV from stdin with `--result-json`, keeping
 pipe-friendly reviewer fail-policy handoff executable after packaging.
 It also starts the packaged server entrypoint and probes `/version` and
