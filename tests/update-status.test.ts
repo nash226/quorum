@@ -76,7 +76,7 @@ test("status refresh reads capabilities from the CLI guide", () => {
   execFileSync("npm", ["run", "status:refresh"], { encoding: "utf8" });
 
   const status = readFileSync("docs/status.md", "utf8");
-  assert.match(status, /^- read Markdown, text, HTML, PDF, and DOCX answers and approved sources$/m);
+  assert.match(status, /^- read Markdown, text, HTML, JSON, PDF, and DOCX answers and approved sources$/m);
   assert.doesNotMatch(status, /Missing section "What It Does"/);
 });
 
