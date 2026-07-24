@@ -5302,6 +5302,31 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(batchResult.shouldFail, true);
     assert.deepEqual(batchResult.failVerdicts, ["contradicted"]);
 
+    const durableSourceResponse = await fetch(`${api.url}/verify-batch`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answers: [{ answer: "Refunds are available for 30 days.", answerPath: "answers/refund.md" }],
+        sources: [{
+          id: "support/refunds@2026-07-15",
+          sourcePath: "sources/refunds.md",
+          content: "Refunds are available for 30 days.",
+          title: "Refund Policy",
+          trustLevel: "high",
+        }],
+      }),
+    });
+    assert.equal(durableSourceResponse.status, 200);
+    const durableSourceResult = await durableSourceResponse.json() as Awaited<ReturnType<typeof verifyAnswerBatchContentsResult>>;
+    assert.deepEqual(durableSourceResult.report.sources.map((source) => source.id), [
+      "support/refunds@2026-07-15",
+    ]);
+    assert.deepEqual(durableSourceResult.report.answers[0]?.report.sources.map((source) => source.id), [
+      "support/refunds@2026-07-15",
+    ]);
+
     const importResponse = await fetch(`${api.url}/import-review`, {
       method: "POST",
       headers: {
