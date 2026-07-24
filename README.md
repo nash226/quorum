@@ -187,6 +187,8 @@ The packaged CLI command map is:
 
 The version probe is also available as `quorum --version` and `quorum -v`,
 which is useful for installation checks that do not use a subcommand.
+The packaged smoke gate executes both aliases after build, so published
+installation probes stay aligned with the CLI version contract.
 
 Every command supports `--help` and `-h`; `quorum help <command>` is also
 available for scripted onboarding. Use `--result-json` when an integration
