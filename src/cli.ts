@@ -192,6 +192,11 @@ async function main(): Promise<void> {
       return;
     }
 
+    if (args.length === 2 && isCommandName(helpCommand) && isHelpFlag(args[1])) {
+      printHelp(helpCommand);
+      return;
+    }
+
     if (args.length > 1 || (helpCommand !== undefined && !isCommandName(helpCommand))) {
       throw new Error(`Unknown help topic: ${helpCommand ?? args[1] ?? ""}`);
     }

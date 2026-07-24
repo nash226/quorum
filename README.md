@@ -837,6 +837,9 @@ command to fail closed when aggregate claim quality falls below the threshold.
 
 ## Documentation Map
 
+Use `quorum help <topic>` or `quorum help <topic> --help` to inspect a
+command without running it; both forms print the same command-specific usage.
+
 - [CLI guide](docs/cli-guide.md): local verification, reports, imports, and evaluation.
 - [HTTP API integration](docs/api-integration.md): server startup, discovery, requests, and artifacts.
 - [Programmatic API](docs/programmatic-api.md): embed verification in Node.js workflows.
