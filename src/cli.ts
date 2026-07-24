@@ -1826,7 +1826,7 @@ Options:
     return;
   }
 
-console.log(`Quorum
+  console.log(`Quorum
 
 Usage:
   quorum help [<command>]
