@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6ec8ffe` on 2026-07-24, feat: accept XML source exports
+- Latest shipped change: `d1b1ba5` on 2026-07-24, test: smoke-check packaged JSON sources
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | test: smoke-check packaged JSON sources | `d1b1ba5` |
 | 2026-07-24 | Direct push | feat: accept XML source exports | `6ec8ffe` |
 | 2026-07-24 | Direct push | test: cover base64 source verification | `0a33af5` |
 | 2026-07-24 | Direct push | docs: align roadmap with shipped foundations | `0df245a` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | docs: document vendor JSON media types | `696fd3d` |
 | 2026-07-24 | Direct push | test: cover account recovery fixture directly | `20c850b` |
 | 2026-07-24 | Direct push | docs: explain JSON source exports | `fb65e89` |
-| 2026-07-24 | Direct push | feat: accept JSON source exports | `cd99c42` |
 
