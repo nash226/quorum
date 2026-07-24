@@ -904,6 +904,37 @@ try {
   rmSync(batchStdinTempDir, { recursive: true, force: true });
 }
 
+const batchLabelTempDir = mkdtempSync(join(tmpdir(), "quorum-package-batch-labels-"));
+try {
+  const batchSourceDir = join(batchLabelTempDir, "sources");
+  const firstAnswerPath = join(batchLabelTempDir, "first.md");
+  const secondAnswerPath = join(batchLabelTempDir, "second.md");
+  mkdirSync(batchSourceDir);
+  writeFileSync(firstAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(secondAnswerPath, "Refunds are available within 30 days of purchase.\n");
+  writeFileSync(join(batchSourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\nRefunds are available within 30 days of purchase.\n");
+
+  const batchLabelResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch",
+    "--answer", firstAnswerPath, "--answer-label", "HR packet",
+    "--answer", secondAnswerPath, "--answer-label", "Support packet",
+    "--source-dir", batchSourceDir, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    batchLabelResult.answerCount !== 2 ||
+    JSON.stringify(batchLabelResult.answers?.map(({ answerPath, answerLabel }) => ({ answerPath, answerLabel }))) !==
+      JSON.stringify([
+        { answerPath: firstAnswerPath, answerLabel: "HR packet" },
+        { answerPath: secondAnswerPath, answerLabel: "Support packet" },
+      ]) ||
+    batchLabelResult.answers?.some(({ report }) => report?.answerLabel === undefined)
+  ) {
+    throw new Error("Package artifact CLI did not preserve explicit batch answer labels and order.");
+  }
+} finally {
+  rmSync(batchLabelTempDir, { recursive: true, force: true });
+}
+
 const reviewQueueTempDir = mkdtempSync(join(tmpdir(), "quorum-package-review-queue-"));
 try {
   const reviewCsvPath = join(reviewQueueTempDir, "review.csv");
