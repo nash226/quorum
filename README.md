@@ -18,6 +18,8 @@ markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
 policy tables are also reduced to row-level claims, including tables that omit
 the optional outer pipe characters.
+Fullwidth list punctuation is normalized too, so localized exports such as
+`１．` and `۲．` do not leak ordering markers into reviewer claims.
 Short punctuated policy claims are also preserved across Unicode scripts, so
 concise localized answers remain available for verification and review.
 Unicode checkbox markers (`☐`, `☑`, and `☒`) are also normalized when answers

@@ -100,6 +100,16 @@ test("strips fullwidth numbered-list markers from localized exports", () => {
   ]);
 });
 
+test("strips fullwidth punctuation from localized numbered-list markers", () => {
+  const claims = extractClaims(`１． Employees receive 12 weeks of paid parental leave.
+۲． Healthcare coverage begins after 30 days of employment.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Healthcare coverage begins after 30 days of employment.",
+  ]);
+});
+
 test("strips bracketed numbered-list markers from exported answers", () => {
   const claims = extractClaims(`[1] Employees receive 12 weeks of paid parental leave.
 [2] Healthcare coverage begins after 30 days of employment.`);
