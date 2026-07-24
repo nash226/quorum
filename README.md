@@ -38,6 +38,24 @@ npm run dev -- verify \
   --json
 ```
 
+For agent integrations, run the local HTTP service and use its discovery
+contract before sending verification requests:
+
+```bash
+npm run dev -- serve --port 3000
+curl http://127.0.0.1:3000/health
+curl http://127.0.0.1:3000/openapi.json
+curl -X POST http://127.0.0.1:3000/verify \
+  -H 'content-type: application/json' \
+  -d '{"answer":"Employees receive 12 weeks of paid parental leave.","sources":[{"sourcePath":"hr-policy.md","content":"Employees receive 12 weeks of paid parental leave."}]}'
+```
+
+HTTP responses include a request correlation ID, and `/openapi.json` is the
+machine-readable source of truth for request and response schemas. The service
+also exposes `/verify-batch`, `/import-review`, `/review-queue`,
+`/extract-claims`, and `/evaluate`; run `npm run dev -- serve --help` for the
+full endpoint list and local configuration options.
+
 `npm run check` is the full local release gate: it runs tests and the TypeScript
 build, then smoke-checks the HTTP API and packaged CLI before enforcing the
 checked-in evaluation score and mismatch thresholds.
