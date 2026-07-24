@@ -117,6 +117,10 @@ The packaged CLI command map is:
 | `openapi` | Export the machine-readable API contract. |
 | `version` | Probe the CLI and API contract version. |
 
+The generated [status page](docs/status.md) is refreshed from the default
+branch after shipped changes, so its capability, roadmap, and recent-shipment
+snapshot can be used as a quick release-truth check.
+
 Every command supports `--help` and `-h`; `quorum help <command>` is also
 available for scripted onboarding. Use `--result-json` when an integration
 needs `shouldFail` and `failVerdicts` alongside a report, and use `--answer -`
