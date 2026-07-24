@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `db03d20` on 2026-07-24, feat: preserve batch fail policy in reports
+- Latest shipped change: `4429572` on 2026-07-24, test: smoke-check batch HTTP fail policy
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | test: smoke-check batch HTTP fail policy | `4429572` |
 | 2026-07-24 | Direct push | feat: preserve batch fail policy in reports | `db03d20` |
 | 2026-07-24 | Direct push | test: smoke-check packaged empty source rejection | `ca56ae6` |
 | 2026-07-24 | Direct push | test: cover packaged queue domain filters | `bccdfe6` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | docs: document CLI version aliases | `f08ffa6` |
 | 2026-07-24 | [#917](https://github.com/nash226/quorum/pull/917) | docs: expose complete top-level CLI options | `e7d1265` |
 | 2026-07-24 | Direct push | test: smoke-check packaged reviewer queue | `9b73073` |
-| 2026-07-24 | Direct push | test: smoke-check batch aggregate summary | `a6046e9` |
 
