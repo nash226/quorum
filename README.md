@@ -50,6 +50,10 @@ structured `error` and `requestId` fields as other HTTP validation failures.
 Use `--generated-at <timestamp>` when a batch run needs one caller-owned audit
 timestamp across every answer and exported reviewer artifact.
 
+The packaged smoke gate verifies both PDF and DOCX ingestion for answers and
+approved sources after every build, so binary policy workflows have the same
+release-level coverage as Markdown and HTML inputs.
+
 For an agent or workflow runner that needs JSON over HTTP, start the local API
 and probe its published capability contract:
 
