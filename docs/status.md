@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cd99c42` on 2026-07-24, feat: accept JSON source exports
+- Latest shipped change: `fb65e89` on 2026-07-24, docs: explain JSON source exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | docs: explain JSON source exports | `fb65e89` |
 | 2026-07-24 | Direct push | feat: accept JSON source exports | `cd99c42` |
 | 2026-07-24 | Direct push | test: smoke-check packaged evaluation reports | `947324a` |
 | 2026-07-24 | Direct push | test: smoke-check packaged batch CLI | `15216a1` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: smoke-check packaged claim provenance | `760d966` |
 | 2026-07-24 | Direct push | feat: preserve CLI claim preview provenance | `4a2b915` |
 | 2026-07-24 | [#950](https://github.com/nash226/quorum/pull/950) | docs: explain shipped review loop | `93c5997` |
-| 2026-07-24 | Direct push | test: preserve claim preview provenance | `ce05b79` |
 
