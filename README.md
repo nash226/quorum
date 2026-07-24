@@ -47,6 +47,8 @@ filters. The packaged HTTP claim-preview check also covers Markdown table rows,
 so the published artifact keeps table headers and separators out of claims. It
 also verifies that `/extract-claims` returns caller-supplied `answerPath` and
 `answerLabel` values, preserving provenance for reviewer and workflow clients.
+The CLI `extract-claims --result-json` and `--result-json-out` formats now carry
+the same answer provenance while keeping the legacy `--json` claims-only format.
 
 ```bash
 npm install

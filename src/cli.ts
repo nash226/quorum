@@ -485,13 +485,18 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 async function runExtractClaims(args: string[]): Promise<void> {
   const parsed = parseExtractClaimsArgs(args);
   const result = extractClaimsResult(await readTextInput(parsed.answerPath));
+  const resultWithProvenance = {
+    ...result,
+    answerPath: parsed.answerPath,
+    ...(parsed.answerLabel ? { answerLabel: parsed.answerLabel } : {}),
+  };
 
   if (parsed.resultJsonOutPath) {
-    await writeReportFile(parsed.resultJsonOutPath, JSON.stringify(result, null, 2));
+    await writeReportFile(parsed.resultJsonOutPath, JSON.stringify(resultWithProvenance, null, 2));
   }
 
   if (parsed.resultJson) {
-    console.log(JSON.stringify(result, null, 2));
+    console.log(JSON.stringify(resultWithProvenance, null, 2));
     return;
   }
 
