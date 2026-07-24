@@ -5109,6 +5109,41 @@ test("HTTP API verifies DOCX answer and source bytes sent as base64 JSON content
   }
 });
 
+test("HTTP API verifies JSON source exports sent as inline content", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid leave.",
+        sources: [
+          {
+            sourcePath: "exports/leave-policy.json",
+            content: JSON.stringify({ policy: "Employees receive 12 weeks of paid leave." }),
+            title: "Leave policy export",
+            trustLevel: "high",
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as Awaited<ReturnType<typeof verifyAnswerContentsResult>>;
+    assert.equal(result.report.sources[0]?.sourcePath, "exports/leave-policy.json");
+    assert.equal(result.report.sources[0]?.title, "Leave policy export");
+    assert.deepEqual(result.report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API rejects malformed or ambiguous base64 content fields", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

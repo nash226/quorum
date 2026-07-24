@@ -526,6 +526,9 @@ evaluation commands are in [docs/cli-guide.md](docs/cli-guide.md).
 Pipeline integrations can also stream one approved Markdown or text source via
 `--source -` when the answer is supplied from a file:
 
+The HTTP API accepts JSON knowledge-base exports as inline approved source
+content as well, preserving the export path and title in the evidence report.
+
 ```bash
 cat approved-policy.md | npm run dev -- verify --answer generated-answer.md --source - --json
 ```
