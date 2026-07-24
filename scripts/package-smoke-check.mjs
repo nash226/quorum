@@ -439,6 +439,7 @@ try {
 const batchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-batch-"));
 try {
   const answerDir = join(batchTempDir, "answers");
+  const aggregateSummaryCsvPath = join(batchTempDir, "batch-aggregate-summary.csv");
   mkdirSync(answerDir);
   writeFileSync(join(answerDir, "verified.md"), "Employees receive 12 weeks of paid parental leave.\n");
   writeFileSync(join(answerDir, "empty.md"), "Thanks!\n");
@@ -449,6 +450,8 @@ try {
     answerDir,
     "--source",
     fileURLToPath(new URL("examples/sources/hr-policy.md", packageRoot)),
+    "--aggregate-summary-csv-out",
+    aggregateSummaryCsvPath,
     "--result-json",
   ], { encoding: "utf8" }));
   if (
@@ -458,6 +461,10 @@ try {
     batchResult.report?.summary?.verified !== 1
   ) {
     throw new Error("Package artifact CLI did not preserve the expected batch verification contract.");
+  }
+  const aggregateSummaryCsv = readFileSync(aggregateSummaryCsvPath, "utf8");
+  if (!/^generated_at,answer_count,answers_with_claims,answers_without_claims,answers_with_failures,total_claims,verified,contradicted,unsupported,needs_review,source_count,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids\n[^\n]+,2,1,1,0,1,1,0,0,0,1,/.test(aggregateSummaryCsv)) {
+    throw new Error("Package artifact CLI did not preserve the batch aggregate summary CSV contract.");
   }
 } finally {
   rmSync(batchTempDir, { recursive: true, force: true });
