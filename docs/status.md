@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `696fd3d` on 2026-07-24, docs: document vendor JSON media types
+- Latest shipped change: `d19f4a3` on 2026-07-24, docs: list JSON local source format
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | docs: list JSON local source format | `d19f4a3` |
 | 2026-07-24 | Direct push | docs: document vendor JSON media types | `696fd3d` |
 | 2026-07-24 | Direct push | test: cover account recovery fixture directly | `20c850b` |
 | 2026-07-24 | Direct push | docs: explain JSON source exports | `fb65e89` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: smoke-check packaged evaluation reports | `947324a` |
 | 2026-07-24 | Direct push | test: smoke-check packaged batch CLI | `15216a1` |
 | 2026-07-24 | Direct push | feat: include source context in batch text reports | `48048b7` |
-| 2026-07-24 | Direct push | test: smoke-check packaged claim provenance | `760d966` |
 
