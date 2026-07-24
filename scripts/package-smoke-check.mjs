@@ -26,6 +26,13 @@ const libraryEntry = await import(new URL("dist/src/index.js", packageRoot));
 const serverEntry = await import(new URL("dist/src/api-server.js", packageRoot));
 const cliPath = new URL("dist/src/cli.js", packageRoot);
 
+for (const versionFlag of ["--version", "-v"]) {
+  const versionOutput = execFileSync("node", [fileURLToPath(cliPath), versionFlag], { encoding: "utf8" }).trim();
+  if (versionOutput !== `quorum ${packageJson.version}`) {
+    throw new Error(`Package artifact did not preserve the ${versionFlag} version probe contract.`);
+  }
+}
+
 if (
   typeof libraryEntry.verifyAnswer !== "function" ||
   typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
