@@ -102,10 +102,10 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown, text, exported HTML, JSON exports, PDF, and DOCX
-answers and approved sources. JSON files are treated as inspectable UTF-8
-evidence, so exported knowledge-base payloads can be reviewed without a
-separate conversion step. Use `--source-dir` for a mixed directory of policy
+Verification accepts Markdown, text, exported HTML, JSON exports, XML exports,
+PDF, and DOCX answers and approved sources. JSON and XML files are treated as
+inspectable UTF-8 evidence, so exported knowledge-base payloads can be reviewed
+without a separate conversion step. Use `--source-dir` for a mixed directory of policy
 files;
 answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The

@@ -180,6 +180,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".htm",
   ".pdf",
   ".docx",
+  ".xml",
 ]);
 export const STDIN_ANSWER_PATH = "<stdin>";
 
