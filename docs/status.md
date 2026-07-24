@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9b73073` on 2026-07-24, test: smoke-check packaged reviewer queue
+- Latest shipped change: `e7d1265` on 2026-07-24, docs: expose complete top-level CLI options
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | [#917](https://github.com/nash226/quorum/pull/917) | docs: expose complete top-level CLI options | `e7d1265` |
 | 2026-07-24 | Direct push | test: smoke-check packaged reviewer queue | `9b73073` |
 | 2026-07-24 | Direct push | test: smoke-check batch aggregate summary | `a6046e9` |
 | 2026-07-24 | Direct push | fix: parse markdown tables without outer pipes | `726f643` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | style: preserve CLI help indentation | `00bc77a` |
 | 2026-07-24 | Direct push | docs: expose top-level CLI help map | `507c561` |
 | 2026-07-24 | Direct push | test: smoke-check reviewer queue summary csv | `4c414d5` |
-| 2026-07-24 | Direct push | test: smoke-check single-answer summary csv | `14ee48e` |
 
