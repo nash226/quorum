@@ -848,6 +848,9 @@ reviewer workload and benchmark drift.
 The packaged HTTP smoke gate also verifies browser preflight responses for the
 GET-only discovery, version, OpenAPI, health, readiness, and liveness routes,
 including their allowed headers, origin, cache lifetime, and empty body.
+It also verifies conditional ETag revalidation for bodyless `HEAD` requests on
+the discovery, capabilities, version, and OpenAPI endpoints, so lightweight
+integrations can cache contract metadata safely.
 The HTTP queue overview also rejects unknown `queueStatus` values with a
 structured 400 response, keeping pending, reviewed, and no-claims routing
 explicit for downstream consumers.

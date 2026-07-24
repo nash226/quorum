@@ -78,6 +78,22 @@ try {
     throw new Error("Package artifact server did not preserve the bodyless discovery HEAD contract.");
   }
 
+  for (const path of ["/", "/capabilities", "/version", "/openapi.json"]) {
+    const headResponse = await fetch(`${packagedServer.url}${path}`, { method: "HEAD" });
+    const etag = headResponse.headers.get("etag");
+    if (headResponse.status !== 200 || !etag || (await headResponse.text()) !== "") {
+      throw new Error(`Package artifact server did not expose a cacheable bodyless HEAD response for ${path}.`);
+    }
+
+    const revalidatedResponse = await fetch(`${packagedServer.url}${path}`, {
+      method: "HEAD",
+      headers: { "if-none-match": etag },
+    });
+    if (revalidatedResponse.status !== 304 || revalidatedResponse.headers.get("etag") !== etag || (await revalidatedResponse.text()) !== "") {
+      throw new Error(`Package artifact server did not preserve conditional HEAD revalidation for ${path}.`);
+    }
+  }
+
   const versionResponse = await fetch(`${packagedServer.url}/version`);
   if (versionResponse.status !== 200 || (await versionResponse.json()).service !== "quorum") {
     throw new Error("Package artifact server did not serve the expected version contract.");
