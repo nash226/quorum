@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1fe1347` on 2026-07-24, Merged after hosted CI passed.
+- Latest shipped change: `02be6e6` on 2026-07-24, test: cover packaged readiness query aliases
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | test: cover packaged readiness query aliases | `02be6e6` |
 | 2026-07-24 | [#906](https://github.com/nash226/quorum/pull/906) | Merged after hosted CI passed. | `1fe1347` |
 | 2026-07-24 | Direct push | docs: clarify shipped roadmap foundations | `6eca99a` |
 | 2026-07-22 | Direct push | test: cover malformed JSON API errors | `3e2c16a` |
@@ -55,5 +56,4 @@
 | 2026-07-22 | Direct push | test: cover empty API source directories | `75a3384` |
 | 2026-07-22 | Direct push | test: cover packaged discovery preflight | `1ef8a82` |
 | 2026-07-22 | Direct push | fix: accept help flag for help topic | `8928584` |
-| 2026-07-22 | Direct push | docs: document in-memory batch verification results | `3cfec9c` |
 
