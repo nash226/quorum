@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `160b8fd` on 2026-07-24, test: preserve packaged batch answer labels
+- Latest shipped change: `f156e93` on 2026-07-24, docs: list supported document formats
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | docs: list supported document formats | `f156e93` |
 | 2026-07-24 | Direct push | test: preserve packaged batch answer labels | `160b8fd` |
 | 2026-07-24 | [#940](https://github.com/nash226/quorum/pull/940) | test: cover packaged batch source IDs | `dba14e7` |
 | 2026-07-24 | [#939](https://github.com/nash226/quorum/pull/939) | fix: normalize fullwidth list punctuation | `9a70cf2` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | fix: preserve explicit IDs for DOCX sources | `5b10008` |
 | 2026-07-24 | [#936](https://github.com/nash226/quorum/pull/936) | docs: explain capabilities head probes | `ce13614` |
 | 2026-07-24 | Direct push | fix: preserve localized short claims | `b10cb14` |
-| 2026-07-24 | Direct push | docs: clarify explicit source selection | `5b4e05d` |
 
