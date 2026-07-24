@@ -580,21 +580,36 @@ for (const command of [
 const extractClaimsTempDir = mkdtempSync(join(tmpdir(), "quorum-package-extract-claims-"));
 try {
   const extractClaimsAnswerPath = join(extractClaimsTempDir, "answer.md");
+  const extractClaimsResultPath = join(extractClaimsTempDir, "claims-result.json");
   writeFileSync(extractClaimsAnswerPath, "1. Employees receive 12 weeks of paid parental leave.\n");
   const extractClaimsResult = JSON.parse(execFileSync(process.execPath, [
     fileURLToPath(cliPath),
     "extract-claims",
     "--answer",
     extractClaimsAnswerPath,
+    "--answer-label",
+    "Packaged claim preview",
+    "--result-json-out",
+    extractClaimsResultPath,
     "--result-json",
   ], { encoding: "utf8" }));
+  const extractClaimsResultFile = JSON.parse(readFileSync(extractClaimsResultPath, "utf8"));
   if (
     extractClaimsResult.answerHasClaims !== true ||
+    extractClaimsResult.answerPath !== extractClaimsAnswerPath ||
+    extractClaimsResult.answerLabel !== "Packaged claim preview" ||
     extractClaimsResult.claims?.length !== 1 ||
     extractClaimsResult.claims[0]?.id !== "claim_1" ||
     extractClaimsResult.claims[0]?.text !== "Employees receive 12 weeks of paid parental leave."
   ) {
     throw new Error("Package artifact CLI did not preserve the expected claim extraction contract.");
+  }
+  if (
+    extractClaimsResultFile.answerPath !== extractClaimsAnswerPath ||
+    extractClaimsResultFile.answerLabel !== "Packaged claim preview" ||
+    extractClaimsResultFile.claims?.[0]?.id !== "claim_1"
+  ) {
+    throw new Error("Package artifact CLI did not preserve claim preview provenance in the result file.");
   }
 } finally {
   rmSync(extractClaimsTempDir, { recursive: true, force: true });
