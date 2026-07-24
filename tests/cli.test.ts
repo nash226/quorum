@@ -2106,6 +2106,28 @@ test("verify discovers JSON sources in source directories", async () => {
   }
 });
 
+test("verify discovers CSV sources and matches normalized rows", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-csv-source-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(tempDir, "answer.md");
+    await mkdir(sourceDir, { recursive: true });
+    await writeFile(answerPath, "Parental leave is limited to 12 weeks.\n", "utf8");
+    await writeFile(join(sourceDir, "benefits.csv"), "policy,limit\nParental leave,12 weeks\n", "utf8");
+
+    const report = JSON.parse(await runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir, "--json"])) as {
+      sources: Array<{ title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.sources[0]?.title, "benefits");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch returns an aggregate report for each answer file", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-"));
 

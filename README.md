@@ -99,8 +99,9 @@ local API, and evaluation gates as shipped foundations; durable queue
 persistence and the dashboard boundary remain an explicit product decision
 rather than an unscoped implementation task.
 
-Verification accepts Markdown, text, exported HTML, PDF, and DOCX answers and
-approved sources. Use `--source-dir` for a mixed directory of policy files;
+Verification accepts Markdown, text, exported HTML, PDF, DOCX, JSON, and CSV
+answers and approved sources. Use `--source-dir` for a mixed directory of
+policy files;
 answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
 CLI also deduplicates repeated source paths, keeping each approved document
@@ -122,6 +123,10 @@ are evaluated first and directory-discovered sources are appended. That keeps
 curated policy order stable while still allowing a shared source directory.
 The HTTP `verify` endpoint accepts PDF and DOCX answer/source bytes as base64
 JSON content, preserving the supplied paths and source metadata in its result.
+
+CSV source exports are treated as approved evidence tables: the first row is
+used as column headings, and each later row is normalized into searchable
+`heading: value` fields while preserving quoted commas.
 The HTTP `verify-batch` endpoint also preserves caller-supplied source IDs in
 both the batch and per-answer reports, keeping evidence references durable for
 multi-answer workflow consumers.
