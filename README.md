@@ -211,6 +211,22 @@ The packaged CLI command map is:
 | `openapi` | Export the machine-readable API contract. |
 | `version` | Probe the CLI and API contract version. |
 
+For a compact command-line reference, the shipped entry points are:
+
+```text
+quorum verify --answer <path|-> (--source <path> | --source-dir <path>) ...
+quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) ...
+quorum extract-claims --answer <path|-> [--json|--result-json]
+quorum import-review --review-csv <path|-> [--json|--result-json]
+quorum review-queue --review-csv <path|-> [--queue-status <status>] [--json]
+quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--json|--result-json]
+quorum serve [--host <host>] [--port <port>]
+quorum openapi [--json|--yaml] [--out <path>]
+quorum version
+```
+
+Run `quorum <command> --help` for the complete option list and examples.
+
 The version probe is also available as `quorum --version` and `quorum -v`,
 which is useful for installation checks that do not use a subcommand.
 The packaged smoke gate executes both aliases after build, so published
