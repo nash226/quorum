@@ -586,6 +586,15 @@ test("serve --help prints API usage without starting the server", async () => {
   assert.match(result.stdout, /POST \/import-review\s+Import reviewer CSV content from JSON request content/);
 });
 
+test("top-level help exposes the full serve configuration surface", async () => {
+  const result = await runCliAllowFailure(["--help"]);
+
+  assert.match(
+    result.stdout,
+    /quorum serve \[--host <host>\] \[--port <port>\] \[--max-request-bytes <bytes>\] \[--request-timeout-ms <milliseconds>\] \[--cors-origin <origin>\]/,
+  );
+});
+
 test("serve rejects non-positive request timeout values", async () => {
   const result = await runCliAllowFailure(["serve", "--request-timeout-ms", "0"]);
 

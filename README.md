@@ -60,6 +60,8 @@ curl -fsS http://127.0.0.1:3000/capabilities
 
 The [HTTP integration guide](docs/api-integration.md) covers verification,
 reviewer-queue, health, readiness, liveness, and OpenAPI discovery endpoints.
+The top-level `quorum --help` synopsis also exposes the server's request-limit,
+timeout, and CORS flags for deployment-script discovery.
 
 Node.js workers can use the built package directly when starting an HTTP server
 would add unnecessary overhead. The public `quorum` entrypoint exposes the same
