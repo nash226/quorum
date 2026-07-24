@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f156e93` on 2026-07-24, docs: list supported document formats
+- Latest shipped change: `4f9ca02` on 2026-07-24, docs: explain the CI verification gate
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | docs: explain the CI verification gate | `4f9ca02` |
 | 2026-07-24 | Direct push | docs: list supported document formats | `f156e93` |
 | 2026-07-24 | Direct push | test: preserve packaged batch answer labels | `160b8fd` |
 | 2026-07-24 | [#940](https://github.com/nash226/quorum/pull/940) | test: cover packaged batch source IDs | `dba14e7` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | fix: normalize unicode checkbox claims | `ae4fe50` |
 | 2026-07-24 | Direct push | fix: preserve explicit IDs for DOCX sources | `5b10008` |
 | 2026-07-24 | [#936](https://github.com/nash226/quorum/pull/936) | docs: explain capabilities head probes | `ce13614` |
-| 2026-07-24 | Direct push | fix: preserve localized short claims | `b10cb14` |
 
