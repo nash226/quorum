@@ -474,6 +474,9 @@ The packaged smoke check also covers the same malformed-body contract across
 POST route preserves the same safe client-error boundary.
 It also verifies that every JSON POST route rejects non-JSON content types with
 the same structured `415` response and preserves caller-supplied request IDs.
+JSON POST routes also accept vendor media types such as
+`application/vnd.quorum+json`, so API gateways can add a versioned content type
+without losing the normal request validation and correlation contract.
 The packaged smoke check exercises browser preflight across all six POST
 route, keeping CORS method, header, origin, cache, and bodyless-response
 contracts aligned as new JSON endpoints are added.
