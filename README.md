@@ -121,6 +121,9 @@ The packaged CLI command map is:
 | `openapi` | Export the machine-readable API contract. |
 | `version` | Probe the CLI and API contract version. |
 
+The version probe is also available as `quorum --version` and `quorum -v`,
+which is useful for installation checks that do not use a subcommand.
+
 Every command supports `--help` and `-h`; `quorum help <command>` is also
 available for scripted onboarding. Use `--result-json` when an integration
 needs `shouldFail` and `failVerdicts` alongside a report, and use `--answer -`
