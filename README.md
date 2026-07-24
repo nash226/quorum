@@ -73,6 +73,9 @@ The roadmap now treats reviewer queues and the local API as shipped foundations;
 the next persistence and dashboard boundary remains an explicit product
 decision rather than an unscoped implementation task.
 
+For a focused source checkout check, run `npm test && npm run build`; use
+`npm run check` before publishing or handing off a release candidate.
+
 Verification accepts Markdown, text, exported HTML, PDF, and DOCX answers and
 approved sources. Use `--source-dir` for a mixed directory of policy files;
 answer and source directories are searched recursively, so nested policy or
