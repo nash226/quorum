@@ -77,6 +77,8 @@ curl -fsS http://127.0.0.1:3000/capabilities
 
 The [HTTP integration guide](docs/api-integration.md) covers verification,
 reviewer-queue, health, readiness, liveness, and OpenAPI discovery endpoints.
+The packaged HTTP smoke gate also evaluates an inline HR fixture with a domain
+filter, keeping published scorecard and generated-timestamp behavior covered.
 
 Node.js workers can use the built package directly when starting an HTTP server
 would add unnecessary overhead. The public `quorum` entrypoint exposes the same
