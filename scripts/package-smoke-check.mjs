@@ -650,6 +650,29 @@ try {
   rmSync(stdinAnswerTempDir, { recursive: true, force: true });
 }
 
+const generatedAtTempDir = mkdtempSync(join(tmpdir(), "quorum-package-generated-at-"));
+try {
+  const generatedAtSourceDir = join(generatedAtTempDir, "sources");
+  mkdirSync(generatedAtSourceDir);
+  writeFileSync(join(generatedAtSourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n");
+  const generatedAtResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", "-", "--source-dir", generatedAtSourceDir,
+    "--generated-at", "2026-07-24T00:00:00.000Z", "--json",
+  ], {
+    encoding: "utf8",
+    input: "Employees receive 12 weeks of paid parental leave.\n",
+  }));
+  if (
+    generatedAtResult.summary?.verified !== 1 ||
+    generatedAtResult.generatedAt !== "2026-07-24T00:00:00.000Z" ||
+    generatedAtResult.report?.generatedAt !== "2026-07-24T00:00:00.000Z"
+  ) {
+    throw new Error("Package artifact CLI did not preserve the single-answer generated-at contract.");
+  }
+} finally {
+  rmSync(generatedAtTempDir, { recursive: true, force: true });
+}
+
 const batchStdinTempDir = mkdtempSync(join(tmpdir(), "quorum-package-batch-stdin-answer-"));
 try {
   const batchSourceDir = join(batchStdinTempDir, "sources");
