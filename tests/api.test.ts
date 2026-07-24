@@ -143,7 +143,7 @@ import { createSimplePdf } from "./pdf-test-helpers.js";
 
 test("programmatic API exposes supported source and answer extensions", () => {
   assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx", ".json", ".xml"]);
-  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx"]);
+  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx", ".xml"]);
 });
 
 test("API discovery exposes transport limits and supported methods", () => {
@@ -944,6 +944,7 @@ test("programmatic API resolves source and answer paths in CLI order", async () 
     const explicitSourcePath = join(tempDir, "explicit-source.md");
     const directoryAnswerPath = join(answerDir, "a-answer.md");
     const nestedAnswerPath = join(nestedAnswerDir, "b-answer.txt");
+    const xmlAnswerPath = join(nestedAnswerDir, "c-answer.xml");
     const directorySourcePath = join(sourceDir, "a-source.md");
     const nestedSourcePath = join(nestedSourceDir, "b-source.html");
 
@@ -955,6 +956,7 @@ test("programmatic API resolves source and answer paths in CLI order", async () 
       writeFile(explicitAnswerPath, "Explicit answer.\n", "utf8"),
       writeFile(directoryAnswerPath, "Directory answer.\n", "utf8"),
       writeFile(nestedAnswerPath, "Nested answer.\n", "utf8"),
+      writeFile(xmlAnswerPath, "<answer>XML answer.</answer>\n", "utf8"),
       writeFile(explicitSourcePath, "Explicit source.\n", "utf8"),
       writeFile(directorySourcePath, "Directory source.\n", "utf8"),
       writeFile(
@@ -966,7 +968,7 @@ test("programmatic API resolves source and answer paths in CLI order", async () 
 
     assert.deepEqual(
       await resolveAnswerPaths([explicitAnswerPath], [answerDir]),
-      [explicitAnswerPath, directoryAnswerPath, nestedAnswerPath],
+      [explicitAnswerPath, directoryAnswerPath, nestedAnswerPath, xmlAnswerPath],
     );
     assert.deepEqual(
       await resolveSourcePaths([explicitSourcePath], [sourceDir]),
