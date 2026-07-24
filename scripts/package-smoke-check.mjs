@@ -147,6 +147,14 @@ try {
     }
   }
 
+  for (const [path, query] of [["/healthz", "probe=readiness"], ["/readyz", "probe=kubernetes"]]) {
+    const aliasResponse = await fetch(`${packagedServer.url}${path}?${query}`);
+    const aliasPayload = await aliasResponse.json();
+    if (aliasResponse.status !== 200 || aliasPayload.service !== "quorum" || aliasPayload.ok !== true) {
+      throw new Error(`Package artifact server did not preserve the ${path} query probe contract.`);
+    }
+  }
+
   const verifyResponse = await fetch(`${packagedServer.url}/verify`, {
     method: "POST",
     headers: { "content-type": "application/json" },
