@@ -99,8 +99,11 @@ local API, and evaluation gates as shipped foundations; durable queue
 persistence and the dashboard boundary remain an explicit product decision
 rather than an unscoped implementation task.
 
-Verification accepts Markdown, text, exported HTML, PDF, and DOCX answers and
-approved sources. Use `--source-dir` for a mixed directory of policy files;
+Verification accepts Markdown, text, exported HTML, JSON exports, PDF, and DOCX
+answers and approved sources. JSON files are treated as inspectable UTF-8
+evidence, so exported knowledge-base payloads can be reviewed without a
+separate conversion step. Use `--source-dir` for a mixed directory of policy
+files;
 answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
 CLI also deduplicates repeated source paths, keeping each approved document

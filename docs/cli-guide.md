@@ -9,7 +9,7 @@ This concise index is the source for the generated capability snapshot in
 `docs/status.md`. Detailed context and examples remain in this guide and the
 linked workflow documents.
 
-- read Markdown, text, HTML, PDF, and DOCX answers and approved sources
+- read Markdown, text, HTML, JSON, PDF, and DOCX answers and approved sources
 - discover approved sources from explicit paths or directories
 - load source titles, freshness, trust levels, and durable source IDs
 - extract normalized atomic claims, including common exported-answer formats
@@ -55,9 +55,24 @@ npm run dev -- verify \
   --summary-csv-out reports/hr-summary.csv
 ```
 
-Supported answer and source files include Markdown, text, exported HTML, PDF,
-and DOCX. Use `--source-dir` for a directory of approved sources and
+Supported answer and source files include Markdown, text, exported HTML, JSON,
+PDF, and DOCX. JSON source exports are preserved as UTF-8 evidence text, which
+keeps structured knowledge-base payloads inspectable in the normal report
+outputs. Use `--source-dir` for a directory of approved sources and
 `--default-trust-level high` when sources do not carry trust metadata.
+
+For example, a JSON export can be verified directly from a mixed source
+directory:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source-dir exported-policies \
+  --json
+```
+
+The JSON file's basename becomes its fallback source title, while its contents
+remain available in matching evidence snippets.
 
 Use `--json` for the report-only machine-readable shape. Use `--result-json`
 or `--result-json-out <path>` when a workflow also needs `shouldFail` and
