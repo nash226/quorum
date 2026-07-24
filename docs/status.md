@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cef9885` on 2026-07-24, docs: add HTTP API quickstart
+- Latest shipped change: `86e8fcb` on 2026-07-24, test: gate packaged HTTP evaluation mismatches
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | test: gate packaged HTTP evaluation mismatches | `86e8fcb` |
 | 2026-07-24 | Direct push | docs: add HTTP API quickstart | `cef9885` |
 | 2026-07-24 | Direct push | docs: explain reviewer queue handoff | `1e906e5` |
 | 2026-07-24 | Direct push | test: smoke-check packaged markdown table claims | `e99ab9f` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: cover contract discovery HEAD probes | `14fc8be` |
 | 2026-07-24 | Direct push | test: smoke-check packaged HTTP evaluation | `2f252f8` |
 | 2026-07-24 | Direct push | test: smoke-check batch HTTP fail policy | `4429572` |
-| 2026-07-24 | Direct push | feat: preserve batch fail policy in reports | `db03d20` |
 
