@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e99ab9f` on 2026-07-24, test: smoke-check packaged markdown table claims
+- Latest shipped change: `1e906e5` on 2026-07-24, docs: explain reviewer queue handoff
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | docs: explain reviewer queue handoff | `1e906e5` |
 | 2026-07-24 | Direct push | test: smoke-check packaged markdown table claims | `e99ab9f` |
 | 2026-07-24 | Direct push | test: verify packaged conditional discovery probes | `b088bef` |
 | 2026-07-24 | Direct push | test: cover contract discovery HEAD probes | `14fc8be` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: smoke-check batch HTTP fail policy | `4429572` |
 | 2026-07-24 | Direct push | feat: preserve batch fail policy in reports | `db03d20` |
 | 2026-07-24 | Direct push | test: smoke-check packaged empty source rejection | `ca56ae6` |
-| 2026-07-24 | Direct push | test: cover packaged queue domain filters | `bccdfe6` |
 
