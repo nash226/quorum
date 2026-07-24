@@ -65,7 +65,10 @@ try {
   mkdirSync(answerDir, { recursive: true });
   mkdirSync(sourceDir, { recursive: true });
   writeFileSync(join(answerDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n");
-  writeFileSync(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(
+    join(sourceDir, "policy.json"),
+    JSON.stringify({ policy: "Employees receive 12 weeks of paid parental leave." }),
+  );
 
   const batchOutput = execFileSync(
     "node",
@@ -85,9 +88,10 @@ try {
     batchPayload.summary?.answersWithClaims !== 1 ||
     batchPayload.summary?.answersWithoutClaims !== 0 ||
     batchPayload.answers?.[0]?.answerPath !== join(answerDir, "answer.md") ||
-    batchPayload.answers?.[0]?.report?.sources?.[0]?.sourcePath !== join(sourceDir, "policy.md")
+    batchPayload.answers?.[0]?.report?.sources?.[0]?.sourcePath !== join(sourceDir, "policy.json") ||
+    batchPayload.answers?.[0]?.report?.sources?.[0]?.title !== "policy"
   ) {
-    throw new Error("Package artifact did not preserve the packaged CLI batch verification contract.");
+    throw new Error("Package artifact did not preserve JSON source discovery in the packaged CLI contract.");
   }
 } finally {
   rmSync(cliBatchPackageDir, { recursive: true, force: true });
