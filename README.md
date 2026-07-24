@@ -13,9 +13,6 @@ breaks an answer into claims, compares each claim with source evidence, and
 returns reviewer-ready `verified`, `contradicted`, `unsupported`, or
 `needs_review` verdicts. The first wedge is HR and customer-support policy
 verification, where grounded answers are high-volume and costly to get wrong.
-The evaluation suite now includes a support account-recovery scenario covering
-verified recovery steps, a contradicted identity-verification bypass, and an
-unsupported response-time promise.
 Claim extraction also normalizes bracketed, Arabic-Indic, Persian, and fullwidth ordered-list
 markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
@@ -102,11 +99,9 @@ local API, and evaluation gates as shipped foundations; durable queue
 persistence and the dashboard boundary remain an explicit product decision
 rather than an unscoped implementation task.
 
-Verification accepts Markdown, text, exported HTML, JSON exports, PDF, and DOCX
-answers and approved sources. JSON files are treated as inspectable UTF-8
-evidence, so exported knowledge-base payloads can be reviewed without a
-separate conversion step. Use `--source-dir` for a mixed directory of policy
-files;
+Verification accepts Markdown, text, exported HTML, PDF, DOCX, JSON, and CSV
+answers and approved sources. Use `--source-dir` for a mixed directory of
+policy files;
 answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
 CLI also deduplicates repeated source paths, keeping each approved document
@@ -128,6 +123,10 @@ are evaluated first and directory-discovered sources are appended. That keeps
 curated policy order stable while still allowing a shared source directory.
 The HTTP `verify` endpoint accepts PDF and DOCX answer/source bytes as base64
 JSON content, preserving the supplied paths and source metadata in its result.
+
+CSV source exports are treated as approved evidence tables: the first row is
+used as column headings, and each later row is normalized into searchable
+`heading: value` fields while preserving quoted commas.
 The HTTP `verify-batch` endpoint also preserves caller-supplied source IDs in
 both the batch and per-answer reports, keeping evidence references durable for
 multi-answer workflow consumers.
@@ -477,9 +476,6 @@ The packaged smoke check also covers the same malformed-body contract across
 POST route preserves the same safe client-error boundary.
 It also verifies that every JSON POST route rejects non-JSON content types with
 the same structured `415` response and preserves caller-supplied request IDs.
-JSON POST routes also accept vendor media types such as
-`application/vnd.quorum+json`, so API gateways can add a versioned content type
-without losing the normal request validation and correlation contract.
 The packaged smoke check exercises browser preflight across all six POST
 route, keeping CORS method, header, origin, cache, and bodyless-response
 contracts aligned as new JSON endpoints are added.
