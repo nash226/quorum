@@ -97,6 +97,21 @@ if (result.shouldFail) {
 The stable source `id` is carried into evidence and reviewer artifacts, so
 workers can keep audit identity independent of temporary file paths.
 
+When an approved document already has a durable identity, preserve it in CLI
+reports with `--source-id`:
+
+```bash
+npm run dev -- verify \
+  --answer answers/customer-response.md \
+  --source policy/returns-policy.md \
+  --source-id support/returns-policy@2026-07-15 \
+  --json
+```
+
+Use one `--source-id` immediately after each explicit `--source`; directory
+discovery continues to assign positional IDs. This keeps evidence and
+reviewer exports traceable when source file paths change.
+
 The packaged CLI command map is:
 
 | Command | Use it to |
