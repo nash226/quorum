@@ -572,6 +572,7 @@ const batchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-batch-"));
 try {
   const answerDir = join(batchTempDir, "answers");
   const aggregateSummaryCsvPath = join(batchTempDir, "batch-aggregate-summary.csv");
+  const sourcePath = fileURLToPath(new URL("examples/sources/hr-policy.md", packageRoot));
   mkdirSync(answerDir);
   writeFileSync(join(answerDir, "verified.md"), "Employees receive 12 weeks of paid parental leave.\n");
   writeFileSync(join(answerDir, "empty.md"), "Thanks!\n");
@@ -581,7 +582,9 @@ try {
     "--answer-dir",
     answerDir,
     "--source",
-    fileURLToPath(new URL("examples/sources/hr-policy.md", packageRoot)),
+    sourcePath,
+    "--source-id",
+    "people-ops/hr-policy@2026-07-24",
     "--aggregate-summary-csv-out",
     aggregateSummaryCsvPath,
     "--result-json",
@@ -590,12 +593,13 @@ try {
     batchResult.shouldFail !== false ||
     batchResult.report?.summary?.answersWithClaims !== 1 ||
     batchResult.report?.summary?.answersWithoutClaims !== 1 ||
-    batchResult.report?.summary?.verified !== 1
+    batchResult.report?.summary?.verified !== 1 ||
+    batchResult.report?.sources?.[0]?.id !== "people-ops/hr-policy@2026-07-24"
   ) {
     throw new Error("Package artifact CLI did not preserve the expected batch verification contract.");
   }
   const aggregateSummaryCsv = readFileSync(aggregateSummaryCsvPath, "utf8");
-  if (!/^generated_at,answer_count,answers_with_claims,answers_without_claims,answers_with_failures,total_claims,verified,contradicted,unsupported,needs_review,source_count,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids\n[^\n]+,2,1,1,0,1,1,0,0,0,1,/.test(aggregateSummaryCsv)) {
+  if (!/^generated_at,answer_count,answers_with_claims,answers_without_claims,answers_with_failures,total_claims,verified,contradicted,unsupported,needs_review,source_count,source_titles,source_trust_levels,source_updated_at,source_paths,source_ids\n[^\n]+,2,1,1,0,1,1,0,0,0,1,[^\n]*people-ops\/hr-policy@2026-07-24/.test(aggregateSummaryCsv)) {
     throw new Error("Package artifact CLI did not preserve the batch aggregate summary CSV contract.");
   }
 } finally {
