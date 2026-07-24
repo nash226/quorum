@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9a70cf2` on 2026-07-24, fix: normalize fullwidth list punctuation
+- Latest shipped change: `dba14e7` on 2026-07-24, test: cover packaged batch source IDs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | [#940](https://github.com/nash226/quorum/pull/940) | test: cover packaged batch source IDs | `dba14e7` |
 | 2026-07-24 | [#939](https://github.com/nash226/quorum/pull/939) | fix: normalize fullwidth list punctuation | `9a70cf2` |
 | 2026-07-24 | Direct push | fix: normalize unicode checkbox claims | `ae4fe50` |
 | 2026-07-24 | Direct push | fix: preserve explicit IDs for DOCX sources | `5b10008` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | fix: preserve localized short claims | `b10cb14` |
 | 2026-07-24 | Direct push | docs: clarify explicit source selection | `5b4e05d` |
 | 2026-07-24 | Direct push | test: gate packaged HTTP evaluation mismatches | `86e8fcb` |
-| 2026-07-24 | Direct push | docs: add HTTP API quickstart | `cef9885` |
 
