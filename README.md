@@ -13,6 +13,9 @@ breaks an answer into claims, compares each claim with source evidence, and
 returns reviewer-ready `verified`, `contradicted`, `unsupported`, or
 `needs_review` verdicts. The first wedge is HR and customer-support policy
 verification, where grounded answers are high-volume and costly to get wrong.
+The evaluation suite now includes a support account-recovery scenario covering
+verified recovery steps, a contradicted identity-verification bypass, and an
+unsupported response-time promise.
 Claim extraction also normalizes bracketed, Arabic-Indic, Persian, and fullwidth ordered-list
 markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
