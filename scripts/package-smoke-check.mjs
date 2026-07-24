@@ -621,6 +621,13 @@ try {
   if (openApiDocument.openapi !== "3.1.0" || openApiDocument.info?.title !== "Quorum Local API" || !openApiDocument.paths?.["/verify"]) {
     throw new Error("Package artifact CLI did not write the expected OpenAPI contract.");
   }
+
+  const deployedOpenApi = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "openapi", "--server-url", "https://quorum.example.internal",
+  ], { encoding: "utf8" }));
+  if (deployedOpenApi.servers?.[0]?.url !== "https://quorum.example.internal" || !deployedOpenApi.paths?.["/verify"]) {
+    throw new Error("Package artifact CLI did not preserve the OpenAPI server URL contract.");
+  }
 } finally {
   rmSync(openApiTempDir, { recursive: true, force: true });
 }
