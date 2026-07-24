@@ -606,6 +606,9 @@ The HR benchmark also includes jury-duty leave coverage, keeping a verified
 entitlement, conflicting duration, and unsupported stipend claim reviewable.
 The reviewer-queue regression also tracks the current answer handoff total, so
 fixture coverage and queue summaries stay aligned as the benchmark grows.
+The packed smoke check now enforces the aggregate evaluation summary as well as
+the per-domain totals, so the published 76-fixture benchmark cannot drift while
+its per-fixture rows still appear internally consistent.
 The support benchmark now also covers holiday service hours, preserving the
 published chat schedule while catching an unconditional coverage promise. The
 packed smoke check asserts that this evaluation remains in the generated report.
