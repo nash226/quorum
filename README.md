@@ -36,6 +36,9 @@ npm run dev -- verify \
 build, then smoke-checks the HTTP API and packaged CLI before enforcing the
 checked-in evaluation score and mismatch thresholds.
 
+For a focused source checkout check, run `npm test && npm run build`; use
+`npm run check` before publishing or handing off a release candidate.
+
 Verification accepts Markdown, text, exported HTML, PDF, and DOCX answers and
 approved sources. Use `--source-dir` for a mixed directory of policy files;
 answer and source directories are searched recursively, so nested policy or
