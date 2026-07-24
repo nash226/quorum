@@ -59,6 +59,13 @@ test("strips JSON extensions from fallback source titles", async () => {
   assert.equal(source.content, '{"policy":"Employees get 12 weeks."}');
 });
 
+test("strips XML extensions from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile("docs/policies/benefits.xml", "<policy>Employees get 12 weeks.</policy>", 0);
+
+  assert.equal(source.title, "benefits");
+  assert.equal(source.content, "<policy>Employees get 12 weeks.</policy>");
+});
+
 test("applies the default trust override when metadata is absent", async () => {
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
     defaultTrustLevel: "high",

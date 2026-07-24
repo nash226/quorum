@@ -290,9 +290,9 @@ The packaged CLI smoke gate verifies DOCX answers and approved sources after
 build, so this integration path stays covered for published artifacts.
 The supported local answer and source formats are Markdown (`.md`, `.markdown`),
 plain text (`.txt`), exported HTML (`.html`, `.htm`), PDF (`.pdf`), and Word
-documents (`.docx`), plus JSON exports (`.json`). JSON exports are read as
-inspectable UTF-8 evidence text while preserving their source metadata in
-reports.
+documents (`.docx`), plus JSON (`.json`) and XML (`.xml`) exports. JSON and XML
+exports are read as inspectable UTF-8 evidence text while preserving their
+source metadata in reports.
 Explicit `--source-id` values are preserved for DOCX sources as well as
 Markdown, HTML, PDF, and text sources, keeping evidence identity stable when
 documents move between local files and downstream integrations.
