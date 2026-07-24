@@ -516,6 +516,11 @@ if (!cliHelp.startsWith("Quorum\n\nUsage:") || !cliHelp.includes("quorum verify"
   throw new Error("Package artifact CLI did not return the expected help contract.");
 }
 
+const topLevelHelpAlias = execFileSync(process.execPath, [fileURLToPath(cliPath), "help", "--help"], { encoding: "utf8" });
+if (topLevelHelpAlias !== cliHelp) {
+  throw new Error("Package artifact CLI did not preserve the top-level help alias contract.");
+}
+
 for (const command of [
   "verify",
   "verify-batch",

@@ -47,6 +47,8 @@ npm run dev -- verify \
 `npm run check` is the same full verification gate used by CI: it runs the
 tests and build, then exercises the local HTTP API, packaged CLI artifact, and
 evaluation fixtures before a change is ready to publish.
+The packaged smoke check also keeps `quorum help --help` identical to the
+top-level `quorum --help` output for wrappers that append help flags.
 
 For agent integrations, run the local HTTP service and use its discovery
 contract before sending verification requests:
