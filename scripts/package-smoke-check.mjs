@@ -21,6 +21,7 @@ if (missingFiles.length > 0) {
 }
 
 const packageRoot = new URL("../", import.meta.url);
+const repoRoot = fileURLToPath(packageRoot);
 const libraryEntry = await import(new URL("dist/src/index.js", packageRoot));
 const serverEntry = await import(new URL("dist/src/api-server.js", packageRoot));
 const cliPath = new URL("dist/src/cli.js", packageRoot);
@@ -322,6 +323,11 @@ try {
         "",
       ].join("\n"),
       queueStatus: "reviewed",
+      domains: ["hr"],
+      fixtures: [{
+        fixturePath: join(repoRoot, "examples", "evaluations", "hr-policy.json"),
+        content: readFileSync(join(repoRoot, "examples", "evaluations", "hr-policy.json"), "utf8"),
+      }],
     }),
   });
   const reviewQueuePayload = await reviewQueueResponse.json();
@@ -330,7 +336,10 @@ try {
     reviewQueuePayload.review?.totalAnswers !== 1 ||
     reviewQueuePayload.review?.reviewedAnswers !== 1 ||
     reviewQueuePayload.review?.verdicts?.verified !== 1 ||
-    reviewQueuePayload.queueStatus !== "reviewed"
+    reviewQueuePayload.queueStatus !== "reviewed" ||
+    reviewQueuePayload.domains?.length !== 1 ||
+    reviewQueuePayload.domains[0] !== "hr" ||
+    reviewQueuePayload.evaluation?.fixtureCount !== 1
   ) {
     throw new Error("Package artifact server did not serve the expected reviewer queue contract.");
   }
