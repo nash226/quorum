@@ -291,7 +291,9 @@ update timestamps, and trust levels in verification reports, keeping audit
 metadata stable for downstream consumers.
 The packaged evaluation smoke gate also checks the `--result-json` response,
 keeping `shouldFail`, mismatch totals, and fail-policy metadata available to CI
-callers after installation.
+callers after installation. It also writes and checks the packaged evaluation
+Markdown, HTML, summary CSV, domain summary CSV, and aggregate summary CSV
+artifacts, keeping reviewer-facing benchmark reports covered after installation.
 
 For a CI gate, add `--fail-on contradicted --fail-on unsupported`.
 Use `--fail-on needs_review` when empty or uncertain answers must stop for

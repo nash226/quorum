@@ -835,6 +835,45 @@ if (
   throw new Error("Package artifact CLI did not preserve the evaluation result-json gate contract.");
 }
 
+const evaluationReportDir = mkdtempSync(join(tmpdir(), "quorum-package-evaluation-reports-"));
+try {
+  const markdownPath = join(evaluationReportDir, "evaluation.md");
+  const htmlPath = join(evaluationReportDir, "evaluation.html");
+  const summaryCsvPath = join(evaluationReportDir, "evaluation-summary.csv");
+  const domainSummaryCsvPath = join(evaluationReportDir, "evaluation-domain-summary.csv");
+  const aggregateSummaryCsvPath = join(evaluationReportDir, "evaluation-aggregate-summary.csv");
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath),
+    "evaluate",
+    "--fixture",
+    fileURLToPath(new URL("examples/evaluations/hr-policy.json", packageRoot)),
+    "--markdown-out",
+    markdownPath,
+    "--html-out",
+    htmlPath,
+    "--summary-csv-out",
+    summaryCsvPath,
+    "--domain-summary-csv-out",
+    domainSummaryCsvPath,
+    "--aggregate-summary-csv-out",
+    aggregateSummaryCsvPath,
+  ], { encoding: "utf8" });
+  const reportChecks = [
+    [markdownPath, "# Quorum Evaluation Report", "Markdown"],
+    [htmlPath, "<html", "HTML"],
+    [summaryCsvPath, "generated_at,fixture_name,", "summary CSV"],
+    [domainSummaryCsvPath, "generated_at,domain,", "domain summary CSV"],
+    [aggregateSummaryCsvPath, "generated_at,fixture_count,", "aggregate summary CSV"],
+  ];
+  for (const [reportPath, marker, reportLabel] of reportChecks) {
+    if (!readFileSync(reportPath, "utf8").toLowerCase().includes(marker.toLowerCase())) {
+      throw new Error(`Package artifact did not write the expected evaluation ${reportLabel} contract.`);
+    }
+  }
+} finally {
+  rmSync(evaluationReportDir, { recursive: true, force: true });
+}
+
 const pdfTempDir = mkdtempSync(join(tmpdir(), "quorum-package-pdf-"));
 try {
   const pdfAnswerPath = join(pdfTempDir, "answer.md");
