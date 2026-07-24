@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5b10008` on 2026-07-24, fix: preserve explicit IDs for DOCX sources
+- Latest shipped change: `ae4fe50` on 2026-07-24, fix: normalize unicode checkbox claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | fix: normalize unicode checkbox claims | `ae4fe50` |
 | 2026-07-24 | Direct push | fix: preserve explicit IDs for DOCX sources | `5b10008` |
 | 2026-07-24 | [#936](https://github.com/nash226/quorum/pull/936) | docs: explain capabilities head probes | `ce13614` |
 | 2026-07-24 | Direct push | fix: preserve localized short claims | `b10cb14` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: gate packaged HTTP evaluation mismatches | `86e8fcb` |
 | 2026-07-24 | Direct push | docs: add HTTP API quickstart | `cef9885` |
 | 2026-07-24 | Direct push | docs: explain reviewer queue handoff | `1e906e5` |
-| 2026-07-24 | Direct push | test: smoke-check packaged markdown table claims | `e99ab9f` |
 
