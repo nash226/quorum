@@ -83,6 +83,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseHtmlSource(normalizedContent);
   }
 
+  if (isCsvSource(sourcePath)) {
+    return { metadata: {}, body: normalizeCsvSource(normalizedContent) };
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -186,8 +190,69 @@ function isDocxSource(sourcePath: string): boolean {
   return /\.docx$/i.test(sourcePath);
 }
 
+function isCsvSource(sourcePath: string): boolean {
+  return /\.csv$/i.test(sourcePath);
+}
+
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf|docx|json)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf|docx|json|csv)$/i, "");
+}
+
+function normalizeCsvSource(content: string): string {
+  const rows = parseCsvRows(content.replace(/\r\n/g, "\n"));
+  const [headerRow, ...dataRows] = rows;
+  if (!headerRow || headerRow.length === 0) {
+    return "";
+  }
+
+  return dataRows
+    .map((row) =>
+      headerRow
+        .map((header, index) => {
+          const value = row[index]?.trim() ?? "";
+          return value ? `${header.trim()}: ${value}` : "";
+        })
+        .filter(Boolean)
+        .join("; "),
+    )
+    .filter(Boolean)
+    .join("\n");
+}
+
+function parseCsvRows(content: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let cell = "";
+  let quoted = false;
+
+  for (let index = 0; index < content.length; index += 1) {
+    const character = content[index];
+    const nextCharacter = content[index + 1];
+    if (character === '"') {
+      if (quoted && nextCharacter === '"') {
+        cell += '"';
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
+    } else if (character === "," && !quoted) {
+      row.push(cell);
+      cell = "";
+    } else if (character === "\n" && !quoted) {
+      row.push(cell);
+      rows.push(row);
+      row = [];
+      cell = "";
+    } else {
+      cell += character;
+    }
+  }
+
+  if (cell || row.length > 0) {
+    row.push(cell);
+    rows.push(row);
+  }
+  return rows;
 }
 
 function parseHtmlSource(content: string): ParsedSource {

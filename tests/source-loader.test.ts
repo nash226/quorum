@@ -59,6 +59,15 @@ test("strips JSON extensions from fallback source titles", async () => {
   assert.equal(source.content, '{"policy":"Employees get 12 weeks."}');
 });
 
+test("normalizes CSV rows into searchable source evidence", () => {
+  const parsed = parseSource(
+    "docs/policies/benefits.csv",
+    'policy,limit\n"Parental leave",12 weeks\n"Meal stipend","$50, monthly"\n',
+  );
+
+  assert.equal(parsed.body, "policy: Parental leave; limit: 12 weeks\npolicy: Meal stipend; limit: $50, monthly");
+});
+
 test("applies the default trust override when metadata is absent", async () => {
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
     defaultTrustLevel: "high",

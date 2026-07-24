@@ -128,6 +128,9 @@ are evaluated first and directory-discovered sources are appended. That keeps
 curated policy order stable while still allowing a shared source directory.
 The HTTP `verify` endpoint accepts PDF and DOCX answer/source bytes as base64
 JSON content, preserving the supplied paths and source metadata in its result.
+CSV source exports are treated as approved evidence tables: the first row is
+used as column headings, and each later row is normalized into searchable
+`heading: value` fields while preserving quoted commas.
 The HTTP `verify-batch` endpoint also preserves caller-supplied source IDs in
 both the batch and per-answer reports, keeping evidence references durable for
 multi-answer workflow consumers.
