@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `48048b7` on 2026-07-24, feat: include source context in batch text reports
+- Latest shipped change: `15216a1` on 2026-07-24, test: smoke-check packaged batch CLI
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | test: smoke-check packaged batch CLI | `15216a1` |
 | 2026-07-24 | Direct push | feat: include source context in batch text reports | `48048b7` |
 | 2026-07-24 | Direct push | test: smoke-check packaged claim provenance | `760d966` |
 | 2026-07-24 | Direct push | feat: preserve CLI claim preview provenance | `4a2b915` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: preserve claim preview provenance | `ce05b79` |
 | 2026-07-24 | Direct push | test: smoke-check packaged reviewer queue filters | `66a9027` |
 | 2026-07-24 | Direct push | test: cover packaged top-level help alias | `d1c2127` |
-| 2026-07-24 | Direct push | docs: clarify roadmap foundations | `d83dd82` |
 
