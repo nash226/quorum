@@ -164,6 +164,11 @@ human review; the CLI treats answers with no extracted claims as a review-policy
 failure too. See the [CLI guide](docs/cli-guide.md#fail-policy-gates) for the
 copy-pasteable example.
 
+No-claim answers remain explicit in every reviewer artifact: the report keeps
+zero claim assessments, labels the primary finding as `needs_review`, and
+explains that no claims were extracted. This makes an empty or heading-only
+draft visible to queue consumers without inventing evidence.
+
 Integrations can check the installed CLI and API contract version without
 starting the server:
 
