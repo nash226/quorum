@@ -797,7 +797,9 @@ Queue overviews also expose final `verified`, `contradicted`, `unsupported`,
 and `needs_review` claim counts so dashboard consumers can prioritize review
 work without recounting individual claims. The human-readable
 `review-queue` CLI summary now prints the same verdict breakdown alongside
-reviewer workload and benchmark drift.
+reviewer workload and benchmark drift. For machine-readable handoffs,
+`review-queue` also accepts the consistent `--result-json` and
+`--result-json-out` aliases alongside its existing JSON flags.
 The packaged HTTP smoke gate also verifies browser preflight responses for the
 GET-only discovery, version, OpenAPI, health, readiness, and liveness routes,
 including their allowed headers, origin, cache lifetime, and empty body.

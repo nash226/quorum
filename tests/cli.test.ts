@@ -3949,6 +3949,38 @@ test("review-queue accepts a stable generated-at timestamp for JSON and CSV hand
   }
 });
 
+test("review-queue supports result-json naming for machine-readable handoffs", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-result-json-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    const resultJsonPath = join(tempDir, "queue.json");
+    await runCli([
+      "verify-batch",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--review-csv-out",
+      reviewCsvPath,
+    ]);
+
+    const stdout = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--result-json",
+      "--result-json-out",
+      resultJsonPath,
+    ]);
+
+    assert.equal(JSON.parse(stdout).review.totalAnswers, 1);
+    assert.equal(JSON.parse(await readFile(resultJsonPath, "utf8")).review.totalAnswers, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("review-queue scopes workload to a queue status", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-filter-"));
 
