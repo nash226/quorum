@@ -66,6 +66,8 @@ exported review artifacts.
 The same batch fail policy is available over HTTP: with `failOn` and
 `failOnStatus`, a risky batch returns HTTP `409` plus `shouldFail` and
 `failVerdicts` metadata for workflow gating.
+The packaged smoke check now verifies this response contract end to end, so a
+release check covers both the local batch CLI and the HTTP workflow gate.
 
 For an agent or workflow runner that needs JSON over HTTP, start the local API
 and probe its published capability contract:
