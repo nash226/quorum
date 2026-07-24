@@ -621,6 +621,10 @@ try {
   );
   assert.match(
     evaluationSummaryCsv,
+    /^.*Support holiday hours policy example.*?,1,1,1,0,1,1,1,0$/m,
+  );
+  assert.match(
+    evaluationSummaryCsv,
     /^.*Support SLA policy example.*?,1,1,1,0,1,1,1,0$/m,
   );
   assert.match(
