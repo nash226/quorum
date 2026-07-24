@@ -12,7 +12,26 @@ test("help --help reuses the top-level usage contract", async () => {
   assert.equal(result.code, 0);
   assert.equal(result.stderr, "");
   assert.match(result.stdout, /Usage:/);
+  assert.match(result.stdout, /quorum help \[<command>\]/);
   assert.match(result.stdout, /quorum verify-batch/);
+});
+
+test("top-level help lists every shipped command", async () => {
+  const stdout = await runCli(["--help"]);
+
+  for (const command of [
+    "verify",
+    "verify-batch",
+    "extract-claims",
+    "import-review",
+    "review-queue",
+    "evaluate",
+    "serve",
+    "openapi",
+    "version",
+  ]) {
+    assert.match(stdout, new RegExp(`quorum ${command}(?: |$)`));
+  }
 });
 
 test("verify applies the default trust override only to sources without metadata", async () => {
