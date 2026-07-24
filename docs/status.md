@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `79021a5` on 2026-07-24, test: preserve packaged OpenAPI server URLs
+- Latest shipped change: `d83dd82` on 2026-07-24, docs: clarify roadmap foundations
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,12 +48,12 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | docs: clarify roadmap foundations | `d83dd82` |
+| 2026-07-24 | Direct push | docs: clarify roadmap foundations | `ce01592` |
 | 2026-07-24 | Direct push | test: preserve packaged OpenAPI server URLs | `79021a5` |
 | 2026-07-24 | Direct push | test: cover packaged version aliases | `ffbe60b` |
 | 2026-07-24 | Direct push | docs: explain the CI verification gate | `4f9ca02` |
 | 2026-07-24 | Direct push | docs: list supported document formats | `f156e93` |
 | 2026-07-24 | Direct push | test: preserve packaged batch answer labels | `160b8fd` |
 | 2026-07-24 | [#940](https://github.com/nash226/quorum/pull/940) | test: cover packaged batch source IDs | `dba14e7` |
-| 2026-07-24 | [#939](https://github.com/nash226/quorum/pull/939) | fix: normalize fullwidth list punctuation | `9a70cf2` |
-| 2026-07-24 | Direct push | fix: normalize unicode checkbox claims | `ae4fe50` |
 
