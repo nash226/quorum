@@ -95,6 +95,9 @@ JSON content, preserving the supplied paths and source metadata in its result.
 The HTTP `verify-batch` endpoint also preserves caller-supplied source IDs in
 both the batch and per-answer reports, keeping evidence references durable for
 multi-answer workflow consumers.
+The packaged `verify-batch` smoke gate also assigns and checks an explicit
+`--source-id`, keeping durable source identity covered for batch CLI consumers
+and aggregate CSV exports.
 Malformed JSON requests fail closed with a 400 response containing the same
 structured `error` and `requestId` fields as other HTTP validation failures.
 Use `--generated-at <timestamp>` when a batch run needs one caller-owned audit
