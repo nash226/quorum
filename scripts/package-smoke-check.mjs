@@ -322,11 +322,31 @@ try {
   const markdownTableClaimsPayload = await markdownTableClaimsResponse.json();
   if (
     markdownTableClaimsResponse.status !== 200 ||
+    markdownTableClaimsPayload.answerPath !== "answers/hr-table.md" ||
     markdownTableClaimsPayload.claims?.length !== 1 ||
     markdownTableClaimsPayload.claims[0]?.text !==
       "Parental leave: Employees receive 12 weeks of paid parental leave."
   ) {
     throw new Error("Package artifact server did not preserve Markdown table claim extraction.");
+  }
+
+  const labeledExtractClaimsResponse = await fetch(`${packagedServer.url}/extract-claims`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answer: "Employees receive 12 weeks of paid parental leave.",
+      answerPath: "answers/hr-answer.md",
+      answerLabel: "HR reviewer packet",
+    }),
+  });
+  const labeledExtractClaimsPayload = await labeledExtractClaimsResponse.json();
+  if (
+    labeledExtractClaimsResponse.status !== 200 ||
+    labeledExtractClaimsPayload.answerPath !== "answers/hr-answer.md" ||
+    labeledExtractClaimsPayload.answerLabel !== "HR reviewer packet" ||
+    labeledExtractClaimsPayload.claims?.length !== 1
+  ) {
+    throw new Error("Package artifact server did not preserve claim preview answer provenance.");
   }
 
   const extractClaimsBase64Response = await fetch(`${packagedServer.url}/extract-claims`, {
