@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4c414d5` on 2026-07-24, test: smoke-check reviewer queue summary csv
+- Latest shipped change: `507c561` on 2026-07-24, docs: expose top-level CLI help map
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | docs: expose top-level CLI help map | `507c561` |
 | 2026-07-24 | Direct push | test: smoke-check reviewer queue summary csv | `4c414d5` |
 | 2026-07-24 | Direct push | test: smoke-check single-answer summary csv | `14ee48e` |
 | 2026-07-24 | Direct push | test: cover packaged readiness query aliases | `02be6e6` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | docs: clarify shipped roadmap foundations | `6eca99a` |
 | 2026-07-22 | Direct push | test: cover malformed JSON API errors | `3e2c16a` |
 | 2026-07-22 | Direct push | test: cover HTTP DOCX base64 verification | `cf464f6` |
-| 2026-07-22 | Direct push | test: cover empty API source directories | `75a3384` |
 
