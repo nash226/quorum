@@ -1375,6 +1375,40 @@ test("verify-batch discovers PDF and DOCX answers from answer directories", asyn
   }
 });
 
+test("verify discovers DOCX sources from source directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-document-source-dir-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(tempDir, "answer.md");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "This is a test.", "utf8"),
+      readFile(docxFixturePath).then((content) => writeFile(join(sourceDir, "policy.docx"), content)),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ sourcePath: string }>;
+    };
+
+    assert.equal(report.sources.length, 1);
+    assert.match(report.sources[0]?.sourcePath ?? "", /policy\.docx$/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify ignores collapsed html details body content in answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-collapsed-details-answer-"));
 
