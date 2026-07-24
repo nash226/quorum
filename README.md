@@ -63,6 +63,9 @@ timestamp across every answer and exported reviewer artifact.
 Batch text, Markdown, and HTML reports also show the configured `--fail-on`
 verdicts alongside each answer's match status, preserving the CI policy in
 exported review artifacts.
+The same batch fail policy is available over HTTP: with `failOn` and
+`failOnStatus`, a risky batch returns HTTP `409` plus `shouldFail` and
+`failVerdicts` metadata for workflow gating.
 
 For an agent or workflow runner that needs JSON over HTTP, start the local API
 and probe its published capability contract:
