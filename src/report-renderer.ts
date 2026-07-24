@@ -81,6 +81,8 @@ export function renderBatchTextReport(report: BatchVerificationReport, failOn: C
       `  Fail policy: ${answer.shouldFail ? "matched" : "clear"}`,
       `  Fail verdicts: ${answer.failVerdicts.length > 0 ? answer.failVerdicts.join(", ") : "none"}`,
       `  Answer preview: ${renderAnswerPreview(answer.report.answer) || "No answer content provided."}`,
+      "  Sources:",
+      ...answer.report.sources.map((source) => `  - ${renderTextSourceLabel(source)}`),
       `  Primary finding: ${primaryFinding}`,
       `  Primary reason: ${primaryReason}`,
     );
