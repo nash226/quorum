@@ -35,6 +35,9 @@ npm run dev -- verify \
 `npm run check` is the full local release gate: it runs tests and the TypeScript
 build, then smoke-checks the HTTP API and packaged CLI before enforcing the
 checked-in evaluation score and mismatch thresholds.
+The roadmap now treats reviewer queues and the local API as shipped foundations;
+the next persistence and dashboard boundary remains an explicit product
+decision rather than an unscoped implementation task.
 
 Verification accepts Markdown, text, exported HTML, PDF, and DOCX answers and
 approved sources. Use `--source-dir` for a mixed directory of policy files;

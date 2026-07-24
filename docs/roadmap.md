@@ -27,7 +27,6 @@ front of enterprise agent workflows.
 
 ## Later
 
-- Add a dashboard for review queues and audit history.
 - Integrate with ticketing, HR, and support platforms.
 - Add evaluation datasets for more business domains.
 - Measure false positives, false negatives, and reviewer time saved.
