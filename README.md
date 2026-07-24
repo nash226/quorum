@@ -23,7 +23,9 @@ the optional outer pipe characters.
 
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
-machine-readable after packaging.
+machine-readable after packaging. It also exercises the packaged
+`review-queue` command, including its generated timestamp and JSON/CSV queue
+overview artifacts.
 
 ```bash
 npm install

@@ -768,4 +768,38 @@ try {
   rmSync(batchStdinTempDir, { recursive: true, force: true });
 }
 
+const reviewQueueTempDir = mkdtempSync(join(tmpdir(), "quorum-package-review-queue-"));
+try {
+  const reviewCsvPath = join(reviewQueueTempDir, "review.csv");
+  const queueJsonPath = join(reviewQueueTempDir, "queue.json");
+  const queueCsvPath = join(reviewQueueTempDir, "queue.csv");
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", "-", "--source",
+    fileURLToPath(new URL("examples/sources/hr-policy.md", packageRoot)),
+    "--review-csv-out", reviewCsvPath,
+  ], {
+    encoding: "utf8",
+    input: "Employees receive 12 weeks of paid parental leave.\n",
+  });
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "review-queue", "--review-csv", reviewCsvPath,
+    "--generated-at", "2026-07-24T00:00:00.000Z", "--json", "--out", queueJsonPath,
+    "--csv-out", queueCsvPath,
+  ], { encoding: "utf8" });
+  const queueJson = JSON.parse(readFileSync(queueJsonPath, "utf8"));
+  const queueCsv = readFileSync(queueCsvPath, "utf8");
+  if (
+    queueJson.generatedAt !== "2026-07-24T00:00:00.000Z" ||
+    queueJson.review?.totalAnswers !== 1 ||
+    queueJson.review?.pendingAnswers !== 1 ||
+    queueJson.review?.totalClaims !== 1 ||
+    !queueCsv.startsWith('"generated_at","queue_status","domains","total_answers",') ||
+    !queueCsv.includes('"1","1","0","0","1","1","0","1","0","0","0"')
+  ) {
+    throw new Error("Package artifact CLI did not preserve the reviewer queue overview contract.");
+  }
+} finally {
+  rmSync(reviewQueueTempDir, { recursive: true, force: true });
+}
+
 console.log(`Package smoke check passed: ${packageResult.filename} contains ${files.size} files.`);
