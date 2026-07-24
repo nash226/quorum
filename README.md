@@ -342,6 +342,8 @@ evaluation surfaces as the CLI. Node.js callers can use the public
 The package smoke check also executes the published `quorum version --json`
 entrypoint, keeping the installed CLI contract aligned with the package
 manifest and library exports.
+It also runs the packaged `verify-batch` CLI against nested answer and source
+directories, preserving the directory-based batch workflow after publishing.
 It also imports a completed review CSV from stdin with `--result-json`, keeping
 pipe-friendly reviewer fail-policy handoff executable after packaging.
 It also starts the packaged server entrypoint and probes `/version` and
