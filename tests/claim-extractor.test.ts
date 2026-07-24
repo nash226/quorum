@@ -171,6 +171,18 @@ test("ignores quote, checkbox, and heading markdown prefixes", () => {
   );
 });
 
+test("strips unicode checkbox markers from exported task lists", () => {
+  const claims = extractClaims(`☑ Employees receive 12 weeks of paid parental leave.
+☐ Contractors do not receive paid vacation.
+☒ Managers approve exceptions within five business days.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Contractors do not receive paid vacation.",
+    "Managers approve exceptions within five business days.",
+  ]);
+});
+
 test("extracts clean claims from markdown definition lists", () => {
   const claims = extractClaims(`Leave policy
 : Employees receive 12 weeks of paid parental leave.
