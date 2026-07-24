@@ -4050,6 +4050,13 @@ test("programmatic API bounds request duration with a configurable timeout", () 
   }
 });
 
+test("programmatic API close is safe to call more than once", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  await Promise.all([api.close(), api.close()]);
+  await api.close();
+});
+
 test("programmatic API advertises the configured request timeout", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0, requestTimeoutMs: 1_500 });
 

@@ -289,6 +289,8 @@ Operational probes support bodyless `HEAD` requests as well as `GET`, so
 load balancers can check status headers without downloading a JSON payload.
 The API regression suite also verifies that Kubernetes-style `GET /readyz`
 readiness probes return the same request-correlated, no-store health envelope.
+The programmatic server handle also makes `close()` idempotent, so CLI signal
+handlers and embedding applications can share cleanup paths safely.
 Browser-based monitors can also preflight `/health`, `/healthz`, `/readyz`, and
 `/livez`; each route preserves the advertised origin, `GET, HEAD, OPTIONS`
 methods, request-ID header, and ten-minute preflight cache contract.
