@@ -155,6 +155,23 @@ CLI contract discovery covered after packaging.
 The version command and its `--version`/`-v` aliases also accept `--help` and
 `-h`, so wrappers can append a help flag consistently to any published command.
 
+For a queue handoff, export the reviewer CSV during verification, then combine
+reviewer workload with benchmark drift in one machine-readable overview:
+
+```bash
+npm run dev -- review-queue \
+  --review-csv reports/batch-review.csv \
+  --fixture-dir examples/evaluations \
+  --queue-status pending \
+  --json --out reports/review-queue.json \
+  --csv-out reports/review-queue.csv
+```
+
+The `pending`, `reviewed`, and `no_claims` filters apply to answer groups, so a
+workflow can route only the work that still needs attention. The same queue
+summary is available through the HTTP API and the programmatic API, while
+`evaluate` remains the CI gate for fixture mismatches and minimum score.
+
 It also checks that packaged `/health`, `/healthz`, `/readyz`, and `/livez`
 endpoints support bodyless `HEAD` probes for deployment health checks.
 The same packaged HTTP gate exercises the readiness query aliases
