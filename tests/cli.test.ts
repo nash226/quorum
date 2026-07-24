@@ -287,6 +287,16 @@ test("help exposes the version command topic", async () => {
   assert.match(result.stdout, /^Quorum version\n\nUsage:\n  quorum version \[--json\]/);
 });
 
+test("version aliases accept command help flags", async () => {
+  for (const args of [["version", "--help"], ["version", "-h"], ["--version", "--help"], ["-v", "-h"]]) {
+    const result = await runCliAllowFailure(args);
+
+    assert.equal(result.code, 0);
+    assert.equal(result.stderr, "");
+    assert.match(result.stdout, /^Quorum version\n\nUsage:\n  quorum version \[--json\]/);
+  }
+});
+
 test("help rejects unknown or multiple topics", async () => {
   for (const args of [["help", "missing"], ["help", "verify", "serve"]]) {
     const result = await runCliAllowFailure(args);

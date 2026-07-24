@@ -387,6 +387,7 @@ for (const command of [
   "evaluate",
   "serve",
   "openapi",
+  "version",
 ]) {
   for (const helpFlag of ["--help", "-h"]) {
     const commandHelp = execFileSync(process.execPath, [fileURLToPath(cliPath), command, helpFlag], { encoding: "utf8" });
