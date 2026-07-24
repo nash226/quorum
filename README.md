@@ -159,6 +159,9 @@ endpoints support bodyless `HEAD` probes for deployment health checks.
 The same packaged HTTP gate exercises the readiness query aliases
 `/healthz?probe=readiness` and `/readyz?probe=kubernetes`, keeping probe routing
 available in the published server artifact.
+Unit coverage also verifies bodyless `HEAD` probes for the root discovery,
+version, and OpenAPI contract routes, so lightweight clients can check those
+documents without downloading response bodies.
 These four operational routes currently share the same process-health
 envelope; readiness is not dependency-aware yet, so integrations should treat
 them as serving probes until a durable dependency boundary is shipped.

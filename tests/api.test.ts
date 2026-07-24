@@ -436,6 +436,23 @@ test("HTTP API serves bodyless HEAD responses for operational probes", async () 
   }
 });
 
+test("HTTP API serves bodyless HEAD responses for contract discovery", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const path of ["/", "/version", "/openapi.json"]) {
+      const response = await fetch(`${api.url}${path}`, { method: "HEAD" });
+
+      assert.equal(response.status, 200, path);
+      assert.match(response.headers.get("etag") ?? "", /^\"[a-f0-9]{64}\"$/, path);
+      assert.equal(response.headers.get("cache-control"), "public, max-age=0, must-revalidate", path);
+      assert.equal(await response.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API exposes CORS preflight metadata for operational probes", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
