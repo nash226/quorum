@@ -44,6 +44,10 @@ npm run dev -- verify \
   --json
 ```
 
+`npm run check` is the same full verification gate used by CI: it runs the
+tests and build, then exercises the local HTTP API, packaged CLI artifact, and
+evaluation fixtures before a change is ready to publish.
+
 For agent integrations, run the local HTTP service and use its discovery
 contract before sending verification requests:
 
