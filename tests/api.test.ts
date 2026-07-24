@@ -538,6 +538,41 @@ test("HTTP API extracts claims from base64 text and document answers", async () 
   }
 });
 
+test("HTTP API verifies against a base64 approved source", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        sources: [{
+          sourcePath: "policies/hr-policy.md",
+          contentBase64: Buffer.from("Employees receive 12 weeks of paid parental leave.").toString("base64"),
+          id: "hr-policy@2026-07-15",
+          title: "HR Policy",
+          updatedAt: "2026-07-15",
+          trustLevel: "high",
+        }],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const payload = await response.json();
+    assert.equal(payload.report.summary.verified, 1);
+    assert.deepEqual(payload.report.sources, [{
+      id: "hr-policy@2026-07-15",
+      sourcePath: "policies/hr-policy.md",
+      title: "HR Policy",
+      updatedAt: "2026-07-15",
+      trustLevel: "high",
+    }]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API restricts CORS responses to configured origins", async () => {
   const api = await startApiServer({
     host: "127.0.0.1",
