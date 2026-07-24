@@ -116,6 +116,9 @@ The packaged HTTP smoke gate also evaluates an inline HR fixture with a domain
 filter, keeping published scorecard and generated-timestamp behavior covered.
 It also submits a deliberately mismatched fixture with `failOnStatus`, keeping
 the published HTTP evaluation gate fail closed with a `409` response.
+The HTTP integration guide also documents bodyless `HEAD /capabilities` probes,
+so workflow runners can revalidate runtime limits and queue metadata without
+downloading the capabilities JSON.
 
 Node.js workers can use the built package directly when starting an HTTP server
 would add unnecessary overhead. The public `quorum` entrypoint exposes the same

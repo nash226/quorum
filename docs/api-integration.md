@@ -191,12 +191,19 @@ When a client only needs headers, use `HEAD` to avoid downloading a JSON body:
 ```bash
 curl -sSI http://127.0.0.1:3000/readyz
 curl -sSI http://127.0.0.1:3000/livez
+curl -sSI http://127.0.0.1:3000/capabilities
 ```
 
 The discovery headers on these responses include the service version, the
 OpenAPI path, configured request limits, and a request ID. Use the returned
 `X-Quorum-OpenAPI-Path` value to fetch the generated contract before building
 request payloads.
+
+`HEAD /capabilities` also returns the same stable `ETag` as the capabilities
+representation, so a workflow runner can check whether its cached capability
+metadata is current without downloading the JSON body. Send that validator in
+`If-None-Match` to receive `304 Not Modified` when no runtime capability has
+changed.
 
 For a cache-aware bodyless probe, send the previously returned validator. The
 same pattern works for `/capabilities` and `/openapi.json`; use the endpoint's
