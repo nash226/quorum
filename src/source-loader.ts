@@ -187,7 +187,7 @@ function isDocxSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf|docx)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf|docx|json)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {

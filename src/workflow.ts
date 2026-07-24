@@ -171,7 +171,7 @@ export interface ReviewerDecisionFileImportResultOptions
   failOn?: ClaimVerdict[];
 }
 
-export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx"]);
+export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".docx", ".json"]);
 export const ANSWER_EXTENSIONS = new Set([
   ".md",
   ".markdown",
