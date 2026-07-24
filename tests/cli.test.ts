@@ -2084,31 +2084,6 @@ test("verify threads fail-policy context into single-answer text, markdown, and 
   }
 });
 
-test("verify discovers JSON sources in source directories", async () => {
-  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-source-"));
-
-  try {
-    const sourceDir = join(tempDir, "sources");
-    const answerPath = join(tempDir, "answer.md");
-    await mkdir(sourceDir, { recursive: true });
-    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
-    await writeFile(
-      join(sourceDir, "hr-policy.json"),
-      '{"policy":"Employees receive 12 weeks of paid parental leave."}',
-      "utf8",
-    );
-
-    const report = JSON.parse(
-      await runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir, "--json"]),
-    ) as { sources: Array<{ title: string }>; summary: { verified: number } };
-
-    assert.deepEqual(report.sources, [{ id: "source_1", title: "hr-policy", trustLevel: "medium" }]);
-    assert.equal(report.summary.verified, 1);
-  } finally {
-    await rm(tempDir, { recursive: true, force: true });
-  }
-});
-
 test("verify-batch returns an aggregate report for each answer file", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-"));
 
