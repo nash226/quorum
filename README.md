@@ -569,8 +569,9 @@ contract version.
 The checked-in 77-fixture benchmark spans 27 HR and 50 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
-verdict routing against approved Markdown, HTML, PDF, or directory-backed
-sources. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
+verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
+sources. JSON exports are preserved as UTF-8 evidence text so structured
+knowledge-base payloads remain inspectable in reports. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.
 Run `npm run evaluate:ci` to execute the full checked-in benchmark with the
 aggregate score and mismatch gates enabled; it is the same fail-closed check
