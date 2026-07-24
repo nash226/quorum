@@ -97,10 +97,10 @@ full endpoint list and local configuration options.
 `npm run check` is the full local release gate: it runs tests and the TypeScript
 build, then smoke-checks the HTTP API and packaged CLI before enforcing the
 checked-in evaluation score and mismatch thresholds.
-The [roadmap](docs/roadmap.md) treats batch verification, reviewer queues, the
-local API, and evaluation gates as shipped foundations; durable queue
-persistence and the dashboard boundary remain an explicit product decision
-rather than an unscoped implementation task.
+The [roadmap](docs/roadmap.md) records batch verification, reviewer queues, the
+local API, and evaluation gates as shipped foundations. Durable queue
+persistence is the next product step, while the dashboard remains downstream
+of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
 Verification accepts Markdown, text, exported HTML, JSON exports, PDF, and DOCX
 answers and approved sources. JSON files are treated as inspectable UTF-8

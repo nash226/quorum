@@ -12,6 +12,8 @@ front of enterprise agent workflows.
 
 ## Shipped foundation
 
+- Batch verification, reviewer queue, and evaluation workflows are available
+  through the CLI and local HTTP API.
 - Reviewer queue CLI and HTTP surfaces summarize imported decisions alongside
   optional benchmark drift.
 - Packaged CLI verification covers Markdown, HTML, PDF, and DOCX answer/source
@@ -21,8 +23,8 @@ front of enterprise agent workflows.
 
 ## Next
 
-- Choose the durable queue backend and dashboard boundary for reviewer work
-  queues and audit history.
+- Choose the durable queue backend for reviewer work queues and audit history;
+  the dashboard boundary is tracked separately in [decision issue #683](https://github.com/nash226/quorum/issues/683).
 - Expand the HR and support fixture set as policy coverage grows.
 
 ## Later
