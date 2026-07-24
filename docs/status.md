@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `93c5997` on 2026-07-24, docs: explain shipped review loop
+- Latest shipped change: `4a2b915` on 2026-07-24, feat: preserve CLI claim preview provenance
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | feat: preserve CLI claim preview provenance | `4a2b915` |
 | 2026-07-24 | [#950](https://github.com/nash226/quorum/pull/950) | docs: explain shipped review loop | `93c5997` |
 | 2026-07-24 | Direct push | test: preserve claim preview provenance | `ce05b79` |
 | 2026-07-24 | Direct push | test: smoke-check packaged reviewer queue filters | `66a9027` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | docs: clarify roadmap foundations | `d83dd82` |
 | 2026-07-24 | Direct push | docs: clarify roadmap foundations | `ce01592` |
 | 2026-07-24 | Direct push | test: preserve packaged OpenAPI server URLs | `79021a5` |
-| 2026-07-24 | Direct push | test: cover packaged version aliases | `ffbe60b` |
 
