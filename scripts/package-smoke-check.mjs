@@ -262,6 +262,34 @@ try {
     throw new Error("Package artifact server did not verify the expected answer contract.");
   }
 
+  const jsonSourceResponse = await fetch(`${packagedServer.url}/verify`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answer: "Employees receive 12 weeks of paid parental leave.",
+      sources: [{
+        id: "hr-policy-json@2026-07-15",
+        sourcePath: "exports/hr-policy.json",
+        title: "HR Policy JSON Export",
+        updatedAt: "2026-07-15",
+        trustLevel: "high",
+        content: JSON.stringify({ policy: "Employees receive 12 weeks of paid parental leave." }),
+      }],
+    }),
+  });
+  const jsonSourcePayload = await jsonSourceResponse.json();
+  const jsonSource = jsonSourcePayload.report?.sources?.[0];
+  if (
+    jsonSourceResponse.status !== 200 ||
+    jsonSourcePayload.report?.summary?.verified !== 1 ||
+    jsonSource?.id !== "hr-policy-json@2026-07-15" ||
+    jsonSource?.title !== "HR Policy JSON Export" ||
+    jsonSource?.updatedAt !== "2026-07-15" ||
+    jsonSource?.trustLevel !== "high"
+  ) {
+    throw new Error("Package artifact server did not verify the JSON source contract.");
+  }
+
   const verifyBatchResponse = await fetch(`${packagedServer.url}/verify-batch`, {
     method: "POST",
     headers: { "content-type": "application/json" },
