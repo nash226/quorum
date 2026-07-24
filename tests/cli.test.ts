@@ -398,7 +398,27 @@ test("extract-claims result-json exposes the answer routing flag", async () => {
     "--result-json",
   ]);
 
-  assert.deepEqual(JSON.parse(stdout), { answerHasClaims: false, claims: [] });
+  assert.deepEqual(JSON.parse(stdout), {
+    answerHasClaims: false,
+    claims: [],
+    answerPath: "examples/answers/empty-answer.md",
+  });
+});
+
+test("extract-claims result-json preserves answer provenance", async () => {
+  const stdout = await runCli([
+    "extract-claims",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--answer-label",
+    "HR reviewer packet",
+    "--result-json",
+  ]);
+
+  const result = JSON.parse(stdout) as { answerPath: string; answerLabel: string };
+
+  assert.equal(result.answerPath, "examples/answers/hr-answer.md");
+  assert.equal(result.answerLabel, "HR reviewer packet");
 });
 
 test("extract-claims result-json-out writes the routing-aware preview", async () => {
@@ -416,7 +436,12 @@ test("extract-claims result-json-out writes the routing-aware preview", async ()
 
     assert.equal(result.code, 0);
     assert.match(result.stdout, /Claim preview result JSON written to/);
-    assert.equal(JSON.parse(await readFile(resultPath, "utf8")).answerHasClaims, true);
+    const resultJson = JSON.parse(await readFile(resultPath, "utf8")) as {
+      answerHasClaims: boolean;
+      answerPath: string;
+    };
+    assert.equal(resultJson.answerHasClaims, true);
+    assert.equal(resultJson.answerPath, "examples/answers/hr-answer.md");
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
