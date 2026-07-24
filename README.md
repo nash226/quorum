@@ -344,6 +344,9 @@ from silently falling back to an unfiltered overview.
 The `POST /review-queue` response preserves a caller-supplied
 `X-Quorum-Request-Id` in both the JSON payload and response header, so queue
 handoffs can correlate results with an upstream trace.
+The packaged smoke check also verifies that a caller-supplied `generatedAt`
+timestamp is preserved in the queue response, giving retried handoffs a stable
+audit timestamp to compare.
 The packaged smoke check pins that correlation contract end to end and verifies
 that `queueStatus: "pending"` filters the reviewer totals without changing
 optional benchmark metrics.

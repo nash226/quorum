@@ -314,6 +314,7 @@ try {
         "",
       ].join("\n"),
       queueStatus: "reviewed",
+      generatedAt: "2026-07-21T20:00:00.000Z",
     }),
   });
   const reviewQueuePayload = await reviewQueueResponse.json();
@@ -322,7 +323,8 @@ try {
     reviewQueuePayload.review?.totalAnswers !== 1 ||
     reviewQueuePayload.review?.reviewedAnswers !== 1 ||
     reviewQueuePayload.review?.verdicts?.verified !== 1 ||
-    reviewQueuePayload.queueStatus !== "reviewed"
+    reviewQueuePayload.queueStatus !== "reviewed" ||
+    reviewQueuePayload.generatedAt !== "2026-07-21T20:00:00.000Z"
   ) {
     throw new Error("Package artifact server did not serve the expected reviewer queue contract.");
   }
