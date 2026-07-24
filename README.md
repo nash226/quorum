@@ -140,6 +140,8 @@ The packaged CLI smoke gate probes representative `quorum help <command>`
 topics after building, keeping the documented onboarding alias executable in
 published artifacts. It also probes the published `help version` topic, keeping
 CLI contract discovery covered after packaging.
+The version command and its `--version`/`-v` aliases also accept `--help` and
+`-h`, so wrappers can append a help flag consistently to any published command.
 
 It also checks that packaged `/health`, `/healthz`, `/readyz`, and `/livez`
 endpoints support bodyless `HEAD` probes for deployment health checks.

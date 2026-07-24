@@ -172,6 +172,11 @@ async function main(): Promise<void> {
   }
 
   if (command === "version" || command === "--version" || command === "-v") {
+    if (args.length === 1 && isHelpFlag(args[0])) {
+      printHelp("version");
+      return;
+    }
+
     if (args.length > 1 || (args.length === 1 && args[0] !== "--json")) {
       throw new Error("Usage: quorum version [--json]");
     }
