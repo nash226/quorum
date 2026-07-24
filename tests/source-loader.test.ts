@@ -23,6 +23,15 @@ test("extracts readable text from DOCX source content", async () => {
   assert.equal(source.content, "Walking on imported air");
 });
 
+test("preserves a caller-supplied source identifier for DOCX content", async () => {
+  const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
+  const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0, {
+    id: "people-ops/hr-policy@2026-05-31",
+  });
+
+  assert.equal(source.id, "people-ops/hr-policy@2026-05-31");
+});
+
 test("strips supported text extensions from fallback source titles", async () => {
   const markdownSource = await sourceDocumentFromFile(
     "docs/policies/leave-policy.markdown",

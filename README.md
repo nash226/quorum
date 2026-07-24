@@ -239,6 +239,9 @@ npm run dev -- verify \
 
 The packaged CLI smoke gate verifies DOCX answers and approved sources after
 build, so this integration path stays covered for published artifacts.
+Explicit `--source-id` values are preserved for DOCX sources as well as
+Markdown, HTML, PDF, and text sources, keeping evidence identity stable when
+documents move between local files and downstream integrations.
 The packaged HTTP smoke gate also preserves caller-supplied source IDs, titles,
 update timestamps, and trust levels in verification reports, keeping audit
 metadata stable for downstream consumers.

@@ -699,7 +699,7 @@ async function docxSourceDocumentFromFile(
   const result = await mammoth.extractRawText({ buffer: Buffer.from(content) });
 
   return {
-    id: `source_${index + 1}`,
+    id: options.id ?? `source_${index + 1}`,
     sourcePath,
     title: options.title ?? sourceTitleFromPath(sourcePath),
     updatedAt: validatedUpdatedAt(sourcePath, options.updatedAt),
