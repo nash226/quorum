@@ -297,6 +297,9 @@ Use `--server-url` when the generated document should point at a deployed
 Quorum endpoint; the [HTTP integration guide](docs/api-integration.md) covers
 the corresponding discovery and request contracts.
 
+The packaged CLI smoke gate also verifies that `openapi --server-url` preserves
+the requested deployment URL in the generated `servers` contract.
+
 To run those contracts locally for an agent or workflow runner:
 
 ```bash
