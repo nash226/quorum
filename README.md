@@ -15,7 +15,9 @@ returns reviewer-ready `verified`, `contradicted`, `unsupported`, or
 verification, where grounded answers are high-volume and costly to get wrong.
 Claim extraction also normalizes bracketed, Arabic-Indic, Persian, and fullwidth ordered-list
 markers plus common Unicode bullets such as middle dots and square bullets,
-keeping exported and localized answers clean before evidence matching.
+keeping exported and localized answers clean before evidence matching. Markdown
+policy tables are also reduced to row-level claims, including tables that omit
+the optional outer pipe characters.
 
 ## Quick Start
 
