@@ -295,6 +295,9 @@ plain text (`.txt`), exported HTML (`.html`, `.htm`), PDF (`.pdf`), and Word
 documents (`.docx`), plus JSON (`.json`) and XML (`.xml`) exports. JSON and XML
 exports are read as inspectable UTF-8 evidence text while preserving their
 source metadata in reports.
+The CLI guide now lists XML alongside JSON in its capability index and verify
+workflow, keeping the documented local source contract aligned with the
+shipped XML ingestion path.
 Explicit `--source-id` values are preserved for DOCX sources as well as
 Markdown, HTML, PDF, and text sources, keeping evidence identity stable when
 documents move between local files and downstream integrations.
