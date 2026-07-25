@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cc3547b` on 2026-07-25, fix: stabilize recursive discovery order
+- Latest shipped change: `581f27e` on 2026-07-25, docs: clarify document answer discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | docs: clarify document answer discovery | `581f27e` |
 | 2026-07-25 | Direct push | fix: stabilize recursive discovery order | `cc3547b` |
 | 2026-07-25 | Direct push | docs: clarify structured answer file boundaries | `2865bd4` |
 | 2026-07-25 | Direct push | test: smoke-check packaged XML sources | `a069e0d` |
@@ -56,5 +57,4 @@
 | 2026-07-24 | [#985](https://github.com/nash226/quorum/pull/985) | test: cover empty source directory failure | `d3d6305` |
 | 2026-07-24 | Direct push | test: cover packaged XHTML answers | `0b99533` |
 | 2026-07-24 | [#983](https://github.com/nash226/quorum/pull/983) | test: cover packaged XHTML source verification | `5f7aecb` |
-| 2026-07-24 | Direct push | feat: support XHTML document ingestion | `f3bdb1f` |
 
