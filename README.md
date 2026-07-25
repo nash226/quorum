@@ -32,6 +32,8 @@ Inline CJK and fullwidth sentence punctuation is split consistently too, so
 multiple localized claims in one line stay independently reviewable.
 Unicode checkbox markers (`☐`, `☑`, and `☒`) are also normalized when answers
 come from exported task lists.
+Nested Markdown blockquotes and lists are normalized too, so claims copied from
+quoted review threads do not retain repeated `>` or list markers.
 
 The shipped product surface now covers the full review loop:
 

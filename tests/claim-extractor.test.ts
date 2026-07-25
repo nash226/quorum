@@ -482,6 +482,16 @@ test("keeps wrapped blockquote lines as a single claim", () => {
   ]);
 });
 
+test("normalizes nested blockquote list prefixes", () => {
+  const claims = extractClaims(`> > - Employees receive 12 weeks of paid parental leave.
+> > - Healthcare coverage begins after 30 days of employment.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Healthcare coverage begins after 30 days of employment.",
+  ]);
+});
+
 test("ignores standalone markdown callout labels before quoted claims", () => {
   const claims = extractClaims(`## Support Notes
 
