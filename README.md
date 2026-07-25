@@ -41,6 +41,8 @@ The shipped product surface now covers the full review loop:
 - `evaluate` runs checked-in policy fixtures as a CI mismatch and score gate.
 - `serve` exposes the same workflows through a local HTTP API, while `openapi`
   exports its integration contract.
+- Batch answer discovery accepts nested HTML/XHTML exports alongside the other
+  shipped answer formats, preserving readable answer text for verification.
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
