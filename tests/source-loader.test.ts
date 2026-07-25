@@ -86,6 +86,17 @@ test("normalizes XML source exports into claim-readable text", async () => {
   assert.equal(source.content, "Employees get 12 weeks.\nUS & CA");
 });
 
+test("normalizes YAML source exports into claim-readable lines", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.yaml",
+    `policy:\n  leave: Employees get 12 weeks.\nregions:\n  - US\n  - CA`,
+    0,
+  );
+
+  assert.equal(source.title, "benefits");
+  assert.equal(source.content, "policy.leave: Employees get 12 weeks.\nregions[1]: US\nregions[2]: CA");
+});
+
 test("keeps malformed structured exports readable instead of failing ingestion", async () => {
   const malformedJson = await sourceDocumentFromFile(
     "docs/policies/benefits.json",

@@ -115,10 +115,10 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown, text, exported HTML/XHTML, JSON exports, PDF, and DOCX
+Verification accepts Markdown, text, exported HTML/XHTML, JSON/YAML/XML exports, PDF, and DOCX
 answers and approved sources. Recursive answer directories also cover PDF and
 DOCX exports, keeping binary answer batches aligned with explicit file
-verification. JSON and XML exports are normalized into
+verification. JSON, YAML, and XML exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
 reviewed without a separate conversion step. Use `--source-dir` for a mixed directory of policy
 files;
@@ -310,7 +310,7 @@ The packaged CLI smoke gate verifies DOCX answers and approved sources after
 build, so this integration path stays covered for published artifacts.
 The supported local answer and source formats are Markdown (`.md`, `.markdown`),
 plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
-documents (`.docx`), plus JSON (`.json`) and XML (`.xml`) exports. JSON and XML
+documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), and XML (`.xml`) exports. JSON, YAML, and XML
 exports are normalized into claim-readable evidence text while preserving
 their source metadata in reports.
 File-based JSON and XML answers receive the same normalization before claim

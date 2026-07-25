@@ -91,6 +91,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseXmlSource(normalizedContent);
   }
 
+  if (isYamlSource(sourcePath)) {
+    return parseYamlSource(normalizedContent);
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -202,8 +206,12 @@ function isXmlSource(sourcePath: string): boolean {
   return /\.xml$/i.test(sourcePath);
 }
 
+function isYamlSource(sourcePath: string): boolean {
+  return /\.ya?ml$/i.test(sourcePath);
+}
+
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|json|xml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|json|xml|ya?ml)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
@@ -293,6 +301,40 @@ function parseXmlSource(content: string): ParsedSource {
         .join("\n"),
     ),
   };
+}
+
+function parseYamlSource(content: string): ParsedSource {
+  const lines: string[] = [];
+  const parents: Array<{ indent: number; key: string }> = [];
+  const listIndexes = new Map<string, number>();
+
+  for (const rawLine of content.replace(/\r\n/g, "\n").split("\n")) {
+    const line = rawLine.replace(/\s+#.*$/, "").trimEnd();
+    if (!line.trim() || line.trimStart().startsWith("#") || line.trim() === "---") continue;
+    const indent = line.length - line.trimStart().length;
+    const value = line.trim();
+    while (parents.at(-1) && indent <= (parents.at(-1)?.indent ?? -1)) parents.pop();
+    const prefix = parents.map((parent) => parent.key).join(".");
+
+    if (value.startsWith("- ")) {
+      const index = (listIndexes.get(prefix) ?? 0) + 1;
+      listIndexes.set(prefix, index);
+      lines.push(prefix ? `${prefix}[${index}]: ${value.slice(2).trim()}` : value.slice(2).trim());
+      continue;
+    }
+    const separator = value.indexOf(":");
+    if (separator === -1) {
+      lines.push(value);
+      continue;
+    }
+    const key = value.slice(0, separator).trim();
+    const scalar = value.slice(separator + 1).trim();
+    const path = prefix ? `${prefix}.${key}` : key;
+    if (scalar) lines.push(`${path}: ${scalar}`);
+    else parents.push({ indent, key });
+  }
+
+  return { metadata: {}, body: lines.join("\n") || content };
 }
 
 function selectHtmlTitle(input: {
