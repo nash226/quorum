@@ -326,6 +326,8 @@ so single-answer verification extracts claims from policy fields instead of
 matching against raw YAML punctuation.
 Source-directory verification discovers both `.yaml` and `.yml` policies,
 including files nested below the supplied directory.
+Recursive source discovery also loads DOCX policies, so Word-based approved
+source folders can be verified without listing every document explicitly.
 File-based JSON and XML answers receive the same normalization before claim
 extraction, so exported agent responses can be verified without first
 converting them to plain text.
