@@ -49,6 +49,8 @@ roadmap step is a durable API service boundary for agent integrations.
 Recursive answer and source discovery now sorts the complete flattened path
 set, keeping batch order and reviewer labels stable when root and nested files
 are mixed.
+Localized claim extraction also recognizes Arabic, Indic, CJK, and fullwidth
+sentence terminators.
 
 ## Quick Start
 
