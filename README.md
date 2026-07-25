@@ -340,8 +340,8 @@ The CLI guide now lists XML alongside JSON in its capability index and verify
 workflow, keeping the documented local source contract aligned with the
 shipped XML ingestion path.
 Recursive `--source-dir` discovery is covered for both JSON and XML exports, so
-mixed approved-source folders can be verified without converting those files or
-listing every path explicitly.
+including nested XML policy folders, so mixed approved-source folders can be
+verified without converting those files or listing every path explicitly.
 Explicit `--source-id` values are preserved for DOCX sources as well as
 Markdown, HTML, PDF, and text sources, keeping evidence identity stable when
 documents move between local files and downstream integrations.
