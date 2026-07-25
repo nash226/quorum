@@ -1434,6 +1434,50 @@ test("verify-batch discovers htm answers from answer directories", async () => {
   }
 });
 
+test("verify-batch discovers xhtml answers from answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xhtml-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourcePath = join(tempDir, "support-policy.md");
+
+    await mkdir(answerDir, { recursive: true });
+    await Promise.all([
+      writeFile(
+        join(answerDir, "support-answer.xhtml"),
+        '<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><body><p>Customers may request a refund within 30 days.</p></body></html>',
+        "utf8",
+      ),
+      writeFile(sourcePath, "Customers may request a refund within 30 days.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      summary: { verified: number };
+      answers: Array<{ answerPath: string; report: { assessments: Array<{ claim: { text: string } }> } }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.match(report.answers[0]?.answerPath ?? "", /support-answer\.xhtml$/);
+    assert.deepEqual(
+      report.answers[0]?.report.assessments.map((assessment) => assessment.claim.text),
+      ["Customers may request a refund within 30 days."],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers PDF and DOCX answers from answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-document-answer-dir-"));
 
