@@ -1371,6 +1371,40 @@ test("verify accepts a docx source", async () => {
   }
 });
 
+test("verify accepts a docx answer", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-docx-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.docx");
+    const sourcePath = join(tempDir, "hr-policy.md");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+
+    await Promise.all([
+      readFile(docxFixturePath).then((content) => writeFile(answerPath, content)),
+      writeFile(sourcePath, "Walking on imported air\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerPath: string;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims against html sources with named entities", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-entities-"));
 
