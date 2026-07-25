@@ -1434,6 +1434,31 @@ test("verify-batch discovers htm answers from answer directories", async () => {
   }
 });
 
+test("verify-batch discovers CSV answers from answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-csv-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await mkdir(answerDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "support-answer.csv"), "Customers may request a refund within 30 days.\n", "utf8"),
+      writeFile(sourcePath, "Customers may request a refund within 30 days.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source", sourcePath, "--json",
+    ])) as { answerCount: number; summary: { verified: number }; answers: Array<{ answerPath: string }> };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.match(report.answers[0]?.answerPath ?? "", /support-answer\.csv$/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers PDF and DOCX answers from answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-document-answer-dir-"));
 
