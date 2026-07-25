@@ -62,9 +62,9 @@ report outputs. Use `--source-dir` for a directory of approved sources and
 `--default-trust-level high` when sources do not carry trust metadata.
 
 JSON and XML answers use the same normalization when passed explicitly with
-`--answer`. The batch directory contract is intentionally narrower while
-structured-answer directory discovery is being expanded; use explicit answer
-paths when a directory also contains exported policy JSON or XML.
+`--answer`. Recursive answer directories include PDF and DOCX exports as well;
+JSON and XML answer files still use explicit `--answer` paths until their
+directory-discovery contract is expanded.
 
 For example, a JSON export can be verified directly from a mixed source
 directory:
