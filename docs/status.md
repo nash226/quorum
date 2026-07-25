@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7eb2865` on 2026-07-25, docs: align format discovery contract
+- Latest shipped change: `ca82525` on 2026-07-25, test: cover nested markdown quote claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | test: cover nested markdown quote claims | `ca82525` |
 | 2026-07-25 | Direct push | docs: align format discovery contract | `7eb2865` |
 | 2026-07-25 | Direct push | test: cover nested DOCX answer discovery | `393bf1c` |
 | 2026-07-25 | Direct push | docs: expose supported file formats in cli help | `30c82c6` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | fix: normalize programmatic TOML answers | `9a3b421` |
 | 2026-07-25 | Direct push | test: cover nested TOML answer discovery | `11f16ea` |
 | 2026-07-25 | Direct push | feat: support TOML answer files | `10c3655` |
-| 2026-07-25 | Direct push | docs: clarify structured source formats | `eb1d748` |
 
