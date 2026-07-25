@@ -47,7 +47,8 @@ The shipped product surface now covers the full review loop:
   exports its integration contract.
 
 Batch verification and the local HTTP API are shipped foundations; the next
-roadmap step is a durable API service boundary for agent integrations.
+roadmap step is to harden the local HTTP contract for agent integrations while
+durable reviewer persistence remains pending product decision #683.
 Recursive answer and source discovery now sorts the complete flattened path
 set, keeping batch order and reviewer labels stable when root and nested files
 are mixed.
