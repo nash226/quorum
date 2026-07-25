@@ -329,6 +329,9 @@ converting them to plain text.
 Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 `.xhtml` exports, so common HTML extensions can be used without listing each
 answer explicitly.
+It also discovers JSON, YAML/YML, and XML answer exports recursively, keeping
+structured agent responses in the same batch verification path as explicit
+single-answer inputs.
 When a batch report is written inside an answer directory, its configured
 output path is excluded from recursive answer discovery so reruns do not verify
 their own generated report.
