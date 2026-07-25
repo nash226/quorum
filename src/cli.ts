@@ -1857,9 +1857,9 @@ Usage:
   quorum openapi [--server-url <url>] [--out <path>]
   quorum version [--json]
 
-Supported files:
-  Answers: Markdown/MDX, AsciiDoc/Org, text, HTML/XHTML, PDF, DOCX, and TOML
-  Sources: Markdown/MDX, AsciiDoc/Org, text, HTML/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML
+  Supported files:
+    Answers: Markdown/MDX (including MKDN), AsciiDoc/Org, text, HTML/XHTML, PDF, DOCX, and TOML
+    Sources: Markdown/MDX (including MKDN), AsciiDoc/Org, text, HTML/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML
   Directory discovery is recursive and skips hidden files and directories.
 
 Example:
