@@ -1451,6 +1451,26 @@ test("programmatic batch verification normalizes YAML answers", async () => {
   });
 });
 
+test("programmatic batch verification normalizes TOML answers", async () => {
+  const result = await verifyAnswerBatchContentsResult({
+    answers: [{
+      answerPath: "answers/leave-answer.toml",
+      answer: '[policy]\nleave = "Employees receive 12 weeks of paid leave."\n',
+    }],
+    sources: [{
+      sourcePath: "policies/leave-policy.md",
+      content: "Employees receive 12 weeks of paid leave.",
+    }],
+  });
+
+  assert.deepEqual(result.report.answers[0]?.report.summary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
+  });
+});
+
 test("async in-memory verification extracts PDF and DOCX answer bytes", async () => {
   const pdfAnswer = createSimplePdf("Employees receive 12 weeks of paid leave.");
   const pdfReport = await verifyAnswerContents({

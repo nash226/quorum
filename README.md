@@ -336,6 +336,8 @@ Nested TOML answer-directory discovery is covered by the CLI regression suite,
 preserving answer paths and verified claims for directory-based handoffs.
 Programmatic batch verification applies that normalization to YAML answers too,
 so integrations can submit structured answer content without pre-converting it.
+Programmatic batch verification applies the same normalization to TOML answers
+when integrations provide content in memory with an `.toml` answer path.
 Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 `.xhtml` exports, so common HTML extensions can be used without listing each
 answer explicitly.

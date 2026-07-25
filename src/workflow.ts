@@ -641,7 +641,7 @@ async function answerContentToText(
   content: string | Uint8Array,
   answerPath?: string,
 ): Promise<string> {
-  if (answerPath && /\.(?:json|ya?ml|xml)$/i.test(answerPath)) {
+  if (answerPath && /\.(?:json|ya?ml|xml|toml)$/i.test(answerPath)) {
     const answerDocument = typeof content === "string"
       ? await sourceDocumentFromFile(answerPath, content, 0)
       : await sourceDocumentFromFile(answerPath, content, 0);
