@@ -67,6 +67,13 @@ test("splits inline CJK and fullwidth sentences", () => {
   );
 });
 
+test("splits Arabic and Indic sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("هل تمت الموافقة؟ نعم تمت الموافقة। The policy applies॥"),
+    ["هل تمت الموافقة؟", "نعم تمت الموافقة।", "The policy applies॥"],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
