@@ -158,7 +158,9 @@ source directories.
 answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
 recursive scan skips hidden files and directories whose names begin with `.`,
-so editor metadata and hidden staging folders are not treated as inputs. The
+so editor metadata and hidden staging folders are not treated as inputs, and
+supported extensions are matched case-insensitively for exports such as
+`POLICY.MD`. The
 CLI also deduplicates repeated source paths, keeping each approved document
 represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
