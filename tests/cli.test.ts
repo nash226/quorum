@@ -1587,18 +1587,19 @@ test("verify-batch discovers htm answers from answer directories", async () => {
   }
 });
 
-test("verify-batch discovers PDF and DOCX answers from answer directories", async () => {
+test("verify-batch discovers PDF and nested DOCX answers from answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-document-answer-dir-"));
 
   try {
     const answerDir = join(tempDir, "answers");
+    const nestedAnswerDir = join(answerDir, "regional");
     const sourcePath = join(tempDir, "policy.md");
     const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
 
-    await mkdir(answerDir, { recursive: true });
+    await mkdir(nestedAnswerDir, { recursive: true });
     await Promise.all([
       writeFile(join(answerDir, "leave-answer.pdf"), createSimplePdf("Employees receive 12 weeks of paid leave.")),
-      readFile(docxFixturePath).then((content) => writeFile(join(answerDir, "support-answer.docx"), content)),
+      readFile(docxFixturePath).then((content) => writeFile(join(nestedAnswerDir, "support-answer.docx"), content)),
       writeFile(
         sourcePath,
         "Employees receive 12 weeks of paid leave. Walking on imported air.\n",
@@ -1635,7 +1636,7 @@ test("verify-batch discovers PDF and DOCX answers from answer directories", asyn
       [1, 1],
     );
     assert.match(report.answers[0]?.answerPath ?? "", /leave-answer\.pdf$/);
-    assert.match(report.answers[1]?.answerPath ?? "", /support-answer\.docx$/);
+    assert.match(report.answers[1]?.answerPath ?? "", /regional[\\/]support-answer\.docx$/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
