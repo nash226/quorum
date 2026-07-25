@@ -313,6 +313,8 @@ plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf
 documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), and XML (`.xml`) exports. JSON, YAML, and XML
 exports are normalized into claim-readable evidence text while preserving
 their source metadata in reports.
+Source-directory verification discovers both `.yaml` and `.yml` policies,
+including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim
 extraction, so exported agent responses can be verified without first
 converting them to plain text.
