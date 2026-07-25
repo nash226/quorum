@@ -43,9 +43,16 @@ test("strips supported text extensions from fallback source titles", async () =>
     "Escalate incidents within one hour.",
     1,
   );
+  const propertiesSource = await sourceDocumentFromFile(
+    "docs/policies/support.properties",
+    "refund.window.days=30\n",
+    2,
+  );
 
   assert.equal(markdownSource.title, "leave-policy");
   assert.equal(textSource.title, "escalation-guide");
+  assert.equal(propertiesSource.title, "support");
+  assert.equal(propertiesSource.content, "refund.window.days=30\n");
 });
 
 test("strips AsciiDoc extensions from fallback source titles", async () => {
