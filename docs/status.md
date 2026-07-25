@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `36bb0c4` on 2026-07-25, feat: discover YAML source directories
+- Latest shipped change: `cddb4ed` on 2026-07-25, test: cover YAML sources in programmatic API
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | test: cover YAML sources in programmatic API | `cddb4ed` |
 | 2026-07-25 | Direct push | feat: discover YAML source directories | `36bb0c4` |
 | 2026-07-25 | Direct push | feat: ingest YAML policy sources | `06b2dc5` |
 | 2026-07-25 | [#1001](https://github.com/nash226/quorum/pull/1001) | fix: split Arabic and Indic sentences | `c362fd3` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | fix: exclude batch report outputs from discovery | `81cd04d` |
 | 2026-07-25 | Direct push | docs: clarify document answer discovery | `581f27e` |
 | 2026-07-25 | Direct push | fix: stabilize recursive discovery order | `cc3547b` |
-| 2026-07-25 | Direct push | docs: clarify structured answer file boundaries | `2865bd4` |
 
