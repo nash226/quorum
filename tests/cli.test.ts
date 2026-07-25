@@ -2370,6 +2370,30 @@ test("verify discovers YAML and YML sources in nested source directories", async
   }
 });
 
+test("verify discovers DOCX sources from source directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-docx-source-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(tempDir, "answer.md");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+    await mkdir(join(sourceDir, "hr"), { recursive: true });
+    await writeFile(answerPath, "Walking on imported air\n", "utf8");
+    await readFile(docxFixturePath).then((content) =>
+      writeFile(join(sourceDir, "hr", "policy.docx"), content),
+    );
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir, "--json"]),
+    ) as { sources: Array<{ title: string }>; summary: { verified: number } };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["policy"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch returns an aggregate report for each answer file", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-"));
 
