@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cad27b5` on 2026-07-25, feat: discover MediaWiki policy exports
+- Latest shipped change: `28ddbab` on 2026-07-25, test: pin repository check script contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | [#1053](https://github.com/nash226/quorum/pull/1053) | test: pin repository check script contract | `28ddbab` |
 | 2026-07-25 | Direct push | feat: discover MediaWiki policy exports | `cad27b5` |
 | 2026-07-25 | Direct push | test: cover YAML sources through HTTP API | `3c8a7db` |
 | 2026-07-25 | Direct push | test: derive packaged capability extensions | `de6a428` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | feat: expose supported input formats | `fb0f852` |
 | 2026-07-25 | Direct push | feat: discover Org-mode policy exports | `8606665` |
 | 2026-07-25 | [#1034](https://github.com/nash226/quorum/pull/1034) | feat: discover MDX policy exports | `1f3daa5` |
-| 2026-07-25 | Direct push | feat: discover AsciiDoc policy exports | `a196821` |
 
