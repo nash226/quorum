@@ -93,6 +93,18 @@ test("strips JSON extensions from fallback source titles", async () => {
   assert.equal(source.content, "policy: Employees get 12 weeks.");
 });
 
+test("normalizes JSONL records for answer-style claim extraction", async () => {
+  const document = await sourceDocumentFromFile(
+    "answers/agent.jsonl",
+    '{"answer":"Employees receive 12 weeks of leave."}\n{"answer":"Managers approve the request."}\n',
+    0,
+  );
+
+  assert.equal(document.title, "agent");
+  assert.match(document.content, /\[1\]\.answer: Employees receive 12 weeks of leave\./);
+  assert.match(document.content, /\[2\]\.answer: Managers approve the request\./);
+});
+
 test("strips XML extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile("docs/policies/benefits.xml", "<policy>Employees get 12 weeks.</policy>", 0);
 

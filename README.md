@@ -343,7 +343,10 @@ including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim
 extraction, so exported agent responses can be verified without first
 converting them to plain text.
-File-based TOML answers use the same normalization path as structured sources,
+File-based JSONL answers use the same normalization path as structured sources,
+so newline-delimited agent exports can be discovered recursively through
+`--answer-dir` without conversion. Each JSON object is rendered with a stable
+record index before claim extraction. File-based TOML answers use the same normalization path as structured sources,
 both when passed directly and when discovered through `--answer-dir`, so
 agent exports do not need to be converted before batch verification.
 Nested TOML answer-directory discovery is covered by the CLI regression suite,
