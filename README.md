@@ -161,9 +161,11 @@ represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
 It also covers recursive discovery ordering, mixed explicit and directory
 sources, reviewer-oriented batch JSON, and CI fail policies.
-Structured answer exports can be passed directly with `--answer` or discovered
-through `--answer-dir`; JSON, YAML/YML, XML, and TOML files use the same
-normalization path in both workflows.
+Structured answer exports can be passed directly with `--answer`; TOML files
+can also be discovered through `--answer-dir`, while JSON, YAML/YML, and XML
+answers use the same normalization path when passed explicitly. Structured
+source exports are supported through both explicit `--source` and recursive
+`--source-dir` workflows.
 When a workflow has an explicit source set, repeat `--source` instead of
 creating a temporary directory:
 
