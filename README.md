@@ -336,6 +336,10 @@ human review; the CLI treats answers with no extracted claims as a review-policy
 failure too. See the [CLI guide](docs/cli-guide.md#fail-policy-gates) for the
 copy-pasteable example.
 
+Verification also stops with `No approved source files found` when the supplied
+source paths and directories contain no supported files, instead of producing a
+report where every claim is unsupported.
+
 Integrations can check the installed CLI and API contract version without
 starting the server:
 

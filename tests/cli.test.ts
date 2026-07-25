@@ -122,6 +122,28 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("verify rejects an empty source directory before producing unsupported claims", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-sources-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(sourceDir);
+
+    const result = await runCliAllowFailure([
+      "verify",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source-dir",
+      sourceDir,
+    ]);
+
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /No approved source files found/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify preserves explicit stable source IDs in evidence and reports", async () => {
   const stdout = await runCli([
     "verify",
