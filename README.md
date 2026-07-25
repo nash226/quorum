@@ -318,6 +318,9 @@ their source metadata in reports.
 JSON and YAML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.
+YAML/YML answer files use the same normalization path as structured sources,
+so single-answer verification extracts claims from policy fields instead of
+matching against raw YAML punctuation.
 Source-directory verification discovers both `.yaml` and `.yml` policies,
 including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim

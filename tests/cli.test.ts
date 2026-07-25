@@ -107,6 +107,29 @@ test("verify deduplicates repeated approved source paths", async () => {
   assert.equal(report.sources[0]?.sourcePath, "examples/sources/hr-policy.md");
 });
 
+test("verify normalizes YAML answers before claim extraction", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-yaml-answer-"));
+  const answerPath = join(tempDir, "answer.yaml");
+  const sourcePath = join(tempDir, "policy.md");
+
+  try {
+    await Promise.all([
+      writeFile(answerPath, "policy: Employees receive 12 weeks of paid leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { assessments: Array<{ verdict: string; claim: { text: string } }> };
+
+    assert.equal(report.assessments.length, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "policy: Employees receive 12 weeks of paid leave.");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([
