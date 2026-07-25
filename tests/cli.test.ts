@@ -1350,7 +1350,7 @@ test("verify accepts a docx source", async () => {
     };
 
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "hr-policy", trustLevel: "medium" },
+      { id: "source_1", sourcePath, title: "hr-policy", trustLevel: "medium" },
     ]);
     assert.equal(report.summary.verified, 1);
   } finally {
