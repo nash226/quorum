@@ -182,6 +182,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".xhtml",
   ".pdf",
   ".docx",
+  ".toml",
 ]);
 export const STDIN_ANSWER_PATH = "<stdin>";
 
@@ -830,7 +831,7 @@ async function readAnswerInput(inputPath: string): Promise<string> {
   if (inputPath !== "-") {
     const content = await readFile(inputPath);
 
-    if (/\.(?:pdf|docx|json|ya?ml|xml)$/i.test(inputPath)) {
+    if (/\.(?:pdf|docx|json|ya?ml|xml|toml)$/i.test(inputPath)) {
       const answerDocument = await sourceDocumentFromFile(inputPath, content, 0);
       return answerDocument.content;
     }

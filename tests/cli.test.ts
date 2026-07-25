@@ -1413,6 +1413,55 @@ test("verify normalizes structured JSON answers before claim extraction", async 
   }
 });
 
+test("verify normalizes TOML answers before claim extraction", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.toml");
+    await writeFile(answerPath, '[policy]\nleave = "Employees receive 12 weeks of paid leave."\n');
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as { assessments: Array<{ claim: { text: string } }> };
+    assert.equal(report.assessments[0]?.claim.text, 'policy.leave: "Employees receive 12 weeks of paid leave."');
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch discovers TOML answers in answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    await mkdir(answerDir);
+    await writeFile(join(answerDir, "answer.toml"), '[policy]\nleave = "Employees receive 12 weeks of paid leave."\n');
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as { answers: Array<{ answerPath: string; report: { assessments: Array<unknown> } }> };
+    assert.equal(report.answers.length, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "answer.toml"));
+    assert.equal(report.answers[0]?.report.assessments.length, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers htm answers from answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-htm-answer-dir-"));
 

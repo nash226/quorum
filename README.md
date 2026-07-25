@@ -329,6 +329,9 @@ including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim
 extraction, so exported agent responses can be verified without first
 converting them to plain text.
+File-based TOML answers use the same normalization path as structured sources,
+both when passed directly and when discovered through `--answer-dir`, so
+agent exports do not need to be converted before batch verification.
 Programmatic batch verification applies that normalization to YAML answers too,
 so integrations can submit structured answer content without pre-converting it.
 Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
