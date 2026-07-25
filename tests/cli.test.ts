@@ -3191,6 +3191,32 @@ test("verify-batch preserves explicit answer order ahead of directory-discovered
   }
 });
 
+test("verify-batch preserves a streamed answer before explicit answer files", async () => {
+  const stdout = await runCli([
+    "verify-batch",
+    "--answer",
+    "-",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--source",
+    "examples/sources/hr-policy.md",
+    "--json",
+  ], {
+    stdin: "Employees receive 12 weeks of paid parental leave.\n",
+  });
+
+  const report = JSON.parse(stdout) as {
+    answers: Array<{ answerPath: string; answerLabel: string; report: { summary: { verified: number } } }>;
+  };
+
+  assert.deepEqual(report.answers.map((answer) => answer.answerPath), [
+    "<stdin>",
+    "examples/answers/hr-answer.md",
+  ]);
+  assert.equal(report.answers[0]?.answerLabel, "<stdin>");
+  assert.equal(report.answers[0]?.report.summary.verified, 1);
+});
+
 test("verify-batch dedupes repeated answer files that use different path spellings", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-answer-dedupe-"));
 

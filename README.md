@@ -654,6 +654,8 @@ The packaged smoke gate also verifies the published `quorum verify --answer -`
 path, so integrations can stream an answer directly without a temporary file.
 It also verifies that packaged `verify-batch` can combine one streamed answer
 with explicit answer files while preserving input order and `<stdin>` provenance.
+The CLI test suite also pins that streamed-first ordering contract before
+published-package smoke checks run.
 That packaged batch smoke also pins a caller-supplied `--generated-at` timestamp
 through the aggregate and per-answer reports for reproducible audit handoffs.
 
