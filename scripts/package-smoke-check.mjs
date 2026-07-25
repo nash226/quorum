@@ -218,7 +218,7 @@ try {
     JSON.stringify(capabilitiesPayload.capabilities?.sourceExtensions) !==
       JSON.stringify([".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml", ".toml"]) ||
     JSON.stringify(capabilitiesPayload.capabilities?.answerExtensions) !==
-      JSON.stringify([".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx"]) ||
+      JSON.stringify([".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".toml"]) ||
     JSON.stringify(capabilitiesPayload.capabilities?.trustLevels) !== JSON.stringify(["low", "medium", "high"]) ||
     !Array.isArray(capabilitiesPayload.capabilities?.reviewQueueStatuses) ||
     !capabilitiesPayload.capabilities.reviewQueueStatuses.includes("no_claims")
