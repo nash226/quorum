@@ -328,6 +328,8 @@ including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim
 extraction, so exported agent responses can be verified without first
 converting them to plain text.
+Programmatic batch verification applies that normalization to YAML answers too,
+so integrations can submit structured answer content without pre-converting it.
 Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 `.xhtml` exports, so common HTML extensions can be used without listing each
 answer explicitly.

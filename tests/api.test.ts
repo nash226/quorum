@@ -1431,6 +1431,26 @@ test("programmatic API normalizes embedded JSON, YAML, and XML sources", async (
   });
 });
 
+test("programmatic batch verification normalizes YAML answers", async () => {
+  const result = await verifyAnswerBatchContentsResult({
+    answers: [{
+      answerPath: "answers/remote-work.yaml",
+      answer: "policy:\n  eligibility: Employees may work remotely two days per week.\n",
+    }],
+    sources: [{
+      sourcePath: "policies/remote-work.md",
+      content: "Employees may work remotely two days per week.",
+    }],
+  });
+
+  assert.deepEqual(result.report.answers[0]?.report.summary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
+  });
+});
+
 test("async in-memory verification extracts PDF and DOCX answer bytes", async () => {
   const pdfAnswer = createSimplePdf("Employees receive 12 weeks of paid leave.");
   const pdfReport = await verifyAnswerContents({
