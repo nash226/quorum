@@ -1370,7 +1370,7 @@ test("programmatic API verifies one in-memory answer against raw source content"
   });
 });
 
-test("programmatic API normalizes embedded JSON and XML sources", async () => {
+test("programmatic API normalizes embedded JSON, YAML, and XML sources", async () => {
   const sources = await loadSourcesFromContent({
     sources: [
       {
@@ -1382,6 +1382,10 @@ test("programmatic API normalizes embedded JSON and XML sources", async () => {
       {
         sourcePath: "policies/refunds-policy.xml",
         content: `<?xml version="1.0"?><policy><rule>Refunds are available for 30 days from the purchase date.</rule></policy>`,
+      },
+      {
+        sourcePath: "policies/remote-work-policy.yaml",
+        content: "policy:\n  eligibility: Employees may work remotely two days per week.\n",
       },
     ],
   });
@@ -1400,6 +1404,10 @@ test("programmatic API normalizes embedded JSON and XML sources", async () => {
         title: "refunds-policy",
         content: "Refunds are available for 30 days from the purchase date.",
       },
+      {
+        title: "remote-work-policy",
+        content: "policy.eligibility: Employees may work remotely two days per week.",
+      },
     ],
   );
 
@@ -1407,18 +1415,19 @@ test("programmatic API normalizes embedded JSON and XML sources", async () => {
     answers: [
       { answer: "Employees receive 12 weeks of paid parental leave.", answerPath: "answers/leave.md" },
       { answer: "Refunds are available for 30 days from the purchase date.", answerPath: "answers/refunds.md" },
+      { answer: "Employees may work remotely two days per week.", answerPath: "answers/remote-work.md" },
     ],
     sources,
   });
 
-  assert.deepEqual(report.summary, {
-    verified: 2,
-    contradicted: 0,
-    unsupported: 0,
-    needs_review: 0,
-    answersWithClaims: 2,
-    answersWithoutClaims: 0,
-    answersWithFailures: 0,
+    assert.deepEqual(report.summary, {
+      verified: 3,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithClaims: 3,
+      answersWithoutClaims: 0,
+      answersWithFailures: 0,
   });
 });
 
