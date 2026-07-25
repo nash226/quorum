@@ -151,7 +151,7 @@ represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
 Structured answer exports can be passed directly with `--answer` or discovered
 through `--answer-dir`; JSON, YAML/YML, XML, and TOML files use the same
-normalization path in both workflows.
+normalization path in both workflows, including recursive batch discovery.
 When a workflow has an explicit source set, repeat `--source` instead of
 creating a temporary directory:
 
