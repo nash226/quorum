@@ -321,6 +321,8 @@ file-based verification without separate CLI overrides.
 YAML/YML answer files use the same normalization path as structured sources,
 so single-answer verification extracts claims from policy fields instead of
 matching against raw YAML punctuation.
+Batch answer-directory discovery also includes `.yaml` and `.yml` exports, so
+YAML agent responses can be verified without listing each answer explicitly.
 Source-directory verification discovers both `.yaml` and `.yml` policies,
 including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim

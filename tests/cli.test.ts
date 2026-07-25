@@ -1391,6 +1391,39 @@ test("verify-batch discovers html answers from answer directories", async () => 
   }
 });
 
+test("verify-batch discovers YAML and YML answers from answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-yaml-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourcePath = join(tempDir, "support-policy.md");
+
+    await mkdir(answerDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "yaml-answer.yaml"), "response: Customers can request refunds within 30 days.\n", "utf8"),
+      writeFile(join(answerDir, "yml-answer.yml"), "response: Customers can request refunds within 30 days.\n", "utf8"),
+      writeFile(sourcePath, "Customers can request refunds within 30 days.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source", sourcePath, "--json",
+    ])) as {
+      answerCount: number;
+      summary: { verified: number };
+      answers: Array<{ answerPath: string }>;
+    };
+
+    assert.equal(report.answerCount, 2);
+    assert.equal(report.summary.verified, 2);
+    assert.deepEqual(
+      report.answers.map((answer) => answer.answerPath),
+      [join(answerDir, "yaml-answer.yaml"), join(answerDir, "yml-answer.yml")],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify normalizes structured JSON answers before claim extraction", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-answer-"));
 
