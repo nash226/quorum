@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a069e0d` on 2026-07-25, test: smoke-check packaged XML sources
+- Latest shipped change: `2865bd4` on 2026-07-25, docs: clarify structured answer file boundaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | docs: clarify structured answer file boundaries | `2865bd4` |
 | 2026-07-25 | Direct push | test: smoke-check packaged XML sources | `a069e0d` |
 | 2026-07-24 | Direct push | feat: normalize structured answer files | `6b8575d` |
 | 2026-07-24 | [#985](https://github.com/nash226/quorum/pull/985) | test: cover empty source directory failure | `d3d6305` |
@@ -56,5 +57,4 @@
 | 2026-07-24 | [#983](https://github.com/nash226/quorum/pull/983) | test: cover packaged XHTML source verification | `5f7aecb` |
 | 2026-07-24 | Direct push | feat: support XHTML document ingestion | `f3bdb1f` |
 | 2026-07-24 | Direct push | test: preserve malformed structured source exports | `6d5e1a4` |
-| 2026-07-24 | Direct push | test: cover htm batch answer discovery | `6f5e92a` |
 
