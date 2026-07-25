@@ -265,7 +265,8 @@ function parseHtmlSource(content: string): ParsedSource {
 
 function parseJsonSource(content: string): ParsedSource {
   try {
-    return { metadata: {}, body: formatStructuredValue(JSON.parse(content)) };
+    const value: unknown = JSON.parse(content);
+    return { metadata: structuredMetadata(value), body: formatStructuredValue(value) };
   } catch {
     return { metadata: {}, body: content };
   }
@@ -305,6 +306,7 @@ function parseXmlSource(content: string): ParsedSource {
 
 function parseYamlSource(content: string): ParsedSource {
   const lines: string[] = [];
+  const metadata: SourceMetadata = {};
   const parents: Array<{ indent: number; key: string }> = [];
   const listIndexes = new Map<string, number>();
 
@@ -330,11 +332,36 @@ function parseYamlSource(content: string): ParsedSource {
     const key = value.slice(0, separator).trim();
     const scalar = value.slice(separator + 1).trim();
     const path = prefix ? `${prefix}.${key}` : key;
-    if (scalar) lines.push(`${path}: ${scalar}`);
+    if (scalar) {
+      lines.push(`${path}: ${scalar}`);
+      if (!prefix) applyStructuredMetadata(metadata, key, scalar);
+    }
     else parents.push({ indent, key });
   }
 
-  return { metadata: {}, body: lines.join("\n") || content };
+  return { metadata, body: lines.join("\n") || content };
+}
+
+function structuredMetadata(value: unknown): SourceMetadata {
+  const metadata: SourceMetadata = {};
+
+  if (!value || typeof value !== "object" || Array.isArray(value)) return metadata;
+
+  for (const [key, item] of Object.entries(value)) {
+    if (typeof item === "string" || typeof item === "number") {
+      applyStructuredMetadata(metadata, key, String(item));
+    }
+  }
+
+  return metadata;
+}
+
+function applyStructuredMetadata(metadata: SourceMetadata, key: string, value: string): void {
+  const normalizedKey = key.replace(/[-_]/g, "").toLowerCase();
+
+  if (normalizedKey === "title" && value) metadata.title = stripQuotes(value);
+  else if (normalizedKey === "updatedat" && value) metadata.updatedAt = stripQuotes(value);
+  else if (normalizedKey === "trustlevel" && value) metadata.trustLevel = tryParseTrustLevel(stripQuotes(value));
 }
 
 function selectHtmlTitle(input: {
