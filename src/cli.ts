@@ -52,8 +52,10 @@ import { extractClaimsResult } from "./claim-extractor.js";
 import { renderAnswerPreview, stripByteOrderMark } from "./text.js";
 import {
   importReviewerDecisionFile,
+  ANSWER_EXTENSIONS,
   loadSourceDocuments,
   loadSourceDocumentsFromContent,
+  SOURCE_EXTENSIONS,
   verifyAnswerFile,
   verifyBatchAnswers,
 } from "./workflow.js";
@@ -153,6 +155,7 @@ interface OpenApiArgs {
 
 const HELP_FLAGS = new Set(["--help", "-h"]);
 type CommandName =
+  | "formats"
   | "verify"
   | "verify-batch"
   | "extract-claims"
@@ -202,6 +205,15 @@ async function main(): Promise<void> {
     }
 
     printHelp(helpCommand as CommandName | undefined);
+    return;
+  }
+
+  if (command === "formats") {
+    if (args.length > 0) {
+      throw new Error("Usage: quorum formats");
+    }
+
+    printFormats();
     return;
   }
 
@@ -1594,6 +1606,7 @@ function isHelpFlag(value: string): boolean {
 
 function isCommandName(value: string): value is CommandName {
   return [
+    "formats",
     "verify",
     "verify-batch",
     "extract-claims",
@@ -1628,6 +1641,13 @@ function parseMinScore(value: string): number {
 
 function printHelp(command?: CommandName): void {
   const helpTextByCommand: Record<CommandName, string> = {
+    formats: `Quorum formats
+
+Usage:
+  quorum formats
+
+Print the extensions discovered for approved sources and AI-generated answers.
+`,
     verify: `Quorum verify
 
 Usage:
@@ -1847,6 +1867,7 @@ Options:
 
 Usage:
   quorum help [<command>]
+  quorum formats
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--source-id <id>] [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--source-id <id>] [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on <verdict>]
   quorum extract-claims --answer <path|-> [--answer-label <label>] [--json|--result-json] [--result-json-out <path>]
@@ -1876,6 +1897,18 @@ Example:
   npm run dev -- openapi --out reports/openapi.json
   npm run dev -- version
 `);
+}
+
+function printFormats(): void {
+  console.log(`Quorum input formats
+
+Source files: ${formatExtensions(SOURCE_EXTENSIONS)}
+Answer files: ${formatExtensions(ANSWER_EXTENSIONS)}
+`);
+}
+
+function formatExtensions(extensions: ReadonlySet<string>): string {
+  return [...extensions].sort().join(", ");
 }
 
 main().catch((error: unknown) => {

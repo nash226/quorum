@@ -56,6 +56,13 @@ sentence terminators.
 
 ## Quick Start
 
+To see the exact extensions discovered for approved sources and AI-generated
+answers, run:
+
+```bash
+npm run dev -- formats
+```
+
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
 machine-readable after packaging. It also exercises the packaged
