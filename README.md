@@ -122,6 +122,8 @@ verification. JSON, YAML, and XML exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
 reviewed without a separate conversion step. Use `--source-dir` for a mixed directory of policy
 files;
+the programmatic API applies the same YAML/YML normalization to in-memory sources and file-backed
+source directories.
 answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
 CLI also deduplicates repeated source paths, keeping each approved document
