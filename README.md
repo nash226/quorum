@@ -153,6 +153,8 @@ so editor metadata and hidden staging folders are not treated as inputs. The
 CLI also deduplicates repeated source paths, keeping each approved document
 represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
+It also covers recursive discovery ordering, mixed explicit and directory
+sources, reviewer-oriented batch JSON, and CI fail policies.
 Structured answer exports can be passed directly with `--answer` or discovered
 through `--answer-dir`; JSON, YAML/YML, XML, and TOML files use the same
 normalization path in both workflows.

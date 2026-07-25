@@ -11,7 +11,7 @@
 
 ## Current Capabilities
 
-- read Markdown, text, HTML, JSON, XML, PDF, and DOCX answers and approved sources
+- read Markdown/MDX, AsciiDoc, Org-mode, MediaWiki, text, HTML/XHTML, JSON, YAML/YML, XML, TOML, PDF, and DOCX answers and approved sources
 - discover approved sources from explicit paths or directories
 - load source titles, freshness, trust levels, and durable source IDs
 - extract normalized atomic claims, including common exported-answer formats
