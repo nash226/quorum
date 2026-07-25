@@ -267,6 +267,8 @@ summary is available through the HTTP API and the programmatic API, while
 
 It also checks that packaged `/health`, `/healthz`, `/readyz`, and `/livez`
 endpoints support bodyless `HEAD` probes for deployment health checks.
+The same packaged gate probes bodyless `HEAD /capabilities`, keeping capability
+discovery compatible with lightweight integration checks.
 The same packaged HTTP gate exercises the readiness query aliases
 `/healthz?probe=readiness` and `/readyz?probe=kubernetes`, keeping probe routing
 available in the published server artifact.
