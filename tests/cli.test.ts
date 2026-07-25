@@ -2220,6 +2220,32 @@ test("verify discovers XML sources in source directories", async () => {
   }
 });
 
+test("verify discovers XHTML sources in source directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xhtml-source-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(tempDir, "answer.md");
+    await mkdir(sourceDir, { recursive: true });
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(
+      join(sourceDir, "hr-policy.xhtml"),
+      "<?xml version=\"1.0\"?><html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>HR Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>",
+      "utf8",
+    );
+
+    const report = JSON.parse(await runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir, "--json"])) as {
+      sources: Array<{ title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.sources[0]?.title, "HR Policy");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch returns an aggregate report for each answer file", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-"));
 
