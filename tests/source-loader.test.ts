@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import JSZip from "jszip";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 import { parseSource, sourceDocumentFromFile } from "../src/source-loader.js";
 
@@ -21,6 +22,20 @@ test("extracts readable text from DOCX source content", async () => {
   assert.equal(source.title, "hr-policy");
   assert.equal(source.trustLevel, "medium");
   assert.equal(source.content, "Walking on imported air");
+});
+
+test("extracts readable text and metadata from ODT source content", async () => {
+  const archive = new JSZip();
+  archive.file(
+    "content.xml",
+    '<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><office:meta><dc:title>Benefits Policy</dc:title><dc:date>2026-07-20</dc:date></office:meta><office:body><office:text><text:h>Leave</text:h><text:p>Employees receive 12 weeks.</text:p></office:text></office:body></office:document-content>',
+  );
+  const content = await archive.generateAsync({ type: "uint8array" });
+  const source = await sourceDocumentFromFile("docs/benefits.odt", content, 0);
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-07-20");
+  assert.equal(source.content, "Leave\nEmployees receive 12 weeks.");
 });
 
 test("preserves a caller-supplied source identifier for DOCX content", async () => {
