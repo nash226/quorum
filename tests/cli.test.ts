@@ -1368,6 +1368,28 @@ test("verify-batch discovers html answers from answer directories", async () => 
   }
 });
 
+test("verify normalizes structured JSON answers before claim extraction", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.json");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, JSON.stringify({ response: "Customers can request refunds within 30 days." }), "utf8"),
+      writeFile(sourcePath, "Customers can request refunds within 30 days.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as { summary: { verified: number } };
+
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers htm answers from answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-htm-answer-dir-"));
 
