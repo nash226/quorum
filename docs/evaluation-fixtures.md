@@ -25,7 +25,7 @@ set covers:
 - priority support response-time and unsupported-account-management claims
 - phone-support availability, callback timing, and unsupported universal-access claims
 
-The benchmark currently contains 77 fixtures: 27 HR and 50 support workflows.
+The benchmark currently contains 78 fixtures: 27 HR and 51 support workflows.
 The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.

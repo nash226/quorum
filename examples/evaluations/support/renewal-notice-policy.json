@@ -1,0 +1,24 @@
+{
+  "name": "Support subscription renewal notice policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-renewal-notice-answer.md",
+  "answer": "Customers receive an email reminder 7 days before annual renewal.\nCustomers receive a reminder 30 days before every renewal.\nCustomers receive a free gift card with every support interaction.\n",
+  "answerLabel": "Support renewal notice reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-renewal-notice-policy.md",
+      "id": "support/renewal-notice@2026-07-24",
+      "title": "Support Subscription Renewal Notice Policy",
+      "updatedAt": "2026-07-24",
+      "trustLevel": "high",
+      "content": "Customers receive an email reminder 7 days before annual renewal.\nCustomers receive renewal reminders when required by the plan terms.\nRenewal reminders do not include a guaranteed refund; refund eligibility follows the applicable plan policy.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}

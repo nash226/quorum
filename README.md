@@ -16,6 +16,9 @@ verification, where grounded answers are high-volume and costly to get wrong.
 The evaluation suite now includes a support account-recovery scenario covering
 verified recovery steps, a contradicted identity-verification bypass, and an
 unsupported response-time promise.
+It also includes a subscription-renewal notice scenario covering a verified
+annual reminder, a contradicted reminder window, and an unsupported gift-card
+promise.
 Claim extraction also normalizes bracketed, Arabic-Indic, Persian, and fullwidth ordered-list
 markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
@@ -584,7 +587,7 @@ The same packaged check verifies that the public `API_VERSION` export matches
 the package version, keeping library callers and HTTP/CLI discovery on one
 contract version.
 
-The checked-in 77-fixture benchmark spans 27 HR and 50 support workflows, including
+The checked-in 78-fixture benchmark spans 27 HR and 51 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
@@ -601,7 +604,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 77-fixture total explicit, so new benchmark packets cannot drift
+the published 78-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.
@@ -610,7 +613,7 @@ matched-claim counts drift, keeping scorecard and aggregate gates reviewable.
 The fixture loader now applies the same fail-closed rule to unknown top-level
 fields, so misspelled answer, source, or expectation keys fail before scoring.
 The evaluator also regression-tests the support-only domain filter, keeping
-focused support scorecards aligned with the 50-fixture benchmark slice.
+focused support scorecards aligned with the 51-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
@@ -750,7 +753,7 @@ The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
 
-The benchmark inventory is currently reconciled at 77 fixtures, including the
+The benchmark inventory is currently reconciled at 78 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
 
 The HR benchmark now also covers sabbatical leave, preserving the five-year
