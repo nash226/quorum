@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `32d96a9` on 2026-07-24, feat: normalize JSON and XML source exports
+- Latest shipped change: `a38d260` on 2026-07-24, docs: document XML source verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -48,6 +48,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | docs: document XML source verification | `a38d260` |
 | 2026-07-24 | Direct push | feat: normalize JSON and XML source exports | `32d96a9` |
 | 2026-07-24 | Direct push | test: cover XML source directory discovery | `48390c0` |
 | 2026-07-24 | Direct push | test: add support renewal notice fixture | `2661260` |
@@ -55,5 +56,4 @@
 | 2026-07-24 | Direct push | test: smoke-check packaged JSON sources | `d1b1ba5` |
 | 2026-07-24 | Direct push | feat: accept XML source exports | `6ec8ffe` |
 | 2026-07-24 | Direct push | test: cover base64 source verification | `0a33af5` |
-| 2026-07-24 | Direct push | docs: align roadmap with shipped foundations | `0df245a` |
 

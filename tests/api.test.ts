@@ -1370,6 +1370,58 @@ test("programmatic API verifies one in-memory answer against raw source content"
   });
 });
 
+test("programmatic API normalizes embedded JSON and XML sources", async () => {
+  const sources = await loadSourcesFromContent({
+    sources: [
+      {
+        sourcePath: "policies/leave-policy.json",
+        content: JSON.stringify({
+          policy: "Employees receive 12 weeks of paid parental leave.",
+        }),
+      },
+      {
+        sourcePath: "policies/refunds-policy.xml",
+        content: `<?xml version="1.0"?><policy><rule>Refunds are available for 30 days from the purchase date.</rule></policy>`,
+      },
+    ],
+  });
+
+  assert.deepEqual(
+    sources.map((source) => ({
+      title: source.title,
+      content: source.content,
+    })),
+    [
+      {
+        title: "leave-policy",
+        content: "policy: Employees receive 12 weeks of paid parental leave.",
+      },
+      {
+        title: "refunds-policy",
+        content: "Refunds are available for 30 days from the purchase date.",
+      },
+    ],
+  );
+
+  const report = verifyAnswers({
+    answers: [
+      { answer: "Employees receive 12 weeks of paid parental leave.", answerPath: "answers/leave.md" },
+      { answer: "Refunds are available for 30 days from the purchase date.", answerPath: "answers/refunds.md" },
+    ],
+    sources,
+  });
+
+  assert.deepEqual(report.summary, {
+    verified: 2,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
+    answersWithClaims: 2,
+    answersWithoutClaims: 0,
+    answersWithFailures: 0,
+  });
+});
+
 test("async in-memory verification extracts PDF and DOCX answer bytes", async () => {
   const pdfAnswer = createSimplePdf("Employees receive 12 weeks of paid leave.");
   const pdfReport = await verifyAnswerContents({
