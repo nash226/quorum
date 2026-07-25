@@ -290,7 +290,7 @@ function formatStructuredValue(value: unknown, prefix = ""): string {
 
 function parseXmlSource(content: string): ParsedSource {
   return {
-    metadata: {},
+    metadata: parseXmlMetadata(content),
     body: decodeHtmlEntities(
       content
         .replace(/<\?xml[\s\S]*?\?>/gi, " ")
@@ -302,6 +302,17 @@ function parseXmlSource(content: string): ParsedSource {
         .join("\n"),
     ),
   };
+}
+
+function parseXmlMetadata(content: string): SourceMetadata {
+  const metadata: SourceMetadata = {};
+
+  for (const match of content.matchAll(/<([A-Za-z][A-Za-z0-9_.:-]*)\b[^>]*>\s*([^<]+?)\s*<\/\1\s*>/g)) {
+    const value = decodeHtmlEntities(match[2] ?? "").trim();
+    if (value) applyStructuredMetadata(metadata, match[1] ?? "", value);
+  }
+
+  return metadata;
 }
 
 function parseYamlSource(content: string): ParsedSource {

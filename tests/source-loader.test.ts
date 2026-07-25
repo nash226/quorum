@@ -106,6 +106,19 @@ test("normalizes XML source exports into claim-readable text", async () => {
   assert.equal(source.content, "Employees get 12 weeks.\nUS & CA");
 });
 
+test("loads metadata from XML source exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.xml",
+    "<policy><title>Benefits Policy</title><updated_at>2026-07-25</updated_at><trust_level>high</trust_level><leave>Employees get 12 weeks.</leave></policy>",
+    0,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-07-25");
+  assert.equal(source.trustLevel, "high");
+  assert.match(source.content, /Employees get 12 weeks\./);
+});
+
 test("normalizes YAML source exports into claim-readable lines", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.yaml",

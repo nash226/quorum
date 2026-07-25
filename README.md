@@ -314,7 +314,9 @@ The supported local answer and source formats are Markdown (`.md`, `.markdown`),
 plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
 documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), and XML (`.xml`) exports. JSON, YAML, and XML
 exports are normalized into claim-readable evidence text while preserving
-their source metadata in reports.
+their source metadata in reports. XML exports also read scalar `title`,
+`updatedAt`/`updated_at`, and `trustLevel`/`trust_level` elements, so reviewer
+evidence keeps provenance from structured policy exports.
 JSON and YAML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.
