@@ -28,6 +28,8 @@ Fullwidth list punctuation is normalized too, so localized exports such as
 `１．` and `۲．` do not leak ordering markers into reviewer claims.
 Short punctuated policy claims are also preserved across Unicode scripts, so
 concise localized answers remain available for verification and review.
+Inline CJK and fullwidth sentence punctuation is split consistently too, so
+multiple localized claims in one line stay independently reviewable.
 Unicode checkbox markers (`☐`, `☑`, and `☒`) are also normalized when answers
 come from exported task lists.
 
