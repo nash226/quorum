@@ -309,6 +309,8 @@ extraction, so exported agent responses can be verified without first
 converting them to plain text.
 Batch answer-directory discovery also includes `.json` and `.xml` exports, so
 structured agent responses can be verified alongside Markdown and HTML answers.
+The packaged capability smoke check validates those structured answer extensions
+too, keeping published discovery metadata aligned with batch behavior.
 Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 `.xhtml` exports, so common HTML extensions can be used without listing each
 answer explicitly.
