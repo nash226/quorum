@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a196821` on 2026-07-25, feat: discover AsciiDoc policy exports
+- Latest shipped change: `1f3daa5` on 2026-07-25, feat: discover MDX policy exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | [#1034](https://github.com/nash226/quorum/pull/1034) | feat: discover MDX policy exports | `1f3daa5` |
 | 2026-07-25 | Direct push | feat: discover AsciiDoc policy exports | `a196821` |
 | 2026-07-25 | Direct push | docs: document the complete local check gate | `e801bc3` |
 | 2026-07-25 | Direct push | test: cover nested markdown quote claims | `ca82525` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | test: cover nested DOCX answer discovery | `393bf1c` |
 | 2026-07-25 | Direct push | docs: expose supported file formats in cli help | `30c82c6` |
 | 2026-07-25 | Direct push | test: cover single-answer DOCX verification | `58535e7` |
-| 2026-07-25 | Direct push | fix: normalize programmatic TOML answers | `9a3b421` |
 
