@@ -26,6 +26,9 @@ const libraryEntry = await import(new URL("dist/src/index.js", packageRoot));
 const serverEntry = await import(new URL("dist/src/api-server.js", packageRoot));
 const cliPath = new URL("dist/src/cli.js", packageRoot);
 
+const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS];
+const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS];
+
 for (const versionFlag of ["--version", "-v"]) {
   const versionOutput = execFileSync("node", [fileURLToPath(cliPath), versionFlag], { encoding: "utf8" }).trim();
   if (versionOutput !== `quorum ${packageJson.version}`) {
@@ -215,10 +218,8 @@ try {
     capabilitiesPayload.service !== "quorum" ||
     capabilitiesPayload.capabilities?.maxRequestBytes !== 1_048_576 ||
     capabilitiesPayload.capabilities?.requestTimeoutMs !== 30_000 ||
-    JSON.stringify(capabilitiesPayload.capabilities?.sourceExtensions) !==
-      JSON.stringify([".md", ".markdown", ".mdx", ".adoc", ".asciidoc", ".org", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml", ".toml"]) ||
-    JSON.stringify(capabilitiesPayload.capabilities?.answerExtensions) !==
-      JSON.stringify([".md", ".markdown", ".mdx", ".adoc", ".asciidoc", ".org", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".toml"]) ||
+    JSON.stringify(capabilitiesPayload.capabilities?.sourceExtensions) !== JSON.stringify(expectedSourceExtensions) ||
+    JSON.stringify(capabilitiesPayload.capabilities?.answerExtensions) !== JSON.stringify(expectedAnswerExtensions) ||
     JSON.stringify(capabilitiesPayload.capabilities?.trustLevels) !== JSON.stringify(["low", "medium", "high"]) ||
     !Array.isArray(capabilitiesPayload.capabilities?.reviewQueueStatuses) ||
     !capabilitiesPayload.capabilities.reviewQueueStatuses.includes("no_claims")

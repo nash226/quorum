@@ -176,6 +176,9 @@ multi-answer workflow consumers.
 The packaged `verify-batch` smoke gate also assigns and checks an explicit
 `--source-id`, keeping durable source identity covered for batch CLI consumers
 and aggregate CSV exports.
+The package smoke gate derives its supported-extension contract from the built
+library exports, so adding a format cannot leave the published capability check
+with a stale hard-coded list.
 It also discovers an inspectable JSON policy export from a packaged source
 directory, keeping the published CLI's local JSON ingestion path covered.
 It also checks repeated explicit answers with `--answer-label`, preserving
