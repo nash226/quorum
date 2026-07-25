@@ -67,7 +67,7 @@ export function stripByteOrderMark(text: string): string {
 export function splitIntoSentences(text: string): string[] {
   return text
     .replace(/\r/g, "")
-    .split(/\n+|(?<=[.!?])\s+/g)
+    .split(/\n+|(?<=[.!?])\s+|(?<=[\u3002\uFF01\uFF1F])(?:\s+|(?=\p{L}|\p{N}))/gu)
     .map((part) => stripLeadingClaimMarker(part).trim())
     .filter(Boolean);
 }
