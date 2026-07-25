@@ -211,7 +211,7 @@ function isYamlSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|json|xml|ya?ml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|json|xml|ya?ml|csv)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
