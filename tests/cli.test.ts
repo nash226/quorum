@@ -3139,6 +3139,42 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("verify discovers files with uppercase supported extensions", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-uppercase-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(answerDir, "ANSWER.MD");
+    const sourcePath = join(sourceDir, "POLICY.MD");
+
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answers: Array<{ answerPath: string; report: { summary: { verified: number } } }>;
+    };
+
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [answerPath]);
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify dedupes repeated source files that use different path spellings", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-source-dedupe-"));
 
