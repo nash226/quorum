@@ -9,7 +9,7 @@ This concise index is the source for the generated capability snapshot in
 `docs/status.md`. Detailed context and examples remain in this guide and the
 linked workflow documents.
 
-- read Markdown, text, HTML, JSON, XML, PDF, and DOCX answers and approved sources
+- read Markdown/MDX, AsciiDoc, Org-mode, MediaWiki, text, HTML/XHTML, JSON, YAML/YML, XML, TOML, PDF, and DOCX answers and approved sources
 - discover approved sources from explicit paths or directories
 - load source titles, freshness, trust levels, and durable source IDs
 - extract normalized atomic claims, including common exported-answer formats
@@ -55,16 +55,13 @@ npm run dev -- verify \
   --summary-csv-out reports/hr-summary.csv
 ```
 
-Supported answer and source files include Markdown/MDX, text, exported HTML, JSON,
-XML, PDF, and DOCX. JSON and XML source exports are preserved as UTF-8 evidence
-text, which keeps structured knowledge-base payloads inspectable in the normal
-report outputs. Use `--source-dir` for a directory of approved sources and
+Supported answer and source files include Markdown/MDX, AsciiDoc, Org-mode,
+MediaWiki, text, exported HTML/XHTML, JSON, YAML/YML, XML, TOML, PDF, and DOCX.
+Structured JSON, YAML, XML, and TOML exports are normalized into claim-readable
+evidence text. Recursive answer and source directories discover the same
+supported formats, skip hidden paths, and sort the complete flattened path set.
+Use `--source-dir` for a directory of approved sources and
 `--default-trust-level high` when sources do not carry trust metadata.
-
-JSON and XML answers use the same normalization when passed explicitly with
-`--answer`. Recursive answer directories include PDF and DOCX exports as well;
-JSON and XML answer files still use explicit `--answer` paths until their
-directory-discovery contract is expanded.
 
 For example, a JSON export can be verified directly from a mixed source
 directory:
