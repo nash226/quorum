@@ -298,6 +298,9 @@ plain text (`.txt`), exported HTML (`.html`, `.htm`), PDF (`.pdf`), and Word
 documents (`.docx`), plus JSON (`.json`) and XML (`.xml`) exports. JSON and XML
 exports are normalized into claim-readable evidence text while preserving
 their source metadata in reports.
+The programmatic API applies the same JSON and XML normalization to embedded
+source content, so in-memory integrations receive the same claim-readable
+evidence text as CLI file-based verification.
 The CLI guide now lists XML alongside JSON in its capability index and verify
 workflow, keeping the documented local source contract aligned with the
 shipped XML ingestion path.
