@@ -13,6 +13,49 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.docx, \.htm, \.html/);
 });
 
+test("formats --json exposes the discovery contract to integrations", async () => {
+  const stdout = await runCli(["formats", "--json"]);
+  const formats = JSON.parse(stdout) as {
+    sourceExtensions: string[];
+    answerExtensions: string[];
+  };
+
+  assert.deepEqual(formats.sourceExtensions, [
+    ".adoc",
+    ".asciidoc",
+    ".docx",
+    ".htm",
+    ".html",
+    ".json",
+    ".markdown",
+    ".md",
+    ".mdx",
+    ".org",
+    ".pdf",
+    ".toml",
+    ".txt",
+    ".xhtml",
+    ".xml",
+    ".yaml",
+    ".yml",
+  ]);
+  assert.deepEqual(formats.answerExtensions, [
+    ".adoc",
+    ".asciidoc",
+    ".docx",
+    ".htm",
+    ".html",
+    ".markdown",
+    ".md",
+    ".mdx",
+    ".org",
+    ".pdf",
+    ".toml",
+    ".txt",
+    ".xhtml",
+  ]);
+});
+
 test("help --help reuses the top-level usage contract", async () => {
   const result = await runCliAllowFailure(["help", "--help"]);
 

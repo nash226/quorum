@@ -63,6 +63,10 @@ answers, run:
 npm run dev -- formats
 ```
 
+Integrations can consume the same discovery contract without parsing CLI text:
+`npm run dev -- formats --json` returns sorted `sourceExtensions` and
+`answerExtensions` arrays.
+
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
 machine-readable after packaging. It also exercises the packaged
