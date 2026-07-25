@@ -1858,8 +1858,8 @@ Usage:
   quorum version [--json]
 
 Supported files:
-  Answers: Markdown, text, HTML/XHTML, PDF, DOCX, and TOML
-  Sources: Markdown, text, HTML/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML
+  Answers: Markdown, AsciiDoc, text, HTML/XHTML, PDF, DOCX, and TOML
+  Sources: Markdown, AsciiDoc, text, HTML/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML
   Directory discovery is recursive and skips hidden files and directories.
 
 Example:
