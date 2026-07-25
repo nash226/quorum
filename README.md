@@ -312,9 +312,11 @@ The packaged CLI smoke gate verifies DOCX answers and approved sources after
 build, so this integration path stays covered for published artifacts.
 The supported local answer and source formats are Markdown (`.md`, `.markdown`),
 plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
-documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), and XML (`.xml`) exports. JSON, YAML, and XML
+documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), XML (`.xml`), and CSV (`.csv`) exports. JSON, YAML, and XML
 exports are normalized into claim-readable evidence text while preserving
 their source metadata in reports.
+CSV source exports are treated as readable policy text, so spreadsheet-backed
+approved sources can be discovered from source directories without conversion.
 JSON and YAML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.
