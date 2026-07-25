@@ -350,6 +350,8 @@ The packaged CLI smoke gate verifies DOCX answers and approved sources after
 build, so this integration path stays covered for published artifacts.
 The file-based `verify` path also has a direct DOCX-source regression check,
 covering the primary single-answer workflow before release.
+The same path now has a direct DOCX-answer regression check, keeping Word-based
+answer verification executable alongside the existing packaged smoke gate.
 Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
