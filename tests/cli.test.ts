@@ -130,6 +130,46 @@ test("verify normalizes YAML answers before claim extraction", async () => {
   }
 });
 
+test("verify-batch discovers TOML answers from nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-answers-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(answerDir, "nested", "support-answer.toml");
+
+    await Promise.all([
+      mkdir(join(answerDir, "nested"), { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(
+        answerPath,
+        'answer = "Refunds are available within 30 days of purchase."\n',
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "support-playbook.md"),
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]),
+    ) as {
+      answerCount: number;
+      answers: Array<{ answerPath: string; report: { summary: Record<string, number> } }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.answers[0]?.answerPath, answerPath);
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([
