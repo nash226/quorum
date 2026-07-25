@@ -307,6 +307,8 @@ converting them to plain text.
 Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 `.xhtml` exports, so common HTML extensions can be used without listing each
 answer explicitly.
+Batch answer-directory discovery also includes `.json` and `.xml` exports, with
+the same structured-answer normalization used for explicitly provided files.
 The packaged CLI smoke gate also verifies an XHTML source end to end, including
 its page title and claim evidence.
 The programmatic API applies the same JSON and XML normalization to embedded
