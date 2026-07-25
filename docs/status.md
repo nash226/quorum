@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a37c588` on 2026-07-25, test: cover XML answer verification
+- Latest shipped change: `a57aed6` on 2026-07-25, test: add identity verification evaluation fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | test: add identity verification evaluation fixture | `a57aed6` |
 | 2026-07-25 | Direct push | test: cover XML answer verification | `a37c588` |
 | 2026-07-25 | Direct push | fix: preserve structured source freshness aliases | `988def2` |
 | 2026-07-25 | Direct push | docs: clarify durable queue roadmap boundary | `625692b` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | [#1053](https://github.com/nash226/quorum/pull/1053) | test: pin repository check script contract | `28ddbab` |
 | 2026-07-25 | Direct push | feat: discover MediaWiki policy exports | `cad27b5` |
 | 2026-07-25 | Direct push | test: cover YAML sources through HTTP API | `3c8a7db` |
-| 2026-07-25 | Direct push | test: derive packaged capability extensions | `de6a428` |
 
