@@ -2220,6 +2220,38 @@ test("verify discovers XML sources in source directories", async () => {
   }
 });
 
+test("verify discovers YAML and YML sources in nested source directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-yaml-source-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    const nestedSourceDir = join(sourceDir, "policies");
+    const answerPath = join(tempDir, "answer.md");
+    await mkdir(nestedSourceDir, { recursive: true });
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(
+      join(sourceDir, "hr-policy.yaml"),
+      "policy:\n  benefit: Employees receive 12 weeks of paid parental leave.\n",
+      "utf8",
+    );
+    await writeFile(
+      join(nestedSourceDir, "regional-policy.yml"),
+      "policy:\n  region: United States\n",
+      "utf8",
+    );
+
+    const report = JSON.parse(await runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir, "--json"])) as {
+      sources: Array<{ title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["hr-policy", "regional-policy"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch returns an aggregate report for each answer file", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-"));
 
