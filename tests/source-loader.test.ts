@@ -297,6 +297,17 @@ test("extracts readable text and title from exported html sources", async () => 
   assert.doesNotMatch(source.content, /analytics|display: none/);
 });
 
+test("uses the filename as the fallback title for untitled xhtml sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/escalations.xhtml",
+    '<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><body><p>Escalate priority incidents immediately.</p></body></html>',
+    0,
+  );
+
+  assert.equal(source.title, "escalations");
+  assert.equal(source.content, "Escalate priority incidents immediately.");
+});
+
 test("prefers the page heading when html titles include help-center chrome", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",
