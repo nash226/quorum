@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `10c3655` on 2026-07-25, feat: support TOML answer files
+- Latest shipped change: `11f16ea` on 2026-07-25, test: cover nested TOML answer discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | test: cover nested TOML answer discovery | `11f16ea` |
 | 2026-07-25 | Direct push | feat: support TOML answer files | `10c3655` |
 | 2026-07-25 | Direct push | docs: clarify structured source formats | `eb1d748` |
 | 2026-07-25 | Direct push | feat: ingest TOML policy sources | `7b09d0f` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | docs: explain hidden directory discovery | `bb820aa` |
 | 2026-07-25 | Direct push | fix: normalize YAML answer files | `860e124` |
 | 2026-07-25 | Direct push | feat: preserve structured source metadata | `a8e28b5` |
-| 2026-07-25 | Direct push | test: cover nested XML source discovery | `3b15808` |
 
