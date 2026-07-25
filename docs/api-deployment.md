@@ -54,6 +54,10 @@ responses are uncached; verification, reviewer-import, evaluation, and error
 responses are also marked `Cache-Control: no-store` because they can contain
 business evidence or reviewer decisions.
 
+The programmatic `startApiServer()` helper returns an idempotent `close()`
+function. Call it from both `SIGINT` and `SIGTERM` handlers, or from multiple
+cleanup paths, without needing a separate shutdown race guard.
+
 ## Preserve durable source identity
 
 Authentication protects who can call the service; source IDs explain what an

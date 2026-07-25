@@ -1358,13 +1358,15 @@ export async function startApiServer(options: ApiServerOptions = {}): Promise<St
     throw new Error("Could not determine API server address.");
   }
 
+  let closePromise: Promise<void> | undefined;
+
   return {
     host,
     port: address.port,
     server,
     url: formatServerOrigin(host, address.port),
-    close: () =>
-      new Promise<void>((resolve, reject) => {
+    close: () => {
+      closePromise ??= new Promise<void>((resolve, reject) => {
         server.close((error) => {
           if (error) {
             reject(error);
@@ -1373,7 +1375,10 @@ export async function startApiServer(options: ApiServerOptions = {}): Promise<St
 
           resolve();
         });
-      }),
+      });
+
+      return closePromise;
+    },
   };
 }
 
