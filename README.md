@@ -121,10 +121,10 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown/MDX, AsciiDoc/Org-mode, text, exported HTML/XHTML, JSON/YAML/XML/TOML
+Verification accepts Markdown/MDX, AsciiDoc/Org-mode, text, exported HTML/XHTML, JSON/JSONL/YAML/XML/TOML
 exports, PDF, and DOCX answers and approved sources. Recursive answer
 directories cover AsciiDoc/Org-mode, HTML/XHTML, PDF, DOCX, and TOML exports, keeping binary and
-structured answer batches aligned with explicit file verification. JSON, YAML,
+structured answer batches aligned with explicit file verification. JSON, JSONL, YAML,
 XML, and TOML source exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
 reviewed without a separate conversion step. Use `--source-dir` for a mixed directory of policy
@@ -329,7 +329,7 @@ the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
 The supported local answer and source formats are Markdown/MDX (`.md`, `.markdown`, `.mdx`),
 plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
-documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), XML (`.xml`), and TOML (`.toml`) exports. JSON, YAML, and TOML
+documents (`.docx`), plus JSON (`.json`), JSON Lines (`.jsonl`), YAML (`.yaml`, `.yml`), XML (`.xml`), and TOML (`.toml`) exports. JSON, JSONL, YAML, and TOML
 exports are normalized into claim-readable evidence text while preserving
 their source metadata in reports.
 JSON, YAML, and TOML exports also read top-level `title`, `updatedAt`/`updated_at`,
