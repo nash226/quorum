@@ -1322,6 +1322,42 @@ test("evaluate reports when a domain filter matches no fixtures", async () => {
   );
 });
 
+test("verify accepts a docx source", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-docx-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.docx");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+
+    await Promise.all([
+      writeFile(answerPath, "Walking on imported air\n", "utf8"),
+      readFile(docxFixturePath).then((content) => writeFile(sourcePath, content)),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ id: string; title: string; trustLevel: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(report.sources, [
+      { id: "source_1", title: "hr-policy", trustLevel: "medium" },
+    ]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims against html sources with named entities", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-entities-"));
 
