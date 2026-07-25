@@ -76,6 +76,26 @@ test("normalizes structured JSON source exports into claim-readable lines", asyn
   assert.equal(source.content, "policy.leave: Employees get 12 weeks.\nregions[1]: US\nregions[2]: CA");
 });
 
+test("loads metadata from structured JSON and YAML source exports", async () => {
+  const jsonSource = await sourceDocumentFromFile(
+    "docs/policy.json",
+    JSON.stringify({ title: "Benefits Policy", updatedAt: "2026-07-20", trustLevel: "high", policy: "Employees receive paid leave." }),
+    0,
+  );
+  const yamlSource = await sourceDocumentFromFile(
+    "docs/policy.yaml",
+    "title: Support Policy\nupdated_at: 2026-07-21\ntrust_level: low\npolicy: Refunds are available within 30 days.\n",
+    1,
+  );
+
+  assert.equal(jsonSource.title, "Benefits Policy");
+  assert.equal(jsonSource.updatedAt, "2026-07-20");
+  assert.equal(jsonSource.trustLevel, "high");
+  assert.equal(yamlSource.title, "Support Policy");
+  assert.equal(yamlSource.updatedAt, "2026-07-21");
+  assert.equal(yamlSource.trustLevel, "low");
+});
+
 test("normalizes XML source exports into claim-readable text", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.xml",

@@ -315,6 +315,9 @@ plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf
 documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), and XML (`.xml`) exports. JSON, YAML, and XML
 exports are normalized into claim-readable evidence text while preserving
 their source metadata in reports.
+JSON and YAML exports also read top-level `title`, `updatedAt`/`updated_at`,
+and `trustLevel`/`trust_level` fields, so structured policy metadata survives
+file-based verification without separate CLI overrides.
 Source-directory verification discovers both `.yaml` and `.yml` policies,
 including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim
