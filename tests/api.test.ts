@@ -142,8 +142,8 @@ import {
 import { createSimplePdf } from "./pdf-test-helpers.js";
 
 test("programmatic API exposes supported source and answer extensions", () => {
-  assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".mdx", ".adoc", ".asciidoc", ".org", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml", ".toml"]);
-  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".mdx", ".adoc", ".asciidoc", ".org", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".toml"]);
+  assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".mdx", ".adoc", ".asciidoc", ".org", ".textile", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml", ".toml"]);
+  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".mdx", ".adoc", ".asciidoc", ".org", ".textile", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".toml"]);
 });
 
 test("API discovery exposes transport limits and supported methods", () => {
@@ -944,8 +944,10 @@ test("programmatic API resolves source and answer paths in CLI order", async () 
     const explicitSourcePath = join(tempDir, "explicit-source.md");
     const directoryAnswerPath = join(answerDir, "z-answer.md");
     const nestedAnswerPath = join(nestedAnswerDir, "a-answer.txt");
+    const textileAnswerPath = join(answerDir, "textile-answer.textile");
     const directorySourcePath = join(sourceDir, "z-source.md");
     const nestedSourcePath = join(nestedSourceDir, "a-source.html");
+    const textileSourcePath = join(sourceDir, "textile-source.textile");
 
     await Promise.all([
       mkdir(nestedAnswerDir, { recursive: true }),
@@ -955,8 +957,10 @@ test("programmatic API resolves source and answer paths in CLI order", async () 
       writeFile(explicitAnswerPath, "Explicit answer.\n", "utf8"),
       writeFile(directoryAnswerPath, "Directory answer.\n", "utf8"),
       writeFile(nestedAnswerPath, "Nested answer.\n", "utf8"),
+      writeFile(textileAnswerPath, "Textile answer.\n", "utf8"),
       writeFile(explicitSourcePath, "Explicit source.\n", "utf8"),
       writeFile(directorySourcePath, "Directory source.\n", "utf8"),
+      writeFile(textileSourcePath, "Textile source.\n", "utf8"),
       writeFile(
         nestedSourcePath,
         "<html><body><main><p>Nested source.</p></main></body></html>",
@@ -966,11 +970,11 @@ test("programmatic API resolves source and answer paths in CLI order", async () 
 
     assert.deepEqual(
       await resolveAnswerPaths([explicitAnswerPath], [answerDir]),
-      [explicitAnswerPath, nestedAnswerPath, directoryAnswerPath],
+      [explicitAnswerPath, nestedAnswerPath, textileAnswerPath, directoryAnswerPath],
     );
     assert.deepEqual(
       await resolveSourcePaths([explicitSourcePath], [sourceDir]),
-      [explicitSourcePath, nestedSourcePath, directorySourcePath],
+      [explicitSourcePath, nestedSourcePath, textileSourcePath, directorySourcePath],
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
