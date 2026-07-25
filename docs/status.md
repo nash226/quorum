@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1135c38` on 2026-07-24, test: cover structured sources in programmatic API
+- Latest shipped change: `1b889e2` on 2026-07-24, docs: align roadmap with shipped API foundations
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | docs: align roadmap with shipped API foundations | `1b889e2` |
 | 2026-07-24 | Direct push | test: cover structured sources in programmatic API | `1135c38` |
 | 2026-07-24 | Direct push | docs: document XML source verification | `a38d260` |
 | 2026-07-24 | Direct push | feat: normalize JSON and XML source exports | `32d96a9` |
@@ -56,5 +57,4 @@
 | 2026-07-24 | Direct push | test: add support renewal notice fixture | `2661260` |
 | 2026-07-24 | Direct push | docs: document XML source support | `f637f7b` |
 | 2026-07-24 | Direct push | test: smoke-check packaged JSON sources | `d1b1ba5` |
-| 2026-07-24 | Direct push | feat: accept XML source exports | `6ec8ffe` |
 
