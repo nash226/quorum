@@ -123,6 +123,9 @@ verification. JSON, YAML, XML, and TOML source exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
 reviewed without a separate conversion step. Use `--source-dir` for a mixed directory of policy
 files;
+`quorum --help` lists these supported answer and source formats alongside the
+recursive, hidden-file filtering behavior, so integrations can confirm the
+directory contract before invoking a batch run.
 the programmatic API applies the same YAML/YML normalization to in-memory sources and file-backed
 source directories.
 answer and source directories are searched recursively, so nested policy or
