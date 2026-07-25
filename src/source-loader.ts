@@ -95,6 +95,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseYamlSource(normalizedContent);
   }
 
+  if (isTomlSource(sourcePath)) {
+    return parseTomlSource(normalizedContent);
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -210,8 +214,12 @@ function isYamlSource(sourcePath: string): boolean {
   return /\.ya?ml$/i.test(sourcePath);
 }
 
+function isTomlSource(sourcePath: string): boolean {
+  return /\.toml$/i.test(sourcePath);
+}
+
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|json|xml|ya?ml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|json|xml|ya?ml|toml)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
@@ -337,6 +345,34 @@ function parseYamlSource(content: string): ParsedSource {
       if (!prefix) applyStructuredMetadata(metadata, key, scalar);
     }
     else parents.push({ indent, key });
+  }
+
+  return { metadata, body: lines.join("\n") || content };
+}
+
+function parseTomlSource(content: string): ParsedSource {
+  const lines: string[] = [];
+  const metadata: SourceMetadata = {};
+  let section = "";
+
+  for (const rawLine of content.replace(/\r\n/g, "\n").split("\n")) {
+    const line = rawLine.replace(/\s+#.*$/, "").trim();
+    if (!line) continue;
+    const sectionMatch = line.match(/^\[([^\]]+)\]$/);
+    if (sectionMatch) {
+      section = sectionMatch[1]?.trim() ?? "";
+      continue;
+    }
+    const separator = line.indexOf("=");
+    if (separator === -1) {
+      lines.push(line);
+      continue;
+    }
+    const key = line.slice(0, separator).trim();
+    const scalar = line.slice(separator + 1).trim();
+    const path = section ? `${section}.${key}` : key;
+    lines.push(`${path}: ${scalar}`);
+    if (!section) applyStructuredMetadata(metadata, key, scalar);
   }
 
   return { metadata, body: lines.join("\n") || content };

@@ -117,6 +117,19 @@ test("normalizes YAML source exports into claim-readable lines", async () => {
   assert.equal(source.content, "policy.leave: Employees get 12 weeks.\nregions[1]: US\nregions[2]: CA");
 });
 
+test("normalizes TOML source exports and preserves metadata", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.toml",
+    'title = "Benefits Policy"\nupdated_at = "2026-07-20"\ntrust_level = "high"\n[policy]\nleave = "Employees get 12 weeks."',
+    0,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-07-20");
+  assert.equal(source.trustLevel, "high");
+  assert.equal(source.content, 'title: "Benefits Policy"\nupdated_at: "2026-07-20"\ntrust_level: "high"\npolicy.leave: "Employees get 12 weeks."');
+});
+
 test("keeps malformed structured exports readable instead of failing ingestion", async () => {
   const malformedJson = await sourceDocumentFromFile(
     "docs/policies/benefits.json",
