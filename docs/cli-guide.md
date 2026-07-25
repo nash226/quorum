@@ -235,6 +235,12 @@ npm run dev -- verify \
 The API requires unique `sources[].id` values. Explicit CLI sources accept
 `--source-id`; directory sources retain positional fallback IDs.
 
+When a source does not provide a title in frontmatter or embedded document
+metadata, Quorum derives the reviewer-facing title from the filename and
+removes the supported format suffix. For example, `policies/benefits.json`
+and `policies/benefits.xml` are both reported as `benefits`, while their
+original paths remain available in the evidence metadata.
+
 Report-producing workflows accept `--generated-at <timestamp>` so retries can
 reuse one audit timestamp across JSON, text, Markdown, HTML, and CSV output.
 

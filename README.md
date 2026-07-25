@@ -320,6 +320,9 @@ evidence text as CLI file-based verification.
 Malformed JSON exports remain available as raw source text, while incomplete XML
 is still stripped to readable text, so a vendor export problem does not silently
 drop the evidence file before review.
+When structured sources omit a title, reviewer reports derive a clean fallback
+title from the filename (for example, `benefits.json` becomes `benefits`) while
+retaining the original source path for evidence traceability.
 The CLI guide now lists XML alongside JSON in its capability index and verify
 workflow, keeping the documented local source contract aligned with the
 shipped XML ingestion path.
