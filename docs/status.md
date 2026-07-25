@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `de6a428` on 2026-07-25, test: derive packaged capability extensions
+- Latest shipped change: `3c8a7db` on 2026-07-25, test: cover YAML sources through HTTP API
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | test: cover YAML sources through HTTP API | `3c8a7db` |
 | 2026-07-25 | Direct push | test: derive packaged capability extensions | `de6a428` |
 | 2026-07-25 | Direct push | fix: preserve decimal values during claim splitting | `9405efb` |
 | 2026-07-25 | Direct push | feat: expose supported input formats | `fb0f852` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | [#1034](https://github.com/nash226/quorum/pull/1034) | feat: discover MDX policy exports | `1f3daa5` |
 | 2026-07-25 | Direct push | feat: discover AsciiDoc policy exports | `a196821` |
 | 2026-07-25 | Direct push | docs: document the complete local check gate | `e801bc3` |
-| 2026-07-25 | Direct push | test: cover nested markdown quote claims | `ca82525` |
 
