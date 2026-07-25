@@ -1039,7 +1039,7 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
       /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
     assert.match(summaryCsv, /^[^,\n]+,hr,27,0,0\.000,27,0,82,82,1\.000,100%,32,19,22,9,32,19,22,9$/m);
-    assert.match(summaryCsv, /^[^,\n]+,support,51,0,0\.000,50,1,149,149,1\.000,100%,56,34,43,16,56,34,43,16$/m);
+    assert.match(summaryCsv, /^[^,\n]+,support,52,0,0\.000,51,1,152,152,1\.000,100%,57,34,44,17,57,34,44,17$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -1064,7 +1064,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /,78,77,1,0,0\.000,231,231,1\.000,100%,hr .*88,53,65,25,88,53,65,25/);
+    assert.match(summaryCsv, /,79,78,1,0,0\.000,234,234,1\.000,100%,hr .*89,53,66,26,89,53,66,26/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -1316,7 +1316,7 @@ test("evaluate writes the gate-aware result JSON to disk", async () => {
     assert.equal(payload.shouldFail, false);
     assert.deepEqual(payload.failureReasons, []);
     assert.equal(payload.mismatchCount, 0);
-    assert.equal(payload.summary.fixtureCount, 78);
+    assert.equal(payload.summary.fixtureCount, 79);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -4330,7 +4330,7 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
     assert.equal(overview.review.totalAnswers, 37);
     assert.equal(overview.review.pendingAnswers, 36);
     assert.equal(overview.queueStatus, null);
-    assert.equal(overview.evaluation.fixtureCount, 78);
+    assert.equal(overview.evaluation.fixtureCount, 79);
     assert.equal(overview.evaluation.mismatchCount, 0);
     assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
 
@@ -4343,7 +4343,7 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
     ]);
     assert.match(text, /Reviewer queue: 37 answers \(36 pending, 0 reviewed, 1 no claims\)/);
     assert.match(text, /Final verdicts: 26 verified, 18 contradicted, 29 unsupported, 34 needs review/);
-    assert.match(text, /Benchmark drift: 0\/78 mismatches \(0%\)/);
+    assert.match(text, /Benchmark drift: 0\/79 mismatches \(0%\)/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

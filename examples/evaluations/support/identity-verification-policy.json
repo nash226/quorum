@@ -1,0 +1,24 @@
+{
+  "name": "Support identity verification policy example",
+  "domain": "support",
+  "answerPath": "answers/support-identity-verification-answer.md",
+  "answerLabel": "Support identity verification reviewer packet",
+  "answer": "Support must verify the customer's identity before changing account ownership details.\nSupport may accept a screenshot of an ID without matching the account name.\nSupport can disclose the account email address to any caller who knows the order number.\n",
+  "sources": [
+    {
+      "sourcePath": "policies/support/identity-verification.md",
+      "id": "support/identity-verification@2026-07-25",
+      "title": "Support Identity Verification Policy",
+      "updatedAt": "2026-07-25",
+      "trustLevel": "high",
+      "content": "Support must verify the customer's identity before changing account ownership details.\nIdentity documents must match the account name before support can use them for verification.\nSupport must not disclose account details to a caller based only on an order number.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "unsupported", "needs_review"]
+}
