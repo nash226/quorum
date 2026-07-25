@@ -99,6 +99,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseTomlSource(normalizedContent);
   }
 
+  if (isRtfSource(sourcePath)) {
+    return parseRtfSource(normalizedContent);
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -218,8 +222,12 @@ function isTomlSource(sourcePath: string): boolean {
   return /\.toml$/i.test(sourcePath);
 }
 
+function isRtfSource(sourcePath: string): boolean {
+  return /\.rtf$/i.test(sourcePath);
+}
+
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|json|xml|ya?ml|toml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|json|xml|ya?ml|toml|rtf)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
@@ -376,6 +384,20 @@ function parseTomlSource(content: string): ParsedSource {
   }
 
   return { metadata, body: lines.join("\n") || content };
+}
+
+function parseRtfSource(content: string): ParsedSource {
+  const body = content
+    .replace(/\\'[0-9a-f]{2}/gi, "")
+    .replace(/\\(?:par|line)\b\s?/gi, "\n")
+    .replace(/\\[a-z]+-?\d*/gi, "")
+    .replace(/[{}]/g, "")
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+
+  return { metadata: {}, body: body || content };
 }
 
 function structuredMetadata(value: unknown): SourceMetadata {
