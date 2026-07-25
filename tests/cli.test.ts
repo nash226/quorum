@@ -32,6 +32,11 @@ test("top-level help lists every shipped command", async () => {
   ]) {
     assert.match(stdout, new RegExp(`quorum ${command}(?: |$)`));
   }
+
+  assert.match(stdout, /Supported files:/);
+  assert.match(stdout, /Answers: Markdown, text, HTML\/XHTML, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Sources: Markdown, text, HTML\/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML/);
+  assert.match(stdout, /Directory discovery is recursive and skips hidden files and directories/);
 });
 
 test("verify applies the default trust override only to sources without metadata", async () => {

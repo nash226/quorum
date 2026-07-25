@@ -1857,6 +1857,11 @@ Usage:
   quorum openapi [--server-url <url>] [--out <path>]
   quorum version [--json]
 
+Supported files:
+  Answers: Markdown, text, HTML/XHTML, PDF, DOCX, and TOML
+  Sources: Markdown, text, HTML/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML
+  Directory discovery is recursive and skips hidden files and directories.
+
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported
   cat examples/answers/hr-answer.md | npm run dev -- verify --answer - --answer-label "HR reviewer packet" --source-dir examples/sources --json
