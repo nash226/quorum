@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `3b15808` on 2026-07-25, test: cover nested XML source discovery
+- Latest shipped change: `a8e28b5` on 2026-07-25, feat: preserve structured source metadata
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | feat: preserve structured source metadata | `a8e28b5` |
 | 2026-07-25 | Direct push | test: cover nested XML source discovery | `3b15808` |
 | 2026-07-25 | Direct push | test: cover YAML sources in programmatic API | `cddb4ed` |
 | 2026-07-25 | Direct push | feat: discover YAML source directories | `36bb0c4` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | [#1001](https://github.com/nash226/quorum/pull/1001) | fix: split Arabic and Indic sentences | `c362fd3` |
 | 2026-07-25 | Direct push | fix: split adjacent localized sentences | `07afdcb` |
 | 2026-07-25 | Direct push | fix: exclude batch report outputs from discovery | `81cd04d` |
-| 2026-07-25 | Direct push | docs: clarify document answer discovery | `581f27e` |
 
