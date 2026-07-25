@@ -115,11 +115,11 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown, text, exported HTML/XHTML, JSON/YAML/XML exports, PDF, and DOCX
-answers and approved sources; approved source directories also accept TOML
-policy exports. Recursive answer directories also cover PDF and
-DOCX exports, keeping binary answer batches aligned with explicit file
-verification. JSON, YAML, XML, and TOML source exports are normalized into
+Verification accepts Markdown, text, exported HTML/XHTML, JSON/YAML/XML/TOML
+exports, PDF, and DOCX answers and approved sources. Recursive answer
+directories cover HTML/XHTML, PDF, DOCX, and TOML exports, keeping binary and
+structured answer batches aligned with explicit file verification. JSON, YAML,
+XML, and TOML source exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
 reviewed without a separate conversion step. Use `--source-dir` for a mixed directory of policy
 files;
@@ -135,9 +135,9 @@ so editor metadata and hidden staging folders are not treated as inputs. The
 CLI also deduplicates repeated source paths, keeping each approved document
 represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
-For structured answer exports, pass the JSON or XML file explicitly with
-`--answer`; directory-based structured-answer discovery is tracked separately
-from the explicit file contract.
+Structured answer exports can be passed directly with `--answer` or discovered
+through `--answer-dir`; JSON, YAML/YML, XML, and TOML files use the same
+normalization path in both workflows.
 When a workflow has an explicit source set, repeat `--source` instead of
 creating a temporary directory:
 
