@@ -19,6 +19,9 @@ unsupported response-time promise.
 It also includes a subscription-renewal notice scenario covering a verified
 annual reminder, a contradicted reminder window, and an unsupported gift-card
 promise.
+The support evaluation suite also covers identity verification, including a
+verified ownership check plus unsupported and needs-review shortcuts for
+mismatched identity documents and order-number-only disclosure.
 Claim extraction also normalizes bracketed, Arabic-Indic, Persian, and fullwidth ordered-list
 markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
@@ -689,7 +692,7 @@ The same packaged check verifies that the public `API_VERSION` export matches
 the package version, keeping library callers and HTTP/CLI discovery on one
 contract version.
 
-The checked-in 78-fixture benchmark spans 27 HR and 51 support workflows, including
+The checked-in 79-fixture benchmark spans 27 HR and 52 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
@@ -855,7 +858,7 @@ The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
 
-The benchmark inventory is currently reconciled at 78 fixtures, including the
+The benchmark inventory is currently reconciled at 79 fixtures, including the
 shipped HR travel-reimbursement coverage described below.
 
 The HR benchmark now also covers sabbatical leave, preserving the five-year
