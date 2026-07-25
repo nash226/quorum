@@ -121,7 +121,7 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown/MDX, AsciiDoc/Org-mode, text, exported HTML/XHTML, JSON/YAML/XML/TOML
+Verification accepts Markdown/MDX/MKDN, AsciiDoc/Org-mode, text, exported HTML/XHTML, JSON/YAML/XML/TOML
 exports, PDF, and DOCX answers and approved sources. Recursive answer
 directories cover AsciiDoc/Org-mode, HTML/XHTML, PDF, DOCX, and TOML exports, keeping binary and
 structured answer batches aligned with explicit file verification. JSON, YAML,
