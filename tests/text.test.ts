@@ -60,6 +60,13 @@ test("strips inline numeric-colon list markers when splitting sentences", () => 
   );
 });
 
+test("splits inline CJK and fullwidth sentences", () => {
+  assert.deepEqual(
+    splitIntoSentences("休暇申請は承認制。지원 신청은 필수！Employees need approval？"),
+    ["休暇申請は承認制。", "지원 신청은 필수！", "Employees need approval？"],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
