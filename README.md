@@ -313,6 +313,8 @@ npm run dev -- verify \
 
 The packaged CLI smoke gate verifies DOCX answers and approved sources after
 build, so this integration path stays covered for published artifacts.
+The file-based `verify` path also has a direct DOCX-source regression check,
+covering the primary single-answer workflow before release.
 The supported local answer and source formats are Markdown (`.md`, `.markdown`),
 plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
 documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), XML (`.xml`), and TOML (`.toml`) exports. JSON, YAML, and TOML
