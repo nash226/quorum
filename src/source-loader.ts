@@ -1,5 +1,6 @@
 import { basename } from "node:path";
 import mammoth from "mammoth";
+import JSZip from "jszip";
 import { PDFParse } from "pdf-parse";
 import type { SourceDocument, SourceTrustLevel } from "./domain.js";
 import { stripByteOrderMark } from "./text.js";
@@ -61,6 +62,10 @@ export async function sourceDocumentFromFile(
 
   if (isDocxSource(sourcePath)) {
     return docxSourceDocumentFromFile(sourcePath, content, index, options);
+  }
+
+  if (isOdtSource(sourcePath)) {
+    return odtSourceDocumentFromFile(sourcePath, content, index, options);
   }
 
   const textContent = typeof content === "string" ? content : new TextDecoder().decode(content);
@@ -202,6 +207,10 @@ function isDocxSource(sourcePath: string): boolean {
   return /\.docx$/i.test(sourcePath);
 }
 
+function isOdtSource(sourcePath: string): boolean {
+  return /\.odt$/i.test(sourcePath);
+}
+
 function isJsonSource(sourcePath: string): boolean {
   return /\.json$/i.test(sourcePath);
 }
@@ -219,7 +228,38 @@ function isTomlSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|json|xml|ya?ml|toml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf|docx|odt|json|xml|ya?ml|toml)$/i, "");
+}
+
+async function odtSourceDocumentFromFile(sourcePath: string, content: string | Uint8Array, index: number, options: SourceDocumentOptions): Promise<SourceDocument> {
+  const archive = await JSZip.loadAsync(typeof content === "string" ? new TextEncoder().encode(content) : content);
+  const contentEntry = archive.file("content.xml");
+  if (!contentEntry) throw new Error(`ODT source is missing content.xml: ${sourcePath}`);
+  const xml = await contentEntry.async("string");
+  const metadata = parseOdtMetadata(xml);
+  return {
+    id: options.id ?? `source_${index + 1}`,
+    sourcePath,
+    title: options.title ?? metadata.title ?? sourceTitleFromPath(sourcePath),
+    updatedAt: validatedUpdatedAt(sourcePath, options.updatedAt ?? metadata.updatedAt),
+    trustLevel: options.trustLevel ?? metadata.trustLevel ?? options.defaultTrustLevel ?? "medium",
+    content: normalizeOdtText(xml),
+  };
+}
+
+function parseOdtMetadata(content: string): SourceMetadata {
+  return {
+    title: decodeXmlEntities(content.match(/<dc:title\b[^>]*>([\s\S]*?)<\/dc:title>/i)?.[1] ?? "").trim() || undefined,
+    updatedAt: decodeXmlEntities(content.match(/<dc:date\b[^>]*>([\s\S]*?)<\/dc:date>/i)?.[1] ?? "").trim() || undefined,
+  };
+}
+
+function normalizeOdtText(content: string): string {
+  return decodeXmlEntities(content.replace(/<text:tab\b[^>]*\/?\s*>/gi, "\t").replace(/<text:line-break\b[^>]*\/?\s*>/gi, "\n").replace(/<text:p\b[^>]*>/gi, "\n").replace(/<text:h\b[^>]*>/gi, "\n").replace(/<text:s\b[^>]*text:c\s*=\s*["'](\d+)["'][^>]*\/?\s*>/gi, (_match, count: string) => " ".repeat(Number(count))).replace(/<[^>]+>/g, "").replace(/\n\s*\n+/g, "\n").trim());
+}
+
+function decodeXmlEntities(value: string): string {
+  return value.replace(/&#x([0-9a-f]+);/gi, (_match, code: string) => String.fromCodePoint(Number.parseInt(code, 16))).replace(/&#(\d+);/g, (_match, code: string) => String.fromCodePoint(Number(code))).replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
