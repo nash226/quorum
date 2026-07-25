@@ -390,8 +390,9 @@ function parseRtfSource(content: string): ParsedSource {
   const body = content
     .replace(/\\'[0-9a-f]{2}/gi, "")
     .replace(/\\(?:par|line)\b\s?/gi, "\n")
-    .replace(/\\[a-z]+\d*\s?/gi, "")
+    .replace(/\\[a-z]+-?\d*/gi, "")
     .replace(/[{}]/g, "")
+    .replace(/[ \t]{2,}/g, " ")
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
