@@ -141,6 +141,28 @@ test("loads metadata from structured JSON and YAML source exports", async () => 
   assert.equal(yamlSource.trustLevel, "low");
 });
 
+test("maps common structured modification keys to source freshness", async () => {
+  const jsonSource = await sourceDocumentFromFile(
+    "docs/policy.json",
+    JSON.stringify({ title: "Benefits Policy", modifiedAt: "2026-07-22", policy: "Employees receive paid leave." }),
+    0,
+  );
+  const yamlSource = await sourceDocumentFromFile(
+    "docs/policy.yaml",
+    "title: Support Policy\nlast_modified: 2026-07-23\npolicy: Refunds are available within 30 days.\n",
+    1,
+  );
+  const tomlSource = await sourceDocumentFromFile(
+    "docs/policy.toml",
+    'title = "Travel Policy"\nlastUpdated = "2026-07-24"\npolicy = "Submit expenses within 30 days."',
+    2,
+  );
+
+  assert.equal(jsonSource.updatedAt, "2026-07-22");
+  assert.equal(yamlSource.updatedAt, "2026-07-23");
+  assert.equal(tomlSource.updatedAt, "2026-07-24");
+});
+
 test("normalizes XML source exports into claim-readable text", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.xml",
