@@ -86,6 +86,24 @@ test("normalizes XML source exports into claim-readable text", async () => {
   assert.equal(source.content, "Employees get 12 weeks.\nUS & CA");
 });
 
+test("keeps malformed structured exports readable instead of failing ingestion", async () => {
+  const malformedJson = await sourceDocumentFromFile(
+    "docs/policies/benefits.json",
+    '{"policy":{"leave":"Employees get 12 weeks."}',
+    0,
+  );
+  const malformedXml = await sourceDocumentFromFile(
+    "docs/policies/benefits.xml",
+    "<policy><leave>Employees get 12 weeks.",
+    1,
+  );
+
+  assert.equal(malformedJson.title, "benefits");
+  assert.equal(malformedJson.content, '{"policy":{"leave":"Employees get 12 weeks."}');
+  assert.equal(malformedXml.title, "benefits");
+  assert.equal(malformedXml.content, "Employees get 12 weeks.");
+});
+
 test("applies the default trust override when metadata is absent", async () => {
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
     defaultTrustLevel: "high",

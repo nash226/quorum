@@ -307,6 +307,9 @@ each answer explicitly.
 The programmatic API applies the same JSON and XML normalization to embedded
 source content, so in-memory integrations receive the same claim-readable
 evidence text as CLI file-based verification.
+Malformed JSON exports remain available as raw source text, while incomplete XML
+is still stripped to readable text, so a vendor export problem does not silently
+drop the evidence file before review.
 The CLI guide now lists XML alongside JSON in its capability index and verify
 workflow, keeping the documented local source contract aligned with the
 shipped XML ingestion path.
