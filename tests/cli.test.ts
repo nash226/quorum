@@ -34,8 +34,8 @@ test("top-level help lists every shipped command", async () => {
   }
 
   assert.match(stdout, /Supported files:/);
-  assert.match(stdout, /Answers: Markdown, text, HTML\/XHTML, PDF, DOCX, and TOML/);
-  assert.match(stdout, /Sources: Markdown, text, HTML\/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML/);
+  assert.match(stdout, /Answers: Markdown, text \(\.txt\/.text\), HTML\/XHTML, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Sources: Markdown, text \(\.txt\/.text\), HTML\/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files and directories/);
 });
 
@@ -170,6 +170,34 @@ test("verify-batch discovers TOML answers from nested directories", async () => 
     assert.equal(report.answerCount, 1);
     assert.equal(report.answers[0]?.answerPath, answerPath);
     assert.equal(report.answers[0]?.report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch discovers .text answers from nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-text-answers-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(answerDir, "nested", "support-answer.text");
+
+    await Promise.all([
+      mkdir(join(answerDir, "nested"), { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(answerPath, "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(join(sourceDir, "support-playbook.txt"), "Refunds are available within 30 days of purchase.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]),
+    ) as { answerCount: number; answers: Array<{ answerPath: string }> };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.answers[0]?.answerPath, answerPath);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -2426,7 +2454,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     const batchAggregateSummaryCsvOutPath = join(tempDir, "reports", "batch-aggregate-summary.csv");
 
     await Promise.all([
-      mkdir(answerDir, { recursive: true }),
+      mkdir(join(answerDir, "nested"), { recursive: true }),
       mkdir(sourceDir, { recursive: true }),
     ]);
 

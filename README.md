@@ -328,7 +328,7 @@ Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
 The supported local answer and source formats are Markdown (`.md`, `.markdown`),
-plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
+plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
 documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), XML (`.xml`), and TOML (`.toml`) exports. JSON, YAML, and TOML
 exports are normalized into claim-readable evidence text while preserving
 their source metadata in reports.
