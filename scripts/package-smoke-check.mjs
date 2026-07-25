@@ -127,6 +127,33 @@ try {
   rmSync(cliXhtmlPackageDir, { recursive: true, force: true });
 }
 
+const cliXmlSourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xml-source-"));
+try {
+  const answerPath = join(cliXmlSourcePackageDir, "answer.md");
+  const sourcePath = join(cliXmlSourcePackageDir, "policy.xml");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(
+    sourcePath,
+    '<?xml version="1.0"?><policy><title>Parental Leave Policy</title><rule>Employees receive 12 weeks of paid parental leave.</rule></policy>',
+  );
+
+  const xmlSourceOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const xmlSourcePayload = JSON.parse(xmlSourceOutput);
+  if (
+    xmlSourcePayload.summary?.verified !== 1 ||
+    xmlSourcePayload.sources?.[0]?.title !== "policy" ||
+    xmlSourcePayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected XML source contract.");
+  }
+} finally {
+  rmSync(cliXmlSourcePackageDir, { recursive: true, force: true });
+}
+
 if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.startApiServer !== "function") {
   throw new Error("Package artifact server entry point is missing required server exports.");
 }
