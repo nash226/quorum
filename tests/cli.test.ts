@@ -6,6 +6,13 @@ import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 
+test("formats lists the extensions accepted by source and answer discovery", async () => {
+  const stdout = await runCli(["formats"]);
+
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.docx, \.htm, \.html/);
+});
+
 test("help --help reuses the top-level usage contract", async () => {
   const result = await runCliAllowFailure(["help", "--help"]);
 
@@ -20,6 +27,7 @@ test("top-level help lists every shipped command", async () => {
   const stdout = await runCli(["--help"]);
 
   for (const command of [
+    "formats",
     "verify",
     "verify-batch",
     "extract-claims",
@@ -30,7 +38,7 @@ test("top-level help lists every shipped command", async () => {
     "openapi",
     "version",
   ]) {
-    assert.match(stdout, new RegExp(`quorum ${command}(?: |$)`));
+    assert.match(stdout, new RegExp(`quorum ${command}(?: |$|\\n)`));
   }
 
   assert.match(stdout, /Supported files:/);
