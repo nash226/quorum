@@ -216,9 +216,9 @@ try {
     capabilitiesPayload.capabilities?.maxRequestBytes !== 1_048_576 ||
     capabilitiesPayload.capabilities?.requestTimeoutMs !== 30_000 ||
     JSON.stringify(capabilitiesPayload.capabilities?.sourceExtensions) !==
-      JSON.stringify([".md", ".markdown", ".adoc", ".asciidoc", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml", ".toml"]) ||
+      JSON.stringify([".md", ".markdown", ".mdx", ".adoc", ".asciidoc", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml", ".toml"]) ||
     JSON.stringify(capabilitiesPayload.capabilities?.answerExtensions) !==
-      JSON.stringify([".md", ".markdown", ".adoc", ".asciidoc", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".toml"]) ||
+      JSON.stringify([".md", ".markdown", ".mdx", ".adoc", ".asciidoc", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".toml"]) ||
     JSON.stringify(capabilitiesPayload.capabilities?.trustLevels) !== JSON.stringify(["low", "medium", "high"]) ||
     !Array.isArray(capabilitiesPayload.capabilities?.reviewQueueStatuses) ||
     !capabilitiesPayload.capabilities.reviewQueueStatuses.includes("no_claims")

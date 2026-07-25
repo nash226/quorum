@@ -55,7 +55,7 @@ npm run dev -- verify \
   --summary-csv-out reports/hr-summary.csv
 ```
 
-Supported answer and source files include Markdown, text, exported HTML, JSON,
+Supported answer and source files include Markdown/MDX, text, exported HTML, JSON,
 XML, PDF, and DOCX. JSON and XML source exports are preserved as UTF-8 evidence
 text, which keeps structured knowledge-base payloads inspectable in the normal
 report outputs. Use `--source-dir` for a directory of approved sources and

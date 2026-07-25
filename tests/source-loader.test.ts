@@ -64,6 +64,17 @@ test("strips AsciiDoc extensions from fallback source titles", async () => {
   assert.equal(asciidocSource.title, "escalation-guide");
 });
 
+test("strips MDX extensions from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.mdx",
+    "Employees receive 12 weeks of paid parental leave.\n",
+    0,
+  );
+
+  assert.equal(source.title, "leave-policy");
+  assert.equal(source.content, "Employees receive 12 weeks of paid parental leave.\n");
+});
+
 test("strips JSON extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.json",
