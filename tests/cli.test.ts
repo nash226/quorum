@@ -1587,6 +1587,37 @@ test("verify-batch discovers htm answers from answer directories", async () => {
   }
 });
 
+test("verify-batch discovers nested reStructuredText answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-rst-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(answerDir, "regional", "support-answer.rst");
+    const sourcePath = join(sourceDir, "refund-policy.rst");
+
+    await mkdir(join(answerDir, "regional"), { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Customers may request a refund within 30 days.\n", "utf8"),
+      writeFile(sourcePath, "Customers may request a refund within 30 days.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]);
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      summary: { verified: number };
+      answers: Array<{ answerPath: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answers[0]?.answerPath, answerPath);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers PDF and nested DOCX answers from answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-document-answer-dir-"));
 
