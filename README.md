@@ -309,6 +309,8 @@ Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 answer explicitly.
 The packaged CLI smoke gate also verifies an XHTML source end to end, including
 its page title and claim evidence.
+It also verifies an XML approved source end to end, keeping structured policy
+exports covered in the published CLI artifact.
 The programmatic API applies the same JSON and XML normalization to embedded
 source content, so in-memory integrations receive the same claim-readable
 evidence text as CLI file-based verification.
