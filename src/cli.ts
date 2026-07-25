@@ -209,11 +209,11 @@ async function main(): Promise<void> {
   }
 
   if (command === "formats") {
-    if (args.length > 0) {
-      throw new Error("Usage: quorum formats");
+    if (args.length > 1 || (args.length === 1 && args[0] !== "--json")) {
+      throw new Error("Usage: quorum formats [--json]");
     }
 
-    printFormats();
+    printFormats(args[0] === "--json");
     return;
   }
 
@@ -1641,7 +1641,7 @@ function parseMinScore(value: string): number {
 
 function printHelp(command?: CommandName): void {
   const helpTextByCommand: Record<CommandName, string> = {
-    formats: `Quorum formats
+  formats: `Quorum formats [--json]
 
 Usage:
   quorum formats
@@ -1899,7 +1899,17 @@ Example:
 `);
 }
 
-function printFormats(): void {
+function printFormats(asJson = false): void {
+  if (asJson) {
+    console.log(
+      JSON.stringify({
+        sourceExtensions: [...SOURCE_EXTENSIONS].sort(),
+        answerExtensions: [...ANSWER_EXTENSIONS].sort(),
+      }),
+    );
+    return;
+  }
+
   console.log(`Quorum input formats
 
 Source files: ${formatExtensions(SOURCE_EXTENSIONS)}
