@@ -56,14 +56,34 @@ test("strips JSON extensions from fallback source titles", async () => {
   );
 
   assert.equal(source.title, "benefits");
-  assert.equal(source.content, '{"policy":"Employees get 12 weeks."}');
+  assert.equal(source.content, "policy: Employees get 12 weeks.");
 });
 
 test("strips XML extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile("docs/policies/benefits.xml", "<policy>Employees get 12 weeks.</policy>", 0);
 
   assert.equal(source.title, "benefits");
-  assert.equal(source.content, "<policy>Employees get 12 weeks.</policy>");
+  assert.equal(source.content, "Employees get 12 weeks.");
+});
+
+test("normalizes structured JSON source exports into claim-readable lines", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.json",
+    '{"policy":{"leave":"Employees get 12 weeks."},"regions":["US","CA"]}',
+    0,
+  );
+
+  assert.equal(source.content, "policy.leave: Employees get 12 weeks.\nregions[1]: US\nregions[2]: CA");
+});
+
+test("normalizes XML source exports into claim-readable text", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.xml",
+    '<?xml version="1.0"?><policy><leave>Employees get 12 weeks.</leave><region>US &amp; CA</region></policy>',
+    0,
+  );
+
+  assert.equal(source.content, "Employees get 12 weeks.\nUS & CA");
 });
 
 test("applies the default trust override when metadata is absent", async () => {
