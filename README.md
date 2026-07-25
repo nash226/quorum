@@ -51,6 +51,9 @@ The shipped product surface now covers the full review loop:
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
+Durable reviewer-queue persistence remains a product decision tracked in
+[issue #683](https://github.com/nash226/quorum/issues/683), rather than an
+implicit dependency of the local workflow.
 Recursive answer and source discovery now sorts the complete flattened path
 set, keeping batch order and reviewer labels stable when root and nested files
 are mixed.
