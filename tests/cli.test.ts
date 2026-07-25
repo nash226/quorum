@@ -1390,6 +1390,47 @@ test("verify normalizes structured JSON answers before claim extraction", async 
   }
 });
 
+test("verify-batch discovers JSON and XML answers from answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-structured-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await mkdir(answerDir, { recursive: true });
+    await Promise.all([
+      writeFile(
+        join(answerDir, "json-answer.json"),
+        JSON.stringify({ response: "Customers can request refunds within 30 days." }),
+        "utf8",
+      ),
+      writeFile(
+        join(answerDir, "xml-answer.xml"),
+        "<answer><response>Customers can request refunds within 30 days.</response></answer>",
+        "utf8",
+      ),
+      writeFile(sourcePath, "Customers can request refunds within 30 days.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source", sourcePath, "--json",
+    ])) as {
+      answerCount: number;
+      summary: { verified: number };
+      answers: Array<{ answerPath: string }>;
+    };
+
+    assert.equal(report.answerCount, 2);
+    assert.equal(report.summary.verified, 2);
+    assert.deepEqual(
+      report.answers.map((answer) => answer.answerPath),
+      [join(answerDir, "json-answer.json"), join(answerDir, "xml-answer.xml")],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers htm answers from answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-htm-answer-dir-"));
 
