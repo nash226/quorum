@@ -35,7 +35,7 @@ test("top-level help lists every shipped command", async () => {
 
   assert.match(stdout, /Supported files:/);
   assert.match(stdout, /Answers: Markdown\/MDX, AsciiDoc\/Org, text, HTML\/XHTML, PDF, DOCX, and TOML/);
-  assert.match(stdout, /Sources: Markdown\/MDX, AsciiDoc\/Org, text, HTML\/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML/);
+  assert.match(stdout, /Sources: Markdown\/MDX, AsciiDoc\/Org, text, HTML\/XHTML, PDF, DOCX, JSON\/JSONL, YAML, XML, and TOML/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files and directories/);
 });
 
@@ -2366,6 +2366,33 @@ test("verify discovers JSON sources in source directories", async () => {
     };
 
     assert.equal(report.sources[0]?.title, "hr-policy");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify discovers JSONL sources and normalizes each record", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-jsonl-source-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(tempDir, "answer.md");
+    await mkdir(sourceDir, { recursive: true });
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(
+      join(sourceDir, "hr-policy.jsonl"),
+      '{"title":"HR Benefits Policy","trustLevel":"high"}\n{"policy":"Employees receive 12 weeks of paid parental leave."}\n',
+      "utf8",
+    );
+
+    const report = JSON.parse(await runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir, "--json"])) as {
+      sources: Array<{ title: string; trustLevel: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.sources[0]?.title, "HR Benefits Policy");
+    assert.equal(report.sources[0]?.trustLevel, "high");
     assert.equal(report.summary.verified, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });

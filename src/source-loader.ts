@@ -87,6 +87,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseJsonSource(normalizedContent);
   }
 
+  if (isJsonLinesSource(sourcePath)) {
+    return parseJsonLinesSource(normalizedContent);
+  }
+
   if (isXmlSource(sourcePath)) {
     return parseXmlSource(normalizedContent);
   }
@@ -206,6 +210,10 @@ function isJsonSource(sourcePath: string): boolean {
   return /\.json$/i.test(sourcePath);
 }
 
+function isJsonLinesSource(sourcePath: string): boolean {
+  return /\.jsonl$/i.test(sourcePath);
+}
+
 function isXmlSource(sourcePath: string): boolean {
   return /\.xml$/i.test(sourcePath);
 }
@@ -219,7 +227,7 @@ function isTomlSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|adoc|asciidoc|org|txt|html?|xhtml|pdf|docx|json|xml|ya?ml|toml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|adoc|asciidoc|org|txt|html?|xhtml|pdf|docx|json|jsonl|xml|ya?ml|toml)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
@@ -278,6 +286,26 @@ function parseJsonSource(content: string): ParsedSource {
   } catch {
     return { metadata: {}, body: content };
   }
+}
+
+function parseJsonLinesSource(content: string): ParsedSource {
+  const values: unknown[] = [];
+
+  for (const line of content.replace(/\r\n/g, "\n").split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+
+    try {
+      values.push(JSON.parse(trimmed) as unknown);
+    } catch {
+      return { metadata: {}, body: content };
+    }
+  }
+
+  return {
+    metadata: values.length > 0 ? structuredMetadata(values[0]) : {},
+    body: values.map((value) => formatStructuredValue(value)).join("\n"),
+  };
 }
 
 function formatStructuredValue(value: unknown, prefix = ""): string {
