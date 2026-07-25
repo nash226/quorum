@@ -1034,6 +1034,17 @@ test("falls back to the html file name when the page has no title", async () => 
   assert.equal(source.content, "Escalate priority incidents immediately.");
 });
 
+test("parses XHTML sources and preserves the file-name title fallback", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/escalations.xhtml",
+    '<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><body><p>Escalate priority incidents immediately.</p></body></html>',
+    15,
+  );
+
+  assert.equal(source.title, "escalations");
+  assert.equal(source.content, "Escalate priority incidents immediately.");
+});
+
 test("extracts readable text from pdf sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.pdf",

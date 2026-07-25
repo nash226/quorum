@@ -297,13 +297,13 @@ npm run dev -- verify \
 The packaged CLI smoke gate verifies DOCX answers and approved sources after
 build, so this integration path stays covered for published artifacts.
 The supported local answer and source formats are Markdown (`.md`, `.markdown`),
-plain text (`.txt`), exported HTML (`.html`, `.htm`), PDF (`.pdf`), and Word
+plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
 documents (`.docx`), plus JSON (`.json`) and XML (`.xml`) exports. JSON and XML
 exports are normalized into claim-readable evidence text while preserving
 their source metadata in reports.
-Batch answer-directory discovery is regression-tested for both `.html` and
-`.htm` exports, so either common HTML extension can be used without listing
-each answer explicitly.
+Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
+`.xhtml` exports, so common HTML extensions can be used without listing each
+answer explicitly.
 The programmatic API applies the same JSON and XML normalization to embedded
 source content, so in-memory integrations receive the same claim-readable
 evidence text as CLI file-based verification.
