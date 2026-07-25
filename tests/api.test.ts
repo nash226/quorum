@@ -143,7 +143,7 @@ import { createSimplePdf } from "./pdf-test-helpers.js";
 
 test("programmatic API exposes supported source and answer extensions", () => {
   assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml"]);
-  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx"]);
+  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".yaml", ".yml"]);
 });
 
 test("API discovery exposes transport limits and supported methods", () => {
