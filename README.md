@@ -366,6 +366,8 @@ including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim
 extraction, so exported agent responses can be verified without first
 converting them to plain text.
+The CLI regression suite also verifies an XML answer end to end against an
+approved policy, keeping this structured-response path release-gated.
 File-based TOML answers use the same normalization path as structured sources,
 both when passed directly and when discovered through `--answer-dir`, so
 agent exports do not need to be converted before batch verification.
