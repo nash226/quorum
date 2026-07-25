@@ -172,7 +172,7 @@ export interface ReviewerDecisionFileImportResultOptions
   failOn?: ClaimVerdict[];
 }
 
-export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml"]);
+export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml", ".tsv"]);
 export const ANSWER_EXTENSIONS = new Set([
   ".md",
   ".markdown",
@@ -182,6 +182,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".xhtml",
   ".pdf",
   ".docx",
+  ".tsv",
 ]);
 export const STDIN_ANSWER_PATH = "<stdin>";
 

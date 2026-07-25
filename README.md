@@ -115,8 +115,8 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown, text, exported HTML/XHTML, JSON/YAML/XML exports, PDF, and DOCX
-answers and approved sources. Recursive answer directories also cover PDF and
+Verification accepts Markdown, text, tab-separated (`.tsv`) exports, exported HTML/XHTML, JSON/YAML/XML exports, PDF, and DOCX
+answers and approved sources. Recursive answer directories also cover TSV, PDF and
 DOCX exports, keeping binary answer batches aligned with explicit file
 verification. JSON, YAML, and XML exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be

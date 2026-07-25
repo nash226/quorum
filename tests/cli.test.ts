@@ -623,6 +623,38 @@ test("verify-batch discovers answer and source files in nested directories", asy
   }
 });
 
+test("verify-batch discovers TSV answers and sources from directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-tsv-inputs-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "leave.tsv"), "claim\tEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "leave-policy.tsv"), "policy\tEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--result-json",
+    ]);
+    const result = JSON.parse(stdout) as {
+      report: { answerCount: number; sourceCount: number };
+    };
+
+    assert.equal(result.report.answerCount, 1);
+    assert.equal(result.report.sourceCount, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("import-review --help prints import usage without requiring a csv path", async () => {
   const result = await runCliAllowFailure(["import-review", "--help"]);
 
