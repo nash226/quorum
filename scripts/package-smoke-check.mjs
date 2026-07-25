@@ -97,6 +97,33 @@ try {
   rmSync(cliBatchPackageDir, { recursive: true, force: true });
 }
 
+const cliXhtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xhtml-"));
+try {
+  const answerPath = join(cliXhtmlPackageDir, "answer.md");
+  const sourcePath = join(cliXhtmlPackageDir, "policy.xhtml");
+  writeFileSync(answerPath, "Customers can request refunds within 30 days.\n");
+  writeFileSync(
+    sourcePath,
+    '<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Refund Policy</title></head><body><p>Customers can request refunds within 30 days.</p></body></html>',
+  );
+
+  const xhtmlOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const xhtmlPayload = JSON.parse(xhtmlOutput);
+  if (
+    xhtmlPayload.summary?.verified !== 1 ||
+    xhtmlPayload.sources?.[0]?.title !== "Refund Policy" ||
+    xhtmlPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected XHTML source contract.");
+  }
+} finally {
+  rmSync(cliXhtmlPackageDir, { recursive: true, force: true });
+}
+
 if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.startApiServer !== "function") {
   throw new Error("Package artifact server entry point is missing required server exports.");
 }
