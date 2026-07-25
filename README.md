@@ -112,7 +112,9 @@ persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
 Verification accepts Markdown, text, exported HTML/XHTML, JSON exports, PDF, and DOCX
-answers and approved sources. JSON and XML exports are normalized into
+answers and approved sources. Recursive answer directories also cover PDF and
+DOCX exports, keeping binary answer batches aligned with explicit file
+verification. JSON and XML exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
 reviewed without a separate conversion step. Use `--source-dir` for a mixed directory of policy
 files;
