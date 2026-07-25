@@ -1567,6 +1567,30 @@ test("verify-batch discovers AsciiDoc answers and sources in directories", async
   }
 });
 
+test("verify-batch discovers MediaWiki answers and sources in directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-wiki-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources", "nested");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "answer.wiki"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "hr-policy.wiki"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", join(tempDir, "sources"), "--json",
+    ])) as { answerCount: number; summary: { verified: number } };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers htm answers from answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-htm-answer-dir-"));
 
