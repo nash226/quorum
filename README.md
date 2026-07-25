@@ -1021,6 +1021,11 @@ benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
 
+Node workers can also import reviewer-decision CSV content in memory, filter it
+to `pending`, `reviewed`, or `no_claims`, and render a focused queue summary
+without starting the HTTP server. See the [programmatic API guide](docs/programmatic-api.md)
+for the reviewer handoff example.
+
 ## Documentation Map
 
 - [CLI guide](docs/cli-guide.md): local verification, reports, imports, and evaluation.
