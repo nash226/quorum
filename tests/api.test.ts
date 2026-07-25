@@ -942,10 +942,10 @@ test("programmatic API resolves source and answer paths in CLI order", async () 
     const nestedSourceDir = join(sourceDir, "nested");
     const explicitAnswerPath = join(tempDir, "explicit-answer.md");
     const explicitSourcePath = join(tempDir, "explicit-source.md");
-    const directoryAnswerPath = join(answerDir, "a-answer.md");
-    const nestedAnswerPath = join(nestedAnswerDir, "b-answer.txt");
-    const directorySourcePath = join(sourceDir, "a-source.md");
-    const nestedSourcePath = join(nestedSourceDir, "b-source.html");
+    const directoryAnswerPath = join(answerDir, "z-answer.md");
+    const nestedAnswerPath = join(nestedAnswerDir, "a-answer.txt");
+    const directorySourcePath = join(sourceDir, "z-source.md");
+    const nestedSourcePath = join(nestedSourceDir, "a-source.html");
 
     await Promise.all([
       mkdir(nestedAnswerDir, { recursive: true }),
@@ -966,11 +966,11 @@ test("programmatic API resolves source and answer paths in CLI order", async () 
 
     assert.deepEqual(
       await resolveAnswerPaths([explicitAnswerPath], [answerDir]),
-      [explicitAnswerPath, directoryAnswerPath, nestedAnswerPath],
+      [explicitAnswerPath, nestedAnswerPath, directoryAnswerPath],
     );
     assert.deepEqual(
       await resolveSourcePaths([explicitSourcePath], [sourceDir]),
-      [explicitSourcePath, directorySourcePath, nestedSourcePath],
+      [explicitSourcePath, nestedSourcePath, directorySourcePath],
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });

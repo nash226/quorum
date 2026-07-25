@@ -44,6 +44,9 @@ The shipped product surface now covers the full review loop:
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
+Recursive answer and source discovery now sorts the complete flattened path
+set, keeping batch order and reviewer labels stable when root and nested files
+are mixed.
 
 ## Quick Start
 
