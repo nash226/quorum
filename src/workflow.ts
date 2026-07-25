@@ -634,6 +634,13 @@ async function answerContentToText(
   content: string | Uint8Array,
   answerPath?: string,
 ): Promise<string> {
+  if (answerPath && /\.(?:json|xml)$/i.test(answerPath)) {
+    const answerDocument = typeof content === "string"
+      ? await sourceDocumentFromFile(answerPath, content, 0)
+      : await sourceDocumentFromFile(answerPath, content, 0);
+    return answerDocument.content;
+  }
+
   if (typeof content === "string") {
     return content;
   }
@@ -816,7 +823,7 @@ async function readAnswerInput(inputPath: string): Promise<string> {
   if (inputPath !== "-") {
     const content = await readFile(inputPath);
 
-    if (/\.(?:pdf|docx)$/i.test(inputPath)) {
+    if (/\.(?:pdf|docx|json|xml)$/i.test(inputPath)) {
       const answerDocument = await sourceDocumentFromFile(inputPath, content, 0);
       return answerDocument.content;
     }
