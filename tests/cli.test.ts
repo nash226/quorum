@@ -958,6 +958,42 @@ test("verify accepts pdf sources", async () => {
   }
 });
 
+test("verify accepts pdf answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.pdf");
+    const sourcePath = join(tempDir, "hr-policy.pdf");
+    const pdfContent = createSimplePdf("Employees receive 12 weeks of paid parental leave.");
+
+    await Promise.all([
+      writeFile(answerPath, pdfContent),
+      writeFile(sourcePath, pdfContent),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerPath: string;
+      summary: Record<string, number>;
+      sources: Array<{ sourcePath: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("evaluate renders scorecards for shipped example fixtures", async () => {
   const stdout = await runCli([
     "evaluate",
