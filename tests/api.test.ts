@@ -612,6 +612,48 @@ test("HTTP API restricts CORS responses to configured origins", async () => {
   }
 });
 
+test("HTTP API verifies claims against YAML source content", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answer: "Employees may work remotely two days per week.",
+        sources: [{
+          sourcePath: "policies/remote-work-policy.yaml",
+          content: "policy:\n  eligibility: Employees may work remotely two days per week.\n",
+          title: "Remote Work Policy",
+          trustLevel: "high",
+        }],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const payload = await response.json() as {
+      report: {
+        summary: { verified: number; contradicted: number; unsupported: number; needs_review: number };
+        sources: Array<{ id: string; sourcePath: string; title: string; trustLevel: string }>;
+      };
+    };
+    assert.deepEqual(payload.report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+    assert.deepEqual(payload.report.sources, [{
+      id: "source_1",
+      sourcePath: "policies/remote-work-policy.yaml",
+      title: "Remote Work Policy",
+      trustLevel: "high",
+    }]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API marks mutable JSON responses as non-cacheable and contracts as revalidatable", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

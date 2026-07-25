@@ -46,6 +46,8 @@ The shipped product surface now covers the full review loop:
 - `evaluate` runs checked-in policy fixtures as a CI mismatch and score gate.
 - `serve` exposes the same workflows through a local HTTP API, while `openapi`
   exports its integration contract.
+- The local HTTP API verifies structured YAML source content with the same
+  evidence report and source-metadata contract as file-backed workflows.
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
