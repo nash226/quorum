@@ -2199,12 +2199,18 @@ test("verify discovers XML sources in source directories", async () => {
 
   try {
     const sourceDir = join(tempDir, "sources");
+    const nestedSourceDir = join(sourceDir, "regional");
     const answerPath = join(tempDir, "answer.md");
-    await mkdir(sourceDir, { recursive: true });
+    await mkdir(nestedSourceDir, { recursive: true });
     await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
     await writeFile(
       join(sourceDir, "hr-policy.xml"),
       "<policy><benefit>Employees receive 12 weeks of paid parental leave.</benefit></policy>",
+      "utf8",
+    );
+    await writeFile(
+      join(nestedSourceDir, "regional-policy.xml"),
+      "<policy><region>United States</region></policy>",
       "utf8",
     );
 
@@ -2213,7 +2219,7 @@ test("verify discovers XML sources in source directories", async () => {
       summary: { verified: number };
     };
 
-    assert.equal(report.sources[0]?.title, "hr-policy");
+    assert.deepEqual(report.sources.map((source) => source.title), ["hr-policy", "regional-policy"]);
     assert.equal(report.summary.verified, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
