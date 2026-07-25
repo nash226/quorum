@@ -99,9 +99,12 @@ try {
 
 const cliXhtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xhtml-"));
 try {
-  const answerPath = join(cliXhtmlPackageDir, "answer.md");
+  const answerPath = join(cliXhtmlPackageDir, "answer.xhtml");
   const sourcePath = join(cliXhtmlPackageDir, "policy.xhtml");
-  writeFileSync(answerPath, "Customers can request refunds within 30 days.\n");
+  writeFileSync(
+    answerPath,
+    '<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><body><p>Customers can request refunds within 30 days.</p></body></html>',
+  );
   writeFileSync(
     sourcePath,
     '<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Refund Policy</title></head><body><p>Customers can request refunds within 30 days.</p></body></html>',
