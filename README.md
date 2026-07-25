@@ -118,6 +118,9 @@ queue folders can be verified without flattening the approved file layout. The
 CLI also deduplicates repeated source paths, keeping each approved document
 represented once in the evidence report. The
 [CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
+For structured answer exports, pass the JSON or XML file explicitly with
+`--answer`; directory-based structured-answer discovery is tracked separately
+from the explicit file contract.
 When a workflow has an explicit source set, repeat `--source` instead of
 creating a temporary directory:
 
