@@ -29,6 +29,23 @@ const cliPath = new URL("dist/src/cli.js", packageRoot);
 const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS];
 const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS];
 
+const formatsOutput = execFileSync("node", [fileURLToPath(cliPath), "formats"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+});
+let formatsPayload;
+try {
+  formatsPayload = JSON.parse(formatsOutput);
+} catch (error) {
+  throw new Error(`Package artifact formats command did not return valid JSON: ${error?.message ?? error}`);
+}
+if (
+  JSON.stringify(formatsPayload?.sourceExtensions) !== JSON.stringify(expectedSourceExtensions) ||
+  JSON.stringify(formatsPayload?.answerExtensions) !== JSON.stringify(expectedAnswerExtensions)
+) {
+  throw new Error("Package artifact formats command did not preserve the exported format contract.");
+}
+
 for (const versionFlag of ["--version", "-v"]) {
   const versionOutput = execFileSync("node", [fileURLToPath(cliPath), versionFlag], { encoding: "utf8" }).trim();
   if (versionOutput !== `quorum ${packageJson.version}`) {
