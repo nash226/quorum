@@ -48,6 +48,17 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(textSource.title, "escalation-guide");
 });
 
+test("strips TSV extensions from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.tsv",
+    "policy\tEmployees get 12 weeks.",
+    0,
+  );
+
+  assert.equal(source.title, "benefits");
+  assert.equal(source.content, "policy\tEmployees get 12 weeks.");
+});
+
 test("strips JSON extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.json",
