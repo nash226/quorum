@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `fb0f852` on 2026-07-25, feat: expose supported input formats
+- Latest shipped change: `9405efb` on 2026-07-25, fix: preserve decimal values during claim splitting
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | fix: preserve decimal values during claim splitting | `9405efb` |
 | 2026-07-25 | Direct push | feat: expose supported input formats | `fb0f852` |
 | 2026-07-25 | Direct push | feat: discover Org-mode policy exports | `8606665` |
 | 2026-07-25 | [#1034](https://github.com/nash226/quorum/pull/1034) | feat: discover MDX policy exports | `1f3daa5` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | docs: document the complete local check gate | `e801bc3` |
 | 2026-07-25 | Direct push | test: cover nested markdown quote claims | `ca82525` |
 | 2026-07-25 | Direct push | docs: align format discovery contract | `7eb2865` |
-| 2026-07-25 | Direct push | test: cover nested DOCX answer discovery | `393bf1c` |
 
