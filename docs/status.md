@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7adc786` on 2026-07-25, fix: normalize programmatic YAML answers
+- Latest shipped change: `7b09d0f` on 2026-07-25, feat: ingest TOML policy sources
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | feat: ingest TOML policy sources | `7b09d0f` |
 | 2026-07-25 | Direct push | fix: normalize programmatic YAML answers | `7adc786` |
 | 2026-07-25 | Direct push | docs: explain hidden directory discovery | `bb820aa` |
 | 2026-07-25 | Direct push | fix: normalize YAML answer files | `860e124` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | test: cover nested XML source discovery | `3b15808` |
 | 2026-07-25 | Direct push | test: cover YAML sources in programmatic API | `cddb4ed` |
 | 2026-07-25 | Direct push | feat: discover YAML source directories | `36bb0c4` |
-| 2026-07-25 | Direct push | feat: ingest YAML policy sources | `06b2dc5` |
 
