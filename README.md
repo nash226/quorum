@@ -121,7 +121,7 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown, text, exported HTML/XHTML, JSON/YAML/XML/TOML
+Verification accepts Markdown (`.md`, `.markdown`, `.mdown`, and `.mkdn`), text, exported HTML/XHTML, JSON/YAML/XML/TOML
 exports, PDF, and DOCX answers and approved sources. Recursive answer
 directories cover HTML/XHTML, PDF, DOCX, and TOML exports, keeping binary and
 structured answer batches aligned with explicit file verification. JSON, YAML,
@@ -327,7 +327,8 @@ covering the primary single-answer workflow before release.
 Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
-The supported local answer and source formats are Markdown (`.md`, `.markdown`),
+The supported local answer and source formats are Markdown (`.md`, `.markdown`,
+`.mdown`, and `.mkdn`),
 plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
 documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), XML (`.xml`), and TOML (`.toml`) exports. JSON, YAML, and TOML
 exports are normalized into claim-readable evidence text while preserving
