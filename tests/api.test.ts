@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { request as httpRequest } from "node:http";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { join, relative, resolve } from "node:path";
 import test from "node:test";
 import {
   API_CAPABILITIES as SERVER_API_CAPABILITIES,
@@ -143,7 +143,7 @@ import { createSimplePdf } from "./pdf-test-helpers.js";
 
 test("programmatic API exposes supported source and answer extensions", () => {
   assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml"]);
-  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx"]);
+  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml"]);
 });
 
 test("API discovery exposes transport limits and supported methods", () => {
@@ -982,6 +982,27 @@ test("programmatic API reports missing explicit batch answer paths during resolu
     resolveAnswerPaths(["missing-answer.md"], []),
     /Answer file not found: missing-answer\.md/,
   );
+});
+
+test("programmatic API discovers structured answer exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-structured-answers-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    await mkdir(join(answerDir, "nested"), { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "answer.json"), '{"answer":"Employees receive paid leave."}', "utf8"),
+      writeFile(join(answerDir, "nested", "answer.yaml"), "answer: Employees receive paid leave.\n", "utf8"),
+      writeFile(join(answerDir, "nested", "answer.xml"), "<answer>Employees receive paid leave.</answer>", "utf8"),
+    ]);
+
+    assert.deepEqual(
+      (await resolveAnswerPaths([], [answerDir])).map((path) => relative(answerDir, path)),
+      ["answer.json", join("nested", "answer.xml"), join("nested", "answer.yaml")],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("programmatic API batches file and directory answers with fail verdicts", async () => {
