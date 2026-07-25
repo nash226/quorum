@@ -130,6 +130,17 @@ test("normalizes TOML source exports and preserves metadata", async () => {
   assert.equal(source.content, 'title: "Benefits Policy"\nupdated_at: "2026-07-20"\ntrust_level: "high"\npolicy.leave: "Employees get 12 weeks."');
 });
 
+test("normalizes RTF source exports into claim-readable text", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.rtf",
+    String.raw`{\rtf1\ansi Employees receive \b 12 weeks\b0 of paid leave.\par Requests require manager review.}`,
+    0,
+  );
+
+  assert.equal(source.title, "benefits");
+  assert.equal(source.content, "Employees receive 12 weeks of paid leave.\nRequests require manager review.");
+});
+
 test("keeps malformed structured exports readable instead of failing ingestion", async () => {
   const malformedJson = await sourceDocumentFromFile(
     "docs/policies/benefits.json",

@@ -172,7 +172,7 @@ export interface ReviewerDecisionFileImportResultOptions
   failOn?: ClaimVerdict[];
 }
 
-export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml", ".toml"]);
+export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".yaml", ".yml", ".xml", ".toml", ".rtf"]);
 export const ANSWER_EXTENSIONS = new Set([
   ".md",
   ".markdown",
@@ -183,6 +183,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".pdf",
   ".docx",
   ".toml",
+  ".rtf",
 ]);
 export const STDIN_ANSWER_PATH = "<stdin>";
 
@@ -652,8 +653,8 @@ async function answerContentToText(
     return content;
   }
 
-  if (!answerPath || !/\.(?:pdf|docx)$/i.test(answerPath)) {
-    throw new Error("Binary answer content requires answerPath ending in .pdf or .docx.");
+  if (!answerPath || !/\.(?:pdf|docx|rtf)$/i.test(answerPath)) {
+    throw new Error("Binary answer content requires answerPath ending in .pdf, .docx, or .rtf.");
   }
 
   const answerDocument = await sourceDocumentFromFile(answerPath, content, 0);
