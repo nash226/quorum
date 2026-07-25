@@ -2,6 +2,16 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { renderAnswerLabels, renderAnswerPreview, splitIntoSentences } from "../src/text.js";
 
+test("keeps decimal values inside one sentence", () => {
+  assert.deepEqual(
+    splitIntoSentences("The policy applies to 95.5% of eligible employees. Review exceptions separately."),
+    [
+      "The policy applies to 95.5% of eligible employees.",
+      "Review exceptions separately.",
+    ],
+  );
+});
+
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
     renderAnswerLabels([
