@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5f7aecb` on 2026-07-24, test: cover packaged XHTML source verification
+- Latest shipped change: `0b99533` on 2026-07-24, test: cover packaged XHTML answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-24 | Direct push | test: cover packaged XHTML answers | `0b99533` |
 | 2026-07-24 | [#983](https://github.com/nash226/quorum/pull/983) | test: cover packaged XHTML source verification | `5f7aecb` |
 | 2026-07-24 | Direct push | feat: support XHTML document ingestion | `f3bdb1f` |
 | 2026-07-24 | Direct push | test: preserve malformed structured source exports | `6d5e1a4` |
@@ -56,5 +57,4 @@
 | 2026-07-24 | Direct push | docs: align roadmap with shipped API foundations | `1b889e2` |
 | 2026-07-24 | Direct push | test: cover structured sources in programmatic API | `1135c38` |
 | 2026-07-24 | Direct push | docs: document XML source verification | `a38d260` |
-| 2026-07-24 | Direct push | feat: normalize JSON and XML source exports | `32d96a9` |
 
