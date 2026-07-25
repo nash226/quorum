@@ -396,7 +396,15 @@ function applyStructuredMetadata(metadata: SourceMetadata, key: string, value: s
   const normalizedKey = key.replace(/[-_]/g, "").toLowerCase();
 
   if (normalizedKey === "title" && value) metadata.title = stripQuotes(value);
-  else if (normalizedKey === "updatedat" && value) metadata.updatedAt = stripQuotes(value);
+  else if (
+    (normalizedKey === "updatedat" ||
+      normalizedKey === "modifiedat" ||
+      normalizedKey === "lastmodified" ||
+      normalizedKey === "lastupdated") &&
+    value
+  ) {
+    metadata.updatedAt = stripQuotes(value);
+  }
   else if (normalizedKey === "trustlevel" && value) metadata.trustLevel = tryParseTrustLevel(stripQuotes(value));
 }
 

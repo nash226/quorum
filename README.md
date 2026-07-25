@@ -48,6 +48,9 @@ The shipped product surface now covers the full review loop:
   exports its integration contract.
 - The local HTTP API verifies structured YAML source content with the same
   evidence report and source-metadata contract as file-backed workflows.
+- Structured JSON, YAML, and TOML sources recognize common freshness keys such
+  as `modifiedAt`, `last_modified`, and `lastUpdated`, preserving exported
+  policy timestamps in evidence metadata.
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
