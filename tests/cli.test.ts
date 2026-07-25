@@ -4329,3 +4329,23 @@ async function runCliAllowFailure(
     });
   });
 }
+
+test("verify-batch excludes configured report outputs from answer directory discovery", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-output-exclusion-"));
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const markdownOutPath = join(answerDir, "batch-report.md");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await writeFile(join(answerDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(markdownOutPath, "A previous generated report.\n", "utf8");
+    await writeFile(join(sourceDir, "hr-policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    const stdout = await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--markdown-out", markdownOutPath, "--json"]);
+    const report = JSON.parse(stdout) as { answerCount: number; answers: Array<{ answerPath: string }> };
+    assert.equal(report.answerCount, 1);
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [join(answerDir, "answer.md")]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});

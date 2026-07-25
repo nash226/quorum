@@ -50,6 +50,7 @@ export interface BatchVerificationOptions {
   sources: SourceDocument[];
   failOn?: ClaimVerdict[];
   generatedAt?: string;
+  excludedAnswerPaths?: string[];
 }
 
 export interface InMemoryAnswerInput {
@@ -199,6 +200,7 @@ export async function resolveSourcePaths(
 export async function resolveAnswerPaths(
   answerPaths: string[],
   answerDirs: string[],
+  excludedPaths: string[] = [],
 ): Promise<string[]> {
   await Promise.all(
     answerPaths
@@ -206,7 +208,11 @@ export async function resolveAnswerPaths(
       .map((answerPath) => ensureFilePath(answerPath, "Answer")),
   );
   const directoryFiles = (
-    await Promise.all(answerDirs.map((answerDir) => listAnswerFiles(answerDir)))
+    await Promise.all(
+      answerDirs.map((answerDir) =>
+        listAnswerFiles(answerDir, new Set(excludedPaths.map((path) => resolve(path)))),
+      ),
+    )
   ).flat();
 
   return dedupePathsInOrder([...answerPaths, ...directoryFiles]);
@@ -469,7 +475,7 @@ export async function verifyAnswerContentsResult(
 export async function verifyBatchAnswers(
   options: BatchVerificationOptions,
 ): Promise<BatchVerificationReport> {
-  const answerPaths = await resolveAnswerPaths(options.answerPaths, options.answerDirPaths);
+  const answerPaths = await resolveAnswerPaths(options.answerPaths, options.answerDirPaths, options.excludedAnswerPaths);
 
   if (answerPaths.length === 0) {
     const locations = [...options.answerPaths, ...options.answerDirPaths].join(", ");
@@ -785,14 +791,15 @@ async function listSourceFiles(sourceDir: string): Promise<string[]> {
   return listFilesWithExtensions(sourceDir, SOURCE_EXTENSIONS, "Approved source");
 }
 
-async function listAnswerFiles(answerDir: string): Promise<string[]> {
-  return listFilesWithExtensions(answerDir, ANSWER_EXTENSIONS, "Answer");
+async function listAnswerFiles(answerDir: string, excludedPaths: ReadonlySet<string> = new Set()): Promise<string[]> {
+  return listFilesWithExtensions(answerDir, ANSWER_EXTENSIONS, "Answer", excludedPaths);
 }
 
 async function listFilesWithExtensions(
   directory: string,
   extensions: ReadonlySet<string>,
   label: string,
+  excludedPaths: ReadonlySet<string> = new Set(),
 ): Promise<string[]> {
   await ensureDirectoryPath(directory, label);
   const entries = await readdir(directory, { withFileTypes: true });
@@ -805,10 +812,10 @@ async function listFilesWithExtensions(
       const path = join(directory, entry.name);
 
       if (entry.isDirectory()) {
-        return listFilesWithExtensions(path, extensions, label);
+        return listFilesWithExtensions(path, extensions, label, excludedPaths);
       }
 
-      if (entry.isFile() && extensions.has(extname(entry.name).toLowerCase())) {
+      if (entry.isFile() && !excludedPaths.has(resolve(path)) && extensions.has(extname(entry.name).toLowerCase())) {
         return [path];
       }
 
