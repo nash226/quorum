@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `83755d3` on 2026-07-25, docs: align CLI format guide
+- Latest shipped change: `625692b` on 2026-07-25, docs: clarify durable queue roadmap boundary
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | docs: clarify durable queue roadmap boundary | `625692b` |
 | 2026-07-25 | Direct push | docs: align CLI format guide | `83755d3` |
 | 2026-07-25 | [#1053](https://github.com/nash226/quorum/pull/1053) | test: pin repository check script contract | `28ddbab` |
 | 2026-07-25 | Direct push | feat: discover MediaWiki policy exports | `cad27b5` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | test: derive packaged capability extensions | `de6a428` |
 | 2026-07-25 | Direct push | fix: preserve decimal values during claim splitting | `9405efb` |
 | 2026-07-25 | Direct push | feat: expose supported input formats | `fb0f852` |
-| 2026-07-25 | Direct push | feat: discover Org-mode policy exports | `8606665` |
 
