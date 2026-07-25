@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9a3b421` on 2026-07-25, fix: normalize programmatic TOML answers
+- Latest shipped change: `58535e7` on 2026-07-25, test: cover single-answer DOCX verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | test: cover single-answer DOCX verification | `58535e7` |
 | 2026-07-25 | Direct push | fix: normalize programmatic TOML answers | `9a3b421` |
 | 2026-07-25 | Direct push | test: cover nested TOML answer discovery | `11f16ea` |
 | 2026-07-25 | Direct push | feat: support TOML answer files | `10c3655` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | feat: ingest TOML policy sources | `7b09d0f` |
 | 2026-07-25 | Direct push | fix: normalize programmatic YAML answers | `7adc786` |
 | 2026-07-25 | Direct push | docs: explain hidden directory discovery | `bb820aa` |
-| 2026-07-25 | Direct push | fix: normalize YAML answer files | `860e124` |
 
