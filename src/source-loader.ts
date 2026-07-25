@@ -83,6 +83,14 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseHtmlSource(normalizedContent);
   }
 
+  if (isJsonSource(sourcePath)) {
+    return parseJsonSource(normalizedContent);
+  }
+
+  if (isXmlSource(sourcePath)) {
+    return parseXmlSource(normalizedContent);
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -186,6 +194,14 @@ function isDocxSource(sourcePath: string): boolean {
   return /\.docx$/i.test(sourcePath);
 }
 
+function isJsonSource(sourcePath: string): boolean {
+  return /\.json$/i.test(sourcePath);
+}
+
+function isXmlSource(sourcePath: string): boolean {
+  return /\.xml$/i.test(sourcePath);
+}
+
 function sourceTitleFromPath(sourcePath: string): string {
   return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf|docx|json|xml)$/i, "");
 }
@@ -236,6 +252,46 @@ function parseHtmlSource(content: string): ParsedSource {
       trustLevel,
     },
     body: normalizeHtmlText(normalized),
+  };
+}
+
+function parseJsonSource(content: string): ParsedSource {
+  try {
+    return { metadata: {}, body: formatStructuredValue(JSON.parse(content)) };
+  } catch {
+    return { metadata: {}, body: content };
+  }
+}
+
+function formatStructuredValue(value: unknown, prefix = ""): string {
+  if (value === null || typeof value !== "object") {
+    return prefix ? `${prefix}: ${String(value)}` : String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value
+      .map((item, index) => formatStructuredValue(item, prefix ? `${prefix}[${index + 1}]` : `[${index + 1}]`))
+      .join("\n");
+  }
+
+  return Object.entries(value)
+    .map(([key, item]) => formatStructuredValue(item, prefix ? `${prefix}.${key}` : key))
+    .join("\n");
+}
+
+function parseXmlSource(content: string): ParsedSource {
+  return {
+    metadata: {},
+    body: decodeHtmlEntities(
+      content
+        .replace(/<\?xml[\s\S]*?\?>/gi, " ")
+        .replace(/<!--[\s\S]*?-->/g, " ")
+        .replace(/<[^>]+>/g, "\n")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .join("\n"),
+    ),
   };
 }
 

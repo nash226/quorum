@@ -105,11 +105,11 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown, text, exported HTML, JSON and XML exports, PDF,
-and DOCX answers and approved sources. JSON and XML files are treated as
-inspectable UTF-8 evidence, so exported knowledge-base payloads can be
-reviewed without a separate conversion step. Use `--source-dir` for a mixed
-directory of policy files;
+Verification accepts Markdown, text, exported HTML, JSON exports, PDF, and DOCX
+answers and approved sources. JSON and XML exports are normalized into
+claim-readable evidence text, so exported knowledge-base payloads can be
+reviewed without a separate conversion step. Use `--source-dir` for a mixed directory of policy
+files;
 answer and source directories are searched recursively, so nested policy or
 queue folders can be verified without flattening the approved file layout. The
 CLI also deduplicates repeated source paths, keeping each approved document
@@ -296,8 +296,8 @@ build, so this integration path stays covered for published artifacts.
 The supported local answer and source formats are Markdown (`.md`, `.markdown`),
 plain text (`.txt`), exported HTML (`.html`, `.htm`), PDF (`.pdf`), and Word
 documents (`.docx`), plus JSON (`.json`) and XML (`.xml`) exports. JSON and XML
-exports are read as inspectable UTF-8 evidence text while preserving their
-source metadata in reports.
+exports are normalized into claim-readable evidence text while preserving
+their source metadata in reports.
 The CLI guide now lists XML alongside JSON in its capability index and verify
 workflow, keeping the documented local source contract aligned with the
 shipped XML ingestion path.
@@ -594,8 +594,8 @@ The checked-in 78-fixture benchmark spans 27 HR and 51 support workflows, includ
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
-sources. JSON exports are preserved as UTF-8 evidence text so structured
-knowledge-base payloads remain inspectable in reports. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
+sources. JSON and XML exports are normalized into evidence text so structured
+knowledge-base payloads remain claim-readable in reports. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.
 Run `npm run evaluate:ci` to execute the full checked-in benchmark with the
 aggregate score and mismatch gates enabled; it is the same fail-closed check
