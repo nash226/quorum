@@ -185,6 +185,29 @@ test("verify-batch discovers TOML answers from nested directories", async () => 
   }
 });
 
+test("verify accepts a direct TOML answer path", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-answer-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.toml");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, 'answer = "Refunds are available within 30 days of purchase."\n', "utf8"),
+      writeFile(sourcePath, "Refunds are available within 30 days of purchase.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { answerPath: string; summary: Record<string, number> };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([
