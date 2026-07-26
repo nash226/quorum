@@ -435,6 +435,8 @@ Direct JSONL answer files are also normalized one record at a time by `verify`,
 preserving the answer path while exposing each record as reviewer-verifiable claims.
 Source-directory verification discovers both `.yaml` and `.yml` policies,
 including files nested below the supplied directory.
+Direct `verify --source` also accepts XML policy exports alongside JSON and YAML,
+so a single approved policy can be checked without staging it in a directory.
 File-based JSON and XML answers receive the same normalization before claim
 extraction, so exported agent responses can be verified without first
 converting them to plain text.
