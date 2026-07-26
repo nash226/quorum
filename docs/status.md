@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a346d26` on 2026-07-26, feat: split unicode-uppercase compound claims
+- Latest shipped change: `5d5fed7` on 2026-07-26, docs: align supported format guide
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | [#1116](https://github.com/nash226/quorum/pull/1116) | docs: align supported format guide | `5d5fed7` |
 | 2026-07-26 | Direct push | feat: split unicode-uppercase compound claims | `a346d26` |
 | 2026-07-26 | Direct push | test: cover direct text answer verification | `f7c59e4` |
 | 2026-07-26 | [#1112](https://github.com/nash226/quorum/pull/1112) | test: cover direct Org-mode answers | `385602c` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | feat: accept CSV answer exports | `13abd37` |
 | 2026-07-26 | Direct push | fix: accept BOM-prefixed reviewer CSVs | `7fb1252` |
 | 2026-07-26 | Direct push | fix: discover YAML answers in directories | `581df8b` |
-| 2026-07-26 | Direct push | fix: decode batch text content from base64 | `a17402f` |
 
