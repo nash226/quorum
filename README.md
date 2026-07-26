@@ -1235,6 +1235,10 @@ command to fail closed when aggregate claim quality falls below the threshold.
 
 [Watch or download the Quorum demo video](docs/assets/quorum-demo.mp4)
 
+Direct TSV answer exports (`.tsv`) are now accepted by `verify` alongside CSV,
+and TSV policy files are included in source discovery; tab-separated rows stay
+available for claim matching without a conversion step.
+
 ## Development
 
 ```bash

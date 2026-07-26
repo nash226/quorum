@@ -31,6 +31,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.wiki/);
   assert.match(stdout, /Source files: .*\.csv/);
   assert.match(stdout, /Answer files: .*\.csv/);
+  assert.match(stdout, /Source files: .*\.tsv/);
+  assert.match(stdout, /Answer files: .*\.tsv/);
   assert.match(stdout, /Source files: .*\.qmd/);
   assert.match(stdout, /Answer files: .*\.qmd/);
 });
@@ -107,6 +109,28 @@ test("verify accepts a direct CSV answer export", async () => {
     const sourcePath = join(tempDir, "policy.md");
     await Promise.all([
       writeFile(answerPath, "field,response\npolicy,Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as { answerPath: string; summary: { verified: number } };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify accepts a direct TSV answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.tsv");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "field\tresponse\npolicy\tEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
       writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
     ]);
 
