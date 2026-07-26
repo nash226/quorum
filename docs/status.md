@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2dfd390` on 2026-07-26, docs: align help with input formats
+- Latest shipped change: `d9d6819` on 2026-07-26, test: keep packaged format contract aligned
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | test: keep packaged format contract aligned | `d9d6819` |
 | 2026-07-26 | Direct push | docs: align help with input formats | `2dfd390` |
 | 2026-07-26 | Direct push | test: cover direct TOML source verification | `96a2d47` |
 | 2026-07-26 | Direct push | test: cover direct AsciiDoc source verification | `322cd48` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | test: cover MediaWiki batch discovery | `22c7f0c` |
 | 2026-07-26 | Direct push | test: cover direct CSV source verification | `b1be01d` |
 | 2026-07-26 | [#1117](https://github.com/nash226/quorum/pull/1117) | test: cover direct text source verification | `f686d2f` |
-| 2026-07-26 | [#1116](https://github.com/nash226/quorum/pull/1116) | docs: align supported format guide | `5d5fed7` |
 
