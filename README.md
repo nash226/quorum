@@ -59,6 +59,9 @@ The shipped product surface now covers the full review loop:
 - `evaluate` runs checked-in policy fixtures as a CI mismatch and score gate.
 - `serve` exposes the same workflows through a local HTTP API, while `openapi`
   exports its integration contract.
+- Failed local API startups now close their partially initialized listener before
+  returning the bind error, so retrying after a port conflict does not leak a
+  server resource.
 - The local HTTP API verifies structured YAML source content with the same
   evidence report and source-metadata contract as file-backed workflows.
 - Structured JSON, YAML, and TOML sources recognize common freshness keys such
