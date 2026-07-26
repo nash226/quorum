@@ -14,6 +14,7 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+<<<<<<< ours
 test("extracts readable text from DOCX source content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0);
@@ -30,6 +31,16 @@ test("preserves a caller-supplied source identifier for DOCX content", async () 
   });
 
   assert.equal(source.id, "people-ops/hr-policy@2026-05-31");
+=======
+test("strips a UTF-8 BOM from source content before parsing", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.txt",
+    "\uFEFFEmployees receive 12 weeks.",
+    0,
+  );
+
+  assert.equal(source.content, "Employees receive 12 weeks.");
+>>>>>>> theirs
 });
 
 test("strips supported text extensions from fallback source titles", async () => {
