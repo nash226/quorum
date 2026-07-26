@@ -31,6 +31,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.wiki/);
   assert.match(stdout, /Source files: .*\.csv/);
   assert.match(stdout, /Answer files: .*\.csv/);
+  assert.match(stdout, /Source files: .*\.qmd/);
+  assert.match(stdout, /Answer files: .*\.qmd/);
 });
 
 test("verify accepts a direct CSV answer export", async () => {
@@ -272,8 +274,8 @@ test("top-level help lists every shipped command", async () => {
   }
 
   assert.match(stdout, /Supported files:/);
-  assert.match(stdout, /Answers: Markdown\/MDX, AsciiDoc\/Org, MediaWiki, text, HTML\/XHTML, JSON, YAML, XML, CSV, PDF, DOCX, and TOML/);
-  assert.match(stdout, /Sources: Markdown\/MDX, AsciiDoc\/Org, text, HTML\/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML/);
+  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, text, HTML\/XHTML, JSON, YAML, XML, CSV, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, text, HTML\/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files and directories/);
 });
 
@@ -2021,6 +2023,30 @@ test("verify-batch discovers AsciiDoc and LaTeX answers and sources in directori
 
     assert.equal(report.answerCount, 2);
     assert.equal(report.summary.verified, 2);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch discovers Quarto Markdown answers and sources in directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-qmd-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "answer.qmd"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "hr-policy.qmd"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ])) as { answerCount: number; summary: { verified: number } };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.summary.verified, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

@@ -9,7 +9,7 @@ This concise index is the source for the generated capability snapshot in
 `docs/status.md`. Detailed context and examples remain in this guide and the
 linked workflow documents.
 
-- read Markdown/MDX, AsciiDoc, Org-mode, MediaWiki, text, HTML/XHTML, JSON, YAML/YML, XML, TOML, PDF, and DOCX answers and approved sources
+- read Markdown/MDX/Quarto, AsciiDoc, Org-mode, MediaWiki, text, HTML/XHTML, JSON, YAML/YML, XML, TOML, PDF, and DOCX answers and approved sources
 - discover approved sources from explicit paths or directories
 - load source titles, freshness, trust levels, and durable source IDs
 - extract normalized atomic claims, including common exported-answer formats
