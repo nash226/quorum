@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e440866` on 2026-07-26, feat: discover Quarto Markdown exports
+- Latest shipped change: `385602c` on 2026-07-26, test: cover direct Org-mode answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | [#1112](https://github.com/nash226/quorum/pull/1112) | test: cover direct Org-mode answers | `385602c` |
 | 2026-07-26 | Direct push | feat: discover Quarto Markdown exports | `e440866` |
 | 2026-07-26 | Direct push | feat: accept CSV answer exports | `13abd37` |
 | 2026-07-26 | Direct push | fix: accept BOM-prefixed reviewer CSVs | `7fb1252` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | fix: decode batch text content from base64 | `a17402f` |
 | 2026-07-26 | Direct push | feat: discover CSV policy sources | `d660f0e` |
 | 2026-07-26 | Direct push | docs: list wiki answer exports | `59eedc1` |
-| 2026-07-26 | Direct push | fix: normalize direct JSONL answers | `2b12ebb` |
 
