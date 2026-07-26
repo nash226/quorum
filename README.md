@@ -73,6 +73,9 @@ The shipped product surface now covers the full review loop:
   path in the JSON report for reviewer handoff.
 - Direct `verify` also accepts AsciiDoc answer exports, preserving the answer
   path in the JSON report for reviewer handoff.
+- Direct `verify` and recursive answer discovery also accept CSV answer
+  exports, so spreadsheet-delivered agent drafts can enter the same evidence
+  workflow.
 - Direct `verify` also accepts MediaWiki approved-source exports, preserving
   the source path in evidence for reviewer handoff.
 

@@ -22,7 +22,7 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   const stdout = await runCli(["formats"]);
 
   assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
-  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
@@ -30,7 +30,53 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Source files: .*\.wiki/);
   assert.match(stdout, /Answer files: .*\.wiki/);
   assert.match(stdout, /Source files: .*\.csv/);
-  assert.doesNotMatch(stdout, /Answer files: .*\.csv/);
+  assert.match(stdout, /Answer files: .*\.csv/);
+});
+
+test("verify accepts a direct CSV answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-csv-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.csv");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "field,response\npolicy,Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as { answerPath: string; summary: { verified: number } };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch discovers CSV answers in nested answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-csv-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    await mkdir(answerDir, { recursive: true });
+    await writeFile(
+      join(answerDir, "answer.csv"),
+      "field,response\npolicy,Employees receive 12 weeks of paid parental leave.\n",
+      "utf8",
+    );
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", join(tempDir, "answers"),
+      "--source", "examples/sources/hr-policy.md", "--json",
+    ])) as { answerCount: number; summary: { verified: number } };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("verify discovers reStructuredText files in source and answer directories", async () => {
@@ -226,7 +272,7 @@ test("top-level help lists every shipped command", async () => {
   }
 
   assert.match(stdout, /Supported files:/);
-  assert.match(stdout, /Answers: Markdown\/MDX, AsciiDoc\/Org, MediaWiki, text, HTML\/XHTML, JSON, YAML, XML, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Answers: Markdown\/MDX, AsciiDoc\/Org, MediaWiki, text, HTML\/XHTML, JSON, YAML, XML, CSV, PDF, DOCX, and TOML/);
   assert.match(stdout, /Sources: Markdown\/MDX, AsciiDoc\/Org, text, HTML\/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files and directories/);
 });
