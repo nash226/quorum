@@ -74,6 +74,20 @@ curl -sS http://127.0.0.1:3000/capabilities | jq '.capabilities.reviewQueueStatu
 # ["pending", "reviewed", "no_claims"]
 ```
 
+### CLI compatibility probe
+
+Workflows that invoke Quorum as a packaged CLI can check the service identity
+without starting an HTTP listener:
+
+```bash
+npm run dev -- version --json
+# {"service":"quorum","version":"0.1.0"}
+```
+
+The JSON fields match the HTTP `/version` response (apart from its request
+correlation envelope), making the probe useful for startup checks and logging
+the exact Quorum contract a runner used.
+
 Treat this list as the service contract for queue routing; clients should not
 assume that every answer contains claims or has already been reviewed.
 The `POST /import-review` request also accepts an optional `queueStatus` value
