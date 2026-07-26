@@ -294,6 +294,32 @@ test("verify accepts a direct Org-mode answer export", async () => {
   }
 });
 
+test("verify accepts a direct Org-mode approved source export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-org-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.org");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "* Benefits\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers CSV answers in nested answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-csv-answer-dir-"));
 
