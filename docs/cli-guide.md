@@ -100,6 +100,9 @@ Use exactly one `--source -`; stdin is consumed once, so it cannot be combined
 with another `--source`, `--source-dir`, or `--answer -` in the same command.
 PDF, DOCX, and HTML sources should use a file path or `--source-dir` so Quorum
 can identify their format from the file.
+PDF and DOCX answers follow the same rule: pass a file path with `--answer` or
+place them under `--answer-dir`; binary answer content cannot be supplied via
+stdin because the CLI uses the filename extension to select its parser.
 
 ## Preview claims
 
