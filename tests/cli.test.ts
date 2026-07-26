@@ -35,6 +35,38 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.qmd/);
 });
 
+test("verify accepts a direct .text answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-text-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.text");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as { assessments: Array<{ verdict: string; claim: { text: string } }> };
+
+    assert.equal(report.assessments.length, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(
+      report.assessments[0]?.claim.text,
+      "Employees receive 12 weeks of paid parental leave.",
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct CSV answer export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-csv-answer-"));
 
