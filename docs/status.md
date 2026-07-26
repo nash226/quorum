@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9a97780` on 2026-07-26, test: cover direct Org source verification
+- Latest shipped change: `64bc2e9` on 2026-07-26, docs: list structured answer formats
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | docs: list structured answer formats | `64bc2e9` |
 | 2026-07-26 | Direct push | test: cover direct Org source verification | `9a97780` |
 | 2026-07-26 | Direct push | test: cover direct MDX answers | `1d47517` |
 | 2026-07-26 | Direct push | test: cover direct YML answer verification | `6ec0143` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | test: smoke-check packaged AsciiDoc verification | `84133f8` |
 | 2026-07-26 | Direct push | test: cover direct Markdown extension verification | `03c0e0e` |
 | 2026-07-26 | Direct push | test: cover direct TOML answer verdicts | `8d6a5d9` |
-| 2026-07-26 | [#1135](https://github.com/nash226/quorum/pull/1135) | test: cover direct HTML source verification | `222c6ef` |
 
