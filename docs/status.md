@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `34e5f5d` on 2026-07-26, test: cover direct LaTeX source verification
+- Latest shipped change: `222c6ef` on 2026-07-26, test: cover direct HTML source verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | [#1135](https://github.com/nash226/quorum/pull/1135) | test: cover direct HTML source verification | `222c6ef` |
 | 2026-07-26 | [#1134](https://github.com/nash226/quorum/pull/1134) | test: cover direct LaTeX source verification | `34e5f5d` |
 | 2026-07-26 | Direct push | test: smoke-check packaged JSONL answers | `d11455d` |
 | 2026-07-26 | [#1132](https://github.com/nash226/quorum/pull/1132) | test: cover direct JSONL source verification | `8825a19` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | docs: align help with input formats | `2dfd390` |
 | 2026-07-26 | Direct push | test: cover direct TOML source verification | `96a2d47` |
 | 2026-07-26 | Direct push | test: cover direct AsciiDoc source verification | `322cd48` |
-| 2026-07-26 | Direct push | test: cover direct reStructuredText sources | `9f1ee68` |
 
