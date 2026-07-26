@@ -48,10 +48,16 @@ test("strips supported text extensions from fallback source titles", async () =>
     "Escalate returns within one hour.",
     2,
   );
+  const rstSource = await sourceDocumentFromFile(
+    "docs/policies/incident-response.rst",
+    "Escalate incidents within one hour.",
+    3,
+  );
 
   assert.equal(markdownSource.title, "leave-policy");
   assert.equal(textSource.title, "escalation-guide");
   assert.equal(textExtensionSource.title, "returns-policy");
+  assert.equal(rstSource.title, "incident-response");
 });
 
 test("strips AsciiDoc extensions from fallback source titles", async () => {
