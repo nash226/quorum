@@ -92,8 +92,9 @@ The shipped product surface now covers the full review loop:
 - Direct `verify` also accepts LaTeX (`.tex`) approved-source exports, preserving
   the source path and title in the evidence report for reviewer handoff.
 
-Batch verification and the local HTTP API are shipped foundations; the next
-roadmap step is a durable API service boundary for agent integrations.
+Batch verification and the local HTTP API are shipped foundations. Durable API
+service hosting and reviewer-queue persistence remain roadmap decisions rather
+than implicit dependencies of the local workflow.
 Durable reviewer-queue persistence remains a product decision tracked in
 [issue #683](https://github.com/nash226/quorum/issues/683), rather than an
 implicit dependency of the local workflow.
