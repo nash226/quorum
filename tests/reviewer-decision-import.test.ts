@@ -75,6 +75,17 @@ waiting on plan language"
   assert.match(report.claims[2]?.reviewerNotes ?? "", /waiting on plan language/);
 });
 
+test("imports reviewer decision CSVs with a UTF-8 BOM", () => {
+  const report = importReviewerDecisions(
+    `\uFEFFclaim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes
+claim_1,Employees receive 12 weeks of paid parental leave.,verified,The approved policy matches.,HR Policy,Employees receive 12 weeks of paid parental leave.,,`,
+  );
+
+  assert.equal(report.summary.totalClaims, 1);
+  assert.equal(report.claims[0]?.claimId, "claim_1");
+  assert.equal(report.claims[0]?.finalVerdict, "verified");
+});
+
 test("imports batch reviewer decisions with answer path context", () => {
   const report = importReviewerDecisions(`answer_label,answer_path,answer_preview,answer_fail_policy,answer_fail_verdicts,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_trust_levels,evidence_updated_at,evidence_scores,evidence_quotes,reviewer_verdict,reviewer_notes
 hr-answer,examples/answers/hr-answer.md,Employees receive 12 weeks of paid parental leave.,matched,unsupported,claim_1,Employees receive 12 weeks of paid parental leave.,verified,The claim is strongly supported by an approved source.,HR Policy,high,2026-05-31,0.998,Employees receive 12 weeks of paid parental leave.,,
