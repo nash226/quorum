@@ -718,6 +718,10 @@ The same packaged check verifies that the public `API_VERSION` export matches
 the package version, keeping library callers and HTTP/CLI discovery on one
 contract version.
 
+The CLI help contract now lists JSON, YAML, and XML answers alongside the
+structured source formats already supported, keeping the documented input
+surface aligned with direct verification behavior.
+
 The checked-in 79-fixture benchmark spans 27 HR and 52 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing

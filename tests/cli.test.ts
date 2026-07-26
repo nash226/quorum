@@ -44,7 +44,7 @@ test("top-level help lists every shipped command", async () => {
   }
 
   assert.match(stdout, /Supported files:/);
-  assert.match(stdout, /Answers: Markdown\/MDX, AsciiDoc\/Org, MediaWiki, text, HTML\/XHTML, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Answers: Markdown\/MDX, AsciiDoc\/Org, MediaWiki, text, HTML\/XHTML, JSON, YAML, XML, PDF, DOCX, and TOML/);
   assert.match(stdout, /Sources: Markdown\/MDX, AsciiDoc\/Org, text, HTML\/XHTML, PDF, DOCX, JSON, YAML, XML, and TOML/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files and directories/);
 });
