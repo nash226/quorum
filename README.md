@@ -46,6 +46,8 @@ Short punctuated policy claims are also preserved across Unicode scripts, so
 concise localized answers remain available for verification and review.
 Inline CJK and fullwidth sentence punctuation is split consistently too, so
 multiple localized claims in one line stay independently reviewable.
+Semicolon-linked policy clauses, including clauses beginning with non-Latin
+uppercase letters, are split too for more precise evidence matches.
 Unicode checkbox markers (`☐`, `☑`, and `☒`) are also normalized when answers
 come from exported task lists.
 Nested Markdown blockquotes and lists are normalized too, so claims copied from
