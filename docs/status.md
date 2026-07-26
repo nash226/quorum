@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d660f0e` on 2026-07-26, feat: discover CSV policy sources
+- Latest shipped change: `a17402f` on 2026-07-26, fix: decode batch text content from base64
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | fix: decode batch text content from base64 | `a17402f` |
 | 2026-07-26 | Direct push | feat: discover CSV policy sources | `d660f0e` |
 | 2026-07-26 | Direct push | docs: list wiki answer exports | `59eedc1` |
 | 2026-07-26 | Direct push | fix: normalize direct JSONL answers | `2b12ebb` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | feat: discover .wiki MediaWiki exports | `eb4f413` |
 | 2026-07-26 | Direct push | fix: strip rst extensions from source titles | `02cd314` |
 | 2026-07-26 | Direct push | feat: discover reStructuredText exports | `ed7c8d3` |
-| 2026-07-26 | [#1089](https://github.com/nash226/quorum/pull/1089) | test: cover version aliases | `83d937d` |
 
