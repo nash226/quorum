@@ -492,6 +492,8 @@ Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 answer explicitly.
 Direct XHTML answer verification is also regression-tested, preserving the
 single-answer path for XML-compatible knowledge-base exports.
+Direct HTML answers now use the same page-chrome filtering as approved HTML
+sources, keeping navigation and hidden content out of claim extraction.
 When a batch report is written inside an answer directory, its configured
 output path is excluded from recursive answer discovery so reruns do not verify
 their own generated report.
