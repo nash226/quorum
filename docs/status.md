@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `03c0e0e` on 2026-07-26, test: cover direct Markdown extension verification
+- Latest shipped change: `84133f8` on 2026-07-26, test: smoke-check packaged AsciiDoc verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | test: smoke-check packaged AsciiDoc verification | `84133f8` |
 | 2026-07-26 | Direct push | test: cover direct Markdown extension verification | `03c0e0e` |
 | 2026-07-26 | Direct push | test: cover direct TOML answer verdicts | `8d6a5d9` |
 | 2026-07-26 | [#1135](https://github.com/nash226/quorum/pull/1135) | test: cover direct HTML source verification | `222c6ef` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | test: smoke-check packaged JSONL answers | `d11455d` |
 | 2026-07-26 | [#1132](https://github.com/nash226/quorum/pull/1132) | test: cover direct JSONL source verification | `8825a19` |
 | 2026-07-26 | Direct push | test: keep packaged format contract aligned | `d9d6819` |
-| 2026-07-26 | Direct push | docs: align help with input formats | `2dfd390` |
 
