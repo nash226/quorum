@@ -64,6 +64,8 @@ The shipped product surface now covers the full review loop:
   discovery behavior.
 - Direct `verify` also accepts MediaWiki answer exports, preserving the answer
   path in the JSON report for reviewer handoff.
+- Direct `verify` also accepts AsciiDoc answer exports, preserving the answer
+  path in the JSON report for reviewer handoff.
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
