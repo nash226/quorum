@@ -1729,6 +1729,43 @@ test("verify normalizes structured JSON answers before claim extraction", async 
   }
 });
 
+test("verify normalizes direct JSONL answers before claim extraction", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-jsonl-answer-"));
+  const answerPath = join(tempDir, "answer.jsonl");
+  const sourcePath = join(tempDir, "policy.md");
+
+  try {
+    await Promise.all([
+      writeFile(
+        answerPath,
+        '{"response":"Customers can request refunds within 30 days."}\n',
+        "utf8",
+      ),
+      writeFile(
+        sourcePath,
+        "Customers can request refunds within 30 days.\n",
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      answerPath: string;
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.deepEqual(report.assessments.map((assessment) => assessment.claim.text), [
+      "response: Customers can request refunds within 30 days.",
+    ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify result-json preserves direct JSON answer provenance", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-result-"));
 
