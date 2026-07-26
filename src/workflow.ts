@@ -189,6 +189,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".pdf",
   ".docx",
   ".json",
+  ".xml",
   ".toml",
 ]);
 export const STDIN_ANSWER_PATH = "<stdin>";

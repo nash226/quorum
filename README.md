@@ -401,6 +401,9 @@ including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim
 extraction, so exported agent responses can be verified without first
 converting them to plain text.
+XML answers are also discovered recursively by `verify-batch --answer-dir`,
+keeping directory-based structured response handoffs aligned with explicit
+answer verification.
 The CLI regression suite also verifies an XML answer end to end against an
 approved policy, keeping this structured-response path release-gated.
 File-based TOML answers use the same normalization path as structured sources,
