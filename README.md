@@ -31,6 +31,9 @@ Common `.text` exports are accepted alongside `.txt` files for both answers and
 approved sources, so plain-text handoffs keep working when vendors use the
 long-form extension. Direct single-answer verification now covers `.text`
 sources in the CLI regression suite as well as recursive batch discovery.
+Direct single-answer verification also covers `.markdown` answer and approved
+source paths, keeping the common long-form Markdown extension on the same
+evidence-gated path as `.md` files.
 Quarto Markdown (`.qmd`) exports are also discovered for answers and approved
 sources, so rendered-document workflows can retain their native file paths.
 reStructuredText (`.rst`) exports are also discovered recursively for both
