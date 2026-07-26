@@ -366,6 +366,8 @@ their source metadata in reports.
 JSON, YAML, and TOML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.
+The direct TOML source workflow is covered end to end as well, including
+metadata preservation and a verified claim against the normalized policy text.
 YAML/YML answer files use the same normalization path as structured sources,
 so single-answer verification extracts claims from policy fields instead of
 matching against raw YAML punctuation.
