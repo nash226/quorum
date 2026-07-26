@@ -222,6 +222,8 @@ The direct XML-answer CLI contract is covered end to end too: normalized claims
 remain verifiable and the JSON report preserves the caller's answer path.
 Direct reStructuredText approved-source verification is also covered end to end,
 preserving the explicit `.rst` source path in the evidence report.
+Direct TOML approved-source verification is covered end to end as well, preserving
+the explicit `.toml` source path and fallback title in the evidence report.
 When a workflow has an explicit source set, repeat `--source` instead of
 creating a temporary directory:
 
