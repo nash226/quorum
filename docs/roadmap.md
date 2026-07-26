@@ -16,8 +16,9 @@ front of enterprise agent workflows.
   through the CLI and local HTTP API.
 - Reviewer queue CLI and HTTP surfaces summarize imported decisions alongside
   optional benchmark drift.
-- Packaged CLI verification covers Markdown, HTML, PDF, and DOCX answer/source
-  ingestion paths.
+- Packaged CLI verification covers Markdown and text documents, HTML/XHTML,
+  PDF/DOCX, and structured JSON/YAML/XML/TOML/CSV answer and source exports;
+  the supported extension contract is exposed through `quorum formats`.
 - Deployment and integration guides document the local API's authentication
   boundary, operational limits, and durable source identifiers.
 

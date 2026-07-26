@@ -62,6 +62,11 @@ quoted review threads do not retain repeated `>` or list markers.
 
 The shipped product surface now covers the full review loop:
 
+The packaged CLI and programmatic API now expose one aligned answer/source
+format contract for text, HTML/XHTML, PDF/DOCX, and structured JSON/YAML/XML/
+TOML/CSV exports; run `npm run dev -- formats` to inspect the exact extensions
+available to integrations.
+
 - `extract-claims` previews normalized claims before evidence matching.
 - Decimal values such as `95.5%` remain intact while claims are split into sentences.
 - `verify` and `verify-batch` produce reviewer reports and machine-readable
