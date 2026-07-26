@@ -25,6 +25,33 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.docx, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
+  assert.match(stdout, /Source files: .*\.rst/);
+  assert.match(stdout, /Answer files: .*\.rst/);
+});
+
+test("verify discovers reStructuredText files in source and answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-rst-discovery-"));
+  const answerDir = join(tempDir, "answers");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await Promise.all([mkdir(answerDir), mkdir(sourceDir)]);
+    await Promise.all([
+      writeFile(join(answerDir, "answer.rst"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.rst"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ]));
+
+    assert.equal(report.summary.answersWithClaims, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "answer.rst"));
+    assert.equal(report.sources[0]?.sourcePath, join(sourceDir, "policy.rst"));
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("verify accepts a direct MediaWiki answer export", async () => {
