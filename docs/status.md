@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `581df8b` on 2026-07-26, fix: discover YAML answers in directories
+- Latest shipped change: `7fb1252` on 2026-07-26, fix: accept BOM-prefixed reviewer CSVs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | fix: accept BOM-prefixed reviewer CSVs | `7fb1252` |
 | 2026-07-26 | Direct push | fix: discover YAML answers in directories | `581df8b` |
 | 2026-07-26 | Direct push | fix: decode batch text content from base64 | `a17402f` |
 | 2026-07-26 | Direct push | feat: discover CSV policy sources | `d660f0e` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | fix: normalize direct JSONL answers | `2b12ebb` |
 | 2026-07-26 | Direct push | feat: support JSONL policy exports | `73408d0` |
 | 2026-07-26 | Direct push | feat: discover .wiki MediaWiki exports | `eb4f413` |
-| 2026-07-26 | Direct push | fix: strip rst extensions from source titles | `02cd314` |
 
