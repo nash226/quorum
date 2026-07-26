@@ -100,6 +100,8 @@ The CLI `extract-claims --result-json` and `--result-json-out` formats now carry
 the same answer provenance while keeping the legacy `--json` claims-only format.
 Direct `verify --result-json` responses preserve the structured answer path too,
 so JSON answer exports remain traceable in single-answer workflow handoffs.
+The saved `--result-json-out` artifact preserves that same answer path and label,
+so file-based integrations retain provenance as well as stdout consumers.
 The packaged CLI smoke gate checks both machine-readable forms, including the
 answer path and reviewer-facing label in the saved result artifact.
 The plain-text batch report also repeats source titles, trust, freshness, and

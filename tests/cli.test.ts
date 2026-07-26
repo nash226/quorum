@@ -1566,6 +1566,37 @@ test("verify result-json preserves direct JSON answer provenance", async () => {
   }
 });
 
+test("verify result-json-out preserves direct JSON answer provenance", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-result-out-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.json");
+    const sourcePath = join(tempDir, "policy.md");
+    const resultJsonOutPath = join(tempDir, "reports", "result.json");
+
+    await mkdir(join(tempDir, "reports"), { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, JSON.stringify({ response: "Customers can request refunds within 30 days." }), "utf8"),
+      writeFile(sourcePath, "Customers can request refunds within 30 days.\n", "utf8"),
+    ]);
+
+    const result = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath,
+      "--result-json", "--result-json-out", resultJsonOutPath,
+    ])) as {
+      report: { answerPath: string; answerLabel?: string; summary: { verified: number } };
+    };
+    const saved = JSON.parse(await readFile(resultJsonOutPath, "utf8")) as typeof result;
+
+    assert.equal(result.report.answerPath, answerPath);
+    assert.equal(result.report.answerLabel, "answer");
+    assert.equal(result.report.summary.verified, 1);
+    assert.deepEqual(saved, result);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify normalizes structured XML answers before claim extraction", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xml-answer-"));
 
