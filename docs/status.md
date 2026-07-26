@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9f1ee68` on 2026-07-26, test: cover direct reStructuredText sources
+- Latest shipped change: `322cd48` on 2026-07-26, test: cover direct AsciiDoc source verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | test: cover direct AsciiDoc source verification | `322cd48` |
 | 2026-07-26 | Direct push | test: cover direct reStructuredText sources | `9f1ee68` |
 | 2026-07-26 | Direct push | test: cover MediaWiki batch discovery | `22c7f0c` |
 | 2026-07-26 | Direct push | test: cover direct CSV source verification | `b1be01d` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | [#1116](https://github.com/nash226/quorum/pull/1116) | docs: align supported format guide | `5d5fed7` |
 | 2026-07-26 | Direct push | feat: split unicode-uppercase compound claims | `a346d26` |
 | 2026-07-26 | Direct push | test: cover direct text answer verification | `f7c59e4` |
-| 2026-07-26 | [#1112](https://github.com/nash226/quorum/pull/1112) | test: cover direct Org-mode answers | `385602c` |
 
