@@ -665,7 +665,7 @@ async function answerContentToText(
   }
 
   if (!answerPath || !/\.(?:pdf|docx)$/i.test(answerPath)) {
-    throw new Error("Binary answer content requires answerPath ending in .pdf or .docx.");
+    return new TextDecoder().decode(content);
   }
 
   const answerDocument = await sourceDocumentFromFile(answerPath, content, 0);

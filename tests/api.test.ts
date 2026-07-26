@@ -5255,6 +5255,42 @@ test("HTTP API verifies PDF answer and source bytes sent as base64 JSON content"
   }
 });
 
+test("HTTP API verifies batch answers and sources sent as base64 JSON content", async () => {
+  const api = await startApiServer();
+
+  try {
+    const answer = "Employees receive 12 weeks of paid parental leave.";
+    const source = "Employees receive 12 weeks of paid parental leave.";
+    const response = await fetch(`${api.url}/verify-batch`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answers: [{
+          answerPath: "answers/hr-parental-leave.txt",
+          answerBase64: Buffer.from(answer).toString("base64"),
+        }],
+        sources: [{
+          id: "people-ops/leave-policy@2026-07-15",
+          sourcePath: "sources/hr-policy.txt",
+          contentBase64: Buffer.from(source).toString("base64"),
+          title: "Parental Leave Policy",
+          trustLevel: "high",
+        }],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as Awaited<ReturnType<typeof verifyAnswerBatchContentsResult>>;
+    assert.equal(result.report.summary.verified, 1);
+    assert.equal(result.report.answers[0]?.answerPath, "answers/hr-parental-leave.txt");
+    assert.deepEqual(result.report.answers[0]?.report.sources.map((item) => item.id), [
+      "people-ops/leave-policy@2026-07-15",
+    ]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API verifies DOCX answer and source bytes sent as base64 JSON content", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const docxBytes = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
