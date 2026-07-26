@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8ab01b1` on 2026-07-26, feat: discover XML answers in directories
+- Latest shipped change: `a3aee9a` on 2026-07-26, feat: discover LaTeX policy exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | feat: discover LaTeX policy exports | `a3aee9a` |
 | 2026-07-26 | Direct push | feat: discover XML answers in directories | `8ab01b1` |
 | 2026-07-26 | Direct push | test: cover direct MediaWiki answer verification | `6773d1f` |
 | 2026-07-26 | Direct push | test: preserve direct JSON answer provenance | `ff42fe5` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | feat: discover JSON batch answers | `c39cd77` |
 | 2026-07-25 | Direct push | docs: align answer format help | `9a073b3` |
 | 2026-07-25 | Direct push | test: cover direct structured source verification | `d7e20ee` |
-| 2026-07-25 | Direct push | test: cover direct XML answer verification | `2cdb071` |
 
