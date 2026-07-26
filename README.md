@@ -81,6 +81,8 @@ The shipped product surface now covers the full review loop:
   path in the JSON report for reviewer handoff.
 - Direct `verify` also accepts AsciiDoc answer exports, preserving the answer
   path in the JSON report for reviewer handoff.
+- The packaged CLI smoke check also verifies an AsciiDoc answer against an
+  approved source, keeping this export path release-gated after publishing.
 - Direct `verify` also accepts `.adoc` and `.asciidoc` approved source exports,
   preserving the source path in the JSON evidence report.
 - Direct `verify` also accepts Org-mode answer exports, preserving the answer

@@ -141,6 +141,31 @@ try {
   rmSync(cliXhtmlPackageDir, { recursive: true, force: true });
 }
 
+const cliAsciiDocPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-asciidoc-"));
+try {
+  const answerPath = join(cliAsciiDocPackageDir, "answer.asciidoc");
+  const sourcePath = join(cliAsciiDocPackageDir, "policy.adoc");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "= Parental Leave Policy\n\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const asciidocOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const asciidocPayload = JSON.parse(asciidocOutput);
+  if (
+    asciidocPayload.summary?.verified !== 1 ||
+    asciidocPayload.answerPath !== answerPath ||
+    asciidocPayload.sources?.[0]?.title !== "policy" ||
+    asciidocPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected AsciiDoc answer/source contract.");
+  }
+} finally {
+  rmSync(cliAsciiDocPackageDir, { recursive: true, force: true });
+}
+
 const cliXmlSourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xml-source-"));
 try {
   const answerPath = join(cliXmlSourcePackageDir, "answer.md");
