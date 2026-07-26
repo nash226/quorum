@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0fc8c20` on 2026-07-25, test: cover case-insensitive directory discovery
+- Latest shipped change: `1a70a67` on 2026-07-25, docs: align cli format help
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | docs: align cli format help | `1a70a67` |
 | 2026-07-25 | Direct push | test: cover case-insensitive directory discovery | `0fc8c20` |
 | 2026-07-25 | [#1061](https://github.com/nash226/quorum/pull/1061) | test: cover direct PDF answer verification | `67a7e87` |
 | 2026-07-25 | Direct push | test: add identity verification evaluation fixture | `a57aed6` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | fix: preserve structured source freshness aliases | `988def2` |
 | 2026-07-25 | Direct push | docs: clarify durable queue roadmap boundary | `625692b` |
 | 2026-07-25 | Direct push | docs: align CLI format guide | `83755d3` |
-| 2026-07-25 | [#1053](https://github.com/nash226/quorum/pull/1053) | test: pin repository check script contract | `28ddbab` |
 
