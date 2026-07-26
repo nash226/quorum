@@ -38,6 +38,8 @@ HTML and XHTML exports, including nested answer directories, so browser-
 rendered agent drafts retain their original paths in batch reports.
 Quarto Markdown (`.qmd`) exports are also discovered for answers and approved
 sources, so rendered-document workflows can retain their native file paths.
+MDX (`.mdx`) answer exports are covered directly as well, preserving the
+original answer path and verified evidence for component-based agent drafts.
 reStructuredText (`.rst`) exports are also discovered recursively for both
 answers and approved sources, so documentation-tool exports can enter the same
 verification flow without renaming. When an `.rst` file has no title metadata,
