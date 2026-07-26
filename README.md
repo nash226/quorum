@@ -148,6 +148,17 @@ curl -X POST http://127.0.0.1:3000/verify \
   -d '{"answer":"Employees receive 12 weeks of paid parental leave.","sources":[{"sourcePath":"hr-policy.md","content":"Employees receive 12 weeks of paid parental leave."}]}'
 ```
 
+CLI-based runners can perform the same lightweight compatibility check without
+starting the server:
+
+```bash
+npm run dev -- version --json
+# {"service":"quorum","version":"0.1.0"}
+```
+
+The JSON version contract is stable and matches the HTTP service identity, so
+an integration can fail early when its expected Quorum contract is unavailable.
+
 HTTP responses include a request correlation ID, and `/openapi.json` is the
 machine-readable source of truth for request and response schemas. The service
 also exposes `/verify-batch`, `/import-review`, `/review-queue`,
