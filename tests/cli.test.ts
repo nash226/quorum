@@ -31,8 +31,33 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.wiki/);
   assert.match(stdout, /Source files: .*\.csv/);
   assert.match(stdout, /Answer files: .*\.csv/);
+  assert.match(stdout, /Answer files: .*\.tsv/);
   assert.match(stdout, /Source files: .*\.qmd/);
   assert.match(stdout, /Answer files: .*\.qmd/);
+});
+
+test("verify-batch discovers TSV answer exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-answer-"));
+  const answerDir = join(tempDir, "answers");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await Promise.all([mkdir(answerDir), mkdir(sourceDir)]);
+    await Promise.all([
+      writeFile(join(answerDir, "answer.tsv"), "claim\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ]));
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "answer.tsv"));
+    assert.equal(report.answers[0]?.answerLabel, "answer");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("verify accepts a direct .text answer export", async () => {
