@@ -74,6 +74,42 @@ test("verify accepts a direct .text answer export", async () => {
   }
 });
 
+test("verify accepts a direct Quarto Markdown answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-qmd-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.qmd");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answerPath: string;
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments.length, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(
+      report.assessments[0]?.claim.text,
+      "Employees receive 12 weeks of paid parental leave.",
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct .text source export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-text-source-"));
 
