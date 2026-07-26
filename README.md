@@ -411,6 +411,8 @@ so single-answer verification extracts claims from policy fields instead of
 matching against raw YAML punctuation.
 JSON answer files are also discovered recursively by `verify-batch --answer-dir`,
 using the same structured normalization as explicitly supplied JSON answers.
+Direct JSONL answer files are also normalized one record at a time by `verify`,
+preserving the answer path while exposing each record as reviewer-verifiable claims.
 Source-directory verification discovers both `.yaml` and `.yml` policies,
 including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim
