@@ -32,7 +32,9 @@ approved sources, so plain-text handoffs keep working when vendors use the
 long-form extension.
 reStructuredText (`.rst`) exports are also discovered recursively for both
 answers and approved sources, so documentation-tool exports can enter the same
-verification flow without renaming.
+verification flow without renaming. When an `.rst` file has no title metadata,
+its reviewer-facing fallback title now also drops the extension, matching the
+other supported document formats.
 Explicit `--source` paths for JSON and YAML policy exports are also covered by
 the CLI regression suite, alongside recursive source-directory discovery.
 Fullwidth list punctuation is normalized too, so localized exports such as
