@@ -128,7 +128,7 @@ function isPdfSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|org|html?|pdf)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {

@@ -38,6 +38,7 @@ The current CLI can:
 - batch verify multiple AI-generated answers from a directory
 - read one or more approved Markdown, text, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, or PDF source documents
+- discover Org-mode policy exports from source directories alongside other supported source files
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
@@ -251,6 +252,7 @@ Supported source extensions today:
 - `.md`
 - `.markdown`
 - `.txt`
+- `.org`
 - `.html`
 - `.htm`
 - `.pdf`

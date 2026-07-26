@@ -336,6 +336,11 @@ test("verify-batch returns an aggregate report for each answer file", async () =
         "Refunds are available within 30 days of purchase.\n",
         "utf8",
       ),
+      writeFile(
+        join(sourceDir, "benefits-policy.org"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
     ]);
 
     const stdout = await runCli([
@@ -372,10 +377,11 @@ test("verify-batch returns an aggregate report for each answer file", async () =
     };
 
     assert.equal(report.answerCount, 2);
-    assert.equal(report.sourceCount, 2);
+    assert.equal(report.sourceCount, 3);
     assert.deepEqual(report.sources, [
-      { id: "source_1", title: "hr-policy", trustLevel: "medium" },
-      { id: "source_2", title: "support-playbook", trustLevel: "medium" },
+      { id: "source_1", title: "benefits-policy", trustLevel: "medium" },
+      { id: "source_2", title: "hr-policy", trustLevel: "medium" },
+      { id: "source_3", title: "support-playbook", trustLevel: "medium" },
     ]);
     assert.equal(report.answers.length, 2);
     assert.deepEqual(
