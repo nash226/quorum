@@ -64,7 +64,7 @@ The shipped product surface now covers the full review loop:
 - Structured JSON, YAML, and TOML sources recognize common freshness keys such
   as `modifiedAt`, `last_modified`, and `lastUpdated`, preserving exported
   policy timestamps in evidence metadata.
-- CLI help now lists MediaWiki alongside the formats discovered for answer
+- CLI help now lists MediaWiki (including `.wiki` exports) alongside the formats discovered for answer
   directories, keeping the advertised input contract aligned with the shipped
   discovery behavior.
 - Direct `verify` also accepts MediaWiki answer exports, preserving the answer

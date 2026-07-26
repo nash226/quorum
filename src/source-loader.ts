@@ -219,7 +219,7 @@ function isTomlSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|adoc|asciidoc|org|mediawiki|rst|tex|txt|text|html?|xhtml|pdf|docx|json|xml|ya?ml|toml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|adoc|asciidoc|org|mediawiki|wiki|rst|tex|txt|text|html?|xhtml|pdf|docx|json|xml|ya?ml|toml)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {

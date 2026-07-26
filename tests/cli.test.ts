@@ -27,6 +27,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
   assert.match(stdout, /Answer files: .*\.rst/);
+  assert.match(stdout, /Source files: .*\.wiki/);
+  assert.match(stdout, /Answer files: .*\.wiki/);
 });
 
 test("verify discovers reStructuredText files in source and answer directories", async () => {
