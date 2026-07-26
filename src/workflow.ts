@@ -193,6 +193,8 @@ export const ANSWER_EXTENSIONS = new Set([
   ".docx",
   ".json",
   ".jsonl",
+  ".yaml",
+  ".yml",
   ".xml",
   ".toml",
 ]);
