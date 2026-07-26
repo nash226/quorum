@@ -30,6 +30,8 @@ the optional outer pipe characters.
 Common `.text` exports are accepted alongside `.txt` files for both answers and
 approved sources, so plain-text handoffs keep working when vendors use the
 long-form extension.
+Explicit `--source` paths for JSON and YAML policy exports are also covered by
+the CLI regression suite, alongside recursive source-directory discovery.
 Fullwidth list punctuation is normalized too, so localized exports such as
 `１．` and `۲．` do not leak ordering markers into reviewer claims.
 Short punctuated policy claims are also preserved across Unicode scripts, so

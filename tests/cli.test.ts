@@ -2476,6 +2476,30 @@ test("verify discovers JSON sources in source directories", async () => {
   }
 });
 
+test("verify accepts JSON and YAML sources passed explicitly", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-structured-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const jsonSourcePath = join(tempDir, "hr-policy.json");
+    const yamlSourcePath = join(tempDir, "regional-policy.yaml");
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(jsonSourcePath, '{"policy":"Employees receive 12 weeks of paid parental leave."}', "utf8");
+    await writeFile(yamlSourcePath, "policy:\n  benefit: Employees receive 12 weeks of paid parental leave.\n", "utf8");
+
+    for (const sourcePath of [jsonSourcePath, yamlSourcePath]) {
+      const report = JSON.parse(
+        await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+      ) as { sources: Array<{ sourcePath: string }>; summary: { verified: number } };
+
+      assert.deepEqual(report.sources.map((source) => source.sourcePath), [sourcePath]);
+      assert.equal(report.summary.verified, 1);
+    }
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify discovers XML sources in source directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xml-source-"));
 
