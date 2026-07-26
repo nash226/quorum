@@ -107,6 +107,9 @@ filters. The packaged HTTP claim-preview check also covers Markdown table rows,
 so the published artifact keeps table headers and separators out of claims. It
 also verifies that `/extract-claims` returns caller-supplied `answerPath` and
 `answerLabel` values, preserving provenance for reviewer and workflow clients.
+The same package smoke check runs `quorum formats` and compares its JSON output
+with the packaged library exports, so CLI capability discovery cannot drift from
+the API contract.
 The CLI `extract-claims --result-json` and `--result-json-out` formats now carry
 the same answer provenance while keeping the legacy `--json` claims-only format.
 Direct `verify --result-json` responses preserve the structured answer path too,
