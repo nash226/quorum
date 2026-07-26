@@ -182,6 +182,17 @@ test("normalizes JSONL source exports into claim-readable text", async () => {
   assert.equal(source.content, "[1].policy: Employees get 12 weeks.\n[1].region: US\n[2].policy: Contractors get 6 weeks.\n[2].region: CA");
 });
 
+test("normalizes NDJSON source exports and strips the extension from titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.ndjson",
+    '{"policy":"Employees get 12 weeks.","region":"US"}\n{"policy":"Contractors get 6 weeks.","region":"CA"}\n',
+    0,
+  );
+
+  assert.equal(source.title, "benefits");
+  assert.equal(source.content, "[1].policy: Employees get 12 weeks.\n[1].region: US\n[2].policy: Contractors get 6 weeks.\n[2].region: CA");
+});
+
 test("maps common structured modification keys to source freshness", async () => {
   const jsonSource = await sourceDocumentFromFile(
     "docs/policy.json",

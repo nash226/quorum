@@ -401,8 +401,9 @@ TOML (`.toml`).
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
 (`.xml`). JSON, YAML, XML, and TOML exports are normalized into claim-readable
 text while preserving their source metadata in reports.
-JSONL sources are normalized one record at a time, so newline-delimited policy
-exports can be discovered recursively without conversion.
+JSONL and NDJSON sources are normalized one record at a time, so newline-delimited
+policy exports can be discovered recursively without conversion. Both extensions
+are included in directory discovery and the `quorum formats` contract.
 JSON, YAML, and TOML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.
