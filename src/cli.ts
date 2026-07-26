@@ -209,11 +209,11 @@ async function main(): Promise<void> {
   }
 
   if (command === "formats") {
-    if (args.length > 0) {
-      throw new Error("Usage: quorum formats");
+    if (args.length > 1 || (args.length === 1 && args[0] !== "--json")) {
+      throw new Error("Usage: quorum formats [--json]");
     }
 
-    printFormats();
+    printFormats(args[0] === "--json");
     return;
   }
 
@@ -1644,9 +1644,10 @@ function printHelp(command?: CommandName): void {
     formats: `Quorum formats
 
 Usage:
-  quorum formats
+  quorum formats [--json]
 
 Print the extensions discovered for approved sources and AI-generated answers.
+Use --json for a machine-readable source and answer extension contract.
 `,
     verify: `Quorum verify
 
@@ -1899,7 +1900,15 @@ Example:
 `);
 }
 
-function printFormats(): void {
+function printFormats(json = false): void {
+  if (json) {
+    console.log(JSON.stringify({
+      sources: [...SOURCE_EXTENSIONS].sort(),
+      answers: [...ANSWER_EXTENSIONS].sort(),
+    }, null, 2));
+    return;
+  }
+
   console.log(`Quorum input formats
 
 Source files: ${formatExtensions(SOURCE_EXTENSIONS)}

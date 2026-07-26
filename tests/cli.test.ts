@@ -15,6 +15,16 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.text/);
 });
 
+test("formats supports a machine-readable extension contract", async () => {
+  const stdout = await runCli(["formats", "--json"]);
+  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };
+
+  assert.deepEqual(formats.sources, [...formats.sources].sort());
+  assert.deepEqual(formats.answers, [...formats.answers].sort());
+  assert.ok(formats.sources.includes(".json"));
+  assert.ok(formats.answers.includes(".json"));
+});
+
 test("help --help reuses the top-level usage contract", async () => {
   const result = await runCliAllowFailure(["help", "--help"]);
 
