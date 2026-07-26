@@ -2346,6 +2346,33 @@ test("verify accepts direct AsciiDoc answers", async () => {
   }
 });
 
+test("verify accepts a direct LaTeX answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-latex-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.tex");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "\\section{Benefits}\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as { answerPath: string; summary: { verified: number } };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers TOML answers in answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-answer-dir-"));
 
