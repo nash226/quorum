@@ -6,6 +6,9 @@ Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
+Direct `verify` is regression-tested for DOCX answers, preserving the original
+answer path after document text extraction for reviewer handoff.
+
 ## Why Quorum Exists
 
 AI answers can sound confident while drifting from approved policy. Quorum
