@@ -1344,13 +1344,20 @@ export async function startApiServer(options: ApiServerOptions = {}): Promise<St
   const port = options.port ?? 3000;
   const server = createApiServer(options);
 
-  await new Promise<void>((resolve, reject) => {
-    server.once("error", reject);
-    server.listen(port, host, () => {
-      server.off("error", reject);
-      resolve();
+  try {
+    await new Promise<void>((resolve, reject) => {
+      server.once("error", reject);
+      server.listen(port, host, () => {
+        server.off("error", reject);
+        resolve();
+      });
     });
-  });
+  } catch (error: unknown) {
+    await new Promise<void>((resolve) => {
+      server.close(() => resolve());
+    });
+    throw error;
+  }
 
   const address = server.address();
 

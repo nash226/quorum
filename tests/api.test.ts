@@ -4463,6 +4463,22 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("programmatic API cleans up after a failed startup", async () => {
+  const blocker = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const address = blocker.server.address();
+    assert.ok(address && typeof address !== "string");
+
+    await assert.rejects(
+      startApiServer({ host: "127.0.0.1", port: address.port }),
+      /EADDRINUSE|address already in use/i,
+    );
+  } finally {
+    await blocker.close();
+  }
+});
+
 test("programmatic API requires a JSON content type for POST endpoints", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
