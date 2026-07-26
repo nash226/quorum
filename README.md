@@ -145,6 +145,10 @@ machine-readable source of truth for request and response schemas. The service
 also exposes `/verify-batch`, `/import-review`, `/review-queue`,
 `/extract-claims`, and `/evaluate`; run `npm run dev -- serve --help` for the
 full endpoint list and local configuration options.
+Deployment probes are available at `/health`, `/healthz`, `/readyz`, and
+`/livez`; each returns a machine-readable `200` response with the service
+version and correlation ID, while `HEAD` requests expose the same probe headers
+without a response body.
 
 `npm run check` is the full local release gate: it runs tests and the TypeScript
 build, then smoke-checks the HTTP API and packaged CLI before enforcing the
