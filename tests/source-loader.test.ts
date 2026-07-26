@@ -232,6 +232,22 @@ test("keeps malformed structured exports readable instead of failing ingestion",
   assert.equal(malformedXml.content, "Employees get 12 weeks.");
 });
 
+test("strips structured and knowledge-export extensions from fallback titles", async () => {
+  const jsonSource = await sourceDocumentFromFile(
+    "exports/hr-policy.json",
+    '{"content":"Employees get 12 weeks."}',
+    0,
+  );
+  const xmlSource = await sourceDocumentFromFile(
+    "exports/support-policy.xml",
+    "<policy>Refunds are available within 30 days.</policy>",
+    1,
+  );
+
+  assert.equal(jsonSource.title, "hr-policy");
+  assert.equal(xmlSource.title, "support-policy");
+});
+
 test("applies the default trust override when metadata is absent", async () => {
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
     defaultTrustLevel: "high",
