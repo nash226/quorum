@@ -116,6 +116,13 @@ test("strips MediaWiki extensions from fallback source titles", async () => {
   assert.equal(source.content, "Employees receive 12 weeks of paid parental leave.\n");
 });
 
+test("strips wiki extensions from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile("docs/policies/leave-policy.wiki", "Employees receive 12 weeks of paid parental leave.\n", 0);
+
+  assert.equal(source.title, "leave-policy");
+  assert.equal(source.content, "Employees receive 12 weeks of paid parental leave.\n");
+});
+
 test("strips JSON extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.json",
