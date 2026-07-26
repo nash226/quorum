@@ -29,8 +29,8 @@ policy tables are also reduced to row-level claims, including tables that omit
 the optional outer pipe characters.
 Common `.text` exports are accepted alongside `.txt` files for both answers and
 approved sources, so plain-text handoffs keep working when vendors use the
-long-form extension. Direct single-answer verification is covered by the CLI
-regression suite as well as recursive batch discovery.
+long-form extension. Direct single-answer verification now covers `.text`
+sources in the CLI regression suite as well as recursive batch discovery.
 Quarto Markdown (`.qmd`) exports are also discovered for answers and approved
 sources, so rendered-document workflows can retain their native file paths.
 reStructuredText (`.rst`) exports are also discovered recursively for both
