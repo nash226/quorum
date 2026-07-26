@@ -457,6 +457,8 @@ file-based verification without separate CLI overrides.
 YAML/YML answer files use the same normalization path as structured sources,
 so single-answer verification extracts claims from policy fields instead of
 matching against raw YAML punctuation.
+The direct CLI regression suite also verifies `.yml` answer paths end to end,
+including answer-path provenance and a verified evidence result.
 YAML and YML answers are also discovered recursively by `verify-batch
 --answer-dir`, keeping directory-based answer handoffs aligned with direct
 file verification.

@@ -686,6 +686,29 @@ test("verify normalizes YAML answers before claim extraction", async () => {
   }
 });
 
+test("verify normalizes direct YML answers before claim extraction", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-yml-answer-"));
+  const answerPath = join(tempDir, "answer.yml");
+  const sourcePath = join(tempDir, "policy.md");
+
+  try {
+    await Promise.all([
+      writeFile(answerPath, "policy: Employees receive 12 weeks of paid leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { answerPath: string; assessments: Array<{ verdict: string; claim: { text: string } }> };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "policy: Employees receive 12 weeks of paid leave.");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers TOML answers from nested directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-answers-"));
 
