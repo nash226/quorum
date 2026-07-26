@@ -199,6 +199,9 @@ files;
 `quorum --help` lists these supported answer and source formats alongside the
 recursive, hidden-file filtering behavior, so integrations can confirm the
 directory contract before invoking a batch run.
+The help output now names every extension family exposed by discovery, including
+MediaWiki, reStructuredText, LaTeX, JSONL, and CSV, keeping the human-readable
+contract aligned with `quorum formats`.
 the programmatic API applies the same YAML/YML normalization to in-memory sources and file-backed
 source directories.
 answer and source directories are searched recursively, so nested policy or
