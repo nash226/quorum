@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8825a19` on 2026-07-26, test: cover direct JSONL source verification
+- Latest shipped change: `d11455d` on 2026-07-26, test: smoke-check packaged JSONL answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | test: smoke-check packaged JSONL answers | `d11455d` |
 | 2026-07-26 | [#1132](https://github.com/nash226/quorum/pull/1132) | test: cover direct JSONL source verification | `8825a19` |
 | 2026-07-26 | Direct push | test: keep packaged format contract aligned | `d9d6819` |
 | 2026-07-26 | Direct push | docs: align help with input formats | `2dfd390` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | test: cover direct AsciiDoc source verification | `322cd48` |
 | 2026-07-26 | Direct push | test: cover direct reStructuredText sources | `9f1ee68` |
 | 2026-07-26 | Direct push | test: cover MediaWiki batch discovery | `22c7f0c` |
-| 2026-07-26 | Direct push | test: cover direct CSV source verification | `b1be01d` |
 
