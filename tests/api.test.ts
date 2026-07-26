@@ -142,8 +142,8 @@ import {
 import { createSimplePdf } from "./pdf-test-helpers.js";
 
 test("programmatic API exposes supported source and answer extensions", () => {
-  assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".mediawiki", ".wiki", ".rst", ".tex", ".txt", ".text", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".yaml", ".yml", ".xml", ".toml", ".csv"]);
-  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".mediawiki", ".wiki", ".rst", ".tex", ".txt", ".text", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".yaml", ".yml", ".xml", ".toml", ".csv"]);
+  assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".mediawiki", ".wiki", ".rst", ".tex", ".txt", ".text", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv"]);
+  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".mediawiki", ".wiki", ".rst", ".tex", ".txt", ".text", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv"]);
 });
 
 test("API discovery exposes transport limits and supported methods", () => {
