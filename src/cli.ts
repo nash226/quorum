@@ -1475,21 +1475,12 @@ async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
     });
   }
 
-<<<<<<< ours
   return loadSourceDocuments({
     sourcePaths: args.sourcePaths,
     sourceDirs: args.sourceDirs,
     sourceIdsByPath: args.sourceIdsByPath,
     defaultTrustLevel: args.defaultTrustLevel,
   });
-=======
-async function verifySingleAnswer(
-  answerPath: string,
-  sources: SourceDocument[],
-): Promise<VerificationReport> {
-  const answer = (await readFile(answerPath, "utf8")).replace(/^\uFEFF/, "");
-  return verifyAnswer(answer, sources, undefined, answerPath);
->>>>>>> theirs
 }
 
 async function readTextInput(inputPath: string): Promise<string> {

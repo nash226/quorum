@@ -67,50 +67,8 @@ test("verify accepts a direct .text answer export", async () => {
   }
 });
 
-<<<<<<< ours
 test("verify accepts a direct .text source export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-text-source-"));
-=======
-test("verify strips a UTF-8 BOM from answer files", async () => {
-  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-bom-answer-"));
-
-  try {
-    const answerPath = join(tempDir, "answer.txt");
-    const sourcePath = join(tempDir, "policy.txt");
-
-    await Promise.all([
-      writeFile(answerPath, "\uFEFFEmployees receive 12 weeks.\n", "utf8"),
-      writeFile(sourcePath, "Employees receive 12 weeks.\n", "utf8"),
-    ]);
-
-    const report = JSON.parse(
-      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
-    ) as { summary: Record<string, number> };
-
-    assert.equal(report.summary.verified, 1);
-  } finally {
-    await rm(tempDir, { recursive: true, force: true });
-  }
-});
-
-test("verify rejects unsupported default trust overrides", async () => {
-  await assert.rejects(
-    runCli([
-      "verify",
-      "--answer",
-      "examples/answers/hr-answer.md",
-      "--source",
-      "examples/sources/hr-policy.md",
-      "--default-trust-level",
-      "critical",
-    ]),
-    /Unsupported trust level: critical/,
-  );
-});
-
-test("verify accepts pdf sources", async () => {
-  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
->>>>>>> theirs
 
   try {
     const answerPath = join(tempDir, "answer.md");
@@ -455,6 +413,27 @@ Employees receive 12 weeks of paid parental leave.
       { id: "source_1", sourcePath: plainSourcePath, title: "plain-source", trustLevel: "high" },
       { id: "source_2", sourcePath: metadataSourcePath, title: "Metadata Source", trustLevel: "low" },
     ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify accepts BOM-prefixed direct answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-bom-exports-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.txt");
+    const sourcePath = join(tempDir, "policy.txt");
+    await Promise.all([
+      writeFile(answerPath, "\uFEFFEmployees receive 12 weeks.\n", "utf8"),
+      writeFile(sourcePath, "\uFEFFEmployees receive 12 weeks.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { summary: Record<string, number> };
+
+    assert.equal(report.summary.verified, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

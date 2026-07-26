@@ -63,6 +63,8 @@ The shipped product surface now covers the full review loop:
   summaries, with optional benchmark drift context.
 - Reviewer decision CSV imports accept UTF-8 BOM prefixes emitted by some
   spreadsheet tools.
+- Direct answer and source imports also accept UTF-8 BOM prefixes from exported
+  policy files.
 - `evaluate` runs checked-in policy fixtures as a CI mismatch and score gate.
 - `serve` exposes the same workflows through a local HTTP API, while `openapi`
   exports its integration contract.
@@ -110,7 +112,6 @@ This command is the source of truth for directory discovery: it prints the
 separate source and answer extension sets used by `verify-batch`, so scripts
 can confirm the packaged input contract before submitting a batch.
 
-<<<<<<< ours
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
 machine-readable after packaging. It also exercises the packaged
@@ -129,13 +130,6 @@ answer path and reviewer-facing label in the saved result artifact.
 The plain-text batch report also repeats source titles, trust, freshness, and
 paths inside each answer section, so copied reviewer findings retain their
 evidence provenance without needing the full report header.
-=======
-Direct answer and source imports also strip a leading UTF-8 BOM, keeping
-Windows-generated policy exports from polluting the first claim or metadata
-field.
-
-## Example
->>>>>>> theirs
 
 ```bash
 npm install

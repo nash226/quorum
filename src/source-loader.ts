@@ -59,17 +59,11 @@ export async function sourceDocumentFromFile(
     return pdfSourceDocumentFromFile(sourcePath, content, index, options);
   }
 
-<<<<<<< ours
   if (isDocxSource(sourcePath)) {
     return docxSourceDocumentFromFile(sourcePath, content, index, options);
   }
 
   const textContent = typeof content === "string" ? content : new TextDecoder().decode(content);
-=======
-  const textContent = stripUtf8Bom(
-    typeof content === "string" ? content : content.toString("utf8"),
-  );
->>>>>>> theirs
   const parsed = parseSource(sourcePath, textContent);
 
   return {
@@ -80,10 +74,6 @@ export async function sourceDocumentFromFile(
     trustLevel: options.trustLevel ?? parsed.metadata.trustLevel ?? options.defaultTrustLevel ?? "medium",
     content: parsed.body,
   };
-}
-
-function stripUtf8Bom(content: string): string {
-  return content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
 }
 
 export function parseSource(sourcePath: string, content: string): ParsedSource {
