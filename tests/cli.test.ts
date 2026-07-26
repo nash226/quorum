@@ -21,7 +21,7 @@ test("version aliases report the package contract version", async () => {
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
-  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
   assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.docx, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
@@ -29,6 +29,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.rst/);
   assert.match(stdout, /Source files: .*\.wiki/);
   assert.match(stdout, /Answer files: .*\.wiki/);
+  assert.match(stdout, /Source files: .*\.csv/);
+  assert.doesNotMatch(stdout, /Answer files: .*\.csv/);
 });
 
 test("verify discovers reStructuredText files in source and answer directories", async () => {
