@@ -217,6 +217,9 @@ files;
 `quorum --help` lists these supported answer and source formats alongside the
 recursive, hidden-file filtering behavior, so integrations can confirm the
 directory contract before invoking a batch run.
+Binary PDF and DOCX answers are also covered by the direct and recursive paths;
+pass them as files because stdin is reserved for text answers whose parser does
+not depend on a filename extension.
 The help output now names every extension family exposed by discovery, including
 MediaWiki, reStructuredText, LaTeX, JSONL, and CSV, keeping the human-readable
 contract aligned with `quorum formats`.
