@@ -1762,8 +1762,8 @@ test("verify-batch discovers JSON answers in answer directories", async () => {
   }
 });
 
-test("verify-batch discovers AsciiDoc answers and sources in directories", async () => {
-  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-asciidoc-dir-"));
+test("verify-batch discovers AsciiDoc and LaTeX answers and sources in directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-text-export-dir-"));
 
   try {
     const answerDir = join(tempDir, "answers");
@@ -1772,15 +1772,17 @@ test("verify-batch discovers AsciiDoc answers and sources in directories", async
     await mkdir(sourceDir, { recursive: true });
     await Promise.all([
       writeFile(join(answerDir, "answer.asciidoc"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(answerDir, "answer.tex"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
       writeFile(join(sourceDir, "hr-policy.adoc"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "hr-policy.tex"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
     ]);
 
     const report = JSON.parse(await runCli([
       "verify-batch", "--answer-dir", answerDir, "--source-dir", join(tempDir, "sources"), "--json",
     ])) as { answerCount: number; summary: { verified: number } };
 
-    assert.equal(report.answerCount, 1);
-    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answerCount, 2);
+    assert.equal(report.summary.verified, 2);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
