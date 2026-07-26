@@ -14,6 +14,12 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("normalizes Textile source exports", async () => {
+  const source = await sourceDocumentFromFile("docs/policies/leave-policy.textile", "h1. Leave policy\n\nEmployees receive *12 weeks* of paid leave.\n\n* Submit a request.\n* Wait for approval.\n", 0);
+  assert.equal(source.title, "leave-policy");
+  assert.equal(source.content, "Leave policy\n\nEmployees receive 12 weeks of paid leave.\n\n- Submit a request.\n- Wait for approval.");
+});
+
 test("extracts readable text from DOCX source content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0);
