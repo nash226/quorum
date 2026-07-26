@@ -382,7 +382,8 @@ Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
 The supported local answer formats are Markdown/MDX (`.md`, `.markdown`,
-`.mdx`), AsciiDoc/Org/MediaWiki (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`),
+`.mdx`), AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`,
+`.mediawiki`, `.tex`),
 plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON (`.json`), and TOML (`.toml`).
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
