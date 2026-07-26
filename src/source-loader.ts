@@ -99,6 +99,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseTomlSource(normalizedContent);
   }
 
+  if (isTextileSource(sourcePath)) {
+    return { metadata: {}, body: normalizeTextileSource(normalizedContent) };
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -218,8 +222,16 @@ function isTomlSource(sourcePath: string): boolean {
   return /\.toml$/i.test(sourcePath);
 }
 
+function isTextileSource(sourcePath: string): boolean {
+  return /\.textile$/i.test(sourcePath);
+}
+
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|qmd|adoc|asciidoc|org|mediawiki|wiki|rst|tex|txt|text|html?|xhtml|pdf|docx|jsonl?|xml|ya?ml|toml|csv)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|qmd|adoc|asciidoc|org|mediawiki|wiki|rst|tex|txt|text|textile|html?|xhtml|pdf|docx|jsonl?|xml|ya?ml|toml|csv)$/i, "");
+}
+
+function normalizeTextileSource(content: string): string {
+  return content.replace(/\r\n/g, "\n").replace(/^h[1-6]\.\s+/gm, "").replace(/^\*\s+/gm, "- ").replace(/\*([^*\n]+)\*/g, "$1").replace(/_([^_\n]+)_/g, "$1").split("\n").map((line) => line.trim()).join("\n").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 function parseHtmlSource(content: string): ParsedSource {
