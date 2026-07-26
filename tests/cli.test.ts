@@ -15,6 +15,33 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.text/);
 });
 
+test("verify accepts a direct MediaWiki answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-mediawiki-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.mediawiki");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]));
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("help --help reuses the top-level usage contract", async () => {
   const result = await runCliAllowFailure(["help", "--help"]);
 
