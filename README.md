@@ -394,7 +394,7 @@ the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
 The supported local answer formats are Markdown/MDX (`.md`, `.markdown`,
 `.mdx`), AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`,
-`.mediawiki`, `.tex`),
+`.mediawiki`, `.wiki`, `.tex`),
 plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL (`.json`, `.jsonl`), and
 TOML (`.toml`).
