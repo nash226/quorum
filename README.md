@@ -436,7 +436,8 @@ are normalized into claim-readable text while preserving their source metadata
 in reports. CSV exports are discovered recursively as approved sources and are
 kept as readable row text for claim matching.
 JSONL sources are normalized one record at a time, so newline-delimited policy
-exports can be discovered recursively without conversion.
+exports can be discovered recursively or passed directly to `verify` without
+conversion; the direct path is covered by the CLI regression suite.
 JSON, YAML, and TOML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.
