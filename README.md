@@ -47,6 +47,8 @@ Unicode checkbox markers (`☐`, `☑`, and `☒`) are also normalized when answ
 come from exported task lists.
 Nested Markdown blockquotes and lists are normalized too, so claims copied from
 quoted review threads do not retain repeated `>` or list markers.
+HTML/XHTML answer exports are also discovered recursively and reduced to clean
+answer text, so page chrome and scripts do not leak into claim verification.
 
 The shipped product surface now covers the full review loop:
 

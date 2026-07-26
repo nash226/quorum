@@ -374,6 +374,54 @@ test("verify-batch discovers XML answers from nested directories", async () => {
   }
 });
 
+test("verify-batch discovers and normalizes HTML answers from nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-answers-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(answerDir, "nested", "support-answer.html");
+
+    await Promise.all([
+      mkdir(join(answerDir, "nested"), { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(
+        answerPath,
+        "<html><head><title>Support answer</title></head><body><p>Refunds are available within 30 days of purchase.</p><script>ignored()</script></body></html>",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "support-playbook.md"),
+        "Refunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]),
+    ) as {
+      answerCount: number;
+      answers: Array<{
+        answerPath: string;
+        report: { summary: Record<string, number>; assessments: Array<{ claim: { text: string } }> };
+      }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.answers[0]?.answerPath, answerPath);
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
+    assert.match(report.answers[0]?.report.assessments[0]?.claim.text ?? "", /Refunds are available/);
+    assert.doesNotMatch(
+      report.answers[0]?.report.assessments.map((assessment) => assessment.claim.text).join(" ") ?? "",
+      /ignored/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([
