@@ -55,6 +55,7 @@ import {
   ANSWER_EXTENSIONS,
   loadSourceDocuments,
   loadSourceDocumentsFromContent,
+  readAnswerInput,
   SOURCE_EXTENSIONS,
   verifyAnswerFile,
   verifyBatchAnswers,
@@ -503,7 +504,7 @@ async function runVerifyBatch(args: string[]): Promise<void> {
 
 async function runExtractClaims(args: string[]): Promise<void> {
   const parsed = parseExtractClaimsArgs(args);
-  const result = extractClaimsResult(await readTextInput(parsed.answerPath));
+  const result = extractClaimsResult(await readAnswerInput(parsed.answerPath));
   const resultWithProvenance = {
     ...result,
     answerPath: parsed.answerPath,

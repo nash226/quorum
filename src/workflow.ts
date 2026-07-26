@@ -843,7 +843,7 @@ async function listFilesWithExtensions(
   return files.flat().sort((left, right) => left.localeCompare(right));
 }
 
-async function readAnswerInput(inputPath: string): Promise<string> {
+export async function readAnswerInput(inputPath: string): Promise<string> {
   if (inputPath !== "-") {
     const content = await readFile(inputPath);
 

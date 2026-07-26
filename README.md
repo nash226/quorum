@@ -60,7 +60,7 @@ quoted review threads do not retain repeated `>` or list markers.
 
 The shipped product surface now covers the full review loop:
 
-- `extract-claims` previews normalized claims before evidence matching.
+- `extract-claims` previews normalized claims before evidence matching, including PDF and other structured answer exports.
 - Decimal values such as `95.5%` remain intact while claims are split into sentences.
 - `verify` and `verify-batch` produce reviewer reports and machine-readable
   fail-policy results.
