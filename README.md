@@ -414,6 +414,9 @@ file-based verification without separate CLI overrides.
 YAML/YML answer files use the same normalization path as structured sources,
 so single-answer verification extracts claims from policy fields instead of
 matching against raw YAML punctuation.
+YAML and YML answers are also discovered recursively by `verify-batch
+--answer-dir`, keeping directory-based answer handoffs aligned with direct
+file verification.
 JSON answer files are also discovered recursively by `verify-batch --answer-dir`,
 using the same structured normalization as explicitly supplied JSON answers.
 Direct JSONL answer files are also normalized one record at a time by `verify`,

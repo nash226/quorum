@@ -58,6 +58,33 @@ test("verify discovers reStructuredText files in source and answer directories",
   }
 });
 
+test("verify-batch discovers YAML answers in answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-yaml-answer-discovery-"));
+  const answerDir = join(tempDir, "answers");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await Promise.all([mkdir(answerDir), mkdir(sourceDir)]);
+    await Promise.all([
+      writeFile(join(answerDir, "answer.yaml"), "answer: Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(answerDir, "backup.yml"), "answer: Employees receive 8 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ]));
+
+    assert.equal(report.summary.answersWithClaims, 2);
+    assert.deepEqual(report.answers.map((answer: { answerPath: string }) => answer.answerPath), [
+      join(answerDir, "answer.yaml"),
+      join(answerDir, "backup.yml"),
+    ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct MediaWiki answer export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-mediawiki-answer-"));
 
