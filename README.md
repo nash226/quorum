@@ -30,6 +30,8 @@ the optional outer pipe characters.
 Common `.text` exports are accepted alongside `.txt` files for both answers and
 approved sources, so plain-text handoffs keep working when vendors use the
 long-form extension.
+Quarto Markdown (`.qmd`) exports are also discovered for answers and approved
+sources, so rendered-document workflows can retain their native file paths.
 reStructuredText (`.rst`) exports are also discovered recursively for both
 answers and approved sources, so documentation-tool exports can enter the same
 verification flow without renaming. When an `.rst` file has no title metadata,
@@ -400,8 +402,8 @@ are binary PDF files.
 Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
-The supported local answer formats are Markdown/MDX (`.md`, `.markdown`,
-`.mdx`), AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`,
+The supported local answer formats are Markdown/MDX/Quarto (`.md`, `.markdown`,
+`.mdx`, `.qmd`), AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`,
 `.mediawiki`, `.wiki`, `.tex`),
 plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL (`.json`, `.jsonl`), and
