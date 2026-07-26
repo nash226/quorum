@@ -91,6 +91,8 @@ The shipped product surface now covers the full review loop:
   preserving the source path in the JSON evidence report.
 - Direct `verify` also accepts Org-mode answer exports, preserving the answer
   path in the JSON report for reviewer handoff.
+- Direct `verify` also accepts Org-mode approved-source exports, preserving the
+  source path and fallback title in the JSON evidence report.
 - Direct `verify` and recursive answer discovery also accept CSV answer
   exports, so spreadsheet-delivered agent drafts can enter the same evidence
   workflow.
