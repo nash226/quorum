@@ -80,6 +80,8 @@ The shipped product surface now covers the full review loop:
   path in the JSON report for reviewer handoff.
 - Direct `verify` also accepts Org-mode answer exports, preserving the answer
   path in the JSON report for reviewer handoff.
+- Direct and batch verification normalize XHTML answer exports before claim
+  extraction, so page titles and metadata do not become claims.
 - Direct `verify` and recursive answer discovery also accept CSV answer
   exports, so spreadsheet-delivered agent drafts can enter the same evidence
   workflow.

@@ -2469,6 +2469,29 @@ test("verify strips inline html formatting from html answers before matching", a
   }
 });
 
+test("verify removes html answer metadata before extracting claims", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-answer-metadata-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.xhtml");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "<html><head><title>Export</title><meta name=\"description\" content=\"Ignore this metadata\"></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]);
+    const report = JSON.parse(stdout) as { assessments: Array<{ claim: { text: string }; verdict: string }> };
+
+    assert.deepEqual(report.assessments.map((assessment) => assessment.claim.text), [
+      "Employees receive 12 weeks of paid parental leave.",
+    ]);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims extracted from html table answers against html table sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-table-answer-"));
 
