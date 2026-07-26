@@ -180,6 +180,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".adoc",
   ".asciidoc",
   ".org",
+  ".textile",
   ".mediawiki",
   ".wiki",
   ".rst",
