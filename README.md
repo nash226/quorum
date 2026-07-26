@@ -310,6 +310,8 @@ The packaged CLI command map is:
 
 The version probe is also available as `quorum --version` and `quorum -v`,
 which is useful for installation checks that do not use a subcommand.
+The CLI regression suite pins all three version entry points to the package
+contract string, so alias behavior stays visible during normal test runs.
 The packaged smoke gate executes both aliases after build, so published
 installation probes stay aligned with the CLI version contract.
 
