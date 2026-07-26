@@ -62,6 +62,8 @@ The shipped product surface now covers the full review loop:
 - CLI help now lists MediaWiki alongside the formats discovered for answer
   directories, keeping the advertised input contract aligned with the shipped
   discovery behavior.
+- Direct `verify` also accepts MediaWiki answer exports, preserving the answer
+  path in the JSON report for reviewer handoff.
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
