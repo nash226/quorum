@@ -59,6 +59,39 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("verify accepts direct .markdown answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-markdown-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.markdown");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerPath?: string;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([
