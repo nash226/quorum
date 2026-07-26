@@ -28,6 +28,17 @@ const cliPath = new URL("dist/src/cli.js", packageRoot);
 
 const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS];
 const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS];
+const formatExtensions = (extensions) => [...extensions].sort().join(", ");
+
+const formatsOutput = execFileSync("node", [fileURLToPath(cliPath), "formats"], { encoding: "utf8" });
+const sourceFormatLine = formatsOutput.match(/^Source files: (.+)$/m)?.[1] ?? "";
+const answerFormatLine = formatsOutput.match(/^Answer files: (.+)$/m)?.[1] ?? "";
+if (
+  sourceFormatLine !== formatExtensions(expectedSourceExtensions) ||
+  answerFormatLine !== formatExtensions(expectedAnswerExtensions)
+) {
+  throw new Error("Package artifact CLI formats output drifted from the library input contract.");
+}
 
 for (const versionFlag of ["--version", "-v"]) {
   const versionOutput = execFileSync("node", [fileURLToPath(cliPath), versionFlag], { encoding: "utf8" }).trim();

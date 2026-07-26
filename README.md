@@ -147,6 +147,9 @@ build, HTTP and packaged-artifact smoke checks, and the checked-in evaluation
 suite in one command.
 The package-script contract test keeps this gate aligned with the commands CI
 actually runs.
+The packaged smoke check also compares `quorum formats` with the library's
+exported source and answer extension contract, so CLI discovery cannot drift
+from the API and programmatic workflow surface.
 
 `npm run check` is the same full verification gate used by CI: it runs the
 tests and build, then exercises the local HTTP API, packaged CLI artifact, and
