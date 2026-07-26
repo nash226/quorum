@@ -1509,7 +1509,7 @@ function parseCsv(content: string): string[][] {
   let row: string[] = [];
   let cell = "";
   let inQuotes = false;
-  const normalized = content.replace(/\r\n/g, "\n");
+  const normalized = content.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
 
   for (let index = 0; index < normalized.length; index += 1) {
     const character = normalized[index];

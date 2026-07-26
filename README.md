@@ -56,6 +56,8 @@ The shipped product surface now covers the full review loop:
   fail-policy results.
 - `import-review` and `review-queue` turn reviewer decisions into queue-ready
   summaries, with optional benchmark drift context.
+- Reviewer decision CSV imports accept UTF-8 BOM prefixes emitted by some
+  spreadsheet tools.
 - `evaluate` runs checked-in policy fixtures as a CI mismatch and score gate.
 - `serve` exposes the same workflows through a local HTTP API, while `openapi`
   exports its integration contract.
