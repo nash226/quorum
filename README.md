@@ -89,6 +89,8 @@ The shipped product surface now covers the full review loop:
   the source path in evidence for reviewer handoff.
 - Direct `verify` also accepts CSV approved-source exports, preserving the
   source path and title in the evidence report for reviewer handoff.
+- Direct `verify` also accepts LaTeX (`.tex`) approved-source exports, preserving
+  the source path and title in the evidence report for reviewer handoff.
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
