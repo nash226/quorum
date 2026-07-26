@@ -91,6 +91,8 @@ The shipped product surface now covers the full review loop:
   source path and title in the evidence report for reviewer handoff.
 - Direct `verify` also accepts LaTeX (`.tex`) approved-source exports, preserving
   the source path and title in the evidence report for reviewer handoff.
+- Direct TOML answers are covered through verdict evaluation, keeping structured
+  configuration exports on the same evidence-gated path as text answers.
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
