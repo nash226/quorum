@@ -81,6 +81,10 @@ answers, run:
 npm run dev -- formats
 ```
 
+This command is the source of truth for directory discovery: it prints the
+separate source and answer extension sets used by `verify-batch`, so scripts
+can confirm the packaged input contract before submitting a batch.
+
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
 machine-readable after packaging. It also exercises the packaged
