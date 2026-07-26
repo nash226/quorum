@@ -143,6 +143,11 @@ full endpoint list and local configuration options.
 `npm run check` is the full local release gate: it runs tests and the TypeScript
 build, then smoke-checks the HTTP API and packaged CLI before enforcing the
 checked-in evaluation score and mismatch thresholds.
+
+The generated [status snapshot](docs/status.md) combines the README
+capabilities, roadmap, and recent first-parent shipments. Refresh it after a
+shipped change with `npm run status:refresh`.
+
 The [roadmap](docs/roadmap.md) records batch verification, reviewer queues, the
 local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
