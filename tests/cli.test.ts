@@ -343,6 +343,39 @@ test("verify rejects an empty source directory before producing unsupported clai
   }
 });
 
+test("directory discovery ignores hidden answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-hidden-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(join(answerDir, ".generated"), { recursive: true });
+    await mkdir(join(sourceDir, ".cache"), { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "visible.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(answerDir, ".hidden.md"), "Employees receive 99 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(answerDir, ".generated", "nested.md"), "Employees receive 88 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, ".hidden.md"), "Employees receive 99 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, ".cache", "nested.md"), "Employees receive 88 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ])) as { answers: Array<{ answerPath: string }>; sources: Array<{ title: string }> };
+
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [join(answerDir, "visible.md")]);
+    assert.deepEqual(report.sources.map((source) => source.title), ["policy"]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify preserves explicit stable source IDs in evidence and reports", async () => {
   const stdout = await runCli([
     "verify",

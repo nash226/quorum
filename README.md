@@ -388,6 +388,8 @@ The supported local answer formats are Markdown/MDX (`.md`, `.markdown`,
 `.mediawiki`, `.tex`),
 plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON (`.json`), and TOML (`.toml`).
+Recursive `--answer-dir` and `--source-dir` discovery skips hidden files and
+directories, keeping generated caches and dot-folder exports out of a batch.
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
 (`.xml`). JSON, YAML, XML, and TOML exports are normalized into claim-readable
 text while preserving their source metadata in reports.
