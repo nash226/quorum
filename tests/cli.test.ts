@@ -409,6 +409,33 @@ test("verify accepts a direct AsciiDoc answer export", async () => {
   }
 });
 
+test("verify accepts a direct AsciiDoc approved source export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-asciidoc-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.asciidoc");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]));
+
+    assert.equal(report.sources[0].sourcePath, sourcePath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("help --help reuses the top-level usage contract", async () => {
   const result = await runCliAllowFailure(["help", "--help"]);
 
