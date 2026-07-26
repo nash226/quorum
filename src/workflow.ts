@@ -195,6 +195,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".jsonl",
   ".xml",
   ".toml",
+  ".csv",
 ]);
 export const STDIN_ANSWER_PATH = "<stdin>";
 
