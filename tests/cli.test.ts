@@ -2177,6 +2177,34 @@ test("verify normalizes TOML answers before claim extraction", async () => {
   }
 });
 
+test("verify evaluates claims from direct TOML answers against approved sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-answer-verdict-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.toml");
+    await writeFile(answerPath, '[policy]\nleave = "Employees receive 12 weeks of paid leave."\n');
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--json",
+    ])) as {
+      answerPath: string;
+      summary: { verified: number };
+      assessments: Array<{ verdict: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct AsciiDoc answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-asciidoc-"));
 
