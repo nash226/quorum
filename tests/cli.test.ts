@@ -30,7 +30,32 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Source files: .*\.wiki/);
   assert.match(stdout, /Answer files: .*\.wiki/);
   assert.match(stdout, /Source files: .*\.csv/);
+  assert.match(stdout, /Source files: .*\.tsv/);
   assert.doesNotMatch(stdout, /Answer files: .*\.csv/);
+});
+
+test("verify-batch discovers TSV approved sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-source-"));
+  const answerDir = join(tempDir, "answers");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await Promise.all([mkdir(answerDir), mkdir(sourceDir)]);
+    await Promise.all([
+      writeFile(join(answerDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "leave-policy.tsv"), "policy\tdetails\nleave\tEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ]));
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.sources[0]?.sourcePath, join(sourceDir, "leave-policy.tsv"));
+    assert.equal(report.sources[0]?.title, "leave-policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("verify discovers reStructuredText files in source and answer directories", async () => {
