@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2cdb071` on 2026-07-25, test: cover direct XML answer verification
+- Latest shipped change: `d7e20ee` on 2026-07-25, test: cover direct structured source verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-25 | Direct push | test: cover direct structured source verification | `d7e20ee` |
 | 2026-07-25 | Direct push | test: cover direct XML answer verification | `2cdb071` |
 | 2026-07-25 | Direct push | test: cover direct AsciiDoc answer verification | `c0abbfa` |
 | 2026-07-25 | Direct push | docs: explain formats discovery contract | `b3599a1` |
@@ -56,5 +57,4 @@
 | 2026-07-25 | Direct push | feat: accept plain text export extension | `39f0390` |
 | 2026-07-25 | Direct push | docs: align cli format help | `1a70a67` |
 | 2026-07-25 | Direct push | test: cover case-insensitive directory discovery | `0fc8c20` |
-| 2026-07-25 | [#1061](https://github.com/nash226/quorum/pull/1061) | test: cover direct PDF answer verification | `67a7e87` |
 
