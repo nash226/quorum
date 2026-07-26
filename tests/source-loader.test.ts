@@ -134,6 +134,17 @@ test("strips JSON extensions from fallback source titles", async () => {
   assert.equal(source.content, "policy: Employees get 12 weeks.");
 });
 
+test("treats JSON-LD exports as JSON sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.jsonld",
+    JSON.stringify({ title: "Leave Policy", content: "Employees receive 12 weeks of paid parental leave." }),
+    0,
+  );
+
+  assert.equal(source.title, "Leave Policy");
+  assert.match(source.content, /12 weeks of paid parental leave/);
+});
+
 test("strips XML extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile("docs/policies/benefits.xml", "<policy>Employees get 12 weeks.</policy>", 0);
 

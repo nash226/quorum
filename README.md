@@ -30,6 +30,8 @@ the optional outer pipe characters.
 Common `.text` exports are accepted alongside `.txt` files for both answers and
 approved sources, so plain-text handoffs keep working when vendors use the
 long-form extension.
+JSON-LD (`.jsonld`) policy exports are accepted anywhere JSON sources are
+accepted, including recursive source-directory discovery.
 reStructuredText (`.rst`) exports are also discovered recursively for both
 answers and approved sources, so documentation-tool exports can enter the same
 verification flow without renaming. When an `.rst` file has no title metadata,
