@@ -97,6 +97,9 @@ npm run dev -- formats
 This command is the source of truth for directory discovery: it prints the
 separate source and answer extension sets used by `verify-batch`, so scripts
 can confirm the packaged input contract before submitting a batch.
+Use the HTTP `/capabilities` endpoint when a workflow needs to consume that
+contract programmatically; it publishes the corresponding runtime discovery
+metadata as JSON.
 
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
