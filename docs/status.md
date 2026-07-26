@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `73408d0` on 2026-07-26, feat: support JSONL policy exports
+- Latest shipped change: `2b12ebb` on 2026-07-26, fix: normalize direct JSONL answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | fix: normalize direct JSONL answers | `2b12ebb` |
 | 2026-07-26 | Direct push | feat: support JSONL policy exports | `73408d0` |
 | 2026-07-26 | Direct push | feat: discover .wiki MediaWiki exports | `eb4f413` |
 | 2026-07-26 | Direct push | fix: strip rst extensions from source titles | `02cd314` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | [#1089](https://github.com/nash226/quorum/pull/1089) | test: cover version aliases | `83d937d` |
 | 2026-07-26 | Direct push | test: cover direct MediaWiki source verification | `d6f9d2c` |
 | 2026-07-26 | Direct push | test: cover direct AsciiDoc answer verification | `c49646b` |
-| 2026-07-26 | Direct push | test: cover direct XHTML answer verification | `ddfb4ba` |
 
