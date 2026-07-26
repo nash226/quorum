@@ -6,6 +6,18 @@ import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 
+test("version aliases report the package contract version", async () => {
+  const [longAlias, shortAlias, command] = await Promise.all([
+    runCli(["--version"]),
+    runCli(["-v"]),
+    runCli(["version"]),
+  ]);
+
+  assert.equal(longAlias.trim(), "quorum 0.1.0");
+  assert.equal(shortAlias, longAlias);
+  assert.equal(command, longAlias);
+});
+
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
