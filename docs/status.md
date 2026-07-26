@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `83d937d` on 2026-07-26, test: cover version aliases
+- Latest shipped change: `ed7c8d3` on 2026-07-26, feat: discover reStructuredText exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | feat: discover reStructuredText exports | `ed7c8d3` |
 | 2026-07-26 | [#1089](https://github.com/nash226/quorum/pull/1089) | test: cover version aliases | `83d937d` |
 | 2026-07-26 | Direct push | test: cover direct MediaWiki source verification | `d6f9d2c` |
 | 2026-07-26 | Direct push | test: cover direct AsciiDoc answer verification | `c49646b` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | feat: discover LaTeX policy exports | `a3aee9a` |
 | 2026-07-26 | Direct push | feat: discover XML answers in directories | `8ab01b1` |
 | 2026-07-26 | Direct push | test: cover direct MediaWiki answer verification | `6773d1f` |
-| 2026-07-26 | Direct push | test: preserve direct JSON answer provenance | `ff42fe5` |
 
