@@ -394,6 +394,8 @@ approved policy, keeping this structured-response path release-gated.
 File-based TOML answers use the same normalization path as structured sources,
 both when passed directly and when discovered through `--answer-dir`, so
 agent exports do not need to be converted before batch verification.
+The CLI regression suite now also covers the direct `verify --answer` path,
+keeping single-answer and recursive batch behavior aligned.
 Nested TOML answer-directory discovery is covered by the CLI regression suite,
 preserving answer paths and verified claims for directory-based handoffs.
 Direct AsciiDoc answers are also covered end to end, keeping explicit `.adoc`
