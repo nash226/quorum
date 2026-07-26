@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `92c9a30` on 2026-07-26, test: cover nested HTML answer discovery
+- Latest shipped change: `6ec0143` on 2026-07-26, test: cover direct YML answer verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | test: cover direct YML answer verification | `6ec0143` |
 | 2026-07-26 | Direct push | test: cover nested HTML answer discovery | `92c9a30` |
 | 2026-07-26 | Direct push | test: smoke-check packaged AsciiDoc verification | `84133f8` |
 | 2026-07-26 | Direct push | test: cover direct Markdown extension verification | `03c0e0e` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | [#1135](https://github.com/nash226/quorum/pull/1135) | test: cover direct HTML source verification | `222c6ef` |
 | 2026-07-26 | [#1134](https://github.com/nash226/quorum/pull/1134) | test: cover direct LaTeX source verification | `34e5f5d` |
 | 2026-07-26 | Direct push | test: smoke-check packaged JSONL answers | `d11455d` |
-| 2026-07-26 | [#1132](https://github.com/nash226/quorum/pull/1132) | test: cover direct JSONL source verification | `8825a19` |
 
