@@ -1039,6 +1039,22 @@ test("extract-claims reads stdin and prints claim ids", async () => {
   );
 });
 
+test("extract-claims normalizes PDF answer exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-extract-pdf-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.pdf");
+    await writeFile(answerPath, createSimplePdf("Employees receive 12 weeks of paid parental leave."));
+
+    const stdout = await runCli(["extract-claims", "--answer", answerPath, "--json"]);
+    const claims = JSON.parse(stdout) as Array<{ text: string }>;
+
+    assert.equal(claims[0]?.text, "Employees receive 12 weeks of paid parental leave.");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("extract-claims prints an optional reviewer-facing answer label", async () => {
   const result = await runCli([
     "extract-claims",
