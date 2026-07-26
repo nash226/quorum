@@ -421,6 +421,8 @@ when integrations provide content in memory with an `.toml` answer path.
 Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 `.xhtml` exports, so common HTML extensions can be used without listing each
 answer explicitly.
+Direct XHTML answer verification is also regression-tested, preserving the
+single-answer path for XML-compatible knowledge-base exports.
 When a batch report is written inside an answer directory, its configured
 output path is excluded from recursive answer discovery so reruns do not verify
 their own generated report.
