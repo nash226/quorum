@@ -222,6 +222,9 @@ suite verifies this source transport contract directly.
 The HTTP `verify-batch` endpoint also preserves caller-supplied source IDs in
 both the batch and per-answer reports, keeping evidence references durable for
 multi-answer workflow consumers.
+It also accepts base64-encoded answer and approved-source content in batch
+requests, so agent workflows can verify in-memory documents without creating
+temporary files while retaining their supplied paths and source IDs.
 The packaged `verify-batch` smoke gate also assigns and checks an explicit
 `--source-id`, keeping durable source identity covered for batch CLI consumers
 and aggregate CSV exports.
