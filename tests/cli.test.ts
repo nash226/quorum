@@ -1583,6 +1583,38 @@ test("verify normalizes TOML answers before claim extraction", async () => {
   }
 });
 
+test("verify accepts TOML sources and preserves structured metadata", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "benefits.toml");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        'title = "Benefits Policy"\nupdatedAt = "2026-07-24"\ntrustLevel = "high"\n\n[policy]\nleave = "Employees receive 12 weeks of paid leave."\n',
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      sources: Array<{ id: string; sourcePath: string; title: string; updatedAt?: string; trustLevel: string }>;
+      summary: { verified: number };
+    };
+
+    assert.deepEqual(report.sources, [
+      { id: "source_1", sourcePath, title: "Benefits Policy", updatedAt: "2026-07-24", trustLevel: "high" },
+    ]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers TOML answers in answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-answer-dir-"));
 
