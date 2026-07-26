@@ -334,6 +334,35 @@ test("verify-batch discovers MediaWiki answers and sources", async () => {
   }
 });
 
+test("verify-batch discovers nested HTML and XHTML answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-html-answer-discovery-"));
+  const answerDir = join(tempDir, "answers");
+  const nestedAnswerDir = join(answerDir, "nested");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await Promise.all([mkdir(nestedAnswerDir, { recursive: true }), mkdir(sourceDir)]);
+    await Promise.all([
+      writeFile(join(answerDir, "answer.html"), "<p>Employees receive 12 weeks of paid parental leave.</p>\n", "utf8"),
+      writeFile(join(nestedAnswerDir, "backup.xhtml"), "<p>Employees receive 12 weeks of paid parental leave.</p>\n", "utf8"),
+      writeFile(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ]));
+
+    assert.equal(report.summary.answersWithClaims, 2);
+    assert.equal(report.summary.verified, 2);
+    assert.deepEqual(report.answers.map((answer: { answerPath: string }) => answer.answerPath), [
+      join(answerDir, "answer.html"),
+      join(nestedAnswerDir, "backup.xhtml"),
+    ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers YAML answers in answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-yaml-answer-discovery-"));
   const answerDir = join(tempDir, "answers");
