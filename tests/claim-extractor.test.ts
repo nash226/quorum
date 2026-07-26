@@ -765,6 +765,15 @@ test("splits semicolon-delimited policy clauses into separate claims", () => {
   );
 });
 
+test("splits semicolon clauses beginning with non-Latin uppercase letters", () => {
+  const claims = extractClaims("Η άδεια είναι διαθέσιμη; Διευθυντές εγκρίνουν αιτήματα.");
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Η άδεια είναι διαθέσιμη",
+    "Διευθυντές εγκρίνουν αιτήματα.",
+  ]);
+});
+
 test("keeps lowercase semicolon continuations in the same claim", () => {
   const claims = extractClaims(
     "Employees receive 12 weeks of paid parental leave; for full-time staff only.",

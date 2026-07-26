@@ -94,7 +94,7 @@ function isShortPunctuatedClaim(text: string): boolean {
 
 function splitCompoundClaim(sentence: string): string[] {
   return sentence
-    .split(/;\s+(?=[A-Z0-9("'])/g)
+    .split(/;\s+(?=\p{Lu}|\p{N}|["'])/gu)
     .flatMap((part) =>
       part.split(/,\s+(?:and|but|or)\s+(?=[A-Z0-9("'])/g),
     )
