@@ -54,6 +54,9 @@ The shipped product surface now covers the full review loop:
 - Structured JSON, YAML, and TOML sources recognize common freshness keys such
   as `modifiedAt`, `last_modified`, and `lastUpdated`, preserving exported
   policy timestamps in evidence metadata.
+- CLI help now lists MediaWiki alongside the formats discovered for answer
+  directories, keeping the advertised input contract aligned with the shipped
+  discovery behavior.
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
