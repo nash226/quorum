@@ -184,6 +184,8 @@ sources, reviewer-oriented batch JSON, and CI fail policies.
 Structured answer exports can be passed directly with `--answer` or discovered
 through `--answer-dir`; JSON, YAML/YML, XML, and TOML files use the same
 normalization path in both workflows.
+The direct XML-answer CLI contract is covered end to end too: normalized claims
+remain verifiable and the JSON report preserves the caller's answer path.
 When a workflow has an explicit source set, repeat `--source` instead of
 creating a temporary directory:
 

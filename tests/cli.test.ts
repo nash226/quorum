@@ -1554,9 +1554,18 @@ test("verify normalizes structured XML answers before claim extraction", async (
 
     const report = JSON.parse(await runCli([
       "verify", "--answer", answerPath, "--source", sourcePath, "--json",
-    ])) as { summary: { verified: number } };
+    ])) as {
+      answerPath: string;
+      summary: { verified: number };
+      assessments: Array<{ claim: { text: string } }>;
+    };
 
+    assert.equal(report.answerPath, answerPath);
     assert.equal(report.summary.verified, 1);
+    assert.deepEqual(
+      report.assessments.map((assessment) => assessment.claim.text),
+      ["Customers can request refunds within 30 days."],
+    );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
