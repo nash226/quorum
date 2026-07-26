@@ -11,6 +11,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
 
   assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.docx, \.htm, \.html/);
   assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Source files: .*\.text/);
+  assert.match(stdout, /Answer files: .*\.text/);
 });
 
 test("help --help reuses the top-level usage contract", async () => {
