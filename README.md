@@ -377,11 +377,13 @@ are binary PDF files.
 Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
-The supported local answer and source formats are Markdown/MDX (`.md`, `.markdown`, `.mdx`),
-plain text (`.txt`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF (`.pdf`), and Word
-documents (`.docx`), plus JSON (`.json`), YAML (`.yaml`, `.yml`), XML (`.xml`), and TOML (`.toml`) exports. JSON, YAML, and TOML
-exports are normalized into claim-readable evidence text while preserving
-their source metadata in reports.
+The supported local answer formats are Markdown/MDX (`.md`, `.markdown`,
+`.mdx`), AsciiDoc/Org/MediaWiki (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`),
+plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
+PDF (`.pdf`), Word documents (`.docx`), JSON (`.json`), and TOML (`.toml`).
+Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
+(`.xml`). JSON, YAML, XML, and TOML exports are normalized into claim-readable
+text while preserving their source metadata in reports.
 JSON, YAML, and TOML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.
