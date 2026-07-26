@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c49646b` on 2026-07-26, test: cover direct AsciiDoc answer verification
+- Latest shipped change: `d6f9d2c` on 2026-07-26, test: cover direct MediaWiki source verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | test: cover direct MediaWiki source verification | `d6f9d2c` |
 | 2026-07-26 | Direct push | test: cover direct AsciiDoc answer verification | `c49646b` |
 | 2026-07-26 | Direct push | test: cover direct XHTML answer verification | `ddfb4ba` |
 | 2026-07-26 | Direct push | feat: discover LaTeX policy exports | `a3aee9a` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | test: cover direct MediaWiki answer verification | `6773d1f` |
 | 2026-07-26 | Direct push | test: preserve direct JSON answer provenance | `ff42fe5` |
 | 2026-07-25 | Direct push | docs: align supported format guidance | `3e300ec` |
-| 2026-07-25 | Direct push | feat: discover JSON batch answers | `c39cd77` |
 
