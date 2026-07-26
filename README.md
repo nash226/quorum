@@ -33,7 +33,9 @@ long-form extension. Direct single-answer verification now covers `.text`
 sources in the CLI regression suite as well as recursive batch discovery.
 Direct single-answer verification also covers `.markdown` answer and approved
 source paths, keeping the common long-form Markdown extension on the same
-evidence-gated path as `.md` files.
+evidence-gated path as `.md` files. Recursive answer discovery also covers
+HTML and XHTML exports, including nested answer directories, so browser-
+rendered agent drafts retain their original paths in batch reports.
 Quarto Markdown (`.qmd`) exports are also discovered for answers and approved
 sources, so rendered-document workflows can retain their native file paths.
 reStructuredText (`.rst`) exports are also discovered recursively for both
