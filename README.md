@@ -396,10 +396,13 @@ The supported local answer formats are Markdown/MDX (`.md`, `.markdown`,
 `.mdx`), AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`,
 `.mediawiki`, `.tex`),
 plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
-PDF (`.pdf`), Word documents (`.docx`), JSON (`.json`), and TOML (`.toml`).
+PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL (`.json`, `.jsonl`), and
+TOML (`.toml`).
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
 (`.xml`). JSON, YAML, XML, and TOML exports are normalized into claim-readable
 text while preserving their source metadata in reports.
+JSONL sources are normalized one record at a time, so newline-delimited policy
+exports can be discovered recursively without conversion.
 JSON, YAML, and TOML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.

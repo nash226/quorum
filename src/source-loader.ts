@@ -203,7 +203,7 @@ function isDocxSource(sourcePath: string): boolean {
 }
 
 function isJsonSource(sourcePath: string): boolean {
-  return /\.json$/i.test(sourcePath);
+  return /\.jsonl?$/i.test(sourcePath);
 }
 
 function isXmlSource(sourcePath: string): boolean {
@@ -219,7 +219,7 @@ function isTomlSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|adoc|asciidoc|org|mediawiki|wiki|rst|tex|txt|text|html?|xhtml|pdf|docx|json|xml|ya?ml|toml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|adoc|asciidoc|org|mediawiki|wiki|rst|tex|txt|text|html?|xhtml|pdf|docx|jsonl?|xml|ya?ml|toml)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
@@ -272,6 +272,17 @@ function parseHtmlSource(content: string): ParsedSource {
 }
 
 function parseJsonSource(content: string): ParsedSource {
+  if (/\n/.test(content.trim())) {
+    const lines = content.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+    if (lines.length > 1) {
+      try {
+        return { metadata: {}, body: formatStructuredValue(lines.map((line) => JSON.parse(line))) };
+      } catch {
+        // Fall through to regular JSON parsing so malformed exports stay readable.
+      }
+    }
+  }
+
   try {
     const value: unknown = JSON.parse(content);
     return { metadata: structuredMetadata(value), body: formatStructuredValue(value) };
