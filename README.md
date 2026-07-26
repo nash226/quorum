@@ -396,6 +396,8 @@ both when passed directly and when discovered through `--answer-dir`, so
 agent exports do not need to be converted before batch verification.
 Nested TOML answer-directory discovery is covered by the CLI regression suite,
 preserving answer paths and verified claims for directory-based handoffs.
+Direct AsciiDoc answers are also covered end to end, keeping explicit `.adoc`
+and `.asciidoc` verification aligned with batch discovery.
 Programmatic batch verification applies that normalization to YAML answers too,
 so integrations can submit structured answer content without pre-converting it.
 Programmatic batch verification applies the same normalization to TOML answers
