@@ -1032,6 +1032,27 @@ try {
   rmSync(stdinAnswerTempDir, { recursive: true, force: true });
 }
 
+const jsonlAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-jsonl-answer-"));
+try {
+  const jsonlAnswerPath = join(jsonlAnswerTempDir, "answer.jsonl");
+  const jsonlSourcePath = join(jsonlAnswerTempDir, "policy.md");
+  writeFileSync(jsonlAnswerPath, '{"response":"Employees receive 12 weeks of paid parental leave."}\n');
+  writeFileSync(jsonlSourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+  const jsonlAnswerResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", jsonlAnswerPath, "--source", jsonlSourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    jsonlAnswerResult.summary?.verified !== 1 ||
+    jsonlAnswerResult.answerPath !== jsonlAnswerPath ||
+    jsonlAnswerResult.assessments?.[0]?.claim?.text !==
+      "response: Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact CLI did not preserve the direct JSONL answer contract.");
+  }
+} finally {
+  rmSync(jsonlAnswerTempDir, { recursive: true, force: true });
+}
+
 const generatedAtTempDir = mkdtempSync(join(tmpdir(), "quorum-package-generated-at-"));
 try {
   const generatedAtSourceDir = join(generatedAtTempDir, "sources");
