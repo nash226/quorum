@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f016cd5` on 2026-07-27, test: expand support security fixtures
+- Latest shipped change: `49d0006` on 2026-07-27, fix: advertise TSV input support
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | fix: advertise TSV input support | `49d0006` |
 | 2026-07-27 | Direct push | test: expand support security fixtures | `f016cd5` |
 | 2026-07-27 | Direct push | feat: support TSV verification inputs | `6d8eda5` |
 | 2026-07-27 | [#1176](https://github.com/nash226/quorum/pull/1176) | test: cover direct JSON answer verification | `118498e` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: cover direct INI verification | `7a4b991` |
 | 2026-07-27 | [#1172](https://github.com/nash226/quorum/pull/1172) | docs: explain direct structured answer verification | `04fb0cf` |
 | 2026-07-27 | Direct push | test: cover direct properties verification | `3ec64d4` |
-| 2026-07-27 | Direct push | test: cover direct uppercase input paths | `08a6321` |
 
