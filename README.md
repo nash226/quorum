@@ -567,6 +567,8 @@ Direct JSONL answer files are also normalized one record at a time by `verify`,
 preserving the answer path while exposing each record as reviewer-verifiable claims.
 The packaged CLI smoke gate verifies this direct JSONL answer contract too, so
 published artifacts retain structured-answer provenance and claim text.
+It also verifies a direct TOML answer against an approved source, keeping the
+packaged structured-answer path aligned with the TOML unit and CLI coverage.
 Source-directory verification discovers both `.yaml` and `.yml` policies,
 including files nested below the supplied directory.
 File-based JSON and XML answers receive the same normalization before claim
