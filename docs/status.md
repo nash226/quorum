@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `942b7f0` on 2026-07-26, docs: document capabilities bootstrap
+- Latest shipped change: `b474c49` on 2026-07-26, docs: align product surface roadmap
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -41,7 +41,7 @@
 
 ### Next In docs/roadmap.md
 
-- Add a durable API service boundary for agent integrations beyond the local HTTP server.
+- Add a durable API service boundary for agent integrations beyond the local HTTP server (requires a deployment decision).
 - Choose the durable queue backend for reviewer work queues and audit history; the dashboard boundary is tracked separately in [decision issue #683](https://github.com/nash226/quorum/issues/683).
 - Expand the HR and support fixture set as policy coverage grows.
 
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | docs: align product surface roadmap | `b474c49` |
 | 2026-07-26 | Direct push | docs: document capabilities bootstrap | `942b7f0` |
 | 2026-07-26 | Direct push | fix: exclude generated reports from source discovery | `94a40c5` |
 | 2026-07-26 | Direct push | feat: expose formats as JSON | `7e8e0c4` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | docs: explain CLI format discovery | `68361b2` |
 | 2026-07-26 | Direct push | docs: align roadmap with format contract | `3189288` |
 | 2026-07-26 | Direct push | docs: clarify binary answer input contract | `26d9ced` |
-| 2026-07-26 | Direct push | docs: list structured answer formats | `64bc2e9` |
 
