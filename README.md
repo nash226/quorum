@@ -317,12 +317,16 @@ example:
 npm run dev -- verify \
   --answer answer.xml \
   --source-dir examples/sources \
-  --result-json
+  --json
 ```
 
 The result keeps `answer.xml` as the answer provenance while reporting the
 normalized claim verdicts, so workflow clients can retain the original export
 path without converting it to Markdown first.
+
+This structured-export path is covered by the packaged verification contract,
+so the same XML answer behavior is available from the built CLI used by
+integrations.
 
 `quorum --help` lists these supported answer and source formats alongside the
 recursive, hidden-file filtering behavior, so integrations can confirm the
