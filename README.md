@@ -307,6 +307,8 @@ sources, reviewer-oriented batch JSON, and CI fail policies.
 Structured answer exports can be passed directly with `--answer` or discovered
 through `--answer-dir`; JSON, YAML/YML, XML, and TOML files use the same
 normalization path in both workflows.
+Batch discovery also matches supported extensions case-insensitively, including
+uppercase JSONL exports nested below an answer directory.
 MediaWiki exports (`.mediawiki` and `.wiki`) are also discovered in answer and
 source directories as plain-text inputs, with the end-to-end batch path covered
 by the CLI test suite.
