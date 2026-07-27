@@ -2507,6 +2507,65 @@ test("verify evaluates claims from direct .properties answers and sources", asyn
   }
 });
 
+test("verify-batch discovers INI and properties answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-config-batch-"));
+  const answerDir = join(tempDir, "answers");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await Promise.all([
+      mkdir(answerDir),
+      mkdir(sourceDir),
+    ]);
+    await Promise.all([
+      writeFile(
+        join(answerDir, "ini-answer.ini"),
+        "[policy]\nleave=Employees receive 12 weeks of paid parental leave.\n",
+      ),
+      writeFile(
+        join(answerDir, "properties-answer.properties"),
+        "leave=Employees receive 12 weeks of paid parental leave.\n",
+      ),
+      writeFile(
+        join(sourceDir, "ini-policy.ini"),
+        "[policy]\nleave=Employees receive 12 weeks of paid parental leave.\n",
+      ),
+      writeFile(
+        join(sourceDir, "properties-policy.properties"),
+        "leave=Employees receive 12 weeks of paid parental leave.\n",
+      ),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ])) as {
+      summary: { answersWithClaims: number; verified: number };
+      answers: Array<{
+        answerPath: string;
+        report: { summary: { verified: number } };
+      }>;
+    };
+
+    assert.equal(report.summary.answersWithClaims, 2);
+    assert.equal(report.summary.verified, 2);
+    assert.deepEqual(
+      report.answers.map((answer) => answer.answerPath),
+      [join(answerDir, "ini-answer.ini"), join(answerDir, "properties-answer.properties")],
+    );
+    assert.deepEqual(
+      report.answers.map((answer) => answer.report.summary.verified),
+      [1, 1],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct AsciiDoc answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-asciidoc-"));
 

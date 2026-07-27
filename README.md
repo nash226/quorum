@@ -114,6 +114,8 @@ exports such as `POLICY.PDF` and `Answer.JSON` follow the same verification path
 as lowercase filenames.
 Direct `verify` paths use the same case-insensitive extension contract, so
 uppercase answer and source exports are accepted without renaming.
+Batch discovery also covers `.ini` and `.properties` policy exports, so
+configuration-backed answer and source directories can use the same workflow.
 
 - `extract-claims` previews normalized claims before evidence matching.
 - Decimal values such as `95.5%` remain intact while claims are split into sentences.
