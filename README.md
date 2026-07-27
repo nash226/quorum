@@ -157,10 +157,11 @@ answers without jumping straight to JSON.
 git clone https://github.com/nash226/quorum.git
 cd quorum
 npm install
-npm test
-npm run build
+npm run check
 npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv
 ```
+
+`npm run check` runs the same test-and-build gate used by CI.
 
 ## Source Metadata
 
