@@ -40,6 +40,17 @@ if (
   throw new Error("Package artifact CLI formats output drifted from the library input contract.");
 }
 
+const formatsJsonOutput = execFileSync("node", [fileURLToPath(cliPath), "formats", "--json"], {
+  encoding: "utf8",
+});
+const formatsJson = JSON.parse(formatsJsonOutput);
+if (
+  JSON.stringify(formatsJson.sources) !== JSON.stringify([...expectedSourceExtensions].sort()) ||
+  JSON.stringify(formatsJson.answers) !== JSON.stringify([...expectedAnswerExtensions].sort())
+) {
+  throw new Error("Package artifact CLI JSON formats output drifted from the library input contract.");
+}
+
 for (const versionFlag of ["--version", "-v"]) {
   const versionOutput = execFileSync("node", [fileURLToPath(cliPath), versionFlag], { encoding: "utf8" }).trim();
   if (versionOutput !== `quorum ${packageJson.version}`) {
