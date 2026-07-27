@@ -66,6 +66,9 @@ The packaged CLI and programmatic API now expose one aligned answer/source
 format contract for text, HTML/XHTML, PDF/DOCX, and structured JSON/YAML/XML/
 TOML/CSV exports; run `npm run dev -- formats` to inspect the exact extensions
 available to integrations.
+Directory discovery matches those supported extensions case-insensitively, so
+exports such as `POLICY.PDF` and `Answer.JSON` follow the same verification path
+as lowercase filenames.
 
 - `extract-claims` previews normalized claims before evidence matching.
 - Decimal values such as `95.5%` remain intact while claims are split into sentences.
