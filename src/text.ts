@@ -65,11 +65,19 @@ export function stripByteOrderMark(text: string): string {
 }
 
 export function splitIntoSentences(text: string): string[] {
-  return text
+  const abbreviationMarker = "\u0000";
+  const protectedText = text.replace(
+    /\b(?:mr|mrs|ms|dr|prof|sr|jr|st|vs|e\.g|i\.e)\./gi,
+    (abbreviation) => abbreviation.slice(0, -1) + abbreviationMarker,
+  );
+
+  return protectedText
     .replace(/\r/g, "")
     .replace(/(\d)\.(?=\d)/g, "$1\uE000")
     .split(/\n+|(?<=[.!?])\s+|(?<=[\u3002\uFF01\uFF1F\u061F\u0964\u0965])(?:\s+|(?=\p{L}|\p{N}))/gu)
-    .map((part) => stripLeadingClaimMarker(part).replace(/\uE000/g, ".").trim())
+    .map((part) =>
+      stripLeadingClaimMarker(part).replace(/\uE000/g, ".").replaceAll(abbreviationMarker, ".").trim(),
+    )
     .filter(Boolean);
 }
 

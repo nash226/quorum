@@ -2,6 +2,13 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { renderAnswerLabels, renderAnswerPreview, splitIntoSentences } from "../src/text.js";
 
+test("does not split common abbreviations into separate claims", () => {
+  assert.deepEqual(
+    splitIntoSentences("Dr. Rivera approved the policy. E.g. the leave rule applies to contractors."),
+    ["Dr. Rivera approved the policy.", "E.g. the leave rule applies to contractors."],
+  );
+});
+
 test("keeps decimal values inside one sentence", () => {
   assert.deepEqual(
     splitIntoSentences("The policy applies to 95.5% of eligible employees. Review exceptions separately."),
