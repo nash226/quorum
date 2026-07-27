@@ -122,6 +122,8 @@ as lowercase filenames.
   source path and title in the evidence report for reviewer handoff.
 - Direct `verify` also accepts LaTeX (`.tex`) approved-source exports, preserving
   the source path and title in the evidence report for reviewer handoff.
+- Direct `verify` also accepts TOML (`.toml`) approved-source exports, preserving
+  the source path and fallback title in the evidence report for reviewer handoff.
 - Direct TOML answers are covered through verdict evaluation, keeping structured
   configuration exports on the same evidence-gated path as text answers.
 
