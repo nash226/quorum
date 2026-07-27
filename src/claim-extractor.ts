@@ -93,13 +93,25 @@ function isShortPunctuatedClaim(text: string): boolean {
 }
 
 function splitCompoundClaim(sentence: string): string[] {
-  return sentence
-    .split(/;\s+(?=\p{Lu}|\p{N}|["'])/gu)
+  return splitSubstantialSemicolonClaims(sentence)
     .flatMap((part) =>
       part.split(/,\s+(?:and|but|or)\s+(?=[A-Z0-9("'])/g),
     )
     .map((part) => part.trim())
     .filter(Boolean);
+}
+
+function splitSubstantialSemicolonClaims(sentence: string): string[] {
+  const parts = sentence.split(/;\s+/u).map((part) => part.trim()).filter(Boolean);
+
+  const secondPart = parts[1] ?? "";
+  const isContinuation = /^(?:and|but|or|for|with|which|that|including|unless|while|because|as|after|before|during|subject)\b/i.test(
+    secondPart,
+  );
+
+  return parts.length > 1 && !isContinuation && parts.every((part) => part.length >= 12)
+    ? parts
+    : [sentence];
 }
 
 function normalizeAnswer(answer: string): string {

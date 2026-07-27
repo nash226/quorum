@@ -826,6 +826,17 @@ test("preserves uncertainty wording in compound claims", () => {
   ]);
 });
 
+test("splits lowercase semicolon-delimited policy claims when both sides are substantial", () => {
+  const claims = extractClaims(
+    "Employees receive 12 weeks of paid parental leave; contractors do not receive paid vacation.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave",
+    "contractors do not receive paid vacation.",
+  ]);
+});
+
 test("keeps wrapped parenthesized numeric markdown list items as single claims", () => {
   const claims = extractClaims(`Policy notes:
 
