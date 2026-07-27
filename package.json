@@ -33,6 +33,7 @@
     "build": "tsc -p tsconfig.json",
     "check": "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci",
     "dev": "tsx src/cli.ts",
+    "formats": "npm run dev -- formats",
     "prepublishOnly": "npm run check",
     "smoke": "node scripts/smoke-check.mjs",
     "package:smoke": "node scripts/package-smoke-check.mjs",
