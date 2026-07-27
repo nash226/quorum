@@ -3330,6 +3330,31 @@ test("verify threads fail-policy context into single-answer text, markdown, and 
   }
 });
 
+test("verify accepts a direct YAML answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-yaml-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.yaml");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "response: Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      answerPath: string;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify discovers JSON sources in source directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-source-"));
 
