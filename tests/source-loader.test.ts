@@ -61,6 +61,11 @@ test("strips supported text extensions from fallback source titles", async () =>
     "Escalate returns within one hour.",
     2,
   );
+  const logSource = await sourceDocumentFromFile(
+    "docs/policies/support-audit.log",
+    "Escalate failed password resets within one hour.",
+    3,
+  );
   const rstSource = await sourceDocumentFromFile(
     "docs/policies/incident-response.rst",
     "Escalate incidents within one hour.",
@@ -95,6 +100,7 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(markdownSource.title, "leave-policy");
   assert.equal(textSource.title, "escalation-guide");
   assert.equal(textExtensionSource.title, "returns-policy");
+  assert.equal(logSource.title, "support-audit");
   assert.equal(rstSource.title, "incident-response");
   assert.equal(csvSource.title, "leave-policy");
   assert.equal(csvSource.content, "policy,details\nleave,Employees get 12 weeks.\n");

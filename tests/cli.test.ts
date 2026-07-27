@@ -42,6 +42,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.ndjson/);
   assert.match(stdout, /Source files: .*\.textile/);
   assert.match(stdout, /Answer files: .*\.textile/);
+  assert.match(stdout, /Source files: .*\.log/);
+  assert.match(stdout, /Answer files: .*\.log/);
 });
 
 test("verify accepts direct TSV answer and source exports", async () => {
