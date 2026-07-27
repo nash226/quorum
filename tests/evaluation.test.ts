@@ -2167,7 +2167,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 79);
+  assert.equal(scorecards.length, 80);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2239,6 +2239,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support subscription renewal notice policy example",
       "Support replacement policy example",
       "Support return policy example",
+      "Support returns and exchange policy example",
       "Support service credit policy example",
       "Support service outage policy example",
       "Support shipping protection policy example",
@@ -2318,7 +2319,7 @@ test("filters the support evaluation fixture set by domain", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 52);
+  assert.equal(scorecards.length, 53);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "support"));
 });
 

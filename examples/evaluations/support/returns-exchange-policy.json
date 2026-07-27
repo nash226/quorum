@@ -1,0 +1,19 @@
+{
+  "name": "Support returns and exchange policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-returns-exchange-answer.md",
+  "answer": "Customers may request an exchange within 30 days of delivery.\nCustomers may return opened items within 90 days for a full refund.\nEvery return automatically includes free express replacement shipping.\n",
+  "answerLabel": "Support returns and exchange reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "inline/support-returns-exchange-policy.md",
+      "id": "support/returns-exchange@2026-07-27",
+      "title": "Support Returns and Exchange Policy",
+      "updatedAt": "2026-07-27",
+      "trustLevel": "high",
+      "content": "Customers may request an exchange within 30 days of delivery. Opened items may be returned within 14 days for a refund after inspection. Return shipping is charged to the customer unless the item arrived damaged."
+    }
+  ],
+  "expectedSummary": { "verified": 1, "contradicted": 1, "unsupported": 1, "needs_review": 0 },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
