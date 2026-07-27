@@ -302,7 +302,8 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown-family (`.md`, `.markdown`, `.mdx`, `.qmd`),
+Verification accepts Markdown-family (`.md`, `.markdown`, `.mdx`, `.qmd`,
+`.mdown`, `.mkdn`),
 AsciiDoc/Org-mode/MediaWiki (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
 `.wiki`), reStructuredText/LaTeX (`.rst`, `.tex`), text (`.txt`, `.text`,
 `.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
@@ -566,7 +567,7 @@ Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
 The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
-(`.md`, `.markdown`, `.mdx`, `.qmd`, `.rst`), AsciiDoc/Org/MediaWiki/LaTeX
+(`.md`, `.markdown`, `.mdx`, `.qmd`, `.mdown`, `.mkdn`, `.rst`), AsciiDoc/Org/MediaWiki/LaTeX
 (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`, `.wiki`, `.tex`),
 plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL (`.json`, `.jsonl`), and

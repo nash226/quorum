@@ -94,6 +94,14 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(propertiesSource.content, "leave.weeks=12\nleave.paid=true\n");
 });
 
+test("strips common Markdown alias extensions from fallback source titles", async () => {
+  const mdownSource = await sourceDocumentFromFile("docs/policies/leave-policy.mdown", "Employees get 12 weeks.", 0);
+  const mkdnSource = await sourceDocumentFromFile("docs/policies/escalation-guide.mkdn", "Escalate incidents within one hour.", 1);
+
+  assert.equal(mdownSource.title, "leave-policy");
+  assert.equal(mkdnSource.title, "escalation-guide");
+});
+
 test("strips AsciiDoc extensions from fallback source titles", async () => {
   const adocSource = await sourceDocumentFromFile(
     "docs/policies/leave-policy.adoc",
