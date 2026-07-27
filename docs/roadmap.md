@@ -10,6 +10,11 @@ front of enterprise agent workflows.
 - Make reviewer handoff artifacts easier to route, audit, and approve.
 - Expand evaluation fixtures and scorecards across HR and support policy domains.
 
+The initial evidence-gate workflow is usable end to end: teams can verify
+single or batched answers, route reviewer decisions, and inspect evaluation
+results from the CLI or local HTTP API. Near-term work should strengthen these
+surfaces rather than add another parallel workflow.
+
 ## Shipped foundation
 
 - Batch verification, reviewer queue, and evaluation workflows are available
