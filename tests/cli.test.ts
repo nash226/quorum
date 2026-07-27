@@ -2379,7 +2379,10 @@ test("verify accepts direct AsciiDoc answers", async () => {
     ])) as { assessments: Array<{ verdict: string; claim: { text: string } }> };
 
     assert.equal(report.assessments[0]?.verdict, "verified");
-    assert.equal(report.assessments[0]?.claim.text, "Employees receive 12 weeks of paid parental leave.");
+    assert.equal(
+      report.assessments[0]?.claim.text,
+      "response: Employees receive 12 weeks of paid parental leave.",
+    );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
