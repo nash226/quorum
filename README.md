@@ -48,6 +48,8 @@ Quarto Markdown (`.qmd`) exports are also discovered for answers and approved
 sources, so rendered-document workflows can retain their native file paths.
 MDX (`.mdx`) answer exports are covered directly as well, preserving the
 original answer path and verified evidence for component-based agent drafts.
+Direct MDX approved-source verification is covered too, preserving the source
+path and extension-free fallback title in reviewer evidence.
 INI (`.ini`) policy and answer exports are discovered as plain-text inputs,
 with the extension removed from fallback evidence titles.
 Direct INI answers and approved sources are also covered end to end, preserving
