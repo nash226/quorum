@@ -15,6 +15,9 @@ Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,
 so exported policy files retain their title and metadata when loaded through
 the programmatic API.
 
+CRLF line endings receive the same normalization, preserving frontmatter
+metadata from policy exports created on Windows.
+
 The packaged CLI smoke gate now verifies both the human-readable and
 `--json` format contracts against the library export, so published CLI and API
 capabilities cannot silently drift apart.

@@ -351,6 +351,20 @@ Employees get 12 weeks.
   assert.doesNotMatch(parsed.body, /People Ops/);
 });
 
+test("parses frontmatter from CRLF source exports", () => {
+  const parsed = parseSource(
+    "docs/hr-policy.md",
+    "---\r\ntitle: HR Benefits Policy\r\nupdatedAt: 2026-05-31\r\ntrustLevel: high\r\n---\r\nEmployees get 12 weeks.\r\n",
+  );
+
+  assert.deepEqual(parsed.metadata, {
+    title: "HR Benefits Policy",
+    updatedAt: "2026-05-31",
+    trustLevel: "high",
+  });
+  assert.equal(parsed.body, "Employees get 12 weeks.\n");
+});
+
 test("parses toml-style source frontmatter delimited by plus signs", () => {
   const parsed = parseSource("docs/hr-policy.md", `+++
 title = "HR Benefits Policy"
