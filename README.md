@@ -264,7 +264,7 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown-family, AsciiDoc/Org-mode/MediaWiki,
+Verification accepts Markdown-family, including `.mdown`, AsciiDoc/Org-mode/MediaWiki,
 reStructuredText/LaTeX, text, exported HTML/XHTML, JSON/JSONL/YAML/XML/TOML,
 CSV/TSV, PDF, and DOCX answers and approved sources. Recursive answer and
 source directories discover those same extension families, keeping structured

@@ -51,6 +51,11 @@ test("strips supported text extensions from fallback source titles", async () =>
     "Employees get 12 weeks.",
     0,
   );
+  const mdownSource = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.mdown",
+    "Employees get 12 weeks.",
+    1,
+  );
   const textSource = await sourceDocumentFromFile(
     "docs/policies/escalation-guide.txt",
     "Escalate incidents within one hour.",
@@ -83,6 +88,7 @@ test("strips supported text extensions from fallback source titles", async () =>
   );
 
   assert.equal(markdownSource.title, "leave-policy");
+  assert.equal(mdownSource.title, "leave-policy");
   assert.equal(textSource.title, "escalation-guide");
   assert.equal(textExtensionSource.title, "returns-policy");
   assert.equal(rstSource.title, "incident-response");

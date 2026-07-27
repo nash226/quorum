@@ -35,6 +35,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.qmd/);
   assert.match(stdout, /Source files: .*\.properties/);
   assert.match(stdout, /Answer files: .*\.properties/);
+  assert.match(stdout, /Source files: .*\.mdown/);
+  assert.match(stdout, /Answer files: .*\.mdown/);
   assert.match(stdout, /Source files: .*\.tsv/);
   assert.match(stdout, /Answer files: .*\.tsv/);
 });
@@ -101,6 +103,34 @@ test("verify accepts a direct .text answer export", async () => {
       report.assessments[0]?.claim.text,
       "Employees receive 12 weeks of paid parental leave.",
     );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch discovers .mdown answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdown-discovery-"));
+  const answersDir = join(tempDir, "answers");
+  const sourcesDir = join(tempDir, "sources");
+
+  try {
+    await mkdir(answersDir);
+    await mkdir(sourcesDir);
+    await Promise.all([
+      writeFile(join(answersDir, "answer.mdown"), "Employees receive 12 weeks of paid parental leave.\n"),
+      writeFile(join(sourcesDir, "policy.mdown"), "Employees receive 12 weeks of paid parental leave.\n"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answersDir,
+      "--source-dir",
+      sourcesDir,
+    ]);
+
+    assert.match(stdout, /Employees receive 12 weeks of paid parental leave/);
+    assert.match(stdout, /VERIFIED/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
