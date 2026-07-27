@@ -12,6 +12,10 @@ structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+Fallback evidence titles also strip the newly supported `.ndjson` and
+`.textile` extensions, keeping directory-discovered source names consistent
+with the other supported formats.
+
 Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,
 so exported policy files retain their title and metadata when loaded through
 the programmatic API.
