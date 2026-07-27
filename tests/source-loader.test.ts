@@ -14,6 +14,19 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("extracts metadata from XML source exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.xml",
+    `<policy><title>HR parental leave policy</title><updated_at>2026-07-01</updated_at><trust_level>high</trust_level><rule>Employees get 12 weeks.</rule></policy>`,
+    0,
+  );
+
+  assert.equal(source.title, "HR parental leave policy");
+  assert.equal(source.updatedAt, "2026-07-01");
+  assert.equal(source.trustLevel, "high");
+  assert.match(source.content, /Employees get 12 weeks\./);
+});
+
 test("extracts readable text from DOCX source content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0);
