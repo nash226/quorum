@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `08a6321` on 2026-07-27, test: cover direct uppercase input paths
+- Latest shipped change: `3ec64d4` on 2026-07-27, test: cover direct properties verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | test: cover direct properties verification | `3ec64d4` |
 | 2026-07-27 | Direct push | test: cover direct uppercase input paths | `08a6321` |
 | 2026-07-27 | Direct push | docs: clarify packaged format contract | `b1e3b01` |
 | 2026-07-26 | Direct push | docs: clarify format contract command | `fa09f8f` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | test: cover direct TOML source verification | `5208d1d` |
 | 2026-07-26 | Direct push | feat: discover properties verification inputs | `91a467b` |
 | 2026-07-26 | Direct push | feat: discover INI verification inputs | `ab97217` |
-| 2026-07-26 | Direct push | docs: align product surface roadmap | `b474c49` |
 
