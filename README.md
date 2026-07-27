@@ -238,6 +238,8 @@ Direct `verify --result-json` responses preserve the structured answer path too,
 so JSON answer exports remain traceable in single-answer workflow handoffs.
 The packaged CLI smoke gate checks both machine-readable forms, including the
 answer path and reviewer-facing label in the saved result artifact.
+Programmatic batch verification also honors excluded answer paths for explicit
+inputs, keeping generated reports and other output files out of a re-run.
 The plain-text batch report also repeats source titles, trust, freshness, and
 paths inside each answer section, so copied reviewer findings retain their
 evidence provenance without needing the full report header.

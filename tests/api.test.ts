@@ -1026,6 +1026,18 @@ test("programmatic API reports missing explicit batch answer paths during resolu
   );
 });
 
+test("programmatic API excludes explicitly supplied answer paths", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-excluded-answer-"));
+  const answerPath = join(tempDir, "answer.md");
+
+  try {
+    await writeFile(answerPath, "Answer content.\n", "utf8");
+    assert.deepEqual(await resolveAnswerPaths([answerPath], [], [answerPath]), []);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("programmatic API batches file and directory answers with fail verdicts", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-batch-"));
 
