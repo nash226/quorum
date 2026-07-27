@@ -21,11 +21,13 @@ front of enterprise agent workflows.
   the supported extension contract is exposed through `quorum formats`.
 - Deployment and integration guides document the local API's authentication
   boundary, operational limits, and durable source identifiers.
+- The CLI and local HTTP API expose the same verification and reviewer-queue
+  report shapes, with `quorum formats` documenting the supported file contract.
 
 ## Next
 
 - Add a durable API service boundary for agent integrations beyond the local
-  HTTP server.
+  HTTP server (requires a deployment decision).
 - Choose the durable queue backend for reviewer work queues and audit history;
   the dashboard boundary is tracked separately in [decision issue #683](https://github.com/nash226/quorum/issues/683).
 - Expand the HR and support fixture set as policy coverage grows.

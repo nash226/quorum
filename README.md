@@ -62,6 +62,13 @@ quoted review threads do not retain repeated `>` or list markers.
 
 The shipped product surface now covers the full review loop:
 
+For local integrations, `quorum serve` exposes verification, batch review,
+reviewer-queue summaries, and the OpenAPI contract over HTTP. The same
+workflows are available from the CLI, so teams can start with checked-in
+policy files and move to an agent integration without changing the evidence
+report shape. The current service is intentionally a local HTTP boundary;
+durable hosting and queue storage remain roadmap decisions.
+
 The packaged CLI and programmatic API now expose one aligned answer/source
 format contract for text, HTML/XHTML, PDF/DOCX, and structured JSON/YAML/XML/
 TOML/CSV exports; run `npm run dev -- formats` to inspect the exact extensions
