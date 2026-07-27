@@ -84,10 +84,11 @@ report shape. The current service is intentionally a local HTTP boundary;
 durable hosting and queue storage remain roadmap decisions.
 
 The packaged CLI and programmatic API now expose one aligned answer/source
-format contract for text, HTML/XHTML, PDF/DOCX, Java-style `.properties`, and
-structured JSON/YAML/XML/TOML/CSV exports; run `npm run dev -- formats` to
-inspect the exact extensions
-available to integrations.
+format contract for Markdown-family, text, HTML/XHTML, PDF/DOCX,
+Java-style `.properties`, and structured JSON/JSONL/YAML/XML/TOML/CSV/TSV
+exports; run `npm run dev -- formats` to inspect the exact extensions available
+to integrations. The README format summary now matches that published
+contract, including CSV/TSV and structured answer discovery.
 Use `npm run dev -- formats --json` when an integration needs the same contract
 as sorted machine-readable `sources` and `answers` arrays.
 Directory discovery matches those supported extensions case-insensitively, so
@@ -258,14 +259,14 @@ local API, and evaluation gates as shipped foundations. Durable queue
 persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
-Verification accepts Markdown/MDX, AsciiDoc/Org-mode/MediaWiki exports, text, exported HTML/XHTML, JSON/YAML/XML/TOML
-exports, PDF, and DOCX answers and approved sources. Recursive answer
-directories cover AsciiDoc/Org-mode, HTML/XHTML, PDF, DOCX, and TOML exports, keeping binary and
-structured answer batches aligned with explicit file verification. JSON, YAML,
-XML, and TOML source exports are normalized into
-claim-readable evidence text, so exported knowledge-base payloads can be
-reviewed without a separate conversion step. Use `--source-dir` for a mixed directory of policy
-files;
+Verification accepts Markdown-family, AsciiDoc/Org-mode/MediaWiki,
+reStructuredText/LaTeX, text, exported HTML/XHTML, JSON/JSONL/YAML/XML/TOML,
+CSV/TSV, PDF, and DOCX answers and approved sources. Recursive answer and
+source directories discover those same extension families, keeping structured
+and binary batches aligned with explicit file verification. JSON, YAML, XML,
+and TOML source exports are normalized into claim-readable evidence text, so
+exported knowledge-base payloads can be reviewed without a separate conversion
+step. Use `--source-dir` for a mixed directory of policy files;
 
 Structured answer exports can be verified directly; Quorum normalizes their
 claim-bearing fields before matching them against approved evidence. For
