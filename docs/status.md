@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1cbf31a` on 2026-07-27, feat: support Textile input exports
+- Latest shipped change: `df6c189` on 2026-07-27, fix: normalize ndjson and textile source loading
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | fix: normalize ndjson and textile source loading | `df6c189` |
 | 2026-07-27 | Direct push | feat: support Textile input exports | `1cbf31a` |
 | 2026-07-27 | Direct push | feat: support NDJSON input exports | `7ca0499` |
 | 2026-07-27 | Direct push | fix: exclude explicit batch output paths | `c8da566` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | fix: omit deleted html claim text | `bcaeadc` |
 | 2026-07-27 | Direct push | fix: split lowercase semicolon claims | `1f8838f` |
 | 2026-07-27 | Direct push | test: cover packaged JSONL verification | `6fe4c28` |
-| 2026-07-27 | Direct push | fix: preserve dotted URLs in claims | `b4066a9` |
 
