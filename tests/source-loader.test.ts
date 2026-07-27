@@ -227,6 +227,19 @@ test("normalizes JSONL source exports into claim-readable text", async () => {
   assert.equal(source.content, "[1].policy: Employees get 12 weeks.\n[1].region: US\n[2].policy: Contractors get 6 weeks.\n[2].region: CA");
 });
 
+test("preserves metadata from the first JSONL source record", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.jsonl",
+    '{"title":"Benefits Policy","updatedAt":"2026-07-20","trustLevel":"high","policy":"Employees get 12 weeks."}\n{"policy":"Contractors get 6 weeks."}\n',
+    0,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-07-20");
+  assert.equal(source.trustLevel, "high");
+  assert.match(source.content, /\[1\]\.policy: Employees get 12 weeks\./);
+});
+
 test("maps common structured modification keys to source freshness", async () => {
   const jsonSource = await sourceDocumentFromFile(
     "docs/policy.json",
