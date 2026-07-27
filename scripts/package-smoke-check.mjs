@@ -1078,6 +1078,27 @@ try {
   rmSync(jsonlAnswerTempDir, { recursive: true, force: true });
 }
 
+const tomlAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-toml-answer-"));
+try {
+  const tomlAnswerPath = join(tomlAnswerTempDir, "answer.toml");
+  const tomlSourcePath = join(tomlAnswerTempDir, "policy.md");
+  writeFileSync(tomlAnswerPath, '[policy]\nleave = "Employees receive 12 weeks of paid parental leave."\n');
+  writeFileSync(tomlSourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+  const tomlAnswerResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", tomlAnswerPath, "--source", tomlSourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    tomlAnswerResult.summary?.verified !== 1 ||
+    tomlAnswerResult.answerPath !== tomlAnswerPath ||
+    tomlAnswerResult.assessments?.[0]?.claim?.text !==
+      'policy.leave: "Employees receive 12 weeks of paid parental leave."'
+  ) {
+    throw new Error("Package artifact CLI did not preserve the direct TOML answer contract.");
+  }
+} finally {
+  rmSync(tomlAnswerTempDir, { recursive: true, force: true });
+}
+
 const generatedAtTempDir = mkdtempSync(join(tmpdir(), "quorum-package-generated-at-"));
 try {
   const generatedAtSourceDir = join(generatedAtTempDir, "sources");
