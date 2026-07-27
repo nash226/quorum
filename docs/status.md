@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d7bdc55` on 2026-07-27, test: smoke-check packaged NDJSON verification
+- Latest shipped change: `f79bff2` on 2026-07-27, fix: normalize parenthesized localized list markers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | fix: normalize parenthesized localized list markers | `f79bff2` |
 | 2026-07-27 | Direct push | test: smoke-check packaged NDJSON verification | `d7bdc55` |
 | 2026-07-27 | Direct push | fix: normalize ndjson and textile source loading | `df6c189` |
 | 2026-07-27 | Direct push | feat: support Textile input exports | `1cbf31a` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | fix: exclude explicit batch output paths | `c8da566` |
 | 2026-07-27 | Direct push | test: cover packaged INI verification | `503b25c` |
 | 2026-07-27 | Direct push | fix: omit deleted html claim text | `bcaeadc` |
-| 2026-07-27 | Direct push | fix: split lowercase semicolon claims | `1f8838f` |
 
