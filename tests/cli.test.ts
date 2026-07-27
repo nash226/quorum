@@ -35,6 +35,17 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.qmd/);
 });
 
+test("formats --json exposes a stable machine-readable input contract", async () => {
+  const stdout = await runCli(["formats", "--json"]);
+  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };
+
+  assert.deepEqual(formats.sources, [...formats.sources].sort());
+  assert.deepEqual(formats.answers, [...formats.answers].sort());
+  assert.deepEqual(formats.sources, formats.answers);
+  assert.ok(formats.sources.includes(".md"));
+  assert.ok(formats.sources.includes(".json"));
+});
+
 test("help advertises the complete discovered input contract", async () => {
   const stdout = await runCli(["--help"]);
 
