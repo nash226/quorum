@@ -15,6 +15,31 @@ The service publishes its machine-readable contract at
 runtime description, `GET /healthz` for a readiness probe, or `GET /livez` for
 a liveness probe that confirms the process is serving requests.
 
+## Bootstrap an integration
+
+A workflow runner can discover the runtime contract before sending a
+verification request. Fetch `/capabilities` once at startup, cache the body by
+its `ETag`, and use the advertised values for request validation and routing:
+
+```bash
+CAPABILITIES="$(curl -fsS http://127.0.0.1:3000/capabilities)"
+jq '{version: .version,
+    requestContentTypes: .capabilities.requestContentTypes,
+    answerExtensions: .capabilities.answerExtensions,
+    sourceExtensions: .capabilities.sourceExtensions,
+    maxRequestBytes: .capabilities.maxRequestBytes,
+    reviewQueueStatuses: .capabilities.reviewQueueStatuses}' \
+  <<<"$CAPABILITIES"
+```
+
+The `answerExtensions` and `sourceExtensions` arrays describe file-backed
+workflow inputs; they do not replace the JSON schema in `/openapi.json` for
+HTTP request validation. `requestContentTypes`, `binaryContentEncodings`, and
+`maxRequestBytes` describe transport limits, while `reviewQueueStatuses` and
+the artifact arrays let queue workers avoid hard-coded routing choices. Treat
+unknown capability values as unsupported and refresh the cached response when
+the `ETag` changes.
+
 For container or load-balancer probes, the liveness endpoint is intentionally
 independent of source loading and reviewer queue state:
 
