@@ -41,6 +41,11 @@ Batch verification is shipped and should be treated as a foundation for these
 next steps, not as a separate roadmap item: its directory and explicit-path
 workflows already produce reviewer decisions and queue-routing summaries.
 
+Until those decisions are made, the local HTTP API is the actionable integration
+boundary. Its discovery endpoints expose the supported contract and allow
+clients to revalidate cached metadata with bodyless `HEAD` requests and ETags;
+future service work should preserve that lightweight bootstrap behavior.
+
 ## Later
 
 - Integrate with ticketing, HR, and support platforms.

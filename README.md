@@ -16,6 +16,11 @@ explicit answer paths, exports claim-level reviewer decisions, and produces
 one-row-per-answer summaries for queue routing. Durable queue persistence is
 the next product step, pending the backend choice tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
+Local API integrations can bootstrap from `/capabilities`, cache the response
+with its `ETag`, and revalidate the contract with bodyless `HEAD` requests;
+the local server remains the supported reliability boundary while durable
+service deployment is still awaiting a product decision.
+
 ## Why Quorum Exists
 
 AI answers can sound confident while drifting from approved policy. Quorum
