@@ -512,9 +512,9 @@ The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
 (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`, `.wiki`, `.tex`),
 plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL (`.json`, `.jsonl`), and
-TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and CSV (`.csv`).
+TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and CSV/TSV (`.csv`, `.tsv`).
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
-(`.xml`), and CSV (`.csv`) policy exports. JSON, YAML, XML, and TOML exports
+(`.xml`), and CSV/TSV (`.csv`, `.tsv`) policy exports. JSON, YAML, XML, and TOML exports
 are normalized into claim-readable text while preserving their source metadata
 in reports. CSV exports are discovered recursively as approved sources and are
 kept as readable row text for claim matching.
