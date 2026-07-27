@@ -28,6 +28,21 @@ linked workflow documents.
 - support request IDs, method negotiation, ETags, and conditional contract requests
 - export stable programmatic API paths, methods, and error response types
 
+## Inspect supported input formats
+
+Use `formats` to print the exact source and answer extensions discovered by
+the local CLI:
+
+```bash
+npm run dev -- formats
+```
+
+The command prints separate `Source files` and `Answer files` lines. These are
+the directory-discovery contract used by `verify-batch` and `--answer-dir`;
+they are not a request-validation schema for the HTTP API. Machine-readable
+integrations should use the HTTP `/capabilities` response, which exposes the
+same format contract alongside the API limits and queue statuses.
+
 ## Check the contract version
 
 The CLI exposes the same version used by the HTTP API and generated OpenAPI
