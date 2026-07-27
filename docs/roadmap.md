@@ -37,6 +37,10 @@ surfaces rather than add another parallel workflow.
   the dashboard boundary is tracked separately in [decision issue #683](https://github.com/nash226/quorum/issues/683).
 - Expand the HR and support fixture set as policy coverage grows.
 
+Batch verification is shipped and should be treated as a foundation for these
+next steps, not as a separate roadmap item: its directory and explicit-path
+workflows already produce reviewer decisions and queue-routing summaries.
+
 ## Later
 
 - Integrate with ticketing, HR, and support platforms.
