@@ -13,6 +13,9 @@ breaks an answer into claims, compares each claim with source evidence, and
 returns reviewer-ready `verified`, `contradicted`, `unsupported`, or
 `needs_review` verdicts. The first wedge is HR and customer-support policy
 verification, where grounded answers are high-volume and costly to get wrong.
+The checked-in examples also include a support-security scenario covering
+password-reset expiry, account-change verification, escalation requirements,
+and an unsupported premium-service claim.
 The evaluation suite now includes a support account-recovery scenario covering
 verified recovery steps, a contradicted identity-verification bypass, and an
 unsupported response-time promise.

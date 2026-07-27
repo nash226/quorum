@@ -27,6 +27,20 @@ test("HR example produces one verified, contradicted, and unsupported claim", as
   });
 });
 
+test("support security example covers verification and escalation claims", async () => {
+  const report = await verifyExample(
+    "examples/fixtures/support-security-answer.md",
+    "examples/fixtures/support-security-playbook.md",
+  );
+
+  assert.deepEqual(report.summary, {
+    verified: 1,
+    unsupported: 1,
+    contradicted: 0,
+    needs_review: 2,
+  });
+});
+
 test("support example produces one verified, contradicted, and unsupported claim", async () => {
   const report = await verifyExample(
     "examples/answers/support-answer.md",
