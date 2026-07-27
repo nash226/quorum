@@ -179,6 +179,22 @@ test("strips JSON extensions from fallback source titles", async () => {
   assert.equal(source.content, "policy: Employees get 12 weeks.");
 });
 
+test("strips NDJSON and Textile extensions from fallback source titles", async () => {
+  const ndjsonSource = await sourceDocumentFromFile(
+    "docs/policies/benefits.ndjson",
+    '{"policy":"Employees get 12 weeks."}\n',
+    0,
+  );
+  const textileSource = await sourceDocumentFromFile(
+    "docs/policies/benefits.textile",
+    "Employees get 12 weeks.\n",
+    1,
+  );
+
+  assert.equal(ndjsonSource.title, "benefits");
+  assert.equal(textileSource.title, "benefits");
+});
+
 test("strips XML extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile("docs/policies/benefits.xml", "<policy>Employees get 12 weeks.</policy>", 0);
 
