@@ -22,6 +22,8 @@ promise.
 The support evaluation suite also covers identity verification, including a
 verified ownership check plus unsupported and needs-review shortcuts for
 mismatched identity documents and order-number-only disclosure.
+It now also covers subscription pausing, including a verified pause duration,
+a contradicted billing claim, and an unsupported charge promise.
 Claim extraction also normalizes bracketed, Arabic-Indic, Persian, and fullwidth ordered-list
 markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
