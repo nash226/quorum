@@ -56,6 +56,8 @@ Direct INI answers and approved sources are also covered end to end, preserving
 their paths and verified evidence in single-answer reports.
 Direct `.properties` answer and approved-source exports are also covered end to
 end, preserving the answer path, source path, and fallback source title.
+The packaged CLI smoke check verifies that this same `.properties` contract
+survives the npm package boundary.
 Direct single-answer verification also covers XML answer exports, preserving the
 answer path and verified claim evidence without requiring batch discovery.
 The top-level CLI help now advertises CSV and TSV together, matching the

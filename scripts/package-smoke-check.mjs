@@ -193,6 +193,31 @@ try {
   rmSync(cliXmlSourcePackageDir, { recursive: true, force: true });
 }
 
+const cliPropertiesPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-properties-"));
+try {
+  const answerPath = join(cliPropertiesPackageDir, "answer.properties");
+  const sourcePath = join(cliPropertiesPackageDir, "policy.properties");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const propertiesOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const propertiesPayload = JSON.parse(propertiesOutput);
+  if (
+    propertiesPayload.summary?.verified !== 1 ||
+    propertiesPayload.answerPath !== answerPath ||
+    propertiesPayload.sources?.[0]?.title !== "policy" ||
+    propertiesPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected properties answer/source contract.");
+  }
+} finally {
+  rmSync(cliPropertiesPackageDir, { recursive: true, force: true });
+}
+
 if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.startApiServer !== "function") {
   throw new Error("Package artifact server entry point is missing required server exports.");
 }
