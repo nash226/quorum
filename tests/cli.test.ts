@@ -39,6 +39,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.tsv/);
   assert.match(stdout, /Source files: .*\.ndjson/);
   assert.match(stdout, /Answer files: .*\.ndjson/);
+  assert.match(stdout, /Source files: .*\.textile/);
+  assert.match(stdout, /Answer files: .*\.textile/);
 });
 
 test("verify accepts direct TSV answer and source exports", async () => {
@@ -72,8 +74,8 @@ test("formats --json exposes a stable machine-readable input contract", async ()
 test("help advertises the complete discovered input contract", async () => {
   const stdout = await runCli(["--help"]);
 
-  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
-  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
 });
 
 test("verify accepts a direct .text answer export", async () => {
@@ -163,6 +165,31 @@ test("verify accepts a direct .markdown answer and source export", async () => {
     assert.equal(report.summary.verified, 1);
     assert.equal(report.sources[0]?.sourcePath, sourcePath);
     assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify accepts direct Textile answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-textile-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.textile");
+    const sourcePath = join(tempDir, "policy.textile");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+    };
+
+    assert.equal(report.assessments.length, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "Employees receive 12 weeks of paid parental leave.");
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -742,8 +769,8 @@ test("top-level help lists every shipped command", async () => {
   }
 
   assert.match(stdout, /Supported files:/);
-  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
-  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files and directories/);
 });
 
