@@ -71,6 +71,9 @@ as sorted machine-readable `sources` and `answers` arrays.
 Directory discovery matches those supported extensions case-insensitively, so
 exports such as `POLICY.PDF` and `Answer.JSON` follow the same verification path
 as lowercase filenames.
+Recursive answer and source discovery also sorts root-level and nested paths as
+one stable list, keeping repeated batch reports deterministic when directories
+contain a mix of both.
 
 - `extract-claims` previews normalized claims before evidence matching.
 - Decimal values such as `95.5%` remain intact while claims are split into sentences.

@@ -1349,6 +1349,44 @@ test("verify-batch discovers answer and source files in nested directories", asy
   }
 });
 
+test("verify-batch sorts root and nested answer paths as one stable list", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-sorted-inputs-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourcePath = join(tempDir, "policy.md");
+    const nestedAnswerDir = join(answerDir, "nested");
+    const rootAnswerPath = join(answerDir, "zeta.md");
+    const nestedAnswerPath = join(nestedAnswerDir, "alpha.md");
+
+    await mkdir(nestedAnswerDir, { recursive: true });
+    await Promise.all([
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(rootAnswerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(nestedAnswerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source",
+      sourcePath,
+      "--result-json",
+    ]);
+    const result = JSON.parse(stdout) as {
+      report: { answers: Array<{ answerPath: string }> };
+    };
+
+    assert.deepEqual(
+      result.report.answers.map((answer) => answer.answerPath),
+      [nestedAnswerPath, rootAnswerPath],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("import-review --help prints import usage without requiring a csv path", async () => {
   const result = await runCliAllowFailure(["import-review", "--help"]);
 
