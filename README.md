@@ -91,7 +91,7 @@ durable hosting and queue storage remain roadmap decisions.
 The packaged CLI and programmatic API now expose one aligned answer/source
 format contract for Markdown-family, text, HTML/XHTML, PDF/DOCX,
 Java-style `.properties`, and structured JSON/JSONL/YAML/XML/TOML/CSV/TSV
-exports; run `npm run dev -- formats` to inspect the exact extensions available
+exports; run `npm run formats` to inspect the exact extensions available
 to integrations. The README format summary now matches that published
 contract, including CSV/TSV and structured answer discovery.
 Use `npm run dev -- formats --json` when an integration needs the same contract
