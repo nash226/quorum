@@ -154,6 +154,8 @@ uppercase answer and source exports are accepted without renaming.
   the source path and fallback title in the evidence report for reviewer handoff.
 - Direct TOML answers are covered through verdict evaluation, keeping structured
   configuration exports on the same evidence-gated path as text answers.
+- The packaged CLI smoke check also verifies a direct YAML answer, keeping the
+  published structured-answer path covered after build and packaging.
 
 Batch verification and the local HTTP API are shipped foundations; the next
 roadmap step is a durable API service boundary for agent integrations.
