@@ -44,6 +44,8 @@ INI (`.ini`) policy and answer exports are discovered as plain-text inputs,
 with the extension removed from fallback evidence titles.
 Direct `.properties` answer and approved-source exports are also covered end to
 end, preserving the answer path, source path, and fallback source title.
+Direct YAML answer exports are covered end to end too, preserving the answer
+path while matching claims against an approved source.
 reStructuredText (`.rst`) exports are also discovered recursively for both
 answers and approved sources, so documentation-tool exports can enter the same
 verification flow without renaming. When an `.rst` file has no title metadata,
