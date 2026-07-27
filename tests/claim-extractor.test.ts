@@ -56,6 +56,16 @@ test("extracts clean claims from markdown list answers", () => {
   );
 });
 
+test("joins markdown hard-break lines into one claim", () => {
+  const claims = extractClaims(
+    "Employees receive 12 weeks of paid parental leave  \nfrom their first day of employment.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave from their first day of employment.",
+  ]);
+});
+
 test("strips common unicode numbered-list markers from claims", () => {
   const claims = extractClaims(`① Employees receive 12 weeks of paid parental leave.
 ❷ Healthcare coverage begins after 30 days of employment.
