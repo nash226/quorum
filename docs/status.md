@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9623d71` on 2026-07-27, feat: preserve XML source metadata
+- Latest shipped change: `4d43379` on 2026-07-27, docs: align README input format contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | docs: align README input format contract | `4d43379` |
 | 2026-07-27 | Direct push | feat: preserve XML source metadata | `9623d71` |
 | 2026-07-27 | [#1181](https://github.com/nash226/quorum/pull/1181) | docs: align roadmap with shipped evidence workflow | `c195872` |
 | 2026-07-27 | [#1180](https://github.com/nash226/quorum/pull/1180) | test: cover uppercase JSONL batch discovery | `e5b1818` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: expand support security fixtures | `f016cd5` |
 | 2026-07-27 | Direct push | feat: support TSV verification inputs | `6d8eda5` |
 | 2026-07-27 | [#1176](https://github.com/nash226/quorum/pull/1176) | test: cover direct JSON answer verification | `118498e` |
-| 2026-07-27 | Direct push | test: cover direct XML answer verification | `dd2527b` |
 
