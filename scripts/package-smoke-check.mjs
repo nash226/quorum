@@ -1222,6 +1222,27 @@ try {
   rmSync(yamlAnswerTempDir, { recursive: true, force: true });
 }
 
+const jsonAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-json-answer-"));
+try {
+  const jsonAnswerPath = join(jsonAnswerTempDir, "answer.json");
+  const jsonSourcePath = join(jsonAnswerTempDir, "policy.md");
+  writeFileSync(jsonAnswerPath, '{"response":"Employees receive 12 weeks of paid parental leave."}\n');
+  writeFileSync(jsonSourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+  const jsonAnswerResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", jsonAnswerPath, "--source", jsonSourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    jsonAnswerResult.summary?.verified !== 1 ||
+    jsonAnswerResult.answerPath !== jsonAnswerPath ||
+    jsonAnswerResult.assessments?.[0]?.claim?.text !==
+      "response: Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact CLI did not preserve the direct JSON answer contract.");
+  }
+} finally {
+  rmSync(jsonAnswerTempDir, { recursive: true, force: true });
+}
+
 const generatedAtTempDir = mkdtempSync(join(tmpdir(), "quorum-package-generated-at-"));
 try {
   const generatedAtSourceDir = join(generatedAtTempDir, "sources");
