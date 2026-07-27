@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a51d3ce` on 2026-07-27, docs: clarify supported input formats
+- Latest shipped change: `9dfa8c0` on 2026-07-27, test: cover direct MDX source verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | [#1197](https://github.com/nash226/quorum/pull/1197) | test: cover direct MDX source verification | `9dfa8c0` |
 | 2026-07-27 | Direct push | docs: clarify supported input formats | `a51d3ce` |
 | 2026-07-27 | Direct push | docs: explain machine-readable format checks | `a6c8bb4` |
 | 2026-07-27 | Direct push | docs: use formats package script | `500fca6` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | feat: preserve JSONL source metadata | `64cba79` |
 | 2026-07-27 | Direct push | docs: align README input format contract | `4d43379` |
 | 2026-07-27 | Direct push | feat: preserve XML source metadata | `9623d71` |
-| 2026-07-27 | [#1181](https://github.com/nash226/quorum/pull/1181) | docs: align roadmap with shipped evidence workflow | `c195872` |
 
