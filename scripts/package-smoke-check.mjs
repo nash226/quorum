@@ -245,6 +245,41 @@ try {
   rmSync(cliTomlSourcePackageDir, { recursive: true, force: true });
 }
 
+const cliFrontmatterPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-frontmatter-"));
+try {
+  const answerPath = join(cliFrontmatterPackageDir, "answer.md");
+  const sourcePath = join(cliFrontmatterPackageDir, "policy.md");
+  writeFileSync(
+    answerPath,
+    "---\ntitle: Agent answer\n---\n\nEmployees receive 12 weeks of paid parental leave.\n",
+  );
+  writeFileSync(
+    sourcePath,
+    "---\ntitle: Parental Leave Policy\nupdated_at: 2026-07-27\ntrust_level: high\n---\n\nEmployees receive 12 weeks of paid parental leave.\n",
+  );
+
+  const frontmatterOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const frontmatterPayload = JSON.parse(frontmatterOutput);
+  const frontmatterSource = frontmatterPayload.sources?.[0];
+  if (
+    frontmatterPayload.summary?.verified !== 1 ||
+    frontmatterPayload.answerPath !== answerPath ||
+    frontmatterPayload.assessments?.[0]?.claim?.text !== "Employees receive 12 weeks of paid parental leave." ||
+    frontmatterSource?.title !== "Parental Leave Policy" ||
+    frontmatterSource?.updatedAt !== "2026-07-27" ||
+    frontmatterSource?.trustLevel !== "high" ||
+    frontmatterSource?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not preserve the expected Markdown front matter contract.");
+  }
+} finally {
+  rmSync(cliFrontmatterPackageDir, { recursive: true, force: true });
+}
+
 if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.startApiServer !== "function") {
   throw new Error("Package artifact server entry point is missing required server exports.");
 }

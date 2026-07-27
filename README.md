@@ -65,6 +65,9 @@ The packaged CLI smoke check verifies that this same `.properties` contract
 survives the npm package boundary.
 The packaged CLI smoke check also verifies TOML approved-source metadata,
 including the structured title and source path, after packaging.
+It also verifies Markdown front matter at the package boundary: answer metadata
+is removed from extracted claims while approved-source title, freshness, trust,
+and path metadata remain available in the evidence report.
 TSV answer and policy exports are also covered through nested batch discovery,
 preserving their paths while verifying tab-delimited claims.
 Direct single-answer verification also covers XML answer exports, preserving the
