@@ -67,7 +67,7 @@ export function stripByteOrderMark(text: string): string {
 export function splitIntoSentences(text: string): string[] {
   const abbreviationMarker = "\u0000";
   const protectedText = text.replace(
-    /\b(?:mr|mrs|ms|dr|prof|sr|jr|st|vs|e\.g|i\.e)\./gi,
+    /\b(?:mr|mrs|ms|dr|prof|sr|jr|st|vs|etc|inc|e\.g|i\.e)\./gi,
     (abbreviation) => abbreviation.slice(0, -1) + abbreviationMarker,
   );
 

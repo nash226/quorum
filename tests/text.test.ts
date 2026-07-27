@@ -4,8 +4,24 @@ import { renderAnswerLabels, renderAnswerPreview, splitIntoSentences } from "../
 
 test("does not split common abbreviations into separate claims", () => {
   assert.deepEqual(
-    splitIntoSentences("Dr. Rivera approved the policy. E.g. the leave rule applies to contractors."),
-    ["Dr. Rivera approved the policy.", "E.g. the leave rule applies to contractors."],
+    splitIntoSentences(
+      "Dr. Rivera approved the policy. E.g. the leave rule applies to contractors. The policy covers tools, etc. for every team.",
+    ),
+    [
+      "Dr. Rivera approved the policy.",
+      "E.g. the leave rule applies to contractors.",
+      "The policy covers tools, etc. for every team.",
+    ],
+  );
+});
+
+test("does not split company abbreviations inside business claims", () => {
+  assert.deepEqual(
+    splitIntoSentences("Acme Inc. requires approval. The review covers vendors, etc. before launch."),
+    [
+      "Acme Inc. requires approval.",
+      "The review covers vendors, etc. before launch.",
+    ],
   );
 });
 
