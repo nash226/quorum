@@ -65,6 +65,8 @@ its reviewer-facing fallback title now also drops the extension, matching the
 other supported document formats.
 Explicit `--source` paths for JSON and YAML policy exports are also covered by
 the CLI regression suite, alongside recursive source-directory discovery.
+Direct `.mdx` approved-source verification is covered too, preserving the
+explicit source path and extension-free fallback title used in evidence.
 Fullwidth list punctuation is normalized too, so localized exports such as
 `１．` and `۲．` do not leak ordering markers into reviewer claims.
 Short punctuated policy claims are also preserved across Unicode scripts, so
