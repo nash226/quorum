@@ -63,6 +63,8 @@ Direct `.properties` answer and approved-source exports are also covered end to
 end, preserving the answer path, source path, and fallback source title.
 The packaged CLI smoke check verifies that this same `.properties` contract
 survives the npm package boundary.
+The packaged CLI smoke check also verifies TOML approved-source metadata,
+including the structured title and source path, after packaging.
 TSV answer and policy exports are also covered through nested batch discovery,
 preserving their paths while verifying tab-delimited claims.
 Direct single-answer verification also covers XML answer exports, preserving the
