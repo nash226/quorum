@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b4066a9` on 2026-07-27, fix: preserve dotted URLs in claims
+- Latest shipped change: `6fe4c28` on 2026-07-27, test: cover packaged JSONL verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | test: cover packaged JSONL verification | `6fe4c28` |
 | 2026-07-27 | Direct push | fix: preserve dotted URLs in claims | `b4066a9` |
 | 2026-07-27 | Direct push | test: cover packaged JSONL source verification | `708501d` |
 | 2026-07-27 | Direct push | test: cover binary BOM source loading | `2addce0` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: cover packaged CSV verification | `5fa3934` |
 | 2026-07-27 | Direct push | fix: preserve abbreviated claim sentences | `502f628` |
 | 2026-07-27 | [#1210](https://github.com/nash226/quorum/pull/1210) | docs: record packaged format contract check | `d0ed543` |
-| 2026-07-27 | Direct push | test: gate packaged JSON formats contract | `385e4ba` |
 
