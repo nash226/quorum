@@ -470,6 +470,16 @@ test("keeps escaped pipes inside markdown table cells", () => {
   );
 });
 
+test("preserves escaped pipes in table evidence labels", () => {
+  const claims = extractClaims(`| Policy | Answer |
+| --- | --- |
+| Plan A \\| Plan B | Customers may switch plans after 30 days. |`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Plan A | Plan B: Customers may switch plans after 30 days.",
+  ]);
+});
+
 test("keeps wrapped blockquote lines as a single claim", () => {
   const claims = extractClaims(`## Support Notes
 
