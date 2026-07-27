@@ -11,6 +11,10 @@ contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
 structured JSON/JSONL/YAML/XML/TOML exports. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+The packaged CLI smoke gate now verifies both the human-readable and
+`--json` format contracts against the library export, so published CLI and API
+capabilities cannot silently drift apart.
+
 Batch verification is also a shipped workflow: it checks directories or
 explicit answer paths, exports claim-level reviewer decisions, and produces
 one-row-per-answer summaries for queue routing. Durable queue persistence is
