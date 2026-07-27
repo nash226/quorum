@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bcaeadc` on 2026-07-27, fix: omit deleted html claim text
+- Latest shipped change: `503b25c` on 2026-07-27, test: cover packaged INI verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | test: cover packaged INI verification | `503b25c` |
 | 2026-07-27 | Direct push | fix: omit deleted html claim text | `bcaeadc` |
 | 2026-07-27 | Direct push | fix: split lowercase semicolon claims | `1f8838f` |
 | 2026-07-27 | Direct push | test: cover packaged JSONL verification | `6fe4c28` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: cover packaged JSONL source verification | `708501d` |
 | 2026-07-27 | Direct push | test: cover binary BOM source loading | `2addce0` |
 | 2026-07-27 | Direct push | test: cover packaged JSON answer verification | `251db2d` |
-| 2026-07-27 | Direct push | test: cover packaged CSV verification | `5fa3934` |
 
