@@ -387,6 +387,17 @@ Employees get 12 weeks.
   assert.equal(parsed.body, "Employees get 12 weeks.\n");
 });
 
+test("strips a UTF-8 BOM from binary source exports before parsing", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.md",
+    new TextEncoder().encode("\uFEFF---\ntitle: Benefits Policy\n---\nEmployees receive paid leave.\n"),
+    0,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.content, "Employees receive paid leave.\n");
+});
+
 test("keeps frontmatter trust levels ahead of the default override", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",

@@ -11,6 +11,10 @@ contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
 structured JSON/JSONL/YAML/XML/TOML exports. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,
+so exported policy files retain their title and metadata when loaded through
+the programmatic API.
+
 The packaged CLI smoke gate now verifies both the human-readable and
 `--json` format contracts against the library export, so published CLI and API
 capabilities cannot silently drift apart.
