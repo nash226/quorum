@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c8da566` on 2026-07-27, fix: exclude explicit batch output paths
+- Latest shipped change: `7ca0499` on 2026-07-27, feat: support NDJSON input exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | feat: support NDJSON input exports | `7ca0499` |
 | 2026-07-27 | Direct push | fix: exclude explicit batch output paths | `c8da566` |
 | 2026-07-27 | Direct push | test: cover packaged INI verification | `503b25c` |
 | 2026-07-27 | Direct push | fix: omit deleted html claim text | `bcaeadc` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: cover packaged JSONL verification | `6fe4c28` |
 | 2026-07-27 | Direct push | fix: preserve dotted URLs in claims | `b4066a9` |
 | 2026-07-27 | Direct push | test: cover packaged JSONL source verification | `708501d` |
-| 2026-07-27 | Direct push | test: cover binary BOM source loading | `2addce0` |
 
