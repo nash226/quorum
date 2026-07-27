@@ -259,6 +259,8 @@ actually runs.
 The packaged smoke check also compares `quorum formats` with the library's
 exported source and answer extension contract, so CLI discovery cannot drift
 from the API and programmatic workflow surface.
+It also verifies the packed CLI can directly verify `.ini` answer and policy
+files, keeping this lightweight enterprise export path covered after publishing.
 The [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) explains how
 to use that output for local directory discovery and when integrations should
 probe the HTTP `/capabilities` contract instead.
