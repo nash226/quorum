@@ -766,6 +766,27 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("verify accepts BOM-prefixed direct answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-bom-exports-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.txt");
+    const sourcePath = join(tempDir, "policy.txt");
+    await Promise.all([
+      writeFile(answerPath, "\uFEFFEmployees receive 12 weeks.\n", "utf8"),
+      writeFile(sourcePath, "\uFEFFEmployees receive 12 weeks.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { summary: Record<string, number> };
+
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify deduplicates repeated approved source paths", async () => {
   const stdout = await runCli([
     "verify",
