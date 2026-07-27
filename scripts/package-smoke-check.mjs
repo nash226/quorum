@@ -279,6 +279,31 @@ try {
   rmSync(cliCsvPackageDir, { recursive: true, force: true });
 }
 
+const cliIniPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-ini-"));
+try {
+  const answerPath = join(cliIniPackageDir, "answer.ini");
+  const sourcePath = join(cliIniPackageDir, "policy.ini");
+  writeFileSync(answerPath, "claim=Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "policy=Employees receive 12 weeks of paid parental leave.\n");
+
+  const iniOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const iniPayload = JSON.parse(iniOutput);
+  if (
+    iniPayload.summary?.verified !== 1 ||
+    iniPayload.answerPath !== answerPath ||
+    iniPayload.sources?.[0]?.title !== "policy" ||
+    iniPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected INI answer/source contract.");
+  }
+} finally {
+  rmSync(cliIniPackageDir, { recursive: true, force: true });
+}
+
 const cliTomlSourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-toml-source-"));
 try {
   const answerPath = join(cliTomlSourcePackageDir, "answer.md");
