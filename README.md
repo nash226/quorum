@@ -531,6 +531,8 @@ kept as readable row text for claim matching.
 JSONL sources are normalized one record at a time, so newline-delimited policy
 exports can be discovered recursively or passed directly to `verify` without
 conversion; the direct path is covered by the CLI regression suite.
+Direct YAML policy exports are covered by the same CLI verification path, including
+their source title fallback and verified claim result.
 JSON, YAML, and TOML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.
