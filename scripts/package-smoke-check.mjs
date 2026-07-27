@@ -122,6 +122,31 @@ try {
   rmSync(cliBatchPackageDir, { recursive: true, force: true });
 }
 
+const cliJsonlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-jsonl-"));
+try {
+  const answerPath = join(cliJsonlPackageDir, "answer.jsonl");
+  const sourcePath = join(cliJsonlPackageDir, "policy.jsonl");
+  writeFileSync(answerPath, '{"claim":"Employees receive 12 weeks of paid parental leave."}\n');
+  writeFileSync(sourcePath, '{"title":"Parental Leave Policy","claim":"Employees receive 12 weeks of paid parental leave."}\n');
+
+  const jsonlOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const jsonlPayload = JSON.parse(jsonlOutput);
+  if (
+    jsonlPayload.summary?.verified !== 1 ||
+    jsonlPayload.answerPath !== answerPath ||
+    jsonlPayload.sources?.[0]?.title !== "Parental Leave Policy" ||
+    jsonlPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected JSONL answer/source contract.");
+  }
+} finally {
+  rmSync(cliJsonlPackageDir, { recursive: true, force: true });
+}
+
 const cliXhtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xhtml-"));
 try {
   const answerPath = join(cliXhtmlPackageDir, "answer.xhtml");
