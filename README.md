@@ -1380,6 +1380,33 @@ benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
 
+For an agent or service that already has answer and policy text in memory, the
+public package API accepts the same evidence inputs without temporary files:
+
+```ts
+import { verifyAnswerContentsResult } from "quorum";
+
+const result = await verifyAnswerContentsResult({
+  answer: "Refunds are available for 30 days from the purchase date.",
+  answerLabel: "support-agent draft",
+  sources: [{
+    sourcePath: "policies/refunds.md",
+    content: "Refunds are available for 30 days from the purchase date.",
+    title: "Refund Policy",
+    trustLevel: "high",
+  }],
+  failOn: ["contradicted", "unsupported"],
+});
+
+if (result.shouldFail) {
+  throw new Error(`Evidence gate failed: ${result.failVerdicts.join(", ")}`);
+}
+```
+
+Use `verifyAnswerBatchContentsResult` when several agent answers share the
+same approved source set. The result includes each answer's label, claim-level
+verdicts, evidence, and whether the selected fail policy was triggered.
+
 ## Documentation Map
 
 - [CLI guide](docs/cli-guide.md): local verification, reports, imports, and evaluation.
