@@ -254,6 +254,22 @@ XML, and TOML source exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
 reviewed without a separate conversion step. Use `--source-dir` for a mixed directory of policy
 files;
+
+Structured answer exports can be verified directly; Quorum normalizes their
+claim-bearing fields before matching them against approved evidence. For
+example:
+
+```bash
+npm run dev -- verify \
+  --answer answer.xml \
+  --source-dir examples/sources \
+  --result-json
+```
+
+The result keeps `answer.xml` as the answer provenance while reporting the
+normalized claim verdicts, so workflow clients can retain the original export
+path without converting it to Markdown first.
+
 `quorum --help` lists these supported answer and source formats alongside the
 recursive, hidden-file filtering behavior, so integrations can confirm the
 directory contract before invoking a batch run.
