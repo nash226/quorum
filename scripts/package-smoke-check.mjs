@@ -184,7 +184,7 @@ try {
   const xmlSourcePayload = JSON.parse(xmlSourceOutput);
   if (
     xmlSourcePayload.summary?.verified !== 1 ||
-    xmlSourcePayload.sources?.[0]?.title !== "policy" ||
+    xmlSourcePayload.sources?.[0]?.title !== "Parental Leave Policy" ||
     xmlSourcePayload.sources?.[0]?.sourcePath !== sourcePath
   ) {
     throw new Error("Package artifact did not verify the expected XML source contract.");
