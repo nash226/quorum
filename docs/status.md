@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4d24e8a` on 2026-07-27, test: cover packaged properties verification
+- Latest shipped change: `3813682` on 2026-07-27, docs: align roadmap with shipped batch verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | docs: align roadmap with shipped batch verification | `3813682` |
 | 2026-07-27 | Direct push | test: cover packaged properties verification | `4d24e8a` |
 | 2026-07-27 | Direct push | test: cover packaged YAML answer verification | `6654cd2` |
 | 2026-07-27 | Direct push | docs: document direct MDX source verification | `e647422` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | docs: clarify supported input formats | `a51d3ce` |
 | 2026-07-27 | Direct push | docs: explain machine-readable format checks | `a6c8bb4` |
 | 2026-07-27 | Direct push | docs: use formats package script | `500fca6` |
-| 2026-07-27 | Direct push | docs: summarize shipped input format contract | `2a4183a` |
 
