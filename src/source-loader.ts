@@ -276,7 +276,8 @@ function parseJsonSource(content: string): ParsedSource {
     const lines = content.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
     if (lines.length > 1) {
       try {
-        return { metadata: {}, body: formatStructuredValue(lines.map((line) => JSON.parse(line))) };
+        const records = lines.map((line) => JSON.parse(line));
+        return { metadata: structuredMetadata(records[0]), body: formatStructuredValue(records) };
       } catch {
         // Fall through to regular JSON parsing so malformed exports stay readable.
       }
