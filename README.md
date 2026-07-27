@@ -53,6 +53,9 @@ markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
 policy tables are also reduced to row-level claims, including tables that omit
 the optional outer pipe characters.
+Parenthesized Arabic-Indic, Persian, and fullwidth ordered-list markers are
+normalized too, so localized exports using `(١)`-style lists retain clean claim
+text for evidence matching.
 Common abbreviations such as `Dr.` and `e.g.` stay inside a claim, preventing
 reviewer reports from splitting those sentences at the abbreviation period.
 URLs with dotted hostnames and paths also stay inside a claim while sentence
