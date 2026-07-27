@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `64cba79` on 2026-07-27, feat: preserve JSONL source metadata
+- Latest shipped change: `2a4183a` on 2026-07-27, docs: summarize shipped input format contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | docs: summarize shipped input format contract | `2a4183a` |
 | 2026-07-27 | Direct push | feat: preserve JSONL source metadata | `64cba79` |
 | 2026-07-27 | Direct push | docs: align README input format contract | `4d43379` |
 | 2026-07-27 | Direct push | feat: preserve XML source metadata | `9623d71` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | [#1180](https://github.com/nash226/quorum/pull/1180) | test: cover uppercase JSONL batch discovery | `e5b1818` |
 | 2026-07-27 | Direct push | fix: advertise TSV input support | `49d0006` |
 | 2026-07-27 | Direct push | test: expand support security fixtures | `f016cd5` |
-| 2026-07-27 | Direct push | feat: support TSV verification inputs | `6d8eda5` |
 
