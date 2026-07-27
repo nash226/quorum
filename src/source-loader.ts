@@ -203,7 +203,7 @@ function isDocxSource(sourcePath: string): boolean {
 }
 
 function isJsonSource(sourcePath: string): boolean {
-  return /\.jsonl?$/i.test(sourcePath);
+  return /\.(?:jsonl?|ndjson)$/i.test(sourcePath);
 }
 
 function isXmlSource(sourcePath: string): boolean {
@@ -219,7 +219,7 @@ function isTomlSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|qmd|adoc|asciidoc|org|mediawiki|wiki|rst|tex|txt|text|ini|properties|html?|xhtml|pdf|docx|jsonl?|xml|ya?ml|toml|csv|tsv)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|qmd|adoc|asciidoc|org|mediawiki|wiki|rst|tex|txt|text|ini|properties|html?|xhtml|pdf|docx|jsonl?|ndjson|xml|ya?ml|toml|csv|tsv)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
