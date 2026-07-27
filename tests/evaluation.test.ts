@@ -2101,6 +2101,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/renewal-notice-policy.json"),
     resolve("examples/evaluations/support/replacement-policy.json"),
     resolve("examples/evaluations/support/return-policy.json"),
+    resolve("examples/evaluations/support/returns-exchange-policy.json"),
     resolve("examples/evaluations/support/service-credit-policy.json"),
       resolve("examples/evaluations/support/service-outage-policy.json"),
       resolve("examples/evaluations/support/shipping-protection-policy.json"),
