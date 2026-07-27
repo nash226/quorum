@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7e8e0c4` on 2026-07-26, feat: expose formats as JSON
+- Latest shipped change: `94a40c5` on 2026-07-26, fix: exclude generated reports from source discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | fix: exclude generated reports from source discovery | `94a40c5` |
 | 2026-07-26 | Direct push | feat: expose formats as JSON | `7e8e0c4` |
 | 2026-07-26 | Direct push | docs: clarify case-insensitive format discovery | `e204e1b` |
 | 2026-07-26 | Direct push | docs: explain CLI format discovery | `68361b2` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | docs: clarify binary answer input contract | `26d9ced` |
 | 2026-07-26 | Direct push | docs: list structured answer formats | `64bc2e9` |
 | 2026-07-26 | Direct push | test: cover direct Org source verification | `9a97780` |
-| 2026-07-26 | Direct push | test: cover direct MDX answers | `1d47517` |
 
