@@ -12,6 +12,9 @@ structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+Markdown hard-break lines are joined before claim extraction, so wrapped
+policy statements remain one claim in reviewer reports.
+
 Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,
 so exported policy files retain their title and metadata when loaded through
 the programmatic API.

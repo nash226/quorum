@@ -118,7 +118,9 @@ function splitSubstantialSemicolonClaims(sentence: string): string[] {
 }
 
 function normalizeAnswer(answer: string): string {
-  const lines = normalizeHtmlAnswerMarkup(protectMarkdownTableHtmlBreaks(stripByteOrderMark(answer)))
+  const lines = normalizeHtmlAnswerMarkup(
+    protectMarkdownTableHtmlBreaks(normalizeMarkdownHardBreaks(stripByteOrderMark(answer))),
+  )
     .replace(/\r/g, "")
     .split("\n");
   const normalizedLines: string[] = [];
@@ -282,6 +284,10 @@ function normalizeAnswer(answer: string): string {
   }
 
   return normalizedLines.join("\n");
+}
+
+function normalizeMarkdownHardBreaks(answer: string): string {
+  return answer.replace(/(?: {2,}|\\)\r?\n(?=\S)/g, " ");
 }
 
 function protectMarkdownTableHtmlBreaks(answer: string): string {
