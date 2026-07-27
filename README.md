@@ -273,6 +273,9 @@ exported source and answer extension contract, so CLI discovery cannot drift
 from the API and programmatic workflow surface.
 The CLI contract test applies the same exact comparison during ordinary test
 runs, catching format-list drift before a package smoke run.
+
+Plain-text `.log` exports are accepted for both answers and approved sources,
+so support and audit log evidence can be verified without renaming files.
 It also verifies the packed CLI can directly verify `.ini` answer and policy
 files, keeping this lightweight enterprise export path covered after publishing.
 The [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) explains how
