@@ -170,6 +170,9 @@ actually runs.
 The packaged smoke check also compares `quorum formats` with the library's
 exported source and answer extension contract, so CLI discovery cannot drift
 from the API and programmatic workflow surface.
+The [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) explains how
+to use that output for local directory discovery and when integrations should
+probe the HTTP `/capabilities` contract instead.
 
 `npm run check` is the same full verification gate used by CI: it runs the
 tests and build, then exercises the local HTTP API, packaged CLI artifact, and
