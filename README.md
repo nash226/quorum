@@ -246,7 +246,10 @@ supported extensions are matched case-insensitively for exports such as
 `POLICY.MD`. The
 CLI also deduplicates repeated source paths, keeping each approved document
 represented once in the evidence report. The
-[CLI guide](docs/cli-guide.md) documents format-specific and streaming details.
+Configured report outputs are also excluded from source and answer discovery,
+so rerunning a command with reports stored beside inputs does not ingest stale
+generated artifacts. The [CLI guide](docs/cli-guide.md) documents format-specific
+and streaming details.
 It also covers recursive discovery ordering, mixed explicit and directory
 sources, reviewer-oriented batch JSON, and CI fail policies.
 Structured answer exports can be passed directly with `--answer` or discovered

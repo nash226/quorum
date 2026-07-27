@@ -308,7 +308,7 @@ async function main(): Promise<void> {
 
 async function runVerify(args: string[]): Promise<void> {
   const parsed = parseVerifyArgs(args);
-  const sources = await loadSources(parsed);
+  const sources = await loadSources(parsed, outputPaths(parsed));
   const report = await verifyAnswerFile(parsed.answerPath, sources, parsed.generatedAt, parsed.answerLabel);
   const jsonReport = JSON.stringify(report, null, 2);
   const htmlReport = renderHtmlReport(report, parsed.failOn);
@@ -392,7 +392,7 @@ async function runVerify(args: string[]): Promise<void> {
 
 async function runVerifyBatch(args: string[]): Promise<void> {
   const parsed = parseVerifyBatchArgs(args);
-  const sources = await loadSources(parsed);
+  const sources = await loadSources(parsed, outputPaths(parsed));
   const batchReport = await verifyBatchAnswers({
     answerPaths: parsed.answerPaths,
     answerDirPaths: parsed.answerDirPaths,
@@ -1460,7 +1460,7 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
   };
 }
 
-async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
+async function loadSources(args: VerifyArgs, excludedSourcePaths: string[] = []): Promise<SourceDocument[]> {
   const stdinSources = args.sourcePaths.filter((sourcePath) => sourcePath === "-");
   if (stdinSources.length > 0) {
     if (args.sourcePaths.length !== 1 || args.sourceDirs.length > 0) {
@@ -1480,7 +1480,20 @@ async function loadSources(args: VerifyArgs): Promise<SourceDocument[]> {
     sourceDirs: args.sourceDirs,
     sourceIdsByPath: args.sourceIdsByPath,
     defaultTrustLevel: args.defaultTrustLevel,
+    excludedSourcePaths,
   });
+}
+
+function outputPaths(args: VerifyArgs): string[] {
+  const outputArgs = args as VerifySingleArgs | VerifyBatchArgs;
+  return [
+    outputArgs.outPath,
+    outputArgs.markdownOutPath,
+    outputArgs.htmlOutPath,
+    outputArgs.reviewCsvOutPath,
+    outputArgs.summaryCsvOutPath,
+    ...("aggregateSummaryCsvOutPath" in outputArgs ? [outputArgs.aggregateSummaryCsvOutPath] : []),
+  ].filter((path): path is string => path !== undefined);
 }
 
 async function readTextInput(inputPath: string): Promise<string> {
