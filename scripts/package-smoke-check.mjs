@@ -1271,6 +1271,47 @@ try {
   rmSync(jsonlSourceTempDir, { recursive: true, force: true });
 }
 
+const ndjsonAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-ndjson-answer-"));
+try {
+  const ndjsonAnswerPath = join(ndjsonAnswerTempDir, "answer.ndjson");
+  const ndjsonSourcePath = join(ndjsonAnswerTempDir, "policy.md");
+  writeFileSync(ndjsonAnswerPath, '{"response":"Employees receive 12 weeks of paid parental leave."}\n');
+  writeFileSync(ndjsonSourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+  const ndjsonAnswerResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", ndjsonAnswerPath, "--source", ndjsonSourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    ndjsonAnswerResult.summary?.verified !== 1 ||
+    ndjsonAnswerResult.answerPath !== ndjsonAnswerPath ||
+    ndjsonAnswerResult.assessments?.[0]?.claim?.text !==
+      "response: Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact CLI did not preserve the direct NDJSON answer contract.");
+  }
+} finally {
+  rmSync(ndjsonAnswerTempDir, { recursive: true, force: true });
+}
+
+const ndjsonSourceTempDir = mkdtempSync(join(tmpdir(), "quorum-package-ndjson-source-"));
+try {
+  const ndjsonAnswerPath = join(ndjsonSourceTempDir, "answer.md");
+  const ndjsonSourcePath = join(ndjsonSourceTempDir, "policy.ndjson");
+  writeFileSync(ndjsonAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(ndjsonSourcePath, '{"policy":"Employees receive 12 weeks of paid parental leave."}\n');
+  const ndjsonSourceResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", ndjsonAnswerPath, "--source", ndjsonSourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    ndjsonSourceResult.summary?.verified !== 1 ||
+    ndjsonSourceResult.sources?.[0]?.sourcePath !== ndjsonSourcePath ||
+    ndjsonSourceResult.sources?.[0]?.title !== "policy"
+  ) {
+    throw new Error("Package artifact CLI did not preserve the direct NDJSON source contract.");
+  }
+} finally {
+  rmSync(ndjsonSourceTempDir, { recursive: true, force: true });
+}
+
 const yamlAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-yaml-answer-"));
 try {
   const yamlAnswerPath = join(yamlAnswerTempDir, "answer.yaml");
