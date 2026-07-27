@@ -229,6 +229,31 @@ try {
   rmSync(cliPropertiesPackageDir, { recursive: true, force: true });
 }
 
+const cliRstPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-rst-"));
+try {
+  const answerPath = join(cliRstPackageDir, "answer.rst");
+  const sourcePath = join(cliRstPackageDir, "policy.rst");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Parental Leave Policy\n======================\n\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const rstOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const rstPayload = JSON.parse(rstOutput);
+  if (
+    rstPayload.summary?.verified !== 1 ||
+    rstPayload.answerPath !== answerPath ||
+    rstPayload.sources?.[0]?.title !== "policy" ||
+    rstPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected reStructuredText answer/source contract.");
+  }
+} finally {
+  rmSync(cliRstPackageDir, { recursive: true, force: true });
+}
+
 const cliCsvPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-csv-"));
 try {
   const answerPath = join(cliCsvPackageDir, "answer.csv");
