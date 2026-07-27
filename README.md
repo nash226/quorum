@@ -81,6 +81,8 @@ as sorted machine-readable `sources` and `answers` arrays.
 Directory discovery matches those supported extensions case-insensitively, so
 exports such as `POLICY.PDF` and `Answer.JSON` follow the same verification path
 as lowercase filenames.
+Direct `verify` paths use the same case-insensitive extension contract, so
+uppercase answer and source exports are accepted without renaming.
 
 - `extract-claims` previews normalized claims before evidence matching.
 - Decimal values such as `95.5%` remain intact while claims are split into sentences.

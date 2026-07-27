@@ -4149,6 +4149,34 @@ test("verify discovers files with uppercase supported extensions", async () => {
   }
 });
 
+test("verify accepts direct answer and source paths with uppercase extensions", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-uppercase-"));
+
+  try {
+    const answerPath = join(tempDir, "ANSWER.JSON");
+    const sourcePath = join(tempDir, "POLICY.MD");
+    await Promise.all([
+      writeFile(answerPath, JSON.stringify({ response: "Employees receive 12 weeks of paid parental leave." }), "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]);
+    const report = JSON.parse(stdout) as {
+      answerPath: string;
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(
+      report.assessments[0]?.claim.text,
+      "response: Employees receive 12 weeks of paid parental leave.",
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify dedupes repeated source files that use different path spellings", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-source-dedupe-"));
 
