@@ -39,6 +39,16 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.tsv/);
 });
 
+test("formats accepts both help flag aliases", async () => {
+  const [longAlias, shortAlias] = await Promise.all([
+    runCli(["formats", "--help"]),
+    runCli(["formats", "-h"]),
+  ]);
+
+  assert.match(longAlias, /^Quorum formats\n\nUsage:\n  quorum formats/);
+  assert.equal(shortAlias, longAlias);
+});
+
 test("verify accepts direct TSV answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-"));
   try {

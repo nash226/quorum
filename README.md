@@ -90,6 +90,7 @@ inspect the exact extensions
 available to integrations.
 Use `npm run dev -- formats --json` when an integration needs the same contract
 as sorted machine-readable `sources` and `answers` arrays.
+The same command accepts `--help` or `-h` for a successful usage-only probe.
 Directory discovery matches those supported extensions case-insensitively, so
 exports such as `POLICY.PDF` and `Answer.JSON` follow the same verification path
 as lowercase filenames.
