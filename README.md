@@ -24,10 +24,10 @@ HTML answer exports now omit deleted and struck-through policy text before
 claim extraction, keeping stale revisions out of evidence reports while
 retaining the visible replacement text.
 
-Batch verification is also a shipped workflow: it checks directories or
-explicit answer paths, exports claim-level reviewer decisions, and produces
-one-row-per-answer summaries for queue routing. Durable queue persistence is
-the next product step, pending the backend choice tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
+Batch verification and the local HTTP/programmatic API are shipped workflows:
+they verify directories or in-memory inputs, export claim-level reviewer
+decisions, and produce queue-ready summaries. Durable queue persistence is the
+next product step, pending the backend choice tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
 ## Why Quorum Exists
 
