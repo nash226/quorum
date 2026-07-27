@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9983a0e` on 2026-07-27, test: smoke-check packaged TOML sources
+- Latest shipped change: `b738cb2` on 2026-07-27, test: expand support returns evaluation coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | test: expand support returns evaluation coverage | `b738cb2` |
 | 2026-07-27 | Direct push | test: smoke-check packaged TOML sources | `9983a0e` |
 | 2026-07-27 | Direct push | test: cover nested TSV batch discovery | `cf17798` |
 | 2026-07-27 | Direct push | test: cover config format batch discovery | `420456d` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: cover packaged properties verification | `4d24e8a` |
 | 2026-07-27 | Direct push | test: cover packaged YAML answer verification | `6654cd2` |
 | 2026-07-27 | Direct push | docs: document direct MDX source verification | `e647422` |
-| 2026-07-27 | [#1197](https://github.com/nash226/quorum/pull/1197) | test: cover direct MDX source verification | `9dfa8c0` |
 
