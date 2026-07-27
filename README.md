@@ -51,6 +51,8 @@ Direct `.properties` answer and approved-source exports are also covered end to
 end, preserving the answer path, source path, and fallback source title.
 Direct single-answer verification also covers XML answer exports, preserving the
 answer path and verified claim evidence without requiring batch discovery.
+The top-level CLI help now advertises CSV and TSV together, matching the
+format contract used by direct verification and directory discovery.
 reStructuredText (`.rst`) exports are also discovered recursively for both
 answers and approved sources, so documentation-tool exports can enter the same
 verification flow without renaming. When an `.rst` file has no title metadata,
