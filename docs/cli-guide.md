@@ -34,7 +34,7 @@ Use `formats` to print the exact source and answer extensions discovered by
 the local CLI:
 
 ```bash
-npm run dev -- formats
+npm run formats
 ```
 
 The command prints separate `Source files` and `Answer files` lines. These are
@@ -42,6 +42,8 @@ the directory-discovery contract used by `verify-batch` and `--answer-dir`;
 they are not a request-validation schema for the HTTP API. Machine-readable
 integrations should use the HTTP `/capabilities` response, which exposes the
 same format contract alongside the API limits and queue statuses.
+For a CLI-only integration, append `-- --json` to receive sorted
+machine-readable `sources` and `answers` arrays.
 
 ## Check the contract version
 
