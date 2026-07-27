@@ -8,7 +8,7 @@ customers, employees, tickets, workflows, or downstream systems.
 
 The shipped CLI and programmatic API support the same answer/source format
 contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
-structured JSON/JSONL/YAML/XML/TOML exports. Run `npm run formats` to inspect
+structured JSON/JSONL/NDJSON/YAML/XML/TOML exports. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
 Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,

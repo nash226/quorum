@@ -37,6 +37,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.properties/);
   assert.match(stdout, /Source files: .*\.tsv/);
   assert.match(stdout, /Answer files: .*\.tsv/);
+  assert.match(stdout, /Source files: .*\.ndjson/);
+  assert.match(stdout, /Answer files: .*\.ndjson/);
 });
 
 test("verify accepts direct TSV answer and source exports", async () => {
@@ -2356,6 +2358,28 @@ test("verify normalizes direct JSONL answers before claim extraction", async () 
     assert.deepEqual(report.assessments.map((assessment) => assessment.claim.text), [
       "response: Customers can request refunds within 30 days.",
     ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify normalizes direct NDJSON answers before claim extraction", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-ndjson-answer-"));
+  const answerPath = join(tempDir, "answer.ndjson");
+  const sourcePath = join(tempDir, "policy.md");
+
+  try {
+    await Promise.all([
+      writeFile(answerPath, '{"response":"Customers can request refunds within 30 days."}\n', "utf8"),
+      writeFile(sourcePath, "Customers can request refunds within 30 days.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { answerPath: string; summary: { verified: number } };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
