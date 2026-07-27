@@ -63,6 +63,11 @@ test("strips supported text extensions from fallback source titles", async () =>
     "[leave]\nweeks=12\n",
     5,
   );
+  const propertiesSource = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.properties",
+    "leave.weeks=12\nleave.paid=true\n",
+    6,
+  );
 
   assert.equal(markdownSource.title, "leave-policy");
   assert.equal(textSource.title, "escalation-guide");
@@ -72,6 +77,8 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(csvSource.content, "policy,details\nleave,Employees get 12 weeks.\n");
   assert.equal(iniSource.title, "leave-policy");
   assert.equal(iniSource.content, "[leave]\nweeks=12\n");
+  assert.equal(propertiesSource.title, "leave-policy");
+  assert.equal(propertiesSource.content, "leave.weeks=12\nleave.paid=true\n");
 });
 
 test("strips AsciiDoc extensions from fallback source titles", async () => {
