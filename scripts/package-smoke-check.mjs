@@ -229,6 +229,31 @@ try {
   rmSync(cliPropertiesPackageDir, { recursive: true, force: true });
 }
 
+const cliCsvPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-csv-"));
+try {
+  const answerPath = join(cliCsvPackageDir, "answer.csv");
+  const sourcePath = join(cliCsvPackageDir, "policy.csv");
+  writeFileSync(answerPath, "claim\nEmployees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "policy\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const csvOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const csvPayload = JSON.parse(csvOutput);
+  if (
+    csvPayload.summary?.verified !== 1 ||
+    csvPayload.answerPath !== answerPath ||
+    csvPayload.sources?.[0]?.title !== "policy" ||
+    csvPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected CSV answer/source contract.");
+  }
+} finally {
+  rmSync(cliCsvPackageDir, { recursive: true, force: true });
+}
+
 const cliTomlSourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-toml-source-"));
 try {
   const answerPath = join(cliTomlSourcePackageDir, "answer.md");
