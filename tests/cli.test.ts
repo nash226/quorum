@@ -858,6 +858,35 @@ test("verify-batch discovers XML answers from nested directories", async () => {
   }
 });
 
+test("verify accepts a direct XML answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-xml-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.xml");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "<answer>Refunds are available within 30 days of purchase.</answer>\n", "utf8"),
+      writeFile(sourcePath, "Refunds are available within 30 days of purchase.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      answerPath: string;
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(
+      report.assessments[0]?.claim.text,
+      "Refunds are available within 30 days of purchase.",
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([
