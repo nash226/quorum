@@ -135,6 +135,9 @@ Java-style `.properties`, and structured JSON/JSONL/YAML/XML/TOML/CSV/TSV
 exports; run `npm run formats` to inspect the exact extensions available
 to integrations. The README format summary now matches that published
 contract, including CSV/TSV and structured answer discovery.
+Newline-delimited JSON (`.jsonl` and `.ndjson`) is normalized record by record,
+and Textile (`.textile`) exports retain a clean filename fallback title in
+evidence reports.
 Use `npm run dev -- formats --json` when an integration needs the same contract
 as sorted machine-readable `sources` and `answers` arrays.
 The [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) now shows
