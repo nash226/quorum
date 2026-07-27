@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7a4b991` on 2026-07-27, test: cover direct INI verification
+- Latest shipped change: `dd2527b` on 2026-07-27, test: cover direct XML answer verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | test: cover direct XML answer verification | `dd2527b` |
 | 2026-07-27 | Direct push | test: cover direct INI verification | `7a4b991` |
 | 2026-07-27 | [#1172](https://github.com/nash226/quorum/pull/1172) | docs: explain direct structured answer verification | `04fb0cf` |
 | 2026-07-27 | Direct push | test: cover direct properties verification | `3ec64d4` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | docs: clarify packaged format contract | `b1e3b01` |
 | 2026-07-26 | Direct push | docs: clarify format contract command | `fa09f8f` |
 | 2026-07-26 | Direct push | feat: add dedicated formats script | `7c08c41` |
-| 2026-07-26 | Direct push | test: cover direct TOML source verification | `5208d1d` |
 
