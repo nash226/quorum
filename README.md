@@ -138,6 +138,9 @@ contract, including CSV/TSV and structured answer discovery.
 Newline-delimited JSON (`.jsonl` and `.ndjson`) is normalized record by record,
 and Textile (`.textile`) exports retain a clean filename fallback title in
 evidence reports.
+The packaged CLI smoke gate also verifies direct `.ndjson` answer and approved-
+source inputs, preserving structured claim text and source-path provenance after
+the npm artifact is built.
 Use `npm run dev -- formats --json` when an integration needs the same contract
 as sorted machine-readable `sources` and `answers` arrays.
 The [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) now shows
