@@ -333,8 +333,9 @@ AsciiDoc/Org-mode/MediaWiki (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
 JSON/JSONL/YAML/XML/TOML, CSV/TSV, PDF, and DOCX answers and approved sources.
 Run `npm run formats -- --json` for the authoritative machine-readable list.
 Recursive answer and source directories discover those same extensions
-case-insensitively, keeping structured and binary batches aligned with explicit
-file verification. JSON, YAML, XML, and TOML source exports are normalized into
+case-insensitively—including uppercase `.ADOC` and mixed-case `.AsciiDoc`
+exports—keeping structured and binary batches aligned with explicit file
+verification. JSON, YAML, XML, and TOML source exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
 reviewed without a separate conversion step. Use `--source-dir` for a mixed
 directory of policy files;
