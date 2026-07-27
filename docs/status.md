@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `fa09f8f` on 2026-07-26, docs: clarify format contract command
+- Latest shipped change: `b1e3b01` on 2026-07-27, docs: clarify packaged format contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | docs: clarify packaged format contract | `b1e3b01` |
 | 2026-07-26 | Direct push | docs: clarify format contract command | `fa09f8f` |
 | 2026-07-26 | Direct push | feat: add dedicated formats script | `7c08c41` |
 | 2026-07-26 | Direct push | test: cover direct TOML source verification | `5208d1d` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | feat: discover INI verification inputs | `ab97217` |
 | 2026-07-26 | Direct push | docs: align product surface roadmap | `b474c49` |
 | 2026-07-26 | Direct push | docs: document capabilities bootstrap | `942b7f0` |
-| 2026-07-26 | Direct push | fix: exclude generated reports from source discovery | `94a40c5` |
 
