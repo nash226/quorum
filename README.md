@@ -447,6 +447,9 @@ workflow can route only the work that still needs attention. The same queue
 summary is available through the HTTP API and the programmatic API, while
 `evaluate` remains the CI gate for fixture mismatches and minimum score.
 
+Source frontmatter with an invalid `trustLevel` is rejected instead of silently
+falling back to the default, keeping malformed evidence metadata fail-closed.
+
 It also checks that packaged `/health`, `/healthz`, `/readyz`, and `/livez`
 endpoints support bodyless `HEAD` probes for deployment health checks.
 The same packaged HTTP gate exercises the readiness query aliases
