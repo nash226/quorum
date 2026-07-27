@@ -45,6 +45,17 @@ same format contract alongside the API limits and queue statuses.
 For a CLI-only integration, append `-- --json` to receive sorted
 machine-readable `sources` and `answers` arrays.
 
+For example:
+
+```bash
+npm run formats -- --json
+```
+
+Each array contains the lowercase extensions accepted for that role, such as
+`.md`, `.pdf`, and `.jsonl`. Use these arrays to make an allow-list decision
+before submitting a file to `verify` or `verify-batch`; they are the same
+format contract exported by the programmatic API.
+
 ## Check the contract version
 
 The CLI exposes the same version used by the HTTP API and generated OpenAPI

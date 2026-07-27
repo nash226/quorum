@@ -96,6 +96,8 @@ to integrations. The README format summary now matches that published
 contract, including CSV/TSV and structured answer discovery.
 Use `npm run dev -- formats --json` when an integration needs the same contract
 as sorted machine-readable `sources` and `answers` arrays.
+The [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) now shows
+how to use those arrays as an input allow-list before submitting a file.
 Directory discovery matches those supported extensions case-insensitively, so
 exports such as `POLICY.PDF` and `Answer.JSON` follow the same verification path
 as lowercase filenames.
