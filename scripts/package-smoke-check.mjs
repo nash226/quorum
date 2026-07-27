@@ -218,6 +218,33 @@ try {
   rmSync(cliPropertiesPackageDir, { recursive: true, force: true });
 }
 
+const cliTomlSourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-toml-source-"));
+try {
+  const answerPath = join(cliTomlSourcePackageDir, "answer.md");
+  const sourcePath = join(cliTomlSourcePackageDir, "policy.toml");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(
+    sourcePath,
+    'title = "Parental Leave Policy"\n[policy]\nrule = "Employees receive 12 weeks of paid parental leave."\n',
+  );
+
+  const tomlSourceOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const tomlSourcePayload = JSON.parse(tomlSourceOutput);
+  if (
+    tomlSourcePayload.summary?.verified !== 1 ||
+    tomlSourcePayload.sources?.[0]?.title !== "Parental Leave Policy" ||
+    tomlSourcePayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected TOML source contract.");
+  }
+} finally {
+  rmSync(cliTomlSourcePackageDir, { recursive: true, force: true });
+}
+
 if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.startApiServer !== "function") {
   throw new Error("Package artifact server entry point is missing required server exports.");
 }
