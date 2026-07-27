@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0063511` on 2026-07-27, test: cover packaged markdown front matter
+- Latest shipped change: `385e4ba` on 2026-07-27, test: gate packaged JSON formats contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | test: gate packaged JSON formats contract | `385e4ba` |
 | 2026-07-27 | Direct push | test: cover packaged markdown front matter | `0063511` |
 | 2026-07-27 | Direct push | test: expand support returns evaluation coverage | `b738cb2` |
 | 2026-07-27 | Direct push | test: smoke-check packaged TOML sources | `9983a0e` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: cover config format batch discovery | `420456d` |
 | 2026-07-27 | Direct push | docs: align roadmap with shipped batch verification | `3813682` |
 | 2026-07-27 | Direct push | test: cover packaged properties verification | `4d24e8a` |
-| 2026-07-27 | Direct push | test: cover packaged YAML answer verification | `6654cd2` |
 
