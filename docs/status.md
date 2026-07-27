@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5208d1d` on 2026-07-26, test: cover direct TOML source verification
+- Latest shipped change: `7c08c41` on 2026-07-26, feat: add dedicated formats script
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | feat: add dedicated formats script | `7c08c41` |
 | 2026-07-26 | Direct push | test: cover direct TOML source verification | `5208d1d` |
 | 2026-07-26 | Direct push | feat: discover properties verification inputs | `91a467b` |
 | 2026-07-26 | Direct push | feat: discover INI verification inputs | `ab97217` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | docs: document capabilities bootstrap | `942b7f0` |
 | 2026-07-26 | Direct push | fix: exclude generated reports from source discovery | `94a40c5` |
 | 2026-07-26 | Direct push | feat: expose formats as JSON | `7e8e0c4` |
-| 2026-07-26 | Direct push | docs: clarify case-insensitive format discovery | `e204e1b` |
 
