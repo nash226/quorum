@@ -50,6 +50,8 @@ policy tables are also reduced to row-level claims, including tables that omit
 the optional outer pipe characters.
 Common abbreviations such as `Dr.` and `e.g.` stay inside a claim, preventing
 reviewer reports from splitting those sentences at the abbreviation period.
+URLs with dotted hostnames and paths also stay inside a claim while sentence
+boundaries after the URL remain available for separate reviewer evidence.
 Common `.text` exports are accepted alongside `.txt` files for both answers and
 approved sources, so plain-text handoffs keep working when vendors use the
 long-form extension. Direct single-answer verification now covers `.text`

@@ -19,6 +19,16 @@ test("keeps decimal values inside one sentence", () => {
   );
 });
 
+test("keeps dotted URLs inside one claim while splitting the surrounding sentences", () => {
+  assert.deepEqual(
+    splitIntoSentences("Read https://support.example.com/reset. Contact support if the link fails."),
+    [
+      "Read https://support.example.com/reset.",
+      "Contact support if the link fails.",
+    ],
+  );
+});
+
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
     renderAnswerLabels([
