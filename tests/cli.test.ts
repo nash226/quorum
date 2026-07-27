@@ -35,6 +35,25 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.qmd/);
   assert.match(stdout, /Source files: .*\.properties/);
   assert.match(stdout, /Answer files: .*\.properties/);
+  assert.match(stdout, /Source files: .*\.tsv/);
+  assert.match(stdout, /Answer files: .*\.tsv/);
+});
+
+test("verify accepts direct TSV answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-"));
+  try {
+    const answerPath = join(tempDir, "answer.tsv");
+    const sourcePath = join(tempDir, "policy.tsv");
+    await writeFile(answerPath, "claim\nEmployees receive 12 weeks of paid parental leave.\n");
+    await writeFile(sourcePath, "policy\nEmployees receive 12 weeks of paid parental leave.\n");
+
+    const stdout = await runCli(["verify", "--answer", answerPath, "--source", sourcePath]);
+
+    assert.match(stdout, /VERIFIED/);
+    assert.match(stdout, /Employees receive 12 weeks of paid parental leave/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("formats --json exposes a stable machine-readable input contract", async () => {
