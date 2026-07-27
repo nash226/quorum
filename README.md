@@ -151,7 +151,9 @@ This command is the source of truth for directory discovery: it prints the
 separate source and answer extension sets used by `verify-batch`, so scripts
 can confirm the packaged input contract before submitting a batch.
 Use `npm run formats -- --json` when an integration needs the same contract as
-sorted machine-readable `sources` and `answers` arrays.
+sorted machine-readable `sources` and `answers` arrays. The packaged smoke
+check compares those arrays with the library export, so published CLI and API
+format capabilities cannot silently drift apart.
 
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
