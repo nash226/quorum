@@ -240,7 +240,10 @@ export async function resolveAnswerPaths(
     )
   ).flat();
 
-  return dedupePathsInOrder([...answerPaths, ...directoryFiles]);
+  const excluded = new Set(excludedPaths.map((path) => resolve(path)));
+  return dedupePathsInOrder([...answerPaths, ...directoryFiles]).filter(
+    (path) => !excluded.has(resolve(path)),
+  );
 }
 
 export async function loadSourceDocuments(
