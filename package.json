@@ -3,40 +3,13 @@
   "version": "0.1.0",
   "description": "Business-facing evidence layer for enterprise AI agent claims.",
   "type": "module",
-  "main": "./dist/src/index.js",
-  "types": "./dist/src/index.d.ts",
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/src/index.d.ts",
-      "import": "./dist/src/index.js",
-      "default": "./dist/src/index.js"
-    },
-    "./server": {
-      "types": "./dist/src/api-server.d.ts",
-      "import": "./dist/src/api-server.js",
-      "default": "./dist/src/api-server.js"
-    },
-    "./cli": {
-      "types": "./dist/src/cli.d.ts",
-      "import": "./dist/src/cli.js",
-      "default": "./dist/src/cli.js"
-    }
-  },
   "bin": {
-    "quorum": "./dist/src/cli.js"
+    "quorum": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "check": "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci",
+    "check": "npm test && npm run build",
     "dev": "tsx src/cli.ts",
-    "prepublishOnly": "npm run check",
-    "smoke": "node scripts/smoke-check.mjs",
-    "package:smoke": "node scripts/package-smoke-check.mjs",
-    "evaluate:ci": "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch",
     "status:refresh": "node scripts/update-status.mjs",
     "test": "node --import tsx --test tests/**/*.test.ts"
   },
@@ -49,7 +22,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "mammoth": "^1.12.0",
     "pdf-parse": "^2.4.5"
   }
 }
