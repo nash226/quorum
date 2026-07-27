@@ -173,7 +173,7 @@ export interface ReviewerDecisionFileImportResultOptions
   failOn?: ClaimVerdict[];
 }
 
-export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".mediawiki", ".wiki", ".rst", ".tex", ".txt", ".text", ".ini", ".properties", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv"]);
+export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".mediawiki", ".wiki", ".rst", ".tex", ".txt", ".text", ".ini", ".properties", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".ndjson", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv"]);
 export const ANSWER_EXTENSIONS = new Set([
   ".md",
   ".markdown",
@@ -197,6 +197,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".docx",
   ".json",
   ".jsonl",
+  ".ndjson",
   ".yaml",
   ".yml",
   ".xml",
@@ -862,7 +863,7 @@ async function readAnswerInput(inputPath: string): Promise<string> {
   if (inputPath !== "-") {
     const content = await readFile(inputPath);
 
-    if (/\.(?:pdf|docx|jsonl?|ya?ml|xml|toml)$/i.test(inputPath)) {
+    if (/\.(?:pdf|docx|jsonl?|ndjson|ya?ml|xml|toml)$/i.test(inputPath)) {
       const answerDocument = await sourceDocumentFromFile(inputPath, content, 0);
       return answerDocument.content;
     }
