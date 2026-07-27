@@ -8,7 +8,7 @@ customers, employees, tickets, workflows, or downstream systems.
 
 The shipped CLI and programmatic API support the same answer/source format
 contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
-structured JSON/JSONL/YAML/XML/TOML exports. Run `npm run formats` to inspect
+structured JSON/JSONL/NDJSON/YAML/XML/TOML exports. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
 ## Why Quorum Exists
@@ -90,7 +90,7 @@ durable hosting and queue storage remain roadmap decisions.
 
 The packaged CLI and programmatic API now expose one aligned answer/source
 format contract for Markdown-family, text, HTML/XHTML, PDF/DOCX,
-Java-style `.properties`, and structured JSON/JSONL/YAML/XML/TOML/CSV/TSV
+Java-style `.properties`, and structured JSON/JSONL/NDJSON/YAML/XML/TOML/CSV/TSV
 exports; run `npm run dev -- formats` to inspect the exact extensions available
 to integrations. The README format summary now matches that published
 contract, including CSV/TSV and structured answer discovery.

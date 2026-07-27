@@ -240,6 +240,17 @@ test("preserves metadata from the first JSONL source record", async () => {
   assert.match(source.content, /\[1\]\.policy: Employees get 12 weeks\./);
 });
 
+test("normalizes NDJSON source exports into claim-readable text", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.ndjson",
+    '{"title":"Benefits Policy","policy":"Employees receive 12 weeks of paid parental leave."}\n',
+    0,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.match(source.content, /Employees receive 12 weeks of paid parental leave/);
+});
+
 test("maps common structured modification keys to source freshness", async () => {
   const jsonSource = await sourceDocumentFromFile(
     "docs/policy.json",
