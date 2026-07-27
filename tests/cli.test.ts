@@ -1748,6 +1748,40 @@ test("verify accepts pdf answers", async () => {
   }
 });
 
+test("verify-batch discovers pdf answers in answer directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    const sourcePath = join(tempDir, "hr-policy.pdf");
+    const pdfContent = createSimplePdf("Employees receive 12 weeks of paid parental leave.");
+    await mkdir(answerDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "answer.pdf"), pdfContent),
+      writeFile(sourcePath, pdfContent),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch",
+      "--answer-dir",
+      join(tempDir, "answers"),
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      answerCount: number;
+      answers: Array<{ answerPath: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "answer.pdf"));
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("evaluate renders scorecards for shipped example fixtures", async () => {
   const stdout = await runCli([
     "evaluate",

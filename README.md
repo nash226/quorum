@@ -539,6 +539,8 @@ covering the primary single-answer workflow before release.
 The same direct `verify` path is regression-tested for PDF answers as well as
 PDF sources, preserving the answer path and verified result when both sides
 are binary PDF files.
+Recursive `verify-batch --answer-dir` discovery is also regression-tested for
+binary PDF answers, preserving their nested path in the batch handoff.
 Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
