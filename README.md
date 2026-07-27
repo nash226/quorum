@@ -141,10 +141,10 @@ sentence terminators.
 ## Quick Start
 
 To see the exact extensions discovered for approved sources and AI-generated
-answers, run:
+answers, run the dedicated format-contract command:
 
 ```bash
-npm run dev -- formats
+npm run formats
 ```
 
 This command is the source of truth for directory discovery: it prints the

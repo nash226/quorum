@@ -9,6 +9,7 @@ test("package scripts keep the documented repository check gate intact", async (
   const scripts = packageJson.scripts ?? {};
 
   assert.equal(scripts.check, "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci");
+  assert.equal(scripts.formats, "npm run dev -- formats");
   assert.equal(scripts.smoke, "node scripts/smoke-check.mjs");
   assert.equal(scripts["package:smoke"], "node scripts/package-smoke-check.mjs");
   assert.equal(scripts["evaluate:ci"], "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch");
