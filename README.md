@@ -200,6 +200,13 @@ curl -X POST http://127.0.0.1:3000/verify \
   -d '{"answer":"Employees receive 12 weeks of paid parental leave.","sources":[{"sourcePath":"hr-policy.md","content":"Employees receive 12 weeks of paid parental leave."}]}'
 ```
 
+Integration clients can bootstrap from `GET /capabilities` before submitting
+work: the response advertises supported answer/source extensions, JSON content
+types, binary encodings, request limits, queue statuses, and artifact choices.
+Cache that response with its `ETag`, and use `/openapi.json` for request
+schemas; the [API integration guide](docs/api-integration.md#bootstrap-an-integration)
+now includes a copy-paste discovery example.
+
 HTTP responses include a request correlation ID, and `/openapi.json` is the
 machine-readable source of truth for request and response schemas. The service
 also exposes `/verify-batch`, `/import-review`, `/review-queue`,
