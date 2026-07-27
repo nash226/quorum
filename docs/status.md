@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ab97217` on 2026-07-26, feat: discover INI verification inputs
+- Latest shipped change: `91a467b` on 2026-07-26, feat: discover properties verification inputs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | feat: discover properties verification inputs | `91a467b` |
 | 2026-07-26 | Direct push | feat: discover INI verification inputs | `ab97217` |
 | 2026-07-26 | Direct push | docs: align product surface roadmap | `b474c49` |
 | 2026-07-26 | Direct push | docs: document capabilities bootstrap | `942b7f0` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | feat: expose formats as JSON | `7e8e0c4` |
 | 2026-07-26 | Direct push | docs: clarify case-insensitive format discovery | `e204e1b` |
 | 2026-07-26 | Direct push | docs: explain CLI format discovery | `68361b2` |
-| 2026-07-26 | Direct push | docs: align roadmap with format contract | `3189288` |
 
