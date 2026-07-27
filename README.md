@@ -40,6 +40,8 @@ Quarto Markdown (`.qmd`) exports are also discovered for answers and approved
 sources, so rendered-document workflows can retain their native file paths.
 MDX (`.mdx`) answer exports are covered directly as well, preserving the
 original answer path and verified evidence for component-based agent drafts.
+INI (`.ini`) policy and answer exports are discovered as plain-text inputs,
+with the extension removed from fallback evidence titles.
 reStructuredText (`.rst`) exports are also discovered recursively for both
 answers and approved sources, so documentation-tool exports can enter the same
 verification flow without renaming. When an `.rst` file has no title metadata,
