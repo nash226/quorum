@@ -42,6 +42,8 @@ MDX (`.mdx`) answer exports are covered directly as well, preserving the
 original answer path and verified evidence for component-based agent drafts.
 INI (`.ini`) policy and answer exports are discovered as plain-text inputs,
 with the extension removed from fallback evidence titles.
+Direct INI answers and approved sources are also covered end to end, preserving
+their paths and verified evidence in single-answer reports.
 Direct `.properties` answer and approved-source exports are also covered end to
 end, preserving the answer path, source path, and fallback source title.
 reStructuredText (`.rst`) exports are also discovered recursively for both
