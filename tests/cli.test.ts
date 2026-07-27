@@ -2358,6 +2358,41 @@ test("verify evaluates claims from direct TOML answers against approved sources"
   }
 });
 
+test("verify evaluates claims from direct .properties answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-properties-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.properties");
+    const sourcePath = join(tempDir, "policy.properties");
+    await Promise.all([
+      writeFile(answerPath, "leave=Employees receive 12 weeks of paid parental leave.\n"),
+      writeFile(sourcePath, "leave=Employees receive 12 weeks of paid parental leave.\n"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      answerPath: string;
+      summary: { verified: number };
+      assessments: Array<{ verdict: string }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct AsciiDoc answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-asciidoc-"));
 
