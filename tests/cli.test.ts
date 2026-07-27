@@ -5,6 +5,7 @@ import { join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
+import { ANSWER_EXTENSIONS, SOURCE_EXTENSIONS } from "../src/workflow.js";
 
 test("version aliases report the package contract version", async () => {
   const [longAlias, shortAlias, command] = await Promise.all([
@@ -66,6 +67,8 @@ test("formats --json exposes a stable machine-readable input contract", async ()
 
   assert.deepEqual(formats.sources, [...formats.sources].sort());
   assert.deepEqual(formats.answers, [...formats.answers].sort());
+  assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
+  assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
   assert.deepEqual(formats.sources, formats.answers);
   assert.ok(formats.sources.includes(".md"));
   assert.ok(formats.sources.includes(".json"));
