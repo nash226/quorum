@@ -1172,6 +1172,23 @@ test("extracts clean claims from html answer markup", () => {
   );
 });
 
+test("ignores deleted html policy text while keeping inserted answer text", () => {
+  const claims = extractClaims(`<!doctype html>
+<html>
+  <body>
+    <p><del>Employees receive 8 weeks of paid parental leave.</del> Employees receive 12 weeks of paid parental leave.</p>
+    <p><s>Customers can request refunds within 14 days.</s> Customers can request refunds within 30 days.</p>
+    <p><strike>Annual plans require finance approval.</strike> Annual plans require support approval.</p>
+  </body>
+</html>`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Customers can request refunds within 30 days.",
+    "Annual plans require support approval.",
+  ]);
+});
+
 test("ignores html code blocks between claims", () => {
   const claims = extractClaims(`<!doctype html>
 <html>
