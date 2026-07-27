@@ -112,6 +112,8 @@ uppercase answer and source exports are accepted without renaming.
 - Structured JSON, YAML, and TOML sources recognize common freshness keys such
   as `modifiedAt`, `last_modified`, and `lastUpdated`, preserving exported
   policy timestamps in evidence metadata.
+- XML approved sources preserve common `title`, freshness, and `trustLevel`
+  metadata too, keeping structured exports consistent in reviewer evidence.
 - CLI help now lists MediaWiki (including `.wiki` exports) alongside the formats discovered for answer
   directories, keeping the advertised input contract aligned with the shipped
   discovery behavior.
