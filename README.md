@@ -34,9 +34,9 @@ auditable evidence report before an agent response becomes a business action.
 
 The current CLI can:
 
-- read an AI-generated answer from a Markdown or text file
+- read an AI-generated answer from a Markdown, text, or AsciiDoc file
 - batch verify multiple AI-generated answers from a directory
-- read one or more approved Markdown, text, or exported HTML source documents
+- read one or more approved Markdown, text, AsciiDoc, or exported HTML source documents
 - read one or more approved Markdown, text, exported HTML, or PDF source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
@@ -251,6 +251,8 @@ Supported source extensions today:
 - `.md`
 - `.markdown`
 - `.txt`
+- `.adoc`
+- `.asciidoc`
 - `.html`
 - `.htm`
 - `.pdf`
