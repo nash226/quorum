@@ -536,6 +536,8 @@ JSON answer files are also discovered recursively by `verify-batch --answer-dir`
 using the same structured normalization as explicitly supplied JSON answers.
 Direct JSONL answer files are also normalized one record at a time by `verify`,
 preserving the answer path while exposing each record as reviewer-verifiable claims.
+Batch answer-directory discovery also covers JSONL exports, preserving each
+newline-delimited answer path and verified verdict in the batch report.
 The packaged CLI smoke gate verifies this direct JSONL answer contract too, so
 published artifacts retain structured-answer provenance and claim text.
 Source-directory verification discovers both `.yaml` and `.yml` policies,
