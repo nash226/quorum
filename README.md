@@ -6,6 +6,11 @@ Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
+The shipped CLI and programmatic API support the same answer/source format
+contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
+structured JSON/JSONL/YAML/XML/TOML exports. Run `npm run formats` to inspect
+the exact extension sets used for directory discovery.
+
 ## Why Quorum Exists
 
 AI answers can sound confident while drifting from approved policy. Quorum
