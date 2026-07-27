@@ -67,6 +67,35 @@ test("formats --json exposes a stable machine-readable input contract", async ()
   assert.ok(formats.sources.includes(".json"));
 });
 
+test("verify normalizes direct html answers before claim extraction", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-html-answer-normalization-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.html");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "<nav>Ignore this navigation claim.</nav><main><p>Employees receive 12 weeks of paid parental leave.</p></main>", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as { assessments: Array<{ claim: { text: string } }> };
+
+    assert.deepEqual(
+      report.assessments.map((assessment) => assessment.claim.text),
+      ["Employees receive 12 weeks of paid parental leave."],
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("help advertises the complete discovered input contract", async () => {
   const stdout = await runCli(["--help"]);
 
