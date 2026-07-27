@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `502f628` on 2026-07-27, fix: preserve abbreviated claim sentences
+- Latest shipped change: `5fa3934` on 2026-07-27, test: cover packaged CSV verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | test: cover packaged CSV verification | `5fa3934` |
 | 2026-07-27 | Direct push | fix: preserve abbreviated claim sentences | `502f628` |
 | 2026-07-27 | [#1210](https://github.com/nash226/quorum/pull/1210) | docs: record packaged format contract check | `d0ed543` |
 | 2026-07-27 | Direct push | test: gate packaged JSON formats contract | `385e4ba` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: expand support returns evaluation coverage | `b738cb2` |
 | 2026-07-27 | Direct push | test: smoke-check packaged TOML sources | `9983a0e` |
 | 2026-07-27 | Direct push | test: cover nested TSV batch discovery | `cf17798` |
-| 2026-07-27 | Direct push | test: cover config format batch discovery | `420456d` |
 

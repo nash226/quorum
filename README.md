@@ -209,6 +209,16 @@ sorted machine-readable `sources` and `answers` arrays. The packaged smoke
 check compares both the human-readable and JSON arrays with the library export,
 so published CLI and API format capabilities cannot silently drift apart.
 
+For a shell allow-list, extract the answer extensions directly from that
+contract:
+
+```bash
+npm run formats -- --json | jq -r '.answers[]'
+```
+
+This keeps upload validation aligned with the exact extensions accepted by the
+installed Quorum version.
+
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
 machine-readable after packaging. It also exercises the packaged
