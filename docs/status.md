@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `68361b2` on 2026-07-26, docs: explain CLI format discovery
+- Latest shipped change: `e204e1b` on 2026-07-26, docs: clarify case-insensitive format discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-26 | Direct push | docs: clarify case-insensitive format discovery | `e204e1b` |
 | 2026-07-26 | Direct push | docs: explain CLI format discovery | `68361b2` |
 | 2026-07-26 | Direct push | docs: align roadmap with format contract | `3189288` |
 | 2026-07-26 | Direct push | docs: clarify binary answer input contract | `26d9ced` |
@@ -56,5 +57,4 @@
 | 2026-07-26 | Direct push | test: cover direct Org source verification | `9a97780` |
 | 2026-07-26 | Direct push | test: cover direct MDX answers | `1d47517` |
 | 2026-07-26 | Direct push | test: cover direct YML answer verification | `6ec0143` |
-| 2026-07-26 | Direct push | test: cover nested HTML answer discovery | `92c9a30` |
 
