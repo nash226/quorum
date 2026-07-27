@@ -3457,6 +3457,34 @@ test("verify discovers JSON sources in source directories", async () => {
   }
 });
 
+test("verify-batch discovers uppercase JSONL answers recursively", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-uppercase-jsonl-answer-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    const sourcePath = join(tempDir, "policy.md");
+    const answerPath = join(answerDir, "answer.JSONL");
+    await mkdir(answerDir, { recursive: true });
+    await writeFile(answerPath, '{"response":"Customers can request refunds within 30 days."}\n', "utf8");
+    await writeFile(sourcePath, "Customers can request refunds within 30 days.\n", "utf8");
+
+    const report = JSON.parse(
+      await runCli(["verify-batch", "--answer-dir", join(tempDir, "answers"), "--source", sourcePath, "--json"]),
+    ) as {
+      answerCount: number;
+      summary: { verified: number };
+      answers: Array<{ answerPath: string; report: { summary: { verified: number } } }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answers[0]?.answerPath, answerPath);
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts JSON and YAML sources passed explicitly", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-structured-source-"));
 
