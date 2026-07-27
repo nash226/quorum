@@ -47,7 +47,8 @@ Claim extraction also normalizes bracketed, Arabic-Indic, Persian, and fullwidth
 markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
 policy tables are also reduced to row-level claims, including tables that omit
-the optional outer pipe characters.
+the optional outer pipe characters. Escaped pipe characters inside table cells
+remain part of the label instead of becoming column boundaries.
 Common abbreviations such as `Dr.` and `e.g.` stay inside a claim, preventing
 reviewer reports from splitting those sentences at the abbreviation period.
 URLs with dotted hostnames and paths also stay inside a claim while sentence
