@@ -19,6 +19,10 @@ The packaged CLI smoke gate now verifies both the human-readable and
 `--json` format contracts against the library export, so published CLI and API
 capabilities cannot silently drift apart.
 
+HTML answer exports now omit deleted and struck-through policy text before
+claim extraction, keeping stale revisions out of evidence reports while
+retaining the visible replacement text.
+
 Batch verification is also a shipped workflow: it checks directories or
 explicit answer paths, exports claim-level reviewer decisions, and produces
 one-row-per-answer summaries for queue routing. Durable queue persistence is
