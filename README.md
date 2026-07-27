@@ -72,8 +72,9 @@ report shape. The current service is intentionally a local HTTP boundary;
 durable hosting and queue storage remain roadmap decisions.
 
 The packaged CLI and programmatic API now expose one aligned answer/source
-format contract for text, HTML/XHTML, PDF/DOCX, and structured JSON/YAML/XML/
-TOML/CSV exports; run `npm run dev -- formats` to inspect the exact extensions
+format contract for text, HTML/XHTML, PDF/DOCX, Java-style `.properties`, and
+structured JSON/YAML/XML/TOML/CSV exports; run `npm run dev -- formats` to
+inspect the exact extensions
 available to integrations.
 Use `npm run dev -- formats --json` when an integration needs the same contract
 as sorted machine-readable `sources` and `answers` arrays.

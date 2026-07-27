@@ -33,6 +33,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.csv/);
   assert.match(stdout, /Source files: .*\.qmd/);
   assert.match(stdout, /Answer files: .*\.qmd/);
+  assert.match(stdout, /Source files: .*\.properties/);
+  assert.match(stdout, /Answer files: .*\.properties/);
 });
 
 test("formats --json exposes a stable machine-readable input contract", async () => {
