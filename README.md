@@ -239,6 +239,13 @@ Cache that response with its `ETag`, and use `/openapi.json` for request
 schemas; the [API integration guide](docs/api-integration.md#bootstrap-an-integration)
 now includes a copy-paste discovery example.
 
+Operational probes are process-level in the local-first service: `/livez`,
+`/healthz`, `/health`, and `/readyz` confirm that Quorum is serving requests,
+but do not check durable storage or external dependencies. Treat them as
+serving probes until a durable deployment boundary is introduced; see the
+[API probe guidance](docs/api-integration.md) before wiring them into a
+production load balancer.
+
 HTTP responses include a request correlation ID, and `/openapi.json` is the
 machine-readable source of truth for request and response schemas. The service
 also exposes `/verify-batch`, `/import-review`, `/review-queue`,
