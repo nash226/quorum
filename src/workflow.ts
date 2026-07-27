@@ -26,6 +26,7 @@ export interface SourceLoadOptions {
   sourceDirs: string[];
   sourceIdsByPath?: Record<string, string>;
   defaultTrustLevel?: SourceTrustLevel;
+  excludedSourcePaths?: string[];
 }
 
 export interface InMemorySourceInput {
@@ -205,13 +206,17 @@ export const STDIN_ANSWER_PATH = "<stdin>";
 export async function resolveSourcePaths(
   sourcePaths: string[],
   sourceDirs: string[],
+  excludedPaths: string[] = [],
 ): Promise<string[]> {
   await Promise.all(sourcePaths.map((sourcePath) => ensureFilePath(sourcePath, "Approved source")));
   const directoryFiles = (
     await Promise.all(sourceDirs.map((sourceDir) => listSourceFiles(sourceDir)))
   ).flat();
 
-  return dedupePathsInOrder([...sourcePaths, ...directoryFiles]);
+  const excluded = new Set(excludedPaths.map((path) => resolve(path)));
+  return dedupePathsInOrder([...sourcePaths, ...directoryFiles]).filter(
+    (path) => !excluded.has(resolve(path)),
+  );
 }
 
 export async function resolveAnswerPaths(
@@ -238,7 +243,11 @@ export async function resolveAnswerPaths(
 export async function loadSourceDocuments(
   options: SourceLoadOptions,
 ): Promise<SourceDocument[]> {
-  const sourcePaths = await resolveSourcePaths(options.sourcePaths, options.sourceDirs);
+  const sourcePaths = await resolveSourcePaths(
+    options.sourcePaths,
+    options.sourceDirs,
+    options.excludedSourcePaths,
+  );
 
   if (sourcePaths.length === 0) {
     const locations = [...options.sourcePaths, ...options.sourceDirs].join(", ");

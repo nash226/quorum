@@ -3040,6 +3040,31 @@ test("verify ignores hidden source files and hidden source subdirectories", asyn
   }
 });
 
+test("verify excludes configured report outputs from source directory discovery", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-source-output-exclusion-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+    const reportPath = join(sourceDir, "report.json");
+    await mkdir(sourceDir, { recursive: true });
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(join(sourceDir, "hr-policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(reportPath, "{\"stale\":true}\n", "utf8");
+
+    const stdout = await runCli([
+      "verify", "--answer", answerPath, "--source-dir", sourceDir,
+      "--out", reportPath, "--json",
+    ]);
+    const report = JSON.parse(stdout) as { sources: Array<{ sourcePath: string }>; summary: { verified: number } };
+
+    assert.deepEqual(report.sources.map((source) => source.sourcePath), [join(sourceDir, "hr-policy.md")]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify ignores indented markdown code blocks in the answer", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-indented-code-"));
 
