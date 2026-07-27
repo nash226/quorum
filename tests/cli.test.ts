@@ -407,6 +407,38 @@ test("verify-batch discovers CSV answers in nested answer directories", async ()
   }
 });
 
+test("verify-batch discovers TSV answers and sources in nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-batch-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    const sourceDir = join(tempDir, "sources", "regional");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "answer.tsv"), "field\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.tsv"), "policy\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", join(tempDir, "answers"),
+      "--source-dir", join(tempDir, "sources"), "--json",
+    ])) as {
+      answerCount: number;
+      summary: { verified: number };
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ sourcePath: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "answer.tsv"));
+    assert.equal(report.sources[0]?.sourcePath, join(sourceDir, "policy.tsv"));
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify discovers reStructuredText files in source and answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-rst-discovery-"));
   const answerDir = join(tempDir, "answers");
