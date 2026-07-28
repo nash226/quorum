@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cd33bf2` on 2026-07-27, docs: align capability snapshot with shipped formats
+- Latest shipped change: `0260238` on 2026-07-27, fix: split Unicode-separated answer lines
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | fix: split Unicode-separated answer lines | `0260238` |
 | 2026-07-27 | Direct push | docs: align capability snapshot with shipped formats | `cd33bf2` |
 | 2026-07-27 | Direct push | fix: normalize programmatic jsonl answers | `75f6c30` |
 | 2026-07-27 | Direct push | test: smoke-check packaged log verification | `ce59b75` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: lock CLI format contract to API | `4f0682a` |
 | 2026-07-27 | Direct push | fix: normalize parenthesized localized list markers | `f79bff2` |
 | 2026-07-27 | Direct push | test: smoke-check packaged NDJSON verification | `d7bdc55` |
-| 2026-07-27 | Direct push | fix: normalize ndjson and textile source loading | `df6c189` |
 
