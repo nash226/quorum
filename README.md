@@ -168,6 +168,8 @@ evidence reports.
 The packaged CLI smoke gate also verifies direct `.ndjson` answer and approved-
 source inputs, preserving structured claim text and source-path provenance after
 the npm artifact is built.
+The CLI regression suite also covers direct JSON approved-source verification,
+including structured source titles and verified claim matching.
 Use `npm run dev -- formats --json` when an integration needs the same contract
 as sorted machine-readable `sources` and `answers` arrays.
 The [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) now shows
