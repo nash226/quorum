@@ -21,6 +21,10 @@ drop their extension, keeping reviewer evidence consistent with other formats.
 The packaged CLI smoke gate also verifies Textile answer and approved-source
 files, keeping this documented format covered after publishing.
 
+The packaged CLI smoke gate now verifies TOML answer and approved-source files
+together, keeping structured answer exports release-gated alongside TOML policy
+sources.
+
 Direct CLI verification now covers YAML answers and YML approved sources,
 including structured claims and source titles in the JSON evidence report.
 
