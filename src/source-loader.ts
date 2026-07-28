@@ -1,5 +1,6 @@
 import { basename } from "node:path";
 import mammoth from "mammoth";
+import JSZip from "jszip";
 import { PDFParse } from "pdf-parse";
 import type { SourceDocument, SourceTrustLevel } from "./domain.js";
 import { stripByteOrderMark } from "./text.js";
@@ -61,6 +62,10 @@ export async function sourceDocumentFromFile(
 
   if (isDocxSource(sourcePath)) {
     return docxSourceDocumentFromFile(sourcePath, content, index, options);
+  }
+
+  if (isOdtSource(sourcePath)) {
+    return odtSourceDocumentFromFile(sourcePath, content as Uint8Array, index, options);
   }
 
   const textContent = typeof content === "string" ? content : new TextDecoder().decode(content);
@@ -202,6 +207,10 @@ function isDocxSource(sourcePath: string): boolean {
   return /\.docx$/i.test(sourcePath);
 }
 
+function isOdtSource(sourcePath: string): boolean {
+  return /\.odt$/i.test(sourcePath);
+}
+
 function isJsonSource(sourcePath: string): boolean {
   return /\.(?:jsonl?|ndjson)$/i.test(sourcePath);
 }
@@ -219,7 +228,7 @@ function isTomlSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|qmd|adoc|asciidoc|org|mediawiki|wiki|rst|tex|textile|txt|text|log|ini|properties|html?|xhtml|pdf|docx|jsonl?|ndjson|xml|ya?ml|toml|csv|tsv)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdx|qmd|adoc|asciidoc|org|mediawiki|wiki|rst|tex|textile|txt|text|log|ini|properties|html?|xhtml|pdf|docx|odt|jsonl?|ndjson|xml|ya?ml|toml|csv|tsv)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
@@ -903,6 +912,35 @@ async function docxSourceDocumentFromFile(
     updatedAt: validatedUpdatedAt(sourcePath, options.updatedAt),
     trustLevel: options.trustLevel ?? options.defaultTrustLevel ?? "medium",
     content: normalizeDocxText(result.value),
+  };
+}
+
+async function odtSourceDocumentFromFile(
+  sourcePath: string,
+  content: string | Uint8Array,
+  index: number,
+  options: SourceDocumentOptions,
+): Promise<SourceDocument> {
+  if (typeof content === "string") {
+    throw new Error(`ODT source content must be provided as binary data: ${sourcePath}`);
+  }
+
+  const archive = await JSZip.loadAsync(content);
+  const contentEntry = archive.file("content.xml");
+
+  if (!contentEntry) {
+    throw new Error(`ODT source is missing content.xml: ${sourcePath}`);
+  }
+
+  const parsed = parseSource("content.xml", await contentEntry.async("string"));
+
+  return {
+    id: options.id ?? `source_${index + 1}`,
+    sourcePath,
+    title: options.title ?? parsed.metadata.title ?? sourceTitleFromPath(sourcePath),
+    updatedAt: validatedUpdatedAt(sourcePath, options.updatedAt ?? parsed.metadata.updatedAt),
+    trustLevel: options.trustLevel ?? parsed.metadata.trustLevel ?? options.defaultTrustLevel ?? "medium",
+    content: parsed.body,
   };
 }
 

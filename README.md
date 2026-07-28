@@ -8,7 +8,7 @@ customers, employees, tickets, workflows, or downstream systems.
 
 The shipped CLI and programmatic API support the same answer/source format
 contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
-structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
+structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, OpenDocument Text (`.odt`), plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
