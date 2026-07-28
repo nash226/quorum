@@ -358,6 +358,33 @@ try {
   rmSync(cliXmlSourcePackageDir, { recursive: true, force: true });
 }
 
+const cliXmlAnswerPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xml-answer-"));
+try {
+  const answerPath = join(cliXmlAnswerPackageDir, "answer.xml");
+  const sourcePath = join(cliXmlAnswerPackageDir, "policy.md");
+  writeFileSync(
+    answerPath,
+    '<?xml version="1.0"?><answer><claim>Employees receive 12 weeks of paid parental leave.</claim></answer>',
+  );
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const xmlAnswerOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const xmlAnswerPayload = JSON.parse(xmlAnswerOutput);
+  if (
+    xmlAnswerPayload.summary?.verified !== 1 ||
+    xmlAnswerPayload.answerPath !== answerPath ||
+    xmlAnswerPayload.assessments?.[0]?.claim?.text !== "Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact did not verify the expected XML answer contract.");
+  }
+} finally {
+  rmSync(cliXmlAnswerPackageDir, { recursive: true, force: true });
+}
+
 const cliPropertiesPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-properties-"));
 try {
   const answerPath = join(cliPropertiesPackageDir, "answer.properties");
