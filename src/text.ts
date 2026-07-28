@@ -80,7 +80,7 @@ export function splitIntoSentences(text: string): string[] {
     });
 
   return protectedText
-    .replace(/\r/g, "")
+    .replace(/[\r\u2028\u2029]/g, "\n")
     .replace(/(\d)\.(?=\d)/g, `$1${decimalMarker}`)
     .split(/\n+|(?<=[.!?])\s+|(?<=[\u3002\uFF01\uFF1F\u061F\u0964\u0965])(?:\s+|(?=\p{L}|\p{N}))/gu)
     .map((part) =>

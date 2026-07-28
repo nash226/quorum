@@ -59,6 +59,8 @@ markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
 policy tables are also reduced to row-level claims, including tables that omit
 the optional outer pipe characters.
+Unicode line and paragraph separators are normalized as line breaks too, so
+claims from rich-text and document exports remain separated before matching.
 Parenthesized Arabic-Indic, Persian, and fullwidth ordered-list markers are
 normalized too, so localized exports using `(١)`-style lists retain clean claim
 text for evidence matching.
