@@ -197,6 +197,31 @@ try {
   rmSync(cliTextilePackageDir, { recursive: true, force: true });
 }
 
+const cliMdxPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-mdx-"));
+try {
+  const answerPath = join(cliMdxPackageDir, "answer.mdx");
+  const sourcePath = join(cliMdxPackageDir, "policy.mdx");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "# Parental Leave Policy\n\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const mdxOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const mdxPayload = JSON.parse(mdxOutput);
+  if (
+    mdxPayload.summary?.verified !== 1 ||
+    mdxPayload.answerPath !== answerPath ||
+    mdxPayload.sources?.[0]?.title !== "policy" ||
+    mdxPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected MDX answer/source contract.");
+  }
+} finally {
+  rmSync(cliMdxPackageDir, { recursive: true, force: true });
+}
+
 const cliXhtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xhtml-"));
 try {
   const answerPath = join(cliXhtmlPackageDir, "answer.xhtml");
