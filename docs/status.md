@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4f0682a` on 2026-07-27, test: lock CLI format contract to API
+- Latest shipped change: `8d577b9` on 2026-07-27, feat: support log evidence inputs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | feat: support log evidence inputs | `8d577b9` |
 | 2026-07-27 | Direct push | test: lock CLI format contract to API | `4f0682a` |
 | 2026-07-27 | Direct push | fix: normalize parenthesized localized list markers | `f79bff2` |
 | 2026-07-27 | Direct push | test: smoke-check packaged NDJSON verification | `d7bdc55` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | feat: support Textile input exports | `1cbf31a` |
 | 2026-07-27 | Direct push | feat: support NDJSON input exports | `7ca0499` |
 | 2026-07-27 | Direct push | fix: exclude explicit batch output paths | `c8da566` |
-| 2026-07-27 | Direct push | test: cover packaged INI verification | `503b25c` |
 
