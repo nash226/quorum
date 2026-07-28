@@ -159,6 +159,8 @@ evidence reports.
 The packaged CLI smoke gate also verifies direct `.ndjson` answer and approved-
 source inputs, preserving structured claim text and source-path provenance after
 the npm artifact is built.
+It also verifies direct `.text` answer and approved-source inputs after packaging,
+so long-form plain-text handoffs remain release-gated at the npm boundary.
 Use `npm run dev -- formats --json` when an integration needs the same contract
 as sorted machine-readable `sources` and `answers` arrays.
 The [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) now shows
