@@ -6,6 +6,10 @@ Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
+The evaluation suite now includes an HR wellness-benefit scenario, checking a
+reimbursement limit while routing a conflicting limit and unsupported automatic
+reimbursement promise for review.
+
 The packaged CLI smoke gate now verifies AsciiDoc (`.adoc`/`.asciidoc`) and
 Org-mode (`.org`) answer and approved-source exports, keeping these documented
 policy formats executable after publishing.

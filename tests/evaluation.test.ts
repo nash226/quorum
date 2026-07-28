@@ -176,6 +176,20 @@ test("evaluates a shipped HR tuition reimbursement fixture across policy claims"
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped HR wellness benefit fixture across reimbursement claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("tests/fixtures/wellness-benefit-policy.json"),
+    generatedAt: "2026-07-29T01:00:00.000Z",
+  });
+  assert.equal(scorecard.fixtureName, "HR wellness benefit policy example");
+  assert.equal(scorecard.answerLabel, "HR wellness benefit reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "contradicted", "unsupported"]);
+  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-wellness-benefit@2026-07-29");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped HR bonus eligibility fixture across compensation claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/bonus-eligibility-policy.json"),
