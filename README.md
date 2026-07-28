@@ -102,6 +102,9 @@ explicit answer paths, exports claim-level reviewer decisions, and produces
 one-row-per-answer summaries for queue routing. Durable queue persistence is
 the next product step, pending the backend choice tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
+Integrations can run `npm run formats -- --json` to retrieve the versioned,
+sorted answer/source extension contract before submitting files for verification.
+
 ## Why Quorum Exists
 
 AI answers can sound confident while drifting from approved policy. Quorum
