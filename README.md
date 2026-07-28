@@ -317,6 +317,8 @@ curl -X POST http://127.0.0.1:3000/verify \
 Integration clients can bootstrap from `GET /capabilities` before submitting
 work: the response advertises supported answer/source extensions, JSON content
 types, binary encodings, request limits, queue statuses, and artifact choices.
+The advertised answer and source extension arrays are sorted, so discovery
+clients can compare capability snapshots deterministically across runs.
 Cache that response with its `ETag`, and use `/openapi.json` for request
 schemas; the [API integration guide](docs/api-integration.md#bootstrap-an-integration)
 now includes a copy-paste discovery example.

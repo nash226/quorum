@@ -26,8 +26,8 @@ const libraryEntry = await import(new URL("dist/src/index.js", packageRoot));
 const serverEntry = await import(new URL("dist/src/api-server.js", packageRoot));
 const cliPath = new URL("dist/src/cli.js", packageRoot);
 
-const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS];
-const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS];
+const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS].sort();
+const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS].sort();
 const formatExtensions = (extensions) => [...extensions].sort().join(", ");
 
 const formatsOutput = execFileSync("node", [fileURLToPath(cliPath), "formats"], { encoding: "utf8" });

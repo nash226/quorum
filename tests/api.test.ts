@@ -157,6 +157,8 @@ test("API discovery exposes transport limits and supported methods", () => {
   assert.equal(SERVER_API_CORS_MAX_AGE_SECONDS, API_CORS_MAX_AGE_SECONDS);
   assert.deepEqual(API_CAPABILITIES.requestContentTypes, ["application/json", "application/*+json"]);
   assert.deepEqual(API_CAPABILITIES.binaryContentEncodings, ["base64"]);
+  assert.deepEqual(API_CAPABILITIES.sourceExtensions, [...SOURCE_EXTENSIONS].sort());
+  assert.deepEqual(API_CAPABILITIES.answerExtensions, [...ANSWER_EXTENSIONS].sort());
   assert.deepEqual(API_CAPABILITIES.reviewQueueStatuses, ["pending", "reviewed", "no_claims"]);
   assert.equal(API_CAPABILITIES.maxRequestBytes, API_MAX_REQUEST_BYTES);
   assert.equal(API_CAPABILITIES.requestTimeoutMs, SERVER_API_REQUEST_TIMEOUT_MS);
