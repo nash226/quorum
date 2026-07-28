@@ -1917,6 +1917,7 @@ function printFormats(asJson = false): void {
   if (asJson) {
     console.log(JSON.stringify({
       version: API_VERSION,
+      caseInsensitive: true,
       sources: [...SOURCE_EXTENSIONS].sort(),
       answers: [...ANSWER_EXTENSIONS].sort(),
     }));
