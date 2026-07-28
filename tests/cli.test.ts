@@ -22,8 +22,8 @@ test("version aliases report the package contract version", async () => {
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
-  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
-  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
@@ -36,6 +36,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.qmd/);
   assert.match(stdout, /Source files: .*\.properties/);
   assert.match(stdout, /Answer files: .*\.properties/);
+  assert.match(stdout, /Source files: .*\.conf/);
+  assert.match(stdout, /Answer files: .*\.cfg/);
   assert.match(stdout, /Source files: .*\.tsv/);
   assert.match(stdout, /Answer files: .*\.tsv/);
   assert.match(stdout, /Source files: .*\.ndjson/);
@@ -2761,6 +2763,39 @@ test("verify evaluates claims from direct .properties answers and sources", asyn
     assert.equal(report.answerPath, answerPath);
     assert.equal(report.summary.verified, 1);
     assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify evaluates claims from direct .conf answers and .cfg sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-config-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.conf");
+    const sourcePath = join(tempDir, "policy.cfg");
+    await Promise.all([
+      writeFile(answerPath, "leave=Employees receive 12 weeks of paid parental leave.\n"),
+      writeFile(sourcePath, "leave=Employees receive 12 weeks of paid parental leave.\n"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      answerPath: string;
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
     assert.equal(report.sources[0]?.sourcePath, sourcePath);
     assert.equal(report.sources[0]?.title, "policy");
   } finally {
