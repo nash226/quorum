@@ -24,9 +24,15 @@ test("strips supported text extensions from fallback source titles", async () =>
     "Escalate incidents within one hour.",
     1,
   );
+  const yamlSource = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.yaml",
+    "leave_weeks: 12",
+    2,
+  );
 
   assert.equal(markdownSource.title, "leave-policy");
   assert.equal(textSource.title, "escalation-guide");
+  assert.equal(yamlSource.title, "leave-policy");
 });
 
 test("applies the default trust override when metadata is absent", async () => {

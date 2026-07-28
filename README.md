@@ -36,8 +36,8 @@ The current CLI can:
 
 - read an AI-generated answer from a Markdown or text file
 - batch verify multiple AI-generated answers from a directory
-- read one or more approved Markdown, text, or exported HTML source documents
-- read one or more approved Markdown, text, exported HTML, or PDF source documents
+- read one or more approved Markdown, text, YAML, or exported HTML source documents
+- read one or more approved Markdown, text, YAML, exported HTML, or PDF source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
@@ -254,6 +254,11 @@ Supported source extensions today:
 - `.html`
 - `.htm`
 - `.pdf`
+- `.yaml` and `.yml`
+
+YAML files are loaded as plain text, so policy exports can be verified without
+converting them first. The same YAML extensions are accepted for answer files
+and recursive `--answer-dir` discovery.
 
 ## Project Structure
 
