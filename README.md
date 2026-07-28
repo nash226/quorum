@@ -148,6 +148,8 @@ Direct JSON answer verification is also covered at the package boundary,
 preserving structured claim text and answer-path provenance for integrations.
 The packaged CLI smoke gate also verifies direct JSONL answer and approved-source
 verification, preserving structured provenance after the npm artifact is built.
+The same JSONL/NDJSON contract is covered for direct CLI verification as well,
+so newline-delimited exports remain claim-readable before packaging.
 It also verifies Markdown front matter at the package boundary: answer metadata
 is removed from extracted claims while approved-source title, freshness, trust,
 and path metadata remain available in the evidence report.
