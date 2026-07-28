@@ -223,7 +223,7 @@ function sourceTitleFromPath(sourcePath: string): string {
 }
 
 function parseHtmlSource(content: string): ParsedSource {
-  const normalized = content.replace(/\r\n/g, "\n");
+  const normalized = content.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
   const titleMatch = normalized.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
   const headingMatch = normalized.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
   const documentTitle = titleMatch ? decodeHtmlEntities(stripTags(titleMatch[1] ?? "")).trim() : "";
