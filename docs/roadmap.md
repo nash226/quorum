@@ -37,6 +37,11 @@ surfaces rather than add another parallel workflow.
   the dashboard boundary is tracked separately in [decision issue #683](https://github.com/nash226/quorum/issues/683).
 - Expand the HR and support fixture set as policy coverage grows.
 
+The service and queue items are intentionally decision-gated. Safe work can
+continue on fixture coverage and local CLI/API reliability without choosing a
+hosting provider, adding credentials, or committing to a durable storage
+backend.
+
 Batch verification is shipped and should be treated as a foundation for these
 next steps, not as a separate roadmap item: its directory and explicit-path
 workflows already produce reviewer decisions and queue-routing summaries.
