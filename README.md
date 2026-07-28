@@ -85,6 +85,8 @@ Common `.text` exports are accepted alongside `.txt` files for both answers and
 approved sources, so plain-text handoffs keep working when vendors use the
 long-form extension. Direct single-answer verification now covers `.text`
 sources in the CLI regression suite as well as recursive batch discovery.
+The packaged CLI smoke gate also verifies a direct `.text` answer and approved
+source, keeping that vendor handoff path release-gated after publishing.
 Direct single-answer verification also covers `.markdown` answer and approved
 source paths, keeping the common long-form Markdown extension on the same
 evidence-gated path as `.md` files. Recursive answer discovery also covers
