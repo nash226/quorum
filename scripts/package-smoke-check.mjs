@@ -147,6 +147,31 @@ try {
   rmSync(cliJsonlPackageDir, { recursive: true, force: true });
 }
 
+const cliLogPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-log-"));
+try {
+  const answerPath = join(cliLogPackageDir, "answer.log");
+  const sourcePath = join(cliLogPackageDir, "policy.log");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const logOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const logPayload = JSON.parse(logOutput);
+  if (
+    logPayload.summary?.verified !== 1 ||
+    logPayload.answerPath !== answerPath ||
+    logPayload.sources?.[0]?.title !== "policy" ||
+    logPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected log answer/source contract.");
+  }
+} finally {
+  rmSync(cliLogPackageDir, { recursive: true, force: true });
+}
+
 const cliXhtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xhtml-"));
 try {
   const answerPath = join(cliXhtmlPackageDir, "answer.xhtml");
