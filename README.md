@@ -12,6 +12,10 @@ structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+Answers can also be streamed through standard input with `--answer -`; the
+result keeps `<stdin>` as the answer provenance so pipeline integrations do not
+need to create temporary files.
+
 The generated status page now mirrors the complete format capability index,
 including configuration, documentation, log, and structured export inputs.
 
