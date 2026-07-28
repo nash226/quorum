@@ -260,7 +260,8 @@ npm run check
 npm run dev -- verify \
   --answer examples/answers/hr-answer.md \
   --source-dir examples/sources \
-  --json
+  --json \
+  --summary-csv-out reports/hr-summary.csv
 ```
 
 `npm run check` is the recommended pre-PR gate: it runs tests, the TypeScript
@@ -273,6 +274,11 @@ exported source and answer extension contract, so CLI discovery cannot drift
 from the API and programmatic workflow surface.
 The CLI contract test applies the same exact comparison during ordinary test
 runs, catching format-list drift before a package smoke run.
+
+The single-answer quick start also writes `reports/hr-summary.csv`, a
+queue-oriented one-row export with verdict totals, the primary finding, and
+fail-policy status. Use it when a workflow needs a compact routing artifact
+without parsing the full JSON report.
 
 Plain-text `.log` exports are accepted for both answers and approved sources,
 so support and audit log evidence can be verified without renaming files.
