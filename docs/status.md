@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a89067a` on 2026-07-27, fix: stabilize capability extension ordering
+- Latest shipped change: `24b6d8f` on 2026-07-28, fix: preserve Unicode evidence tokens
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,12 +49,12 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | fix: preserve Unicode evidence tokens | `24b6d8f` |
+| 2026-07-28 | Direct push | docs: explain no-claim queue routing | `a889539` |
 | 2026-07-27 | Direct push | fix: stabilize capability extension ordering | `a89067a` |
 | 2026-07-27 | Direct push | docs: clarify the CI pre-PR gate | `4769eac` |
 | 2026-07-27 | Direct push | fix: split Unicode-separated answer lines | `0260238` |
 | 2026-07-27 | Direct push | docs: align capability snapshot with shipped formats | `cd33bf2` |
 | 2026-07-27 | Direct push | fix: normalize programmatic jsonl answers | `75f6c30` |
 | 2026-07-27 | Direct push | test: smoke-check packaged log verification | `ce59b75` |
-| 2026-07-27 | Direct push | feat: support log evidence inputs | `8d577b9` |
-| 2026-07-27 | Direct push | test: lock CLI format contract to API | `4f0682a` |
 
