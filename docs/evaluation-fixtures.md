@@ -26,7 +26,7 @@ set covers:
 - phone-support availability, callback timing, and unsupported universal-access claims
 - support identity-verification claims, including mismatched identity documents and unsafe disclosure shortcuts
 
-The benchmark currently contains 80 fixtures: 27 HR and 53 support workflows.
+The benchmark currently contains 81 fixtures: 27 HR and 54 support workflows.
 The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
