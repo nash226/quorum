@@ -460,6 +460,34 @@ try {
   rmSync(cliTomlSourcePackageDir, { recursive: true, force: true });
 }
 
+const cliYamlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-"));
+try {
+  const answerPath = join(cliYamlPackageDir, "answer.yaml");
+  const sourcePath = join(cliYamlPackageDir, "policy.yml");
+  writeFileSync(answerPath, "claim: Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(
+    sourcePath,
+    "title: Parental Leave Policy\npolicy:\n  rule: Employees receive 12 weeks of paid parental leave.\n",
+  );
+
+  const yamlOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const yamlPayload = JSON.parse(yamlOutput);
+  if (
+    yamlPayload.summary?.verified !== 1 ||
+    yamlPayload.answerPath !== answerPath ||
+    yamlPayload.sources?.[0]?.title !== "Parental Leave Policy" ||
+    yamlPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected YAML answer/source contract.");
+  }
+} finally {
+  rmSync(cliYamlPackageDir, { recursive: true, force: true });
+}
+
 const cliFrontmatterPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-frontmatter-"));
 try {
   const answerPath = join(cliFrontmatterPackageDir, "answer.md");
