@@ -227,6 +227,31 @@ try {
   rmSync(cliAsciiDocPackageDir, { recursive: true, force: true });
 }
 
+const cliLatexPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-latex-"));
+try {
+  const answerPath = join(cliLatexPackageDir, "answer.tex");
+  const sourcePath = join(cliLatexPackageDir, "policy.tex");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "\\section{Parental Leave Policy}\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const latexOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const latexPayload = JSON.parse(latexOutput);
+  if (
+    latexPayload.summary?.verified !== 1 ||
+    latexPayload.answerPath !== answerPath ||
+    latexPayload.sources?.[0]?.title !== "policy" ||
+    latexPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected LaTeX answer/source contract.");
+  }
+} finally {
+  rmSync(cliLatexPackageDir, { recursive: true, force: true });
+}
+
 const cliXmlSourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xml-source-"));
 try {
   const answerPath = join(cliXmlSourcePackageDir, "answer.md");
