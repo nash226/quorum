@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5b6c5fa` on 2026-07-28, test: smoke-check packaged AsciiDoc and Org inputs
+- Latest shipped change: `8b5e071` on 2026-07-28, docs: clarify decision-gated roadmap work
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | docs: clarify decision-gated roadmap work | `8b5e071` |
 | 2026-07-28 | [#1320](https://github.com/nash226/quorum/pull/1320) | test: smoke-check packaged AsciiDoc and Org inputs | `5b6c5fa` |
 | 2026-07-28 | Direct push | test: smoke-check packaged PDF answers | `e86f34d` |
 | 2026-07-28 | Direct push | test: smoke-check packaged XML answers | `eea0e1b` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | test: smoke-check packaged YAML inputs | `d936827` |
 | 2026-07-28 | Direct push | test: smoke-check packaged html answers | `0755b2a` |
 | 2026-07-28 | [#1308](https://github.com/nash226/quorum/pull/1308) | test: smoke-check recursive XHTML sources | `b67c80d` |
-| 2026-07-28 | Direct push | fix: normalize frontmatter metadata keys | `5dbc4f6` |
 
