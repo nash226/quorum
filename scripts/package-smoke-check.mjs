@@ -354,6 +354,31 @@ try {
   rmSync(cliCsvPackageDir, { recursive: true, force: true });
 }
 
+const cliTsvPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-tsv-"));
+try {
+  const answerPath = join(cliTsvPackageDir, "answer.tsv");
+  const sourcePath = join(cliTsvPackageDir, "policy.tsv");
+  writeFileSync(answerPath, "claim\tcontext\nEmployees receive 12 weeks of paid parental leave.\tHR\n");
+  writeFileSync(sourcePath, "policy\towner\nEmployees receive 12 weeks of paid parental leave.\tPeople Ops\n");
+
+  const tsvOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const tsvPayload = JSON.parse(tsvOutput);
+  if (
+    tsvPayload.summary?.verified !== 1 ||
+    tsvPayload.answerPath !== answerPath ||
+    tsvPayload.sources?.[0]?.title !== "policy" ||
+    tsvPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected TSV answer/source contract.");
+  }
+} finally {
+  rmSync(cliTsvPackageDir, { recursive: true, force: true });
+}
+
 const cliIniPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-ini-"));
 try {
   const answerPath = join(cliIniPackageDir, "answer.ini");
