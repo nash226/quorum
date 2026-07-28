@@ -3055,6 +3055,29 @@ test("verify-batch discovers PDF and nested DOCX answers from answer directories
   }
 });
 
+test("verify accepts a direct PDF answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-pdf-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.pdf");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, createSimplePdf("Employees receive 12 weeks of paid leave.")),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { summary: { verified: number }; assessments: Array<{ claim: { text: string } }> };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.assessments[0]?.claim.text, "Employees receive 12 weeks of paid leave.");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify ignores collapsed html details body content in answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-collapsed-details-answer-"));
 
