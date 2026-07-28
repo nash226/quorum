@@ -815,6 +815,33 @@ test("verify accepts a direct AsciiDoc answer export", async () => {
   }
 });
 
+test("verify accepts a direct Org-mode answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-org-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.org");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]));
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct AsciiDoc approved source export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-asciidoc-source-"));
 
