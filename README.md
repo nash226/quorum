@@ -261,6 +261,9 @@ check compares both the human-readable and JSON arrays with the library export,
 so published CLI and API format capabilities cannot silently drift apart.
 The repository test suite also invokes this npm alias end to end, keeping the
 documented command wired to the same contract during development.
+The directory contract includes the standard `.markdown` alias for both
+answers and approved sources, so Markdown exports do not need to be renamed
+before batch verification.
 
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
