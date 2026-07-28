@@ -15,6 +15,11 @@ the exact extension sets used for directory discovery.
 The generated status page now mirrors the complete format capability index,
 including configuration, documentation, log, and structured export inputs.
 
+The [HTTP integration guide](docs/api-integration.md#bootstrap-an-integration)
+now documents the complete capability bootstrap loop: cache `/capabilities`
+with its `ETag`, validate requests from the advertised runtime contract, and
+revalidate with `If-None-Match` before fetching the larger OpenAPI schema.
+
 Claim matching now preserves Unicode letters and numbers, so localized
 non-Latin answers can be compared with matching approved policy text instead
 of losing their meaningful tokens during normalization.
