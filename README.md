@@ -1180,6 +1180,10 @@ The packed smoke check now also verifies accessibility-request verdict counts,
 preserving the approved help-center path while routing review-sensitive and
 unsupported accommodation claims correctly.
 
+The packed smoke check also verifies the HR professional-development fixture,
+keeping the shipped evaluation gate aligned with the roadmap's growing HR policy
+coverage.
+
 The packed smoke check also verifies that support data-export answers appear in
 the benchmark report, preserving the approved request path while catching
 timing drift and unsupported manager-notification claims.

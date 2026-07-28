@@ -1348,6 +1348,22 @@ if (evaluationResult.fixtureName !== "HR policy example" || evaluationResult.sum
   throw new Error("Package artifact CLI did not evaluate the expected fixture contract.");
 }
 
+const professionalDevelopmentEvaluation = JSON.parse(execFileSync(process.execPath, [
+  fileURLToPath(cliPath),
+  "evaluate",
+  "--fixture",
+  fileURLToPath(new URL("examples/evaluations/hr/professional-development-policy.json", packageRoot)),
+  "--json",
+  "--fail-on-mismatch",
+], { encoding: "utf8" }));
+if (
+  professionalDevelopmentEvaluation.fixtureName !== "HR professional development policy example" ||
+  professionalDevelopmentEvaluation.summaryMatches !== true ||
+  professionalDevelopmentEvaluation.score !== 1
+) {
+  throw new Error("Package artifact did not evaluate the professional-development fixture contract.");
+}
+
 const evaluationGateResult = JSON.parse(execFileSync(process.execPath, [
   fileURLToPath(cliPath),
   "evaluate",
