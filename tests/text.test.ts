@@ -29,6 +29,17 @@ test("keeps dotted URLs inside one claim while splitting the surrounding sentenc
   );
 });
 
+test("splits sentences across Unicode line and paragraph separators", () => {
+  assert.deepEqual(
+    splitIntoSentences("Employees receive leave.\u2028Managers approve exceptions.\u2029Support responds within four hours."),
+    [
+      "Employees receive leave.",
+      "Managers approve exceptions.",
+      "Support responds within four hours.",
+    ],
+  );
+});
+
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
     renderAnswerLabels([
