@@ -12,6 +12,9 @@ structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+Direct CLI verification now regression-tests DOCX answer exports, keeping
+single-answer Word handoffs on the same evidence path as DOCX policy sources.
+
 The source-loader regression suite also verifies that YAML/YML fallback titles
 drop their extension, keeping reviewer evidence consistent with other formats.
 
