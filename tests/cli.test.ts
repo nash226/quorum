@@ -3922,13 +3922,22 @@ test("verify discovers XML sources in source directories", async () => {
       "<policy><region>United States</region></policy>",
       "utf8",
     );
+    await writeFile(
+      join(nestedSourceDir, "xhtml-policy.xhtml"),
+      "<?xml version=\"1.0\"?><html xmlns=\"http://www.w3.org/1999/xhtml\"><body><p>Employees may work remotely two days each week.</p></body></html>",
+      "utf8",
+    );
 
     const report = JSON.parse(await runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir, "--json"])) as {
       sources: Array<{ title: string }>;
       summary: { verified: number };
     };
 
-    assert.deepEqual(report.sources.map((source) => source.title), ["hr-policy", "regional-policy"]);
+    assert.deepEqual(report.sources.map((source) => source.title), [
+      "hr-policy",
+      "regional-policy",
+      "xhtml-policy",
+    ]);
     assert.equal(report.summary.verified, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
