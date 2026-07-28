@@ -25,6 +25,9 @@ drop their extension, keeping reviewer evidence consistent with other formats.
 The packaged CLI smoke gate also verifies Textile answer and approved-source
 files, keeping this documented format covered after publishing.
 
+It now also verifies Quarto (`.qmd`) answer and approved-source files in the
+packaged CLI smoke gate, keeping that supported document format release-gated.
+
 The packaged CLI smoke gate now verifies YAML answers against YML approved
 sources, keeping both common structured-policy extensions release-gated.
 

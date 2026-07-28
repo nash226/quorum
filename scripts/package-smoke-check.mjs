@@ -197,6 +197,31 @@ try {
   rmSync(cliTextilePackageDir, { recursive: true, force: true });
 }
 
+const cliQuartoPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-quarto-"));
+try {
+  const answerPath = join(cliQuartoPackageDir, "answer.qmd");
+  const sourcePath = join(cliQuartoPackageDir, "policy.qmd");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const quartoOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const quartoPayload = JSON.parse(quartoOutput);
+  if (
+    quartoPayload.summary?.verified !== 1 ||
+    quartoPayload.answerPath !== answerPath ||
+    quartoPayload.sources?.[0]?.title !== "policy" ||
+    quartoPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected Quarto answer/source contract.");
+  }
+} finally {
+  rmSync(cliQuartoPackageDir, { recursive: true, force: true });
+}
+
 const cliXhtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xhtml-"));
 try {
   const answerPath = join(cliXhtmlPackageDir, "answer.xhtml");
