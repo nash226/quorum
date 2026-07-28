@@ -6,6 +6,10 @@ Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
+The packaged CLI smoke gate now verifies AsciiDoc (`.adoc`/`.asciidoc`) and
+Org-mode (`.org`) answer and approved-source exports, keeping these documented
+policy formats executable after publishing.
+
 The shipped CLI and programmatic API support the same answer/source format
 contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
 structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
