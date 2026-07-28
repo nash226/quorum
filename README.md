@@ -33,7 +33,7 @@ The packaged CLI smoke gate now verifies both the human-readable and
 `--json` format contracts against the library export, so published CLI and API
 capabilities cannot silently drift apart.
 
-Direct XML approved-source verification is covered too: XML metadata and policy
+Direct XML and recursive XHTML approved-source verification are covered too: XML metadata and policy
 content survive the explicit `--source` path into verified evidence reports.
 
 The packaged smoke gate also verifies a Markdown answer against a DOCX policy
