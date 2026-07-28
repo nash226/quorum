@@ -24,6 +24,10 @@ including structured claims and source titles in the JSON evidence report.
 The programmatic batch API also verifies TSV answer and approved-source content,
 preserving spreadsheet export paths in the reviewer report.
 
+Configuration-backed answer and approved-source discovery now also accepts
+`.conf` and `.cfg` files, alongside `.ini` and `.properties`, so common
+enterprise configuration exports can enter the same evidence workflow.
+
 The generated status page now mirrors the complete format capability index,
 including configuration, documentation, log, and structured export inputs.
 
