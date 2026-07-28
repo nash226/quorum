@@ -409,6 +409,43 @@ test("verify-batch returns an aggregate report for each answer file", async () =
   }
 });
 
+test("verify-batch discovers YAML answers and sources recursively", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-yaml-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+      writeFile(join(answerDir, "leave.yaml"), "leaveWeeks: 12\n", "utf8"),
+      writeFile(join(sourceDir, "leave-policy.yml"), "leaveWeeks: 12\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      sourceCount: number;
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ title: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "leave.yaml"));
+    assert.equal(report.sources[0]?.title, "leave-policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch accepts repeated answer files alongside answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-mixed-inputs-"));
 

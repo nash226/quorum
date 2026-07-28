@@ -34,10 +34,9 @@ auditable evidence report before an agent response becomes a business action.
 
 The current CLI can:
 
-- read an AI-generated answer from a Markdown or text file
+- read an AI-generated answer from a Markdown, text, YAML, or YML file
 - batch verify multiple AI-generated answers from a directory
-- read one or more approved Markdown, text, or exported HTML source documents
-- read one or more approved Markdown, text, exported HTML, or PDF source documents
+- read one or more approved Markdown, text, YAML/YML, exported HTML, or PDF source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
