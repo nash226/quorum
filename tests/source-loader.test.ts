@@ -66,6 +66,12 @@ test("strips supported text extensions from fallback source titles", async () =>
     "Escalate failed password resets within one hour.",
     3,
   );
+  const envSource = await sourceDocumentFromFile(
+    "docs/policies/support-policy.env",
+    "PASSWORD_RESET_WINDOW=one business day",
+    4,
+  );
+  assert.equal(envSource.title, "support-policy");
   const rstSource = await sourceDocumentFromFile(
     "docs/policies/incident-response.rst",
     "Escalate incidents within one hour.",
