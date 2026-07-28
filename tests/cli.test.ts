@@ -3770,6 +3770,42 @@ test("verify accepts JSON and YAML sources passed explicitly", async () => {
   }
 });
 
+test("verify preserves metadata from direct JSON approved sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-json-source-metadata-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.json");
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(
+      sourcePath,
+      JSON.stringify({
+        title: "HR parental leave policy",
+        updatedAt: "2026-07-01",
+        trustLevel: "authoritative",
+        policy: "Employees receive 12 weeks of paid parental leave.",
+      }),
+      "utf8",
+    );
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      sources: Array<{ title: string; updatedAt?: string; trustLevel: string }>;
+      summary: { verified: number };
+    };
+
+    assert.deepEqual(report.sources[0], {
+      title: "HR parental leave policy",
+      updatedAt: "2026-07-01",
+      trustLevel: "authoritative",
+    });
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct TOML approved source export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-toml-source-"));
 

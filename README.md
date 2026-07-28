@@ -646,6 +646,8 @@ claim-readable content. The direct path is covered by the CLI regression suite.
 JSON, YAML, and TOML exports also read top-level `title`, `updatedAt`/`updated_at`,
 and `trustLevel`/`trust_level` fields, so structured policy metadata survives
 file-based verification without separate CLI overrides.
+The direct JSON source path is regression-tested for that metadata contract,
+including the reviewer-facing title, freshness timestamp, and trust level.
 YAML/YML answer files use the same normalization path as structured sources,
 so single-answer verification extracts claims from policy fields instead of
 matching against raw YAML punctuation.
