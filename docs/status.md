@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `523b00b` on 2026-07-28, test: smoke-check packaged Textile inputs
+- Latest shipped change: `a8d1de8` on 2026-07-28, test: cover TSV programmatic batch inputs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | test: cover TSV programmatic batch inputs | `a8d1de8` |
 | 2026-07-28 | Direct push | test: smoke-check packaged Textile inputs | `523b00b` |
 | 2026-07-28 | [#1278](https://github.com/nash226/quorum/pull/1278) | test: cover direct YAML verification | `8ca5c4f` |
 | 2026-07-28 | [#1277](https://github.com/nash226/quorum/pull/1277) | test: cover recursive XHTML source discovery | `241f03d` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | test: cover direct JSON source verification | `252182a` |
 | 2026-07-28 | Direct push | test: cover markdown directory discovery | `78d7797` |
 | 2026-07-28 | Direct push | test: cover YAML source fallback titles | `dd091cc` |
-| 2026-07-28 | Direct push | test: exercise formats package alias | `06834c2` |
 
