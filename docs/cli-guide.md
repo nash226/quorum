@@ -83,9 +83,12 @@ npm run dev -- verify \
   --summary-csv-out reports/hr-summary.csv
 ```
 
-Supported answer and source files include Markdown/MDX/Quarto/reStructuredText,
-AsciiDoc, Org-mode, MediaWiki, text, exported HTML/XHTML, JSON, YAML/YML, XML,
-TOML, CSV, PDF, and DOCX.
+Supported answer and source files include Markdown/MDX/Quarto, AsciiDoc,
+Org-mode, MediaWiki, reStructuredText, LaTeX, Textile, plain text/log/config
+exports, HTML/XHTML, JSON/JSONL/NDJSON, YAML/YML, XML, TOML, CSV/TSV, PDF,
+and DOCX. The direct path uses the same case-insensitive extension contract as
+directory discovery; use `npm run formats -- --json` for the authoritative
+extension lists rather than maintaining a second allow-list in an integration.
 Structured JSON, YAML, XML, and TOML exports are normalized into claim-readable
 evidence text. Recursive answer and source directories discover the same
 supported formats, skip hidden paths, and sort the complete flattened path set.
