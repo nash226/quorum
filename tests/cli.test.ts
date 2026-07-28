@@ -2265,6 +2265,51 @@ test("verify accepts a docx source", async () => {
   }
 });
 
+test("verify-batch discovers mixed-case answer and source extensions", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-case-insensitive-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(answerDir);
+    await mkdir(sourceDir);
+
+    await Promise.all([
+      writeFile(
+        join(answerDir, "benefits.MARKDOWN"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.MD"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ title: string }>;
+    };
+
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [
+      join(answerDir, "benefits.MARKDOWN"),
+    ]);
+    assert.deepEqual(report.sources.map((source) => source.title), ["hr-policy"]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims against html sources with named entities", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-entities-"));
 
