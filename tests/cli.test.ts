@@ -22,8 +22,8 @@ test("version aliases report the package contract version", async () => {
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
-  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
-  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
@@ -44,6 +44,10 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.textile/);
   assert.match(stdout, /Source files: .*\.log/);
   assert.match(stdout, /Answer files: .*\.log/);
+  assert.match(stdout, /Source files: .*\.cfg/);
+  assert.match(stdout, /Answer files: .*\.cfg/);
+  assert.match(stdout, /Source files: .*\.conf/);
+  assert.match(stdout, /Answer files: .*\.conf/);
 });
 
 test("verify accepts direct TSV answer and source exports", async () => {
