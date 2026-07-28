@@ -10,6 +10,9 @@ The packaged CLI smoke gate now verifies AsciiDoc (`.adoc`/`.asciidoc`) and
 Org-mode (`.org`) answer and approved-source exports, keeping these documented
 policy formats executable after publishing.
 
+The packaged CLI smoke gate also verifies MediaWiki (`.wiki`/`.mediawiki`)
+answer and approved-source exports, keeping both documented aliases release-gated.
+
 The shipped CLI and programmatic API support the same answer/source format
 contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
 structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
