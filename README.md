@@ -15,6 +15,10 @@ the exact extension sets used for directory discovery.
 Direct CLI verification now regression-tests DOCX answer exports, keeping
 single-answer Word handoffs on the same evidence path as DOCX policy sources.
 
+Markdown and TOML-style frontmatter now recognize metadata keys regardless of
+case or hyphen/underscore spelling, so exported policy titles, timestamps, and
+trust levels survive common authoring-tool variations.
+
 The source-loader regression suite also verifies that YAML/YML fallback titles
 drop their extension, keeping reviewer evidence consistent with other formats.
 

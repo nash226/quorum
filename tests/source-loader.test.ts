@@ -376,6 +376,26 @@ Employees get 12 weeks.
   assert.doesNotMatch(parsed.body, /People Ops/);
 });
 
+test("parses frontmatter metadata with case and separator variants", () => {
+  const source = parseSource(
+    "docs/hr-policy.md",
+    `---
+Title: HR Benefits Policy
+updated-at: 2026-05-31
+TRUST_LEVEL: high
+---
+Employees receive paid leave.
+`,
+  );
+
+  assert.deepEqual(source.metadata, {
+    title: "HR Benefits Policy",
+    updatedAt: "2026-05-31",
+    trustLevel: "high",
+  });
+  assert.equal(source.body, "Employees receive paid leave.\n");
+});
+
 test("parses toml-style source frontmatter delimited by plus signs", () => {
   const parsed = parseSource("docs/hr-policy.md", `+++
 title = "HR Benefits Policy"
