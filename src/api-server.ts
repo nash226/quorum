@@ -250,6 +250,14 @@ export interface ApiVersionResponse {
   version: string;
 }
 
+export interface ApiFormatsResponse {
+  requestId: string;
+  service: string;
+  version: string;
+  sources: readonly string[];
+  answers: readonly string[];
+}
+
 /** Structured error returned by HTTP API failures, including its correlation ID. */
 export interface ApiErrorResponse {
   error: string;
@@ -277,6 +285,7 @@ export const HEALTH_PATH = "/health";
 export const HEALTHZ_PATH = "/healthz";
 export const READYZ_PATH = "/readyz";
 export const VERSION_PATH = "/version";
+export const FORMATS_PATH = "/formats";
 export const OPENAPI_PATH = "/openapi.json";
 export const LIVEZ_PATH = "/livez";
 export const VERIFY_PATH = "/verify";
@@ -427,6 +436,9 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
   { method: "GET", path: VERSION_PATH, description: "Return the Quorum service and contract version." },
   { method: "HEAD", path: VERSION_PATH, description: "Return version headers without a JSON body." },
   { method: "OPTIONS", path: VERSION_PATH, description: "Return CORS preflight headers for version clients." },
+  { method: "GET", path: FORMATS_PATH, description: "Return supported answer and approved-source file extensions." },
+  { method: "HEAD", path: FORMATS_PATH, description: "Return format contract headers without a JSON body." },
+  { method: "OPTIONS", path: FORMATS_PATH, description: "Return CORS preflight headers for format contract clients." },
   { method: "GET", path: OPENAPI_PATH, description: "Return the OpenAPI description for this server." },
   { method: "HEAD", path: OPENAPI_PATH, description: "Return OpenAPI headers without a JSON body." },
   {
@@ -1490,6 +1502,23 @@ async function handleApiRequest(
       isHeadRequest,
       { service: API_SERVICE_NAME, version: API_VERSION },
     );
+    return;
+  }
+
+  if ((request.method === "GET" || isHeadRequest) && url === FORMATS_PATH) {
+    const formatsResponse: ApiFormatsResponse = {
+      requestId: requestId(response),
+      service: API_SERVICE_NAME,
+      version: API_VERSION,
+      sources: [...SOURCE_EXTENSIONS].sort(),
+      answers: [...ANSWER_EXTENSIONS].sort(),
+    };
+    writeConditionalJson(request, response, 200, formatsResponse, isHeadRequest, {
+      service: API_SERVICE_NAME,
+      version: API_VERSION,
+      sources: formatsResponse.sources,
+      answers: formatsResponse.answers,
+    });
     return;
   }
 
