@@ -91,10 +91,11 @@ test("verify accepts direct YAML answer and source exports", async () => {
   }
 });
 
-test("formats --json exposes a stable machine-readable input contract", async () => {
+test("formats --json exposes a versioned machine-readable input contract", async () => {
   const stdout = await runCli(["formats", "--json"]);
-  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };
+  const formats = JSON.parse(stdout) as { version: string; sources: string[]; answers: string[] };
 
+  assert.equal(formats.version, "0.1.0");
   assert.deepEqual(formats.sources, [...formats.sources].sort());
   assert.deepEqual(formats.answers, [...formats.answers].sort());
   assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());

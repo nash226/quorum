@@ -279,8 +279,10 @@ This command is the source of truth for directory discovery: it prints the
 separate source and answer extension sets used by `verify-batch`, so scripts
 can confirm the packaged input contract before submitting a batch.
 Use `npm run formats -- --json` when an integration needs the same contract as
-sorted machine-readable `sources` and `answers` arrays. The packaged smoke
-check compares both the human-readable and JSON arrays with the library export,
+sorted machine-readable `sources` and `answers` arrays. The JSON response also
+includes a `version` field (currently `0.1.0`) so integrations can reject an unexpected
+contract before submitting an export. The packaged smoke check compares both
+the human-readable and JSON arrays with the library export,
 so published CLI and API format capabilities cannot silently drift apart.
 The repository test suite also invokes this npm alias end to end, keeping the
 documented command wired to the same contract during development.
