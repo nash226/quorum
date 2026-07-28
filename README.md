@@ -14,6 +14,9 @@ The HR evaluation set now includes workplace-accommodation requests, covering
 verified routing, review-needed process claims, and unsupported turnaround
 promises in the benchmark scorecard.
 
+The accommodation benchmark also pins its refreshed source identity in the
+regression suite, keeping generated reports aligned with the fixture metadata.
+
 The shipped CLI and programmatic API support the same answer/source format
 contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
 structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)

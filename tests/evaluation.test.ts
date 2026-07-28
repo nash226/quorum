@@ -1475,7 +1475,7 @@ test("evaluates the HR workplace accommodation fixture across policy claims", as
   ]);
   assert.equal(
     scorecard.report.sources[0]?.id,
-    "people-ops/hr-workplace-accommodation@2026-07-15",
+    "people-ops/hr-workplace-accommodation@2026-07-28",
   );
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
