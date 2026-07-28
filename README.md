@@ -15,6 +15,10 @@ the exact extension sets used for directory discovery.
 The source-loader regression suite also verifies that YAML/YML fallback titles
 drop their extension, keeping reviewer evidence consistent with other formats.
 
+It now locks the same extension-free fallback title for Textile (`.textile`)
+policy exports, so direct verification keeps reviewer evidence stable across
+plain-text document formats.
+
 The generated status page now mirrors the complete format capability index,
 including configuration, documentation, log, and structured export inputs.
 
