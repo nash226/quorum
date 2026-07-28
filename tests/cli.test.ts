@@ -171,6 +171,16 @@ test("formats --json exposes a versioned machine-readable input contract", async
   assert.ok(formats.sources.includes(".json"));
 });
 
+test("formats help accepts standard command help flags", async () => {
+  for (const flag of ["--help", "-h"]) {
+    const result = await runCliAllowFailure(["formats", flag]);
+
+    assert.equal(result.code, 0);
+    assert.equal(result.stderr, "");
+    assert.match(result.stdout, /^Quorum formats\n\nUsage:/);
+  }
+});
+
 test("help advertises the complete discovered input contract", async () => {
   const stdout = await runCli(["--help"]);
 

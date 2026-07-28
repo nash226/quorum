@@ -209,6 +209,11 @@ async function main(): Promise<void> {
   }
 
   if (command === "formats") {
+    if (args.some(isHelpFlag)) {
+      printHelp("formats");
+      return;
+    }
+
     if (args.length > 1 || (args.length === 1 && args[0] !== "--json")) {
       throw new Error("Usage: quorum formats [--json]");
     }
