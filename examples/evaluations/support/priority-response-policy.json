@@ -1,0 +1,24 @@
+{
+  "name": "Support priority response policy example",
+  "domain": "support",
+  "answerPath": "<inline>",
+  "answerLabel": "Support priority response reviewer packet",
+  "answer": "Priority customers receive a response within 4 hours.\nPriority customers receive a response within 24 hours.\nCustomers receive a free annual plan upgrade for being priority customers.\n",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-priority-response-policy.md",
+      "id": "support/priority-response@2026-07-28",
+      "title": "Support Priority Response Policy",
+      "updatedAt": "2026-07-28",
+      "trustLevel": "high",
+      "content": "Priority customers receive a response within 4 hours.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
