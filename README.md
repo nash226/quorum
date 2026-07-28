@@ -60,7 +60,8 @@ The packaged CLI smoke gate now verifies both the human-readable and
 capabilities cannot silently drift apart.
 
 Direct XML and recursive XHTML approved-source verification are covered too: XML metadata and policy
-content survive the explicit `--source` path into verified evidence reports.
+content survive verified evidence reports, and the packaged CLI smoke check confirms nested `.xhtml`
+source-directory discovery.
 
 The packaged smoke gate also verifies a Markdown answer against a DOCX policy
 source, keeping the published artifact's Word-based evidence path covered.

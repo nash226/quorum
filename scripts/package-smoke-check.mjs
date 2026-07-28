@@ -200,7 +200,9 @@ try {
 const cliXhtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xhtml-"));
 try {
   const answerPath = join(cliXhtmlPackageDir, "answer.xhtml");
-  const sourcePath = join(cliXhtmlPackageDir, "policy.xhtml");
+  const sourceDir = join(cliXhtmlPackageDir, "sources", "nested");
+  const sourcePath = join(sourceDir, "policy.xhtml");
+  mkdirSync(sourceDir, { recursive: true });
   writeFileSync(
     answerPath,
     '<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><body><p>Customers can request refunds within 30 days.</p></body></html>',
@@ -212,7 +214,7 @@ try {
 
   const xhtmlOutput = execFileSync(
     "node",
-    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source-dir", join(cliXhtmlPackageDir, "sources"), "--json"],
     { cwd: repoRoot, encoding: "utf8" },
   );
   const xhtmlPayload = JSON.parse(xhtmlOutput);
