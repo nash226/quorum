@@ -1280,6 +1280,26 @@ test("falls back to the html file name when the page has no title", async () => 
   assert.equal(source.content, "Escalate priority incidents immediately.");
 });
 
+test("extracts readable text and metadata from exported xml sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.xml",
+    `<?xml version="1.0"?>
+<policy>
+  <title>Benefits Policy</title>
+  <meta name="last-modified" content="2026-06-21" />
+  <meta name="quorum-trust-level" content="high" />
+  <section><heading>Leave</heading><paragraph>Employees receive 12 weeks.</paragraph></section>
+</policy>`,
+    4,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-06-21");
+  assert.equal(source.trustLevel, "high");
+  assert.match(source.content, /Employees receive 12 weeks\./);
+  assert.doesNotMatch(source.content, /<section>|<paragraph>/);
+});
+
 test("parses XHTML sources and preserves the file-name title fallback", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.xhtml",

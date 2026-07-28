@@ -254,6 +254,8 @@ The CLI regression suite locks this behavior for mixed-case Markdown filenames.
   the source path and title in the evidence report for reviewer handoff.
 - Direct `verify` also accepts TOML (`.toml`) approved-source exports, preserving
   the source path and fallback title in the evidence report for reviewer handoff.
+- XML (`.xml`) approved-source exports now reuse the readable-text and metadata
+  extraction path used for HTML knowledge-base exports.
 - Direct TOML answers are covered through verdict evaluation, keeping structured
   configuration exports on the same evidence-gated path as text answers.
 - The packaged CLI smoke check also verifies a direct YAML answer, keeping the
