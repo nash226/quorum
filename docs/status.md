@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `252182a` on 2026-07-28, test: cover direct JSON source verification
+- Latest shipped change: `f01105c` on 2026-07-28, test: cover direct XML source verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | test: cover direct XML source verification | `f01105c` |
 | 2026-07-28 | Direct push | test: cover direct JSON source verification | `252182a` |
 | 2026-07-28 | Direct push | test: cover markdown directory discovery | `78d7797` |
 | 2026-07-28 | Direct push | test: cover YAML source fallback titles | `dd091cc` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | [#1266](https://github.com/nash226/quorum/pull/1266) | test: cover case-insensitive directory discovery | `40bc391` |
 | 2026-07-28 | Direct push | test: cover packaged LaTeX inputs | `ef53003` |
 | 2026-07-28 | Direct push | test: smoke-check packaged DOCX sources | `ccbe1de` |
-| 2026-07-28 | Direct push | fix: normalize triangular Unicode bullets | `e886238` |
 
