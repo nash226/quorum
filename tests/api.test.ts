@@ -1527,6 +1527,26 @@ test("programmatic batch verification normalizes JSONL answers", async () => {
   });
 });
 
+test("programmatic batch verification normalizes NDJSON answers", async () => {
+  const result = await verifyAnswerBatchContentsResult({
+    answers: [{
+      answerPath: "answers/remote-work.ndjson",
+      answer: '{"policy":"Employees may work remotely two days per week."}\n',
+    }],
+    sources: [{
+      sourcePath: "policies/remote-work.md",
+      content: "Employees may work remotely two days per week.",
+    }],
+  });
+
+  assert.deepEqual(result.report.answers[0]?.report.summary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 0,
+  });
+});
+
 test("programmatic batch verification normalizes TOML answers", async () => {
   const result = await verifyAnswerBatchContentsResult({
     answers: [{
