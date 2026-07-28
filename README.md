@@ -290,6 +290,8 @@ runs, catching format-list drift before a package smoke run.
 
 Plain-text `.log` exports are accepted for both answers and approved sources,
 so support and audit log evidence can be verified without renaming files.
+The direct CLI path is regression-tested with `.log` answer and source files,
+including answer and source path provenance in the JSON report.
 The packaged CLI smoke gate also verifies direct `.log` answer and approved-
 source verification, preserving log-file paths and the extension-free source
 title after publishing.
