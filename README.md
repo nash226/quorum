@@ -7,10 +7,14 @@ business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
 The shipped CLI and programmatic API support the same answer/source format
-contract, including Markdown-family, text, HTML/XHTML, PDF/DOCX, CSV/TSV, and
+contract, including Markdown-family, text/log/RTF, HTML/XHTML, PDF/DOCX, CSV/TSV, and
 structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
+
+RTF answer and approved-source exports are accepted directly and through
+directory discovery using the existing text ingestion path, preserving their
+paths and extension-free source titles in evidence reports.
 
 The source-loader regression suite also verifies that YAML/YML fallback titles
 drop their extension, keeping reviewer evidence consistent with other formats.

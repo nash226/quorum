@@ -44,6 +44,31 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.textile/);
   assert.match(stdout, /Source files: .*\.log/);
   assert.match(stdout, /Answer files: .*\.log/);
+  assert.match(stdout, /Source files: .*\.rtf/);
+  assert.match(stdout, /Answer files: .*\.rtf/);
+});
+
+test("verify accepts direct RTF answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-rtf-"));
+  try {
+    const answerPath = join(tempDir, "answer.rtf");
+    const sourcePath = join(tempDir, "policy.rtf");
+    await Promise.all([
+      writeFile(answerPath, "{\\rtf1\\ansi Employees receive 12 weeks of paid parental leave.}\n", "utf8"),
+      writeFile(sourcePath, "{\\rtf1\\ansi Employees receive 12 weeks of paid parental leave.}\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as { summary: { verified: number }; answerPath: string; sources: Array<{ title: string; sourcePath: string }> };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("verify accepts direct TSV answer and source exports", async () => {
