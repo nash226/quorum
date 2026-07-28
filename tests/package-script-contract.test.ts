@@ -15,6 +15,7 @@ test("package scripts keep the documented repository check gate intact", async (
 
   assert.equal(scripts.check, "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci");
   assert.equal(scripts.formats, "npm run dev -- formats");
+  assert.equal(scripts["formats:json"], "npm run formats -- --json");
   assert.equal(scripts.smoke, "node scripts/smoke-check.mjs");
   assert.equal(scripts["package:smoke"], "node scripts/package-smoke-check.mjs");
   assert.equal(scripts["evaluate:ci"], "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch");
@@ -22,6 +23,17 @@ test("package scripts keep the documented repository check gate intact", async (
 
 test("formats package script exposes the machine-readable input contract", async () => {
   const { stdout } = await execFileAsync("npm", ["run", "--silent", "formats", "--", "--json"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };
+
+  assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
+  assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
+});
+
+test("formats:json package alias exposes the machine-readable input contract", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "formats:json"], {
     cwd: new URL("..", import.meta.url),
     maxBuffer: 1024 * 1024,
   });
