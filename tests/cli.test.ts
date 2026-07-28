@@ -76,11 +76,18 @@ test("formats --json exposes a stable machine-readable input contract", async ()
   assert.ok(formats.sources.includes(".json"));
 });
 
+test("top-level help advertises the extended text and JSON export formats", async () => {
+  const stdout = await runCli(["--help"]);
+
+  assert.match(stdout, /text\/log\/INI\/properties/);
+  assert.match(stdout, /JSON\/JSONL\/NDJSON/);
+});
+
 test("help advertises the complete discovered input contract", async () => {
   const stdout = await runCli(["--help"]);
 
-  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
-  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text\/log\/INI\/properties, HTML\/XHTML, JSON\/JSONL\/NDJSON, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text\/log\/INI\/properties, HTML\/XHTML, JSON\/JSONL\/NDJSON, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
 });
 
 test("verify accepts a direct .text answer export", async () => {
@@ -774,8 +781,8 @@ test("top-level help lists every shipped command", async () => {
   }
 
   assert.match(stdout, /Supported files:/);
-  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
-  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text\/log\/INI\/properties, HTML\/XHTML, JSON\/JSONL\/NDJSON, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
+  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text\/log\/INI\/properties, HTML\/XHTML, JSON\/JSONL\/NDJSON, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files and directories/);
 });
 
