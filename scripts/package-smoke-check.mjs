@@ -1195,9 +1195,29 @@ try {
 
 const docxTempDir = mkdtempSync(join(tmpdir(), "quorum-package-docx-"));
 try {
+  const docxSourceAnswerPath = join(docxTempDir, "answer.md");
+  const docxSourcePath = join(docxTempDir, "hr-policy.docx");
+  const docxSourceReportPath = join(docxTempDir, "source-report.json");
+  const docxFixture = readFileSync(new URL("../node_modules/mammoth/test/test-data/single-paragraph.docx", import.meta.url));
+  writeFileSync(docxSourceAnswerPath, "Walking on imported air\n");
+  writeFileSync(docxSourcePath, docxFixture);
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath),
+    "verify",
+    "--answer",
+    docxSourceAnswerPath,
+    "--source",
+    docxSourcePath,
+    "--out",
+    docxSourceReportPath,
+  ], { encoding: "utf8" });
+  const docxSourceReport = JSON.parse(readFileSync(docxSourceReportPath, "utf8"));
+  if (docxSourceReport.summary?.verified !== 1 || docxSourceReport.sources?.[0]?.title !== "hr-policy") {
+    throw new Error("Package artifact CLI did not verify the expected DOCX policy source contract.");
+  }
+
   const docxAnswerPath = join(docxTempDir, "answer.docx");
   const docxReportPath = join(docxTempDir, "report.json");
-  const docxFixture = readFileSync(new URL("../node_modules/mammoth/test/test-data/single-paragraph.docx", import.meta.url));
   writeFileSync(docxAnswerPath, docxFixture);
   execFileSync(process.execPath, [
     fileURLToPath(cliPath),

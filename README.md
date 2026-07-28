@@ -30,6 +30,9 @@ The packaged CLI smoke gate now verifies both the human-readable and
 `--json` format contracts against the library export, so published CLI and API
 capabilities cannot silently drift apart.
 
+The packaged smoke gate also verifies a Markdown answer against a DOCX policy
+source, keeping the published artifact's Word-based evidence path covered.
+
 Programmatic batch verification now normalizes JSONL and NDJSON answers with
 the same structured parsing used by direct CLI verification.
 
