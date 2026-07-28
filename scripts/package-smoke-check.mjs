@@ -229,6 +229,33 @@ try {
   rmSync(cliXhtmlPackageDir, { recursive: true, force: true });
 }
 
+const cliHtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-html-"));
+try {
+  const answerPath = join(cliHtmlPackageDir, "answer.html");
+  const sourcePath = join(cliHtmlPackageDir, "policy.html");
+  writeFileSync(answerPath, "<html><body><p>Customers can request refunds within 30 days.</p></body></html>");
+  writeFileSync(
+    sourcePath,
+    "<html><head><title>Refund Policy</title></head><body><p>Customers can request refunds within 30 days.</p></body></html>",
+  );
+
+  const htmlOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const htmlPayload = JSON.parse(htmlOutput);
+  if (
+    htmlPayload.summary?.verified !== 1 ||
+    htmlPayload.answerPath !== answerPath ||
+    htmlPayload.sources?.[0]?.title !== "Refund Policy"
+  ) {
+    throw new Error("Package artifact did not verify the expected HTML answer contract.");
+  }
+} finally {
+  rmSync(cliHtmlPackageDir, { recursive: true, force: true });
+}
+
 const cliAsciiDocPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-asciidoc-"));
 try {
   const answerPath = join(cliAsciiDocPackageDir, "answer.asciidoc");
