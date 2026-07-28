@@ -925,8 +925,8 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(indexPayload.service, "quorum");
     assert.equal(indexPayload.version, "0.1.0");
     assert.equal(indexPayload.openapiPath, "/openapi.json");
-    assert.deepEqual(indexPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
-    assert.deepEqual(indexPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
+    assert.deepEqual(indexPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS].sort());
+    assert.deepEqual(indexPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS].sort());
     assert.deepEqual(indexPayload.capabilities.requestContentTypes, ["application/json", "application/*+json"]);
     assert.deepEqual(indexPayload.capabilities.headerNames, {
       requestId: "X-Quorum-Request-Id",
@@ -1066,8 +1066,8 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(capabilitiesPayload.version, "0.1.0");
     assert.equal(capabilitiesPayload.openapiPath, "/openapi.json");
     assert.deepEqual(capabilitiesPayload.capabilities.cors.allowedOrigins, ["https://console.example.com"]);
-    assert.deepEqual(capabilitiesPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS]);
-    assert.deepEqual(capabilitiesPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS]);
+    assert.deepEqual(capabilitiesPayload.capabilities.sourceExtensions, [...api.SOURCE_EXTENSIONS].sort());
+    assert.deepEqual(capabilitiesPayload.capabilities.answerExtensions, [...api.ANSWER_EXTENSIONS].sort());
     assert.deepEqual(capabilitiesPayload.capabilities.requestContentTypes, ["application/json", "application/*+json"]);
     assert.deepEqual(capabilitiesPayload.capabilities.verdicts, api.CLAIM_VERDICTS);
     assert.deepEqual(capabilitiesPayload.capabilities.trustLevels, ["low", "medium", "high"]);
