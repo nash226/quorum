@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e886238` on 2026-07-28, fix: normalize triangular Unicode bullets
+- Latest shipped change: `ccbe1de` on 2026-07-28, test: smoke-check packaged DOCX sources
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | test: smoke-check packaged DOCX sources | `ccbe1de` |
 | 2026-07-28 | Direct push | fix: normalize triangular Unicode bullets | `e886238` |
 | 2026-07-28 | Direct push | test: cover direct log verification | `fe31e1f` |
 | 2026-07-28 | Direct push | fix: preserve Unicode evidence tokens | `24b6d8f` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | fix: stabilize capability extension ordering | `a89067a` |
 | 2026-07-27 | Direct push | docs: clarify the CI pre-PR gate | `4769eac` |
 | 2026-07-27 | Direct push | fix: split Unicode-separated answer lines | `0260238` |
-| 2026-07-27 | Direct push | docs: align capability snapshot with shipped formats | `cd33bf2` |
 
