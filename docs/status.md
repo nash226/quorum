@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `40bc391` on 2026-07-28, test: cover case-insensitive directory discovery
+- Latest shipped change: `06834c2` on 2026-07-28, test: exercise formats package alias
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | test: exercise formats package alias | `06834c2` |
 | 2026-07-28 | [#1266](https://github.com/nash226/quorum/pull/1266) | test: cover case-insensitive directory discovery | `40bc391` |
 | 2026-07-28 | Direct push | test: cover packaged LaTeX inputs | `ef53003` |
 | 2026-07-28 | Direct push | test: smoke-check packaged DOCX sources | `ccbe1de` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | test: cover direct log verification | `fe31e1f` |
 | 2026-07-28 | Direct push | fix: preserve Unicode evidence tokens | `24b6d8f` |
 | 2026-07-28 | Direct push | docs: explain no-claim queue routing | `a889539` |
-| 2026-07-27 | Direct push | fix: stabilize capability extension ordering | `a89067a` |
 
