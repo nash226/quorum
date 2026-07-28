@@ -51,6 +51,9 @@ content survive the explicit `--source` path into verified evidence reports.
 The packaged smoke gate also verifies a Markdown answer against a DOCX policy
 source, keeping the published artifact's Word-based evidence path covered.
 
+Direct PDF answer verification is regression-tested too, so a single exported
+PDF response follows the same evidence path as batch-discovered PDF answers.
+
 It also verifies direct LaTeX answer and policy inputs after packaging, keeping
 documentation-tool exports release-gated alongside the other supported formats.
 
