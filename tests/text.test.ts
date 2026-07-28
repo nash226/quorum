@@ -29,6 +29,13 @@ test("does not split common abbreviations into separate claims", () => {
   );
 });
 
+test("does not split a claim at etc.", () => {
+  assert.deepEqual(
+    splitIntoSentences("Approved sources include policies, playbooks, etc. for verification."),
+    ["Approved sources include policies, playbooks, etc. for verification."],
+  );
+});
+
 test("keeps decimal values inside one sentence", () => {
   assert.deepEqual(
     splitIntoSentences("The policy applies to 95.5% of eligible employees. Review exceptions separately."),
