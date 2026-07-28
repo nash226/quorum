@@ -1,6 +1,26 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { renderAnswerLabels, renderAnswerPreview, splitIntoSentences } from "../src/text.js";
+import {
+  overlapScore,
+  renderAnswerLabels,
+  renderAnswerPreview,
+  splitIntoSentences,
+  tokenize,
+} from "../src/text.js";
+
+test("tokenizes non-Latin letters for localized evidence matching", () => {
+  assert.deepEqual(tokenize("Сотрудники получают 12 недель отпуска."), [
+    "сотрудники",
+    "получают",
+    "12",
+    "недель",
+    "отпуска",
+  ]);
+  assert.equal(
+    overlapScore("Сотрудники получают 12 недель отпуска.", "Сотрудники получают 12 недель отпуска."),
+    1,
+  );
+});
 
 test("does not split common abbreviations into separate claims", () => {
   assert.deepEqual(

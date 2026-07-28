@@ -97,7 +97,7 @@ export function tokenize(text: string): string[] {
   return text
     .toLowerCase()
     .replace(/['']/g, "")
-    .match(/[a-z0-9]+/g)
+    .match(/[\p{L}\p{N}]+/gu)
     ?.filter((token) => token.length > 1 && !STOPWORDS.has(token)) ?? [];
 }
 
