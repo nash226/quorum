@@ -15,6 +15,9 @@ the exact extension sets used for directory discovery.
 The source-loader regression suite also verifies that YAML/YML fallback titles
 drop their extension, keeping reviewer evidence consistent with other formats.
 
+The CLI verification path also covers direct XHTML policy sources, so XML-based
+knowledge-base exports work with `--source` as well as directory discovery.
+
 The generated status page now mirrors the complete format capability index,
 including configuration, documentation, log, and structured export inputs.
 
