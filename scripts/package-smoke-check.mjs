@@ -227,6 +227,31 @@ try {
   rmSync(cliAsciiDocPackageDir, { recursive: true, force: true });
 }
 
+const cliMediaWikiPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-mediawiki-"));
+try {
+  const answerPath = join(cliMediaWikiPackageDir, "answer.wiki");
+  const sourcePath = join(cliMediaWikiPackageDir, "policy.mediawiki");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "= Parental Leave Policy =\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const mediaWikiOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const mediaWikiPayload = JSON.parse(mediaWikiOutput);
+  if (
+    mediaWikiPayload.summary?.verified !== 1 ||
+    mediaWikiPayload.answerPath !== answerPath ||
+    mediaWikiPayload.sources?.[0]?.title !== "policy" ||
+    mediaWikiPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected MediaWiki answer/source contract.");
+  }
+} finally {
+  rmSync(cliMediaWikiPackageDir, { recursive: true, force: true });
+}
+
 const cliLatexPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-latex-"));
 try {
   const answerPath = join(cliLatexPackageDir, "answer.tex");
