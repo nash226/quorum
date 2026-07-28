@@ -170,6 +170,8 @@ configuration-backed answer and source directories can use the same workflow.
   fail-policy results.
 - `import-review` and `review-queue` turn reviewer decisions into queue-ready
   summaries, with optional benchmark drift context.
+- Answers with no extractable claims remain visible as explicit `no_claims`
+  queue items for reviewer triage.
 - Reviewer decision CSV imports accept UTF-8 BOM prefixes emitted by some
   spreadsheet tools.
 - `evaluate` runs checked-in policy fixtures as a CI mismatch and score gate.
