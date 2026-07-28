@@ -42,6 +42,9 @@ capabilities cannot silently drift apart.
 Direct XML and recursive XHTML approved-source verification are covered too: XML metadata and policy
 content survive the explicit `--source` path into verified evidence reports.
 
+Direct reStructuredText answer verification is also covered, preserving the
+`.rst` answer path in the JSON evidence report alongside the verified claim.
+
 The packaged smoke gate also verifies a Markdown answer against a DOCX policy
 source, keeping the published artifact's Word-based evidence path covered.
 
