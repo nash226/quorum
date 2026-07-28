@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f01105c` on 2026-07-28, test: cover direct XML source verification
+- Latest shipped change: `241f03d` on 2026-07-28, test: cover recursive XHTML source discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | [#1277](https://github.com/nash226/quorum/pull/1277) | test: cover recursive XHTML source discovery | `241f03d` |
 | 2026-07-28 | Direct push | test: cover direct XML source verification | `f01105c` |
 | 2026-07-28 | Direct push | test: cover direct JSON source verification | `252182a` |
 | 2026-07-28 | Direct push | test: cover markdown directory discovery | `78d7797` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | test: exercise formats package alias | `06834c2` |
 | 2026-07-28 | [#1266](https://github.com/nash226/quorum/pull/1266) | test: cover case-insensitive directory discovery | `40bc391` |
 | 2026-07-28 | Direct push | test: cover packaged LaTeX inputs | `ef53003` |
-| 2026-07-28 | Direct push | test: smoke-check packaged DOCX sources | `ccbe1de` |
 
