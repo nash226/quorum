@@ -27,6 +27,9 @@ including structured claims and source titles in the JSON evidence report.
 The programmatic batch API also verifies TSV answer and approved-source content,
 preserving spreadsheet export paths in the reviewer report.
 
+The packaged CLI smoke gate now verifies direct TSV answer and approved-source
+files too, keeping tab-delimited spreadsheet handoffs release-gated.
+
 The programmatic batch API also covers NDJSON answers, keeping the `.ndjson`
 alias on the same structured parsing path as `.jsonl` inputs.
 
