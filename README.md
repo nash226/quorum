@@ -15,6 +15,10 @@ the exact extension sets used for directory discovery.
 The generated status page now mirrors the complete format capability index,
 including configuration, documentation, log, and structured export inputs.
 
+Claim matching now preserves Unicode letters and numbers, so localized
+non-Latin answers can be compared with matching approved policy text instead
+of losing their meaningful tokens during normalization.
+
 Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,
 so exported policy files retain their title and metadata when loaded through
 the programmatic API.
