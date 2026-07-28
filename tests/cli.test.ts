@@ -26,6 +26,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
+  assert.match(stdout, /Source files: .*\.mdown/);
+  assert.match(stdout, /Answer files: .*\.mdown/);
   assert.match(stdout, /Source files: .*\.rst/);
   assert.match(stdout, /Answer files: .*\.rst/);
   assert.match(stdout, /Source files: .*\.wiki/);
@@ -110,6 +112,25 @@ test("verify accepts a direct .text answer export", async () => {
       report.assessments[0]?.claim.text,
       "Employees receive 12 weeks of paid parental leave.",
     );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify accepts a direct .mdown answer and source export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdown-"));
+  try {
+    const answerPath = join(tempDir, "answer.mdown");
+    const sourcePath = join(tempDir, "policy.mdown");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify", "--answer", answerPath, "--source", sourcePath]);
+
+    assert.match(stdout, /VERIFIED/);
+    assert.match(stdout, /Employees receive 12 weeks of paid parental leave/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
