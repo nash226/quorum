@@ -36,6 +36,13 @@ test("does not split a claim at etc.", () => {
   );
 });
 
+test("does not split a claim at a.m. or p.m.", () => {
+  assert.deepEqual(
+    splitIntoSentences("Support is available from 9 a.m. to 5 p.m. on weekdays."),
+    ["Support is available from 9 a.m. to 5 p.m. on weekdays."],
+  );
+});
+
 test("keeps decimal values inside one sentence", () => {
   assert.deepEqual(
     splitIntoSentences("The policy applies to 95.5% of eligible employees. Review exceptions separately."),
