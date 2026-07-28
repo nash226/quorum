@@ -18,6 +18,9 @@ drop their extension, keeping reviewer evidence consistent with other formats.
 Direct CLI verification now covers YAML answers and YML approved sources,
 including structured claims and source titles in the JSON evidence report.
 
+Direct Org-mode answer verification is covered end to end as well, preserving
+the explicit `.org` answer path in JSON evidence reports.
+
 The generated status page now mirrors the complete format capability index,
 including configuration, documentation, log, and structured export inputs.
 
