@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `896a456` on 2026-07-28, test: cover programmatic NDJSON batches
+- Latest shipped change: `006195e` on 2026-07-28, test: cover direct PDF answer verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | test: cover direct PDF answer verification | `006195e` |
 | 2026-07-28 | Direct push | test: cover programmatic NDJSON batches | `896a456` |
 | 2026-07-28 | Direct push | test: cover TSV programmatic batch inputs | `a8d1de8` |
 | 2026-07-28 | Direct push | test: smoke-check packaged Textile inputs | `523b00b` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | [#1277](https://github.com/nash226/quorum/pull/1277) | test: cover recursive XHTML source discovery | `241f03d` |
 | 2026-07-28 | Direct push | test: cover direct XML source verification | `f01105c` |
 | 2026-07-28 | Direct push | test: cover direct JSON source verification | `252182a` |
-| 2026-07-28 | Direct push | test: cover markdown directory discovery | `78d7797` |
 
