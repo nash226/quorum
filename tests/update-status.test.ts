@@ -76,7 +76,7 @@ test("status refresh reads capabilities from the CLI guide", () => {
   execFileSync("npm", ["run", "status:refresh"], { encoding: "utf8" });
 
   const status = readFileSync("docs/status.md", "utf8");
-  assert.match(status, /^- read Markdown\/MDX\/Quarto, AsciiDoc, Org-mode, MediaWiki, text, HTML\/XHTML, JSON, YAML\/YML, XML, TOML, PDF, and DOCX answers and approved sources$/m);
+  assert.match(status, /^- read Markdown-family \(including MDX and Quarto\), AsciiDoc, Org-mode, MediaWiki, reStructuredText, LaTeX, Textile, text\/log\/configuration files, HTML\/XHTML, PDF, DOCX, CSV\/TSV, and structured JSON\/JSONL\/NDJSON\/YAML\/YML\/XML\/TOML answers and approved sources$/m);
   assert.doesNotMatch(status, /Missing section "What It Does"/);
 });
 
