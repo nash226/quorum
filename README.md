@@ -21,6 +21,9 @@ files, keeping this documented format covered after publishing.
 Direct CLI verification now covers YAML answers and YML approved sources,
 including structured claims and source titles in the JSON evidence report.
 
+The programmatic batch API also verifies TSV answer and approved-source content,
+preserving spreadsheet export paths in the reviewer report.
+
 The generated status page now mirrors the complete format capability index,
 including configuration, documentation, log, and structured export inputs.
 
