@@ -991,6 +991,8 @@ the current coverage inventory and extension workflow.
 Run `npm run evaluate:ci` to execute the full checked-in benchmark with the
 aggregate score and mismatch gates enabled; it is the same fail-closed check
 used before publishing the package.
+The repository test suite also exercises this benchmark through the programmatic
+API, CLI reports, summary CSVs, and reviewer-queue drift views.
 The benchmark also covers phone-support availability boundaries and callback
 timing, so universal access and urgent-response promises are checked against
 approved support policy before they reach a customer.
