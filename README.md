@@ -40,8 +40,9 @@ of losing their meaningful tokens during normalization.
 Claim extraction also strips common triangular Unicode list markers (`▸`, `▹`,
 and `‣`), keeping exported list answers aligned with their approved source text.
 
-Sentence splitting also keeps common abbreviations such as `e.g.`, `i.e.`, and
-`etc.` inside the surrounding claim instead of creating false claim boundaries.
+Sentence splitting also keeps common abbreviations such as `e.g.`, `i.e.`,
+`a.m.`, `p.m.`, and `etc.` inside the surrounding claim instead of creating
+false claim boundaries.
 
 Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,
 so exported policy files retain their title and metadata when loaded through
