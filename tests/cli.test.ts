@@ -3935,6 +3935,37 @@ test("verify discovers XML sources in source directories", async () => {
   }
 });
 
+test("verify accepts a direct XML approved source export with metadata", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xml-direct-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.xml");
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(
+      sourcePath,
+      "<policy><title>HR Benefits Policy</title><updatedAt>2026-07-20</updatedAt><trustLevel>high</trustLevel><benefit>Employees receive 12 weeks of paid parental leave.</benefit></policy>",
+      "utf8",
+    );
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      sources: Array<{ title: string; updatedAt?: string; trustLevel: string }>;
+      summary: { verified: number };
+    };
+
+    assert.deepEqual(report.sources.map(({ title, updatedAt, trustLevel }) => ({ title, updatedAt, trustLevel })), [{
+      title: "HR Benefits Policy",
+      updatedAt: "2026-07-20",
+      trustLevel: "high",
+    }]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify discovers YAML and YML sources in nested source directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-yaml-source-"));
 
