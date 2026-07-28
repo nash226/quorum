@@ -271,9 +271,9 @@ npm run dev -- verify \
   --json
 ```
 
-`npm run check` is the recommended pre-PR gate: it runs tests, the TypeScript
-build, HTTP and packaged-artifact smoke checks, and the checked-in evaluation
-suite in one command.
+`npm run check` is the recommended pre-PR gate and matches the repository CI
+workflow: it runs tests, the TypeScript build, HTTP and packaged-artifact smoke
+checks, and the checked-in evaluation suite in one command.
 The package-script contract test keeps this gate aligned with the commands CI
 actually runs.
 The packaged smoke check also compares `quorum formats` with the library's
