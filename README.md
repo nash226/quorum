@@ -1,5 +1,8 @@
 # Quorum
 
+The HR evaluation benchmark now includes attendance coverage for manager
+notification, exception routing, and an unapproved remote-work claim.
+
 [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
