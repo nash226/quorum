@@ -178,7 +178,8 @@ npm run dev -- import-review \
 ```
 
 Use `--queue-status pending`, `reviewed`, or `no_claims` for a targeted
-handoff. The filtered result recalculates answer groups, claims, queue totals,
+handoff. These are the complete queue-status values; the filtered result
+recalculates answer groups, claims, queue totals,
 artifacts, and optional fail-policy results.
 
 For example, create a pending-only handoff with both machine-readable artifacts:

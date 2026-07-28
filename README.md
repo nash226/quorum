@@ -1502,6 +1502,10 @@ selected fixtures, while the CI command remains the repository-wide gate.
 The packaged CLI smoke check now covers `quorum help <topic>` for every shipped
 command, keeping topic-based onboarding aligned with the executable interface.
 
+The reviewer import guide now calls out the complete `--queue-status` contract
+(`pending`, `reviewed`, or `no_claims`) so queue handoffs use the same values as
+the CLI and HTTP surfaces.
+
 For a focused local scorecard, pass one or more domains to the evaluator:
 
 ```bash
