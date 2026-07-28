@@ -96,6 +96,11 @@ test("strips supported text extensions from fallback source titles", async () =>
     '{"policy":"Employees receive 12 weeks of paid parental leave."}\n',
     8,
   );
+  const yamlSource = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.yaml",
+    "leaveWeeks: 12\n",
+    9,
+  );
 
   assert.equal(markdownSource.title, "leave-policy");
   assert.equal(textSource.title, "escalation-guide");
@@ -111,6 +116,7 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(textileSource.title, "leave-policy");
   assert.equal(ndjsonSource.title, "leave-policy");
   assert.match(ndjsonSource.content, /Employees receive 12 weeks/);
+  assert.equal(yamlSource.title, "leave-policy");
 });
 
 test("strips AsciiDoc extensions from fallback source titles", async () => {
