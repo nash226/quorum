@@ -256,6 +256,8 @@ Use `npm run formats -- --json` when an integration needs the same contract as
 sorted machine-readable `sources` and `answers` arrays. The packaged smoke
 check compares both the human-readable and JSON arrays with the library export,
 so published CLI and API format capabilities cannot silently drift apart.
+The repository test suite also invokes this npm alias end to end, keeping the
+documented command wired to the same contract during development.
 
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
