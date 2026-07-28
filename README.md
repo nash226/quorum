@@ -27,7 +27,7 @@ retaining the visible replacement text.
 Batch verification is also a shipped workflow: it checks directories or
 explicit answer paths, exports claim-level reviewer decisions, and produces
 one-row-per-answer summaries for queue routing. Durable queue persistence is
-the next product step, pending the backend choice tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
+the next product step, pending the backend choice tracked in [issue #683](https://github.com/nash226/quorum/issues/683); see the [roadmap](docs/roadmap.md) for the current sequencing.
 
 ## Why Quorum Exists
 
