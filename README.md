@@ -21,6 +21,9 @@ drop their extension, keeping reviewer evidence consistent with other formats.
 The packaged CLI smoke gate also verifies Textile answer and approved-source
 files, keeping this documented format covered after publishing.
 
+The packaged CLI smoke gate also verifies MDX answer and approved-source files,
+keeping Markdown-family integrations release-gated after publishing.
+
 Direct CLI verification now covers YAML answers and YML approved sources,
 including structured claims and source titles in the JSON evidence report.
 
