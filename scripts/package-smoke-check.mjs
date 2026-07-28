@@ -406,9 +406,9 @@ try {
 
 const cliTomlSourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-toml-source-"));
 try {
-  const answerPath = join(cliTomlSourcePackageDir, "answer.md");
+  const answerPath = join(cliTomlSourcePackageDir, "answer.toml");
   const sourcePath = join(cliTomlSourcePackageDir, "policy.toml");
-  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(answerPath, '[answer]\nclaim = "Employees receive 12 weeks of paid parental leave."\n');
   writeFileSync(
     sourcePath,
     'title = "Parental Leave Policy"\n[policy]\nrule = "Employees receive 12 weeks of paid parental leave."\n',
@@ -425,7 +425,7 @@ try {
     tomlSourcePayload.sources?.[0]?.title !== "Parental Leave Policy" ||
     tomlSourcePayload.sources?.[0]?.sourcePath !== sourcePath
   ) {
-    throw new Error("Package artifact did not verify the expected TOML source contract.");
+    throw new Error("Package artifact did not verify the expected TOML answer/source contract.");
   }
 } finally {
   rmSync(cliTomlSourcePackageDir, { recursive: true, force: true });
