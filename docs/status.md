@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `20a786b` on 2026-07-28, test: smoke-check packaged Quarto inputs
+- Latest shipped change: `eea0e1b` on 2026-07-28, test: smoke-check packaged XML answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | test: smoke-check packaged XML answers | `eea0e1b` |
 | 2026-07-28 | Direct push | test: smoke-check packaged Quarto inputs | `20a786b` |
 | 2026-07-28 | Direct push | test: smoke-check packaged YAML inputs | `d936827` |
 | 2026-07-28 | Direct push | test: smoke-check packaged html answers | `0755b2a` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | fix: normalize frontmatter metadata keys | `5dbc4f6` |
 | 2026-07-28 | Direct push | test: smoke-check packaged TSV inputs | `02c4048` |
 | 2026-07-28 | Direct push | test: cover direct CSV verification | `a4183e7` |
-| 2026-07-28 | Direct push | feat: read metadata from XML exports | `187a6d8` |
 
