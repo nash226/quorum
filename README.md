@@ -15,6 +15,9 @@ the exact extension sets used for directory discovery.
 The source-loader regression suite also verifies that YAML/YML fallback titles
 drop their extension, keeping reviewer evidence consistent with other formats.
 
+The packaged CLI smoke gate also verifies Textile answer and approved-source
+files, keeping this documented format covered after publishing.
+
 Direct CLI verification now covers YAML answers and YML approved sources,
 including structured claims and source titles in the JSON evidence report.
 

@@ -172,6 +172,31 @@ try {
   rmSync(cliLogPackageDir, { recursive: true, force: true });
 }
 
+const cliTextilePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-textile-"));
+try {
+  const answerPath = join(cliTextilePackageDir, "answer.textile");
+  const sourcePath = join(cliTextilePackageDir, "policy.textile");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const textileOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const textilePayload = JSON.parse(textileOutput);
+  if (
+    textilePayload.summary?.verified !== 1 ||
+    textilePayload.answerPath !== answerPath ||
+    textilePayload.sources?.[0]?.title !== "policy" ||
+    textilePayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected Textile answer/source contract.");
+  }
+} finally {
+  rmSync(cliTextilePackageDir, { recursive: true, force: true });
+}
+
 const cliXhtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xhtml-"));
 try {
   const answerPath = join(cliXhtmlPackageDir, "answer.xhtml");
