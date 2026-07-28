@@ -709,6 +709,9 @@ Verification also stops with `No approved source files found` when the supplied
 source paths and directories contain no supported files, instead of producing a
 report where every claim is unsupported.
 
+This validation also covers non-empty directories whose files all use
+unsupported extensions.
+
 Integrations can check the installed CLI and API contract version without
 starting the server:
 

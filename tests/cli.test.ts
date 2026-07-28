@@ -1034,6 +1034,29 @@ test("verify rejects an empty source directory before producing unsupported clai
     ]);
 
     assert.notEqual(result.code, 0);
+    assert.match(`${result.stderr}${result.stdout}`, /No approved source files found/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify rejects source directories containing only unsupported files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-unsupported-sources-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(sourceDir);
+    await writeFile(join(sourceDir, "notes.csv"), "not an approved source format\n", "utf8");
+
+    const result = await runCliAllowFailure([
+      "verify",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source-dir",
+      sourceDir,
+    ]);
+
+    assert.notEqual(result.code, 0);
     assert.match(result.stderr, /No approved source files found/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
