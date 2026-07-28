@@ -201,6 +201,8 @@ The CLI regression suite locks this behavior for mixed-case Markdown filenames.
   policy timestamps in evidence metadata.
 - XML approved sources preserve common `title`, freshness, and `trustLevel`
   metadata too, keeping structured exports consistent in reviewer evidence.
+- The packaged CLI smoke gate verifies that XML source title, freshness, and
+  trust metadata survive the published artifact boundary.
 - CLI help now lists MediaWiki (including `.wiki` exports) alongside the formats discovered for answer
   directories, keeping the advertised input contract aligned with the shipped
   discovery behavior.

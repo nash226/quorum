@@ -259,7 +259,7 @@ try {
   writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
   writeFileSync(
     sourcePath,
-    '<?xml version="1.0"?><policy><title>Parental Leave Policy</title><rule>Employees receive 12 weeks of paid parental leave.</rule></policy>',
+    '<?xml version="1.0"?><policy><title>Parental Leave Policy</title><modifiedAt>2026-07-20</modifiedAt><trustLevel>high</trustLevel><rule>Employees receive 12 weeks of paid parental leave.</rule></policy>',
   );
 
   const xmlSourceOutput = execFileSync(
@@ -271,7 +271,9 @@ try {
   if (
     xmlSourcePayload.summary?.verified !== 1 ||
     xmlSourcePayload.sources?.[0]?.title !== "Parental Leave Policy" ||
-    xmlSourcePayload.sources?.[0]?.sourcePath !== sourcePath
+    xmlSourcePayload.sources?.[0]?.sourcePath !== sourcePath ||
+    xmlSourcePayload.sources?.[0]?.updatedAt !== "2026-07-20" ||
+    xmlSourcePayload.sources?.[0]?.trustLevel !== "high"
   ) {
     throw new Error("Package artifact did not verify the expected XML source contract.");
   }
