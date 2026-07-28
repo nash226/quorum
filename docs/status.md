@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `133290c` on 2026-07-28, test: smoke-check packaged MediaWiki inputs
+- Latest shipped change: `9535536` on 2026-07-28, test: gate professional development fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | test: gate professional development fixture | `9535536` |
 | 2026-07-28 | Direct push | test: smoke-check packaged MediaWiki inputs | `133290c` |
 | 2026-07-28 | Direct push | docs: clarify decision-gated roadmap work | `8b5e071` |
 | 2026-07-28 | [#1320](https://github.com/nash226/quorum/pull/1320) | test: smoke-check packaged AsciiDoc and Org inputs | `5b6c5fa` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | test: smoke-check packaged XML answers | `eea0e1b` |
 | 2026-07-28 | Direct push | test: smoke-check packaged Quarto inputs | `20a786b` |
 | 2026-07-28 | Direct push | test: smoke-check packaged YAML inputs | `d936827` |
-| 2026-07-28 | Direct push | test: smoke-check packaged html answers | `0755b2a` |
 
