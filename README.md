@@ -42,7 +42,9 @@ breaks an answer into claims, compares each claim with source evidence, and
 returns reviewer-ready `verified`, `contradicted`, `unsupported`, or
 `needs_review` verdicts. The first wedge is HR and customer-support policy
 verification, where grounded answers are high-volume and costly to get wrong.
-The checked-in examples also include a support-security scenario covering
+The checked-in examples also include a support trial-conversion scenario
+covering cancellation timing, refund eligibility, and an unsupported conference
+ticket promise. They also include a support-security scenario covering
 password-reset expiry, account-change verification, escalation requirements,
 and an unsupported premium-service claim.
 The evaluation suite now includes a support account-recovery scenario covering
@@ -979,7 +981,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 80-fixture benchmark spans 27 HR and 53 support workflows, including
+The checked-in 81-fixture benchmark spans 27 HR and 54 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
@@ -1009,7 +1011,7 @@ focused support scorecards aligned with the 51-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
-exactly one data row for each of the 80 checked-in benchmark fixtures.
+exactly one data row for each of the 81 checked-in benchmark fixtures.
 It also cross-checks that row count against the aggregate summary's fixture
 count, keeping machine-readable benchmark artifacts internally consistent.
 The packed smoke check also reconciles each domain summary's fixture count
@@ -1145,7 +1147,7 @@ The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
 
-The benchmark inventory is currently reconciled at 80 fixtures, including the
+The benchmark inventory is currently reconciled at 81 fixtures, including the
 new support returns-and-exchange coverage described below.
 
 The new support returns-and-exchange fixture covers a verified exchange window,

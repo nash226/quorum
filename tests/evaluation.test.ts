@@ -2110,6 +2110,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/subscription-pause-policy.json"),
     resolve("examples/evaluations/support/subscription-renewal-policy.json"),
     resolve("examples/evaluations/support/tax-exemption-policy.json"),
+    resolve("examples/evaluations/support/trial-conversion-policy.json"),
     resolve("examples/evaluations/support/usage-limits-policy.json"),
     resolve("examples/evaluations/support/warranty-policy.json"),
     resolve("examples/evaluations/support/workspace-access-policy.json"),
@@ -2168,7 +2169,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 80);
+  assert.equal(scorecards.length, 81);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2249,6 +2250,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support subscription pause policy example",
       "Support subscription renewal policy example",
       "Support tax exemption policy example",
+      "Support trial conversion policy example",
       "Support usage limits policy example",
       "Support warranty policy example",
       "Support workspace access policy example",
@@ -2320,7 +2322,7 @@ test("filters the support evaluation fixture set by domain", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 53);
+  assert.equal(scorecards.length, 54);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "support"));
 });
 

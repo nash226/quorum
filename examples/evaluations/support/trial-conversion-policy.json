@@ -1,0 +1,24 @@
+{
+  "name": "Support trial conversion policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-trial-conversion-answer.md",
+  "answer": "Customers can cancel a trial before it converts to a paid plan.\nTrial conversions are refunded automatically within 30 days.\nCustomers receive a complimentary conference ticket after the trial ends.\n",
+  "answerLabel": "Support trial conversion reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-trial-conversion-policy.md",
+      "id": "support/trial-conversion@2026-07-28",
+      "title": "Support Trial Conversion Policy",
+      "updatedAt": "2026-07-28",
+      "trustLevel": "high",
+      "content": "Customers can cancel a trial before it converts to a paid plan. Trial charges can be refunded within 14 days when eligibility requirements are met.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
