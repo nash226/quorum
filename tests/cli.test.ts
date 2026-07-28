@@ -102,6 +102,33 @@ test("verify accepts direct TSV answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct CSV answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-csv-direct-"));
+  try {
+    const answerPath = join(tempDir, "answer.csv");
+    const sourcePath = join(tempDir, "policy.csv");
+    await Promise.all([
+      writeFile(answerPath, "claim\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "policy\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+      assessments: Array<{ verdict: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct YAML answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-yaml-direct-"));
   try {
