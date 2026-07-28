@@ -56,6 +56,9 @@ business evidence or reviewer decisions.
 
 ## Preserve durable source identity
 
+Integrations can use `GET /formats` to discover the sorted answer and
+approved-source extension contract without duplicating CLI configuration.
+
 Authentication protects who can call the service; source IDs explain what an
 approved record was. When a workflow already has a durable identifier from its
 policy repository, include it as `sources[].id` on `/verify` and

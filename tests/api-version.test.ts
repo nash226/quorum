@@ -8,6 +8,9 @@ import {
   API_ENDPOINTS,
   API_VERSION,
   API_ROOT_PATH,
+  ANSWER_EXTENSIONS,
+  FORMATS_PATH,
+  SOURCE_EXTENSIONS,
   VERSION_PATH,
   createOpenApiDocument,
   startApiServer,
@@ -50,11 +53,30 @@ test("HTTP API exposes a dedicated machine-readable version endpoint", async () 
   }
 });
 
+test("HTTP API exposes the supported input format contract", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  try {
+    const response = await fetch(`${api.url}${FORMATS_PATH}`);
+    assert.equal(response.status, 200);
+    const payload = await response.json() as { requestId: string; service: string; version: string; sources: string[]; answers: string[] };
+    assert.equal(payload.requestId, response.headers.get("x-quorum-request-id"));
+    assert.deepEqual({ ...payload, requestId: "" }, {
+      requestId: "",
+      service: "quorum",
+      version: API_VERSION,
+      sources: [...SOURCE_EXTENSIONS].sort(),
+      answers: [...ANSWER_EXTENSIONS].sort(),
+    });
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API revalidates bodyless discovery probes with conditional HEAD", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
   try {
-    for (const path of [API_ROOT_PATH, "/capabilities", "/openapi.json"]) {
+    for (const path of [API_ROOT_PATH, "/capabilities", FORMATS_PATH, "/openapi.json"]) {
       const headResponse = await fetch(`${api.url}${path}`, { method: "HEAD" });
       assert.equal(headResponse.status, 200, path);
       const etag = headResponse.headers.get("etag");
