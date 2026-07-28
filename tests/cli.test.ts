@@ -63,6 +63,34 @@ test("verify accepts direct TSV answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct YAML answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-yaml-direct-"));
+  try {
+    const answerPath = join(tempDir, "answer.yaml");
+    const sourcePath = join(tempDir, "policy.yml");
+    await Promise.all([
+      writeFile(answerPath, "claim: Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "title: Leave policy\nclaim: Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+      assessments: Array<{ claim: { text: string }; verdict: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "claim: Employees receive 12 weeks of paid parental leave.");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "Leave policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("formats --json exposes a stable machine-readable input contract", async () => {
   const stdout = await runCli(["formats", "--json"]);
   const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };

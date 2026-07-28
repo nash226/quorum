@@ -15,6 +15,9 @@ the exact extension sets used for directory discovery.
 The source-loader regression suite also verifies that YAML/YML fallback titles
 drop their extension, keeping reviewer evidence consistent with other formats.
 
+Direct CLI verification now covers YAML answers and YML approved sources,
+including structured claims and source titles in the JSON evidence report.
+
 The generated status page now mirrors the complete format capability index,
 including configuration, documentation, log, and structured export inputs.
 
