@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d1ea471` on 2026-07-28, fix: preserve etc abbreviation in claims
+- Latest shipped change: `7c13a97` on 2026-07-28, fix: preserve time abbreviations in claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | fix: preserve time abbreviations in claims | `7c13a97` |
 | 2026-07-28 | [#1294](https://github.com/nash226/quorum/pull/1294) | fix: preserve etc abbreviation in claims | `d1ea471` |
 | 2026-07-28 | Direct push | feat: version format contract output | `0cdc7f7` |
 | 2026-07-28 | Direct push | test: cover direct DOCX answer verification | `be05236` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | test: cover programmatic NDJSON batches | `896a456` |
 | 2026-07-28 | Direct push | test: cover TSV programmatic batch inputs | `a8d1de8` |
 | 2026-07-28 | Direct push | test: smoke-check packaged Textile inputs | `523b00b` |
-| 2026-07-28 | [#1278](https://github.com/nash226/quorum/pull/1278) | test: cover direct YAML verification | `8ca5c4f` |
 
