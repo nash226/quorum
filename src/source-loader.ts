@@ -317,6 +317,12 @@ function parseXmlSource(content: string): ParsedSource {
     const value = decodeHtmlEntities((match[2] ?? "").replace(/<[^>]+>/g, " ").trim());
     if (value) applyStructuredMetadata(metadata, key, value);
   }
+  for (const match of content.matchAll(/<meta\b([^>]*)>/gi)) {
+    const attributes = parseHtmlAttributes(`<meta ${match[1] ?? ""}>`);
+    const key = attributes.name ?? attributes.property;
+    const value = attributes.content;
+    if (key && value) applyStructuredMetadata(metadata, key, value);
+  }
 
   return {
     metadata,
@@ -426,7 +432,9 @@ function applyStructuredMetadata(metadata: SourceMetadata, key: string, value: s
   ) {
     metadata.updatedAt = stripQuotes(value);
   }
-  else if (normalizedKey === "trustlevel" && value) metadata.trustLevel = tryParseTrustLevel(stripQuotes(value));
+  else if ((normalizedKey === "trustlevel" || normalizedKey === "quorumtrustlevel") && value) {
+    metadata.trustLevel = tryParseTrustLevel(stripQuotes(value));
+  }
 }
 
 function selectHtmlTitle(input: {
