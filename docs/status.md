@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ce59b75` on 2026-07-27, test: smoke-check packaged log verification
+- Latest shipped change: `75f6c30` on 2026-07-27, fix: normalize programmatic jsonl answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-27 | Direct push | fix: normalize programmatic jsonl answers | `75f6c30` |
 | 2026-07-27 | Direct push | test: smoke-check packaged log verification | `ce59b75` |
 | 2026-07-27 | Direct push | feat: support log evidence inputs | `8d577b9` |
 | 2026-07-27 | Direct push | test: lock CLI format contract to API | `4f0682a` |
@@ -56,5 +57,4 @@
 | 2026-07-27 | Direct push | test: smoke-check packaged NDJSON verification | `d7bdc55` |
 | 2026-07-27 | Direct push | fix: normalize ndjson and textile source loading | `df6c189` |
 | 2026-07-27 | Direct push | feat: support Textile input exports | `1cbf31a` |
-| 2026-07-27 | Direct push | feat: support NDJSON input exports | `7ca0499` |
 
