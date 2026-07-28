@@ -69,6 +69,9 @@ Direct XML and recursive XHTML approved-source verification are covered too: XML
 content survive verified evidence reports, and the packaged CLI smoke check confirms nested `.xhtml`
 source-directory discovery.
 
+The packaged CLI smoke gate also verifies direct XML answer exports, preserving
+structured claim text and answer-path provenance after publishing.
+
 The packaged smoke gate also verifies a Markdown answer against a DOCX policy
 source, keeping the published artifact's Word-based evidence path covered.
 
