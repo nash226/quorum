@@ -150,14 +150,14 @@ function parseFrontmatter(frontmatter: string): SourceMetadata {
       continue;
     }
 
-    const key = match[1];
+    const key = match[1]?.replace(/[-_]/g, "").toLowerCase();
     const value = stripQuotes(match[2] ?? "");
 
     if (key === "title" && value) {
       metadata.title = value;
-    } else if ((key === "updatedAt" || key === "updated_at") && value) {
+    } else if (key === "updatedat" && value) {
       metadata.updatedAt = value;
-    } else if ((key === "trustLevel" || key === "trust_level") && value) {
+    } else if (key === "trustlevel" && value) {
       metadata.trustLevel = tryParseTrustLevel(value);
     }
   }
