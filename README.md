@@ -12,6 +12,9 @@ structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+Machine-readable integrations can use the shorter `npm run formats:json` alias
+to retrieve the same sorted source and answer extension lists as JSON.
+
 Direct CLI verification now regression-tests DOCX answer exports, keeping
 single-answer Word handoffs on the same evidence path as DOCX policy sources.
 
