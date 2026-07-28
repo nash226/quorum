@@ -742,6 +742,8 @@ output path is excluded from recursive answer discovery so reruns do not verify
 their own generated report.
 The packaged CLI smoke gate also verifies an XHTML source end to end, including
 its page title and claim evidence.
+It also verifies an HTML answer and approved source end to end, keeping the
+browser-exported single-answer path covered in the published CLI artifact.
 It also verifies an XML approved source end to end, keeping structured policy
 exports covered in the published CLI artifact.
 The programmatic API applies the same JSON and XML normalization to embedded
