@@ -707,7 +707,10 @@ drop the evidence file before review.
 The CLI guide now lists XML alongside JSON in its capability index and verify
 workflow, keeping the documented local source contract aligned with the
 shipped XML ingestion path.
-Recursive `--source-dir` discovery is covered for both JSON and XML exports, so
+XML policy exports can carry a `<title>`, `updatedAt`, and `trustLevel` element;
+Quorum preserves those values with the evidence report while normalizing the
+remaining policy text for claim matching.
+Recursive `--source-dir` discovery is covered for both JSON and XML exports,
 including nested XML policy folders, so mixed approved-source folders can be
 verified without converting those files or listing every path explicitly.
 Explicit `--source-id` values are preserved for DOCX sources as well as
