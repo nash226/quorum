@@ -70,7 +70,7 @@ export function splitIntoSentences(text: string): string[] {
   const urlMarker = "\uE001";
   const protectedText = text
     .replace(
-      /\b(?:mr|mrs|ms|dr|prof|sr|jr|st|vs|e\.g|i\.e)\./gi,
+      /\b(?:mr|mrs|ms|dr|prof|sr|jr|st|vs|e\.g|i\.e|etc)\./gi,
       (abbreviation) => abbreviation.slice(0, -1) + abbreviationMarker,
     )
     .replace(/https?:\/\/[^\s<>"']+/gi, (url) => {
