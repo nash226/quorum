@@ -12,6 +12,11 @@ structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+CSV exports are first-class verification inputs: `verify` accepts a single CSV
+answer and approved source directly, while `verify-batch` discovers CSV files
+recursively. Reports preserve each CSV path and use its filename as the source
+title, so spreadsheet-delivered policy evidence remains traceable during review.
+
 Direct CLI verification now regression-tests DOCX answer exports, keeping
 single-answer Word handoffs on the same evidence path as DOCX policy sources.
 
