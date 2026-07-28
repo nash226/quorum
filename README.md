@@ -293,6 +293,8 @@ documented command wired to the same contract during development.
 The directory contract includes the standard `.markdown` alias for both
 answers and approved sources, so Markdown exports do not need to be renamed
 before batch verification.
+The same directory contract also discovers `.text` plain-text exports for both
+answers and approved sources, preserving their filename-based evidence titles.
 
 The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
