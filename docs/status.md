@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `02c4048` on 2026-07-28, test: smoke-check packaged TSV inputs
+- Latest shipped change: `5dbc4f6` on 2026-07-28, fix: normalize frontmatter metadata keys
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | fix: normalize frontmatter metadata keys | `5dbc4f6` |
 | 2026-07-28 | Direct push | test: smoke-check packaged TSV inputs | `02c4048` |
 | 2026-07-28 | Direct push | test: cover direct CSV verification | `a4183e7` |
 | 2026-07-28 | Direct push | feat: read metadata from XML exports | `187a6d8` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | fix: preserve time abbreviations in claims | `7c13a97` |
 | 2026-07-28 | [#1294](https://github.com/nash226/quorum/pull/1294) | fix: preserve etc abbreviation in claims | `d1ea471` |
 | 2026-07-28 | Direct push | feat: version format contract output | `0cdc7f7` |
-| 2026-07-28 | Direct push | test: cover direct DOCX answer verification | `be05236` |
 
