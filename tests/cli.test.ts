@@ -2827,6 +2827,34 @@ test("verify-batch discovers INI and properties answers and sources", async () =
   }
 });
 
+test("verify-batch discovers log answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-log-batch-"));
+  const answerDir = join(tempDir, "answers");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await Promise.all([mkdir(answerDir), mkdir(sourceDir)]);
+    await Promise.all([
+      writeFile(join(answerDir, "support-answer.log"), "Refunds are available within 30 days of purchase.\n"),
+      writeFile(join(sourceDir, "support-policy.log"), "Refunds are available within 30 days of purchase.\n"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ])) as {
+      summary: { answersWithClaims: number; verified: number };
+      answers: Array<{ answerPath: string; report: { summary: { verified: number } } }>;
+    };
+
+    assert.equal(report.summary.answersWithClaims, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "support-answer.log"));
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct AsciiDoc answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-asciidoc-"));
 

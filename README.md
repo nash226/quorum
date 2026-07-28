@@ -648,7 +648,8 @@ requiring every path to be listed explicitly.
 The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
 (`.md`, `.markdown`, `.mdx`, `.qmd`, `.rst`), AsciiDoc/Org/MediaWiki/LaTeX
 (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`, `.wiki`, `.tex`),
-plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
+plain text and log exports (`.txt`, `.text`, `.log`), configuration exports
+(`.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL (`.json`, `.jsonl`), and
 TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and CSV/TSV (`.csv`, `.tsv`).
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
