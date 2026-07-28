@@ -204,6 +204,11 @@ policy files and move to an agent integration without changing the evidence
 report shape. The current service is intentionally a local HTTP boundary;
 durable hosting and queue storage remain roadmap decisions.
 
+Those decision-gated boundaries are called out explicitly in
+[`docs/roadmap.md`](docs/roadmap.md), so implementation work can continue on
+the unblocked local CLI/API and evaluation surfaces without assuming hosting
+or storage choices.
+
 The packaged CLI and programmatic API now expose one aligned answer/source
 format contract for Markdown-family, text, HTML/XHTML, PDF/DOCX,
 Java-style `.properties`, and structured JSON/JSONL/YAML/XML/TOML/CSV/TSV
