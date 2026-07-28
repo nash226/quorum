@@ -77,6 +77,8 @@ source, keeping the published artifact's Word-based evidence path covered.
 
 Direct PDF answer verification is regression-tested too, so a single exported
 PDF response follows the same evidence path as batch-discovered PDF answers.
+The packaged CLI smoke gate also verifies that PDF answer path, protecting the
+published binary artifact from parser or dependency drift.
 
 It also verifies direct LaTeX answer and policy inputs after packaging, keeping
 documentation-tool exports release-gated alongside the other supported formats.

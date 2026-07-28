@@ -1356,14 +1356,14 @@ try {
 
 const pdfTempDir = mkdtempSync(join(tmpdir(), "quorum-package-pdf-"));
 try {
-  const pdfAnswerPath = join(pdfTempDir, "answer.md");
+  const markdownAnswerPath = join(pdfTempDir, "answer.md");
   const pdfReportPath = join(pdfTempDir, "report.json");
-  writeFileSync(pdfAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(markdownAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
   execFileSync(process.execPath, [
     fileURLToPath(cliPath),
     "verify",
     "--answer",
-    pdfAnswerPath,
+    markdownAnswerPath,
     "--source",
     fileURLToPath(new URL("examples/sources/hr-policy.pdf", packageRoot)),
     "--out",
@@ -1372,6 +1372,30 @@ try {
   const pdfReport = JSON.parse(readFileSync(pdfReportPath, "utf8"));
   if (pdfReport.summary?.verified !== 1 || pdfReport.sources?.[0]?.title !== "HR Benefits Policy PDF") {
     throw new Error("Package artifact CLI did not verify the expected PDF source contract.");
+  }
+
+  const pdfAnswerPath = join(pdfTempDir, "answer.pdf");
+  const pdfAnswerReportPath = join(pdfTempDir, "answer-report.json");
+  writeFileSync(
+    pdfAnswerPath,
+    readFileSync(new URL("examples/sources/hr-policy.pdf", packageRoot)),
+  );
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath),
+    "verify",
+    "--answer",
+    pdfAnswerPath,
+    "--source",
+    fileURLToPath(new URL("examples/sources/hr-policy.md", packageRoot)),
+    "--out",
+    pdfAnswerReportPath,
+  ], { encoding: "utf8" });
+  const pdfAnswerReport = JSON.parse(readFileSync(pdfAnswerReportPath, "utf8"));
+  if (
+    pdfAnswerReport.summary?.verified !== 2 ||
+    pdfAnswerReport.answerPath !== pdfAnswerPath
+  ) {
+    throw new Error("Package artifact CLI did not verify the expected PDF answer contract.");
   }
 } finally {
   rmSync(pdfTempDir, { recursive: true, force: true });
