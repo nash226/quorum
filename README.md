@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
+answer and approved-source exports, keeping this supported documentation format
+release-gated after publishing.
+
 Direct `.properties` answer and approved-source exports are covered end to
 end, preserving their paths and the fallback source title in JSON evidence.
 
