@@ -333,6 +333,21 @@ are mixed.
 Localized claim extraction also recognizes Arabic, Indic, CJK, and fullwidth
 sentence terminators.
 
+For a reviewer queue handoff, summarize a completed decision CSV and
+optionally include benchmark drift:
+
+```bash
+npm run dev -- review-queue \
+  --review-csv reports/batch-review.csv \
+  --queue-status pending \
+  --fixture-dir examples/evaluations \
+  --csv-out reports/review-queue.csv
+```
+
+The queue overview reports pending, reviewed, and no-claims workload. Run
+`evaluate` against the same fixture directory when you need a scorecard or CI
+gate; `--min-score` and `--fail-on-mismatch` enforce the benchmark contract.
+
 ## Quick Start
 
 To see the exact extensions discovered for approved sources and AI-generated
