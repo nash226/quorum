@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2590b51` on 2026-07-28, test: cover support price adjustment evaluation
+- Latest shipped change: `d1624dc` on 2026-07-29, fix: support help flags for formats command
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | fix: support help flags for formats command | `d1624dc` |
 | 2026-07-28 | Direct push | test: cover support price adjustment evaluation | `2590b51` |
 | 2026-07-28 | Direct push | test: cover support phone evaluation | `9080a2d` |
 | 2026-07-28 | Direct push | test: cover support invoice correction evaluation | `0ee511e` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | test: cover HTTP queue domain filtering | `571ca32` |
 | 2026-07-28 | Direct push | test: cover nested source discovery | `ae3b650` |
 | 2026-07-28 | [#1331](https://github.com/nash226/quorum/pull/1331) | test: smoke-check machine-readable formats contract | `62f6a6f` |
-| 2026-07-28 | [#1329](https://github.com/nash226/quorum/pull/1329) | docs: clarify reviewer queue status values | `dd91359` |
 
