@@ -10,6 +10,9 @@ The packaged CLI smoke gate now verifies AsciiDoc (`.adoc`/`.asciidoc`) and
 Org-mode (`.org`) answer and approved-source exports, keeping these documented
 policy formats executable after publishing.
 
+The evaluation suite now covers the support invoice-correction policy fixture,
+including verified, contradicted, and unsupported claim outcomes.
+
 The packaged CLI smoke gate also verifies MediaWiki (`.wiki`/`.mediawiki`)
 answer and approved-source exports, keeping both documented aliases release-gated.
 
