@@ -2494,6 +2494,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support billing suspension appeal policy example",
       "Support subscription cancellation policy example",
       "Support charge dispute policy example",
+      "Support complaints policy example",
       "Support account contact change policy example",
       "Support data export policy example",
       "Support data retention policy example",
