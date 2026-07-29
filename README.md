@@ -1,5 +1,9 @@
 # Quorum
 
+The generated [status snapshot](docs/status.md) is current with the default
+branch and records the shipped CLI/API verification, reviewer-queue, and
+evaluation surfaces.
+
 Direct `.properties` answer and approved-source exports are covered end to
 end, preserving their paths and the fallback source title in JSON evidence.
 
