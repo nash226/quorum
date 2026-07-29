@@ -459,6 +459,18 @@ Employees get 12 weeks.
   assert.equal(source.trustLevel, "low");
 });
 
+test("parses frontmatter after a leading UTF-8 BOM", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.md",
+    "\uFEFF---\ntitle: BOM Benefits Policy\nupdatedAt: 2026-06-30\n---\nEmployees get 12 weeks.",
+    0,
+  );
+
+  assert.equal(source.title, "BOM Benefits Policy");
+  assert.equal(source.updatedAt, "2026-06-30");
+  assert.equal(source.content, "Employees get 12 weeks.");
+});
+
 test("rejects invalid source freshness metadata", async () => {
   await assert.rejects(
     sourceDocumentFromFile(

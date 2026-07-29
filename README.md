@@ -78,6 +78,10 @@ Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,
 so exported policy files retain their title and metadata when loaded through
 the programmatic API.
 
+Text source inputs now apply the same BOM normalization, so Markdown and other
+frontmatter-backed exports retain their metadata regardless of how they are
+decoded before verification.
+
 The packaged CLI smoke gate now verifies both the human-readable and
 `--json` format contracts against the library export, so published CLI and API
 capabilities cannot silently drift apart.
