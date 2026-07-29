@@ -2569,6 +2569,41 @@ test("verify-batch discovers mixed-case answer and source extensions", async () 
   }
 });
 
+test("verify discovers ini policy exports from a source directory", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-ini-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "policies");
+    const sourcePath = join(sourceDir, "benefits.ini");
+
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "[parental-leave]\nweeks=12\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ title: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["benefits"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims against html sources with named entities", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-entities-"));
 
