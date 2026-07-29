@@ -99,6 +99,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseTomlSource(normalizedContent);
   }
 
+  if (isLatexSource(sourcePath)) {
+    return { metadata: {}, body: normalizeLatexSource(normalizedContent) };
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -216,6 +220,22 @@ function isYamlSource(sourcePath: string): boolean {
 
 function isTomlSource(sourcePath: string): boolean {
   return /\.toml$/i.test(sourcePath);
+}
+
+function isLatexSource(sourcePath: string): boolean {
+  return /\.tex$/i.test(sourcePath);
+}
+
+function normalizeLatexSource(content: string): string {
+  return content
+    .replace(/(^|\n)\s*%[^\n]*/g, "$1")
+    .replace(/\\(?:begin|end)\{[^}]+\}/g, "")
+    .replace(/\\[A-Za-z@]+(?:\s*\[[^\]]*\])?(?:\s*\{([^}]*)\})?/g, "$1")
+    .replace(/[{}]/g, "")
+    .replace(/\\([%&$#_{}])/g, "$1")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 function sourceTitleFromPath(sourcePath: string): string {

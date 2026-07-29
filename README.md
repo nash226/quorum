@@ -1,5 +1,9 @@
 # Quorum
 
+LaTeX (`.tex`) approved-source exports now normalize common commands and
+comments into readable evidence text before claim matching, while direct CLI
+verification continues to cover the format for answer and source workflows.
+
 Direct CLI verification now regression-tests LaTeX (`.tex`) answer exports
 against approved policy sources, keeping documentation-tool handoffs on the
 same evidence path as other supported formats.

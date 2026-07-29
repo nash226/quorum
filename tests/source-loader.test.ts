@@ -143,7 +143,17 @@ test("strips LaTeX extensions from fallback source titles", async () => {
   );
 
   assert.equal(source.title, "leave-policy");
-  assert.equal(source.content, "Employees receive 12 weeks of paid parental leave.\n");
+  assert.equal(source.content, "Employees receive 12 weeks of paid parental leave.");
+});
+
+test("normalizes common LaTeX markup into readable source evidence", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.tex",
+    "% Internal note\n\\section{Leave Policy}\n\\textbf{Employees} receive 12 weeks of paid parental leave.\n",
+    0,
+  );
+
+  assert.equal(source.content, "Leave Policy\nEmployees receive 12 weeks of paid parental leave.");
 });
 
 test("strips MDX extensions from fallback source titles", async () => {
