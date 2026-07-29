@@ -1,5 +1,9 @@
 # Quorum
 
+The HR evaluation suite now covers wellness-benefit reimbursement claims,
+including a verified annual cap, a receipt-policy contradiction, and an
+unsupported gym-membership claim.
+
 Direct `.properties` answer and approved-source exports are covered end to
 end, preserving their paths and the fallback source title in JSON evidence.
 
@@ -1165,7 +1169,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 83-fixture benchmark spans 29 HR and 54 support workflows, including
+The checked-in 84-fixture benchmark spans 30 HR and 54 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
