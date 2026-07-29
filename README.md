@@ -9,6 +9,9 @@ customers, employees, tickets, workflows, or downstream systems.
 The evaluation suite now covers an HR overtime-policy packet, checking the
 40-hour threshold, overtime-rate contradiction, and missing approval control.
 
+The HTTP evaluation endpoint now has regression coverage for domain-scoped
+fixture requests, keeping API scorecards aligned with CLI domain filtering.
+
 The CLI format-discovery command now accepts both `quorum formats --help` and
 `quorum formats -h`, keeping command-specific help consistent with the other
 published commands.

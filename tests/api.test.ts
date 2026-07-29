@@ -4945,6 +4945,35 @@ test("programmatic API serves evaluation over HTTP", async () => {
   }
 });
 
+test("programmatic API filters evaluation fixtures by domain", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const fixtureDir = join(process.cwd(), "examples/evaluations");
+    const fixturePath = join(fixtureDir, "hr-policy.json");
+    const fixtureContent = await readFile(fixturePath, "utf8");
+    const response = await fetch(`${api.url}/evaluate`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        fixtures: [{ fixturePath, content: fixtureContent }],
+        domains: ["hr"],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      summary: { fixtureCount: number };
+      scorecards: Array<{ domain: string }>;
+    };
+
+    assert.equal(result.summary.fixtureCount, 1);
+    assert.deepEqual(result.scorecards.map((scorecard) => scorecard.domain), ["hr"]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API can embed reviewer artifacts in HTTP responses", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
