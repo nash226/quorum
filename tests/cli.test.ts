@@ -215,6 +215,16 @@ test("formats --json exposes a versioned machine-readable input contract", async
   assert.ok(formats.sources.includes(".json"));
 });
 
+test("formats --json exposes normalized unique extension entries", async () => {
+  const stdout = await runCli(["formats", "--json"]);
+  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };
+
+  for (const extensions of [formats.sources, formats.answers]) {
+    assert.equal(new Set(extensions).size, extensions.length);
+    assert.ok(extensions.every((extension) => /^\.[a-z0-9]+$/.test(extension)));
+  }
+});
+
 test("help advertises the complete discovered input contract", async () => {
   const stdout = await runCli(["--help"]);
 
