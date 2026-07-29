@@ -1532,6 +1532,9 @@ benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
 
+Markdown discovery also accepts the common `.mdown` extension for direct and
+recursive answer/source verification.
+
 ## Documentation Map
 
 - [CLI guide](docs/cli-guide.md): local verification, reports, imports, and evaluation.
