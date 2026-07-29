@@ -2035,6 +2035,8 @@ test("evaluates a shipped inline support gift card fixture across redemption cla
     "unsupported",
   ]);
   assert.equal(scorecard.report.sources[0]?.id, "support/gift-card@2026-07-15");
+  assert.equal(scorecard.report.sources[0]?.title, "Support Gift Card Policy");
+  assert.equal(scorecard.report.sources[0]?.updatedAt, "2026-07-15");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
 });
