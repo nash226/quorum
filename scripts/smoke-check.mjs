@@ -272,7 +272,7 @@ try {
   ]);
 
   assert.match(batchStdout, /Quorum Batch Verification Report/);
-  assert.equal(readJson(batchReportPath).answerCount, 38);
+  assert.equal(readJson(batchReportPath).answerCount, 39);
   assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
   const batchSummaryCsv = readFileSync(batchSummaryCsvPath, "utf8");
   assert.match(
@@ -285,7 +285,7 @@ try {
   assert.ok(hrBatchSummaryRow);
   assert.match(
     hrBatchSummaryRow,
-    /,true,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,HR Benefits Policy,high,2026-05-31,examples\/sources\/hr-policy\.md,source_3,0\.857,Employees receive 12 weeks of paid parental leave\.,3,1,1,1,0,clear,,/,
+    /,true,contradicted,Employees receive 18 weeks of paid parental leave\.,A closely matching approved source uses different numeric terms\.,HR Benefits Policy,high,2026-05-31,examples\/sources\/hr-policy\.md,source_4,0\.857,Employees receive 12 weeks of paid parental leave\.,3,1,1,1,0,clear,,/,
   );
 
   const timestampedQueueOverview = JSON.parse(
@@ -303,7 +303,7 @@ try {
   assert.equal(timestampedQueueOverview.generatedAt, "2026-07-15T04:00:00.000Z");
   assert.match(
     readFileSync(queueOverviewCsvPath, "utf8"),
-    /^"generated_at","queue_status","domains","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","","38",/m,
+    /^"generated_at","queue_status","domains","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","","39",/m,
   );
 
   const pendingQueueOverview = JSON.parse(
@@ -317,14 +317,14 @@ try {
     ]),
   );
   assert.deepEqual(pendingQueueOverview.review, {
-    totalAnswers: 37,
-    pendingAnswers: 37,
+    totalAnswers: 38,
+    pendingAnswers: 38,
     reviewedAnswers: 0,
     noClaimsAnswers: 0,
-    totalClaims: 110,
-    pendingClaims: 110,
+    totalClaims: 113,
+    pendingClaims: 113,
     reviewedClaims: 0,
-    verdicts: { verified: 27, contradicted: 18, unsupported: 29, needs_review: 36 },
+    verdicts: { verified: 28, contradicted: 19, unsupported: 29, needs_review: 37 },
   });
 
   const noClaimsQueueOverview = JSON.parse(
@@ -405,7 +405,7 @@ try {
   );
 
   assert.match(importStdout, /Quorum Reviewer Decision Import/);
-  assert.equal(readJson(importReportPath).answerGroups.length, 38);
+  assert.equal(readJson(importReportPath).answerGroups.length, 39);
   assert.match(readFileSync(importSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
 
   const evaluationReportPath = join(tempDir, "evaluation-report.md");
@@ -500,6 +500,7 @@ try {
   assert.match(evaluationStdout, /HR time-off request policy example/);
   assert.match(evaluationStdout, /HR relocation policy example/);
   assert.match(evaluationStdout, /HR travel reimbursement policy example/);
+  assert.match(evaluationStdout, /HR expense reimbursement policy example/);
   assert.match(evaluationStdout, /HR compensation review policy example/);
   assert.match(evaluationStdout, /HR workplace accommodation policy example/);
   assert.match(evaluationStdout, /HR offboarding policy example/);

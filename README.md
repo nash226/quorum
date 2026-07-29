@@ -1,5 +1,8 @@
 # Quorum
 
+The evaluation suite now covers HR expense reimbursement, including a verified
+submission window, a contradicted deadline, and an unsupported commuter benefit.
+
 The evaluation suite now directly regression-tests support service-outage
 answers, including contradicted refund guarantees, review-routed credit claims,
 and verified incident-status guidance.
