@@ -34,6 +34,9 @@ same evidence path as other supported formats.
 The API contract tests now ensure every endpoint advertised by discovery is
 also represented in the generated OpenAPI document, keeping integration
 clients from receiving an incomplete route schema.
+They also require every advertised OpenAPI operation to have a unique
+`operationId`, so generated clients can address routes without guessing from
+HTTP paths.
 
 The evaluation suite now directly regression-tests support service-outage
 answers, including contradicted refund guarantees, review-routed credit claims,
