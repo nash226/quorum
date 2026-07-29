@@ -347,6 +347,8 @@ the human-readable and JSON arrays with the library export,
 so published CLI and API format capabilities cannot silently drift apart.
 The repository test suite also invokes this npm alias end to end, keeping the
 documented command wired to the same contract during development.
+See the [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) for the
+integration contract and the corresponding HTTP `/capabilities` response.
 The directory contract includes the standard `.markdown` alias for both
 answers and approved sources, so Markdown exports do not need to be renamed
 before batch verification.
