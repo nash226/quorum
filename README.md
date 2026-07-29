@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation suite now directly regression-tests support service-outage
+answers, including contradicted refund guarantees, review-routed credit claims,
+and verified incident-status guidance.
+
 The evaluation suite includes an HR employee-assistance policy fixture that
 checks supported and unsupported benefit claims in one reviewer scorecard.
 
