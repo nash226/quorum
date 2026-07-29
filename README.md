@@ -255,6 +255,10 @@ Supported source extensions today:
 - `.htm`
 - `.pdf`
 
+Integrations can inspect the same versioned allow-list without parsing help
+text with `npm run dev -- formats --json`; the response contains sorted
+`sources` and `answers` extension arrays plus `version: "1"`.
+
 ## Project Structure
 
 ```text

@@ -74,6 +74,15 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("formats exposes the versioned source and answer extension contract", async () => {
+  const stdout = await runCli(["formats", "--json"]);
+  assert.deepEqual(JSON.parse(stdout), {
+    version: "1",
+    sources: [".htm", ".html", ".markdown", ".md", ".pdf", ".txt"],
+    answers: [".markdown", ".md", ".txt"],
+  });
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 

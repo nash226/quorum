@@ -75,6 +75,7 @@ interface ImportReviewArgs {
 
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
 const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
+const FORMAT_CONTRACT_VERSION = "1";
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -94,12 +95,38 @@ async function main(): Promise<void> {
     return;
   }
 
+  if (command === "formats") {
+    runFormats(args);
+    return;
+  }
+
   if (command !== undefined) {
     printHelp();
     process.exitCode = 1;
   } else {
     printHelp();
   }
+}
+
+function runFormats(args: string[]): void {
+  if (args.length > 1 || (args.length === 1 && args[0] !== "--json")) {
+    throw new Error("Usage: quorum formats [--json]");
+  }
+
+  const formats = {
+    version: FORMAT_CONTRACT_VERSION,
+    sources: [...SOURCE_EXTENSIONS].sort(),
+    answers: [...ANSWER_EXTENSIONS].sort(),
+  };
+
+  if (args[0] === "--json") {
+    console.log(JSON.stringify(formats));
+    return;
+  }
+
+  console.log(
+    `Quorum input formats\n\nSource files: ${formats.sources.join(", ")}\nAnswer files: ${formats.answers.join(", ")}`,
+  );
 }
 
 async function runVerify(args: string[]): Promise<void> {
