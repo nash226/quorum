@@ -2104,12 +2104,13 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/hr/benefits-enrollment-policy.json"),
     resolve("examples/evaluations/hr/bereavement-leave-policy.json"),
     resolve("examples/evaluations/hr/bonus-eligibility-policy.json"),
-      resolve("examples/evaluations/hr/compensation-policy.json"),
-      resolve("examples/evaluations/hr/dependent-benefits-policy.json"),
-      resolve("examples/evaluations/hr/employee-referral-policy.json"),
-      resolve("examples/evaluations/hr/expense-reimbursement-policy.json"),
-      resolve("examples/evaluations/hr/jury-duty-policy.json"),
-      resolve("examples/evaluations/hr/leave-carryover-policy.json"),
+    resolve("examples/evaluations/hr/certification-reimbursement-policy.json"),
+    resolve("examples/evaluations/hr/compensation-policy.json"),
+    resolve("examples/evaluations/hr/dependent-benefits-policy.json"),
+    resolve("examples/evaluations/hr/employee-referral-policy.json"),
+    resolve("examples/evaluations/hr/expense-reimbursement-policy.json"),
+    resolve("examples/evaluations/hr/jury-duty-policy.json"),
+    resolve("examples/evaluations/hr/leave-carryover-policy.json"),
     resolve("examples/evaluations/hr/leave-policy.json"),
     resolve("examples/evaluations/hr/medical-leave-policy.json"),
     resolve("examples/evaluations/hr/offboarding-policy.json"),
@@ -2261,7 +2262,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 82);
+  assert.equal(scorecards.length, 83);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2270,6 +2271,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "HR benefits enrollment policy example",
       "HR bereavement leave policy example",
       "HR bonus eligibility policy example",
+      "HR certification reimbursement policy example",
       "HR compensation review policy example",
       "HR dependent benefits policy example",
       "HR employee referral policy example",
@@ -2371,7 +2373,7 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 28);
+  assert.equal(scorecards.length, 29);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2379,6 +2381,7 @@ test("filters evaluation fixture files by domain", async () => {
       "HR benefits enrollment policy example",
       "HR bereavement leave policy example",
       "HR bonus eligibility policy example",
+      "HR certification reimbursement policy example",
       "HR compensation review policy example",
       "HR dependent benefits policy example",
       "HR employee referral policy example",

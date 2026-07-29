@@ -1,0 +1,17 @@
+{
+  "name": "HR certification reimbursement policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-certification-reimbursement-answer.md",
+  "answer": "Employees may request reimbursement for approved professional certifications up to $1,200 per calendar year.\nRequests must be submitted within 45 days of the exam date.\nThe company guarantees reimbursement for every certification attempt.\n",
+  "answerLabel": "HR certification reimbursement reviewer packet",
+  "sources": [{
+    "sourcePath": "hr-certification-reimbursement-policy.md",
+    "id": "people-ops/hr-certification-reimbursement@2026-07-29",
+    "title": "HR Certification Reimbursement Policy",
+    "updatedAt": "2026-07-29",
+    "trustLevel": "high",
+    "content": "Employees may request reimbursement for manager-approved professional certifications up to $1,200 per calendar year. Requests must be submitted within 30 days of the exam date. Reimbursement is subject to annual budget availability and is not guaranteed for every attempt."
+  }],
+  "expectedSummary": { "verified": 1, "contradicted": 1, "unsupported": 0, "needs_review": 1 },
+  "expectedClaimVerdicts": ["verified", "contradicted", "needs_review"]
+}
