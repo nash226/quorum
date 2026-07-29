@@ -1692,7 +1692,9 @@ function selectEvaluationFixtures(
   fixtures: EvaluationFixture[],
   domains: string[] | undefined,
 ): Array<{ fixture: EvaluationFixture; index: number }> {
-  const domainFilter = domains?.length ? new Set(domains) : undefined;
+  const domainFilter = domains?.length
+    ? new Set(domains.map((domain) => domain.trim().toLowerCase()))
+    : undefined;
 
   return fixtures
     .map((fixture, index) => ({ fixture, index }))
@@ -1701,7 +1703,10 @@ function selectEvaluationFixtures(
         return true;
       }
 
-      return fixture.domain !== undefined && domainFilter.has(fixture.domain);
+      return (
+        fixture.domain !== undefined &&
+        domainFilter.has(fixture.domain.trim().toLowerCase())
+      );
     });
 }
 

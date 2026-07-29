@@ -2582,6 +2582,18 @@ test("filters the support evaluation fixture set by domain", async () => {
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "support"));
 });
 
+test("matches evaluation domains case-insensitively", async () => {
+  const scorecards = await evaluateFixtureFiles({
+    fixtureDirPaths: [resolve("examples/evaluations")],
+    fixturePaths: [],
+    domains: [" HR "],
+    generatedAt: "2026-07-17T06:00:00.000Z",
+  });
+
+  assert.equal(scorecards.length, 30);
+  assert.ok(scorecards.every((scorecard) => scorecard.domain === "hr"));
+});
+
 test("reports when domain filters match no evaluation fixtures", async () => {
   await assert.rejects(
     evaluateFixtureFiles({
