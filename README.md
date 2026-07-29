@@ -454,6 +454,9 @@ AsciiDoc/Org-mode/MediaWiki (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
 `.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 JSON/JSONL/YAML/XML/TOML, CSV/TSV, PDF, and DOCX answers and approved sources.
 Run `npm run formats -- --json` for the authoritative machine-readable list.
+Top-level CLI help also names the extended text and structured export families
+(`.log`, `.ini`, `.properties`, `.jsonl`, and `.ndjson`) so operators can
+discover the shipped input boundary before choosing a batch workflow.
 Recursive answer and source directories discover those same extensions
 case-insensitively, keeping structured and binary batches aligned with explicit
 file verification. JSON, YAML, XML, and TOML source exports are normalized into
