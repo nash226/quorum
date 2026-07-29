@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9d12e75` on 2026-07-29, docs: list formats command in README
+- Latest shipped change: `d49d09d` on 2026-07-29, test: cover direct reStructuredText answers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: cover direct reStructuredText answers | `d49d09d` |
 | 2026-07-29 | Direct push | docs: list formats command in README | `9d12e75` |
 | 2026-07-29 | [#1365](https://github.com/nash226/quorum/pull/1365) | test: add HR workplace safety evaluation | `81efc03` |
 | 2026-07-29 | Direct push | test: cover support holiday hours evaluation | `5f734fa` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | docs: explain evaluation score gates | `0bb5d0c` |
 | 2026-07-29 | Direct push | test: guard formats extension contract | `ac8e602` |
 | 2026-07-29 | Direct push | docs: document support price adjustment coverage | `652c26b` |
-| 2026-07-29 | [#1354](https://github.com/nash226/quorum/pull/1354) | test: cover API no-claims queue filtering | `dde6da9` |
 
