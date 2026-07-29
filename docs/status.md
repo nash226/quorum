@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `735c20c` on 2026-07-29, test: cover POST endpoint CORS preflights
+- Latest shipped change: `c372595` on 2026-07-29, test: guard POST request schemas
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | [#1412](https://github.com/nash226/quorum/pull/1412) | test: guard POST request schemas | `c372595` |
 | 2026-07-29 | Direct push | test: cover POST endpoint CORS preflights | `735c20c` |
 | 2026-07-29 | Direct push | test: cover XHTML source title fallback | `00864a4` |
 | 2026-07-29 | Direct push | docs: sync roadmap foundation note | `cef6e81` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | fix: normalize evaluation domain filters | `ab1bcb3` |
 | 2026-07-29 | Direct push | docs: document empty source guard | `8f04fe2` |
 | 2026-07-29 | [#1394](https://github.com/nash226/quorum/pull/1394) | docs: reconcile benchmark fixture counts | `43ac1af` |
-| 2026-07-29 | Direct push | test: add HR wellness benefit evaluation | `9d8ec04` |
 
