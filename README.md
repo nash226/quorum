@@ -5,6 +5,9 @@ while durable API hosting and reviewer-queue storage remain decision-gated.
 See the [roadmap](docs/roadmap.md) for the current priorities and safe next
 steps.
 
+The HTTP API now regression-tests CORS preflight responses across every POST
+endpoint, keeping browser-based agent integrations aligned as routes evolve.
+
 The roadmap now treats batch verification and reviewer queue exports as shipped
 foundations; current safe work focuses on strengthening the local CLI and HTTP
 API while durable hosting and storage remain decision-gated.
