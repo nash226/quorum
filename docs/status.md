@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cef6e81` on 2026-07-29, docs: sync roadmap foundation note
+- Latest shipped change: `00864a4` on 2026-07-29, test: cover XHTML source title fallback
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: cover XHTML source title fallback | `00864a4` |
 | 2026-07-29 | Direct push | docs: sync roadmap foundation note | `cef6e81` |
 | 2026-07-29 | [#1403](https://github.com/nash226/quorum/pull/1403) | docs: clarify current roadmap focus | `2bd0eb6` |
 | 2026-07-29 | Direct push | fix: normalize evaluation domain filters | `ab1bcb3` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | [#1394](https://github.com/nash226/quorum/pull/1394) | docs: reconcile benchmark fixture counts | `43ac1af` |
 | 2026-07-29 | Direct push | test: add HR wellness benefit evaluation | `9d8ec04` |
 | 2026-07-29 | Direct push | test: cover packaged reStructuredText verification | `cd55459` |
-| 2026-07-29 | Direct push | test: cover direct properties verification | `ddcb3cc` |
 
