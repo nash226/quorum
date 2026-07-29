@@ -1203,7 +1203,7 @@ focused support scorecards aligned with the 51-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
-exactly one data row for each of the 83 checked-in benchmark fixtures.
+exactly one data row for each of the 84 checked-in benchmark fixtures.
 It also cross-checks that row count against the aggregate summary's fixture
 count, keeping machine-readable benchmark artifacts internally consistent.
 The packed smoke check also reconciles each domain summary's fixture count
@@ -1343,7 +1343,7 @@ The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
 
-The benchmark inventory is currently reconciled at 83 fixtures, including the
+The benchmark inventory is currently reconciled at 84 fixtures, including the
 new support returns-and-exchange coverage described below.
 
 The new support returns-and-exchange fixture covers a verified exchange window,
