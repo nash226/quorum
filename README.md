@@ -1,5 +1,8 @@
 # Quorum
 
+The evaluation suite includes an HR employee-assistance policy fixture that
+checks supported and unsupported benefit claims in one reviewer scorecard.
+
 [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
