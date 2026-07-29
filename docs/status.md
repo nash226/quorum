@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0bb5d0c` on 2026-07-29, docs: explain evaluation score gates
+- Latest shipped change: `c2a1da4` on 2026-07-29, test: cover HR employee assistance evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | [#1362](https://github.com/nash226/quorum/pull/1362) | test: cover HR employee assistance evaluation | `c2a1da4` |
 | 2026-07-29 | Direct push | docs: explain evaluation score gates | `0bb5d0c` |
 | 2026-07-29 | Direct push | test: guard formats extension contract | `ac8e602` |
 | 2026-07-29 | Direct push | docs: document support price adjustment coverage | `652c26b` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: cover API evaluation domain filters | `5cc540a` |
 | 2026-07-29 | Direct push | test: cover HR overtime evaluation | `cd3ae9f` |
 | 2026-07-29 | Direct push | test: cover formats package help forwarding | `52d679c` |
-| 2026-07-29 | Direct push | fix: support help flags for formats command | `d1624dc` |
 
