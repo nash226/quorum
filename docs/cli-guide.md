@@ -219,6 +219,15 @@ Useful output options include:
 - `--domain hr` or `--domain support` to run selected policy domains. Repeat
   the flag to include more than one domain.
 
+The evaluation command separates the score report from the process gate. Use
+`--min-score <0..1>` to set the minimum aggregate score that passes the gate;
+the default is `0`, so reporting a score does not fail the command by itself.
+Use `--fail-on-mismatch` to fail when any fixture's expected verdicts or
+summary totals drift. When either gate fails, `--result-json` (or
+`--result-json-out`) still includes `shouldFail`, `failReasons`,
+`minScore`, and `scoreThresholdPassed` so CI callers can explain the failure
+without parsing human-readable output.
+
 When a domain filter is supplied, Quorum excludes fixtures from other domains
 before calculating scorecards, mismatch counts, and aggregate totals. This is
 useful when a team owns only one policy area and wants a focused gate:
