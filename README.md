@@ -29,6 +29,9 @@ Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
+Approved-source directory verification now regression-tests `.ini` policy
+exports, including their reviewer-facing fallback title.
+
 The evaluation suite now covers an HR overtime-policy packet, checking the
 40-hour threshold, overtime-rate contradiction, and missing approval control.
 
