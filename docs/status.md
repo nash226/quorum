@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `652c26b` on 2026-07-29, docs: document support price adjustment coverage
+- Latest shipped change: `ac8e602` on 2026-07-29, test: guard formats extension contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: guard formats extension contract | `ac8e602` |
 | 2026-07-29 | Direct push | docs: document support price adjustment coverage | `652c26b` |
 | 2026-07-29 | [#1354](https://github.com/nash226/quorum/pull/1354) | test: cover API no-claims queue filtering | `dde6da9` |
 | 2026-07-29 | Direct push | test: cover API evaluation domain filters | `5cc540a` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: cover formats package help forwarding | `52d679c` |
 | 2026-07-29 | Direct push | fix: support help flags for formats command | `d1624dc` |
 | 2026-07-28 | Direct push | test: cover support price adjustment evaluation | `2590b51` |
-| 2026-07-28 | Direct push | test: cover support phone evaluation | `9080a2d` |
 
