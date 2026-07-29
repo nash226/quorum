@@ -251,6 +251,8 @@ The CLI regression suite locks this behavior for mixed-case Markdown filenames.
   fail-policy results.
 - `import-review` and `review-queue` turn reviewer decisions into queue-ready
   summaries, with optional benchmark drift context.
+- HTTP reviewer-queue requests can scope benchmark drift to selected policy
+  domains without mixing HR and support fixture totals.
 - Answers with no extractable claims remain visible as explicit `no_claims`
   queue items for reviewer triage.
 - Reviewer decision CSV imports accept UTF-8 BOM prefixes emitted by some
