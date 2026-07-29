@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `012c373` on 2026-07-29, test: guard version response contract
+- Latest shipped change: `db54dc9` on 2026-07-29, test: guard OpenAPI preflight schemas
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: guard OpenAPI preflight schemas | `db54dc9` |
 | 2026-07-29 | Direct push | test: guard version response contract | `012c373` |
 | 2026-07-29 | Direct push | test: guard POST response schemas | `da72b25` |
 | 2026-07-29 | [#1412](https://github.com/nash226/quorum/pull/1412) | test: guard POST request schemas | `c372595` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: cover XHTML source title fallback | `00864a4` |
 | 2026-07-29 | Direct push | docs: sync roadmap foundation note | `cef6e81` |
 | 2026-07-29 | [#1403](https://github.com/nash226/quorum/pull/1403) | docs: clarify current roadmap focus | `2bd0eb6` |
-| 2026-07-29 | Direct push | fix: normalize evaluation domain filters | `ab1bcb3` |
 
