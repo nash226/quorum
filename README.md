@@ -40,6 +40,10 @@ Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
+Verification now fails fast when `--source-dir` contains no approved source
+files, preventing an empty evidence set from being mistaken for a trustworthy
+unsupported-claim report.
+
 Approved-source directory verification now regression-tests `.ini` policy
 exports, including their reviewer-facing fallback title.
 
