@@ -39,6 +39,10 @@ The CLI format-discovery command now accepts both `quorum formats --help` and
 `quorum formats -h`, keeping command-specific help consistent with the other
 published commands.
 
+Direct CLI verification now regression-tests reStructuredText (`.rst`) answers,
+keeping single-answer documentation exports on the same evidence path as
+batch-discovered `.rst` files.
+
 The `npm run formats -- --help` package wrapper is covered too, so published
 CLI usage preserves the same format-discovery help contract.
 
