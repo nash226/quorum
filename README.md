@@ -193,6 +193,9 @@ The HR evaluation suite also covers equipment-return claims, including a
 verified return deadline, a contradicted deadline, and an unsupported
 personal-device reimbursement claim.
 
+The checked-in evaluation guide now matches the shipped benchmark inventory:
+84 fixtures across 30 HR and 54 support workflows.
+
 ## Why Quorum Exists
 
 AI answers can sound confident while drifting from approved policy. Quorum
