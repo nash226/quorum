@@ -1,0 +1,19 @@
+{
+  "name": "HR overtime policy example",
+  "domain": "hr",
+  "answerPath": "inline/hr-overtime-answer.md",
+  "answer": "Non-exempt employees receive overtime pay after 40 hours in a workweek.\nNon-exempt employees receive overtime pay after 80 hours in a workweek.\nThe company provides a commuter shuttle.\n",
+  "answerLabel": "HR overtime reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "inline/hr-overtime-policy.md",
+      "id": "people-ops/hr-overtime@2026-07-29",
+      "title": "HR Overtime Policy",
+      "updatedAt": "2026-07-29",
+      "trustLevel": "high",
+      "content": "Non-exempt employees receive overtime pay after 40 hours in a workweek.\nOvertime is paid at one and one-half times the regular rate.\nEmployees must receive manager approval before working overtime.\n"
+    }
+  ],
+  "expectedSummary": { "verified": 1, "contradicted": 1, "unsupported": 1, "needs_review": 0 },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
