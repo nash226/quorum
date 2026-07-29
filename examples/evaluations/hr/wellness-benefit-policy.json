@@ -1,0 +1,24 @@
+{
+  "name": "HR wellness benefit policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-wellness-benefit-answer.md",
+  "answer": "Employees may claim up to $600 per calendar year for eligible wellness expenses.\nEmployees may claim up to $600 per calendar year for eligible wellness expenses without submitting receipts.\nThe company reimburses gym memberships.\n",
+  "answerLabel": "HR wellness benefit reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-wellness-benefit-policy.md",
+      "id": "people-ops/hr-wellness-benefit@2026-07-29",
+      "title": "HR Wellness Benefit Policy",
+      "updatedAt": "2026-07-29",
+      "trustLevel": "high",
+      "content": "Employees may claim up to $600 per calendar year for eligible wellness expenses.\nEmployees must submit receipts through the benefits portal within 60 days of purchase.\nHR reviews each claim for eligibility before reimbursement.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}
