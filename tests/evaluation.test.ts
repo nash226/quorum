@@ -112,6 +112,35 @@ test("evaluates a shipped HR employee assistance fixture across benefit claims",
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates inline HR equipment return claims across all verdict types", async () => {
+  const scorecard = await evaluateFixture({
+    name: "HR equipment return policy example",
+    domain: "hr",
+    answerPath: "answers/hr-equipment-return-answer.md",
+    answer: "Employees may return company equipment within 30 days of leaving the company.\nEmployees may return company equipment within 60 days of leaving the company.\nThe company reimburses personal phone purchases.\n",
+    answerLabel: "HR equipment return reviewer packet",
+    sources: [{
+      sourcePath: "sources/hr-equipment-return-policy.md",
+      id: "people-ops/hr-equipment-return@2026-07-29",
+      title: "HR Equipment Return Policy",
+      updatedAt: "2026-07-29",
+      trustLevel: "high",
+      content: "Employees may return company equipment within 30 days of leaving the company.\nIT provides return instructions and a prepaid shipping label.\nEmployees are responsible for returning laptops, monitors, and access badges.\n",
+    }],
+    expectedSummary: { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 },
+    expectedClaimVerdicts: ["verified", "contradicted", "unsupported"],
+  }, { generatedAt: "2026-07-29T12:00:00.000Z" });
+
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline HR bereavement fixture across leave claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/bereavement-leave-policy.json"),
