@@ -111,6 +111,9 @@ packaged CLI smoke gate, keeping that supported document format release-gated.
 The packaged CLI smoke gate now verifies YAML answers against YML approved
 sources, keeping both common structured-policy extensions release-gated.
 
+It also covers the inverse `.yml` answer and `.yaml` approved-source pairing,
+so either documented YAML alias can be used on either side of verification.
+
 Direct CLI verification now covers YAML answers and YML approved sources,
 including structured claims and source titles in the JSON evidence report.
 
