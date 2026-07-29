@@ -15,6 +15,9 @@ The evaluation suite now covers an HR overtime-policy packet, checking the
 The evaluation suite also covers support price adjustments, including eligible
 requests, retailer restrictions, and refund-routing uncertainty.
 
+The support evaluation suite also directly covers holiday-hours availability,
+including an enterprise-schedule exception that must remain unsupported.
+
 The HTTP evaluation endpoint now has regression coverage for domain-scoped
 fixture requests, keeping API scorecards aligned with CLI domain filtering.
 
