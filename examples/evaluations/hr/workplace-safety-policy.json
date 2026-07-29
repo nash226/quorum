@@ -1,0 +1,24 @@
+{
+  "name": "HR workplace safety policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-workplace-safety-answer.md",
+  "answer": "Employees must report workplace injuries to People Operations within 24 hours.\nEmployees may skip required safety training when their manager approves it.\nThe company provides free commuter parking.\n",
+  "answerLabel": "HR workplace safety reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-workplace-safety-policy.md",
+      "id": "people-ops/hr-workplace-safety@2026-07-29",
+      "title": "HR Workplace Safety Policy",
+      "updatedAt": "2026-07-29",
+      "trustLevel": "high",
+      "content": "Employees must report workplace injuries to People Operations within 24 hours.\nAll employees must complete required safety training before beginning work."
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}

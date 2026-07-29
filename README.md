@@ -3,6 +3,10 @@
 The evaluation suite includes an HR employee-assistance policy fixture that
 checks supported and unsupported benefit claims in one reviewer scorecard.
 
+The evaluation suite now includes HR workplace-safety coverage for injury
+reporting, required training, and unsupported commuter-benefit claims, with
+uncertain training exceptions routed to review.
+
 [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
@@ -1124,7 +1128,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 82-fixture benchmark spans 28 HR and 54 support workflows, including
+The checked-in 83-fixture benchmark spans 29 HR and 54 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
@@ -1154,7 +1158,7 @@ focused support scorecards aligned with the 51-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
-exactly one data row for each of the 82 checked-in benchmark fixtures.
+exactly one data row for each of the 83 checked-in benchmark fixtures.
 It also cross-checks that row count against the aggregate summary's fixture
 count, keeping machine-readable benchmark artifacts internally consistent.
 The packed smoke check also reconciles each domain summary's fixture count
@@ -1294,7 +1298,7 @@ The support benchmark now also covers authorized-contact answers, preserving
 the account-owner confirmation control before account discussions while
 flagging an unsafe no-confirmation billing-contact promise.
 
-The benchmark inventory is currently reconciled at 82 fixtures, including the
+The benchmark inventory is currently reconciled at 83 fixtures, including the
 new support returns-and-exchange coverage described below.
 
 The new support returns-and-exchange fixture covers a verified exchange window,
