@@ -9,6 +9,8 @@ customers, employees, tickets, workflows, or downstream systems.
 The evaluation benchmark now pins HR holiday-observance coverage, including a
 verified paid-holiday entitlement, an annual holiday count routed for review,
 and two uncertain claims routed for review.
+The deterministic API and domain-filter checks also track the expanded
+81-fixture, 240-claim benchmark totals.
 
 The packaged CLI smoke gate now verifies AsciiDoc (`.adoc`/`.asciidoc`) and
 Org-mode (`.org`) answer and approved-source exports, keeping these documented

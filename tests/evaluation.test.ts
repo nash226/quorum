@@ -2315,6 +2315,7 @@ test("filters evaluation fixture files by domain", async () => {
       "HR dependent benefits policy example",
       "HR employee referral policy example",
       "HR expense reimbursement policy example",
+      "HR holiday observance policy example",
       "HR jury duty policy example",
       "HR leave carryover policy example",
       "HR leave policy example",
