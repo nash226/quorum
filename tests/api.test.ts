@@ -2961,6 +2961,31 @@ test("HTTP API supports conditional OpenAPI downloads with ETags", async () => {
   }
 });
 
+test("HTTP API supports conditional capability downloads with ETags", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const firstResponse = await fetch(`${api.url}/capabilities`);
+    const etag = firstResponse.headers.get("etag");
+
+    assert.equal(firstResponse.status, 200);
+    assert.match(etag ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(firstResponse.headers.get("cache-control"), "public, max-age=0, must-revalidate");
+    assert.equal(firstResponse.headers.get("access-control-expose-headers"), API_CORS_EXPOSED_HEADERS);
+    assert.ok((await firstResponse.text()).includes('"capabilities"'));
+
+    const notModifiedResponse = await fetch(`${api.url}/capabilities`, {
+      headers: { "if-none-match": etag ?? "" },
+    });
+
+    assert.equal(notModifiedResponse.status, 304);
+    assert.equal(notModifiedResponse.headers.get("etag"), etag);
+    assert.equal(await notModifiedResponse.text(), "");
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves single-answer verification over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const generatedAt = "2026-07-07T19:15:00.000Z";
