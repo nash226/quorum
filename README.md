@@ -12,6 +12,10 @@ The generated OpenAPI contract now regression-tests every advertised CORS
 preflight operation for its 204 response and complete response-header schema,
 keeping browser and generated clients aligned with the local API discovery list.
 
+The generated OpenAPI contract now documents structured 405 error responses for
+discovered GET and HEAD routes, including the allowed-method header used by
+clients handling unsupported requests.
+
 The OpenAPI contract now regression-tests that every discovered POST endpoint
 publishes an `application/json` request schema, so generated clients can
 validate request shapes before sending verification and review work.

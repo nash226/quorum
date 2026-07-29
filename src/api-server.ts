@@ -4174,6 +4174,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
   const methods = API_ALLOWED_METHODS.map((method) => method.toLowerCase());
   for (const pathItem of Object.values(document.paths)) {
     const pathItemRecord = pathItem as Record<string, unknown>;
+    const allowedMethods = methods.filter((method) => pathItemRecord[method]).map((method) => method.toUpperCase());
     for (const method of methods) {
       const operation = pathItemRecord[method];
       if (!operation || typeof operation !== "object") {
@@ -4185,6 +4186,25 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
         { $ref: "#/components/parameters/RequestIdHeader" },
         ...(Array.isArray(operationRecord.parameters) ? operationRecord.parameters : []),
       ];
+
+      const responses = ((operationRecord as { responses?: Record<string, unknown> }).responses ??= {});
+      if ((method === "get" || method === "head") && !("405" in responses)) {
+        responses["405"] = {
+          description: `The route only accepts ${allowedMethods.join(", ")}.`,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ApiErrorResponse" },
+            },
+          },
+          headers: {
+            ...apiResponseHeaders,
+            Allow: {
+              schema: { type: "string", const: allowedMethods.join(", ") },
+              description: "HTTP methods accepted by this endpoint.",
+            },
+          },
+        };
+      }
     }
   }
 
