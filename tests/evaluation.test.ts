@@ -1385,6 +1385,31 @@ test("evaluates a shipped inline HR professional development fixture across risk
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped HR workplace accommodation fixture across review verdicts", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/hr/workplace-accommodation-policy.json"),
+    generatedAt: "2026-07-29T15:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR workplace accommodation policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.equal(scorecard.answerLabel, "HR workplace accommodation reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-workplace-accommodation@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline HR compensation fixture across risk verdicts", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/compensation-policy.json"),

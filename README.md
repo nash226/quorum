@@ -48,6 +48,10 @@ Evaluation score gates now document and preserve the distinction between
 reported scorecards and failing CI processes, with gate-aware result JSON for
 automation diagnostics.
 
+The evaluation suite also covers workplace-accommodation policy responses,
+including a time-bound claim routed to `needs_review` instead of being treated
+as a confirmed contradiction.
+
 The machine-readable `quorum formats --json` contract now also guards that
 published source and answer extensions remain normalized and unique.
 
