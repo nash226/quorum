@@ -19,6 +19,10 @@ structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+Integrations can consume the same contract without parsing human-readable
+output by running `npm run formats -- --json`; the result includes a versioned
+`sources` and `answers` extension list kept aligned with the library exports.
+
 The built CLI smoke gate also cross-checks `quorum formats --json` against the
 library exports, keeping the machine-readable integration contract aligned
 after compilation.
