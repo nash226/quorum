@@ -1310,6 +1310,51 @@ test("verify accepts a direct XML answer export", async () => {
   }
 });
 
+test("verify combines explicit sources with discovered source-directory files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-source-inputs-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const explicitSourcePath = join(tempDir, "priority-policy.md");
+    const sourceDir = join(tempDir, "policies");
+    const discoveredSourcePath = join(sourceDir, "leave-policy.md");
+
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(explicitSourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(discoveredSourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      explicitSourcePath,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ id: string; sourcePath: string; title: string; trustLevel: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(
+      report.sources.map(({ id, title }) => ({ id, title })),
+      [
+        { id: "source_1", title: "priority-policy" },
+        { id: "source_2", title: "leave-policy" },
+      ],
+    );
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([

@@ -8,6 +8,10 @@ steps.
 The HTTP API now regression-tests CORS preflight responses across every POST
 endpoint, keeping browser-based agent integrations aligned as routes evolve.
 
+Single-answer verification now regression-tests combining an explicitly named
+approved source with files discovered from `--source-dir`, preserving both
+source inputs in the evidence report.
+
 The generated OpenAPI contract now regression-tests every advertised CORS
 preflight operation for its 204 response and complete response-header schema,
 keeping browser and generated clients aligned with the local API discovery list.
