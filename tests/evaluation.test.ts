@@ -437,6 +437,7 @@ test("evaluates a shipped support live chat fixture from HTML policy", async () 
     "unsupported",
   ]);
   assert.match(scorecard.report.sources[0]?.sourcePath ?? "", /support-billing-policy\.html$/);
+  assert.equal(scorecard.report.sources[0]?.id, "support/billing-policy@2026-06-28");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
 });

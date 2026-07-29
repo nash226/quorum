@@ -3,7 +3,14 @@
   "domain": "support",
   "answerPath": "../../answers/support-live-chat-answer.md",
   "answerLabel": "Support live chat reviewer packet",
-  "sourcePaths": ["../../sources/support-billing-policy.html"],
+  "sources": [{
+    "sourcePath": "../../sources/support-billing-policy.html",
+    "id": "support/billing-policy@2026-06-28",
+    "title": "Billing and Support Policy",
+    "updatedAt": "2026-06-28",
+    "trustLevel": "high",
+    "content": "Customers can request billing credits for duplicate charges within 7 days.\nAnnual plan refunds remain available for 14 days after purchase.\nEnterprise plans include live chat support during business hours.\n"
+  }],
   "expectedSummary": {
     "verified": 1,
     "contradicted": 1,
