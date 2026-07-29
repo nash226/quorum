@@ -1,5 +1,8 @@
 # Quorum
 
+Every supported CLI command accepts `-h` or `--help` before required inputs are
+validated, so operators can inspect command-specific usage safely.
+
 The evaluation suite includes an HR employee-assistance policy fixture that
 checks supported and unsupported benefit claims in one reviewer scorecard.
 

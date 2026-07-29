@@ -7,6 +7,24 @@ import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 import { ANSWER_EXTENSIONS, SOURCE_EXTENSIONS } from "../src/workflow.js";
 
+test("supported commands accept -h and --help before parsing required inputs", async () => {
+  for (const [command, flag] of [
+    ["verify", "--help"],
+    ["verify-batch", "-h"],
+    ["extract-claims", "--help"],
+    ["import-review", "--help"],
+    ["review-queue", "-h"],
+    ["evaluate", "--help"],
+    ["serve", "--help"],
+    ["openapi", "-h"],
+  ] as const) {
+    const output = await runCli([command, flag]);
+
+    assert.match(output, new RegExp(`Quorum ${command}`));
+    assert.match(output, /Usage:/);
+  }
+});
+
 test("version aliases report the package contract version", async () => {
   const [longAlias, shortAlias, command] = await Promise.all([
     runCli(["--version"]),
