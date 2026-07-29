@@ -284,7 +284,9 @@ the npm artifact is built.
 The CLI regression suite also covers direct JSON approved-source verification,
 including structured source titles and verified claim matching.
 Use `npm run dev -- formats --json` when an integration needs the same contract
-as sorted machine-readable `sources` and `answers` arrays.
+as sorted machine-readable `sources` and `answers` arrays. The JSON response
+also includes `caseInsensitive: true`, making the matching rule explicit for
+uploaders.
 The [CLI guide](docs/cli-guide.md#inspect-supported-input-formats) now shows
 how to use those arrays as an input allow-list before submitting a file.
 Directory discovery matches those supported extensions case-insensitively, so
