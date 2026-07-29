@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `43ac1af` on 2026-07-29, docs: reconcile benchmark fixture counts
+- Latest shipped change: `8f04fe2` on 2026-07-29, docs: document empty source guard
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | docs: document empty source guard | `8f04fe2` |
 | 2026-07-29 | [#1394](https://github.com/nash226/quorum/pull/1394) | docs: reconcile benchmark fixture counts | `43ac1af` |
 | 2026-07-29 | Direct push | test: add HR wellness benefit evaluation | `9d8ec04` |
 | 2026-07-29 | Direct push | test: cover packaged reStructuredText verification | `cd55459` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | [#1387](https://github.com/nash226/quorum/pull/1387) | test: cover ini policy source discovery | `413c32b` |
 | 2026-07-29 | Direct push | test: cover HR workplace accommodation evaluation | `27fd184` |
 | 2026-07-29 | Direct push | test: preserve log source title fallback | `488fe8c` |
-| 2026-07-29 | Direct push | fix: normalize LaTeX source evidence | `7b85f50` |
 
