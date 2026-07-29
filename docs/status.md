@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5fbb925` on 2026-07-28, test: cover nested log format discovery
+- Latest shipped change: `0ee511e` on 2026-07-28, test: cover support invoice correction evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | test: cover support invoice correction evaluation | `0ee511e` |
 | 2026-07-28 | Direct push | test: cover nested log format discovery | `5fbb925` |
 | 2026-07-28 | Direct push | test: cover HTTP queue domain filtering | `571ca32` |
 | 2026-07-28 | Direct push | test: cover nested source discovery | `ae3b650` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | [#1329](https://github.com/nash226/quorum/pull/1329) | docs: clarify reviewer queue status values | `dd91359` |
 | 2026-07-28 | Direct push | test: gate professional development fixture | `9535536` |
 | 2026-07-28 | Direct push | test: smoke-check packaged MediaWiki inputs | `133290c` |
-| 2026-07-28 | Direct push | docs: clarify decision-gated roadmap work | `8b5e071` |
 
