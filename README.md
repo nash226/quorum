@@ -1,5 +1,8 @@
 # Quorum
 
+The evaluation suite now directly covers the shipped support account-policy
+fixture, including two verified account controls and a contradicted claim.
+
 The API contract tests now ensure every endpoint advertised by discovery is
 also represented in the generated OpenAPI document, keeping integration
 clients from receiving an incomplete route schema.

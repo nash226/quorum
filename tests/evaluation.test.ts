@@ -305,6 +305,31 @@ test("evaluates fixture files relative to the fixture directory", async () => {
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped support account fixture across account claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/account-security-policy.json"),
+    generatedAt: "2026-07-29T13:30:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support account policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support account reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 2,
+    contradicted: 1,
+    unsupported: 0,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "verified",
+    "contradicted",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.title, "Support Playbook");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped support escalation fixture across routing verdicts", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/escalation-policy.json"),
