@@ -12,6 +12,10 @@ The OpenAPI contract now regression-tests that every discovered POST endpoint
 publishes an `application/json` request schema, so generated clients can
 validate request shapes before sending verification and review work.
 
+The OpenAPI contract also regression-tests that every discovered POST endpoint
+publishes an `application/json` success response schema, keeping generated
+clients aligned with the response shape returned by local integrations.
+
 The roadmap now treats batch verification and reviewer queue exports as shipped
 foundations; current safe work focuses on strengthening the local CLI and HTTP
 API while durable hosting and storage remain decision-gated.
