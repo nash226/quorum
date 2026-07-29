@@ -9,6 +9,9 @@ customers, employees, tickets, workflows, or downstream systems.
 The evaluation suite now covers an HR overtime-policy packet, checking the
 40-hour threshold, overtime-rate contradiction, and missing approval control.
 
+Directory verification now discovers `.cfg` and `.conf` policy exports as
+plain-text configuration inputs, alongside `.ini` and `.properties` files.
+
 The evaluation suite also covers support price adjustments, including eligible
 requests, retailer restrictions, and refund-routing uncertainty.
 

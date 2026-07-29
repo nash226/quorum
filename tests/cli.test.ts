@@ -97,8 +97,8 @@ test("verify-batch discovers nested .log answers and sources", async () => {
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
-  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
-  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
@@ -111,6 +111,10 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.qmd/);
   assert.match(stdout, /Source files: .*\.properties/);
   assert.match(stdout, /Answer files: .*\.properties/);
+  assert.match(stdout, /Source files: .*\.cfg/);
+  assert.match(stdout, /Answer files: .*\.cfg/);
+  assert.match(stdout, /Source files: .*\.conf/);
+  assert.match(stdout, /Answer files: .*\.conf/);
   assert.match(stdout, /Source files: .*\.tsv/);
   assert.match(stdout, /Answer files: .*\.tsv/);
   assert.match(stdout, /Source files: .*\.ndjson/);
@@ -2904,7 +2908,7 @@ test("verify evaluates claims from direct .properties answers and sources", asyn
   }
 });
 
-test("verify-batch discovers INI and properties answers and sources", async () => {
+test("verify-batch discovers INI, CFG, CONF, and properties answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-config-batch-"));
   const answerDir = join(tempDir, "answers");
   const sourceDir = join(tempDir, "sources");
@@ -2924,11 +2928,27 @@ test("verify-batch discovers INI and properties answers and sources", async () =
         "leave=Employees receive 12 weeks of paid parental leave.\n",
       ),
       writeFile(
+        join(answerDir, "cfg-answer.cfg"),
+        "leave=Employees receive 12 weeks of paid parental leave.\n",
+      ),
+      writeFile(
+        join(answerDir, "conf-answer.conf"),
+        "leave=Employees receive 12 weeks of paid parental leave.\n",
+      ),
+      writeFile(
         join(sourceDir, "ini-policy.ini"),
         "[policy]\nleave=Employees receive 12 weeks of paid parental leave.\n",
       ),
       writeFile(
         join(sourceDir, "properties-policy.properties"),
+        "leave=Employees receive 12 weeks of paid parental leave.\n",
+      ),
+      writeFile(
+        join(sourceDir, "cfg-policy.cfg"),
+        "leave=Employees receive 12 weeks of paid parental leave.\n",
+      ),
+      writeFile(
+        join(sourceDir, "conf-policy.conf"),
         "leave=Employees receive 12 weeks of paid parental leave.\n",
       ),
     ]);
@@ -2948,15 +2968,15 @@ test("verify-batch discovers INI and properties answers and sources", async () =
       }>;
     };
 
-    assert.equal(report.summary.answersWithClaims, 2);
-    assert.equal(report.summary.verified, 2);
+    assert.equal(report.summary.answersWithClaims, 4);
+    assert.equal(report.summary.verified, 4);
     assert.deepEqual(
       report.answers.map((answer) => answer.answerPath),
-      [join(answerDir, "ini-answer.ini"), join(answerDir, "properties-answer.properties")],
+      [join(answerDir, "cfg-answer.cfg"), join(answerDir, "conf-answer.conf"), join(answerDir, "ini-answer.ini"), join(answerDir, "properties-answer.properties")],
     );
     assert.deepEqual(
       report.answers.map((answer) => answer.report.summary.verified),
-      [1, 1],
+      [1, 1, 1, 1],
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
