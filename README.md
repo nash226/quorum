@@ -166,6 +166,9 @@ Direct INI answers and approved sources are also covered end to end, preserving
 their paths and verified evidence in single-answer reports.
 Direct `.properties` answer and approved-source exports are also covered end to
 end, preserving the answer path, source path, and fallback source title.
+
+Common configuration exports using `.conf` and `.cfg` are also discovered as
+plain-text answers and approved sources, alongside `.ini` and `.properties`.
 The packaged CLI smoke check verifies that this same `.properties` contract
 survives the npm package boundary.
 The packaged CLI smoke check also verifies TOML approved-source metadata,
