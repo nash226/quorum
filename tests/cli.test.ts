@@ -434,6 +434,35 @@ test("verify accepts a direct .mdx answer and preserves its path", async () => {
   }
 });
 
+test("verify-batch discovers nested .mdx answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-mdx-answer-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourcePath = join(tempDir, "policy.md");
+    const answerPath = join(answerDir, "nested", "answer.mdx");
+    await mkdir(join(answerDir, "nested"), { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source", sourcePath, "--json",
+    ])) as {
+      answerCount: number;
+      answers: Array<{ answerPath: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.answers[0]?.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct .mdx source and preserves its path", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdx-source-"));
 
