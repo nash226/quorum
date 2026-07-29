@@ -6,6 +6,10 @@ Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
+The published package smoke gate now verifies the format-discovery help aliases
+(`quorum formats --help` and `quorum formats -h`) alongside the human-readable
+and JSON format contracts, keeping scripted package onboarding release-safe.
+
 The CLI format-discovery command now accepts both `quorum formats --help` and
 `quorum formats -h`, keeping command-specific help consistent with the other
 published commands.
