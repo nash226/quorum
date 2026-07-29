@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bb4c787` on 2026-07-29, test: cover HR equipment return evaluation
+- Latest shipped change: `0763732` on 2026-07-29, test: keep OpenAPI routes aligned
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: keep OpenAPI routes aligned | `0763732` |
 | 2026-07-29 | Direct push | test: cover HR equipment return evaluation | `bb4c787` |
 | 2026-07-29 | [#1369](https://github.com/nash226/quorum/pull/1369) | test: cover support service outage evaluation | `0ebb298` |
 | 2026-07-29 | Direct push | test: cover direct reStructuredText answers | `d49d09d` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | [#1365](https://github.com/nash226/quorum/pull/1365) | test: add HR workplace safety evaluation | `81efc03` |
 | 2026-07-29 | Direct push | test: cover support holiday hours evaluation | `5f734fa` |
 | 2026-07-29 | [#1362](https://github.com/nash226/quorum/pull/1362) | test: cover HR employee assistance evaluation | `c2a1da4` |
-| 2026-07-29 | Direct push | docs: explain evaluation score gates | `0bb5d0c` |
 
