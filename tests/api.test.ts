@@ -176,6 +176,22 @@ test("API discovery endpoint inventory contains one entry per method and path", 
   assert.equal(new Set(endpointKeys).size, endpointKeys.length);
 });
 
+test("OpenAPI gives every advertised operation a unique operation ID", () => {
+  const openApi = createOpenApiDocument() as {
+    paths: Record<string, Record<string, { operationId?: string }>>;
+  };
+  const operations = Object.entries(openApi.paths).flatMap(([path, pathItem]) =>
+    Object.entries(pathItem)
+      .filter(([method]) => SERVER_API_ALLOWED_METHODS.includes(method.toUpperCase() as (typeof SERVER_API_ALLOWED_METHODS)[number]))
+      .map(([method, operation]) => ({ method: method.toUpperCase(), path, operationId: operation.operationId })),
+  );
+  const operationIds = operations.map(({ operationId }) => operationId);
+
+  assert.equal(operations.length, API_ENDPOINTS.length);
+  assert.ok(operations.every(({ operationId }) => operationId));
+  assert.equal(new Set(operationIds).size, operationIds.length);
+});
+
 test("API CORS exposed headers contain each browser-visible header once", () => {
   const exposedHeaders = API_CORS_EXPOSED_HEADERS.split(", ");
 
