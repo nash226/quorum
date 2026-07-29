@@ -174,7 +174,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  if (command === "version" || command === "--version" || command === "-v") {
+  if (command === "version" || command === "--version" || command === "-v" || command === "-V") {
     if (args.length === 1 && isHelpFlag(args[0])) {
       printHelp("version");
       return;
