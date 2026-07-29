@@ -80,6 +80,10 @@ The built CLI smoke gate also cross-checks `quorum formats --json` against the
 library exports, keeping the machine-readable integration contract aligned
 after compilation.
 
+HTTP integrations can use `HEAD /version` as a bodyless compatibility probe;
+the response preserves the version, OpenAPI-path, request-ID, and `ETag`
+headers used by the JSON discovery route.
+
 Direct CLI verification now regression-tests DOCX answer exports, keeping
 single-answer Word handoffs on the same evidence path as DOCX policy sources.
 

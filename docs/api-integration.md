@@ -194,6 +194,14 @@ curl -sS http://127.0.0.1:3000/
 curl -sS http://127.0.0.1:3000/version
 ```
 
+For a bodyless compatibility probe, use `HEAD /version` and inspect
+`X-Quorum-Version`, `X-Quorum-OpenAPI-Path`, and `ETag` without downloading the
+JSON representation:
+
+```bash
+curl -sSI http://127.0.0.1:3000/version
+```
+
 `GET /` returns the endpoint inventory plus the same capability metadata as
 `/capabilities`. It returns a stable `ETag` and supports `If-None-Match`, so a
 bootstrap client can revalidate the discovery contract without downloading the
