@@ -590,6 +590,34 @@ try {
   rmSync(cliYamlPackageDir, { recursive: true, force: true });
 }
 
+const cliYamlAliasPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-alias-"));
+try {
+  const answerPath = join(cliYamlAliasPackageDir, "answer.yml");
+  const sourcePath = join(cliYamlAliasPackageDir, "policy.yaml");
+  writeFileSync(answerPath, "claim: Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(
+    sourcePath,
+    "title: Parental Leave Policy\npolicy:\n  rule: Employees receive 12 weeks of paid parental leave.\n",
+  );
+
+  const yamlAliasOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const yamlAliasPayload = JSON.parse(yamlAliasOutput);
+  if (
+    yamlAliasPayload.summary?.verified !== 1 ||
+    yamlAliasPayload.answerPath !== answerPath ||
+    yamlAliasPayload.sources?.[0]?.title !== "Parental Leave Policy" ||
+    yamlAliasPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the inverse YAML/YML alias contract.");
+  }
+} finally {
+  rmSync(cliYamlAliasPackageDir, { recursive: true, force: true });
+}
+
 const cliFrontmatterPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-frontmatter-"));
 try {
   const answerPath = join(cliFrontmatterPackageDir, "answer.md");
