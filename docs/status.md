@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `488fe8c` on 2026-07-29, test: preserve log source title fallback
+- Latest shipped change: `27fd184` on 2026-07-29, test: cover HR workplace accommodation evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: cover HR workplace accommodation evaluation | `27fd184` |
 | 2026-07-29 | Direct push | test: preserve log source title fallback | `488fe8c` |
 | 2026-07-29 | Direct push | fix: normalize LaTeX source evidence | `7b85f50` |
 | 2026-07-29 | Direct push | test: cover direct LaTeX answer verification | `e24a067` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: cover HR equipment return evaluation | `bb4c787` |
 | 2026-07-29 | [#1369](https://github.com/nash226/quorum/pull/1369) | test: cover support service outage evaluation | `0ebb298` |
 | 2026-07-29 | Direct push | test: cover direct reStructuredText answers | `d49d09d` |
-| 2026-07-29 | Direct push | docs: list formats command in README | `9d12e75` |
 
