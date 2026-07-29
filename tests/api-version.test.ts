@@ -197,6 +197,25 @@ test("OpenAPI gives every discovered POST route a JSON success response schema",
   }
 });
 
+test("OpenAPI documents structured method errors for discovered GET and HEAD routes", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, Record<string, {
+      responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }>; headers?: Record<string, unknown> }>;
+    }>>;
+  };
+
+  for (const endpoint of API_ENDPOINTS.filter(({ method }) => method === "GET" || method === "HEAD")) {
+    const operation = document.paths[endpoint.path]?.[endpoint.method.toLowerCase()];
+    assert.ok(operation, `${endpoint.method} ${endpoint.path}`);
+    assert.equal(
+      operation.responses?.["405"]?.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ApiErrorResponse",
+      `${endpoint.method} ${endpoint.path} 405 response schema`,
+    );
+    assert.ok(operation.responses?.["405"]?.headers?.Allow, `${endpoint.method} ${endpoint.path} Allow header`);
+  }
+});
+
 test("OpenAPI documents revalidation for the capabilities endpoint", () => {
   const document = createOpenApiDocument() as {
     paths: Record<string, {
