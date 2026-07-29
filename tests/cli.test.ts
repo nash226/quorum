@@ -4961,6 +4961,45 @@ test("verify-batch preserves explicit answer order ahead of directory-discovered
   }
 });
 
+test("verify discovers supported sources in nested source directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-nested-sources-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+    const nestedSourceDir = join(sourceDir, "hr", "2026");
+
+    await mkdir(nestedSourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        join(nestedSourceDir, "leave-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ title: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["leave-policy"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch dedupes repeated answer files that use different path spellings", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-answer-dedupe-"));
 

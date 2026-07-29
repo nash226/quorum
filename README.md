@@ -237,6 +237,8 @@ how to use those arrays as an input allow-list before submitting a file.
 Directory discovery matches those supported extensions case-insensitively, so
 exports such as `POLICY.PDF` and `Answer.JSON` follow the same verification path
 as lowercase filenames.
+Source-directory discovery is recursive, so teams can organize approved policy
+documents in nested folders without flattening their evidence library.
 Direct `verify` paths use the same case-insensitive extension contract, so
 uppercase answer and source exports are accepted without renaming.
 Batch discovery also covers `.ini` and `.properties` policy exports, so
