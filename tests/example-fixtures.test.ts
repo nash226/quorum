@@ -68,3 +68,18 @@ test("support HTML example produces one verified, contradicted, and unsupported 
     needs_review: 0,
   });
 });
+
+test("support refund example covers verified, contradicted, and unsupported policy claims", async () => {
+  const report = await verifyExample(
+    "examples/evaluations/support-refunds-answer.md",
+    "examples/evaluations/support-refunds-policy.md",
+  );
+
+  assert.deepEqual(report.summary, {
+    verified: 2,
+    unsupported: 1,
+    contradicted: 0,
+    needs_review: 1,
+  });
+  assert.match(report.assessments[1]?.evidence[0]?.quote ?? "", /original invoice number/);
+});

@@ -1,5 +1,9 @@
 # Quorum
 
+The support evaluation suite now includes a refund-policy case covering
+verified refund handling, a needs-review invoice requirement, and an
+unsupported automatic-refund claim.
+
 The HR evaluation suite now covers wellness-benefit reimbursement claims,
 including a verified annual cap, a receipt-policy contradiction, and an
 unsupported gym-membership claim.
