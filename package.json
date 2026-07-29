@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "mammoth": "^1.12.0",
+    "jszip": "^3.10.1",
     "pdf-parse": "^2.4.5"
   }
 }

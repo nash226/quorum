@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import JSZip from "jszip";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 import { parseSource, sourceDocumentFromFile } from "../src/source-loader.js";
 
@@ -34,6 +35,19 @@ test("extracts readable text from DOCX source content", async () => {
   assert.equal(source.title, "hr-policy");
   assert.equal(source.trustLevel, "medium");
   assert.equal(source.content, "Walking on imported air");
+});
+
+test("extracts readable text from ODT source content", async () => {
+  const archive = new JSZip();
+  archive.file(
+    "content.xml",
+    `<?xml version="1.0"?><office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"><office:body><office:text><text:p>Employees receive 12 weeks of paid parental leave.</text:p></office:text></office:body></office:document-content>`,
+  );
+  const content = await archive.generateAsync({ type: "uint8array" });
+  const source = await sourceDocumentFromFile("docs/hr-policy.odt", content, 0);
+
+  assert.equal(source.title, "hr-policy");
+  assert.match(source.content, /Employees receive 12 weeks of paid parental leave\./);
 });
 
 test("preserves a caller-supplied source identifier for DOCX content", async () => {
