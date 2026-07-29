@@ -386,7 +386,7 @@ from the API and programmatic workflow surface.
 The CLI contract test applies the same exact comparison during ordinary test
 runs, catching format-list drift before a package smoke run.
 
-Plain-text `.log` exports are accepted for both answers and approved sources,
+Plain-text `.log` and `.env` exports are accepted for both answers and approved sources,
 so support and audit log evidence can be verified without renaming files.
 The direct CLI path is regression-tested with `.log` answer and source files,
 including answer and source path provenance in the JSON report.
