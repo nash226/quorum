@@ -669,6 +669,7 @@ The packaged CLI command map is:
 | `evaluate` | Run fixture scorecards and mismatch gates. |
 | `serve` | Start the local HTTP API. |
 | `openapi` | Export the machine-readable API contract. |
+| `formats` | Inspect the versioned answer/source extension contract. |
 | `version` | Probe the CLI and API contract version. |
 
 The version probe is also available as `quorum --version` and `quorum -v`,
