@@ -201,6 +201,25 @@ test("verify accepts direct YAML answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct JSONL answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-jsonl-direct-"));
+  try {
+    const answerPath = join(tempDir, "answer.jsonl");
+    const sourcePath = join(tempDir, "policy.jsonl");
+    await Promise.all([
+      writeFile(answerPath, '{"claim":"Employees receive 12 weeks of paid parental leave."}\n', "utf8"),
+      writeFile(sourcePath, '{"policy":"Employees receive 12 weeks of paid parental leave."}\n', "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify", "--answer", answerPath, "--source", sourcePath]);
+
+    assert.match(stdout, /VERIFIED/);
+    assert.match(stdout, /Employees receive 12 weeks of paid parental leave/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("formats --json exposes a versioned machine-readable input contract", async () => {
   const stdout = await runCli(["formats", "--json"]);
   const formats = JSON.parse(stdout) as { version: string; sources: string[]; answers: string[] };
