@@ -121,6 +121,14 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.log/);
 });
 
+test("formats accepts both help flag aliases", async () => {
+  const longHelp = await runCli(["formats", "--help"]);
+  const shortHelp = await runCli(["formats", "-h"]);
+
+  assert.match(longHelp, /Usage:\s+quorum formats \[--json\]/);
+  assert.equal(shortHelp, longHelp);
+});
+
 test("verify accepts direct TSV answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-"));
   try {
