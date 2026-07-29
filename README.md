@@ -19,6 +19,10 @@ structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+The built CLI smoke gate also cross-checks `quorum formats --json` against the
+library exports, keeping the machine-readable integration contract aligned
+after compilation.
+
 Direct CLI verification now regression-tests DOCX answer exports, keeping
 single-answer Word handoffs on the same evidence path as DOCX policy sources.
 
