@@ -43,6 +43,13 @@ test("does not split a claim at a.m. or p.m.", () => {
   );
 });
 
+test("does not split document references at Fig. or No.", () => {
+  assert.deepEqual(
+    splitIntoSentences("See Fig. 2 for the approval flow. No. 3 lists the required reviewers."),
+    ["See Fig. 2 for the approval flow.", "No. 3 lists the required reviewers."],
+  );
+});
+
 test("keeps decimal values inside one sentence", () => {
   assert.deepEqual(
     splitIntoSentences("The policy applies to 95.5% of eligible employees. Review exceptions separately."),

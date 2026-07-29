@@ -74,6 +74,9 @@ Sentence splitting also keeps common abbreviations such as `e.g.`, `i.e.`,
 `a.m.`, `p.m.`, and `etc.` inside the surrounding claim instead of creating
 false claim boundaries.
 
+Sentence splitting also keeps document references such as `Fig. 2` and `No. 3`
+together, preserving policy claims copied from numbered figures and sections.
+
 Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,
 so exported policy files retain their title and metadata when loaded through
 the programmatic API.
