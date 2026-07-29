@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ae3b650` on 2026-07-28, test: cover nested source discovery
+- Latest shipped change: `571ca32` on 2026-07-28, test: cover HTTP queue domain filtering
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-28 | Direct push | test: cover HTTP queue domain filtering | `571ca32` |
 | 2026-07-28 | Direct push | test: cover nested source discovery | `ae3b650` |
 | 2026-07-28 | [#1331](https://github.com/nash226/quorum/pull/1331) | test: smoke-check machine-readable formats contract | `62f6a6f` |
 | 2026-07-28 | [#1329](https://github.com/nash226/quorum/pull/1329) | docs: clarify reviewer queue status values | `dd91359` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | test: smoke-check packaged MediaWiki inputs | `133290c` |
 | 2026-07-28 | Direct push | docs: clarify decision-gated roadmap work | `8b5e071` |
 | 2026-07-28 | [#1320](https://github.com/nash226/quorum/pull/1320) | test: smoke-check packaged AsciiDoc and Org inputs | `5b6c5fa` |
-| 2026-07-28 | Direct push | test: smoke-check packaged PDF answers | `e86f34d` |
 
