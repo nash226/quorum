@@ -127,7 +127,13 @@ test("HTTP API reports the allowed method for an unsupported route method", asyn
 test("OpenAPI documents the version endpoint", () => {
   const document = createOpenApiDocument() as {
     paths: Record<string, {
-      get?: { operationId?: string; responses?: Record<string, { headers?: Record<string, unknown> }> };
+      get?: {
+        operationId?: string;
+        responses?: Record<string, {
+          headers?: Record<string, unknown>;
+          content?: Record<string, { schema?: { $ref?: string }; examples?: Record<string, { value?: unknown }> }>;
+        }>;
+      };
       head?: { operationId?: string };
     }>;
     components: { schemas: Record<string, { required?: string[] }> };
@@ -136,6 +142,14 @@ test("OpenAPI documents the version endpoint", () => {
   assert.equal(document.paths[VERSION_PATH]?.get?.operationId, "getVersion");
   assert.equal(document.paths[VERSION_PATH]?.head?.operationId, "headVersion");
   assert.ok(document.paths[VERSION_PATH]?.get?.responses?.["304"]?.headers?.ETag);
+  assert.equal(
+    document.paths[VERSION_PATH]?.get?.responses?.["200"]?.content?.["application/json"]?.schema?.$ref,
+    "#/components/schemas/ApiVersionResponse",
+  );
+  assert.deepEqual(
+    document.paths[VERSION_PATH]?.get?.responses?.["200"]?.content?.["application/json"]?.examples?.version?.value,
+    { requestId: "version-contract-test", service: "quorum", version: API_VERSION },
+  );
   assert.deepEqual(document.components.schemas.ApiVersionResponse.required, ["requestId", "service", "version"]);
 });
 
