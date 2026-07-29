@@ -823,6 +823,8 @@ YAML and YML answers are also discovered recursively by `verify-batch
 file verification.
 JSON answer files are also discovered recursively by `verify-batch --answer-dir`,
 using the same structured normalization as explicitly supplied JSON answers.
+Directory discovery preserves explicit `--answer` ordering, then appends
+recursive directory results, while duplicate paths are verified only once.
 The direct JSON answer workflow is regression-tested end to end, including
 verified evidence and the normalized answer content retained in the report.
 Direct JSONL answer files are also normalized one record at a time by `verify`,
