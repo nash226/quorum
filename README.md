@@ -826,6 +826,8 @@ Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 answer explicitly.
 Direct XHTML answer verification is also regression-tested, preserving the
 single-answer path for XML-compatible knowledge-base exports.
+Direct `.htm` answer verification is covered as well, keeping the short HTML
+alias on the same single-answer evidence path as `.html` and `.xhtml`.
 When a batch report is written inside an answer directory, its configured
 output path is excluded from recursive answer discovery so reruns do not verify
 their own generated report.
