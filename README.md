@@ -5,6 +5,10 @@ while durable API hosting and reviewer-queue storage remain decision-gated.
 See the [roadmap](docs/roadmap.md) for the current priorities and safe next
 steps.
 
+The roadmap now treats batch verification and reviewer queue exports as shipped
+foundations; current safe work focuses on strengthening the local CLI and HTTP
+API while durable hosting and storage remain decision-gated.
+
 Evaluation domain filters now ignore surrounding whitespace and letter case,
 so `--domain HR` and `--domain hr` select the same HR scorecards.
 
