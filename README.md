@@ -1148,6 +1148,8 @@ verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
 sources. JSON and XML exports are normalized into evidence text so structured
 knowledge-base payloads remain claim-readable in reports. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.
+The fixture guide now matches that 83-fixture inventory, keeping the documented
+29 HR and 54 support split aligned with the checked-in benchmark.
 Run `npm run evaluate:ci` to execute the full checked-in benchmark with the
 aggregate score and mismatch gates enabled; it is the same fail-closed check
 used before publishing the package.
