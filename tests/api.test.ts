@@ -176,6 +176,20 @@ test("API discovery endpoint inventory contains one entry per method and path", 
   assert.equal(new Set(endpointKeys).size, endpointKeys.length);
 });
 
+test("API discovery descriptions stay aligned with OpenAPI operations", () => {
+  const openApi = createOpenApiDocument() as {
+    paths: Record<string, Record<string, { summary?: string }> | undefined>;
+  };
+
+  for (const endpoint of API_ENDPOINTS) {
+    const operation = openApi.paths[endpoint.path]?.[endpoint.method.toLowerCase()];
+
+    assert.ok(operation, `${endpoint.method} ${endpoint.path} is missing from OpenAPI`);
+    assert.ok(operation.summary, `${endpoint.method} ${endpoint.path} is missing an OpenAPI summary`);
+    assert.notEqual(endpoint.description.trim(), "", `${endpoint.method} ${endpoint.path} is missing discovery documentation`);
+  }
+});
+
 test("API CORS exposed headers contain each browser-visible header once", () => {
   const exposedHeaders = API_CORS_EXPOSED_HEADERS.split(", ");
 
