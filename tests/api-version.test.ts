@@ -139,6 +139,17 @@ test("OpenAPI documents the version endpoint", () => {
   assert.deepEqual(document.components.schemas.ApiVersionResponse.required, ["requestId", "service", "version"]);
 });
 
+test("OpenAPI documents every discovered route and method", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, Record<string, unknown>>;
+  };
+
+  for (const endpoint of API_ENDPOINTS) {
+    assert.ok(document.paths[endpoint.path], endpoint.path);
+    assert.ok(document.paths[endpoint.path]?.[endpoint.method.toLowerCase()], `${endpoint.method} ${endpoint.path}`);
+  }
+});
+
 test("OpenAPI documents revalidation for the capabilities endpoint", () => {
   const document = createOpenApiDocument() as {
     paths: Record<string, {
