@@ -9,6 +9,11 @@ The roadmap now treats batch verification and reviewer queue exports as shipped
 foundations; current safe work focuses on strengthening the local CLI and HTTP
 API while durable hosting and storage remain decision-gated.
 
+The next safe increment is local HTTP API contract hardening across verification,
+claim previews, reviewer imports, queue overviews, evaluation, health,
+readiness, capabilities, and OpenAPI discovery; durable hosting and storage
+remain decision-gated.
+
 Evaluation domain filters now ignore surrounding whitespace and letter case,
 so `--domain HR` and `--domain hr` select the same HR scorecards.
 
