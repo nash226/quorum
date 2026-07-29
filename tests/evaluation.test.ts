@@ -325,7 +325,7 @@ test("evaluates the shipped support account fixture across account claims", asyn
     "verified",
     "contradicted",
   ]);
-  assert.equal(scorecard.report.sources[0]?.title, "Support Playbook");
+  assert.equal(scorecard.report.sources[0]?.title, "Customer Support Playbook");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
 });
