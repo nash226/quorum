@@ -89,6 +89,9 @@ source-directory discovery.
 The packaged CLI smoke gate also verifies direct XML answer exports, preserving
 structured claim text and answer-path provenance after publishing.
 
+Direct reStructuredText answer verification is also covered, preserving the
+`.rst` answer path in the JSON evidence report alongside the verified claim.
+
 The packaged smoke gate also verifies a Markdown answer against a DOCX policy
 source, keeping the published artifact's Word-based evidence path covered.
 
