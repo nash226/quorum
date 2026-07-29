@@ -1,5 +1,8 @@
 # Quorum
 
+Direct `.properties` answer and approved-source exports are covered end to
+end, preserving their paths and the fallback source title in JSON evidence.
+
 LaTeX (`.tex`) approved-source exports now normalize common commands and
 comments into readable evidence text before claim matching, while direct CLI
 verification continues to cover the format for answer and source workflows.
