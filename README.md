@@ -19,6 +19,9 @@ structured JSON/JSONL/NDJSON/YAML/XML/TOML exports, plus Textile (`.textile`)
 documents. Run `npm run formats` to inspect
 the exact extension sets used for directory discovery.
 
+Recursive batch verification now has regression coverage for `.log` answer and
+approved-source exports, including their reviewer-facing source title.
+
 The built CLI smoke gate also cross-checks `quorum formats --json` against the
 library exports, keeping the machine-readable integration contract aligned
 after compilation.
