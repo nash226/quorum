@@ -563,6 +563,22 @@ test("extracts readable text and title from exported html sources", async () => 
   assert.doesNotMatch(source.content, /analytics|display: none/);
 });
 
+test("extracts metadata and readable text from buffered html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    Buffer.from(
+      `<html><head><title>Refund Policy</title><meta name="last-modified" content="2026-07-29" /></head><body><p>Customers can request refunds within 30 days.</p></body></html>`,
+      "utf8",
+    ),
+    2,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.equal(source.updatedAt, "2026-07-29");
+  assert.equal(source.trustLevel, "medium");
+  assert.equal(source.content, "Refund Policy\n\nCustomers can request refunds within 30 days.");
+});
+
 test("prefers the page heading when html titles include help-center chrome", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",
