@@ -8,6 +8,10 @@ steps.
 The HTTP API now regression-tests CORS preflight responses across every POST
 endpoint, keeping browser-based agent integrations aligned as routes evolve.
 
+The OpenAPI contract now regression-tests that every discovered POST endpoint
+publishes an `application/json` request schema, so generated clients can
+validate request shapes before sending verification and review work.
+
 The roadmap now treats batch verification and reviewer queue exports as shipped
 foundations; current safe work focuses on strengthening the local CLI and HTTP
 API while durable hosting and storage remain decision-gated.
