@@ -221,6 +221,16 @@ test("strips XML extensions from fallback source titles", async () => {
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("strips log extensions from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/support-escalation.log",
+    "Escalate priority incidents immediately.",
+    0,
+  );
+
+  assert.equal(source.title, "support-escalation");
+});
+
 test("normalizes structured JSON source exports into claim-readable lines", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.json",

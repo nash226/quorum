@@ -257,6 +257,8 @@ Explicit `--source` paths for JSON and YAML policy exports are also covered by
 the CLI regression suite, alongside recursive source-directory discovery.
 Direct `.mdx` approved-source verification is covered too, preserving the
 explicit source path and extension-free fallback title used in evidence.
+Plain-text `.log` policy exports also preserve an extension-free fallback title
+when they are passed as approved sources.
 Fullwidth list punctuation is normalized too, so localized exports such as
 `１．` and `۲．` do not leak ordering markers into reviewer claims.
 Short punctuated policy claims are also preserved across Unicode scripts, so
