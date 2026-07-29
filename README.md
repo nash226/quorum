@@ -6,6 +6,11 @@ Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
 
+The shipped foundation now covers single-answer and batch verification,
+reviewer decision imports, and the local HTTP API. See
+[`docs/roadmap.md`](docs/roadmap.md) for the next unblocked integration work;
+durable hosting and queue storage remain explicitly decision-gated.
+
 The packaged CLI smoke gate now verifies AsciiDoc (`.adoc`/`.asciidoc`) and
 Org-mode (`.org`) answer and approved-source exports, keeping these documented
 policy formats executable after publishing.
