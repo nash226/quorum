@@ -13,6 +13,9 @@ policy formats executable after publishing.
 The evaluation suite now covers the support invoice-correction policy fixture,
 including verified, contradicted, and unsupported claim outcomes.
 
+The evaluation suite also directly guards the support phone-support fixture,
+including availability, callback-review, and unsupported response-time claims.
+
 The packaged CLI smoke gate also verifies MediaWiki (`.wiki`/`.mediawiki`)
 answer and approved-source exports, keeping both documented aliases release-gated.
 

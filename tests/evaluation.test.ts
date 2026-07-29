@@ -1120,6 +1120,31 @@ test("evaluates a shipped support priority fixture across routing claims", async
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support phone fixture across availability claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/phone-support-policy.json"),
+    generatedAt: "2026-07-21T12:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support phone support policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support phone support reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/phone-support@2026-07-21");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped HR leave fixture across risk verdicts", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/leave-policy.json"),
