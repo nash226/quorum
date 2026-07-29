@@ -141,6 +141,30 @@ test("evaluates inline HR equipment return claims across all verdict types", asy
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the HR expense reimbursement fixture across reimbursement claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/hr/expense-reimbursement-policy.json"),
+    generatedAt: "2026-07-29T13:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR expense reimbursement policy example");
+  assert.equal(scorecard.answerLabel, "HR expense reimbursement reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-expense-reimbursement@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline HR bereavement fixture across leave claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/bereavement-leave-policy.json"),
@@ -2135,6 +2159,7 @@ test("evaluates a shipped fixture that discovers approved sources from a directo
   assert.equal(scorecard.answerLabel, "Support source directory reviewer packet");
   assert.deepEqual(scorecard.sourceDirs, [resolve("examples/sources")]);
   assert.deepEqual(scorecard.sourcePaths, [
+    resolve("examples/sources/hr-expense-reimbursement-policy.md"),
     resolve("examples/sources/hr-leave-policy.md"),
     resolve("examples/sources/hr-payroll-policy.md"),
     resolve("examples/sources/hr-policy.md"),
