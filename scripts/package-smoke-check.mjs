@@ -792,6 +792,27 @@ try {
     throw new Error("Package artifact server did not verify the expected answer contract.");
   }
 
+  const httpDocxFixture = readFileSync(new URL("../node_modules/mammoth/test/test-data/single-paragraph.docx", import.meta.url));
+  const verifyDocxResponse = await fetch(`${packagedServer.url}/verify`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answer: "Walking on imported air",
+      sources: [{
+        sourcePath: "policies/imported.docx",
+        contentBase64: httpDocxFixture.toString("base64"),
+      }],
+    }),
+  });
+  const verifyDocxPayload = await verifyDocxResponse.json();
+  if (
+    verifyDocxResponse.status !== 200 ||
+    verifyDocxPayload.report?.summary?.verified !== 1 ||
+    verifyDocxPayload.report?.sources?.[0]?.sourcePath !== "policies/imported.docx"
+  ) {
+    throw new Error("Package artifact server did not verify the expected DOCX byte transport contract.");
+  }
+
   const verifyBatchResponse = await fetch(`${packagedServer.url}/verify-batch`, {
     method: "POST",
     headers: { "content-type": "application/json" },

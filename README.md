@@ -590,6 +590,8 @@ The HTTP `verify` endpoint accepts PDF and DOCX answer/source bytes as base64
 JSON content, and also accepts base64-encoded approved source text while
 preserving the supplied paths and source metadata in its result. The API test
 suite verifies this source transport contract directly.
+The packaged server smoke gate also verifies a DOCX source transported as
+base64 bytes, keeping the published HTTP ingestion path release-gated.
 The HTTP `verify-batch` endpoint also preserves caller-supplied source IDs in
 both the batch and per-answer reports, keeping evidence references durable for
 multi-answer workflow consumers.
