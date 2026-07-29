@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ab1bcb3` on 2026-07-29, fix: normalize evaluation domain filters
+- Latest shipped change: `2bd0eb6` on 2026-07-29, docs: clarify current roadmap focus
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | [#1403](https://github.com/nash226/quorum/pull/1403) | docs: clarify current roadmap focus | `2bd0eb6` |
 | 2026-07-29 | Direct push | fix: normalize evaluation domain filters | `ab1bcb3` |
 | 2026-07-29 | Direct push | docs: document empty source guard | `8f04fe2` |
 | 2026-07-29 | [#1394](https://github.com/nash226/quorum/pull/1394) | docs: reconcile benchmark fixture counts | `43ac1af` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: cover packaged reStructuredText verification | `cd55459` |
 | 2026-07-29 | Direct push | test: cover direct properties verification | `ddcb3cc` |
 | 2026-07-29 | [#1387](https://github.com/nash226/quorum/pull/1387) | test: cover ini policy source discovery | `413c32b` |
-| 2026-07-29 | Direct push | test: cover HR workplace accommodation evaluation | `27fd184` |
 
