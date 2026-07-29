@@ -11,6 +11,9 @@ The evaluation suite now includes HR workplace-safety coverage for injury
 reporting, required training, and unsupported commuter-benefit claims, with
 uncertain training exceptions routed to review.
 
+Direct CLI verification now regression-tests HTML (`.html`) answer exports,
+keeping single-answer web exports on the same evidence path as batch discovery.
+
 [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
