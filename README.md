@@ -1167,7 +1167,10 @@ and checks their required runtime exports, so a package can fail closed before
 publication if its declared API surface is missing.
 The same packaged check verifies that the public `API_VERSION` export matches
 the package version, keeping library callers and HTTP/CLI discovery on one
-contract version.
+contract version. It also verifies direct TOML answers in the published CLI
+artifact, alongside the structured TOML source and TSV answer/source probes,
+so packaged integrations can use the advertised formats on either side of
+verification.
 
 The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
