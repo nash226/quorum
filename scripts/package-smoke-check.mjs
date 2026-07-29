@@ -58,13 +58,20 @@ for (const versionFlag of ["--version", "-v"]) {
   }
 }
 
-if (
-  typeof libraryEntry.verifyAnswer !== "function" ||
-  typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
-  typeof libraryEntry.createApiServer !== "function" ||
-  libraryEntry.API_VERSION !== packageJson.version
-) {
-  throw new Error("Package artifact root entry point is missing required library exports or version contract.");
+const requiredLibraryExports = [
+  "verifyAnswer",
+  "verifyAnswerFileInputs",
+  "verifyAnswerContentsResult",
+  "verifyAnswerBatchContentsResult",
+  "evaluateFixtureContentsResult",
+  "importReviewerDecisionContentsResult",
+  "createOpenApiDocument",
+  "createApiServer",
+];
+const missingLibraryExports = requiredLibraryExports.filter((name) => typeof libraryEntry[name] !== "function");
+if (missingLibraryExports.length > 0 || libraryEntry.API_VERSION !== packageJson.version) {
+  const missing = missingLibraryExports.length > 0 ? ` Missing exports: ${missingLibraryExports.join(", ")}.` : "";
+  throw new Error(`Package artifact root entry point is missing required library exports or version contract.${missing}`);
 }
 
 const emptySourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-empty-sources-"));
