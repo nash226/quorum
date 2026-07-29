@@ -1,5 +1,10 @@
 # Quorum
 
+The machine-readable `extract-claims --result-json` preview now exposes both
+the normalized claims and `answerHasClaims` plus answer-path provenance, so
+queue integrations can distinguish an empty answer from an answer awaiting
+verification without parsing human-readable output.
+
 Direct `.properties` answer and approved-source exports are covered end to
 end, preserving their paths and the fallback source title in JSON evidence.
 
