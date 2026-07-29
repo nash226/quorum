@@ -40,6 +40,21 @@ the artifact arrays let queue workers avoid hard-coded routing choices. Treat
 unknown capability values as unsupported and refresh the cached response when
 the `ETag` changes.
 
+For a startup integration, the contract can be reduced to one cacheable
+bootstrap sequence:
+
+1. `GET /capabilities` and store the JSON body plus its `ETag`.
+2. Reject or route inputs using the advertised extensions, content types,
+   encodings, limits, verdicts, queue statuses, and artifact names.
+3. Revalidate with `GET /capabilities` and `If-None-Match` on the next startup.
+   A `304 Not Modified` means the cached body is still authoritative; a `200`
+   response replaces both the body and the stored `ETag`.
+4. Fetch `/openapi.json` only when the integration needs request or response
+   schemas beyond the compact capability map.
+
+This keeps clients from hard-coding a second copy of the runtime contract and
+avoids downloading the full OpenAPI document on every process start.
+
 For container or load-balancer probes, the liveness endpoint is intentionally
 independent of source loading and reviewer queue state:
 
