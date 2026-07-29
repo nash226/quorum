@@ -98,7 +98,7 @@ test("evaluates a shipped HR employee assistance fixture across benefit claims",
   assert.equal(scorecard.fixtureName, "HR employee assistance policy example");
   assert.equal(scorecard.domain, "hr");
   assert.deepEqual(scorecard.actualSummary, {
-    verified: 1,
+    verified: 2,
     contradicted: 0,
     unsupported: 1,
     needs_review: 0,
