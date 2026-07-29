@@ -1,5 +1,8 @@
 # Quorum
 
+The support live-chat evaluation now preserves a durable source ID for its
+HTML policy evidence, keeping reviewer reports auditable across reruns.
+
 The API contract tests now ensure every endpoint advertised by discovery is
 also represented in the generated OpenAPI document, keeping integration
 clients from receiving an incomplete route schema.
