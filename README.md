@@ -18,6 +18,10 @@ fixture requests, keeping API scorecards aligned with CLI domain filtering.
 The HTTP reviewer-queue overview now regression-tests `no_claims` filtering,
 keeping empty-answer handoffs distinct from pending reviewer work.
 
+Evaluation score gates now document and preserve the distinction between
+reported scorecards and failing CI processes, with gate-aware result JSON for
+automation diagnostics.
+
 The machine-readable `quorum formats --json` contract now also guards that
 published source and answer extensions remain normalized and unique.
 
