@@ -47,6 +47,9 @@ the exact extension sets used for directory discovery.
 Recursive batch verification now has regression coverage for `.log` answer and
 approved-source exports, including their reviewer-facing source title.
 
+Single-answer verification also recursively discovers supported Markdown, text,
+HTML, PDF, and other approved-source exports below `--source-dir` folders.
+
 The built CLI smoke gate also cross-checks `quorum formats --json` against the
 library exports, keeping the machine-readable integration contract aligned
 after compilation.

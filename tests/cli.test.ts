@@ -551,6 +551,39 @@ test("verify accepts a direct HTML approved source export", async () => {
   }
 });
 
+test("verify recursively discovers nested approved sources from a directory", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-nested-source-dir-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "approved");
+    const nestedSourceDir = join(sourceDir, "support", "regional");
+    const sourcePath = join(nestedSourceDir, "refunds.html");
+    await mkdir(nestedSourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Customers can request refunds within 30 days.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        "<html><head><title>Regional Refund Policy</title></head><body><p>Customers can request refunds within 30 days.</p></body></html>",
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source-dir", sourceDir, "--json",
+    ])) as {
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "Regional Refund Policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct TOML approved source export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-toml-source-"));
 
