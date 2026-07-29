@@ -1,0 +1,17 @@
+{
+  "name": "Support price adjustment policy example",
+  "domain": "support",
+  "answerPath": "support/price-adjustment-answer.md",
+  "answer": "Customers can request a price adjustment within 14 days of purchase. Price adjustments are available for any competitor's lower price. Approved adjustments are refunded to the original payment method.\n",
+  "answerLabel": "Support price adjustment reviewer packet",
+  "sources": [{
+    "sourcePath": "support/price-adjustment-policy@2026-07-29",
+    "id": "support/price-adjustment@2026-07-29",
+    "title": "Support Price Adjustment Policy",
+    "updatedAt": "2026-07-29",
+    "trustLevel": "high",
+    "content": "Customers can request a price adjustment within 14 days of purchase. Price adjustments apply only when the lower price is from an approved retailer. Approved adjustments are refunded to the original payment method.\n"
+  }],
+  "expectedSummary": { "verified": 2, "contradicted": 0, "unsupported": 0, "needs_review": 1 },
+  "expectedClaimVerdicts": ["verified", "needs_review", "verified"]
+}
