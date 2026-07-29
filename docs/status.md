@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cd3ae9f` on 2026-07-29, test: cover HR overtime evaluation
+- Latest shipped change: `5cc540a` on 2026-07-29, test: cover API evaluation domain filters
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: cover API evaluation domain filters | `5cc540a` |
 | 2026-07-29 | Direct push | test: cover HR overtime evaluation | `cd3ae9f` |
 | 2026-07-29 | Direct push | test: cover formats package help forwarding | `52d679c` |
 | 2026-07-29 | Direct push | fix: support help flags for formats command | `d1624dc` |
@@ -56,5 +57,4 @@
 | 2026-07-28 | Direct push | test: cover support phone evaluation | `9080a2d` |
 | 2026-07-28 | Direct push | test: cover support invoice correction evaluation | `0ee511e` |
 | 2026-07-28 | Direct push | test: cover nested log format discovery | `5fbb925` |
-| 2026-07-28 | Direct push | test: cover HTTP queue domain filtering | `571ca32` |
 
