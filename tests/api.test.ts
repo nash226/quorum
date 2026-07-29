@@ -3384,6 +3384,30 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(operationId(openApi.paths["/review-queue"]?.post), "postReviewQueue");
     assert.equal(operationId(openApi.paths["/evaluate"]?.options), "optionsEvaluate");
     assert.equal(operationId(openApi.paths["/evaluate"]?.post), "postEvaluate");
+    const openApiOptions = API_ENDPOINTS.filter((endpoint) => endpoint.method === "OPTIONS");
+    for (const endpoint of openApiOptions) {
+      const optionsOperation = openApi.paths[endpoint.path]?.options as {
+        responses?: Record<string, { description?: string; headers?: Record<string, unknown> }>;
+      } | undefined;
+      assert.ok(optionsOperation, `${endpoint.path} OPTIONS operation is missing from OpenAPI`);
+      assert.equal(
+        optionsOperation?.responses?.["204"]?.description,
+        "CORS preflight succeeded for a local browser-style client.",
+      );
+      assert.deepEqual(Object.keys(optionsOperation?.responses?.["204"]?.headers ?? {}).sort(), [
+        "Access-Control-Allow-Headers",
+        "Access-Control-Allow-Methods",
+        "Access-Control-Allow-Origin",
+        "Access-Control-Expose-Headers",
+        "Access-Control-Max-Age",
+        "X-Quorum-Max-Request-Bytes",
+        "X-Quorum-OpenAPI-Path",
+        "X-Quorum-Request-Id",
+        "X-Quorum-Request-Timeout-Ms",
+        "X-Quorum-Service",
+        "X-Quorum-Version",
+      ]);
+    }
     assert.equal(openApi.paths["/"]?.get?.summary, "Service discovery");
     assert.equal(openApi.paths["/"]?.head?.summary, "Service discovery headers");
     assert.equal(openApi.paths["/"]?.options?.summary, "Service discovery preflight");
