@@ -2087,6 +2087,7 @@ test("evaluates a shipped fixture that discovers approved sources from a directo
     resolve("examples/sources/hr-policy.md"),
     resolve("examples/sources/hr-policy.pdf"),
     resolve("examples/sources/hr-time-off-policy.md"),
+    resolve("examples/sources/hr-workplace-safety-policy.md"),
     resolve("examples/sources/support-account-merge-policy.md"),
     resolve("examples/sources/support-account-recovery-policy.md"),
     resolve("examples/sources/support-account-suspension-policy.md"),
@@ -2190,6 +2191,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/hr/travel-reimbursement-policy.json"),
     resolve("examples/evaluations/hr/tuition-reimbursement-policy.json"),
     resolve("examples/evaluations/hr/workplace-accommodation-policy.json"),
+    resolve("examples/evaluations/hr/workplace-safety-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
     resolve("examples/evaluations/support/accessibility-policy.json"),
     resolve("examples/evaluations/support/account-closure-policy.json"),
@@ -2323,7 +2325,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 82);
+  assert.equal(scorecards.length, 83);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2356,6 +2358,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "HR travel reimbursement policy example",
       "HR tuition reimbursement policy example",
       "HR workplace accommodation policy example",
+      "HR workplace safety policy example",
       "Support policy example",
       "Support accessibility policy example",
       "Support account closure policy example",
@@ -2433,7 +2436,7 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 28);
+  assert.equal(scorecards.length, 29);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2465,6 +2468,7 @@ test("filters evaluation fixture files by domain", async () => {
       "HR travel reimbursement policy example",
       "HR tuition reimbursement policy example",
       "HR workplace accommodation policy example",
+      "HR workplace safety policy example",
     ],
   );
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "hr"));
