@@ -1389,7 +1389,7 @@ test("help rejects unknown or multiple topics", async () => {
 });
 
 test("version reports the CLI and API contract version", async () => {
-  for (const args of [["version"], ["--version"], ["-v"]]) {
+  for (const args of [["version"], ["--version"], ["-v"], ["-V"]]) {
     const result = await runCliAllowFailure(args);
 
     assert.equal(result.code, 0);
@@ -1399,7 +1399,7 @@ test("version reports the CLI and API contract version", async () => {
 });
 
 test("version --json reports a stable machine-readable contract", async () => {
-  for (const args of [["version", "--json"], ["--version", "--json"], ["-v", "--json"]]) {
+  for (const args of [["version", "--json"], ["--version", "--json"], ["-v", "--json"], ["-V", "--json"]]) {
     const result = await runCliAllowFailure(args);
 
     assert.equal(result.code, 0);
