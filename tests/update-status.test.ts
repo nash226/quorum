@@ -124,7 +124,7 @@ test("benchmark inventory keeps HR and support domain counts visible", () => {
   const readme = readFileSync("README.md", "utf8");
 
   assert.deepEqual(Object.keys(counts).sort(), ["hr", "support"]);
-  assert.equal(Object.values(counts).reduce((total, count) => total + count, 0), 81);
-  assert.deepEqual({ hr: counts.hr, support: counts.support }, { hr: 27, support: 54 });
-  assert.match(readme, /27 HR and 54 support workflows/);
+  assert.equal(Object.values(counts).reduce((total, count) => total + count, 0), 82);
+  assert.deepEqual({ hr: counts.hr, support: counts.support }, { hr: 28, support: 54 });
+  assert.match(readme, /28 HR and 54 support workflows/);
 });
