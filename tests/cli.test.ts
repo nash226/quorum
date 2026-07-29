@@ -5624,6 +5624,27 @@ test("verify-batch treats no-claim answers as fail-policy matches for needs_revi
   }
 });
 
+test("verify-batch rejects an empty source directory before producing reports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-empty-sources-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+    await writeFile(join(answerDir, "answer.md"), "A policy claim.\n", "utf8");
+
+    await assert.rejects(
+      runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir]),
+      /No approved source files found in/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch writes a combined reviewer decision csv", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-review-csv-"));
 
