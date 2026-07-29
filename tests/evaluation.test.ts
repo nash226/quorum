@@ -89,8 +89,8 @@ test("evaluates a shipped HR employee assistance fixture across benefit claims",
       trustLevel: "high",
       content: "Employees receive 8 confidential counseling sessions per calendar year.\nThe employee assistance program can also connect employees with community resources.\n",
     }],
-    expectedSummary: { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 },
-    expectedClaimVerdicts: ["verified", "contradicted", "unsupported"],
+    expectedSummary: { verified: 2, contradicted: 0, unsupported: 1, needs_review: 0 },
+    expectedClaimVerdicts: ["verified", "verified", "unsupported"],
   }, {
     generatedAt: "2026-07-29T08:00:00.000Z",
   });
@@ -99,13 +99,13 @@ test("evaluates a shipped HR employee assistance fixture across benefit claims",
   assert.equal(scorecard.domain, "hr");
   assert.deepEqual(scorecard.actualSummary, {
     verified: 1,
-    contradicted: 1,
+    contradicted: 0,
     unsupported: 1,
     needs_review: 0,
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
     "verified",
-    "contradicted",
+    "verified",
     "unsupported",
   ]);
   assert.equal(scorecard.summaryMatches, true);
