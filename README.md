@@ -390,6 +390,9 @@ Plain-text `.log` exports are accepted for both answers and approved sources,
 so support and audit log evidence can be verified without renaming files.
 The direct CLI path is regression-tested with `.log` answer and source files,
 including answer and source path provenance in the JSON report.
+Tab-separated `.tsv` exports are also discovered recursively for batch answers
+and approved sources, preserving the same reviewer evidence flow for exports
+from spreadsheet and queue systems.
 The packaged CLI smoke gate also verifies direct `.log` answer and approved-
 source verification, preserving log-file paths and the extension-free source
 title after publishing.
