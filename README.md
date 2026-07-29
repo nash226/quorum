@@ -12,6 +12,9 @@ The evaluation suite now covers an HR overtime-policy packet, checking the
 The HTTP evaluation endpoint now has regression coverage for domain-scoped
 fixture requests, keeping API scorecards aligned with CLI domain filtering.
 
+The HTTP reviewer-queue overview now regression-tests `no_claims` filtering,
+keeping empty-answer handoffs distinct from pending reviewer work.
+
 The CLI format-discovery command now accepts both `quorum formats --help` and
 `quorum formats -h`, keeping command-specific help consistent with the other
 published commands.
