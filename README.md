@@ -1,5 +1,8 @@
 # Quorum
 
+Top-level CLI help now names the shipped text, log, and configuration export
+formats alongside the machine-readable `formats` contract.
+
 LaTeX (`.tex`) approved-source exports now normalize common commands and
 comments into readable evidence text before claim matching, while direct CLI
 verification continues to cover the format for answer and source workflows.
