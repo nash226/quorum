@@ -74,6 +74,44 @@ test("evaluates a shipped inline HR medical leave fixture across policy claims",
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped HR employee assistance fixture across benefit claims", async () => {
+  const scorecard = await evaluateFixture({
+    name: "HR employee assistance policy example",
+    domain: "hr",
+    answerPath: "answers/hr-employee-assistance-answer.md",
+    answer: "Employees can receive up to 8 confidential counseling sessions per year.\nEmployees can receive up to 20 counseling sessions per year.\nThe company pays for private therapy indefinitely.\n",
+    answerLabel: "HR employee assistance reviewer packet",
+    sources: [{
+      sourcePath: "sources/hr-employee-assistance-policy.md",
+      id: "people-ops/hr-employee-assistance@2026-07-29",
+      title: "HR Employee Assistance Policy",
+      updatedAt: "2026-07-29",
+      trustLevel: "high",
+      content: "Employees can receive up to 8 confidential counseling sessions per calendar year.\nThe employee assistance program can also connect employees with community resources.\n",
+    }],
+    expectedSummary: { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 },
+    expectedClaimVerdicts: ["verified", "contradicted", "unsupported"],
+  }, {
+    generatedAt: "2026-07-29T08:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR employee assistance policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline HR bereavement fixture across leave claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/bereavement-leave-policy.json"),
