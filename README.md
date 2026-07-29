@@ -27,6 +27,9 @@ The HR evaluation suite now covers wellness-benefit reimbursement claims,
 including a verified annual cap, a receipt-policy contradiction, and an
 unsupported gym-membership claim.
 
+Evaluation scorecards now regression-test that approved-source titles and
+freshness timestamps survive the support gift-card workflow alongside verdicts.
+
 The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
 answer and approved-source exports, keeping this supported documentation format
 release-gated after publishing.
