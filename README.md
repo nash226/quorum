@@ -34,6 +34,10 @@ The HR evaluation suite now covers wellness-benefit reimbursement claims,
 including a verified annual cap, a receipt-policy contradiction, and an
 unsupported gym-membership claim.
 
+The HR evaluation suite now also executes the shipped workplace-safety fixture,
+covering a verified injury-reporting claim, a safety-training review case, and
+an unsupported commuter-parking claim.
+
 The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
 answer and approved-source exports, keeping this supported documentation format
 release-gated after publishing.

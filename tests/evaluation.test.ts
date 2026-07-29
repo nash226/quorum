@@ -299,6 +299,20 @@ test("evaluates a shipped HR wellness benefit fixture across reimbursement claim
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped HR workplace safety fixture across compliance claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/hr/workplace-safety-policy.json"),
+    generatedAt: "2026-07-29T17:00:00.000Z",
+  });
+  assert.equal(scorecard.fixtureName, "HR workplace safety policy example");
+  assert.equal(scorecard.answerLabel, "HR workplace safety reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, { verified: 1, contradicted: 0, unsupported: 1, needs_review: 1 });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "needs_review", "unsupported"]);
+  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-workplace-safety@2026-07-29");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates fixture files relative to the fixture directory", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support-policy.json"),
