@@ -2050,6 +2050,30 @@ test("verify accepts pdf sources", async () => {
   }
 });
 
+test("verify discovers LaTeX sources from a source directory", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-tex-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+    const sourcePath = join(sourceDir, "benefits-policy.tex");
+
+    await mkdir(sourceDir);
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "\\section{Benefits Policy}\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir, "--json"]);
+    const report = JSON.parse(stdout) as { sources: Array<{ title: string }>; summary: Record<string, number> };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["benefits-policy"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts pdf answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-answer-"));
 

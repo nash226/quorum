@@ -1,5 +1,7 @@
 # Quorum
 
+LaTeX policy sources discovered from `--source-dir` are regression-tested alongside direct `.tex` inputs.
+
 LaTeX (`.tex`) approved-source exports now normalize common commands and
 comments into readable evidence text before claim matching, while direct CLI
 verification continues to cover the format for answer and source workflows.
