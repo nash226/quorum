@@ -10,6 +10,9 @@ The CLI format-discovery command now accepts both `quorum formats --help` and
 `quorum formats -h`, keeping command-specific help consistent with the other
 published commands.
 
+The `npm run formats -- --help` package wrapper is covered too, so published
+CLI usage preserves the same format-discovery help contract.
+
 The packaged CLI smoke gate now verifies AsciiDoc (`.adoc`/`.asciidoc`) and
 Org-mode (`.org`) answer and approved-source exports, keeping these documented
 policy formats executable after publishing.
