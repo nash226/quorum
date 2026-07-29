@@ -1,5 +1,10 @@
 # Quorum
 
+The current product focus is hardening the shipped CLI and local HTTP API,
+while durable API hosting and reviewer-queue storage remain decision-gated.
+See the [roadmap](docs/roadmap.md) for the current priorities and safe next
+steps.
+
 Evaluation domain filters now ignore surrounding whitespace and letter case,
 so `--domain HR` and `--domain hr` select the same HR scorecards.
 
