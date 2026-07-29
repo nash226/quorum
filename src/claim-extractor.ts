@@ -805,7 +805,7 @@ function stripInlineMarkdown(answer: string): string {
     .replace(/\[([^\]]+)\]\[[^\]]*\]/g, "$1")
     .replace(/\[\^([^\]]+)\]/g, "")
     .replace(/`([^`]+)`/g, "$1")
-    .replace(/~~(\S(?:[\s\S]*?\S)?)~~/g, "$1")
+    .replace(/~~(\S(?:[\s\S]*?\S)?)~~/g, "")
     .replace(/(\*\*|__)(\S(?:[\s\S]*?\S)?)\1/g, "$2")
     .replace(/(\*|_)(\S(?:[\s\S]*?\S)?)\1/g, "$2");
 }

@@ -1099,7 +1099,7 @@ test("strips inline markdown formatting from extracted claims", () => {
       "Parental leave: Employees receive 12 weeks of paid parental leave.",
       "Review the support playbook before escalating tickets.",
       "Review the escalation guide before escalating billing tickets.",
-      "Legacy note Current onboarding steps apply to full-time staff.",
+      "Current onboarding steps apply to full-time staff.",
     ],
   );
 });
