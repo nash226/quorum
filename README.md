@@ -209,6 +209,9 @@ The HR evaluation suite also covers equipment-return claims, including a
 verified return deadline, a contradicted deadline, and an unsupported
 personal-device reimbursement claim.
 
+XHTML exports are treated like HTML sources, including readable-text extraction
+and filename-based title fallback when an export has no title metadata.
+
 ## Why Quorum Exists
 
 AI answers can sound confident while drifting from approved policy. Quorum

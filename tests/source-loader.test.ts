@@ -221,6 +221,17 @@ test("strips XML extensions from fallback source titles", async () => {
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("strips XHTML extensions from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.xhtml",
+    "<html><body><p>Employees receive medical coverage after 30 days.</p></body></html>",
+    0,
+  );
+
+  assert.equal(source.title, "benefits");
+  assert.match(source.content, /Employees receive medical coverage after 30 days/);
+});
+
 test("strips log extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/support-escalation.log",
