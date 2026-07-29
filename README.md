@@ -4,6 +4,9 @@ The evaluation suite now directly regression-tests support service-outage
 answers, including contradicted refund guarantees, review-routed credit claims,
 and verified incident-status guidance.
 
+Claim extraction now omits Markdown strikethrough text, keeping superseded
+policy wording out of reviewer evidence just like deleted HTML text.
+
 The evaluation suite includes an HR employee-assistance policy fixture that
 checks supported and unsupported benefit claims in one reviewer scorecard.
 
