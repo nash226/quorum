@@ -1,0 +1,24 @@
+{
+  "name": "HR holiday observance policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-holiday-observance-answer.md",
+  "answer": "Employees receive paid time off for company-observed holidays.\nEmployees receive 15 paid holidays each year.\nEmployees receive free commuter parking.\n",
+  "answerLabel": "HR holiday observance reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-holiday-observance-policy.md",
+      "id": "people-ops/hr-holiday-observance@2026-07-28",
+      "title": "HR Holiday Observance Policy",
+      "updatedAt": "2026-07-28",
+      "trustLevel": "high",
+      "content": "Employees receive paid time off for company-observed holidays.\nThe company observes 11 paid holidays each year.\nUnused holiday time does not carry into the next calendar year."
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 2
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "needs_review"]
+}
