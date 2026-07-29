@@ -1,0 +1,24 @@
+{
+  "name": "HR employee recognition policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-recognition-answer.md",
+  "answer": "Employees may receive one recognition award each quarter.\nEmployees may receive two recognition awards each quarter.\nEmployees receive free commuter parking.\n",
+  "answerLabel": "HR employee recognition reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-recognition-policy.md",
+      "id": "people-ops/hr-recognition@2026-07-29",
+      "title": "HR Employee Recognition Policy",
+      "updatedAt": "2026-07-29",
+      "trustLevel": "high",
+      "content": "Employees may receive one recognition award each quarter.\nRecognition awards require a nomination and manager approval.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "needs_review"]
+}
