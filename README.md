@@ -147,6 +147,21 @@ explicit answer paths, exports claim-level reviewer decisions, and produces
 one-row-per-answer summaries for queue routing. Durable queue persistence is
 the next product step, pending the backend choice tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
+To turn imported reviewer decisions into a workload handoff, run:
+
+```bash
+npm run dev -- review-queue \
+  --review-csv reports/hr-review-import.csv \
+  --queue-status pending \
+  --csv-out reports/hr-review-queue.csv
+```
+
+The queue summary groups pending, reviewed, and overridden claims by answer,
+keeps the primary finding and evidence context, and can include evaluation
+benchmark drift when `--fixture-dir` is provided. It is a local handoff
+artifact for reviewers; durable storage and hosted queue ownership remain
+decision-gated.
+
 ## Why Quorum Exists
 
 AI answers can sound confident while drifting from approved policy. Quorum
