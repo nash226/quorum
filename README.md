@@ -85,6 +85,10 @@ as a confirmed contradiction.
 The machine-readable `quorum formats --json` contract now also guards that
 published source and answer extensions remain normalized and unique.
 
+The packaged smoke gate also checks the documented root package entrypoint,
+including in-memory verification, evaluation, reviewer-decision import, and
+OpenAPI helpers, so published consumers do not lose those APIs silently.
+
 The CLI format-discovery command now accepts both `quorum formats --help` and
 `quorum formats -h`, keeping command-specific help consistent with the other
 published commands.
