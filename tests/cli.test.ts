@@ -332,7 +332,7 @@ test("verify-batch returns an aggregate report for each answer file", async () =
         "utf8",
       ),
       writeFile(
-        join(sourceDir, "support-playbook.md"),
+        join(sourceDir, "support-playbook.mdx"),
         "Refunds are available within 30 days of purchase.\n",
         "utf8",
       ),
