@@ -112,6 +112,44 @@ test("evaluates a shipped HR employee assistance fixture across benefit claims",
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates inline HR commuter benefits across eligibility claims", async () => {
+  const scorecard = await evaluateFixture({
+    name: "HR commuter benefits policy example",
+    domain: "hr",
+    answerPath: "answers/hr-commuter-benefits-answer.md",
+    answer: "Employees receive 300 dollars per month in commuter benefits.\nEmployees receive 500 dollars per month in commuter benefits.\nThe company operates a free commuter shuttle.\n",
+    answerLabel: "HR commuter benefits reviewer packet",
+    sources: [{
+      sourcePath: "sources/hr-commuter-benefits-policy.md",
+      id: "people-ops/hr-commuter-benefits@2026-07-29",
+      title: "HR Commuter Benefits Policy",
+      updatedAt: "2026-07-29",
+      trustLevel: "high",
+      content: "Employees receive 300 dollars per month in commuter benefits.\nEligible expenses include public transit and qualified parking.\n",
+    }],
+    expectedSummary: { verified: 2, contradicted: 0, unsupported: 1, needs_review: 0 },
+    expectedClaimVerdicts: ["verified", "verified", "unsupported"],
+  }, {
+    generatedAt: "2026-07-29T12:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR commuter benefits policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 2,
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "verified",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline HR bereavement fixture across leave claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/bereavement-leave-policy.json"),

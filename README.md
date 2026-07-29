@@ -7,6 +7,9 @@ and verified incident-status guidance.
 The evaluation suite includes an HR employee-assistance policy fixture that
 checks supported and unsupported benefit claims in one reviewer scorecard.
 
+It also directly covers commuter-benefit eligibility, amount variations, and
+unsupported shuttle promises in an HR reviewer scorecard.
+
 The evaluation suite now includes HR workplace-safety coverage for injury
 reporting, required training, and unsupported commuter-benefit claims, with
 uncertain training exceptions routed to review.
