@@ -16,6 +16,10 @@ including eligibility, retailer restriction, and refund-routing outcomes.
 The evaluation suite also directly guards the support phone-support fixture,
 including availability, callback-review, and unsupported response-time claims.
 
+The evaluation suite now directly guards returns-and-exchange eligibility,
+including a verified exchange window, a contradicted return deadline, and an
+unsupported express-replacement promise.
+
 The packaged CLI smoke gate also verifies MediaWiki (`.wiki`/`.mediawiki`)
 answer and approved-source exports, keeping both documented aliases release-gated.
 
