@@ -1,5 +1,8 @@
 # Quorum
 
+Markdown exports using `.mdown` and `.mkdn` are now discovered alongside `.md`
+and `.markdown`, preserving common vendor handoffs in batch verification.
+
 The evaluation suite now directly regression-tests support service-outage
 answers, including contradicted refund guarantees, review-routed credit claims,
 and verified incident-status guidance.
