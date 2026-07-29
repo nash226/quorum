@@ -58,6 +58,33 @@ test("verify-batch discovers the .text plain-text alias for answers and sources"
   }
 });
 
+test("verify-batch discovers .mdown and .mkdn Markdown aliases", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-markdown-aliases-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "leave.mdown"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.mkdn"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"])) as {
+      answerCount: number;
+      sourceCount: number;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers nested .log answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-log-discovery-"));
 
@@ -101,6 +128,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.csv, \.docx, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
+  assert.match(stdout, /Source files: .*\.mdown/);
+  assert.match(stdout, /Answer files: .*\.mkdn/);
   assert.match(stdout, /Source files: .*\.rst/);
   assert.match(stdout, /Answer files: .*\.rst/);
   assert.match(stdout, /Source files: .*\.wiki/);
