@@ -20,6 +20,10 @@ The OpenAPI contract also regression-tests that every discovered POST endpoint
 publishes an `application/json` success response schema, keeping generated
 clients aligned with the response shape returned by local integrations.
 
+The HTTP API now regression-tests method-negotiation errors across every
+GET-only route, preserving accurate `Allow` headers and structured 405 errors
+for clients that call discovery and probe endpoints with the wrong method.
+
 The dedicated `/version` endpoint now regression-tests its OpenAPI response
 schema and example against the machine-readable payload served to clients.
 
