@@ -100,6 +100,9 @@ published binary artifact from parser or dependency drift.
 It also verifies direct LaTeX answer and policy inputs after packaging, keeping
 documentation-tool exports release-gated alongside the other supported formats.
 
+The packaged smoke gate also verifies a MediaWiki answer against a `.mediawiki`
+approved source, keeping both wiki extensions executable after packaging.
+
 Programmatic batch verification now normalizes JSONL and NDJSON answers with
 the same structured parsing used by direct CLI verification.
 
