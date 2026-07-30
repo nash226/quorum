@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0170919` on 2026-07-29, test: cover restricted CORS preflights
+- Latest shipped change: `4d07520` on 2026-07-29, test: validate API artifact selections
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: validate API artifact selections | `4d07520` |
 | 2026-07-29 | Direct push | test: cover restricted CORS preflights | `0170919` |
 | 2026-07-29 | Direct push | test: cover workplace safety evaluation fixture | `c0269b8` |
 | 2026-07-29 | [#1419](https://github.com/nash226/quorum/pull/1419) | test: cover buffered HTML source imports | `440e047` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: guard version response contract | `012c373` |
 | 2026-07-29 | Direct push | test: guard POST response schemas | `da72b25` |
 | 2026-07-29 | [#1412](https://github.com/nash226/quorum/pull/1412) | test: guard POST request schemas | `c372595` |
-| 2026-07-29 | Direct push | test: cover POST endpoint CORS preflights | `735c20c` |
 
