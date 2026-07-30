@@ -1,5 +1,8 @@
 # Quorum
 
+The current roadmap prioritizes strengthening the local CLI and HTTP API for
+reviewer handoffs; durable hosting and queue persistence remain decision-gated.
+
 Claim extraction recognizes chevron bullets such as `❯` and `❱` from exported
 checklists, keeping those policy statements atomic before evidence verification.
 
