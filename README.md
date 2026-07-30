@@ -347,6 +347,10 @@ Direct single-answer verification also covers XML answer exports, preserving the
 answer path and verified claim evidence without requiring batch discovery.
 The top-level CLI help now advertises CSV and TSV together, matching the
 format contract used by direct verification and directory discovery.
+
+The published package now regression-tests the `/livez` and `/version` HTTP
+path exports alongside the server implementation, keeping Kubernetes liveness
+probes and service-version callers aligned across the public API entrypoint.
 reStructuredText (`.rst`) exports are also discovered recursively for both
 answers and approved sources, so documentation-tool exports can enter the same
 verification flow without renaming. When an `.rst` file has no title metadata,
