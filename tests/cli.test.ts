@@ -94,6 +94,43 @@ test("verify-batch discovers nested .log answers and sources", async () => {
   }
 });
 
+test("verify-batch discovers AsciiDoc and Org answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-doc-format-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "answer.adoc"), "Employees receive 12 weeks of paid leave.\n", "utf8"),
+      writeFile(join(answerDir, "answer.org"), "Employees receive 12 weeks of paid leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.asciidoc"), "Employees receive 12 weeks of paid leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.org"), "Employees receive 12 weeks of paid leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      sourceCount: number;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerCount, 2);
+    assert.equal(report.sourceCount, 2);
+    assert.equal(report.summary.verified, 2);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers nested XML answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xml-discovery-"));
 
