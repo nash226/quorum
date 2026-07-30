@@ -502,6 +502,8 @@ configuration-backed answer and source directories can use the same workflow.
 The CLI regression suite locks this behavior for mixed-case Markdown filenames.
 
 - `extract-claims` previews normalized claims before evidence matching.
+- `extract-claims` also accepts text from stdin (`--answer -`) for pipe-friendly
+  claim previews without creating a temporary answer file.
 - Decimal values such as `95.5%` remain intact while claims are split into sentences.
 - `verify` and `verify-batch` produce reviewer reports and machine-readable
   fail-policy results.
