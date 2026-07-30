@@ -1,5 +1,10 @@
 # Quorum
 
+Integrations can inspect the exact answer and approved-source extensions
+supported by the installed package with `npm run formats -- --json` (or
+`quorum formats --json` after installation). The JSON response is the
+machine-readable contract used by the CLI and programmatic API.
+
 The packaged CLI smoke gate now verifies direct `.text` answers and approved
 sources, keeping the plain-text alias release-gated with the other supported
 input formats.
