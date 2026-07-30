@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `afb1ef4` on 2026-07-30, docs: clarify warranty evaluation coverage
+- Latest shipped change: `560520a` on 2026-07-30, fix: keep semicolon continuation claims atomic
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | fix: keep semicolon continuation claims atomic | `560520a` |
 | 2026-07-30 | Direct push | docs: clarify warranty evaluation coverage | `afb1ef4` |
 | 2026-07-30 | [#1479](https://github.com/nash226/quorum/pull/1479) | docs: reconcile evaluation fixture counts | `179ae3e` |
 | 2026-07-30 | Direct push | test: smoke-check packaged OpenAPI export | `e2e8300` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | [#1473](https://github.com/nash226/quorum/pull/1473) | test: cover unsupported methods on GET routes | `56718ad` |
 | 2026-07-30 | [#1469](https://github.com/nash226/quorum/pull/1469) | test: cover GET route HEAD probes | `82744b6` |
 | 2026-07-30 | Direct push | test: document POST method errors in OpenAPI | `0759a75` |
-| 2026-07-30 | [#1467](https://github.com/nash226/quorum/pull/1467) | test: cover GET-only API method errors | `5e3e158` |
 
