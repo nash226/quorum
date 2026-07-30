@@ -8,6 +8,10 @@ steps.
 The HTTP API now regression-tests CORS preflight responses across every POST
 endpoint, keeping browser-based agent integrations aligned as routes evolve.
 
+Configured CORS origin restrictions now also regression-test allowed and denied
+preflight responses, so browser clients receive the same origin policy before
+submitting verification requests.
+
 The generated OpenAPI contract now regression-tests every advertised CORS
 preflight operation for its 204 response and complete response-header schema,
 keeping browser and generated clients aligned with the local API discovery list.

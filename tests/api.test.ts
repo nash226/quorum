@@ -646,6 +646,30 @@ test("HTTP API restricts CORS responses to configured origins", async () => {
     });
     assert.equal(deniedResponse.headers.get("access-control-allow-origin"), null);
     assert.equal(deniedResponse.headers.get("vary"), "Origin");
+
+    const allowedPreflightResponse = await fetch(`${api.url}/verify`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "https://console.example.com",
+        "access-control-request-method": "POST",
+      },
+    });
+    assert.equal(allowedPreflightResponse.status, 204);
+    assert.equal(allowedPreflightResponse.headers.get("access-control-allow-origin"), "https://console.example.com");
+    assert.equal(allowedPreflightResponse.headers.get("access-control-allow-methods"), "POST, OPTIONS");
+    assert.equal(allowedPreflightResponse.headers.get("vary"), "Origin");
+
+    const deniedPreflightResponse = await fetch(`${api.url}/verify`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "https://unapproved.example.com",
+        "access-control-request-method": "POST",
+      },
+    });
+    assert.equal(deniedPreflightResponse.status, 204);
+    assert.equal(deniedPreflightResponse.headers.get("access-control-allow-origin"), null);
+    assert.equal(deniedPreflightResponse.headers.get("access-control-allow-methods"), "POST, OPTIONS");
+    assert.equal(deniedPreflightResponse.headers.get("vary"), "Origin");
   } finally {
     await api.close();
   }
