@@ -1,5 +1,9 @@
 # Quorum
 
+The CLI regression suite now covers the machine-readable `version --json`
+probe and all documented version-help aliases, keeping local development checks
+aligned with the published CLI contract.
+
 The packaged CLI smoke gate now verifies that `quorum formats --json` reports
 the installed package version as well as its supported extensions, keeping
 machine-readable input discovery aligned with the published API contract.
