@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged evaluation smoke gate now verifies that a failed `--min-score`
+threshold exits with status 2, keeping CI and agent integrations from treating
+below-threshold scorecards as successful commands.
+
 Claim extraction now keeps semicolon-separated continuation clauses together,
 so multi-part policy statements are not fragmented into misleading standalone
 claims when a later clause begins with a conjunction.

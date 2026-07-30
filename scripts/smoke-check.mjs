@@ -453,6 +453,39 @@ try {
   assert.match(evaluationStdout, /HR onboarding policy example/);
   assert.match(evaluationStdout, /HR parental leave policy example/);
   assert.match(evaluationStdout, /HR payroll change policy example/);
+
+  const thresholdFixturePath = join(tempDir, "threshold-fixture.json");
+  const thresholdFixture = {
+    name: "Threshold smoke fixture",
+    domain: "hr",
+    answerPath: "threshold-answer.md",
+    answer: "Employees receive 18 weeks of paid parental leave.\nEmployees receive 20 days of paid vacation each calendar year.\nThe company provides unlimited home-office stipends.\n",
+    sources: [{
+      sourcePath: "hr-policy.md",
+      id: "hr/policy@2026-07-30",
+      title: "HR Policy",
+      content: readFileSync("examples/sources/hr-policy.md", "utf8"),
+    }],
+    expectedSummary: { verified: 2, contradicted: 0, unsupported: 1, needs_review: 0 },
+  };
+  thresholdFixture.expectedClaimVerdicts = ["verified", "verified", "unsupported"];
+  writeFileSync(thresholdFixturePath, JSON.stringify(thresholdFixture), "utf8");
+
+  const failedEvaluation = spawnSync(
+    "node",
+    [
+      cliPath,
+      "evaluate",
+      "--fixture",
+      thresholdFixturePath,
+      "--min-score",
+      "1",
+    ],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  assert.equal(failedEvaluation.status, 2);
+  assert.match(failedEvaluation.stdout, /Minimum score: 1 \(failed\)/);
+  assert.equal(failedEvaluation.stderr, "");
   assert.match(evaluationStdout, /HR jury duty policy example/);
   assert.match(evaluationStdout, /HR dependent benefits policy example/);
   assert.match(evaluationStdout, /HR bonus eligibility policy example/);
