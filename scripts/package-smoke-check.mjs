@@ -1499,6 +1499,26 @@ if (
   throw new Error("Package artifact CLI did not preserve the evaluation result-json gate contract.");
 }
 
+const domainEvaluationResult = JSON.parse(execFileSync(process.execPath, [
+  fileURLToPath(cliPath),
+  "evaluate",
+  "--fixture-dir",
+  fileURLToPath(new URL("examples/evaluations", packageRoot)),
+  "--domain",
+  "hr",
+  "--result-json",
+  "--fail-on-mismatch",
+], { encoding: "utf8" }));
+if (
+  domainEvaluationResult.shouldFail !== false ||
+  domainEvaluationResult.summary?.fixtureCount !== 30 ||
+  domainEvaluationResult.summary?.domains?.length !== 1 ||
+  domainEvaluationResult.summary?.domains?.[0]?.domain !== "hr" ||
+  domainEvaluationResult.summary?.domains?.[0]?.fixtureCount !== 30
+) {
+  throw new Error("Package artifact did not preserve evaluation domain filtering.");
+}
+
 const evaluationReportDir = mkdtempSync(join(tmpdir(), "quorum-package-evaluation-reports-"));
 try {
   const markdownPath = join(evaluationReportDir, "evaluation.md");
