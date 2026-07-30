@@ -1956,6 +1956,34 @@ try {
   rmSync(batchLabelTempDir, { recursive: true, force: true });
 }
 
+const batchFailPolicyTempDir = mkdtempSync(join(tmpdir(), "quorum-package-batch-fail-policy-"));
+try {
+  const answerPath = join(batchFailPolicyTempDir, "answer.md");
+  const sourcePath = join(batchFailPolicyTempDir, "policy.md");
+  writeFileSync(answerPath, "Employees receive 18 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  let batchFailPolicyOutput;
+  try {
+    execFileSync(process.execPath, [
+      fileURLToPath(cliPath), "verify-batch", "--answer", answerPath,
+      "--source", sourcePath, "--json", "--fail-on", "contradicted",
+    ], { encoding: "utf8" });
+  } catch (error) {
+    if (error.status !== 2) {
+      throw error;
+    }
+    batchFailPolicyOutput = error.stdout;
+  }
+
+  const batchFailPolicyResult = JSON.parse(batchFailPolicyOutput ?? "null");
+  if (batchFailPolicyResult?.summary?.answersWithFailures !== 1) {
+    throw new Error("Package artifact CLI did not preserve the batch fail-policy exit contract.");
+  }
+} finally {
+  rmSync(batchFailPolicyTempDir, { recursive: true, force: true });
+}
+
 const reviewQueueTempDir = mkdtempSync(join(tmpdir(), "quorum-package-review-queue-"));
 try {
   const reviewCsvPath = join(reviewQueueTempDir, "review.csv");
