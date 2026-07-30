@@ -1,5 +1,8 @@
 # Quorum
 
+Unknown CLI commands now fail with a concise error on stderr and a non-zero
+exit code, making command typos easier to diagnose in scripts and terminals.
+
 The current product focus is hardening the shipped CLI and local HTTP API,
 while durable API hosting and reviewer-queue storage remain decision-gated.
 See the [roadmap](docs/roadmap.md) for the current priorities and safe next
