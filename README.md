@@ -52,6 +52,10 @@ The generated OpenAPI contract now documents the shared structured `405`
 response, `Allow: GET, HEAD` header, and request-error schema for every
 GET-only route, keeping method negotiation visible to generated clients.
 
+The generated OpenAPI contract also regression-tests the shared structured
+`405` response, `Allow: POST` header, and request-error schema for every
+POST-only route, keeping generated clients aligned with runtime method errors.
+
 The HTTP API contract tests also verify that every POST-only endpoint returns a
 bodyless `405` response to `HEAD` requests while advertising `Allow: POST`.
 
