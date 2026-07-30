@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1e1512a` on 2026-07-29, test: cover query-bearing CORS preflights
+- Latest shipped change: `1ced457` on 2026-07-29, test: cover HEAD errors on POST routes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: cover HEAD errors on POST routes | `1ced457` |
 | 2026-07-29 | Direct push | test: cover query-bearing CORS preflights | `1e1512a` |
 | 2026-07-29 | [#1426](https://github.com/nash226/quorum/pull/1426) | fix: include request ids in OpenAPI size errors | `82d7943` |
 | 2026-07-29 | Direct push | test: validate API artifact selections | `4d07520` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: cover workplace safety evaluation fixture | `c0269b8` |
 | 2026-07-29 | [#1419](https://github.com/nash226/quorum/pull/1419) | test: cover buffered HTML source imports | `440e047` |
 | 2026-07-29 | Direct push | test: guard OpenAPI preflight schemas | `db54dc9` |
-| 2026-07-29 | Direct push | test: guard version response contract | `012c373` |
 
