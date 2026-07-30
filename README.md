@@ -147,6 +147,9 @@ API while durable hosting and storage remain decision-gated.
 Evaluation domain filters now ignore surrounding whitespace and letter case,
 so `--domain HR` and `--domain hr` select the same HR scorecards.
 
+Claim extraction now strips emoji-presentation checkbox markers such as `☑️`
+from exported task lists before verification.
+
 The HR evaluation suite now covers wellness-benefit reimbursement claims,
 including a verified annual cap, a receipt-policy contradiction, and an
 unsupported gym-membership claim.
