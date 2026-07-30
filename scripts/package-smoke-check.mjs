@@ -693,21 +693,38 @@ try {
     }
   }
 
-  const versionResponse = await fetch(`${packagedServer.url}/version`);
-  if (versionResponse.status !== 200 || (await versionResponse.json()).service !== "quorum") {
+  const versionResponse = await fetch(`${packagedServer.url}/version`, {
+    headers: { "X-Quorum-Request-Id": "packaged-version" },
+  });
+  if (
+    versionResponse.status !== 200 ||
+    versionResponse.headers.get("x-quorum-request-id") !== "packaged-version" ||
+    (await versionResponse.json()).requestId !== "packaged-version"
+  ) {
     throw new Error("Package artifact server did not serve the expected version contract.");
   }
 
-  const openApiResponse = await fetch(`${packagedServer.url}/openapi.json`);
+  const openApiResponse = await fetch(`${packagedServer.url}/openapi.json`, {
+    headers: { "X-Quorum-Request-Id": "packaged-openapi" },
+  });
   const openApiDocument = await openApiResponse.json();
-  if (openApiResponse.status !== 200 || openApiDocument.openapi !== "3.1.0" || !openApiDocument.paths?.["/verify"]) {
+  if (
+    openApiResponse.status !== 200 ||
+    openApiResponse.headers.get("x-quorum-request-id") !== "packaged-openapi" ||
+    openApiDocument.openapi !== "3.1.0" ||
+    !openApiDocument.paths?.["/verify"]
+  ) {
     throw new Error("Package artifact server did not serve the expected OpenAPI contract.");
   }
 
-  const capabilitiesResponse = await fetch(`${packagedServer.url}/capabilities`);
+  const capabilitiesResponse = await fetch(`${packagedServer.url}/capabilities`, {
+    headers: { "X-Quorum-Request-Id": "packaged-capabilities" },
+  });
   const capabilitiesPayload = await capabilitiesResponse.json();
   if (
     capabilitiesResponse.status !== 200 ||
+    capabilitiesResponse.headers.get("x-quorum-request-id") !== "packaged-capabilities" ||
+    capabilitiesPayload.requestId !== "packaged-capabilities" ||
     capabilitiesPayload.service !== "quorum" ||
     capabilitiesPayload.capabilities?.maxRequestBytes !== 1_048_576 ||
     capabilitiesPayload.capabilities?.requestTimeoutMs !== 30_000 ||
