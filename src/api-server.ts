@@ -1023,6 +1023,10 @@ const OPENAPI_UNSUPPORTED_MEDIA_TYPE_ERROR_EXAMPLE = {
   error: "Content-Type must be JSON.",
   requestId: "workflow-trace-2026-07-10",
 } as const;
+const OPENAPI_REQUEST_TOO_LARGE_ERROR_EXAMPLE = {
+  error: "Request body must not exceed 1048576 bytes.",
+  requestId: "workflow-trace-2026-07-10",
+} as const;
 const OPENAPI_INTERNAL_SERVER_ERROR_EXAMPLE = {
   error: "Internal server error.",
   requestId: "workflow-trace-2026-07-10",
@@ -2278,7 +2282,10 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
     "413": errorResponse(`The JSON request body exceeded the ${maxRequestBytes}-byte limit.`, {
       requestTooLarge: {
         summary: "The request body exceeded Quorum's JSON payload limit",
-        value: { error: `Request body must not exceed ${maxRequestBytes} bytes.` },
+        value: {
+          ...OPENAPI_REQUEST_TOO_LARGE_ERROR_EXAMPLE,
+          error: `Request body must not exceed ${maxRequestBytes} bytes.`,
+        },
       },
     }),
     "500": errorResponse("The server failed while handling the request.", {

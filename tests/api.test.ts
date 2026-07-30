@@ -3926,6 +3926,10 @@ Refund requests receive an initial response within one business day.
       "Content-Type must be JSON.",
     );
     assert.equal(verify415Example?.requestId, "workflow-trace-2026-07-10");
+    const verify413Example = openApi.paths["/verify"]?.post?.responses?.["413"]?.content?.["application/json"]
+      ?.examples?.["requestTooLarge"]?.value as { error?: string; requestId?: string } | undefined;
+    assert.equal(verify413Example?.error, "Request body must not exceed 1048576 bytes.");
+    assert.equal(verify413Example?.requestId, "workflow-trace-2026-07-10");
     assert.equal(
       openApi.paths["/verify"]?.post?.responses?.["500"]?.content?.["application/json"]?.schema?.$ref,
       "#/components/schemas/ApiErrorResponse",
