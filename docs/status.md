@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `3ad6b22` on 2026-07-30, test: smoke-check evaluation score thresholds
+- Latest shipped change: `2671c4e` on 2026-07-30, test: pin packaged formats version contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | test: pin packaged formats version contract | `2671c4e` |
 | 2026-07-30 | Direct push | test: smoke-check evaluation score thresholds | `3ad6b22` |
 | 2026-07-30 | Direct push | test: smoke-check batch fail policy | `3a4cf8a` |
 | 2026-07-30 | Direct push | test: smoke-check packaged stdin claim previews | `eb1ae58` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | test: smoke-check packaged evaluation domains | `44551dd` |
 | 2026-07-30 | Direct push | fix: keep semicolon continuation claims atomic | `560520a` |
 | 2026-07-30 | Direct push | docs: clarify warranty evaluation coverage | `afb1ef4` |
-| 2026-07-30 | [#1479](https://github.com/nash226/quorum/pull/1479) | docs: reconcile evaluation fixture counts | `179ae3e` |
 
