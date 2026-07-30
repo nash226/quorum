@@ -238,6 +238,10 @@ sources, keeping both common structured-policy extensions release-gated.
 The packaged CLI smoke gate also verifies `version --json`, preserving the
 stable `{ service, version }` compatibility probe for published integrations.
 
+It also imports a completed reviewer decision CSV through `import-review
+--json`, preserving answer groups, reviewed counts, and final verdicts in the
+published machine-readable handoff.
+
 Direct CLI verification now covers YAML answers and YML approved sources,
 including structured claims and source titles in the JSON evidence report.
 

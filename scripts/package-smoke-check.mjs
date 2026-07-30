@@ -66,6 +66,35 @@ if (versionJson.service !== "quorum" || versionJson.version !== packageJson.vers
   throw new Error("Package artifact did not preserve the machine-readable version contract.");
 }
 
+const importReviewPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-import-review-"));
+try {
+  const reviewCsvPath = join(importReviewPackageDir, "review.csv");
+  writeFileSync(
+    reviewCsvPath,
+    [
+      "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+      `${join(importReviewPackageDir, "answer.md")},claim-1,Employees receive 12 weeks of paid leave.,verified,Matches approved policy,HR Policy,Employees receive 12 weeks of paid leave.,verified,Confirmed by reviewer`,
+    ].join("\n") + "\n",
+  );
+
+  const importReviewOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "import-review", "--review-csv", reviewCsvPath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const importReviewPayload = JSON.parse(importReviewOutput);
+  if (
+    importReviewPayload.summary?.reviewedClaims !== 1 ||
+    importReviewPayload.summary?.verified !== 1 ||
+    importReviewPayload.answerGroups?.[0]?.answerPath !== join(importReviewPackageDir, "answer.md") ||
+    importReviewPayload.answerGroups?.[0]?.claims?.[0]?.finalVerdict !== "verified"
+  ) {
+    throw new Error("Package artifact did not preserve the reviewer import JSON contract.");
+  }
+} finally {
+  rmSync(importReviewPackageDir, { recursive: true, force: true });
+}
+
 if (
   typeof libraryEntry.verifyAnswer !== "function" ||
   typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
