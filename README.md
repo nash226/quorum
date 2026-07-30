@@ -562,6 +562,9 @@ npm run check
 This runs the tests, TypeScript build, local API and CLI smoke checks,
 packaged-entrypoint smoke checks, and the evaluation benchmark.
 
+The same gate runs automatically before publishing via `prepublishOnly`, so a
+release cannot skip the smoke or evaluation checks.
+
 `npm run status:refresh` keeps the generated status page's shipment table
 stable across repositories by displaying the first seven characters of each
 shipped commit, independent of Git's automatic abbreviation length.
