@@ -38,6 +38,10 @@ The generated OpenAPI contract now regression-tests every advertised CORS
 preflight operation for its 204 response and complete response-header schema,
 keeping browser and generated clients aligned with the local API discovery list.
 
+The API discovery inventory is also regression-tested against the generated
+OpenAPI paths and methods, so integrations can use either contract surface
+without silently missing a route.
+
 The local HTTP API now regression-tests that each report workflow rejects
 artifact names outside its own supported output set with a clear 400 error,
 keeping verify, batch, reviewer-import, and evaluation clients from requesting
