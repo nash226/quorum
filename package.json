@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "demo:check": "node scripts/check-demo.mjs",
     "dev": "tsx src/cli.ts",
     "status:refresh": "node scripts/update-status.mjs",
     "test": "node --import tsx --test tests/**/*.test.ts"

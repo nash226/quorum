@@ -275,9 +275,13 @@ docs/                  product notes, demo, roadmap, decision queue
 ```bash
 npm test
 npm run build
+npm run demo:check
 ```
 
-The CI workflow runs both commands on pushes and pull requests.
+`npm run demo:check` runs the documented HR example end to end and confirms
+that it produces a non-empty JSON evidence report. The CI workflow runs the
+test suite and build on pushes and pull requests; run the demo check locally
+when changing CLI, source loading, or report generation behavior.
 
 ## Product Direction
 
