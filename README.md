@@ -1,5 +1,8 @@
 # Quorum
 
+The CLI guide now calls out the installed-package form, `quorum formats --json`,
+for integrations that validate supported answer and source extensions.
+
 The local HTTP API now regression-tests unsupported `POST`, `PUT`, `DELETE`,
 and `PATCH` requests across every `GET` route, keeping method errors and
 `Allow: GET, HEAD` guidance consistent for discovery and monitoring clients.

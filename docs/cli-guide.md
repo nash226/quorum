@@ -43,7 +43,8 @@ they are not a request-validation schema for the HTTP API. Machine-readable
 integrations should use the HTTP `/capabilities` response, which exposes the
 same format contract alongside the API limits and queue statuses.
 For a CLI-only integration, append `-- --json` to receive sorted
-machine-readable `sources` and `answers` arrays.
+machine-readable `sources` and `answers` arrays. After installing the package,
+the equivalent command is `quorum formats --json`.
 
 For example:
 
@@ -52,9 +53,10 @@ npm run formats -- --json
 ```
 
 Each array contains the lowercase extensions accepted for that role, such as
-`.md`, `.pdf`, and `.jsonl`. Use these arrays to make an allow-list decision
-before submitting a file to `verify` or `verify-batch`; they are the same
-format contract exported by the programmatic API.
+`.md`, `.pdf`, and `.jsonl`, plus a `version` field matching the API contract.
+Use these arrays to make an allow-list decision before submitting a file to
+`verify` or `verify-batch`; they are the same format contract exported by the
+programmatic API.
 
 ## Check the contract version
 
