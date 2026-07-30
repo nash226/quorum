@@ -545,6 +545,30 @@ test("HTTP API rejects CORS preflight requests for unknown routes", async () => 
   }
 });
 
+test("HTTP API routes query-bearing CORS preflights by pathname", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const path of ["/verify", "/verify-batch", "/import-review", "/review-queue", "/evaluate", "/extract-claims"]) {
+      const response = await fetch(`${api.url}${path}?client=browser`, {
+        method: "OPTIONS",
+        headers: {
+          origin: "https://console.example.com",
+          "access-control-request-method": "POST",
+          "access-control-request-headers": "content-type, x-quorum-request-id",
+        },
+      });
+
+      assert.equal(response.status, 204, path);
+      assert.equal(response.headers.get("access-control-allow-origin"), "*", path);
+      assert.equal(response.headers.get("access-control-allow-methods"), "POST, OPTIONS", path);
+      assert.equal(await response.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API extracts claims from base64 text and document answers", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
