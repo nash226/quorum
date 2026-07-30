@@ -243,6 +243,28 @@ test("OpenAPI gives every discovered POST route a JSON success response schema",
   }
 });
 
+test("OpenAPI documents shared method errors for every POST-only route", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, Record<string, {
+      responses?: Record<string, {
+        headers?: Record<string, { schema?: { const?: string } }>;
+        content?: Record<string, { schema?: { $ref?: string } }>;
+      }>;
+    }>>;
+  };
+
+  for (const endpoint of API_ENDPOINTS.filter(({ method }) => method === "POST")) {
+    const response = document.paths[endpoint.path]?.post?.responses?.["405"];
+    assert.ok(response, `POST ${endpoint.path} 405 response`);
+    assert.equal(response.headers?.Allow?.schema?.const, "POST", `POST ${endpoint.path} Allow header`);
+    assert.equal(
+      response.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ApiErrorResponse",
+      `POST ${endpoint.path} error schema`,
+    );
+  }
+});
+
 test("OpenAPI advertises shared discovery headers on every POST success response", () => {
   const document = createOpenApiDocument() as {
     paths: Record<string, Record<string, {
