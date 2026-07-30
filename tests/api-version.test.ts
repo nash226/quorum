@@ -220,6 +220,32 @@ test("OpenAPI gives every discovered POST route a JSON success response schema",
   }
 });
 
+test("OpenAPI advertises shared discovery headers on every POST success response", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, Record<string, {
+      responses?: Record<string, { headers?: Record<string, unknown> }>;
+    }>>;
+  };
+  const expectedHeaders = [
+    "X-Quorum-Service",
+    "X-Quorum-Version",
+    "X-Quorum-OpenAPI-Path",
+    "X-Quorum-Max-Request-Bytes",
+    "X-Quorum-Request-Timeout-Ms",
+    "X-Quorum-Request-Id",
+    "Cache-Control",
+  ];
+
+  for (const endpoint of API_ENDPOINTS.filter(({ method }) => method === "POST")) {
+    const response = document.paths[endpoint.path]?.post?.responses?.["200"];
+    assert.ok(response, `POST ${endpoint.path} success response`);
+
+    for (const header of expectedHeaders) {
+      assert.ok(response.headers?.[header], `POST ${endpoint.path} is missing ${header}`);
+    }
+  }
+});
+
 test("OpenAPI documents revalidation for the capabilities endpoint", () => {
   const document = createOpenApiDocument() as {
     paths: Record<string, {
