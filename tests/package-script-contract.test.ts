@@ -18,6 +18,7 @@ test("package scripts keep the documented repository check gate intact", async (
   assert.equal(scripts.smoke, "node scripts/smoke-check.mjs");
   assert.equal(scripts["package:smoke"], "node scripts/package-smoke-check.mjs");
   assert.equal(scripts["evaluate:ci"], "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch");
+  assert.equal(scripts["status:refresh"], "node scripts/update-status.mjs");
 });
 
 test("formats package script exposes the machine-readable input contract", async () => {
