@@ -15,6 +15,9 @@ GET-only route, keeping method negotiation visible to generated clients.
 The HTTP API contract tests also verify that every POST-only endpoint returns a
 bodyless `405` response to `HEAD` requests while advertising `Allow: POST`.
 
+Conditional `HEAD` discovery probes now also cover `/version`, so integration
+clients can revalidate the service version without downloading its JSON body.
+
 Those contract tests also cover unsupported `DELETE` and `PUT` requests across
 every POST-only endpoint, so integrations get the same actionable `Allow: POST`
 error instead of route-specific behavior.
