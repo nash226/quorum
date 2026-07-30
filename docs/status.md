@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cabd6eb` on 2026-07-30, test: smoke-check uppercase packaged formats
+- Latest shipped change: `9d0333c` on 2026-07-30, test: guard direct formats json contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | test: guard direct formats json contract | `9d0333c` |
 | 2026-07-30 | Direct push | test: smoke-check uppercase packaged formats | `cabd6eb` |
 | 2026-07-30 | Direct push | test: cover runtime CORS preflights | `a959488` |
 | 2026-07-30 | Direct push | docs: add CLI help onboarding example | `74b985e` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | [#1446](https://github.com/nash226/quorum/pull/1446) | fix: explain unknown CLI commands | `3e898b1` |
 | 2026-07-30 | Direct push | test: keep discovery and OpenAPI routes aligned | `894876c` |
 | 2026-07-30 | Direct push | test: cover discovery route preflights | `5a208df` |
-| 2026-07-30 | Direct push | test: document GET endpoint HEAD contracts | `0fd6c92` |
 
