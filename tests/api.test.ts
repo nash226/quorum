@@ -556,6 +556,37 @@ test("HTTP API exposes CORS preflight metadata for operational probes", async ()
   }
 });
 
+test("HTTP API exposes CORS preflight metadata for discovery routes", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const path of [API_ROOT_PATH, CAPABILITIES_PATH, "/version", SERVER_OPENAPI_PATH]) {
+      const response = await fetch(`${api.url}${path}`, {
+        method: "OPTIONS",
+        headers: {
+          origin: "https://console.example.com",
+          "access-control-request-method": "GET",
+          "access-control-request-headers": "x-quorum-request-id, if-none-match",
+        },
+      });
+
+      assert.equal(response.status, 204, path);
+      assert.equal(response.headers.get("access-control-allow-origin"), "*", path);
+      assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, OPTIONS", path);
+      assert.equal(
+        response.headers.get("access-control-allow-headers"),
+        "Content-Type, X-Quorum-Request-Id, If-None-Match",
+        path,
+      );
+      assert.equal(response.headers.get("access-control-max-age"), "600", path);
+      assert.equal(response.headers.get("access-control-expose-headers"), API_CORS_EXPOSED_HEADERS, path);
+      assert.equal(await response.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API rejects CORS preflight requests for unknown routes", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
