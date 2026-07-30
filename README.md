@@ -1,5 +1,9 @@
 # Quorum
 
+The local HTTP API now exercises every advertised CORS preflight at runtime,
+keeping browser integrations aligned with the route-specific `GET`/`POST`
+method contract.
+
 Unknown CLI commands now fail with a concise error on stderr and a non-zero
 exit code, making command typos easier to diagnose in scripts and terminals.
 

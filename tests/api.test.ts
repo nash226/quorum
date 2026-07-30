@@ -4522,6 +4522,36 @@ test("programmatic API answers CORS preflight requests", async () => {
   }
 });
 
+test("programmatic API serves a successful CORS preflight for every advertised route", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const [index, endpoint] of API_ENDPOINTS.filter(({ method }) => method === "OPTIONS").entries()) {
+      const allowedMethods = API_ENDPOINTS
+        .filter(({ path, method }) => path === endpoint.path && method !== "OPTIONS")
+        .map(({ method }) => method);
+      const response = await fetch(`${api.url}${endpoint.path}`, {
+        method: "OPTIONS",
+        headers: {
+          origin: "http://localhost:5173",
+          "access-control-request-method": allowedMethods[0],
+          "access-control-request-headers": "content-type, x-quorum-request-id, if-none-match",
+          "x-quorum-request-id": `preflight-route-check-${index}`,
+        },
+      });
+
+      assert.equal(response.status, 204, endpoint.path);
+      assert.equal(response.headers.get("access-control-allow-methods"), `${allowedMethods.join(", ")}, OPTIONS`, endpoint.path);
+      assert.equal(response.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS, endpoint.path);
+      assert.equal(response.headers.get("access-control-allow-origin"), "*", endpoint.path);
+      assert.equal(response.headers.get("x-quorum-request-id"), `preflight-route-check-${index}`, endpoint.path);
+      assert.equal(await response.text(), "", endpoint.path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API rejects JSON request bodies larger than the documented limit", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
