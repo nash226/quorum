@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged HTTP API smoke gate now verifies request-ID correlation on version,
+capabilities, and OpenAPI responses, keeping release artifacts traceable for
+calling agents and integration diagnostics.
+
 Unknown CLI commands now fail with a concise error on stderr and a non-zero
 exit code, making command typos easier to diagnose in scripts and terminals.
 
