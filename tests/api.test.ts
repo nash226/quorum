@@ -3136,6 +3136,28 @@ test("HTTP API keeps every POST-only route bodyless for HEAD method errors", asy
   }
 });
 
+test("HTTP API keeps every GET-only route bodyless for HEAD probes", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const getOnlyPaths = [...new Set(SERVER_API_ENDPOINTS
+    .filter((endpoint) => endpoint.method === "GET")
+    .map((endpoint) => endpoint.path))];
+
+  try {
+    for (const [index, path] of getOnlyPaths.entries()) {
+      const response = await fetch(`${api.url}${path}`, {
+        method: "HEAD",
+        headers: { "X-Quorum-Request-Id": `head-get-probe-${index}` },
+      });
+
+      assert.equal(response.status, 200, path);
+      assert.equal(response.headers.get("x-quorum-request-id"), `head-get-probe-${index}`, path);
+      assert.equal(await response.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API advertises POST for unsupported methods on every POST-only route", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const postOnlyPaths = [
