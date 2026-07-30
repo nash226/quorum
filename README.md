@@ -4,6 +4,9 @@ Claim extraction now keeps semicolon-separated continuation clauses together,
 so multi-part policy statements are not fragmented into misleading standalone
 claims when a later clause begins with a conjunction.
 
+Batch verification now regression-tests duplicate approved-source paths, keeping
+repeated explicit source arguments from inflating the evidence set.
+
 The packaged evaluation smoke gate now verifies `quorum evaluate --domain hr`
 selects only the HR scorecards, keeping published domain filtering aligned with
 the local evaluation workflow.
