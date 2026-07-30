@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now keeps semicolon-separated continuation clauses together,
+so multi-part policy statements are not fragmented into misleading standalone
+claims when a later clause begins with a conjunction.
+
 The packaged CLI smoke gate now verifies `quorum openapi --out`, including its
 server URL, version metadata, and published verification route.
 

@@ -262,6 +262,16 @@ Support policy
   );
 });
 
+test("keeps semicolon-separated continuation clauses in one claim", () => {
+  const claims = extractClaims(
+    "Employees receive paid leave; managers approve exceptions; and contractors follow the vendor policy.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive paid leave; managers approve exceptions; and contractors follow the vendor policy.",
+  ]);
+});
+
 test("extracts clean claims from markdown table answers", () => {
   const claims = extractClaims(`| Policy | Details |
 | --- | --- |
