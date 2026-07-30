@@ -1177,6 +1177,8 @@ cat approved-policy.md | npm run dev -- verify --answer generated-answer.md --so
 
 The same pipeline path accepts one Markdown or text policy from stdin; use a
 file path or `--source-dir` for additional or binary-format sources.
+Quorum rejects using stdin for both the answer and approved source in one
+invocation because a pipeline can only provide one consumable stream.
 The packaged smoke gate also verifies the published `quorum verify --answer -`
 path, so integrations can stream an answer directly without a temporary file.
 It also verifies that packaged `verify-batch` can combine one streamed answer
