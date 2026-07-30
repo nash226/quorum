@@ -22,6 +22,9 @@ place, preventing mistyped commands from treating flags as paths or verdicts.
 The packaged CLI smoke gate now verifies direct answer and approved-source paths
 with uppercase extensions, keeping case-insensitive format discovery release-gated.
 
+Batch verification also recursively discovers XML answers and approved sources,
+so nested `.xml` exports can be checked without flattening an input directory.
+
 The local HTTP API now exercises every advertised CORS preflight at runtime,
 keeping browser integrations aligned with the route-specific `GET`/`POST`
 method contract.
