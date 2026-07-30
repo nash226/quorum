@@ -122,6 +122,18 @@ test("strips fullwidth punctuation from localized numbered-list markers", () => 
   ]);
 });
 
+test("strips ideographic commas from localized numbered-list markers", () => {
+  const claims = extractClaims(`1、Employees receive 12 weeks of paid parental leave.
+２、Healthcare coverage begins after 30 days of employment.
+١、Contractors do not receive paid vacation.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Healthcare coverage begins after 30 days of employment.",
+    "Contractors do not receive paid vacation.",
+  ]);
+});
+
 test("strips parenthesized localized numbered-list markers", () => {
   const claims = extractClaims(`(١) Employees receive 12 weeks of paid parental leave.
 (۲) Healthcare coverage begins after 30 days of employment.
