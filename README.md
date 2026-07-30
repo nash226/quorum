@@ -829,6 +829,9 @@ Every command supports `--help` and `-h`; `quorum help <command>` is also
 available for scripted onboarding. Use `--result-json` when an integration
 needs `shouldFail` and `failVerdicts` alongside a report, and use `--answer -`
 or `--review-csv -` to stream one input from stdin.
+For a quick start, inspect the available workflows with `quorum --help`, then
+open the exact contract for a workflow with `quorum help verify` or
+`quorum help review-queue` before preparing its inputs.
 The top-level alias also accepts `quorum help --help`, which is useful for
 wrappers that append a help flag consistently.
 The top-level help now lists the full shipped command map, including the
