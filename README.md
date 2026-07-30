@@ -4,6 +4,10 @@ The packaged CLI smoke gate now verifies that `quorum formats --json` reports
 the installed package version as well as its supported extensions, keeping
 machine-readable input discovery aligned with the published API contract.
 
+The packaged CLI smoke gate also verifies both `formats` help aliases and the
+`help formats` topic, keeping installed-package format discovery documented
+and executable for terminal and integration users.
+
 The packaged evaluation smoke gate now verifies that a failed `--min-score`
 threshold exits with status 2, keeping CI and agent integrations from treating
 below-threshold scorecards as successful commands.
