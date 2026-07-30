@@ -124,6 +124,29 @@ test("HTTP API reports the allowed method for an unsupported route method", asyn
   }
 });
 
+test("HTTP API keeps unsupported methods consistent across GET-only routes", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const getOnlyPaths = ["/", "/capabilities", "/health", "/healthz", "/readyz", "/livez", "/version", "/openapi.json"];
+  const unsupportedMethods = ["POST", "PUT", "DELETE"] as const;
+
+  try {
+    for (const path of getOnlyPaths) {
+      for (const method of unsupportedMethods) {
+        const response = await fetch(`${api.url}${path}`, { method });
+        assert.equal(response.status, 405, `${method} ${path}`);
+        assert.equal(response.headers.get("allow"), "GET, HEAD", `${method} ${path} Allow`);
+        assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8", `${method} ${path} content type`);
+        assert.equal(response.headers.get("x-quorum-request-id")?.length, 36, `${method} ${path} request ID`);
+        const payload = await response.json() as { error: string; requestId: string };
+        assert.equal(payload.error, "Method not allowed. Use GET, HEAD.", `${method} ${path} error`);
+        assert.equal(payload.requestId, response.headers.get("x-quorum-request-id"), `${method} ${path} payload request ID`);
+      }
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("OpenAPI documents the version endpoint", () => {
   const document = createOpenApiDocument() as {
     paths: Record<string, {
