@@ -1416,7 +1416,9 @@ verification while catching payout-timing drift and unsupported guaranteed-bonus
 The packed smoke check also verifies this bonus-eligibility packet in the generated
 report and summary CSV, keeping its compensation verdict paths covered end to end.
 Direct regression coverage now also pins the support warranty fixture's claim,
-eligibility-conflict, and unconditional-replacement verdict paths.
+eligibility-conflict, and unconditional-replacement verdict paths, keeping the
+12-month policy boundary and unsupported replacement promise visible in review
+reports.
 The end-to-end smoke gate also preserves HR time-off routing, keeping the
 verified notice rule, two needs-review claims, and unsupported stipend claim
 visible in the generated benchmark summary.
