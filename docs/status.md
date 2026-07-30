@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4829171` on 2026-07-29, test: cover unsupported API methods
+- Latest shipped change: `dc39a86` on 2026-07-29, test: cover PATCH method errors
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-29 | Direct push | test: cover PATCH method errors | `dc39a86` |
 | 2026-07-29 | Direct push | test: cover unsupported API methods | `4829171` |
 | 2026-07-29 | Direct push | test: stabilize status commit identifiers | `5197564` |
 | 2026-07-29 | Direct push | test: cover unknown-route HEAD errors | `ac9f9ad` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: cover query-bearing CORS preflights | `1e1512a` |
 | 2026-07-29 | [#1426](https://github.com/nash226/quorum/pull/1426) | fix: include request ids in OpenAPI size errors | `82d7943` |
 | 2026-07-29 | Direct push | test: validate API artifact selections | `4d07520` |
-| 2026-07-29 | Direct push | test: cover restricted CORS preflights | `0170919` |
 
