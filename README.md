@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction recognizes chevron bullets such as `❯` and `❱` from exported
+checklists, keeping those policy statements atomic before evidence verification.
+
 Claim extraction now strips circled Latin letter markers such as `ⓐ` and `ⓑ`
 from localized policy lists, keeping exported checklist answers atomic and
 ready for evidence verification.
