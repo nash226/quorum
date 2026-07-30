@@ -45,10 +45,11 @@ const formatsJsonOutput = execFileSync("node", [fileURLToPath(cliPath), "formats
 });
 const formatsJson = JSON.parse(formatsJsonOutput);
 if (
+  formatsJson.version !== packageJson.version ||
   JSON.stringify(formatsJson.sources) !== JSON.stringify([...expectedSourceExtensions].sort()) ||
   JSON.stringify(formatsJson.answers) !== JSON.stringify([...expectedAnswerExtensions].sort())
 ) {
-  throw new Error("Package artifact CLI JSON formats output drifted from the library input contract.");
+  throw new Error("Package artifact CLI JSON formats output drifted from the versioned library input contract.");
 }
 
 const openApiPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-openapi-"));

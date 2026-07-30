@@ -640,6 +640,8 @@ actually runs.
 The packaged smoke check also compares `quorum formats` with the library's
 exported source and answer extension contract, so CLI discovery cannot drift
 from the API and programmatic workflow surface.
+It also checks the JSON format-discovery version against the package version,
+so installed integrations cannot silently consume a mismatched input contract.
 The CLI contract test applies the same exact comparison during ordinary test
 runs, catching format-list drift before a package smoke run.
 
