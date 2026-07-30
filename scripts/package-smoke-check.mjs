@@ -58,6 +58,14 @@ for (const versionFlag of ["--version", "-v"]) {
   }
 }
 
+const versionJsonOutput = execFileSync("node", [fileURLToPath(cliPath), "version", "--json"], {
+  encoding: "utf8",
+});
+const versionJson = JSON.parse(versionJsonOutput);
+if (versionJson.service !== "quorum" || versionJson.version !== packageJson.version) {
+  throw new Error("Package artifact did not preserve the machine-readable version contract.");
+}
+
 if (
   typeof libraryEntry.verifyAnswer !== "function" ||
   typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
