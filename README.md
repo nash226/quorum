@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction recognizes parenthesized Unicode numbered-list exports (such
+as `⑴` and `⑵`), preserving localized policy answers as separate claims.
+
 Claim extraction now keeps semicolon-separated continuation clauses together,
 so multi-part policy statements are not fragmented into misleading standalone
 claims when a later clause begins with a conjunction.
