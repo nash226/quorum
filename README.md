@@ -11,6 +11,10 @@ endpoint, keeping browser-based agent integrations aligned as routes evolve.
 The HTTP API contract tests also verify that every POST-only endpoint returns a
 bodyless `405` response to `HEAD` requests while advertising `Allow: POST`.
 
+Those contract tests also cover unsupported `DELETE` and `PUT` requests across
+every POST-only endpoint, so integrations get the same actionable `Allow: POST`
+error instead of route-specific behavior.
+
 Unknown-route `HEAD` probes now regression-test the same bodyless 404 behavior
 as known route probes, while preserving the request ID and JSON error headers.
 
