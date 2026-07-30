@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `894876c` on 2026-07-30, test: keep discovery and OpenAPI routes aligned
+- Latest shipped change: `3e898b1` on 2026-07-30, fix: explain unknown CLI commands
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | [#1446](https://github.com/nash226/quorum/pull/1446) | fix: explain unknown CLI commands | `3e898b1` |
 | 2026-07-30 | Direct push | test: keep discovery and OpenAPI routes aligned | `894876c` |
 | 2026-07-30 | Direct push | test: cover discovery route preflights | `5a208df` |
 | 2026-07-30 | Direct push | test: document GET endpoint HEAD contracts | `0fd6c92` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: cover PATCH method errors | `dc39a86` |
 | 2026-07-29 | Direct push | test: cover unsupported API methods | `4829171` |
 | 2026-07-29 | Direct push | test: stabilize status commit identifiers | `5197564` |
-| 2026-07-29 | Direct push | test: cover unknown-route HEAD errors | `ac9f9ad` |
 
