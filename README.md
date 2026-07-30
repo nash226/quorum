@@ -4,6 +4,10 @@ The packaged CLI smoke gate now verifies direct `.text` answers and approved
 sources, keeping the plain-text alias release-gated with the other supported
 input formats.
 
+The packaged HTTP smoke gate now verifies that health, readiness, and liveness
+probes remain explicitly non-cacheable, keeping monitoring clients from using
+stale operational state.
+
 HTML answer extraction now treats `<hr>` as a block boundary, preventing
 claims separated by a horizontal rule from being merged.
 

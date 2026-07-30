@@ -793,12 +793,23 @@ try {
   for (const path of ["/health", "/readyz", "/livez"]) {
     const probeResponse = await fetch(`${packagedServer.url}${path}`);
     const probePayload = await probeResponse.json();
-    if (probeResponse.status !== 200 || probePayload.service !== "quorum" || probePayload.ok !== true) {
+    if (
+      probeResponse.status !== 200 ||
+      probeResponse.headers.get("cache-control") !== "no-store" ||
+      probeResponse.headers.has("etag") ||
+      probePayload.service !== "quorum" ||
+      probePayload.ok !== true
+    ) {
       throw new Error(`Package artifact server did not serve the expected ${path} probe contract.`);
     }
 
     const headProbeResponse = await fetch(`${packagedServer.url}${path}`, { method: "HEAD" });
-    if (headProbeResponse.status !== 200 || (await headProbeResponse.text()) !== "") {
+    if (
+      headProbeResponse.status !== 200 ||
+      headProbeResponse.headers.get("cache-control") !== "no-store" ||
+      headProbeResponse.headers.has("etag") ||
+      (await headProbeResponse.text()) !== ""
+    ) {
       throw new Error(`Package artifact server did not preserve the bodyless ${path} HEAD contract.`);
     }
   }
