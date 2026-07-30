@@ -4,6 +4,27 @@ The local HTTP API now regression-tests bodyless `HEAD` probes across every
 discovered `GET` route, keeping health checks and contract downloads safe for
 monitoring clients.
 
+## Local HTTP API quickstart
+
+Start the local service when an agent integration needs an HTTP boundary:
+
+```bash
+npm run dev -- serve --port 3000
+```
+
+Then check readiness or submit a verification request from another terminal:
+
+```bash
+curl http://127.0.0.1:3000/readyz
+curl -X POST http://127.0.0.1:3000/verify \
+  -H 'content-type: application/json' \
+  -d '{"answer":"Employees receive 12 weeks of paid parental leave.","sources":[{"sourcePath":"hr-policy.md","content":"Employees receive 12 weeks of paid parental leave."}]}'
+```
+
+The service is intentionally local-first: use `/healthz`, `/readyz`, and
+`/livez` for probes, and `/openapi.json` for the machine-readable contract.
+Durable hosting and reviewer-queue storage remain decision-gated.
+
 Integrations can inspect the exact answer and approved-source extensions
 supported by the installed package with `npm run formats -- --json` (or
 `quorum formats --json` after installation). The JSON response is the
