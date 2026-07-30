@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e2e8300` on 2026-07-30, test: smoke-check packaged OpenAPI export
+- Latest shipped change: `179ae3e` on 2026-07-30, docs: reconcile evaluation fixture counts
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | [#1479](https://github.com/nash226/quorum/pull/1479) | docs: reconcile evaluation fixture counts | `179ae3e` |
 | 2026-07-30 | Direct push | test: smoke-check packaged OpenAPI export | `e2e8300` |
 | 2026-07-30 | Direct push | docs: clarify installed format contract | `7640ca2` |
 | 2026-07-30 | [#1473](https://github.com/nash226/quorum/pull/1473) | test: cover unsupported methods on GET routes | `56718ad` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | test: document POST method errors in OpenAPI | `0759a75` |
 | 2026-07-30 | [#1467](https://github.com/nash226/quorum/pull/1467) | test: cover GET-only API method errors | `5e3e158` |
 | 2026-07-30 | Direct push | test: cover nested XML batch discovery | `41265d5` |
-| 2026-07-30 | Direct push | docs: document format discovery contract | `4a37975` |
 
