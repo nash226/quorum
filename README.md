@@ -8,6 +8,9 @@ steps.
 The HTTP API now regression-tests CORS preflight responses across every POST
 endpoint, keeping browser-based agent integrations aligned as routes evolve.
 
+The HTTP API contract tests also verify that every POST-only endpoint returns a
+bodyless `405` response to `HEAD` requests while advertising `Allow: POST`.
+
 Configured CORS origin restrictions now also regression-test allowed and denied
 preflight responses, so browser clients receive the same origin policy before
 submitting verification requests.
