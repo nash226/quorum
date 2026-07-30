@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bec4dee` on 2026-07-30, fix: reject missing cli option values
+- Latest shipped change: `ac8b62e` on 2026-07-30, fix: preserve HTML claim boundaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | fix: preserve HTML claim boundaries | `ac8b62e` |
 | 2026-07-30 | Direct push | fix: reject missing cli option values | `bec4dee` |
 | 2026-07-30 | Direct push | test: guard OpenAPI POST response headers | `2a0ca37` |
 | 2026-07-30 | Direct push | docs: expose local HTTP API quickstart | `2aea47d` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | test: smoke-check uppercase packaged formats | `cabd6eb` |
 | 2026-07-30 | Direct push | test: cover runtime CORS preflights | `a959488` |
 | 2026-07-30 | Direct push | docs: add CLI help onboarding example | `74b985e` |
-| 2026-07-30 | Direct push | test: protect status refresh script contract | `ef452b5` |
 
