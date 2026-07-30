@@ -21,6 +21,10 @@ artifact names outside its own supported output set with a clear 400 error,
 keeping verify, batch, reviewer-import, and evaluation clients from requesting
 outputs they cannot receive.
 
+HTTP route discovery now regression-tests query-bearing CORS preflights across
+all POST workflows, keeping browser clients aligned when integrations add
+filter or trace parameters to their endpoint URLs.
+
 The OpenAPI contract now regression-tests that every discovered POST endpoint
 publishes an `application/json` request schema, so generated clients can
 validate request shapes before sending verification and review work.
