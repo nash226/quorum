@@ -615,6 +615,8 @@ answers, run the dedicated format-contract command:
 npm run formats
 ```
 
+Run `npm run help` for the complete installed CLI command reference.
+
 This command is the source of truth for directory discovery: it prints the
 separate source and answer extension sets used by `verify-batch`, so scripts
 can confirm the packaged input contract before submitting a batch.
