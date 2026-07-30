@@ -535,10 +535,9 @@ test("HTTP API rejects CORS preflight requests for unknown routes", async () => 
     });
 
     assert.equal(response.status, 404);
-    assert.deepEqual(await response.json(), {
-      error: "Not found.",
-      requestId: response.headers.get("x-quorum-request-id"),
-    });
+    assert.equal(await response.text(), "");
+    assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8");
+    assert.ok(response.headers.get("x-quorum-request-id"));
     assert.equal(response.headers.get("access-control-allow-methods"), "GET, HEAD, POST, OPTIONS");
   } finally {
     await api.close();

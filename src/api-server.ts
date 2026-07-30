@@ -1405,7 +1405,7 @@ async function handleApiRequest(
 
   if (request.method === "OPTIONS") {
     if (routeMethods === undefined) {
-      writeApiError(response, 404, "Not found.");
+      writeApiError(response, 404, "Not found.", true);
       return;
     }
 
@@ -4377,12 +4377,12 @@ function writeNoContent(response: ServerResponse): void {
   response.end();
 }
 
-function writeApiError(response: ServerResponse, statusCode: number, error: string): void {
+function writeApiError(response: ServerResponse, statusCode: number, error: string, omitBody = false): void {
   const requestId = response.getHeader(API_REQUEST_ID_HEADER);
   writeJson(response, statusCode, {
     error,
     ...(typeof requestId === "string" ? { requestId } : {}),
-  });
+  }, omitBody);
 }
 
 function writeJson(
@@ -4396,13 +4396,14 @@ function writeJson(
   response.statusCode = statusCode;
   response.setHeader("Cache-Control", "no-store");
   response.setHeader("Content-Type", "application/json; charset=utf-8");
-  response.setHeader("Content-Length", Buffer.byteLength(body, "utf8"));
 
   if (omitBody) {
+    response.removeHeader("Content-Length");
     response.end();
     return;
   }
 
+  response.setHeader("Content-Length", Buffer.byteLength(body, "utf8"));
   response.end(body);
 }
 

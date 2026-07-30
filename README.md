@@ -13,6 +13,8 @@ bodyless `405` response to `HEAD` requests while advertising `Allow: POST`.
 
 Unknown-route `HEAD` probes now regression-test the same bodyless 404 behavior
 as known route probes, while preserving the request ID and JSON error headers.
+Unknown-route CORS preflights use that same bodyless 404 contract, so browser
+clients get a consistent missing-route signal without parsing an error body.
 
 Configured CORS origin restrictions now also regression-test allowed and denied
 preflight responses, so browser clients receive the same origin policy before
