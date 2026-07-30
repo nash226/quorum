@@ -4814,6 +4814,19 @@ test("verify-batch rejects repeated stdin answers", async () => {
   }
 });
 
+test("verify-batch rejects consuming stdin for both an answer and source", async () => {
+  const result = await runCliAllowFailure(
+    ["verify-batch", "--answer", "-", "--source", "-", "--json"],
+    { stdin: "Employees receive 12 weeks of paid parental leave.\n" },
+  );
+
+  assert.notEqual(result.code, 0);
+  assert.match(
+    result.stderr,
+    /--answer - and --source - cannot be used together because stdin can only be consumed once\./,
+  );
+});
+
 test("verify-batch rejects repeated explicit answer paths", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-duplicate-answer-"));
 
