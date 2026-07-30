@@ -15,6 +15,10 @@ Those contract tests also cover unsupported `DELETE` and `PUT` requests across
 every POST-only endpoint, so integrations get the same actionable `Allow: POST`
 error instead of route-specific behavior.
 
+The same contract coverage now includes unsupported `PATCH` requests across
+every POST-only endpoint, keeping partial-update clients on the same explicit
+`405` and `Allow: POST` response.
+
 Unknown-route `HEAD` probes now regression-test the same bodyless 404 behavior
 as known route probes, while preserving the request ID and JSON error headers.
 

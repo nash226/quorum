@@ -3069,7 +3069,7 @@ test("HTTP API advertises POST for unsupported methods on every POST-only route"
   ];
 
   try {
-    for (const method of ["DELETE", "PUT"] as const) {
+    for (const method of ["DELETE", "PUT", "PATCH"] as const) {
       for (const [index, path] of postOnlyPaths.entries()) {
         const response = await fetch(`${api.url}${path}`, {
           method,
