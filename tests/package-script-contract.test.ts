@@ -32,6 +32,19 @@ test("formats package script exposes the machine-readable input contract", async
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
 });
 
+test("formats package script exposes the human-readable input contract", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "formats"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /Quorum input formats/);
+  assert.match(stdout, /Source files:/);
+  assert.match(stdout, /Answer files:/);
+  assert.match(stdout, /\.md/);
+  assert.match(stdout, /\.jsonl/);
+});
+
 test("formats package script forwards command-specific help flags", async () => {
   const { stdout } = await execFileAsync("npm", ["run", "--silent", "formats", "--", "--help"], {
     cwd: new URL("..", import.meta.url),
