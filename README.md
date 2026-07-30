@@ -505,6 +505,8 @@ The CLI regression suite locks this behavior for mixed-case Markdown filenames.
 - Decimal values such as `95.5%` remain intact while claims are split into sentences.
 - `verify` and `verify-batch` produce reviewer reports and machine-readable
   fail-policy results.
+- `verify-batch` rejects repeated explicit `--answer` paths before reading any
+  files, preventing duplicate answer rows in reviewer queues.
 - `import-review` and `review-queue` turn reviewer decisions into queue-ready
   summaries, with optional benchmark drift context.
 - HTTP reviewer-queue requests can scope benchmark drift to selected policy

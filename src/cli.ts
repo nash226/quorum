@@ -1203,6 +1203,16 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
     throw new Error("Only one --answer - is allowed because stdin can only be consumed once.");
   }
 
+  const duplicateAnswerPath = answerPaths.find(
+    (answerPath, index) => answerPaths.indexOf(answerPath) !== index,
+  );
+
+  if (duplicateAnswerPath !== undefined) {
+    throw new Error(
+      `Batch answer ${duplicateAnswerPath} was provided more than once. Use one --answer input per file.`,
+    );
+  }
+
   return {
     ...parsed,
     answerPaths,

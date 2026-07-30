@@ -4800,6 +4800,30 @@ test("verify-batch rejects repeated stdin answers", async () => {
   }
 });
 
+test("verify-batch rejects repeated explicit answer paths", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-duplicate-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "source.md");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const result = await runCliAllowFailure([
+      "verify-batch", "--answer", answerPath, "--answer", answerPath,
+      "--source", sourcePath, "--json",
+    ]);
+
+    assert.equal(result.code, 1);
+    assert.equal(result.stdout, "");
+    assert.match(result.stderr, /was provided more than once\. Use one --answer input per file/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch rejects empty resolved source sets", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-empty-sources-"));
 
