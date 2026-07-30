@@ -1859,6 +1859,10 @@ agent integrations. Start it with `npm run dev -- serve --port 3000`, then use
 request and response contract. See the [HTTP API integration guide](docs/api-integration.md)
 for verification, reviewer-queue, and operational probe examples.
 
+Single-answer `verify` accepts exactly one `--answer` path; use
+`verify-batch --answer` when reviewing multiple explicit answer files. Repeating
+`--answer` in a single-answer command fails instead of silently choosing one.
+
 See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
 [docs/api-deployment.md](docs/api-deployment.md) for deployment boundaries.
 Human sign-off
