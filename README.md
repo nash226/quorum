@@ -1369,7 +1369,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 78-fixture total explicit, so new benchmark packets cannot drift
+the published 84-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.
@@ -1378,7 +1378,7 @@ matched-claim counts drift, keeping scorecard and aggregate gates reviewable.
 The fixture loader now applies the same fail-closed rule to unknown top-level
 fields, so misspelled answer, source, or expectation keys fail before scoring.
 The evaluator also regression-tests the support-only domain filter, keeping
-focused support scorecards aligned with the 51-fixture benchmark slice.
+focused support scorecards aligned with the 54-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
