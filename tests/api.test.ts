@@ -3157,6 +3157,33 @@ test("HTTP API supports conditional OpenAPI downloads with ETags", async () => {
   }
 });
 
+test("HTTP API preserves request IDs on conditional OpenAPI responses", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const firstResponse = await fetch(`${api.url}/openapi.json`);
+    const etag = firstResponse.headers.get("etag");
+    assert.ok(etag);
+
+    const notModifiedResponse = await fetch(`${api.url}/openapi.json`, {
+      headers: {
+        "if-none-match": etag,
+        "x-quorum-request-id": "openapi-revalidation-2026-07-30",
+      },
+    });
+
+    assert.equal(notModifiedResponse.status, 304);
+    assert.equal(notModifiedResponse.headers.get("etag"), etag);
+    assert.equal(
+      notModifiedResponse.headers.get("x-quorum-request-id"),
+      "openapi-revalidation-2026-07-30",
+    );
+    assert.equal(await notModifiedResponse.text(), "");
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves single-answer verification over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const generatedAt = "2026-07-07T19:15:00.000Z";
