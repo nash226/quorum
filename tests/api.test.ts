@@ -176,6 +176,20 @@ test("API discovery endpoint inventory contains one entry per method and path", 
   assert.equal(new Set(endpointKeys).size, endpointKeys.length);
 });
 
+test("API discovery inventory stays in parity with the generated OpenAPI paths", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, Record<string, unknown>>;
+  };
+  const documentedKeys = Object.entries(document.paths).flatMap(([path, operations]) =>
+    Object.keys(operations)
+      .filter((method) => SERVER_API_ALLOWED_METHODS.map((allowed) => allowed.toLowerCase()).includes(method))
+      .map((method) => `${method.toUpperCase()} ${path}`),
+  );
+  const discoveredKeys = API_ENDPOINTS.map(({ method, path }) => `${method} ${path}`);
+
+  assert.deepEqual([...documentedKeys].sort(), [...discoveredKeys].sort());
+});
+
 test("OpenAPI documents bodyless HEAD response headers for every GET endpoint", () => {
   const openApi = createOpenApiDocument();
   const discoveryHeaders = [
