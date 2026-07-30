@@ -228,6 +228,19 @@ test("strips unicode checkbox markers from exported task lists", () => {
   ]);
 });
 
+test("strips circled letter markers from localized policy lists", () => {
+  const claims = extractClaims(`ⓐ Employees receive 12 weeks of paid parental leave.
+ⓑ Managers approve leave requests before scheduling.`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave.",
+      "Managers approve leave requests before scheduling.",
+    ],
+  );
+});
+
 test("strips emoji-presentation checkbox markers from exported task lists", () => {
   const claims = extractClaims(`☑️ Employees receive 12 weeks of paid parental leave.
 ☐️ Contractors do not receive paid vacation.
