@@ -2243,7 +2243,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
   };
   const errorResponse = (
     description: string,
-    examples?: Record<string, { summary: string; value: { error: string } }>,
+    examples?: Record<string, { summary: string; value: ApiErrorResponse }>,
     additionalHeaders?: Record<string, { schema: Record<string, unknown>; description: string }>,
   ) => ({
     description,
@@ -2292,6 +2292,22 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
       internalError: {
         summary: "The server hit an unexpected runtime failure",
         value: OPENAPI_INTERNAL_SERVER_ERROR_EXAMPLE,
+      },
+    }),
+  };
+  const getErrorResponses = {
+    "405": errorResponse("The route accepts GET and HEAD.", {
+      wrongMethod: {
+        summary: "A POST request hit a GET-only route",
+        value: {
+          error: "Method not allowed. Use GET, HEAD.",
+          requestId: "get-route-method-check",
+        },
+      },
+    }, {
+      Allow: {
+        schema: { type: "string", const: "GET, HEAD" },
+        description: "HTTP methods accepted by this endpoint.",
       },
     }),
   };
@@ -2397,6 +2413,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               },
             },
             "500": errorResponse("The server failed while handling the request."),
+            ...getErrorResponses,
           },
         },
         head: {
@@ -2458,6 +2475,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               },
             },
             "500": errorResponse("The server failed while handling the request."),
+            ...getErrorResponses,
           },
         },
         head: {
@@ -2512,6 +2530,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               },
             },
             "500": errorResponse("The server failed while handling the request."),
+            ...getErrorResponses,
           },
         },
         head: {
@@ -2564,6 +2583,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               },
             },
             "500": errorResponse("The server failed while handling the request."),
+            ...getErrorResponses,
           },
         },
         head: {
@@ -2616,6 +2636,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               },
             },
             "500": errorResponse("The server failed while handling the request."),
+            ...getErrorResponses,
           },
         },
         head: {
@@ -2668,6 +2689,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               },
             },
             "500": errorResponse("The server failed while handling the request."),
+            ...getErrorResponses,
           },
         },
         head: {
@@ -2721,6 +2743,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               },
             },
             "500": errorResponse("The server failed while handling the request."),
+            ...getErrorResponses,
           },
         },
         head: {
@@ -2772,6 +2795,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               headers: { ETag: openApiResponseHeaders.ETag },
             },
             "500": errorResponse("The server failed while handling the request."),
+            ...getErrorResponses,
           },
         },
         head: {
