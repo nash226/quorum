@@ -1333,6 +1333,18 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("CLI rejects options that are missing their values", async () => {
+  const cases = [
+    ["verify", "--answer", "--source", "examples/sources/hr-policy.md"],
+    ["verify-batch", "--answer-dir", "--source-dir", "examples/sources"],
+    ["import-review", "--review-csv", "--json"],
+  ];
+
+  for (const args of cases) {
+    await assert.rejects(runCli(args), /Unknown or incomplete argument:/);
+  }
+});
+
 test("verify rejects an empty source directory before producing unsupported claims", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-sources-"));
 
