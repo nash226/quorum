@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `af9a002` on 2026-07-30, docs: add package help command
+- Latest shipped change: `0d4ae98` on 2026-07-30, fix: strip circled letter claim markers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | fix: strip circled letter claim markers | `0d4ae98` |
 | 2026-07-30 | Direct push | docs: add package help command | `af9a002` |
 | 2026-07-30 | Direct push | test: cover version CLI contract | `e03f180` |
 | 2026-07-30 | Direct push | fix: strip emoji checkbox markers from claims | `a59c1f6` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | test: pin packaged formats version contract | `2671c4e` |
 | 2026-07-30 | Direct push | test: smoke-check evaluation score thresholds | `3ad6b22` |
 | 2026-07-30 | Direct push | test: smoke-check batch fail policy | `3a4cf8a` |
-| 2026-07-30 | Direct push | test: smoke-check packaged stdin claim previews | `eb1ae58` |
 
