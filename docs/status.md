@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `eb1ae58` on 2026-07-30, test: smoke-check packaged stdin claim previews
+- Latest shipped change: `3a4cf8a` on 2026-07-30, test: smoke-check batch fail policy
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | test: smoke-check batch fail policy | `3a4cf8a` |
 | 2026-07-30 | Direct push | test: smoke-check packaged stdin claim previews | `eb1ae58` |
 | 2026-07-30 | Direct push | fix: reject duplicate batch answer paths | `ea0c37f` |
 | 2026-07-30 | Direct push | test: smoke-check packaged evaluation domains | `44551dd` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | docs: clarify warranty evaluation coverage | `afb1ef4` |
 | 2026-07-30 | [#1479](https://github.com/nash226/quorum/pull/1479) | docs: reconcile evaluation fixture counts | `179ae3e` |
 | 2026-07-30 | Direct push | test: smoke-check packaged OpenAPI export | `e2e8300` |
-| 2026-07-30 | Direct push | docs: clarify installed format contract | `7640ca2` |
 
