@@ -4,6 +4,10 @@ Claim extraction now keeps semicolon-separated continuation clauses together,
 so multi-part policy statements are not fragmented into misleading standalone
 claims when a later clause begins with a conjunction.
 
+The packaged evaluation smoke gate now verifies `quorum evaluate --domain hr`
+selects only the HR scorecards, keeping published domain filtering aligned with
+the local evaluation workflow.
+
 The packaged CLI smoke gate now verifies `quorum openapi --out`, including its
 server URL, version metadata, and published verification route.
 
