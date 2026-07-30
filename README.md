@@ -1,5 +1,9 @@
 # Quorum
 
+The `quorum serve --help` endpoint list now includes `POST /review-queue`,
+keeping reviewer workload handoffs discoverable alongside the other local API
+workflows.
+
 The packaged CLI smoke gate now verifies that `quorum formats --json` reports
 the installed package version as well as its supported extensions, keeping
 machine-readable input discovery aligned with the published API contract.
