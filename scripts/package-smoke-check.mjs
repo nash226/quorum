@@ -716,6 +716,25 @@ if (typeof serverEntry.createApiServer !== "function" || typeof serverEntry.star
   throw new Error("Package artifact server entry point is missing required server exports.");
 }
 
+const factoryServer = serverEntry.createApiServer({ port: 0 });
+await new Promise((resolve, reject) => {
+  factoryServer.once("error", reject);
+  factoryServer.listen(0, "127.0.0.1", resolve);
+});
+try {
+  const factoryAddress = factoryServer.address();
+  if (!factoryAddress || typeof factoryAddress === "string") {
+    throw new Error("Package artifact createApiServer did not expose a TCP address.");
+  }
+  const factoryHealthResponse = await fetch(`http://127.0.0.1:${factoryAddress.port}/health`);
+  const factoryHealthPayload = await factoryHealthResponse.json();
+  if (factoryHealthResponse.status !== 200 || factoryHealthPayload.service !== "quorum" || factoryHealthPayload.ok !== true) {
+    throw new Error("Package artifact createApiServer did not serve the expected health contract.");
+  }
+} finally {
+  await new Promise((resolve, reject) => factoryServer.close((error) => (error ? reject(error) : resolve())));
+}
+
 const packagedServer = await serverEntry.startApiServer({ port: 0 });
 try {
   const discoveryResponse = await fetch(packagedServer.url, {
