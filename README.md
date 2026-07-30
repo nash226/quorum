@@ -269,6 +269,11 @@ structured claim text and answer-path provenance after publishing.
 The packaged smoke gate also verifies a Markdown answer against a DOCX policy
 source, keeping the published artifact's Word-based evidence path covered.
 
+The OpenAPI contract also documents the shared discovery and request-correlation
+headers on every POST success response, so API clients can consistently identify
+the running service, contract version, limits, and request that produced a
+workflow result.
+
 Direct PDF answer verification is regression-tested too, so a single exported
 PDF response follows the same evidence path as batch-discovered PDF answers.
 The packaged CLI smoke gate also verifies that PDF answer path, protecting the
