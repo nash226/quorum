@@ -1,5 +1,8 @@
 # Quorum
 
+HTML answer extraction now treats `<hr>` as a block boundary, preventing
+claims separated by a horizontal rule from being merged.
+
 CLI options that require a value now reject another option supplied in its
 place, preventing mistyped commands from treating flags as paths or verdicts.
 
