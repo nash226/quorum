@@ -1,5 +1,8 @@
 # Quorum
 
+CLI options that require a value now reject another option supplied in its
+place, preventing mistyped commands from treating flags as paths or verdicts.
+
 The packaged CLI smoke gate now verifies direct answer and approved-source paths
 with uppercase extensions, keeping case-insensitive format discovery release-gated.
 

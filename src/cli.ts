@@ -911,6 +911,10 @@ async function runOpenApi(args: string[]): Promise<void> {
   console.log(openApiJson);
 }
 
+function hasOptionValue(value: string | undefined): value is string {
+  return value !== undefined && !value.startsWith("--");
+}
+
 function parseVerifyArgs(args: string[]): VerifySingleArgs {
   const parsed = parseSharedVerifyArgs(args, new Set([
     "--answer",
@@ -934,22 +938,22 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
     const arg = args[index];
     const next = args[index + 1];
 
-    if (arg === "--answer" && next) {
+    if (arg === "--answer" && hasOptionValue(next)) {
       answerPath = next;
       index += 1;
     } else if (arg === "--answer-label" && next) {
       answerLabel = next;
       index += 1;
-    } else if (arg === "--out" && next) {
+    } else if (arg === "--out" && hasOptionValue(next)) {
       outPath = next;
       index += 1;
-    } else if (arg === "--markdown-out" && next) {
+    } else if (arg === "--markdown-out" && hasOptionValue(next)) {
       markdownOutPath = next;
       index += 1;
-    } else if (arg === "--html-out" && next) {
+    } else if (arg === "--html-out" && hasOptionValue(next)) {
       htmlOutPath = next;
       index += 1;
-    } else if (arg === "--review-csv-out" && next) {
+    } else if (arg === "--review-csv-out" && hasOptionValue(next)) {
       reviewCsvOutPath = next;
       index += 1;
     } else if (arg === "--summary-csv-out" && next) {
@@ -993,7 +997,7 @@ function parseExtractClaimsArgs(args: string[]): ExtractClaimsArgs {
     const arg = args[index];
     const next = args[index + 1];
 
-    if (arg === "--answer" && next) {
+    if (arg === "--answer" && hasOptionValue(next)) {
       answerPath = next;
       index += 1;
     } else if (arg === "--answer-label" && next) {
@@ -1163,22 +1167,22 @@ function parseVerifyBatchArgs(args: string[]): VerifyBatchArgs {
         answerLabelsByPath[lastExplicitAnswer.path] = next;
       }
       index += 1;
-    } else if (arg === "--answer-dir" && next) {
+    } else if (arg === "--answer-dir" && hasOptionValue(next)) {
       answerDirPaths.push(next);
       index += 1;
-    } else if (arg === "--out" && next) {
+    } else if (arg === "--out" && hasOptionValue(next)) {
       outPath = next;
       index += 1;
-    } else if (arg === "--markdown-out" && next) {
+    } else if (arg === "--markdown-out" && hasOptionValue(next)) {
       markdownOutPath = next;
       index += 1;
-    } else if (arg === "--html-out" && next) {
+    } else if (arg === "--html-out" && hasOptionValue(next)) {
       htmlOutPath = next;
       index += 1;
-    } else if (arg === "--review-csv-out" && next) {
+    } else if (arg === "--review-csv-out" && hasOptionValue(next)) {
       reviewCsvOutPath = next;
       index += 1;
-    } else if (arg === "--summary-csv-out" && next) {
+    } else if (arg === "--summary-csv-out" && hasOptionValue(next)) {
       summaryCsvOutPath = next;
       index += 1;
     } else if (arg === "--aggregate-summary-csv-out" && next) {
@@ -1231,7 +1235,7 @@ function parseSharedVerifyArgs(
     const arg = args[index];
     const next = args[index + 1];
 
-    if (arg === "--source" && next) {
+    if (arg === "--source" && hasOptionValue(next)) {
       sourcePaths.push(next);
       index += 1;
     } else if (arg === "--source-id" && next) {
@@ -1251,13 +1255,13 @@ function parseSharedVerifyArgs(
 
       sourceIdsByPath[sourcePath] = next;
       index += 1;
-    } else if (arg === "--source-dir" && next) {
+    } else if (arg === "--source-dir" && hasOptionValue(next)) {
       sourceDirs.push(next);
       index += 1;
-    } else if (arg === "--default-trust-level" && next) {
+    } else if (arg === "--default-trust-level" && hasOptionValue(next)) {
       defaultTrustLevel = parseSourceTrustLevel(next);
       index += 1;
-    } else if (arg === "--fail-on" && next) {
+    } else if (arg === "--fail-on" && hasOptionValue(next)) {
       failOn.push(parseClaimVerdict(next));
       index += 1;
     } else if (arg === "--generated-at" && next) {
@@ -1267,7 +1271,7 @@ function parseSharedVerifyArgs(
       json = true;
     } else if (arg === "--result-json") {
       resultJson = true;
-    } else if (commandSpecificOptions.has(arg) && next) {
+    } else if (commandSpecificOptions.has(arg) && hasOptionValue(next)) {
       if (arg === "--result-json-out") {
         resultJsonOutPath = next;
       }
@@ -1312,28 +1316,28 @@ function parseImportReviewArgs(args: string[]): ImportReviewArgs {
     const arg = args[index];
     const next = args[index + 1];
 
-    if (arg === "--review-csv" && next) {
+    if (arg === "--review-csv" && hasOptionValue(next)) {
       reviewCsvPath = next;
       index += 1;
-    } else if (arg === "--out" && next) {
+    } else if (arg === "--out" && hasOptionValue(next)) {
       outPath = next;
       index += 1;
     } else if (arg === "--result-json-out" && next) {
       resultJsonOutPath = next;
       index += 1;
-    } else if (arg === "--markdown-out" && next) {
+    } else if (arg === "--markdown-out" && hasOptionValue(next)) {
       markdownOutPath = next;
       index += 1;
-    } else if (arg === "--html-out" && next) {
+    } else if (arg === "--html-out" && hasOptionValue(next)) {
       htmlOutPath = next;
       index += 1;
-    } else if (arg === "--summary-csv-out" && next) {
+    } else if (arg === "--summary-csv-out" && hasOptionValue(next)) {
       summaryCsvOutPath = next;
       index += 1;
     } else if (arg === "--queue-summary-csv-out" && next) {
       queueSummaryCsvOutPath = next;
       index += 1;
-    } else if (arg === "--fail-on" && next) {
+    } else if (arg === "--fail-on" && hasOptionValue(next)) {
       failOn.push(parseClaimVerdict(next));
       index += 1;
     } else if (arg === "--generated-at" && next) {
