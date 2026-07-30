@@ -468,6 +468,10 @@ sentence terminators.
 
 ## Quick Start
 
+`npm run status:refresh` keeps the generated status page's shipment table
+stable across repositories by displaying the first seven characters of each
+shipped commit, independent of Git's automatic abbreviation length.
+
 To see the exact extensions discovered for approved sources and AI-generated
 answers, run the dedicated format-contract command:
 

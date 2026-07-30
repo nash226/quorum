@@ -21,7 +21,7 @@ test("branchNameFromHistoryRef returns the branch segment", () => {
 
 test("loadRecentShipments reads the supplied history ref", () => {
   const shipments = loadRecentShipments("HEAD");
-  const latestShipmentShortCommit = execFileSync(
+  const latestShipmentCommit = execFileSync(
     "git",
     [
       "log",
@@ -29,7 +29,7 @@ test("loadRecentShipments reads the supplied history ref", () => {
       "--date=short",
       "--grep=^docs: refresh status page$",
       "--invert-grep",
-      "--pretty=format:%h",
+      "--pretty=format:%H",
       "-1",
       "HEAD",
     ],
@@ -38,10 +38,10 @@ test("loadRecentShipments reads the supplied history ref", () => {
     },
   ).trim();
 
-  assert.ok(latestShipmentShortCommit);
+  assert.ok(latestShipmentCommit);
 
   assert.ok(shipments.length > 0);
-  assert.equal(shipments[0]?.shortCommit, latestShipmentShortCommit);
+  assert.equal(shipments[0]?.shortCommit, latestShipmentCommit.slice(0, 7));
   assert.match(shipments[0]?.title ?? "", /\S/);
 });
 
