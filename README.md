@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies mixed-case `.DOCX` answer and
+approved-source paths, keeping case-insensitive document discovery release-gated.
+
 The packaged CLI smoke gate now verifies direct answer and approved-source paths
 with uppercase extensions, keeping case-insensitive format discovery release-gated.
 
