@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `82744b6` on 2026-07-30, test: cover GET route HEAD probes
+- Latest shipped change: `56718ad` on 2026-07-30, test: cover unsupported methods on GET routes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | [#1473](https://github.com/nash226/quorum/pull/1473) | test: cover unsupported methods on GET routes | `56718ad` |
 | 2026-07-30 | [#1469](https://github.com/nash226/quorum/pull/1469) | test: cover GET route HEAD probes | `82744b6` |
 | 2026-07-30 | Direct push | test: document POST method errors in OpenAPI | `0759a75` |
 | 2026-07-30 | [#1467](https://github.com/nash226/quorum/pull/1467) | test: cover GET-only API method errors | `5e3e158` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | docs: document format discovery contract | `4a37975` |
 | 2026-07-30 | Direct push | test: smoke-check packaged reviewer imports | `06d671d` |
 | 2026-07-30 | Direct push | test: guard packaged version json contract | `25fefb5` |
-| 2026-07-30 | Direct push | test: guard packaged probe cache policy | `dcc9426` |
 
