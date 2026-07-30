@@ -1100,6 +1100,8 @@ The core API regression suite also pins conditional `GET /version` revalidation,
 so cache-aware clients can receive `304 Not Modified` without a body.
 The root discovery, capabilities, and OpenAPI probes also support conditional
 `HEAD` requests, returning `304 Not Modified` when their `ETag` is current.
+Conditional `/capabilities` responses preserve an explicit `X-Quorum-Request-Id`
+so cache revalidation remains traceable.
 The [HTTP integration guide](docs/api-integration.md#discover-and-probe-the-service)
 includes a copy-pasteable validator example for cache-aware clients.
 That same conditional probe works for `/capabilities` and `/openapi.json`, so

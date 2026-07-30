@@ -3222,10 +3222,17 @@ test("programmatic API serves single-answer verification over HTTP", async () =>
     assert.equal(await conditionalCapabilitiesHeadResponse.text(), "");
 
     const notModifiedCapabilitiesResponse = await fetch(`${api.url}/capabilities`, {
-      headers: { "if-none-match": capabilitiesEtag ?? "" },
+      headers: {
+        "if-none-match": capabilitiesEtag ?? "",
+        "x-quorum-request-id": "capabilities-cache-trace-2026-07-30",
+      },
     });
     assert.equal(notModifiedCapabilitiesResponse.status, 304);
     assert.equal(notModifiedCapabilitiesResponse.headers.get("etag"), capabilitiesEtag);
+    assert.equal(
+      notModifiedCapabilitiesResponse.headers.get("x-quorum-request-id"),
+      "capabilities-cache-trace-2026-07-30",
+    );
     assert.equal(await notModifiedCapabilitiesResponse.text(), "");
 
     const versionResponse = await fetch(`${api.url}/version`);
