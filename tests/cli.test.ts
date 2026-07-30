@@ -1495,6 +1495,14 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /quorum version \[--json\]/);
 });
 
+test("unknown commands explain the failure without printing misleading help", async () => {
+  const result = await runCliAllowFailure(["not-a-quorum-command"]);
+
+  assert.equal(result.code, 1);
+  assert.match(result.stderr, /Unknown command: not-a-quorum-command/);
+  assert.equal(result.stdout, "");
+});
+
 test("help accepts a command topic", async () => {
   const result = await runCliAllowFailure(["help", "verify"]);
 

@@ -307,8 +307,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  printHelp();
-  process.exitCode = 1;
+  throw new Error(`Unknown command: ${command}`);
 }
 
 async function runVerify(args: string[]): Promise<void> {
