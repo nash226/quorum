@@ -3012,6 +3012,33 @@ test("HTTP API advertises allowed methods on GET-only route errors", async () =>
   }
 });
 
+test("HTTP API keeps every POST-only route bodyless for HEAD method errors", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const postOnlyPaths = [
+    VERIFY_PATH,
+    VERIFY_BATCH_PATH,
+    IMPORT_REVIEW_PATH,
+    REVIEW_QUEUE_PATH,
+    EVALUATE_PATH,
+    EXTRACT_CLAIMS_PATH,
+  ];
+
+  try {
+    for (const [index, path] of postOnlyPaths.entries()) {
+      const response = await fetch(`${api.url}${path}`, {
+        method: "HEAD",
+        headers: { "X-Quorum-Request-Id": `head-method-check-${index}` },
+      });
+
+      assert.equal(response.status, 405, path);
+      assert.equal(response.headers.get("allow"), "POST", path);
+      assert.equal(await response.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API supports conditional OpenAPI downloads with ETags", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
