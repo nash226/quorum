@@ -56,6 +56,18 @@ test("extracts clean claims from markdown list answers", () => {
   );
 });
 
+test("strips bracketed numeric markers from exported answers", () => {
+  const claims = extractClaims(`[1] Employees receive 12 weeks of paid parental leave.
+[2] Healthcare coverage begins after 30 days of employment.
+[3] Contractors do not receive paid vacation.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Healthcare coverage begins after 30 days of employment.",
+    "Contractors do not receive paid vacation.",
+  ]);
+});
+
 test("strips common unicode numbered-list markers from claims", () => {
   const claims = extractClaims(`① Employees receive 12 weeks of paid parental leave.
 ❷ Healthcare coverage begins after 30 days of employment.
