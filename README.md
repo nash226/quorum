@@ -21,6 +21,10 @@ artifact names outside its own supported output set with a clear 400 error,
 keeping verify, batch, reviewer-import, and evaluation clients from requesting
 outputs they cannot receive.
 
+Unknown HTTP routes now regression-test the same request-ID correlation and
+service discovery headers as known routes, giving failed integration probes
+actionable context for logs and retry handling.
+
 The OpenAPI contract now regression-tests that every discovered POST endpoint
 publishes an `application/json` request schema, so generated clients can
 validate request shapes before sending verification and review work.

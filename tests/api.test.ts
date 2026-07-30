@@ -545,6 +545,28 @@ test("HTTP API rejects CORS preflight requests for unknown routes", async () => 
   }
 });
 
+test("HTTP API returns correlated discovery headers for unknown routes", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/missing`);
+
+    assert.equal(response.status, 404);
+    assert.deepEqual(await response.json(), {
+      error: "Not found.",
+      requestId: response.headers.get("x-quorum-request-id"),
+    });
+    assert.match(response.headers.get("x-quorum-request-id") ?? "", /^[0-9a-f-]{36}$/);
+    assert.equal(response.headers.get("x-quorum-service"), "quorum");
+    assert.equal(response.headers.get("x-quorum-version"), "0.1.0");
+    assert.equal(response.headers.get("x-quorum-openapi-path"), "/openapi.json");
+    assert.equal(response.headers.get("x-quorum-max-request-bytes"), "1048576");
+    assert.equal(response.headers.get("x-quorum-request-timeout-ms"), "30000");
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API extracts claims from base64 text and document answers", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
