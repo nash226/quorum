@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a59c1f6` on 2026-07-30, fix: strip emoji checkbox markers from claims
+- Latest shipped change: `e03f180` on 2026-07-30, test: cover version CLI contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | test: cover version CLI contract | `e03f180` |
 | 2026-07-30 | Direct push | fix: strip emoji checkbox markers from claims | `a59c1f6` |
 | 2026-07-30 | Direct push | test: smoke-check packaged formats help | `d2d13b3` |
 | 2026-07-30 | Direct push | test: pin packaged formats version contract | `2671c4e` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | test: smoke-check batch fail policy | `3a4cf8a` |
 | 2026-07-30 | Direct push | test: smoke-check packaged stdin claim previews | `eb1ae58` |
 | 2026-07-30 | Direct push | fix: reject duplicate batch answer paths | `ea0c37f` |
-| 2026-07-30 | Direct push | test: smoke-check packaged evaluation domains | `44551dd` |
 
