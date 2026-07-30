@@ -189,6 +189,17 @@ Healthcare coverage begins after 30 days of employment.
   );
 });
 
+test("keeps HTML horizontal rules from joining adjacent claims", () => {
+  const claims = extractClaims(
+    "<p>Employees receive 12 weeks of paid parental leave.</p><hr><p>Healthcare coverage begins after 30 days.</p>",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Healthcare coverage begins after 30 days.",
+  ]);
+});
+
 test("ignores quote, checkbox, and heading markdown prefixes", () => {
   const claims = extractClaims(`## Support Notes
 
