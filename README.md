@@ -145,6 +145,10 @@ npm run dev -- verify-batch \
   --review-csv-out reports/selected-review.csv
 ```
 
+Single-answer `verify` accepts exactly one `--answer` path; use
+`verify-batch --answer` when reviewing multiple explicit answer files. Repeating
+`--answer` in a single-answer command fails instead of silently choosing one.
+
 When `--answer` is repeated, Quorum keeps those explicit paths in the same
 order in the batch report and reviewer CSV, then appends any additional files
 found through `--answer-dir`. Batch Markdown and HTML reports also include each

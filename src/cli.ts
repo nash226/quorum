@@ -325,6 +325,9 @@ function parseVerifyArgs(args: string[]): VerifySingleArgs {
     const next = args[index + 1];
 
     if (arg === "--answer" && next) {
+      if (answerPath) {
+        throw new Error("verify accepts exactly one --answer <path>");
+      }
       answerPath = next;
       index += 1;
     } else if (arg === "--out" && next) {

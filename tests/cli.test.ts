@@ -74,6 +74,21 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("verify rejects repeated answer paths", async () => {
+  await assert.rejects(
+    runCli([
+      "verify",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--answer",
+      "examples/answers/support-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+    ]),
+    /verify accepts exactly one --answer <path>/,
+  );
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 
