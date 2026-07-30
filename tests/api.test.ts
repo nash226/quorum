@@ -176,6 +176,40 @@ test("API discovery endpoint inventory contains one entry per method and path", 
   assert.equal(new Set(endpointKeys).size, endpointKeys.length);
 });
 
+test("OpenAPI documents bodyless HEAD response headers for every GET endpoint", () => {
+  const openApi = createOpenApiDocument();
+  const discoveryHeaders = [
+    "X-Quorum-Max-Request-Bytes",
+    "X-Quorum-OpenAPI-Path",
+    "X-Quorum-Request-Id",
+    "X-Quorum-Request-Timeout-Ms",
+    "X-Quorum-Service",
+    "X-Quorum-Version",
+  ];
+  const openApiPaths = openApi.paths as Record<string, {
+    head?: {
+      responses?: Record<string, {
+        content?: unknown;
+        headers?: Record<string, unknown>;
+      }>;
+    };
+  }>;
+
+  for (const { path } of API_ENDPOINTS.filter(({ method }) => method === "GET")) {
+    const headResponse = openApiPaths[path]?.head?.responses?.["200"];
+
+    assert.ok(headResponse, `${path} HEAD response is missing from OpenAPI`);
+    assert.ok(Object.keys(headResponse.headers ?? {}).includes("Cache-Control"), `${path} HEAD response is missing Cache-Control`);
+    if ([API_ROOT_PATH, CAPABILITIES_PATH, "/version", OPENAPI_PATH].includes(path as typeof API_ROOT_PATH)) {
+      const actualHeaders = Object.keys(headResponse.headers ?? {});
+      for (const header of discoveryHeaders) {
+        assert.ok(actualHeaders.includes(header), `${path} HEAD response is missing ${header}`);
+      }
+      assert.ok(actualHeaders.includes("ETag"), `${path} HEAD response is missing ETag`);
+    }
+  }
+});
+
 test("API CORS exposed headers contain each browser-visible header once", () => {
   const exposedHeaders = API_CORS_EXPOSED_HEADERS.split(", ");
 
