@@ -396,6 +396,9 @@ async function runVerify(args: string[]): Promise<void> {
 
 async function runVerifyBatch(args: string[]): Promise<void> {
   const parsed = parseVerifyBatchArgs(args);
+  if (parsed.answerPaths.includes("-") && parsed.sourcePaths.includes("-")) {
+    throw new Error("--answer - and --source - cannot be used together because stdin can only be consumed once.");
+  }
   const sources = await loadSources(parsed, outputPaths(parsed));
   const batchReport = await verifyBatchAnswers({
     answerPaths: parsed.answerPaths,
