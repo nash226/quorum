@@ -1656,6 +1656,27 @@ try {
   rmSync(ndjsonSourceTempDir, { recursive: true, force: true });
 }
 
+const uppercaseFormatTempDir = mkdtempSync(join(tmpdir(), "quorum-package-uppercase-format-"));
+try {
+  const answerPath = join(uppercaseFormatTempDir, "ANSWER.JSON");
+  const sourcePath = join(uppercaseFormatTempDir, "POLICY.MD");
+  writeFileSync(answerPath, '{"response":"Employees receive 12 weeks of paid parental leave."}\n');
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+  const result = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    result.summary?.verified !== 1 ||
+    result.answerPath !== answerPath ||
+    result.assessments?.[0]?.claim?.text !==
+      "response: Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact CLI did not preserve case-insensitive direct format discovery.");
+  }
+} finally {
+  rmSync(uppercaseFormatTempDir, { recursive: true, force: true });
+}
+
 const yamlAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-yaml-answer-"));
 try {
   const yamlAnswerPath = join(yamlAnswerTempDir, "answer.yaml");
