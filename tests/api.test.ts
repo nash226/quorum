@@ -3158,6 +3158,34 @@ test("HTTP API keeps every GET-only route bodyless for HEAD probes", async () =>
   }
 });
 
+test("HTTP API advertises GET and HEAD for unsupported methods on every GET-only route", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const getOnlyPaths = [...new Set(SERVER_API_ENDPOINTS
+    .filter((endpoint) => endpoint.method === "GET")
+    .map((endpoint) => endpoint.path))];
+
+  try {
+    for (const method of ["POST", "PUT", "DELETE", "PATCH"] as const) {
+      for (const [index, path] of getOnlyPaths.entries()) {
+        const requestId = `${method.toLowerCase()}-get-method-check-${index}`;
+        const response = await fetch(`${api.url}${path}`, {
+          method,
+          headers: { "X-Quorum-Request-Id": requestId },
+        });
+
+        assert.equal(response.status, 405, `${method} ${path}`);
+        assert.equal(response.headers.get("allow"), "GET, HEAD", `${method} ${path}`);
+        assert.deepEqual(await response.json(), {
+          error: "Method not allowed. Use GET, HEAD.",
+          requestId,
+        });
+      }
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API advertises POST for unsupported methods on every POST-only route", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const postOnlyPaths = [

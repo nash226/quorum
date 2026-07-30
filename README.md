@@ -1,5 +1,9 @@
 # Quorum
 
+The local HTTP API now regression-tests unsupported `POST`, `PUT`, `DELETE`,
+and `PATCH` requests across every `GET` route, keeping method errors and
+`Allow: GET, HEAD` guidance consistent for discovery and monitoring clients.
+
 The local HTTP API now regression-tests bodyless `HEAD` probes across every
 discovered `GET` route, keeping health checks and contract downloads safe for
 monitoring clients.
