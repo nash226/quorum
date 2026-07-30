@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0fd6c92` on 2026-07-30, test: document GET endpoint HEAD contracts
+- Latest shipped change: `5a208df` on 2026-07-30, test: cover discovery route preflights
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | test: cover discovery route preflights | `5a208df` |
 | 2026-07-30 | Direct push | test: document GET endpoint HEAD contracts | `0fd6c92` |
 | 2026-07-30 | Direct push | test: document GET-only OpenAPI errors | `83116ff` |
 | 2026-07-29 | Direct push | test: cover PATCH method errors | `dc39a86` |
@@ -56,5 +57,4 @@
 | 2026-07-29 | Direct push | test: stabilize status commit identifiers | `5197564` |
 | 2026-07-29 | Direct push | test: cover unknown-route HEAD errors | `ac9f9ad` |
 | 2026-07-29 | Direct push | test: cover HEAD errors on POST routes | `1ced457` |
-| 2026-07-29 | Direct push | test: cover query-bearing CORS preflights | `1e1512a` |
 
