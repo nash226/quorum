@@ -3727,6 +3727,20 @@ test("verify reads an approved source from stdin when --source - is used", async
   }
 });
 
+test("verify rejects using stdin for both answer and source", async () => {
+  const result = await runCliAllowFailure(
+    ["verify", "--answer", "-", "--source", "-", "--json"],
+    { stdin: "Employees receive 12 weeks of paid parental leave.\n" },
+  );
+
+  assert.equal(result.code, 1);
+  assert.equal(result.stdout, "");
+  assert.match(
+    result.stderr,
+    /--answer - and --source - cannot be used together because stdin can only be consumed once\./,
+  );
+});
+
 test("verify rejects empty resolved source sets", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-sources-"));
 
