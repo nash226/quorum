@@ -16,6 +16,10 @@ The packaged evaluation smoke gate now verifies `quorum evaluate --domain hr`
 selects only the HR scorecards, keeping published domain filtering aligned with
 the local evaluation workflow.
 
+Claim extraction now normalizes common localized numbered-list markers,
+including ideographic-comma lists such as `1、Policy claims...`, so imported
+answers keep their claim boundaries across common export formats.
+
 The packaged CLI smoke gate now verifies `quorum openapi --out`, including its
 server URL, version metadata, and published verification route.
 

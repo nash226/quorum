@@ -9,9 +9,9 @@ const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,
 const UNICODE_BULLET_PREFIX = /^(?:[\u00B7\u2022\u2023\u25AA\u25AB\u25CF\u25E6\u2043\u2219\u25B8\u25B9])\s+/;
 const UNICODE_CHECKBOX_PREFIX = /^[\u2610\u2611\u2612]\s+/;
 const UNICODE_NUMBER_PREFIX = /^[\u2460-\u2473\u24F5-\u24FE\u2776-\u277F\u2780-\u2789\u278A-\u2793]\s+/;
-const ARABIC_NUMBER_PREFIX = /^[\u0660-\u0669\u06F0-\u06F9]+[.)．]\s+/;
+const ARABIC_NUMBER_PREFIX = /^[\u0660-\u0669\u06F0-\u06F9]+[.)．、]\s+/;
 const PARENTHESIZED_ARABIC_NUMBER_PREFIX = /^\([\u0660-\u0669\u06F0-\u06F9]+\)\s+/;
-const FULLWIDTH_NUMBER_PREFIX = /^[\uFF10-\uFF19]+[.)．]\s+/;
+const FULLWIDTH_NUMBER_PREFIX = /^[\uFF10-\uFF19]+[.)．、]\s+/;
 const PARENTHESIZED_FULLWIDTH_NUMBER_PREFIX = /^\([\uFF10-\uFF19]+\)\s+/;
 const BRACKETED_NUMBER_PREFIX = /^\[\d+\]\s+/;
 const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
@@ -567,7 +567,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     PARENTHESIZED_FULLWIDTH_NUMBER_PREFIX,
     BRACKETED_NUMBER_PREFIX,
     DASH_BULLET_PREFIX,
-    /^\d+[.)]\s+/,
+    /^\d+[.)、]\s+/,
     /^\d+:\s+/,
     /^\(\d+\)\s+/,
     /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
