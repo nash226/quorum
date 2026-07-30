@@ -19,6 +19,20 @@ test("version aliases report the package contract version", async () => {
   assert.equal(command, longAlias);
 });
 
+test("version JSON and help aliases preserve the public CLI contract", async () => {
+  const [versionJson, commandHelp, topicHelp, shortHelp] = await Promise.all([
+    runCli(["version", "--json"]),
+    runCli(["version", "--help"]),
+    runCli(["help", "version"]),
+    runCli(["version", "-h"]),
+  ]);
+
+  assert.deepEqual(JSON.parse(versionJson), { service: "quorum", version: "0.1.0" });
+  assert.match(commandHelp, /^Quorum version\n\nUsage:\n  quorum version \[--json\]/);
+  assert.equal(topicHelp, commandHelp);
+  assert.equal(shortHelp, commandHelp);
+});
+
 test("verify-batch discovers the .text plain-text alias for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-text-alias-"));
 
