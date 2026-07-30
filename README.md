@@ -221,6 +221,9 @@ The CLI format-discovery command now accepts both `quorum formats --help` and
 `quorum formats -h`, keeping command-specific help consistent with the other
 published commands.
 
+The packaged CLI smoke gate also verifies `extract-claims --answer -`, keeping
+pipe-based claim previews release-gated alongside file-based previews.
+
 Direct CLI verification now regression-tests reStructuredText (`.rst`) answers,
 keeping single-answer documentation exports on the same evidence path as
 batch-discovered `.rst` files.
