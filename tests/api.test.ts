@@ -3057,6 +3057,38 @@ test("HTTP API keeps every POST-only route bodyless for HEAD method errors", asy
   }
 });
 
+test("HTTP API advertises POST for unsupported methods on every POST-only route", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const postOnlyPaths = [
+    VERIFY_PATH,
+    VERIFY_BATCH_PATH,
+    IMPORT_REVIEW_PATH,
+    REVIEW_QUEUE_PATH,
+    EVALUATE_PATH,
+    EXTRACT_CLAIMS_PATH,
+  ];
+
+  try {
+    for (const method of ["DELETE", "PUT"] as const) {
+      for (const [index, path] of postOnlyPaths.entries()) {
+        const response = await fetch(`${api.url}${path}`, {
+          method,
+          headers: { "X-Quorum-Request-Id": `${method.toLowerCase()}-method-check-${index}` },
+        });
+
+        assert.equal(response.status, 405, `${method} ${path}`);
+        assert.equal(response.headers.get("allow"), "POST", `${method} ${path}`);
+        assert.deepEqual(await response.json(), {
+          error: "Method not allowed. Use POST.",
+          requestId: `${method.toLowerCase()}-method-check-${index}`,
+        });
+      }
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API supports conditional OpenAPI downloads with ETags", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
