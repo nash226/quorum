@@ -1,5 +1,9 @@
 # Quorum
 
+Batch verification now has regression coverage for discovering AsciiDoc
+(`.adoc`/`.asciidoc`) and Org (`.org`) answers and approved sources from nested
+directories, keeping these documented plain-text formats on the release path.
+
 The packaged CLI smoke gate now verifies that `quorum formats --json` reports
 the installed package version as well as its supported extensions, keeping
 machine-readable input discovery aligned with the published API contract.
