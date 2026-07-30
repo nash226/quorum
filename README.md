@@ -1,5 +1,9 @@
 # Quorum
 
+The installed package now regression-tests both human-readable and JSON output
+from `npm run formats`, keeping the documented input-format discovery command
+safe for terminal users and automation.
+
 The CLI guide now calls out the installed-package form, `quorum formats --json`,
 for integrations that validate supported answer and source extensions.
 
