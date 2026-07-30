@@ -576,6 +576,13 @@ sentence terminators.
 
 ## Quick Start
 
+The shipped CLI also supports reviewer labels and stable source IDs, fixed
+`--generated-at` timestamps, gate-aware `--result-json` artifacts, and
+stdin-backed answers or reviewer CSVs. `verify-batch` adds
+`--aggregate-summary-csv-out`, while `import-review` supports
+`--queue-status pending|reviewed|no_claims` for routing reviewer work. Run
+`npm run dev -- help <command>` for the complete command-specific contract.
+
 After installing dependencies, run the complete pre-PR validation gate with:
 
 ```bash
