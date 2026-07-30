@@ -3,6 +3,9 @@
 The current roadmap prioritizes strengthening the local CLI and HTTP API for
 reviewer handoffs; durable hosting and queue persistence remain decision-gated.
 
+Claim extraction now regression-tests bracketed numeric markers such as `[1]`,
+keeping exported numbered answers atomic before evidence verification.
+
 Claim extraction recognizes chevron bullets such as `❯` and `❱` from exported
 checklists, keeping those policy statements atomic before evidence verification.
 
