@@ -984,6 +984,9 @@ are binary PDF files.
 Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
+Repeated `--answer-dir` paths are deduplicated in discovery order, so including
+a nested answer directory after its parent does not create duplicate review
+work.
 The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
 (`.md`, `.markdown`, `.mdx`, `.qmd`, `.rst`), AsciiDoc/Org/MediaWiki/LaTeX
 (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`, `.wiki`, `.tex`),
