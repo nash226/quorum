@@ -1294,6 +1294,26 @@ try {
   ) {
     throw new Error("Package artifact CLI did not preserve claim preview provenance in the result file.");
   }
+
+  const extractClaimsStdinResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath),
+    "extract-claims",
+    "--answer",
+    "-",
+    "--result-json",
+  ], {
+    encoding: "utf8",
+    input: "Managers approve exceptions within five business days.\n",
+  }));
+  if (
+    extractClaimsStdinResult.answerHasClaims !== true ||
+    extractClaimsStdinResult.answerPath !== "-" ||
+    extractClaimsStdinResult.claims?.length !== 1 ||
+    extractClaimsStdinResult.claims[0]?.id !== "claim_1" ||
+    extractClaimsStdinResult.claims[0]?.text !== "Managers approve exceptions within five business days."
+  ) {
+    throw new Error("Package artifact CLI did not preserve the stdin claim preview contract.");
+  }
 } finally {
   rmSync(extractClaimsTempDir, { recursive: true, force: true });
 }
