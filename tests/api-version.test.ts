@@ -197,6 +197,27 @@ test("OpenAPI gives every discovered POST route a JSON success response schema",
   }
 });
 
+test("OpenAPI gives every discovered POST route the shared JSON error schema", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, Record<string, {
+      responses?: Record<string, { content?: Record<string, { schema?: { $ref?: string } }> }>;
+    }>>;
+  };
+  const expectedStatuses = ["400", "405", "413", "415", "500"];
+
+  for (const endpoint of API_ENDPOINTS.filter(({ method }) => method === "POST")) {
+    const operation = document.paths[endpoint.path]?.post;
+    assert.ok(operation, `POST ${endpoint.path}`);
+    for (const status of expectedStatuses) {
+      assert.equal(
+        operation.responses?.[status]?.content?.["application/json"]?.schema?.$ref,
+        "#/components/schemas/ApiErrorResponse",
+        `${status} POST ${endpoint.path}`,
+      );
+    }
+  }
+});
+
 test("OpenAPI documents revalidation for the capabilities endpoint", () => {
   const document = createOpenApiDocument() as {
     paths: Record<string, {

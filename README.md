@@ -29,6 +29,10 @@ The OpenAPI contract also regression-tests that every discovered POST endpoint
 publishes an `application/json` success response schema, keeping generated
 clients aligned with the response shape returned by local integrations.
 
+The OpenAPI contract also regression-tests that every discovered POST endpoint
+uses the shared `ApiErrorResponse` schema for 400, 405, 413, 415, and 500
+failures, keeping generated clients consistent when requests are rejected.
+
 The dedicated `/version` endpoint now regression-tests its OpenAPI response
 schema and example against the machine-readable payload served to clients.
 
