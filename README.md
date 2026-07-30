@@ -1372,9 +1372,9 @@ verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
 sources. JSON and XML exports are normalized into evidence text so structured
 knowledge-base payloads remain claim-readable in reports. See the [evaluation fixture guide](docs/evaluation-fixtures.md) for
 the current coverage inventory and extension workflow.
-Run `npm run evaluate:ci` to execute the full checked-in benchmark with the
-aggregate score and mismatch gates enabled; it is the same fail-closed check
-used before publishing the package.
+Run `npm run evaluate` (or its explicit `npm run evaluate:ci` equivalent) to
+execute the full checked-in benchmark with aggregate score and mismatch gates
+enabled; it is the same fail-closed check used before publishing the package.
 The benchmark also covers phone-support availability boundaries and callback
 timing, so universal access and urgent-response promises are checked against
 approved support policy before they reach a customer.
