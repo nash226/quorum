@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged HTTP smoke gate now starts the public `createApiServer` factory
+directly and probes its health response, keeping both server entry points
+release-gated for Node.js integrations.
+
 The local HTTP API now regression-tests bodyless `HEAD` probes across every
 discovered `GET` route, keeping health checks and contract downloads safe for
 monitoring clients.
