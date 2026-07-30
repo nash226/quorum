@@ -403,6 +403,8 @@ The CLI regression suite locks this behavior for mixed-case Markdown filenames.
 - `evaluate` runs checked-in policy fixtures as a CI mismatch and score gate.
 - `serve` exposes the same workflows through a local HTTP API, while `openapi`
   exports its integration contract.
+- OpenAPI request-error examples include the same correlation ID required by
+  runtime error responses, including oversized-payload failures.
 - The local HTTP API verifies structured YAML source content with the same
   evidence report and source-metadata contract as file-backed workflows.
 - Structured JSON, YAML, and TOML sources recognize common freshness keys such
