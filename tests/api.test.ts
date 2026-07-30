@@ -545,6 +545,24 @@ test("HTTP API rejects CORS preflight requests for unknown routes", async () => 
   }
 });
 
+test("HTTP API keeps unknown-route HEAD errors bodyless", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/missing`, {
+      method: "HEAD",
+      headers: { "X-Quorum-Request-Id": "missing-head-check" },
+    });
+
+    assert.equal(response.status, 404);
+    assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8");
+    assert.equal(response.headers.get("x-quorum-request-id"), "missing-head-check");
+    assert.equal(await response.text(), "");
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API routes query-bearing CORS preflights by pathname", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
