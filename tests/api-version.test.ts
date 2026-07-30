@@ -164,6 +164,29 @@ test("OpenAPI documents every discovered route and method", () => {
   }
 });
 
+test("OpenAPI documents shared method errors for every GET-only route", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, Record<string, {
+      responses?: Record<string, {
+        headers?: Record<string, { schema?: { const?: string } }>;
+        content?: Record<string, { schema?: { $ref?: string } }>;
+      }>;
+    }>>;
+  };
+
+  const getOnlyPaths = ["/", "/capabilities", "/health", "/healthz", "/readyz", "/livez", "/version", "/openapi.json"];
+  for (const path of getOnlyPaths) {
+    const response = document.paths[path]?.get?.responses?.["405"];
+    assert.ok(response, `GET ${path} 405 response`);
+    assert.equal(response.headers?.Allow?.schema?.const, "GET, HEAD", `GET ${path} Allow header`);
+    assert.equal(
+      response.content?.["application/json"]?.schema?.$ref,
+      "#/components/schemas/ApiErrorResponse",
+      `GET ${path} error schema`,
+    );
+  }
+});
+
 test("OpenAPI gives every discovered POST route a JSON request schema", () => {
   const document = createOpenApiDocument() as {
     paths: Record<string, Record<string, {
