@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `41265d5` on 2026-07-30, test: cover nested XML batch discovery
+- Latest shipped change: `5e3e158` on 2026-07-30, test: cover GET-only API method errors
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | [#1467](https://github.com/nash226/quorum/pull/1467) | test: cover GET-only API method errors | `5e3e158` |
 | 2026-07-30 | Direct push | test: cover nested XML batch discovery | `41265d5` |
 | 2026-07-30 | Direct push | docs: document format discovery contract | `4a37975` |
 | 2026-07-30 | Direct push | test: smoke-check packaged reviewer imports | `06d671d` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | test: guard packaged probe cache policy | `dcc9426` |
 | 2026-07-30 | [#1460](https://github.com/nash226/quorum/pull/1460) | test: smoke-check packaged text inputs | `9c58b49` |
 | 2026-07-30 | [#1458](https://github.com/nash226/quorum/pull/1458) | docs: document the full pre-pr validation gate | `d8e0b6d` |
-| 2026-07-30 | Direct push | fix: preserve HTML claim boundaries | `ac8b62e` |
 
