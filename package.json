@@ -32,6 +32,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci",
+    "demo:check": "node scripts/check-demo.mjs",
     "dev": "tsx src/cli.ts",
     "formats": "npm run dev -- formats",
     "prepublishOnly": "npm run check",

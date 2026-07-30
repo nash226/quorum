@@ -1820,12 +1820,16 @@ command to fail closed when aggregate claim quality falls below the threshold.
 
 ```bash
 npm run check
+npm run demo:check
 ```
 
 `npm run check` runs the repository verification gate used by CI: unit tests,
 the TypeScript build, local HTTP smoke checks, packaged-entrypoint smoke checks,
 and the evaluation score gate. Run the individual commands when narrowing down
 a failure.
+
+`npm run demo:check` runs the documented HR example end to end and confirms
+that it produces a non-empty JSON evidence report.
 
 ```text
 src/          verifier, CLI, reports, workflow, and HTTP API
