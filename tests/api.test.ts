@@ -5634,6 +5634,61 @@ test("HTTP API rejects invalid generatedAt timestamps across report workflows", 
   }
 });
 
+test("HTTP API validates artifact selections per report workflow", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  const requests = [
+    {
+      path: "/verify",
+      body: {
+        answer: "Policy.",
+        sources: [{ sourcePath: "policy.md", content: "Policy." }],
+        includeArtifacts: ["aggregate_summary_csv"],
+      },
+      error: "includeArtifacts[0] must be one of: text, markdown, html, result_json, review_csv, summary_csv.",
+    },
+    {
+      path: "/verify-batch",
+      body: {
+        answers: [{ answer: "Policy.", answerPath: "answer.md" }],
+        sources: [{ sourcePath: "policy.md", content: "Policy." }],
+        includeArtifacts: ["queue_summary_csv"],
+      },
+      error: "includeArtifacts[0] must be one of: text, markdown, html, result_json, review_csv, summary_csv, aggregate_summary_csv.",
+    },
+    {
+      path: "/import-review",
+      body: {
+        reviewCsvContent: "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes\nanswer.md,claim_1,Policy.,verified,Matched,Policy,Policy.,verified,\n",
+        includeArtifacts: ["domain_summary_csv"],
+      },
+      error: "includeArtifacts[0] must be one of: text, markdown, html, result_json, summary_csv, queue_summary_csv.",
+    },
+    {
+      path: "/evaluate",
+      body: {
+        fixtures: [{ fixturePath: "fixture.json", content: "{}" }],
+        includeArtifacts: ["review_csv"],
+      },
+      error: "includeArtifacts[0] must be one of: text, markdown, html, result_json, summary_csv, domain_summary_csv, aggregate_summary_csv.",
+    },
+  ] as const;
+
+  try {
+    for (const request of requests) {
+      const response = await fetch(`${api.url}${request.path}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(request.body),
+      });
+
+      assert.equal(response.status, 400, request.path);
+      assert.equal((await response.json() as { error: string }).error, request.error, request.path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API rejects invalid source updatedAt timestamps", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
