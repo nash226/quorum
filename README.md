@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies `quorum openapi --out`, including its
+server URL, version metadata, and published verification route.
+
 The CLI guide now calls out the installed-package form, `quorum formats --json`,
 for integrations that validate supported answer and source extensions.
 

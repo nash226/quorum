@@ -51,6 +51,26 @@ if (
   throw new Error("Package artifact CLI JSON formats output drifted from the library input contract.");
 }
 
+const openApiPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-openapi-"));
+try {
+  const openApiPath = join(openApiPackageDir, "openapi.json");
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "openapi", "--server-url", "https://quorum.example.test", "--out", openApiPath,
+  ], { encoding: "utf8" });
+  const openApi = JSON.parse(readFileSync(openApiPath, "utf8"));
+  if (
+    openApi.openapi !== "3.1.0" ||
+    openApi.info?.title !== "Quorum Local API" ||
+    openApi.info?.version !== packageJson.version ||
+    JSON.stringify(openApi.servers) !== JSON.stringify([{ url: "https://quorum.example.test" }]) ||
+    !openApi.paths?.["/verify"]?.post
+  ) {
+    throw new Error("Package artifact did not preserve the OpenAPI CLI export contract.");
+  }
+} finally {
+  rmSync(openApiPackageDir, { recursive: true, force: true });
+}
+
 for (const versionFlag of ["--version", "-v"]) {
   const versionOutput = execFileSync("node", [fileURLToPath(cliPath), versionFlag], { encoding: "utf8" }).trim();
   if (versionOutput !== `quorum ${packageJson.version}`) {
