@@ -1,5 +1,9 @@
 # Quorum
 
+The local HTTP API now regression-tests bodyless `HEAD` probes across every
+discovered `GET` route, keeping health checks and contract downloads safe for
+monitoring clients.
+
 Integrations can inspect the exact answer and approved-source extensions
 supported by the installed package with `npm run formats -- --json` (or
 `quorum formats --json` after installation). The JSON response is the
