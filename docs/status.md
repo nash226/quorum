@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ac8b62e` on 2026-07-30, fix: preserve HTML claim boundaries
+- Latest shipped change: `d8e0b6d` on 2026-07-30, docs: document the full pre-pr validation gate
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | [#1458](https://github.com/nash226/quorum/pull/1458) | docs: document the full pre-pr validation gate | `d8e0b6d` |
 | 2026-07-30 | Direct push | fix: preserve HTML claim boundaries | `ac8b62e` |
 | 2026-07-30 | Direct push | fix: reject missing cli option values | `bec4dee` |
 | 2026-07-30 | Direct push | test: guard OpenAPI POST response headers | `2a0ca37` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | test: guard direct formats json contract | `9d0333c` |
 | 2026-07-30 | Direct push | test: smoke-check uppercase packaged formats | `cabd6eb` |
 | 2026-07-30 | Direct push | test: cover runtime CORS preflights | `a959488` |
-| 2026-07-30 | Direct push | docs: add CLI help onboarding example | `74b985e` |
 
