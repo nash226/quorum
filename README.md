@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct `.text` answers and approved
+sources, keeping the plain-text alias release-gated with the other supported
+input formats.
+
 HTML answer extraction now treats `<hr>` as a block boundary, preventing
 claims separated by a horizontal rule from being merged.
 

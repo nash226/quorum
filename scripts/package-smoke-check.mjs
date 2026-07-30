@@ -356,6 +356,31 @@ try {
   rmSync(cliAsciiDocPackageDir, { recursive: true, force: true });
 }
 
+const cliTextPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-text-"));
+try {
+  const answerPath = join(cliTextPackageDir, "answer.text");
+  const sourcePath = join(cliTextPackageDir, "policy.text");
+  writeFileSync(answerPath, "Enterprise support requests receive a first response within four business hours.\n");
+  writeFileSync(sourcePath, "Enterprise support requests receive a first response within four business hours.\n");
+
+  const textOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const textPayload = JSON.parse(textOutput);
+  if (
+    textPayload.summary?.verified !== 1 ||
+    textPayload.answerPath !== answerPath ||
+    textPayload.sources?.[0]?.title !== "policy" ||
+    textPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected .text answer/source contract.");
+  }
+} finally {
+  rmSync(cliTextPackageDir, { recursive: true, force: true });
+}
+
 const cliLatexPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-latex-"));
 try {
   const answerPath = join(cliLatexPackageDir, "answer.tex");
