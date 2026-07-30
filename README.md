@@ -74,6 +74,10 @@ The generated OpenAPI contract now regression-tests every advertised CORS
 preflight operation for its 204 response and complete response-header schema,
 keeping browser and generated clients aligned with the local API discovery list.
 
+The HTTP API now regression-tests unsupported `POST`, `PUT`, and `DELETE`
+requests across every GET-only route, keeping method errors, `Allow: GET, HEAD`,
+and request correlation consistent for monitoring and discovery clients.
+
 The API discovery inventory is also regression-tested against the generated
 OpenAPI paths and methods, so integrations can use either contract surface
 without silently missing a route.
