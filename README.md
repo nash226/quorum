@@ -1,5 +1,8 @@
 # Quorum
 
+Source-loader coverage now verifies that structured exports without embedded
+metadata still receive readable fallback titles in reviewer reports.
+
 The packaged CLI smoke gate now verifies that `quorum formats --json` reports
 the installed package version as well as its supported extensions, keeping
 machine-readable input discovery aligned with the published API contract.

@@ -14,6 +14,16 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("removes structured export extensions from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/customer-support.json",
+    '{"policy":"Customers can request refunds within 30 days."}',
+    0,
+  );
+
+  assert.equal(source.title, "customer-support");
+});
+
 test("extracts metadata from XML source exports", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.xml",
