@@ -5,6 +5,10 @@ while durable API hosting and reviewer-queue storage remain decision-gated.
 See the [roadmap](docs/roadmap.md) for the current priorities and safe next
 steps.
 
+The local HTTP API now regression-tests browser CORS preflights for discovery,
+capabilities, version, and OpenAPI routes, including their cache-related
+request headers.
+
 The HTTP API now regression-tests CORS preflight responses across every POST
 endpoint, keeping browser-based agent integrations aligned as routes evolve.
 
