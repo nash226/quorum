@@ -4925,6 +4925,29 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("programmatic API accepts vendor JSON content types for POST endpoints", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/extract-claims`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/vnd.quorum.preview+json; charset=utf-8",
+        "X-Quorum-Request-Id": "vendor-json-content-type-check",
+      },
+      body: JSON.stringify({ answer: "Employees receive 12 weeks of paid parental leave." }),
+    });
+
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("x-quorum-request-id"), "vendor-json-content-type-check");
+    const payload = (await response.json()) as { requestId: string; answerHasClaims: boolean };
+    assert.equal(payload.requestId, "vendor-json-content-type-check");
+    assert.equal(payload.answerHasClaims, true);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API returns a structured error for malformed JSON", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

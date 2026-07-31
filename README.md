@@ -1319,6 +1319,8 @@ The packaged smoke check also covers the same malformed-body contract across
 POST route preserves the same safe client-error boundary.
 It also verifies that every JSON POST route rejects non-JSON content types with
 the same structured `415` response and preserves caller-supplied request IDs.
+Regression coverage now exercises a typed `application/vnd.quorum.preview+json`
+claim-preview request, including request-ID correlation.
 JSON POST routes also accept vendor media types such as
 `application/vnd.quorum+json`, so API gateways can add a versioned content type
 without losing the normal request validation and correlation contract.
