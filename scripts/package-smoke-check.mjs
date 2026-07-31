@@ -1893,6 +1893,34 @@ try {
   rmSync(ndjsonAnswerTempDir, { recursive: true, force: true });
 }
 
+const mdxBatchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-mdx-batch-"));
+try {
+  const answerDir = join(mdxBatchTempDir, "answers", "nested");
+  const sourceDir = join(mdxBatchTempDir, "sources");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "answer.mdx");
+  const sourcePath = join(sourceDir, "policy.md");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const mdxBatchResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch", "--answer-dir", join(mdxBatchTempDir, "answers"),
+    "--source-dir", sourceDir, "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    mdxBatchResult.summary?.answersWithClaims !== 1 ||
+    mdxBatchResult.summary?.answersWithoutClaims !== 0 ||
+    mdxBatchResult.answers?.[0]?.answerPath !== answerPath ||
+    mdxBatchResult.answers?.[0]?.report?.summary?.verified !== 1 ||
+    mdxBatchResult.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not discover the expected nested MDX batch answer.");
+  }
+} finally {
+  rmSync(mdxBatchTempDir, { recursive: true, force: true });
+}
+
 const ndjsonSourceTempDir = mkdtempSync(join(tmpdir(), "quorum-package-ndjson-source-"));
 try {
   const ndjsonAnswerPath = join(ndjsonSourceTempDir, "answer.md");
