@@ -2342,6 +2342,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/incident-communication-policy.json"),
     resolve("examples/evaluations/support/invoice-correction-policy.json"),
     resolve("examples/evaluations/support/live-chat-policy.json"),
+    resolve("examples/evaluations/support/member-permissions-policy.json"),
     resolve("examples/evaluations/support/order-cancellation-policy.json"),
     resolve("examples/evaluations/support/order-tracking-policy.json"),
     resolve("examples/evaluations/support/password-reset-policy.json"),
