@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
@@ -394,6 +394,50 @@ try {
   }
 } finally {
   rmSync(cliLogPackageDir, { recursive: true, force: true });
+}
+
+const cliPlainTextBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-plain-text-batch-"));
+try {
+  const answerPaths = [
+    join(cliPlainTextBatchPackageDir, "answers", "hr", "answer.text"),
+    join(cliPlainTextBatchPackageDir, "answers", "support", "answer.log"),
+  ];
+  const sourcePaths = [
+    join(cliPlainTextBatchPackageDir, "sources", "hr", "policy.text"),
+    join(cliPlainTextBatchPackageDir, "sources", "support", "policy.log"),
+  ];
+  for (const path of [...answerPaths, ...sourcePaths]) {
+    mkdirSync(dirname(path), { recursive: true });
+  }
+  writeFileSync(answerPaths[0], "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(answerPaths[1], "Enterprise support requests receive a first response within four business hours.\n");
+  writeFileSync(sourcePaths[0], "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePaths[1], "Enterprise support requests receive a first response within four business hours.\n");
+
+  const plainTextBatchPayload = JSON.parse(execFileSync(
+    "node",
+    [
+      fileURLToPath(cliPath),
+      "verify-batch",
+      "--answer-dir",
+      join(cliPlainTextBatchPackageDir, "answers"),
+      "--source-dir",
+      join(cliPlainTextBatchPackageDir, "sources"),
+      "--json",
+    ],
+    { cwd: repoRoot, encoding: "utf8" },
+  ));
+  if (
+    plainTextBatchPayload.summary?.answersWithClaims !== 2 ||
+    plainTextBatchPayload.summary?.answersWithoutClaims !== 0 ||
+    plainTextBatchPayload.answers?.map(({ answerPath }) => answerPath).join("|") !== answerPaths.join("|") ||
+    plainTextBatchPayload.answers?.some(({ report }) => report?.summary?.verified !== 1) ||
+    plainTextBatchPayload.answers?.some(({ report }) => !sourcePaths.includes(report?.sources?.[0]?.sourcePath))
+  ) {
+    throw new Error("Package artifact did not preserve plain-text answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(cliPlainTextBatchPackageDir, { recursive: true, force: true });
 }
 
 const cliTextilePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-textile-"));

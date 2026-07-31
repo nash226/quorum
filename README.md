@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged batch smoke gate now verifies nested `.text` and `.log` answer
+discovery against matching approved sources, keeping plain-text aliases
+release-gated in directory workflows.
+
 The packaged batch smoke gate now verifies nested `.ini` and `.properties`
 answers against matching approved sources, keeping configuration-policy exports
 release-gated in directory workflows.
