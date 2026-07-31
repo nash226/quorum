@@ -15,6 +15,9 @@ Quorum is an evidence gate for enterprise AI agents: the CLI and local HTTP
 API verify single or batched answers against approved sources, then expose
 reviewer-ready evidence and machine-readable report contracts.
 
+CSV and TSV approved-policy exports are normalized into readable evidence
+lines, including title, freshness, and trust metadata columns.
+
 Recursive directory discovery skips hidden files, hidden directories, and
 common editor temporary files so verification batches include only intentional
 documents.

@@ -121,7 +121,7 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(logSource.title, "support-audit");
   assert.equal(rstSource.title, "incident-response");
   assert.equal(csvSource.title, "leave-policy");
-  assert.equal(csvSource.content, "policy,details\nleave,Employees get 12 weeks.\n");
+  assert.equal(csvSource.content, "policy: leave; details: Employees get 12 weeks.");
   assert.equal(iniSource.title, "leave-policy");
   assert.equal(iniSource.content, "[leave]\nweeks=12\n");
   assert.equal(propertiesSource.title, "leave-policy");
@@ -130,6 +130,32 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(ndjsonSource.title, "leave-policy");
   assert.match(ndjsonSource.content, /Employees receive 12 weeks/);
   assert.equal(yamlSource.title, "leave-policy");
+});
+
+test("normalizes quoted csv policy exports and reads metadata columns", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/benefits.CSV",
+    'title,updatedAt,trustLevel,policy\n"Benefits, US",2026-06-15,high,"Employees receive 12 weeks, paid."\n',
+    0,
+  );
+
+  assert.equal(source.title, "Benefits, US");
+  assert.equal(source.updatedAt, "2026-06-15");
+  assert.equal(source.trustLevel, "high");
+  assert.equal(
+    source.content,
+    "title: Benefits, US; updatedAt: 2026-06-15; trustLevel: high; policy: Employees receive 12 weeks, paid.",
+  );
+});
+
+test("normalizes tab-separated policy exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/benefits.TSV",
+    "policy\towner\nEmployees receive medical coverage\tPeople Ops\n",
+    1,
+  );
+
+  assert.equal(source.content, "policy: Employees receive medical coverage; owner: People Ops");
 });
 
 test("strips AsciiDoc extensions from fallback source titles", async () => {
