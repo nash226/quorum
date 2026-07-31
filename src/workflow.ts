@@ -842,7 +842,7 @@ async function listFilesWithExtensions(
   const entries = await readdir(directory, { withFileTypes: true });
   const files = await Promise.all(
     entries.map(async (entry): Promise<string[]> => {
-      if (entry.name.startsWith(".")) {
+      if (isHiddenOrTemporaryEntry(entry.name)) {
         return [];
       }
 
@@ -861,6 +861,10 @@ async function listFilesWithExtensions(
   );
 
   return files.flat().sort((left, right) => left.localeCompare(right));
+}
+
+function isHiddenOrTemporaryEntry(name: string): boolean {
+  return name.startsWith(".") || name.endsWith("~") || name.endsWith(".tmp");
 }
 
 async function readAnswerInput(inputPath: string): Promise<string> {

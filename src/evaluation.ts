@@ -1719,7 +1719,7 @@ async function listEvaluationFixtureFiles(fixtureDirPath: string): Promise<strin
   const entries = await readdir(fixtureDirPath, { withFileTypes: true });
   const files = await Promise.all(
     entries.map(async (entry): Promise<string[]> => {
-      if (entry.name.startsWith(".")) {
+      if (isHiddenOrTemporaryEntry(entry.name)) {
         return [];
       }
 
@@ -1738,6 +1738,10 @@ async function listEvaluationFixtureFiles(fixtureDirPath: string): Promise<strin
   );
 
   return files.flat().sort();
+}
+
+function isHiddenOrTemporaryEntry(name: string): boolean {
+  return name.startsWith(".") || name.endsWith("~") || name.endsWith(".tmp");
 }
 
 async function ensureFilePath(path: string, label: string): Promise<void> {
