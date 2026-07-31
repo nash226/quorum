@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged HTTP smoke gate now verifies CORS headers on an actual health
+response, keeping browser integrations covered beyond preflight behavior.
+
 Claim extraction now strips small triangle bullets such as `▴` and `▾` from
 rich-text policy exports, keeping those statements atomic before evidence
 verification.
