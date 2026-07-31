@@ -799,8 +799,9 @@ The published package smoke check also runs the CLI `verify-batch` contract,
 including a verified answer alongside an empty draft so batch routing stays
 machine-readable after packaging. It also exercises the packaged
 `review-queue` command, including its generated timestamp and JSON/CSV queue
-overview artifacts, plus the HTTP queue's `queueStatus` and policy-domain
-filters. The packaged HTTP claim-preview check also covers Markdown table rows,
+overview artifacts, queue-status filtering, and HR-only benchmark drift
+filtering, plus the HTTP queue's `queueStatus` and policy-domain filters. The
+packaged HTTP claim-preview check also covers Markdown table rows,
 so the published artifact keeps table headers and separators out of claims. It
 also verifies that `/extract-claims` returns caller-supplied `answerPath` and
 `answerLabel` values, preserving provenance for reviewer and workflow clients.
