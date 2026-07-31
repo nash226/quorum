@@ -545,7 +545,7 @@ try {
   assert.equal(
     evaluationSummaryCsv.trim().split("\n").length,
     86,
-    "evaluation summary CSV should contain one header plus one row for each of the 85 benchmark fixtures",
+    "evaluation summary CSV should contain one header plus one row for each of the 86 benchmark fixtures",
   );
   assert.match(
     evaluationSummaryCsv,
@@ -779,7 +779,7 @@ try {
     /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n/m,
   );
   assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,30,0,0\.000,30,0,91,91,1(?:\.0+)?\,100%,36,20,25,10,36,20,25,10$/m);
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,55,0,0\.000,54,1,161,161,1(?:\.0+)?\,100%,61,36,46,18,61,36,46,18$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,56,0,0\.000,55,1,164,164,1(?:\.0+)?\,100%,62,37,47,18,62,37,47,18$/m);
   const fixtureDomainCounts = evaluationSummaryCsv
     .trim()
     .split("\n")
