@@ -782,6 +782,21 @@ test("evaluates a shipped support workspace access fixture across membership con
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped support member permissions fixture across role controls", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/member-permissions-policy.json"),
+    generatedAt: "2026-07-31T01:00:00.000Z",
+  });
+  assert.equal(scorecard.fixtureName, "Support member permissions policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support member permissions reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "contradicted", "unsupported"]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/member-permissions@2026-07-31");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped support data retention fixture across deletion claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/data-retention-policy.json"),
@@ -2327,6 +2342,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/incident-communication-policy.json"),
     resolve("examples/evaluations/support/invoice-correction-policy.json"),
     resolve("examples/evaluations/support/live-chat-policy.json"),
+    resolve("examples/evaluations/support/member-permissions-policy.json"),
     resolve("examples/evaluations/support/order-cancellation-policy.json"),
     resolve("examples/evaluations/support/order-tracking-policy.json"),
     resolve("examples/evaluations/support/password-reset-policy.json"),
@@ -2433,7 +2449,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 84);
+  assert.equal(scorecards.length, 85);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2495,6 +2511,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support incident communication policy example",
       "Support invoice correction policy example",
       "Support live chat policy example",
+      "Support member permissions policy example",
       "Support order cancellation policy example",
       "Support order tracking policy example",
       "Support password reset policy example",
@@ -2592,7 +2609,7 @@ test("filters the support evaluation fixture set by domain", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 54);
+  assert.equal(scorecards.length, 55);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "support"));
 });
 
