@@ -43,6 +43,10 @@ Claim extraction now strips fullwidth Latin letter markers such as `Ａ．` and
 `ｂ）` from localized policy lists, keeping copied answers atomic before
 evidence verification.
 
+Claim extraction also recognizes hollow-circle bullets such as `○` from
+exported checklists, keeping those policy statements atomic before evidence
+verification.
+
 The CLI regression suite now covers the machine-readable `version --json`
 probe and all documented version-help aliases, keeping local development checks
 aligned with the published CLI contract.

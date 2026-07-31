@@ -1107,6 +1107,34 @@ test("strips square bullets from exported policy answers", () => {
   );
 });
 
+test("extracts clean claims from hollow circle bullet list answers", () => {
+  const claims = extractClaims(`Policy notes:
+
+○ Employees receive 12 weeks of paid parental leave
+○ Healthcare coverage begins after 30 days of employment
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave",
+    "Healthcare coverage begins after 30 days of employment",
+  ]);
+});
+
+test("keeps wrapped hollow circle bullet items as single claims", () => {
+  const claims = extractClaims(`Policy notes:
+
+○ Employees receive 12 weeks of paid parental leave
+for full-time staff only.
+○ Enterprise support requests receive a first response
+within four business hours.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave for full-time staff only.",
+    "Enterprise support requests receive a first response within four business hours.",
+  ]);
+});
+
 test("extracts clean claims from em dash bullet list answers", () => {
   const claims = extractClaims(`Policy notes:
 
