@@ -1848,6 +1848,30 @@ test("evaluates a shipped support account merge fixture across lifecycle claims"
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped support renewal-notice fixture across reminder claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/renewal-notice-policy.json"),
+    generatedAt: "2026-07-31T00:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support subscription renewal notice policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/renewal-notice@2026-07-24");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates the support plan change fixture across billing claims", async () => {
   const fixturePath = resolve("examples/evaluations/support/plan-change-policy.json");
   const scorecard = await evaluateFixtureFile(fixturePath, {

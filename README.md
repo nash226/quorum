@@ -327,6 +327,10 @@ The roadmap now treats batch verification and reviewer queue exports as shipped
 foundations; current safe work focuses on strengthening the local CLI and HTTP
 API while durable hosting and storage remain decision-gated.
 
+The evaluation suite now regression-tests the shipped support subscription
+renewal-notice fixture, covering verified, contradicted, and unsupported
+reminder claims with durable source provenance.
+
 Evaluation domain filters now ignore surrounding whitespace and letter case,
 so `--domain HR` and `--domain hr` select the same HR scorecards.
 
