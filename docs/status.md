@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4268bcf` on 2026-07-31, docs: clarify supported input formats
+- Latest shipped change: `5a888de` on 2026-07-31, test: guard chunked API request sizes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | [#1581](https://github.com/nash226/quorum/pull/1581) | test: guard chunked API request sizes | `5a888de` |
 | 2026-07-31 | Direct push | docs: clarify supported input formats | `4268bcf` |
 | 2026-07-31 | [#1578](https://github.com/nash226/quorum/pull/1578) | test: smoke-check packaged NDJSON verification | `fd29d61` |
 | 2026-07-31 | Direct push | test: smoke-check packaged Markdown files | `6f093ca` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: smoke-check packaged queue domain filtering | `7dc9684` |
 | 2026-07-31 | Direct push | test: smoke-check packaged config formats | `3ddd30d` |
 | 2026-07-31 | Direct push | test: cover MediaWiki alias roles | `e40fdd1` |
-| 2026-07-31 | Direct push | test: restore support replacement fixture | `8fc4ae4` |
 
