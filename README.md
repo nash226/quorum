@@ -1,5 +1,7 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct Org-mode answer and approved-source files, keeping `.org` policy exports release-gated with the other supported document formats.
+
 The packaged CLI smoke gate now verifies direct XML answer and approved-source
 exports, keeping the published structured-format contract release-gated.
 
