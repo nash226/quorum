@@ -1916,7 +1916,7 @@ Usage:
 Supported files:
   Answers: Markdown/MDX/Quarto, AsciiDoc/Org, MediaWiki, reStructuredText, LaTeX/Textile, text, HTML/XHTML, JSON/JSONL, YAML, XML, CSV/TSV, PDF, DOCX, and TOML
   Sources: Markdown/MDX/Quarto, AsciiDoc/Org, MediaWiki, reStructuredText, LaTeX/Textile, text, HTML/XHTML, JSON/JSONL, YAML, XML, CSV/TSV, PDF, DOCX, and TOML
-  Directory discovery is recursive and skips hidden files and directories.
+  Directory discovery is recursive and skips hidden files, hidden directories, and common editor temporary files.
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --answer-label "HR reviewer packet" --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --summary-csv-out reports/hr-summary.csv --fail-on contradicted --fail-on unsupported

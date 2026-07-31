@@ -1177,7 +1177,7 @@ test("top-level help lists every shipped command", async () => {
   assert.match(stdout, /Supported files:/);
   assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
   assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
-  assert.match(stdout, /Directory discovery is recursive and skips hidden files and directories/);
+  assert.match(stdout, /Directory discovery is recursive and skips hidden files, hidden directories, and common editor temporary files/);
 });
 
 test("verify applies the default trust override only to sources without metadata", async () => {
@@ -3894,6 +3894,16 @@ test("verify ignores hidden source files and hidden source subdirectories", asyn
       ),
       writeFile(
         join(hiddenSourceDir, "old-policy.md"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "editor-backup.md~"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "scratch.tmp"),
         "Employees receive 18 weeks of paid parental leave.\n",
         "utf8",
       ),
