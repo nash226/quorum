@@ -230,6 +230,34 @@ try {
   rmSync(cliNdjsonPackageDir, { recursive: true, force: true });
 }
 
+const cliDelimitedPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-delimited-"));
+try {
+  const answerPath = join(cliDelimitedPackageDir, "answer.tsv");
+  const sourcePath = join(cliDelimitedPackageDir, "policy.csv");
+  writeFileSync(answerPath, "claim\nEmployees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(
+    sourcePath,
+    "title,policy\nParental Leave Policy,Employees receive 12 weeks of paid parental leave.\n",
+  );
+
+  const delimitedOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const delimitedPayload = JSON.parse(delimitedOutput);
+  if (
+    delimitedPayload.summary?.verified !== 1 ||
+    delimitedPayload.answerPath !== answerPath ||
+    delimitedPayload.sources?.[0]?.title !== "Parental Leave Policy" ||
+    delimitedPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected CSV/TSV answer/source contract.");
+  }
+} finally {
+  rmSync(cliDelimitedPackageDir, { recursive: true, force: true });
+}
+
 const cliYamlBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-batch-"));
 try {
   const answerDir = join(cliYamlBatchPackageDir, "answers");
