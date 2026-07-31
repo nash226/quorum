@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now strips common CJK bracketed number markers such as `【１】`
+and `〔2〕`, keeping copied localized policy lists atomic before verification.
+
 The evaluation benchmark now includes a support member-permissions scenario,
 covering owner-controlled role changes, contradictory admin timing claims, and
 unsupported unlimited-admin promises.
