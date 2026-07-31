@@ -31,6 +31,9 @@ surfaces rather than add another parallel workflow.
 
 ## Next
 
+- Harden the local HTTP API contract for agent integrations: keep verification,
+  claim preview, reviewer import, queue, evaluation, health, readiness,
+  capabilities, and OpenAPI discovery surfaces aligned.
 - Add a durable API service boundary for agent integrations beyond the local
   HTTP server (requires a deployment decision).
 - Choose the durable queue backend for reviewer work queues and audit history;
