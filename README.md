@@ -229,6 +229,14 @@ uncertain training exceptions routed to review.
 
 [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
+The shipped local HTTP API exposes the same verification and reviewer-workflow
+capabilities to agent runners that prefer JSON over shelling out to the CLI.
+Start it with `npm run dev -- serve --port 3000`, then follow the
+[HTTP API integration guide](docs/api-integration.md) for discovery,
+verification, review-queue, and health-probe examples. `GET /capabilities`
+publishes the runtime limits, supported formats, CORS contract, queue statuses,
+and artifact options so clients can negotiate the running service.
+
 Quorum is an evidence gate for enterprise AI agents. It checks AI-generated
 business claims against approved company sources before answers reach
 customers, employees, tickets, workflows, or downstream systems.
