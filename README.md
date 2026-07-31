@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies `.txt` answer and approved-source
+exports, keeping the plain-text extension contract release-gated for published
+CLI artifacts.
+
 Claim extraction now strips reference-mark bullets such as `※` and `⁕` from
 exported checklists, keeping localized policy statements atomic for review.
 

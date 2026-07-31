@@ -537,6 +537,31 @@ try {
   rmSync(cliTextPackageDir, { recursive: true, force: true });
 }
 
+const cliTxtPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-txt-"));
+try {
+  const answerPath = join(cliTxtPackageDir, "answer.txt");
+  const sourcePath = join(cliTxtPackageDir, "policy.txt");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const txtOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const txtPayload = JSON.parse(txtOutput);
+  if (
+    txtPayload.summary?.verified !== 1 ||
+    txtPayload.answerPath !== answerPath ||
+    txtPayload.sources?.[0]?.title !== "policy" ||
+    txtPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected .txt answer/source contract.");
+  }
+} finally {
+  rmSync(cliTxtPackageDir, { recursive: true, force: true });
+}
+
 const cliLatexPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-latex-"));
 try {
   const answerPath = join(cliLatexPackageDir, "answer.tex");
