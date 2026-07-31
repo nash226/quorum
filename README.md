@@ -116,6 +116,9 @@ request headers.
 The HTTP API now regression-tests CORS preflight responses across every POST
 endpoint, keeping browser-based agent integrations aligned as routes evolve.
 
+Conditional OpenAPI revalidations now regression-test request-ID preservation on
+`304 Not Modified` responses, keeping cache-aware agent traces correlated.
+
 The generated OpenAPI contract now documents the shared structured `405`
 response, `Allow: GET, HEAD` header, and request-error schema for every
 GET-only route, keeping method negotiation visible to generated clients.
