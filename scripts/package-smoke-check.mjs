@@ -803,6 +803,17 @@ try {
     throw new Error("Package artifact server did not serve the expected capabilities contract.");
   }
 
+  const browserHealthResponse = await fetch(`${packagedServer.url}/health`, {
+    headers: { origin: "https://browser.example" },
+  });
+  if (
+    browserHealthResponse.status !== 200 ||
+    browserHealthResponse.headers.get("access-control-allow-origin") !== "*" ||
+    browserHealthResponse.headers.get("access-control-expose-headers")?.includes("X-Quorum-Request-Id") !== true
+  ) {
+    throw new Error("Package artifact server did not preserve actual browser CORS response headers.");
+  }
+
   for (const path of ["/", "/capabilities", "/health", "/readyz", "/livez", "/version", "/openapi.json"]) {
     const preflightResponse = await fetch(`${packagedServer.url}${path}`, {
       method: "OPTIONS",
