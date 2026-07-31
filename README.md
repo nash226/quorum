@@ -3,6 +3,10 @@
 The packaged CLI smoke gate now verifies a TSV answer against a CSV approved
 source, keeping delimited policy exports release-gated in published artifacts.
 
+The packaged CLI smoke gate now verifies `extract-claims --json` from stdin,
+keeping the claim-preview command's JSON-array contract release-gated in
+published artifacts.
+
 The packaged HTTP smoke gate now verifies that configured request-size and
 request-timeout limits are exposed through `/capabilities`, keeping deployed
 agent clients aligned with the server's runtime guardrails.
