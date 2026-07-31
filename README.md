@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies `extract-claims` from stdin, keeping
+the lightweight claim-preview workflow release-gated alongside verification.
+
 The packaged CLI smoke gate now verifies a TSV answer against a CSV approved
 source, keeping delimited policy exports release-gated in published artifacts.
 
