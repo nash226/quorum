@@ -33,6 +33,10 @@ Quorum is an evidence gate for enterprise AI agents: the CLI and local HTTP
 API verify single or batched answers against approved sources, then expose
 reviewer-ready evidence and machine-readable report contracts.
 
+The roadmap now treats batch verification and reviewer-queue exports as shipped
+foundations; the next roadmap step is a durable API service boundary, which
+remains decision-gated while local CLI and HTTP reliability work continues.
+
 ## Start the Local API and Evaluation Workflow
 
 Start the shipped local HTTP API with `npm run dev -- serve`, then inspect its
