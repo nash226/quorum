@@ -143,6 +143,9 @@ The packaged evaluation smoke gate now verifies `quorum evaluate --domain hr`
 selects only the HR scorecards, keeping published domain filtering aligned with
 the local evaluation workflow.
 
+That packaged evaluation contract also verifies `--domain support` selects only
+support scorecards, keeping both initial policy wedges release-gated.
+
 The packaged CLI smoke gate now verifies `quorum openapi --out`, including its
 server URL, version metadata, and published verification route.
 
