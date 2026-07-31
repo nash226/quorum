@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c44b5d6` on 2026-07-31, test: smoke-check direct XML verification
+- Latest shipped change: `941bc60` on 2026-07-31, test: harden packaged CSV verification smoke
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | test: harden packaged CSV verification smoke | `941bc60` |
 | 2026-07-31 | Direct push | test: smoke-check direct XML verification | `c44b5d6` |
 | 2026-07-31 | Direct push | test: smoke-check direct YAML verification | `85a712c` |
 | 2026-07-31 | Direct push | docs: explain local API evaluation workflow | `4d45867` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | feat: normalize csv policy sources | `6c6b7de` |
 | 2026-07-31 | Direct push | test: add support plan downgrade evaluation fixture | `3744f33` |
 | 2026-07-31 | [#1546](https://github.com/nash226/quorum/pull/1546) | fix: preserve BOM-prefixed source metadata | `103aa67` |
-| 2026-07-31 | Direct push | test: smoke-check packaged Markdown aliases | `ec7fe50` |
 
