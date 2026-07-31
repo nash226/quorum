@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1d9336a` on 2026-07-30, fix: parse CJK bracketed claim markers
+- Latest shipped change: `b222de0` on 2026-07-30, fix: reject missing evaluate option values
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | fix: reject missing evaluate option values | `b222de0` |
 | 2026-07-30 | Direct push | fix: parse CJK bracketed claim markers | `1d9336a` |
 | 2026-07-30 | Direct push | feat: discover common markdown export aliases | `03c412e` |
 | 2026-07-30 | [#1514](https://github.com/nash226/quorum/pull/1514) | Merge fullwidth letter list marker normalization | `faed9e9` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | fix: parse CJK ideographic claim lists | `33e5c6d` |
 | 2026-07-30 | Direct push | test: cover bracketed claim markers | `2922be9` |
 | 2026-07-30 | Direct push | docs: clarify current roadmap focus | `a896fe7` |
-| 2026-07-30 | Direct push | fix: reject dual stdin batch inputs | `198a0ee` |
 
