@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies `.markdown`, `.mdown`, and `.mkdn`
+answer and approved-source exports, keeping Markdown-family aliases release-gated
+in published artifacts.
+
 The packaged batch smoke gate now verifies nested `.ini` and `.properties`
 answers against matching approved sources, keeping configuration-policy exports
 release-gated in directory workflows.
