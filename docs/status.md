@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a7fa134` on 2026-07-31, docs: clarify shipped CLI and API surface
+- Latest shipped change: `6fa413d` on 2026-07-31, fix: strip colored diamond bullets from claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | fix: strip colored diamond bullets from claims | `6fa413d` |
 | 2026-07-31 | Direct push | docs: clarify shipped CLI and API surface | `a7fa134` |
 | 2026-07-31 | Direct push | fix: strip small triangle bullets from claims | `e385f96` |
 | 2026-07-30 | Direct push | docs: document command help flags | `8685a29` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | fix: strip horizontal bar bullets from claims | `59507bf` |
 | 2026-07-30 | [#1521](https://github.com/nash226/quorum/pull/1521) | fix: strip star bullets from claims | `c73490f` |
 | 2026-07-30 | Direct push | fix: parse alternate CJK claim markers | `2b02999` |
-| 2026-07-30 | Direct push | fix: parse fullwidth numbered claims | `16cde82` |
 
