@@ -15,6 +15,10 @@ Claim extraction now strips common star bullets such as `✦`, `★`, and `☆`
 from rich-text policy exports, keeping those statements atomic before evidence
 verification.
 
+Claim extraction now strips common diamond bullets such as `◆` and `◇` from
+rich-text policy exports, keeping those statements atomic before evidence
+verification.
+
 Claim extraction now strips alternate CJK numbered-list punctuation such as
 `一．` and `二）`, keeping localized policy exports atomic before verification.
 
