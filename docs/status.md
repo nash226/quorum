@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0a72387` on 2026-07-31, test: cover markdown alias discovery
+- Latest shipped change: `6e6b92b` on 2026-07-31, fix: skip temporary files during discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | fix: skip temporary files during discovery | `6e6b92b` |
 | 2026-07-31 | Direct push | test: cover markdown alias discovery | `0a72387` |
 | 2026-07-31 | Direct push | fix: strip diamond bullets from claims | `84c9d14` |
 | 2026-07-31 | Direct push | fix: strip colored diamond bullets from claims | `6fa413d` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | fix: strip small triangle bullets from claims | `e385f96` |
 | 2026-07-30 | Direct push | docs: document command help flags | `8685a29` |
 | 2026-07-30 | Direct push | fix: strip hollow circle bullets from claims | `3390040` |
-| 2026-07-30 | Direct push | fix: strip horizontal bar bullets from claims | `59507bf` |
 
