@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e0a445c` on 2026-07-31, test: smoke-check nested NDJSON batches
+- Latest shipped change: `89d459b` on 2026-07-31, docs: complete supported input format list
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | docs: complete supported input format list | `89d459b` |
 | 2026-07-31 | Direct push | test: smoke-check nested NDJSON batches | `e0a445c` |
 | 2026-07-31 | Direct push | test: harden packaged CSV verification smoke | `941bc60` |
 | 2026-07-31 | Direct push | test: smoke-check direct XML verification | `c44b5d6` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | docs: explain local API evaluation workflow | `4d45867` |
 | 2026-07-31 | Direct push | test: smoke-check YAML batch discovery | `cf42733` |
 | 2026-07-31 | Direct push | feat: normalize csv policy sources | `6c6b7de` |
-| 2026-07-31 | Direct push | test: add support plan downgrade evaluation fixture | `3744f33` |
 
