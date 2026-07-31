@@ -83,6 +83,27 @@ The roadmap now treats batch verification and reviewer-queue exports as shipped
 foundations; the next roadmap step is a durable API service boundary, which
 remains decision-gated while local CLI and HTTP reliability work continues.
 
+## Local HTTP API Smoke Test
+
+The local server exposes discovery and readiness endpoints before accepting
+verification requests. Start it on an ephemeral port when scripting a smoke
+check, then use the advertised contract to verify one answer:
+
+```bash
+npm run dev -- serve --port 0
+curl http://127.0.0.1:<port>/healthz
+curl http://127.0.0.1:<port>/capabilities
+curl -X POST http://127.0.0.1:<port>/verify \
+  -H 'content-type: application/json' \
+  -d '{"answer":"Employees receive 12 weeks of paid parental leave.","sources":[{"title":"HR Policy","content":"Employees receive 12 weeks of paid parental leave."}]}'
+```
+
+`/health`, `/healthz`, `/readyz`, and `/livez` are readiness/liveness aliases;
+`/capabilities` reports supported operations and configured request limits;
+`/openapi.json` is the machine-readable route contract. See
+[docs/api-integration.md](docs/api-integration.md) for request and response
+schemas.
+
 ## Start the Local API and Evaluation Workflow
 
 Start the shipped local HTTP API with `npm run dev -- serve`, then inspect its
