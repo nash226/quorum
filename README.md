@@ -275,9 +275,13 @@ docs/                  product notes, demo, roadmap, decision queue
 ```bash
 npm test
 npm run build
+npm run smoke
 ```
 
-The CI workflow runs both commands on pushes and pull requests.
+The CI workflow runs the tests and build on pushes and pull requests. The
+smoke command builds the package entrypoint and verifies the checked-in HR
+fixture through `dist/cli.js`, providing a quick end-to-end check of the
+shipped CLI path (including the packaged `quorum` entrypoint).
 
 ## Product Direction
 
