@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies `.ini` and `.properties` answer and
+approved-source exports, keeping common configuration-policy formats
+release-gated alongside other supported text inputs.
+
 The packaged CLI smoke gate now verifies both `.wiki` and `.mediawiki` aliases
 in answer and approved-source roles, keeping the MediaWiki format contract
 release-gated symmetrically.
