@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7d01859` on 2026-07-31, docs: show machine-readable format discovery
+- Latest shipped change: `abc4ad1` on 2026-07-31, test: smoke-check packaged TOML batches
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | [#1591](https://github.com/nash226/quorum/pull/1591) | test: smoke-check packaged TOML batches | `abc4ad1` |
 | 2026-07-31 | Direct push | docs: show machine-readable format discovery | `7d01859` |
 | 2026-07-31 | Direct push | test: smoke-check packaged CSV and TSV verification | `52ce90d` |
 | 2026-07-31 | Direct push | test: smoke-check configured API limits | `70b7fd2` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | docs: clarify supported input formats | `4268bcf` |
 | 2026-07-31 | [#1578](https://github.com/nash226/quorum/pull/1578) | test: smoke-check packaged NDJSON verification | `fd29d61` |
 | 2026-07-31 | Direct push | test: smoke-check packaged Markdown files | `6f093ca` |
-| 2026-07-31 | Direct push | docs: explain reviewer queue handoffs | `bf852a6` |
 
