@@ -23,6 +23,7 @@ const CJK_NUMBER_PREFIX = /^[一二三四五六七八九十百千万億]+[、．
 const BRACKETED_NUMBER_PREFIX = /^\[\d+\]\s+/;
 const CJK_BRACKETED_NUMBER_PREFIX = /^[【〔［][0-9０-９]+[】〕］]\s*/;
 const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014\u2015\u2212])\s+/;
+const SECTION_BULLET_PREFIX = /^[\u00A7\u00B6]\s+/;
 const DEFINITION_LIST_PREFIX = /^:\s+/;
 const MARKDOWN_TABLE_SEPARATOR_CELL = /^:?-{3,}:?$/;
 const MARKDOWN_CALLOUT_PREFIX = /^\[![A-Z][A-Z0-9_-]*\][+-]?\s*/i;
@@ -582,6 +583,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     BRACKETED_NUMBER_PREFIX,
     CJK_BRACKETED_NUMBER_PREFIX,
     DASH_BULLET_PREFIX,
+    SECTION_BULLET_PREFIX,
     /^\d+[.)]\s+/,
     /^\d+:\s+/,
     /^\(\d+\)\s+/,

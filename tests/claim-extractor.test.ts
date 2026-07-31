@@ -139,6 +139,16 @@ test("strips horizontal bar bullets from localized answers", () => {
   ]);
 });
 
+test("strips section and pilcrow bullets from policy exports", () => {
+  const claims = extractClaims(`§ Employees receive 12 weeks of paid parental leave.
+¶ Managers must approve leave requests.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Managers must approve leave requests.",
+  ]);
+});
+
 test("strips star bullets from rich-text exports", () => {
   const claims = extractClaims(`✦ Employees receive 12 weeks of paid parental leave.
 ★ Healthcare coverage begins after 30 days of employment.

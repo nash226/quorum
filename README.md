@@ -1,5 +1,8 @@
 # Quorum
 
+Policy-export claim extraction now strips section and pilcrow paragraph markers,
+keeping legal-style bullet lists reviewable as clean claims.
+
 Evaluation fixture discovery recursively skips hidden files and directories,
 so local caches and repository metadata cannot change benchmark counts.
 
