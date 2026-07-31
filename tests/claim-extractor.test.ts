@@ -175,6 +175,16 @@ test("strips CJK ideographic numbered-list markers from claims", () => {
   ]);
 });
 
+test("strips alternate CJK numbered-list punctuation from claims", () => {
+  const claims = extractClaims(`一． Employees receive 12 weeks of paid parental leave.
+二） Managers approve requests within five business days.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Managers approve requests within five business days.",
+  ]);
+});
+
 test("strips parenthesized localized numbered-list markers", () => {
   const claims = extractClaims(`(١) Employees receive 12 weeks of paid parental leave.
 (۲) Healthcare coverage begins after 30 days of employment.
