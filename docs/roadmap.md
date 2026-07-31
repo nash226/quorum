@@ -40,7 +40,8 @@ surfaces rather than add another parallel workflow.
 The service and queue items are intentionally decision-gated. Safe work can
 continue on fixture coverage and local CLI/API reliability without choosing a
 hosting provider, adding credentials, or committing to a durable storage
-backend.
+backend. Review the [decision queue](decision-queue.md) before starting work
+that would cross either boundary.
 
 Batch verification is shipped and should be treated as a foundation for these
 next steps, not as a separate roadmap item: its directory and explicit-path

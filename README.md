@@ -198,6 +198,9 @@ while durable API hosting and reviewer-queue storage remain decision-gated.
 See the [roadmap](docs/roadmap.md) for the current priorities and safe next
 steps.
 
+Before taking on durable hosting or reviewer-queue storage, review the
+[decision queue](docs/decision-queue.md) for the required product choices.
+
 The local HTTP API now regression-tests browser CORS preflights for discovery,
 capabilities, version, and OpenAPI routes, including their cache-related
 request headers.
