@@ -410,7 +410,7 @@ Sentence splitting also keeps common abbreviations such as `e.g.`, `i.e.`,
 `a.m.`, `p.m.`, and `etc.` inside the surrounding claim instead of creating
 false claim boundaries.
 
-Binary source inputs also strip a leading UTF-8 BOM before frontmatter parsing,
+Source inputs strip a leading UTF-8 BOM before frontmatter parsing,
 so exported policy files retain their title and metadata when loaded through
 the programmatic API.
 
