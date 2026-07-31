@@ -720,14 +720,14 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
     const next = args[index + 1];
-    if (arg === "--review-csv" && next) { reviewCsvPath = next; index += 1; }
-    else if (arg === "--fixture" && next) { fixturePaths.push(next); index += 1; }
-    else if (arg === "--fixture-dir" && next) { fixtureDirPaths.push(next); index += 1; }
-    else if (arg === "--domain" && next) { domains.push(next); index += 1; }
-    else if (arg === "--queue-status" && next) { queueStatus = parseReviewerQueueStatus(next); index += 1; }
-    else if (arg === "--generated-at" && next) { generatedAt = parseGeneratedAt(next); index += 1; }
-    else if (arg === "--out" && next) { outPath = next; index += 1; }
-    else if (arg === "--csv-out" && next) { csvOutPath = next; index += 1; }
+    if (arg === "--review-csv" && hasOptionValue(next)) { reviewCsvPath = next; index += 1; }
+    else if (arg === "--fixture" && hasOptionValue(next)) { fixturePaths.push(next); index += 1; }
+    else if (arg === "--fixture-dir" && hasOptionValue(next)) { fixtureDirPaths.push(next); index += 1; }
+    else if (arg === "--domain" && hasOptionValue(next)) { domains.push(next); index += 1; }
+    else if (arg === "--queue-status" && hasOptionValue(next)) { queueStatus = parseReviewerQueueStatus(next); index += 1; }
+    else if (arg === "--generated-at" && hasOptionValue(next)) { generatedAt = parseGeneratedAt(next); index += 1; }
+    else if (arg === "--out" && hasOptionValue(next)) { outPath = next; index += 1; }
+    else if (arg === "--csv-out" && hasOptionValue(next)) { csvOutPath = next; index += 1; }
     else if (arg === "--json") json = true;
     else throw new Error(`Unknown or incomplete argument: ${arg}`);
   }
@@ -1409,48 +1409,48 @@ function parseEvaluateArgs(args: string[]): EvaluateArgs {
     const arg = args[index];
     const next = args[index + 1];
 
-    if (arg === "--fixture" && next) {
+    if (arg === "--fixture" && hasOptionValue(next)) {
       fixturePaths.push(next);
       index += 1;
-    } else if (arg === "--fixture-dir" && next) {
+    } else if (arg === "--fixture-dir" && hasOptionValue(next)) {
       fixtureDirPaths.push(next);
       index += 1;
-    } else if (arg === "--domain" && next) {
+    } else if (arg === "--domain" && hasOptionValue(next)) {
       if (!domains.includes(next)) {
         domains.push(next);
       }
       index += 1;
-    } else if (arg === "--out" && next) {
+    } else if (arg === "--out" && hasOptionValue(next)) {
       outPath = next;
       index += 1;
-    } else if (arg === "--markdown-out" && next) {
+    } else if (arg === "--markdown-out" && hasOptionValue(next)) {
       markdownOutPath = next;
       index += 1;
-    } else if (arg === "--html-out" && next) {
+    } else if (arg === "--html-out" && hasOptionValue(next)) {
       htmlOutPath = next;
       index += 1;
-    } else if (arg === "--summary-csv-out" && next) {
+    } else if (arg === "--summary-csv-out" && hasOptionValue(next)) {
       summaryCsvOutPath = next;
       index += 1;
-    } else if (arg === "--domain-summary-csv-out" && next) {
+    } else if (arg === "--domain-summary-csv-out" && hasOptionValue(next)) {
       domainSummaryCsvOutPath = next;
       index += 1;
-    } else if (arg === "--aggregate-summary-csv-out" && next) {
+    } else if (arg === "--aggregate-summary-csv-out" && hasOptionValue(next)) {
       aggregateSummaryCsvOutPath = next;
       index += 1;
     } else if (arg === "--json") {
       json = true;
     } else if (arg === "--result-json") {
       resultJson = true;
-    } else if (arg === "--result-json-out" && next) {
+    } else if (arg === "--result-json-out" && hasOptionValue(next)) {
       resultJsonOutPath = next;
       index += 1;
     } else if (arg === "--fail-on-mismatch") {
       failOnMismatch = true;
-    } else if (arg === "--min-score" && next) {
+    } else if (arg === "--min-score" && hasOptionValue(next)) {
       minScore = parseMinScore(next);
       index += 1;
-    } else if (arg === "--generated-at" && next) {
+    } else if (arg === "--generated-at" && hasOptionValue(next)) {
       generatedAt = parseGeneratedAt(next);
       index += 1;
     } else {
