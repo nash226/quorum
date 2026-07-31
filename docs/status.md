@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `85a712c` on 2026-07-31, test: smoke-check direct YAML verification
+- Latest shipped change: `c44b5d6` on 2026-07-31, test: smoke-check direct XML verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | test: smoke-check direct XML verification | `c44b5d6` |
 | 2026-07-31 | Direct push | test: smoke-check direct YAML verification | `85a712c` |
 | 2026-07-31 | Direct push | docs: explain local API evaluation workflow | `4d45867` |
 | 2026-07-31 | Direct push | test: smoke-check YAML batch discovery | `cf42733` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: add support plan downgrade evaluation fixture | `3744f33` |
 | 2026-07-31 | [#1546](https://github.com/nash226/quorum/pull/1546) | fix: preserve BOM-prefixed source metadata | `103aa67` |
 | 2026-07-31 | Direct push | test: smoke-check packaged Markdown aliases | `ec7fe50` |
-| 2026-07-31 | [#1542](https://github.com/nash226/quorum/pull/1542) | docs: record current local verification gate | `695c135` |
 
