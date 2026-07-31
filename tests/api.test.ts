@@ -2675,8 +2675,8 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
   assert.equal(batchResult.mismatchCount, 0);
   assert.equal(batchResult.summary.fixtureCount, 86);
   assert.equal(batchResult.summary.mismatchCount, 0);
-  assert.equal(batchResult.summary.matchedClaims, 252);
-  assert.equal(batchResult.summary.totalExpectedClaims, 252);
+  assert.equal(batchResult.summary.matchedClaims, 255);
+  assert.equal(batchResult.summary.totalExpectedClaims, 255);
   assert.equal(batchResult.summary.score, 1);
   assert.equal(batchResult.summary.scoreLabel, "100%");
   assert.deepEqual(batchResult.summary.domains, [
