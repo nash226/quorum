@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `39e6909` on 2026-07-31, test: smoke-check packaged text verification
+- Latest shipped change: `e524eee` on 2026-07-31, test: smoke-check packaged base64 verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | test: smoke-check packaged base64 verification | `e524eee` |
 | 2026-07-31 | Direct push | test: smoke-check packaged text verification | `39e6909` |
 | 2026-07-31 | Direct push | docs: clarify shipped roadmap foundations | `4a17f97` |
 | 2026-07-31 | Direct push | fix: strip reference-mark claim bullets | `64b0971` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | docs: complete supported input format list | `89d459b` |
 | 2026-07-31 | Direct push | test: smoke-check nested NDJSON batches | `e0a445c` |
 | 2026-07-31 | Direct push | test: harden packaged CSV verification smoke | `941bc60` |
-| 2026-07-31 | Direct push | test: smoke-check direct XML verification | `c44b5d6` |
 
