@@ -4,6 +4,10 @@ The packaged CLI smoke gate now verifies `.ini` and `.properties` answer and
 approved-source exports, keeping common configuration-policy formats
 release-gated alongside other supported text inputs.
 
+The CLI guide now includes an executable `review-queue` handoff example with
+queue-status and policy-domain filters, making the shipped reviewer routing
+contract easier to run and audit.
+
 The packaged CLI smoke gate now verifies both `.wiki` and `.mediawiki` aliases
 in answer and approved-source roles, keeping the MediaWiki format contract
 release-gated symmetrically.
