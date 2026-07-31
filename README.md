@@ -1930,6 +1930,9 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
+The checked-in HR and support benchmark currently contains 86 fixtures and 255
+expected claims, including a support plan-downgrade scenario with one verified,
+one contradicted, and one unsupported claim.
 
 ## Documentation Map
 

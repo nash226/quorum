@@ -272,7 +272,7 @@ try {
   ]);
 
   assert.match(batchStdout, /Quorum Batch Verification Report/);
-  assert.equal(readJson(batchReportPath).answerCount, 39);
+  assert.equal(readJson(batchReportPath).answerCount, 40);
   assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
   const batchSummaryCsv = readFileSync(batchSummaryCsvPath, "utf8");
   assert.match(
@@ -303,7 +303,7 @@ try {
   assert.equal(timestampedQueueOverview.generatedAt, "2026-07-15T04:00:00.000Z");
   assert.match(
     readFileSync(queueOverviewCsvPath, "utf8"),
-    /^"generated_at","queue_status","domains","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","","39",/m,
+    /^"generated_at","queue_status","domains","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","","40",/m,
   );
 
   const pendingQueueOverview = JSON.parse(
@@ -317,14 +317,14 @@ try {
     ]),
   );
   assert.deepEqual(pendingQueueOverview.review, {
-    totalAnswers: 38,
-    pendingAnswers: 38,
+    totalAnswers: 39,
+    pendingAnswers: 39,
     reviewedAnswers: 0,
     noClaimsAnswers: 0,
-    totalClaims: 113,
-    pendingClaims: 113,
+    totalClaims: 116,
+    pendingClaims: 116,
     reviewedClaims: 0,
-    verdicts: { verified: 29, contradicted: 18, unsupported: 29, needs_review: 37 },
+    verdicts: { verified: 30, contradicted: 19, unsupported: 30, needs_review: 37 },
   });
 
   const noClaimsQueueOverview = JSON.parse(
@@ -405,7 +405,7 @@ try {
   );
 
   assert.match(importStdout, /Quorum Reviewer Decision Import/);
-  assert.equal(readJson(importReportPath).answerGroups.length, 39);
+  assert.equal(readJson(importReportPath).answerGroups.length, 40);
   assert.match(readFileSync(importSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
 
   const evaluationReportPath = join(tempDir, "evaluation-report.md");
@@ -545,7 +545,7 @@ try {
   assert.equal(
     evaluationSummaryCsv.trim().split("\n").length,
     87,
-    "evaluation summary CSV should contain one header plus one row for each of the 86 benchmark fixtures",
+    "evaluation summary CSV should contain one header plus one row for each of the 87 benchmark scorecards",
   );
   assert.match(
     evaluationSummaryCsv,
