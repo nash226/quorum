@@ -180,6 +180,32 @@ try {
   rmSync(cliBatchPackageDir, { recursive: true, force: true });
 }
 
+const cliNestedOrderPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-nested-order-"));
+try {
+  const answerDir = join(cliNestedOrderPackageDir, "answers");
+  const sourcePath = join(cliNestedOrderPackageDir, "policy.md");
+  mkdirSync(join(answerDir, "z-last"), { recursive: true });
+  mkdirSync(join(answerDir, "a-first"), { recursive: true });
+  const firstAnswerPath = join(answerDir, "a-first", "answer.md");
+  const lastAnswerPath = join(answerDir, "z-last", "answer.md");
+  writeFileSync(firstAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(lastAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const nestedOrderOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify-batch", "--answer-dir", answerDir, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const nestedOrderPayload = JSON.parse(nestedOrderOutput);
+  if (JSON.stringify(nestedOrderPayload.answers?.map(({ answerPath }) => answerPath)) !==
+      JSON.stringify([firstAnswerPath, lastAnswerPath])) {
+    throw new Error("Package artifact did not preserve globally sorted nested batch answer ordering.");
+  }
+} finally {
+  rmSync(cliNestedOrderPackageDir, { recursive: true, force: true });
+}
+
 const cliJsonlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-jsonl-"));
 try {
   const answerPath = join(cliJsonlPackageDir, "answer.jsonl");
