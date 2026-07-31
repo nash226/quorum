@@ -8,6 +8,10 @@ Claim extraction now strips small triangle bullets such as `▴` and `▾` from
 rich-text policy exports, keeping those statements atomic before evidence
 verification.
 
+Batch verification now regression-tests `.mdown` and `.mkdn` Markdown aliases
+for answers and approved sources, keeping adjacent vendor export extensions
+covered by the directory-discovery contract.
+
 Claim extraction now strips Unicode horizontal-bar and minus-sign bullets from
 localized policy exports before evidence verification.
 
