@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `695c135` on 2026-07-31, docs: record current local verification gate
+- Latest shipped change: `ec7fe50` on 2026-07-31, test: smoke-check packaged Markdown aliases
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | test: smoke-check packaged Markdown aliases | `ec7fe50` |
 | 2026-07-31 | [#1542](https://github.com/nash226/quorum/pull/1542) | docs: record current local verification gate | `695c135` |
 | 2026-07-31 | [#1535](https://github.com/nash226/quorum/pull/1535) | test: smoke-check Kubernetes probes | `964ba40` |
 | 2026-07-31 | Direct push | test: cover hidden evaluation fixture discovery | `83a9df6` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: cover markdown alias discovery | `0a72387` |
 | 2026-07-31 | Direct push | fix: strip diamond bullets from claims | `84c9d14` |
 | 2026-07-31 | Direct push | fix: strip colored diamond bullets from claims | `6fa413d` |
-| 2026-07-31 | Direct push | docs: clarify shipped CLI and API surface | `a7fa134` |
 
