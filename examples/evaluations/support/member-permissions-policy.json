@@ -1,0 +1,10 @@
+{
+  "name": "Support member permissions policy example",
+  "domain": "support",
+  "answerPath": "answers/support-member-permissions-answer.md",
+  "answer": "Workspace owners can change a member's role from workspace settings.\nWorkspace owners can grant administrator access within 24 hours.\nSupport can add unlimited administrators on request.\n",
+  "answerLabel": "Support member permissions reviewer packet",
+  "sources": [{"sourcePath":"sources/support-member-permissions-policy.md","id":"support/member-permissions@2026-07-31","title":"Support Member Permissions Policy","updatedAt":"2026-07-31","trustLevel":"high","content":"Workspace owners can change a member's role from workspace settings.\nWorkspace owners can grant administrator access within 7 days.\nSupport can help with role changes after confirming owner approval.\n"}],
+  "expectedSummary": {"verified":1,"contradicted":1,"unsupported":1,"needs_review":0},
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
