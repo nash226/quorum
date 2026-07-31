@@ -126,6 +126,8 @@ aligned with the published CLI contract.
 The packaged CLI smoke gate now verifies that `quorum formats --json` reports
 the installed package version as well as its supported extensions, keeping
 machine-readable input discovery aligned with the published API contract.
+The package-script regression test now checks that same version field through
+the `npm run formats -- --json` wrapper.
 
 The packaged CLI smoke gate also verifies both `formats` help aliases and the
 `help formats` topic, keeping installed-package format discovery documented

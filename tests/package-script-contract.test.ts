@@ -26,8 +26,12 @@ test("formats package script exposes the machine-readable input contract", async
     cwd: new URL("..", import.meta.url),
     maxBuffer: 1024 * 1024,
   });
-  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };
+  const formats = JSON.parse(stdout) as { version: string; sources: string[]; answers: string[] };
+  const packageJson = JSON.parse(
+    await readFile(new URL("../package.json", import.meta.url), "utf8"),
+  ) as { version?: string };
 
+  assert.equal(formats.version, packageJson.version);
   assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
 });
