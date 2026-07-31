@@ -19,6 +19,10 @@ Claim extraction now strips colored diamond bullets such as `🔹` and `🔸` fr
 rich-text policy exports, keeping those statements atomic before evidence
 verification.
 
+Claim extraction now strips black and white diamond bullets such as `◆` and `◇`
+from exported policy checklists, keeping those statements atomic before
+evidence verification.
+
 Claim extraction now strips alternate CJK numbered-list punctuation such as
 `一．` and `二）`, keeping localized policy exports atomic before verification.
 
