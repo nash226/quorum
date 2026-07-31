@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
@@ -5337,6 +5337,34 @@ test("verify discovers supported sources in nested source directories", async ()
 
     assert.deepEqual(report.sources.map((source) => source.title), ["leave-policy"]);
     assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch sorts nested directory answers by full path", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-nested-order-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const earlierPath = join(answerDir, "a-group", "earlier.md");
+    const laterPath = join(answerDir, "z-group", "later.md");
+
+    await Promise.all([
+      mkdir(dirname(earlierPath), { recursive: true }),
+      mkdir(dirname(laterPath), { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(earlierPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(laterPath, "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\nRefunds are available within 30 days of purchase.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]);
+    const report = JSON.parse(stdout) as { answers: Array<{ answerPath: string }> };
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [earlierPath, laterPath]);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

@@ -1311,6 +1311,9 @@ evaluation surfaces as the CLI. Node.js callers can use the public
 The package smoke check also executes the published `quorum version --json`
 entrypoint, keeping the installed CLI contract aligned with the package
 manifest and library exports.
+
+Recursive batch discovery sorts answer and source paths globally, including
+nested directories, so report and reviewer-CSV ordering is repeatable.
 It also runs the packaged `verify-batch` CLI against nested answer and source
 directories, preserving the directory-based batch workflow after publishing.
 It also imports a completed review CSV from stdin with `--result-json`, keeping
