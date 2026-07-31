@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cf42733` on 2026-07-31, test: smoke-check YAML batch discovery
+- Latest shipped change: `4d45867` on 2026-07-31, docs: explain local API evaluation workflow
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | docs: explain local API evaluation workflow | `4d45867` |
 | 2026-07-31 | Direct push | test: smoke-check YAML batch discovery | `cf42733` |
 | 2026-07-31 | Direct push | feat: normalize csv policy sources | `6c6b7de` |
 | 2026-07-31 | Direct push | test: add support plan downgrade evaluation fixture | `3744f33` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: smoke-check packaged Markdown aliases | `ec7fe50` |
 | 2026-07-31 | [#1542](https://github.com/nash226/quorum/pull/1542) | docs: record current local verification gate | `695c135` |
 | 2026-07-31 | [#1535](https://github.com/nash226/quorum/pull/1535) | test: smoke-check Kubernetes probes | `964ba40` |
-| 2026-07-31 | Direct push | test: cover hidden evaluation fixture discovery | `83a9df6` |
 
