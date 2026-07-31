@@ -4778,6 +4778,46 @@ test("every JSON POST endpoint enforces the configured request size limit", asyn
   }
 });
 
+test("HTTP API rejects oversized chunked JSON bodies without a content length", async () => {
+  const maxRequestBytes = 128;
+  const api = await startApiServer({ host: "127.0.0.1", port: 0, maxRequestBytes });
+
+  try {
+    const url = new URL(`${api.url}/verify`);
+    const response = await new Promise<{ statusCode?: number; body: string }>((resolve, reject) => {
+      const request = httpRequest(
+        {
+          hostname: url.hostname,
+          port: url.port,
+          path: url.pathname,
+          method: "POST",
+          headers: { "content-type": "application/json" },
+        },
+        (incoming) => {
+          let body = "";
+          incoming.setEncoding("utf8");
+          incoming.on("data", (chunk) => {
+            body += chunk;
+          });
+          incoming.on("end", () => resolve({ statusCode: incoming.statusCode, body }));
+        },
+      );
+      request.on("error", reject);
+      request.write('{"answer":"');
+      request.write("x".repeat(maxRequestBytes));
+      request.end('"}');
+    });
+
+    assert.equal(response.statusCode, 413);
+    assert.equal(
+      (JSON.parse(response.body) as { error: string }).error,
+      `Request body must not exceed ${maxRequestBytes} bytes.`,
+    );
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API rejects invalid request timeout configuration", () => {
   for (const requestTimeoutMs of [0, -1, Number.NaN, 1.5, Number.POSITIVE_INFINITY]) {
     assert.throws(
