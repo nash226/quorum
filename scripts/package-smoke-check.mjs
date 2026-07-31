@@ -87,6 +87,23 @@ if (versionJson.service !== "quorum" || versionJson.version !== packageJson.vers
   throw new Error("Package artifact did not preserve the machine-readable version contract.");
 }
 
+const extractClaimsOutput = execFileSync(
+  "node",
+  [fileURLToPath(cliPath), "extract-claims", "--answer", "-", "--json"],
+  {
+    cwd: repoRoot,
+    encoding: "utf8",
+    input: "Employees receive 12 weeks of paid parental leave.\n",
+  },
+);
+const extractClaimsPayload = JSON.parse(extractClaimsOutput);
+if (
+  extractClaimsPayload.claims?.length !== 1 ||
+  extractClaimsPayload.claims[0]?.text !== "Employees receive 12 weeks of paid parental leave."
+) {
+  throw new Error("Package artifact did not preserve the extract-claims stdin contract.");
+}
+
 const importReviewPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-import-review-"));
 try {
   const reviewCsvPath = join(importReviewPackageDir, "review.csv");
