@@ -3907,6 +3907,16 @@ test("verify ignores hidden source files and hidden source subdirectories", asyn
         "Employees receive 18 weeks of paid parental leave.\n",
         "utf8",
       ),
+      writeFile(
+        join(sourceDir, "policy.md.bak"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "~$policy.md"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
     ]);
 
     const stdout = await runCli([
@@ -4939,6 +4949,11 @@ test("verify-batch ignores hidden answer files and hidden answer subdirectories"
       ),
       writeFile(
         join(answerDir, ".draft.md"),
+        "Employees receive 18 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(answerDir, "published.md.swp"),
         "Employees receive 18 weeks of paid parental leave.\n",
         "utf8",
       ),

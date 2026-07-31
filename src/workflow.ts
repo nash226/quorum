@@ -864,7 +864,15 @@ async function listFilesWithExtensions(
 }
 
 function isHiddenOrTemporaryEntry(name: string): boolean {
-  return name.startsWith(".") || name.endsWith("~") || name.endsWith(".tmp");
+  return (
+    name.startsWith(".") ||
+    name.endsWith("~") ||
+    name.endsWith(".tmp") ||
+    name.endsWith(".bak") ||
+    name.endsWith(".swp") ||
+    name.endsWith(".swo") ||
+    name.startsWith("~$")
+  );
 }
 
 async function readAnswerInput(inputPath: string): Promise<string> {
