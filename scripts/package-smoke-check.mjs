@@ -555,6 +555,31 @@ try {
   rmSync(cliAsciiDocPackageDir, { recursive: true, force: true });
 }
 
+const cliMarkdownPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-markdown-"));
+try {
+  const answerPath = join(cliMarkdownPackageDir, "answer.markdown");
+  const sourcePath = join(cliMarkdownPackageDir, "policy.markdown");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "# Parental Leave Policy\n\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const markdownOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const markdownPayload = JSON.parse(markdownOutput);
+  if (
+    markdownPayload.summary?.verified !== 1 ||
+    markdownPayload.answerPath !== answerPath ||
+    markdownPayload.sources?.[0]?.title !== "policy" ||
+    markdownPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected .markdown answer/source contract.");
+  }
+} finally {
+  rmSync(cliMarkdownPackageDir, { recursive: true, force: true });
+}
+
 const cliTextPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-text-"));
 try {
   const answerPath = join(cliTextPackageDir, "answer.text");

@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies canonical `.markdown` answer and
+approved-source files directly, keeping the primary Markdown extension covered
+in published artifacts alongside its aliases.
+
 The packaged CLI smoke gate now verifies `.ini` and `.properties` answer and
 approved-source exports, keeping common configuration-policy formats
 release-gated alongside other supported text inputs.
