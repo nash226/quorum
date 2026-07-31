@@ -1140,11 +1140,13 @@ Recursive batch answer discovery is also covered for DOCX files nested below
 the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
 The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
-(`.md`, `.markdown`, `.mdx`, `.qmd`, `.rst`), AsciiDoc/Org/MediaWiki/LaTeX
-(`.adoc`, `.asciidoc`, `.org`, `.mediawiki`, `.wiki`, `.tex`),
-plain text (`.txt`, `.text`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
-PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL (`.json`, `.jsonl`), and
-TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and CSV/TSV (`.csv`, `.tsv`).
+(`.md`, `.markdown`, `.mdown`, `.mkdn`, `.mdx`, `.qmd`, `.rst`),
+AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
+`.wiki`, `.tex`), plain text and configuration exports (`.txt`, `.text`,
+`.log`, `.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
+PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL/NDJSON (`.json`, `.jsonl`,
+`.ndjson`), TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and
+CSV/TSV (`.csv`, `.tsv`).
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
 (`.xml`), and CSV/TSV (`.csv`, `.tsv`) policy exports. JSON, YAML, XML, and TOML exports
 are normalized into claim-readable text while preserving their source metadata
