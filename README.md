@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged batch smoke gate now verifies YAML answer and `.yml` policy-source
+discovery, keeping structured-format coverage aligned between single-file and
+directory verification workflows.
+
 The packaged CLI smoke gate now verifies every non-canonical Markdown-family
 alias, keeping installed answer and source discovery aligned with the published
 `.markdown`, `.mdown`, `.mkdn`, `.mdx`, and `.qmd` format contract.
