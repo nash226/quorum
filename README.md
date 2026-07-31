@@ -4,6 +4,10 @@ The local HTTP smoke gate now verifies base64-encoded answers and approved
 sources through `/verify-batch`, keeping binary-safe batch integrations
 release-gated alongside single-answer verification.
 
+The packaged HTTP smoke gate now verifies base64-encoded answers and approved
+sources through `/verify`, keeping binary-safe agent integrations release-gated
+alongside text request bodies.
+
 The packaged CLI smoke gate now verifies `.txt` answer and approved-source
 exports, keeping the plain-text extension contract release-gated for published
 CLI artifacts.
