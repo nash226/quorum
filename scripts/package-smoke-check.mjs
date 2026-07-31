@@ -205,6 +205,31 @@ try {
   rmSync(cliJsonlPackageDir, { recursive: true, force: true });
 }
 
+const cliNdjsonPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-ndjson-"));
+try {
+  const answerPath = join(cliNdjsonPackageDir, "answer.ndjson");
+  const sourcePath = join(cliNdjsonPackageDir, "policy.ndjson");
+  writeFileSync(answerPath, '{"claim":"Employees receive 12 weeks of paid parental leave."}\n');
+  writeFileSync(sourcePath, '{"title":"Parental Leave Policy","claim":"Employees receive 12 weeks of paid parental leave."}\n');
+
+  const ndjsonOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const ndjsonPayload = JSON.parse(ndjsonOutput);
+  if (
+    ndjsonPayload.summary?.verified !== 1 ||
+    ndjsonPayload.answerPath !== answerPath ||
+    ndjsonPayload.sources?.[0]?.title !== "Parental Leave Policy" ||
+    ndjsonPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected NDJSON answer/source contract.");
+  }
+} finally {
+  rmSync(cliNdjsonPackageDir, { recursive: true, force: true });
+}
+
 const cliYamlBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-batch-"));
 try {
   const answerDir = join(cliYamlBatchPackageDir, "answers");
