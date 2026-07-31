@@ -4577,6 +4577,7 @@ test("verify-batch accepts repeated answer files alongside answer directories", 
     const nestedAnswerPath = join(nestedAnswerDir, "support.txt");
 
     await Promise.all([
+      mkdir(answerDir, { recursive: true }),
       mkdir(nestedAnswerDir, { recursive: true }),
       mkdir(sourceDir, { recursive: true }),
     ]);
@@ -5385,6 +5386,59 @@ test("verify-batch dedupes repeated answer files that use different path spellin
     assert.equal(report.answerCount, 1);
     assert.deepEqual(report.answers.map((answer) => answer.answerPath), [explicitAnswerPath]);
     assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify-batch dedupes overlapping answer directories without changing order", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-overlap-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const nestedAnswerDir = join(answerDir, "nested");
+    const sourceDir = join(tempDir, "sources");
+    const rootAnswerPath = join(answerDir, "root.md");
+    const nestedAnswerPath = join(nestedAnswerDir, "nested.md");
+
+    await Promise.all([
+      mkdir(nestedAnswerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+
+    await Promise.all([
+      writeFile(rootAnswerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(nestedAnswerPath, "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\nRefunds are available within 30 days of purchase.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--answer-dir",
+      nestedAnswerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      answers: Array<{ answerPath: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerCount, 2);
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [
+      nestedAnswerPath,
+      rootAnswerPath,
+    ]);
+    assert.equal(report.summary.verified, 2);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
