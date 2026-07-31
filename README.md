@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now strips fullwidth numeric list markers such as `１．` and
+`２）`, keeping localized policy exports atomic before evidence verification.
+
 Claim extraction now strips Unicode checklist markers such as `☐`, `☑`, and
 `✅`, keeping copied policy checklists atomic before evidence verification.
 
