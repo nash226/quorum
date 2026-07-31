@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged batch smoke gate now verifies nested `.mdx` answer discovery, so
+directory-based review workflows keep the documented Markdown-family aliases
+release-gated alongside direct verification.
+
 The packaged batch smoke gate now verifies nested NDJSON answer and approved-source
 discovery, keeping newline-delimited JSON coverage release-gated alongside direct
 verification.
