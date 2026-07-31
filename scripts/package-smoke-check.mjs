@@ -205,6 +205,48 @@ try {
   rmSync(cliJsonlPackageDir, { recursive: true, force: true });
 }
 
+const cliYamlBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-batch-"));
+try {
+  const answerDir = join(cliYamlBatchPackageDir, "answers");
+  const sourceDir = join(cliYamlBatchPackageDir, "sources");
+  mkdirSync(answerDir);
+  mkdirSync(sourceDir);
+  const answerPath = join(answerDir, "answer.yaml");
+  const sourcePath = join(sourceDir, "policy.yml");
+  writeFileSync(answerPath, "claim: Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(
+    sourcePath,
+    "title: Parental Leave Policy\npolicy:\n  rule: Employees receive 12 weeks of paid parental leave.\n",
+  );
+
+  const yamlBatchOutput = execFileSync(
+    "node",
+    [
+      fileURLToPath(cliPath),
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const yamlBatchPayload = JSON.parse(yamlBatchOutput);
+  if (
+    yamlBatchPayload.summary?.answersWithClaims !== 1 ||
+    yamlBatchPayload.summary?.answersWithoutClaims !== 0 ||
+    yamlBatchPayload.answers?.[0]?.answerPath !== answerPath ||
+    yamlBatchPayload.answers?.[0]?.report?.summary?.verified !== 1 ||
+    yamlBatchPayload.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath ||
+    yamlBatchPayload.answers?.[0]?.report?.sources?.[0]?.title !== "Parental Leave Policy"
+  ) {
+    throw new Error("Package artifact did not preserve YAML answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(cliYamlBatchPackageDir, { recursive: true, force: true });
+}
+
 const cliLogPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-log-"));
 try {
   const answerPath = join(cliLogPackageDir, "answer.log");
