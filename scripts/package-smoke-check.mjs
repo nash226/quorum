@@ -247,6 +247,34 @@ try {
   rmSync(cliYamlBatchPackageDir, { recursive: true, force: true });
 }
 
+const cliYamlDirectPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-direct-"));
+try {
+  const answerPath = join(cliYamlDirectPackageDir, "answer.yaml");
+  const sourcePath = join(cliYamlDirectPackageDir, "policy.yml");
+  writeFileSync(answerPath, "claim: Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(
+    sourcePath,
+    "title: Parental Leave Policy\npolicy:\n  rule: Employees receive 12 weeks of paid parental leave.\n",
+  );
+
+  const yamlDirectOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const yamlDirectPayload = JSON.parse(yamlDirectOutput);
+  if (
+    yamlDirectPayload.summary?.verified !== 1 ||
+    yamlDirectPayload.answerPath !== answerPath ||
+    yamlDirectPayload.sources?.[0]?.title !== "Parental Leave Policy" ||
+    yamlDirectPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected direct YAML answer/source contract.");
+  }
+} finally {
+  rmSync(cliYamlDirectPackageDir, { recursive: true, force: true });
+}
+
 const cliLogPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-log-"));
 try {
   const answerPath = join(cliLogPackageDir, "answer.log");
