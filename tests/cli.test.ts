@@ -1253,6 +1253,27 @@ test("verify deduplicates repeated approved source paths", async () => {
   assert.equal(report.sources[0]?.sourcePath, "examples/sources/hr-policy.md");
 });
 
+test("verify-batch deduplicates repeated approved source paths", async () => {
+  const stdout = await runCli([
+    "verify-batch",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--source",
+    "examples/sources/hr-policy.md",
+    "--source",
+    "./examples/sources/hr-policy.md",
+    "--json",
+  ]);
+
+  const report = JSON.parse(stdout) as {
+    sourceCount: number;
+    sources: Array<{ sourcePath: string }>;
+  };
+
+  assert.equal(report.sourceCount, 1);
+  assert.equal(report.sources[0]?.sourcePath, "examples/sources/hr-policy.md");
+});
+
 test("verify normalizes YAML answers before claim extraction", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-yaml-answer-"));
   const answerPath = join(tempDir, "answer.yaml");
