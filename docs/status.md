@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bf852a6` on 2026-07-31, docs: explain reviewer queue handoffs
+- Latest shipped change: `6f093ca` on 2026-07-31, test: smoke-check packaged Markdown files
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | test: smoke-check packaged Markdown files | `6f093ca` |
 | 2026-07-31 | Direct push | docs: explain reviewer queue handoffs | `bf852a6` |
 | 2026-07-31 | Direct push | test: smoke-check packaged queue domain filtering | `7dc9684` |
 | 2026-07-31 | Direct push | test: smoke-check packaged config formats | `3ddd30d` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: restore support replacement fixture | `8fc4ae4` |
 | 2026-07-31 | Direct push | test: lock nested batch ordering | `2973a01` |
 | 2026-07-31 | Direct push | test: smoke-check packaged base64 verification | `e524eee` |
-| 2026-07-31 | Direct push | test: smoke-check packaged text verification | `39e6909` |
 
