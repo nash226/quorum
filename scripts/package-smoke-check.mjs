@@ -1034,6 +1034,28 @@ try {
     throw new Error("Package artifact server did not verify the expected answer contract.");
   }
 
+  const verifyBase64Response = await fetch(`${packagedServer.url}/verify`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answerBase64: Buffer.from("Employees receive 12 weeks of paid parental leave.").toString("base64"),
+      answerPath: "answers/hr-answer.txt",
+      sources: [{
+        sourcePath: "policies/hr-policy.md",
+        contentBase64: Buffer.from("Employees receive 12 weeks of paid parental leave.\n").toString("base64"),
+      }],
+    }),
+  });
+  const verifyBase64Payload = await verifyBase64Response.json();
+  if (
+    verifyBase64Response.status !== 200 ||
+    verifyBase64Payload.shouldFail !== false ||
+    verifyBase64Payload.report?.summary?.verified !== 1 ||
+    verifyBase64Payload.report?.answerPath !== "answers/hr-answer.txt"
+  ) {
+    throw new Error("Package artifact server did not preserve base64 verification input.");
+  }
+
   const verifyBatchResponse = await fetch(`${packagedServer.url}/verify-batch`, {
     method: "POST",
     headers: { "content-type": "application/json" },
