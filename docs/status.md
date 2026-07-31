@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `3744f33` on 2026-07-31, test: add support plan downgrade evaluation fixture
+- Latest shipped change: `6c6b7de` on 2026-07-31, feat: normalize csv policy sources
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | feat: normalize csv policy sources | `6c6b7de` |
 | 2026-07-31 | Direct push | test: add support plan downgrade evaluation fixture | `3744f33` |
 | 2026-07-31 | [#1546](https://github.com/nash226/quorum/pull/1546) | fix: preserve BOM-prefixed source metadata | `103aa67` |
 | 2026-07-31 | Direct push | test: smoke-check packaged Markdown aliases | `ec7fe50` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | [#1535](https://github.com/nash226/quorum/pull/1535) | test: smoke-check Kubernetes probes | `964ba40` |
 | 2026-07-31 | Direct push | test: cover hidden evaluation fixture discovery | `83a9df6` |
 | 2026-07-31 | Direct push | fix: skip temporary files during discovery | `6e6b92b` |
-| 2026-07-31 | Direct push | test: cover markdown alias discovery | `0a72387` |
 
