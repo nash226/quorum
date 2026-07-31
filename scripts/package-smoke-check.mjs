@@ -483,6 +483,23 @@ try {
   ) {
     throw new Error("Package artifact did not verify the expected MediaWiki answer/source contract.");
   }
+
+  const reverseAnswerPath = join(cliMediaWikiPackageDir, "answer.mediawiki");
+  const reverseSourcePath = join(cliMediaWikiPackageDir, "policy.wiki");
+  writeFileSync(reverseAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(reverseSourcePath, "= Parental Leave Policy =\nEmployees receive 12 weeks of paid parental leave.\n");
+  const reverseMediaWikiPayload = JSON.parse(execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", reverseAnswerPath, "--source", reverseSourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  ));
+  if (
+    reverseMediaWikiPayload.summary?.verified !== 1 ||
+    reverseMediaWikiPayload.answerPath !== reverseAnswerPath ||
+    reverseMediaWikiPayload.sources?.[0]?.sourcePath !== reverseSourcePath
+  ) {
+    throw new Error("Package artifact did not verify MediaWiki aliases in both answer/source roles.");
+  }
 } finally {
   rmSync(cliMediaWikiPackageDir, { recursive: true, force: true });
 }

@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies both `.wiki` and `.mediawiki` aliases
+in answer and approved-source roles, keeping the MediaWiki format contract
+release-gated symmetrically.
+
 The support replacement evaluation fixture now runs end to end from its
 checked-in answer and policy source, covering verified, contradicted, and
 unsupported replacement-eligibility claims in the regression scorecard.
