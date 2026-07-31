@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `faed9e9` on 2026-07-30, Merge fullwidth letter list marker normalization
+- Latest shipped change: `03c412e` on 2026-07-30, feat: discover common markdown export aliases
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | feat: discover common markdown export aliases | `03c412e` |
 | 2026-07-30 | [#1514](https://github.com/nash226/quorum/pull/1514) | Merge fullwidth letter list marker normalization | `faed9e9` |
 | 2026-07-30 | Direct push | test: add support member permissions fixture | `498754e` |
 | 2026-07-30 | Direct push | fix: parse CJK ideographic claim lists | `33e5c6d` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | docs: clarify current roadmap focus | `a896fe7` |
 | 2026-07-30 | Direct push | fix: reject dual stdin batch inputs | `198a0ee` |
 | 2026-07-30 | [#1506](https://github.com/nash226/quorum/pull/1506) | fix: recognize chevron claim bullets | `cebb84f` |
-| 2026-07-30 | Direct push | fix: strip circled letter claim markers | `0d4ae98` |
 
