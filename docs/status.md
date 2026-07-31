@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2922be9` on 2026-07-30, test: cover bracketed claim markers
+- Latest shipped change: `33e5c6d` on 2026-07-30, fix: parse CJK ideographic claim lists
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | fix: parse CJK ideographic claim lists | `33e5c6d` |
 | 2026-07-30 | Direct push | test: cover bracketed claim markers | `2922be9` |
 | 2026-07-30 | Direct push | docs: clarify current roadmap focus | `a896fe7` |
 | 2026-07-30 | Direct push | fix: reject dual stdin batch inputs | `198a0ee` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | fix: strip circled letter claim markers | `0d4ae98` |
 | 2026-07-30 | Direct push | docs: add package help command | `af9a002` |
 | 2026-07-30 | Direct push | test: cover version CLI contract | `e03f180` |
-| 2026-07-30 | Direct push | fix: strip emoji checkbox markers from claims | `a59c1f6` |
 
