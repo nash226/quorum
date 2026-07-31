@@ -408,6 +408,34 @@ try {
   rmSync(cliXhtmlPackageDir, { recursive: true, force: true });
 }
 
+const cliXmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xml-"));
+try {
+  const answerPath = join(cliXmlPackageDir, "answer.xml");
+  const sourcePath = join(cliXmlPackageDir, "policy.xml");
+  writeFileSync(answerPath, "<answer><claim>Customers can request refunds within 30 days.</claim></answer>");
+  writeFileSync(
+    sourcePath,
+    "<policy><title>Refund Policy</title><rule>Customers can request refunds within 30 days.</rule></policy>",
+  );
+
+  const xmlOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const xmlPayload = JSON.parse(xmlOutput);
+  if (
+    xmlPayload.summary?.verified !== 1 ||
+    xmlPayload.answerPath !== answerPath ||
+    xmlPayload.sources?.[0]?.title !== "Refund Policy" ||
+    xmlPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected XML answer/source contract.");
+  }
+} finally {
+  rmSync(cliXmlPackageDir, { recursive: true, force: true });
+}
+
 const cliHtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-html-"));
 try {
   const answerPath = join(cliHtmlPackageDir, "answer.html");
