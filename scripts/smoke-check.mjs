@@ -942,6 +942,22 @@ Employees receive 12 weeks of paid parental leave.
       requestId: "packed-review-queue-invalid-status-contract",
     });
 
+    for (const probePath of ["/healthz", "/readyz", "/livez"]) {
+      const probeResponse = await fetch(`${server.url}${probePath}`);
+      assert.equal(probeResponse.status, 200, `${probePath} should be ready`);
+      assert.equal(probeResponse.headers.get("cache-control"), "no-store", `${probePath} should not be cached`);
+      assert.equal(probeResponse.headers.get("x-quorum-service"), "quorum", `${probePath} should identify Quorum`);
+      assert.equal(probeResponse.headers.get("x-quorum-version"), "0.1.0", `${probePath} should expose the package version`);
+      const probePayload = await probeResponse.json();
+      assert.deepEqual({ ...probePayload, requestId: "" }, {
+        ok: true,
+        requestId: "",
+        service: "quorum",
+        version: "0.1.0",
+      });
+      assert.equal(probePayload.requestId, probeResponse.headers.get("x-quorum-request-id"));
+    }
+
     const indexResponse = await fetch(server.url);
     assert.equal(indexResponse.status, 200);
     const indexEtag = indexResponse.headers.get("etag");

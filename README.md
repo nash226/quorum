@@ -3,6 +3,10 @@
 Evaluation fixture discovery recursively skips hidden files and directories,
 so local caches and repository metadata cannot change benchmark counts.
 
+The packaged HTTP smoke gate now exercises `/healthz`, `/readyz`, and `/livez`
+against a running server, keeping Kubernetes-style readiness and liveness
+probes release-gated with the same uncached JSON contract as `/health`.
+
 Quorum is an evidence gate for enterprise AI agents: the CLI and local HTTP
 API verify single or batched answers against approved sources, then expose
 reviewer-ready evidence and machine-readable report contracts.
