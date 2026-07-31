@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies that a stable ID supplied for a direct
+approved source survives into the source report and evidence, keeping durable
+source identity release-gated for agent integrations.
+
 The packaged HTTP smoke gate now verifies base64-encoded answers and approved
 sources through `/verify`, keeping binary-safe agent integrations release-gated
 alongside text request bodies.
