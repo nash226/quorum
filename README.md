@@ -1146,6 +1146,8 @@ Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
 are normalized into claim-readable text while preserving their source metadata
 in reports. CSV exports are discovered recursively as approved sources and are
 kept as readable row text for claim matching.
+The packaged CLI smoke gate also verifies direct CSV answer and source exports,
+so published artifacts keep this common tabular handoff path working end to end.
 JSONL sources are normalized one record at a time, so newline-delimited policy
 exports can be discovered recursively or passed directly to `verify` without
 conversion; metadata in the first record is preserved alongside the full
