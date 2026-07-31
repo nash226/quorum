@@ -14,6 +14,19 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("extracts HTML metadata after a UTF-8 BOM", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.html",
+    "\uFEFF<html><head><title>HR Benefits Policy</title></head><body><p>Employees get 12 weeks.</p></body></html>",
+    0,
+  );
+
+  assert.equal(source.title, "HR Benefits Policy");
+  assert.equal(source.updatedAt, undefined);
+  assert.equal(source.trustLevel, "medium");
+  assert.match(source.content, /Employees get 12 weeks\./);
+});
+
 test("extracts metadata from XML source exports", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.xml",
