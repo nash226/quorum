@@ -1419,6 +1419,21 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("verify rejects repeated answer paths", async () => {
+  await assert.rejects(
+    runCli([
+      "verify",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--answer",
+      "examples/answers/support-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+    ]),
+    /verify accepts exactly one --answer <path>/,
+  );
+});
+
 test("CLI rejects options that are missing their values", async () => {
   const cases = [
     ["verify", "--answer", "--source", "examples/sources/hr-policy.md"],
