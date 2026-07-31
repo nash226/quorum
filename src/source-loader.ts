@@ -99,6 +99,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseTomlSource(normalizedContent);
   }
 
+  if (isDelimitedSource(sourcePath)) {
+    return parseDelimitedSource(normalizedContent, /\.tsv$/i.test(sourcePath));
+  }
+
   if (isLatexSource(sourcePath)) {
     return { metadata: {}, body: normalizeLatexSource(normalizedContent) };
   }
@@ -220,6 +224,10 @@ function isYamlSource(sourcePath: string): boolean {
 
 function isTomlSource(sourcePath: string): boolean {
   return /\.toml$/i.test(sourcePath);
+}
+
+function isDelimitedSource(sourcePath: string): boolean {
+  return /\.(?:csv|tsv)$/i.test(sourcePath);
 }
 
 function isLatexSource(sourcePath: string): boolean {
@@ -423,6 +431,64 @@ function parseTomlSource(content: string): ParsedSource {
   }
 
   return { metadata, body: lines.join("\n") || content };
+}
+
+function parseDelimitedSource(content: string, tabSeparated: boolean): ParsedSource {
+  const delimiter = tabSeparated ? "\t" : ",";
+  const rows = content
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .filter((line) => line.trim().length > 0)
+    .map((line) => parseDelimitedRow(line, delimiter));
+
+  if (rows.length < 2 || rows[0]?.length === 0) {
+    return { metadata: {}, body: content };
+  }
+
+  const headers = rows[0] ?? [];
+  const metadata: SourceMetadata = {};
+  const lines = rows.slice(1).map((row) =>
+    headers
+      .map((header, index) => {
+        const value = row[index]?.trim() ?? "";
+        return value ? `${header.trim()}: ${value}` : "";
+      })
+      .filter(Boolean)
+      .join("; "),
+  ).filter(Boolean);
+
+  for (const row of rows.slice(1)) {
+    headers.forEach((header, index) => {
+      const value = row[index]?.trim() ?? "";
+      if (value) applyStructuredMetadata(metadata, header, value);
+    });
+  }
+
+  return { metadata, body: lines.join("\n") || content };
+}
+
+function parseDelimitedRow(line: string, delimiter: string): string[] {
+  const cells: string[] = [];
+  let cell = "";
+  let quoted = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (character === '"' && line[index + 1] === '"' && quoted) {
+      cell += '"';
+      index += 1;
+    } else if (character === '"') {
+      quoted = !quoted;
+    } else if (character === delimiter && !quoted) {
+      cells.push(cell);
+      cell = "";
+    } else {
+      cell += character;
+    }
+  }
+
+  cells.push(cell);
+  return cells;
 }
 
 function structuredMetadata(value: unknown): SourceMetadata {
