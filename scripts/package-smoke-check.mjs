@@ -587,6 +587,32 @@ try {
   rmSync(cliRstPackageDir, { recursive: true, force: true });
 }
 
+const cliMarkdownAliasPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-markdown-aliases-"));
+try {
+  const answerPath = join(cliMarkdownAliasPackageDir, "answer.mdown");
+  const sourcePath = join(cliMarkdownAliasPackageDir, "policy.mkdn");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  for (const [label, aliasAnswerPath, aliasSourcePath] of [["mdown", answerPath, sourcePath]]) {
+    const aliasOutput = execFileSync(
+      "node",
+      [fileURLToPath(cliPath), "verify", "--answer", aliasAnswerPath, "--source", aliasSourcePath, "--json"],
+      { cwd: repoRoot, encoding: "utf8" },
+    );
+    const aliasPayload = JSON.parse(aliasOutput);
+    if (
+      aliasPayload.summary?.verified !== 1 ||
+      aliasPayload.answerPath !== aliasAnswerPath ||
+      aliasPayload.sources?.[0]?.sourcePath !== aliasSourcePath
+    ) {
+      throw new Error(`Package artifact did not verify the expected Markdown ${label} alias contract.`);
+    }
+  }
+} finally {
+  rmSync(cliMarkdownAliasPackageDir, { recursive: true, force: true });
+}
+
 const cliXmlSourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xml-source-"));
 try {
   const answerPath = join(cliXmlSourcePackageDir, "answer.md");

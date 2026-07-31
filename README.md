@@ -285,6 +285,9 @@ The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
 answer and approved-source exports, keeping this supported documentation format
 release-gated after publishing.
 
+The packaged CLI smoke gate also verifies the `.mdown` and `.mkdn` Markdown
+aliases, preserving legacy documentation exports through the published CLI.
+
 Direct `.properties` answer and approved-source exports are covered end to
 end, preserving their paths and the fallback source title in JSON evidence.
 
