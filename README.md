@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now strips alternate CJK numbered-list punctuation such as
+`一．` and `二）`, keeping localized policy exports atomic before verification.
+
 Claim extraction now strips fullwidth numeric list markers such as `１．` and
 `２）`, keeping localized policy exports atomic before evidence verification.
 
