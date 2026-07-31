@@ -1396,6 +1396,9 @@ test("CLI rejects options that are missing their values", async () => {
     ["verify", "--answer", "--source", "examples/sources/hr-policy.md"],
     ["verify-batch", "--answer-dir", "--source-dir", "examples/sources"],
     ["import-review", "--review-csv", "--json"],
+    ["evaluate", "--fixture-dir", "--json"],
+    ["evaluate", "--domain", "--fixture-dir", "examples/evaluations"],
+    ["review-queue", "--review-csv", "--json"],
   ];
 
   for (const args of cases) {

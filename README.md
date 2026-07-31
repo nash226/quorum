@@ -1,5 +1,8 @@
 # Quorum
 
+The `evaluate` and `review-queue` commands now reject option names used where
+paths, domains, or other values are required, keeping CLI errors actionable.
+
 Claim extraction now strips common CJK bracketed number markers such as `【１】`
 and `〔2〕`, keeping copied localized policy lists atomic before verification.
 
