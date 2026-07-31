@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `3390040` on 2026-07-30, fix: strip hollow circle bullets from claims
+- Latest shipped change: `8685a29` on 2026-07-30, docs: document command help flags
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | docs: document command help flags | `8685a29` |
 | 2026-07-30 | Direct push | fix: strip hollow circle bullets from claims | `3390040` |
 | 2026-07-30 | Direct push | fix: strip horizontal bar bullets from claims | `59507bf` |
 | 2026-07-30 | [#1521](https://github.com/nash226/quorum/pull/1521) | fix: strip star bullets from claims | `c73490f` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | Direct push | fix: parse fullwidth numbered claims | `16cde82` |
 | 2026-07-30 | Direct push | fix: strip unicode checklist markers | `470c329` |
 | 2026-07-30 | Direct push | fix: reject missing evaluate option values | `b222de0` |
-| 2026-07-30 | Direct push | fix: parse CJK bracketed claim markers | `1d9336a` |
 
