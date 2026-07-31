@@ -5342,6 +5342,34 @@ test("verify discovers supported sources in nested source directories", async ()
   }
 });
 
+test("verify-batch sorts nested directory answers by full path", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-nested-order-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const earlierPath = join(answerDir, "a-group", "earlier.md");
+    const laterPath = join(answerDir, "z-group", "later.md");
+
+    await Promise.all([
+      mkdir(dirname(earlierPath), { recursive: true }),
+      mkdir(dirname(laterPath), { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(earlierPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(laterPath, "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\nRefunds are available within 30 days of purchase.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]);
+    const report = JSON.parse(stdout) as { answers: Array<{ answerPath: string }> };
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [earlierPath, laterPath]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch dedupes repeated answer files that use different path spellings", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-answer-dedupe-"));
 
