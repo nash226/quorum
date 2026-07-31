@@ -1621,6 +1621,37 @@ Employees receive 12 weeks of paid parental leave.
     assert.equal(batchBinaryVerifyResult.report.answers[0]?.answerLabel, "Uploaded HR policy packet");
     assert.equal(batchBinaryVerifyResult.report.summary.verified, 1);
 
+    const batchBase64Answer = Buffer.from("Employees receive 12 weeks of paid parental leave.\n");
+    const batchBase64Source = Buffer.from("Employees receive 12 weeks of paid parental leave.\n");
+    const batchBase64VerifyResponse = await fetch(`${server.url}/verify-batch`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        answers: [
+          {
+            answerBase64: batchBase64Answer.toString("base64"),
+            answerPath: "answers/encoded-answer.txt",
+            answerLabel: "Encoded reviewer packet",
+          },
+        ],
+        sources: [
+          {
+            sourcePath: "policies/encoded-policy.txt",
+            contentBase64: batchBase64Source.toString("base64"),
+            title: "Encoded HR Policy",
+          },
+        ],
+      }),
+    });
+    assert.equal(batchBase64VerifyResponse.status, 200);
+    const batchBase64VerifyResult = await batchBase64VerifyResponse.json();
+    assert.equal(batchBase64VerifyResult.report.answerCount, 1);
+    assert.equal(batchBase64VerifyResult.report.summary.verified, 1);
+    assert.equal(batchBase64VerifyResult.report.answers[0]?.answerPath, "answers/encoded-answer.txt");
+    assert.equal(batchBase64VerifyResult.report.answers[0]?.report.sources[0]?.title, "Encoded HR Policy");
+
     const importReviewResponse = await fetch(`${server.url}/import-review`, {
       method: "POST",
       headers: {
