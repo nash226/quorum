@@ -19,6 +19,21 @@ Quorum is an evidence gate for enterprise AI agents: the CLI and local HTTP
 API verify single or batched answers against approved sources, then expose
 reviewer-ready evidence and machine-readable report contracts.
 
+## Start the Local API and Evaluation Workflow
+
+Start the shipped local HTTP API with `npm run dev -- serve`, then inspect its
+health and contract surfaces:
+
+```bash
+curl http://127.0.0.1:8787/health
+curl http://127.0.0.1:8787/openapi.json
+```
+
+Run the checked-in HR or support scorecards with
+`npm run dev -- evaluate --domain support`. The [API integration guide](docs/api-integration.md),
+[CLI guide](docs/cli-guide.md), and [evaluation fixture guide](docs/evaluation-fixtures.md)
+describe the request, report, and scorecard workflows in detail.
+
 CSV and TSV approved-policy exports are normalized into readable evidence
 lines, including title, freshness, and trust metadata columns.
 
