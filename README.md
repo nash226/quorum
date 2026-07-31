@@ -1,5 +1,9 @@
 # Quorum
 
+The local HTTP API now regression-tests its configured request-size guard for
+both declared and chunked JSON bodies, keeping oversized agent requests
+fail-closed with a structured `413` response.
+
 Directory verification supports the same published answer and source format
 aliases as the local API, including `.text`, structured exports, web exports,
 PDF, and DOCX; run `npm run dev -- formats` for the authoritative lists.
