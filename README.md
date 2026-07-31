@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged batch smoke gate now verifies nested `.wiki` and `.mediawiki`
+answer discovery against matching approved sources, keeping MediaWiki aliases
+release-gated in directory workflows.
+
 The packaged batch smoke gate now verifies nested `.ini` and `.properties`
 answers against matching approved sources, keeping configuration-policy exports
 release-gated in directory workflows.
