@@ -258,6 +258,31 @@ try {
   rmSync(cliDelimitedPackageDir, { recursive: true, force: true });
 }
 
+const cliTexPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-tex-"));
+try {
+  const answerPath = join(cliTexPackageDir, "answer.tex");
+  const sourcePath = join(cliTexPackageDir, "policy.tex");
+  writeFileSync(answerPath, "\\section{Benefits}\nEmployees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "\\section{Parental Leave Policy}\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const texOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const texPayload = JSON.parse(texOutput);
+  if (
+    texPayload.summary?.verified !== 1 ||
+    texPayload.answerPath !== answerPath ||
+    texPayload.sources?.[0]?.title !== "policy" ||
+    texPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected TeX answer/source contract.");
+  }
+} finally {
+  rmSync(cliTexPackageDir, { recursive: true, force: true });
+}
+
 const cliYamlBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-batch-"));
 try {
   const answerDir = join(cliYamlBatchPackageDir, "answers");

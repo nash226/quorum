@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies a TeX answer against a TeX approved
+source, keeping LaTeX policy exports release-gated alongside the other
+supported document formats.
+
 The packaged CLI smoke gate now verifies a TSV answer against a CSV approved
 source, keeping delimited policy exports release-gated in published artifacts.
 
