@@ -1,5 +1,8 @@
 # Quorum
 
+Evaluation fixture discovery recursively skips hidden files and directories,
+so local caches and repository metadata cannot change benchmark counts.
+
 Quorum is an evidence gate for enterprise AI agents: the CLI and local HTTP
 API verify single or batched answers against approved sources, then expose
 reviewer-ready evidence and machine-readable report contracts.
