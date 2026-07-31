@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now strips Unicode checklist markers such as `☐`, `☑`, and
+`✅`, keeping copied policy checklists atomic before evidence verification.
+
 The `evaluate` and `review-queue` commands now reject option names used where
 paths, domains, or other values are required, keeping CLI errors actionable.
 

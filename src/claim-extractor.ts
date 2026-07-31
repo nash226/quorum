@@ -580,7 +580,8 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
     FULLWIDTH_LETTER_PREFIX,
     /^\([Ａ-Ｚａ-ｚ]\)\s+/,
-    /^\[[ xX]\]\s+/,
+    /^\[[ xX\u2610\u2611\u2705]\]\s+/,
+    /^[\u2610\u2611\u2705]\s+/,
     MARKDOWN_CALLOUT_PREFIX,
     DEFINITION_LIST_PREFIX,
   ];
