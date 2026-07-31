@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged batch smoke gate now verifies nested NDJSON answer and approved-source
+discovery, keeping newline-delimited JSON coverage release-gated alongside direct
+verification.
+
 The packaged CLI smoke gate now verifies direct XML answer and approved-source
 exports, keeping the published structured-format contract release-gated.
 

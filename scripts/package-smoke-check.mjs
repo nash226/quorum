@@ -1913,6 +1913,34 @@ try {
   rmSync(ndjsonSourceTempDir, { recursive: true, force: true });
 }
 
+const ndjsonBatchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-ndjson-batch-"));
+try {
+  const answerDir = join(ndjsonBatchTempDir, "answers", "nested");
+  const sourceDir = join(ndjsonBatchTempDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "answer.ndjson");
+  const sourcePath = join(sourceDir, "policy.ndjson");
+  writeFileSync(answerPath, '{"response":"Employees receive 12 weeks of paid parental leave."}\n');
+  writeFileSync(sourcePath, '{"title":"Parental Leave Policy","policy":"Employees receive 12 weeks of paid parental leave."}\n');
+  const ndjsonBatchResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch", "--answer-dir", join(ndjsonBatchTempDir, "answers"),
+    "--source-dir", join(ndjsonBatchTempDir, "sources"), "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    ndjsonBatchResult.summary?.answersWithClaims !== 1 ||
+    ndjsonBatchResult.summary?.answersWithoutClaims !== 0 ||
+    ndjsonBatchResult.answers?.[0]?.answerPath !== answerPath ||
+    ndjsonBatchResult.answers?.[0]?.report?.summary?.verified !== 1 ||
+    ndjsonBatchResult.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath ||
+    ndjsonBatchResult.answers?.[0]?.report?.sources?.[0]?.title !== "Parental Leave Policy"
+  ) {
+    throw new Error("Package artifact did not preserve NDJSON answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(ndjsonBatchTempDir, { recursive: true, force: true });
+}
+
 const uppercaseFormatTempDir = mkdtempSync(join(tmpdir(), "quorum-package-uppercase-format-"));
 try {
   const answerPath = join(uppercaseFormatTempDir, "ANSWER.JSON");
