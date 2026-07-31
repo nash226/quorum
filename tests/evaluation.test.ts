@@ -49,6 +49,31 @@ test("loads and evaluates the HR example fixture", async () => {
   );
 });
 
+test("evaluation directory discovery ignores hidden fixture directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-evaluation-hidden-directory-"));
+  try {
+    const visibleFixture = join(tempDir, "visible.json");
+    const hiddenFixtureDir = join(tempDir, ".cache");
+    const hiddenFixture = join(hiddenFixtureDir, "stale.json");
+    const fixture = JSON.stringify({
+      name: "Visible fixture",
+      domain: "hr",
+      answer: "Employees receive 12 weeks of paid parental leave.",
+      sources: ["Employees receive 12 weeks of paid parental leave."],
+      expected: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
+    });
+    await mkdir(hiddenFixtureDir, { recursive: true });
+    await writeFile(visibleFixture, fixture, "utf8");
+    await writeFile(hiddenFixture, fixture.replace("Visible", "Hidden"), "utf8");
+
+    const paths = await resolveEvaluationFixturePaths([], [tempDir]);
+
+    assert.deepEqual(paths, [visibleFixture]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("evaluates a shipped inline HR medical leave fixture across policy claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/medical-leave-policy.json"),
