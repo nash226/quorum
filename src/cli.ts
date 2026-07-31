@@ -79,6 +79,16 @@ const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
 
+  if (command === "--help" || command === "-h") {
+    printHelp();
+    return;
+  }
+
+  if (args.includes("--help") || args.includes("-h")) {
+    printHelp(command);
+    return;
+  }
+
   if (command === "verify") {
     await runVerify(args);
     return;
@@ -758,13 +768,20 @@ async function writeReportFile(
   await writeFile(outPath, output, "utf8");
 }
 
-function printHelp(): void {
-  console.log(`Quorum
-
-Usage:
+function printHelp(command?: string): void {
+  const usage = `Usage:
   quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path> | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
-  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
+  quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]`;
+
+  if (command === "verify" || command === "verify-batch" || command === "import-review") {
+    console.log(`Quorum ${command}\n\n${usage.split("\n").find((line) => line.includes(`quorum ${command}`))}\n`);
+    return;
+  }
+
+  console.log(`Quorum
+
+${usage}
 
 Example:
   npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --default-trust-level high --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv --fail-on contradicted --fail-on unsupported

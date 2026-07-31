@@ -279,6 +279,10 @@ npm run build
 
 The CI workflow runs both commands on pushes and pull requests.
 
+The CLI also supports `--help` (or `-h`) before or after a command. Use
+`npm run dev -- verify --help` to inspect one command's required inputs and
+options without running a verification.
+
 ## Product Direction
 
 The first wedge is HR and customer-support policy verification. These workflows

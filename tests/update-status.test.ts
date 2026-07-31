@@ -34,7 +34,7 @@ test("loadRecentShipments reads the supplied history ref", () => {
     {
       encoding: "utf8",
     },
-  ).trim();
+  ).trim().slice(0, 7);
 
   assert.ok(latestShipmentShortCommit);
 

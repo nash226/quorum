@@ -6,6 +6,16 @@ import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 
+test("prints general and command-specific help without requiring inputs", async () => {
+  const generalHelp = await runCli(["--help"]);
+  assert.match(generalHelp, /quorum verify-batch/);
+
+  const verifyHelp = await runCli(["verify", "--help"]);
+  assert.match(verifyHelp, /^Quorum verify/m);
+  assert.match(verifyHelp, /--source-dir <path>/);
+  assert.doesNotMatch(verifyHelp, /quorum import-review/);
+});
+
 test("verify applies the default trust override only to sources without metadata", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-"));
 
