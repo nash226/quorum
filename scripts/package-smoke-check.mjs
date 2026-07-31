@@ -1751,6 +1751,29 @@ try {
   rmSync(jsonlSourceTempDir, { recursive: true, force: true });
 }
 
+const markdownAliasTempDir = mkdtempSync(join(tmpdir(), "quorum-package-markdown-aliases-"));
+try {
+  for (const extension of ["markdown", "mdown", "mkdn", "mdx", "qmd"]) {
+    const answerPath = join(markdownAliasTempDir, `answer.${extension}`);
+    const sourcePath = join(markdownAliasTempDir, `policy.${extension}`);
+    writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+    writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+    const markdownAliasResult = JSON.parse(execFileSync(process.execPath, [
+      fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ], { cwd: repoRoot, encoding: "utf8" }));
+    if (
+      markdownAliasResult.summary?.verified !== 1 ||
+      markdownAliasResult.answerPath !== answerPath ||
+      markdownAliasResult.sources?.[0]?.sourcePath !== sourcePath
+    ) {
+      throw new Error(`Package artifact did not verify the expected .${extension} Markdown alias contract.`);
+    }
+  }
+} finally {
+  rmSync(markdownAliasTempDir, { recursive: true, force: true });
+}
+
 const ndjsonAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-ndjson-answer-"));
 try {
   const ndjsonAnswerPath = join(ndjsonAnswerTempDir, "answer.ndjson");
