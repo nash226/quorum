@@ -782,8 +782,8 @@ npm run check
 This runs the tests, TypeScript build, local API and CLI smoke checks,
 packaged-entrypoint smoke checks, and the evaluation benchmark.
 
-The current default branch passes this gate with 770 automated tests, keeping
-the documented local workflow aligned with the repository's CI checks.
+The current default branch passes this gate with the repository's automated
+test suite, keeping the documented local workflow aligned with its CI checks.
 
 `npm run status:refresh` keeps the generated status page's shipment table
 stable across repositories by displaying the first seven characters of each
