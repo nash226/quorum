@@ -796,6 +796,12 @@ answers, run the dedicated format-contract command:
 npm run formats
 ```
 
+Integrations can consume the same contract as sorted JSON arrays with:
+
+```bash
+npm run formats -- --json
+```
+
 Run `npm run help` for the complete installed CLI command reference.
 
 Every shipped command also accepts `--help` or `-h`, so integrations and
