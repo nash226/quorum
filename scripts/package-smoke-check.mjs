@@ -205,6 +205,28 @@ try {
   rmSync(cliJsonlPackageDir, { recursive: true, force: true });
 }
 
+const cliDirectSourceIdPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-direct-source-id-"));
+try {
+  const answerPath = join(cliDirectSourceIdPackageDir, "answer.md");
+  const sourcePath = join(cliDirectSourceIdPackageDir, "policy.md");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+  const output = execFileSync("node", [
+    fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath,
+    "--source-id", "people-ops/hr-policy@2026-07-31", "--json",
+  ], { cwd: repoRoot, encoding: "utf8" });
+  const payload = JSON.parse(output);
+  if (
+    payload.summary?.verified !== 1 ||
+    payload.sources?.[0]?.id !== "people-ops/hr-policy@2026-07-31" ||
+    payload.assessments?.[0]?.evidence?.[0]?.documentId !== "people-ops/hr-policy@2026-07-31"
+  ) {
+    throw new Error("Package artifact did not preserve the direct source ID through verification evidence.");
+  }
+} finally {
+  rmSync(cliDirectSourceIdPackageDir, { recursive: true, force: true });
+}
+
 const cliYamlBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-batch-"));
 try {
   const answerDir = join(cliYamlBatchPackageDir, "answers");
