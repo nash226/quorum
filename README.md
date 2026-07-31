@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct NDJSON answer and approved-source
+exports, keeping newline-delimited JSON coverage release-gated for single-file use.
+
 The packaged CLI smoke gate now verifies canonical `.markdown` answer and
 approved-source files directly, keeping the primary Markdown extension covered
 in published artifacts alongside its aliases.
