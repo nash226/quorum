@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `70b7fd2` on 2026-07-31, test: smoke-check configured API limits
+- Latest shipped change: `52ce90d` on 2026-07-31, test: smoke-check packaged CSV and TSV verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | test: smoke-check packaged CSV and TSV verification | `52ce90d` |
 | 2026-07-31 | Direct push | test: smoke-check configured API limits | `70b7fd2` |
 | 2026-07-31 | [#1581](https://github.com/nash226/quorum/pull/1581) | test: guard chunked API request sizes | `5a888de` |
 | 2026-07-31 | Direct push | docs: clarify supported input formats | `4268bcf` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: smoke-check packaged Markdown files | `6f093ca` |
 | 2026-07-31 | Direct push | docs: explain reviewer queue handoffs | `bf852a6` |
 | 2026-07-31 | Direct push | test: smoke-check packaged queue domain filtering | `7dc9684` |
-| 2026-07-31 | Direct push | test: smoke-check packaged config formats | `3ddd30d` |
 
