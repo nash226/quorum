@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged batch smoke gate now verifies nested TOML answer and approved-source
+discovery, keeping structured policy exports release-gated in directory workflows.
+
 The packaged CLI smoke gate now verifies a TSV answer against a CSV approved
 source, keeping delimited policy exports release-gated in published artifacts.
 

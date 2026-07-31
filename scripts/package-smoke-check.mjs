@@ -2156,6 +2156,34 @@ try {
   rmSync(ndjsonBatchTempDir, { recursive: true, force: true });
 }
 
+const tomlBatchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-toml-batch-"));
+try {
+  const answerDir = join(tomlBatchTempDir, "answers", "nested");
+  const sourceDir = join(tomlBatchTempDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "answer.toml");
+  const sourcePath = join(sourceDir, "policy.toml");
+  writeFileSync(answerPath, 'response = "Employees receive 12 weeks of paid parental leave."\n');
+  writeFileSync(sourcePath, 'title = "Parental Leave Policy"\npolicy = "Employees receive 12 weeks of paid parental leave."\n');
+  const tomlBatchResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch", "--answer-dir", join(tomlBatchTempDir, "answers"),
+    "--source-dir", join(tomlBatchTempDir, "sources"), "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    tomlBatchResult.summary?.answersWithClaims !== 1 ||
+    tomlBatchResult.summary?.answersWithoutClaims !== 0 ||
+    tomlBatchResult.answers?.[0]?.answerPath !== answerPath ||
+    tomlBatchResult.answers?.[0]?.report?.summary?.verified !== 1 ||
+    tomlBatchResult.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath ||
+    tomlBatchResult.answers?.[0]?.report?.sources?.[0]?.title !== "Parental Leave Policy"
+  ) {
+    throw new Error("Package artifact did not preserve TOML answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(tomlBatchTempDir, { recursive: true, force: true });
+}
+
 const uppercaseFormatTempDir = mkdtempSync(join(tmpdir(), "quorum-package-uppercase-format-"));
 try {
   const answerPath = join(uppercaseFormatTempDir, "ANSWER.JSON");
