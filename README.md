@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now strips reference-mark bullets such as `※` and `⁕` from
+exported checklists, keeping localized policy statements atomic for review.
+
 The packaged batch smoke gate now verifies nested `.mdx` answer discovery, so
 directory-based review workflows keep the documented Markdown-family aliases
 release-gated alongside direct verification.
