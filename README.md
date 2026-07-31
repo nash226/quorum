@@ -666,6 +666,10 @@ npm run formats
 
 Run `npm run help` for the complete installed CLI command reference.
 
+Every shipped command also accepts `--help` or `-h`, so integrations and
+operators can inspect a command's usage before preparing answer, source, or
+reviewer inputs.
+
 This command is the source of truth for directory discovery: it prints the
 separate source and answer extension sets used by `verify-batch`, so scripts
 can confirm the packaged input contract before submitting a batch.
