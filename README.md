@@ -60,6 +60,9 @@ Claim extraction now strips colored diamond bullets such as `🔹` and `🔸` fr
 rich-text policy exports, keeping those statements atomic before evidence
 verification.
 
+The packaged CLI smoke gate now verifies TOML answers as well as TOML sources,
+keeping the documented structured-file contract covered end to end.
+
 Claim extraction now strips black and white diamond bullets such as `◆` and `◇`
 from exported policy checklists, keeping those statements atomic before
 evidence verification.
