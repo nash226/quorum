@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `83a9df6` on 2026-07-31, test: cover hidden evaluation fixture discovery
+- Latest shipped change: `964ba40` on 2026-07-31, test: smoke-check Kubernetes probes
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | [#1535](https://github.com/nash226/quorum/pull/1535) | test: smoke-check Kubernetes probes | `964ba40` |
 | 2026-07-31 | Direct push | test: cover hidden evaluation fixture discovery | `83a9df6` |
 | 2026-07-31 | Direct push | fix: skip temporary files during discovery | `6e6b92b` |
 | 2026-07-31 | Direct push | test: cover markdown alias discovery | `0a72387` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | fix: strip colored diamond bullets from claims | `6fa413d` |
 | 2026-07-31 | Direct push | docs: clarify shipped CLI and API surface | `a7fa134` |
 | 2026-07-31 | Direct push | fix: strip small triangle bullets from claims | `e385f96` |
-| 2026-07-30 | Direct push | docs: document command help flags | `8685a29` |
 
