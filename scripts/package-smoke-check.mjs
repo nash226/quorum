@@ -328,6 +328,49 @@ try {
   rmSync(cliYamlDirectPackageDir, { recursive: true, force: true });
 }
 
+const cliConfigBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-config-batch-"));
+try {
+  const answerDir = join(cliConfigBatchPackageDir, "answers", "nested");
+  const sourceDir = join(cliConfigBatchPackageDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+
+  const answerPaths = [join(answerDir, "answer.ini"), join(answerDir, "answer.properties")];
+  const sourcePaths = [join(sourceDir, "policy.ini"), join(sourceDir, "policy.properties")];
+  for (const answerPath of answerPaths) {
+    writeFileSync(answerPath, "claim=Employees receive 12 weeks of paid parental leave.\n");
+  }
+  for (const sourcePath of sourcePaths) {
+    writeFileSync(sourcePath, "title=Parental Leave Policy\npolicy=Employees receive 12 weeks of paid parental leave.\n");
+  }
+
+  const configBatchOutput = execFileSync(
+    "node",
+    [
+      fileURLToPath(cliPath),
+      "verify-batch",
+      "--answer-dir",
+      join(cliConfigBatchPackageDir, "answers"),
+      "--source-dir",
+      join(cliConfigBatchPackageDir, "sources"),
+      "--json",
+    ],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const configBatchPayload = JSON.parse(configBatchOutput);
+  if (
+    configBatchPayload.summary?.answersWithClaims !== 2 ||
+    configBatchPayload.summary?.answersWithoutClaims !== 0 ||
+    configBatchPayload.answers?.map(({ answerPath }) => answerPath).join("|") !== answerPaths.join("|") ||
+    configBatchPayload.answers?.some(({ report }) => report?.summary?.verified !== 1) ||
+    configBatchPayload.answers?.some(({ report }) => !sourcePaths.includes(report?.sources?.[0]?.sourcePath))
+  ) {
+    throw new Error("Package artifact did not preserve INI/properties answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(cliConfigBatchPackageDir, { recursive: true, force: true });
+}
+
 const cliLogPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-log-"));
 try {
   const answerPath = join(cliLogPackageDir, "answer.log");
