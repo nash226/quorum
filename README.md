@@ -437,6 +437,8 @@ reviewer reports from splitting those sentences at the abbreviation period.
 URLs with dotted hostnames and paths also stay inside a claim while sentence
 boundaries after the URL remain available for separate reviewer evidence.
 Common `.text` exports are accepted alongside `.txt` files for both answers and
+`.mdown`/`.mkdn` Markdown aliases are discovered too, so vendor exports keep
+working when they use those extensions.
 approved sources, so plain-text handoffs keep working when vendors use the
 long-form extension. Direct single-answer verification now covers `.text`
 sources in the CLI regression suite as well as recursive batch discovery.
