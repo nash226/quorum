@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct JSON approved-source exports,
+keeping structured source titles and evidence release-gated alongside JSON
+answers and batch discovery.
+
 The packaged HTTP smoke gate now verifies base64-encoded answers and approved
 sources through `/verify`, keeping binary-safe agent integrations release-gated
 alongside text request bodies.
