@@ -108,6 +108,30 @@ test("HTTP API scopes browser preflight methods to every discovered route", asyn
   }
 });
 
+test("OpenAPI documents the shared CORS preflight response for every OPTIONS route", () => {
+  const document = createOpenApiDocument() as {
+    paths: Record<string, Record<string, {
+      responses?: Record<string, {
+        headers?: Record<string, unknown>;
+      }>;
+    }>>;
+  };
+
+  for (const endpoint of API_ENDPOINTS.filter(({ method }) => method === "OPTIONS")) {
+    const response = document.paths[endpoint.path]?.options?.responses?.["204"];
+    assert.ok(response, `OPTIONS ${endpoint.path} 204 response`);
+    for (const header of [
+      "Access-Control-Allow-Origin",
+      "Access-Control-Allow-Methods",
+      "Access-Control-Allow-Headers",
+      "Access-Control-Expose-Headers",
+      "Access-Control-Max-Age",
+    ]) {
+      assert.ok(response.headers?.[header], `OPTIONS ${endpoint.path} ${header} header`);
+    }
+  }
+});
+
 test("HTTP API reports the allowed method for an unsupported route method", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

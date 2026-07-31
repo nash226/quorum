@@ -116,6 +116,10 @@ request headers.
 The HTTP API now regression-tests CORS preflight responses across every POST
 endpoint, keeping browser-based agent integrations aligned as routes evolve.
 
+The generated OpenAPI contract now regression-tests the shared 204 CORS
+preflight response and response headers for every discovered `OPTIONS` route,
+so browser clients and generated clients see the same integration contract.
+
 The generated OpenAPI contract now documents the shared structured `405`
 response, `Allow: GET, HEAD` header, and request-error schema for every
 GET-only route, keeping method negotiation visible to generated clients.
