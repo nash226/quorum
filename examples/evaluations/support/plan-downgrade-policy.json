@@ -1,0 +1,17 @@
+{
+  "name": "Support plan downgrade policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-plan-downgrade-answer.md",
+  "answer": "Customers can downgrade their plan at any time, and the change takes effect at the next renewal.\nCustomers must give 30 days notice before downgrading their plan.\nCustomers receive complimentary airport lounge access.\n",
+  "answerLabel": "Support plan downgrade reviewer packet",
+  "sources": [{
+    "sourcePath": "../../sources/support-plan-downgrade-policy.md",
+    "id": "support/plan-downgrade@2026-07-31",
+    "title": "Support Plan Downgrade Policy",
+    "updatedAt": "2026-07-31",
+    "trustLevel": "high",
+    "content": "Customers can downgrade their plan at any time, and the change takes effect at the next renewal.\nCustomers retain their current plan features until renewal.\nCustomers must give 14 days notice before downgrading their plan.\n"
+  }],
+  "expectedSummary": { "verified": 1, "contradicted": 1, "unsupported": 1, "needs_review": 0 },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}

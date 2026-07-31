@@ -124,8 +124,8 @@ test("benchmark inventory keeps HR and support domain counts visible", () => {
   const readme = readFileSync("README.md", "utf8");
 
   assert.deepEqual(Object.keys(counts).sort(), ["hr", "support"]);
-  assert.equal(Object.values(counts).reduce((total, count) => total + count, 0), 85);
-  assert.deepEqual({ hr: counts.hr, support: counts.support }, { hr: 30, support: 55 });
-  assert.match(readme, /30 HR and 55 support workflows/);
+  assert.equal(Object.values(counts).reduce((total, count) => total + count, 0), 86);
+  assert.deepEqual({ hr: counts.hr, support: counts.support }, { hr: 30, support: 56 });
+  assert.match(readme, /30 HR and 56 support workflows/);
   assert.doesNotMatch(readme, /\b83 checked-in benchmark fixtures\b|\binventory is currently reconciled at 83 fixtures\b/);
 });
