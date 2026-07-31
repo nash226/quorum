@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `470c329` on 2026-07-30, fix: strip unicode checklist markers
+- Latest shipped change: `16cde82` on 2026-07-30, fix: parse fullwidth numbered claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-30 | Direct push | fix: parse fullwidth numbered claims | `16cde82` |
 | 2026-07-30 | Direct push | fix: strip unicode checklist markers | `470c329` |
 | 2026-07-30 | Direct push | fix: reject missing evaluate option values | `b222de0` |
 | 2026-07-30 | Direct push | fix: parse CJK bracketed claim markers | `1d9336a` |
@@ -56,5 +57,4 @@
 | 2026-07-30 | [#1514](https://github.com/nash226/quorum/pull/1514) | Merge fullwidth letter list marker normalization | `faed9e9` |
 | 2026-07-30 | Direct push | test: add support member permissions fixture | `498754e` |
 | 2026-07-30 | Direct push | fix: parse CJK ideographic claim lists | `33e5c6d` |
-| 2026-07-30 | Direct push | test: cover bracketed claim markers | `2922be9` |
 
