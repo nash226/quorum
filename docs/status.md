@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `fd29d61` on 2026-07-31, test: smoke-check packaged NDJSON verification
+- Latest shipped change: `4268bcf` on 2026-07-31, docs: clarify supported input formats
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | docs: clarify supported input formats | `4268bcf` |
 | 2026-07-31 | [#1578](https://github.com/nash226/quorum/pull/1578) | test: smoke-check packaged NDJSON verification | `fd29d61` |
 | 2026-07-31 | Direct push | test: smoke-check packaged Markdown files | `6f093ca` |
 | 2026-07-31 | Direct push | docs: explain reviewer queue handoffs | `bf852a6` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: smoke-check packaged config formats | `3ddd30d` |
 | 2026-07-31 | Direct push | test: cover MediaWiki alias roles | `e40fdd1` |
 | 2026-07-31 | Direct push | test: restore support replacement fixture | `8fc4ae4` |
-| 2026-07-31 | Direct push | test: lock nested batch ordering | `2973a01` |
 
