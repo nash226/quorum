@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8fc4ae4` on 2026-07-31, test: restore support replacement fixture
+- Latest shipped change: `e40fdd1` on 2026-07-31, test: cover MediaWiki alias roles
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | test: cover MediaWiki alias roles | `e40fdd1` |
 | 2026-07-31 | Direct push | test: restore support replacement fixture | `8fc4ae4` |
 | 2026-07-31 | Direct push | test: lock nested batch ordering | `2973a01` |
 | 2026-07-31 | Direct push | test: smoke-check packaged base64 verification | `e524eee` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | docs: clarify shipped roadmap foundations | `4a17f97` |
 | 2026-07-31 | Direct push | fix: strip reference-mark claim bullets | `64b0971` |
 | 2026-07-31 | Direct push | test: smoke-check nested MDX batches | `9102a71` |
-| 2026-07-31 | Direct push | docs: complete supported input format list | `89d459b` |
 
