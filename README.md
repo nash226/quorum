@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now strips directional hand bullets such as `☞` and `👉`
+from exported policy checklists, keeping those statements atomic before
+evidence verification.
+
 Evaluation fixture discovery recursively skips hidden files and directories,
 so local caches and repository metadata cannot change benchmark counts.
 
