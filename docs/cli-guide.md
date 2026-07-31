@@ -305,6 +305,28 @@ npm run dev -- verify \
 When a selected verdict appears, the CLI exits with status code `2`. The same
 decision is available as `shouldFail` and `failVerdicts` in result JSON.
 
+## Summarize reviewer queue work
+
+Use `review-queue` to combine reviewer workload with optional benchmark drift
+in one JSON or CSV handoff:
+
+```bash
+npm run dev -- review-queue \
+  --review-csv reports/reviewer-queue.csv \
+  --fixture-dir examples/evaluations \
+  --queue-status pending \
+  --domain hr \
+  --json \
+  --out reports/reviewer-queue-overview.json \
+  --csv-out reports/reviewer-queue-overview.csv
+```
+
+`--queue-status` accepts `pending`, `reviewed`, or `no_claims` and recalculates
+the selected answer and claim totals. Repeat `--domain` with `hr` or `support`
+to scope benchmark drift to selected policy domains; a domain filter requires
+`--fixture` or `--fixture-dir`. Both output formats echo the applied queue
+status and domain scope so downstream workers can audit the handoff.
+
 ## Commands at a glance
 
 | Command | Purpose |
