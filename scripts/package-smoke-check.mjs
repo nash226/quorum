@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
@@ -624,6 +624,50 @@ try {
   }
 } finally {
   rmSync(cliMediaWikiPackageDir, { recursive: true, force: true });
+}
+
+const cliMediaWikiBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-mediawiki-batch-"));
+try {
+  const answerPaths = [
+    join(cliMediaWikiBatchPackageDir, "answers", "hr", "answer.wiki"),
+    join(cliMediaWikiBatchPackageDir, "answers", "support", "answer.mediawiki"),
+  ];
+  const sourcePaths = [
+    join(cliMediaWikiBatchPackageDir, "sources", "hr", "policy.mediawiki"),
+    join(cliMediaWikiBatchPackageDir, "sources", "support", "policy.wiki"),
+  ];
+  for (const path of [...answerPaths, ...sourcePaths]) {
+    mkdirSync(dirname(path), { recursive: true });
+  }
+  writeFileSync(answerPaths[0], "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(answerPaths[1], "Enterprise support requests receive a first response within four business hours.\n");
+  writeFileSync(sourcePaths[0], "= Parental Leave Policy =\nEmployees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePaths[1], "== Support Response Policy ==\nEnterprise support requests receive a first response within four business hours.\n");
+
+  const mediaWikiBatchPayload = JSON.parse(execFileSync(
+    "node",
+    [
+      fileURLToPath(cliPath),
+      "verify-batch",
+      "--answer-dir",
+      join(cliMediaWikiBatchPackageDir, "answers"),
+      "--source-dir",
+      join(cliMediaWikiBatchPackageDir, "sources"),
+      "--json",
+    ],
+    { cwd: repoRoot, encoding: "utf8" },
+  ));
+  if (
+    mediaWikiBatchPayload.summary?.answersWithClaims !== 2 ||
+    mediaWikiBatchPayload.summary?.answersWithoutClaims !== 0 ||
+    mediaWikiBatchPayload.answers?.map(({ answerPath }) => answerPath).join("|") !== answerPaths.join("|") ||
+    mediaWikiBatchPayload.answers?.some(({ report }) => report?.summary?.verified !== 1) ||
+    mediaWikiBatchPayload.answers?.some(({ report }) => !sourcePaths.includes(report?.sources?.[0]?.sourcePath))
+  ) {
+    throw new Error("Package artifact did not preserve MediaWiki answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(cliMediaWikiBatchPackageDir, { recursive: true, force: true });
 }
 
 const cliAsciiDocPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-asciidoc-"));
