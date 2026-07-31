@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now strips small triangle bullets such as `▴` and `▾` from
+rich-text policy exports, keeping those statements atomic before evidence
+verification.
+
 Claim extraction now strips Unicode horizontal-bar and minus-sign bullets from
 localized policy exports before evidence verification.
 
