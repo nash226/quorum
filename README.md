@@ -332,6 +332,9 @@ The packaged CLI smoke gate now verifies AsciiDoc (`.adoc`/`.asciidoc`) and
 Org-mode (`.org`) answer and approved-source exports, keeping these documented
 policy formats executable after publishing.
 
+Recursive batch verification now regression-tests XHTML (`.xhtml`) answer and
+approved-source exports, including HTML title extraction for reviewer evidence.
+
 The evaluation suite now covers the support price-adjustment policy fixture,
 including eligibility, retailer restriction, and refund-routing outcomes.
 
