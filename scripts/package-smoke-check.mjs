@@ -1441,6 +1441,25 @@ try {
   await packagedServer.close();
 }
 
+const configuredPackagedServer = await serverEntry.startApiServer({
+  port: 0,
+  maxRequestBytes: 4096,
+  requestTimeoutMs: 1250,
+});
+try {
+  const configuredCapabilitiesResponse = await fetch(`${configuredPackagedServer.url}/capabilities`);
+  const configuredCapabilitiesPayload = await configuredCapabilitiesResponse.json();
+  if (
+    configuredCapabilitiesResponse.status !== 200 ||
+    configuredCapabilitiesPayload.capabilities?.maxRequestBytes !== 4096 ||
+    configuredCapabilitiesPayload.capabilities?.requestTimeoutMs !== 1250
+  ) {
+    throw new Error("Package artifact server did not preserve configured runtime limits in capabilities.");
+  }
+} finally {
+  await configuredPackagedServer.close();
+}
+
 const cliVersion = JSON.parse(execFileSync(process.execPath, [fileURLToPath(cliPath), "version", "--json"], { encoding: "utf8" }));
 if (cliVersion.service !== "quorum" || cliVersion.version !== packageJson.version) {
   throw new Error("Package artifact CLI did not return the expected version contract.");

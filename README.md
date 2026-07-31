@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged HTTP smoke gate now verifies that configured request-size and
+request-timeout limits are exposed through `/capabilities`, keeping deployed
+agent clients aligned with the server's runtime guardrails.
+
 The local HTTP API now regression-tests its configured request-size guard for
 both declared and chunked JSON bodies, keeping oversized agent requests
 fail-closed with a structured `413` response.
