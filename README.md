@@ -414,7 +414,7 @@ promise.
 The support evaluation suite also covers identity verification, including a
 verified ownership check plus unsupported and needs-review shortcuts for
 mismatched identity documents and order-number-only disclosure.
-Claim extraction also splits substantial semicolon-delimited policy claims and normalizes bracketed, Arabic-Indic, Persian, and fullwidth ordered-list
+Claim extraction also splits substantial semicolon-delimited policy claims and normalizes bracketed, Arabic-Indic, Persian, fullwidth, and CJK ideographic ordered-list
 markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown
 policy tables are also reduced to row-level claims, including tables that omit

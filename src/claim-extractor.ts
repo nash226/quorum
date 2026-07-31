@@ -14,6 +14,7 @@ const ARABIC_NUMBER_PREFIX = /^[\u0660-\u0669\u06F0-\u06F9]+[.)．]\s+/;
 const PARENTHESIZED_ARABIC_NUMBER_PREFIX = /^\([\u0660-\u0669\u06F0-\u06F9]+\)\s+/;
 const FULLWIDTH_NUMBER_PREFIX = /^[\uFF10-\uFF19]+[.)．]\s+/;
 const PARENTHESIZED_FULLWIDTH_NUMBER_PREFIX = /^\([\uFF10-\uFF19]+\)\s+/;
+const CJK_NUMBER_PREFIX = /^[一二三四五六七八九十百千万億]+、\s*/;
 const BRACKETED_NUMBER_PREFIX = /^\[\d+\]\s+/;
 const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
 const DEFINITION_LIST_PREFIX = /^:\s+/;
@@ -567,6 +568,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     PARENTHESIZED_ARABIC_NUMBER_PREFIX,
     FULLWIDTH_NUMBER_PREFIX,
     PARENTHESIZED_FULLWIDTH_NUMBER_PREFIX,
+    CJK_NUMBER_PREFIX,
     BRACKETED_NUMBER_PREFIX,
     DASH_BULLET_PREFIX,
     /^\d+[.)]\s+/,
