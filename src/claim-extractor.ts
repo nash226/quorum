@@ -17,6 +17,7 @@ const FULLWIDTH_NUMBER_PREFIX = /^[\uFF10-\uFF19]+[.)．]\s+/;
 const PARENTHESIZED_FULLWIDTH_NUMBER_PREFIX = /^\([\uFF10-\uFF19]+\)\s+/;
 const CJK_NUMBER_PREFIX = /^[一二三四五六七八九十百千万億]+、\s*/;
 const BRACKETED_NUMBER_PREFIX = /^\[\d+\]\s+/;
+const CJK_BRACKETED_NUMBER_PREFIX = /^[【〔［][0-9０-９]+[】〕］]\s*/;
 const DASH_BULLET_PREFIX = /^(?:[\u2013\u2014])\s+/;
 const DEFINITION_LIST_PREFIX = /^:\s+/;
 const MARKDOWN_TABLE_SEPARATOR_CELL = /^:?-{3,}:?$/;
@@ -571,6 +572,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     PARENTHESIZED_FULLWIDTH_NUMBER_PREFIX,
     CJK_NUMBER_PREFIX,
     BRACKETED_NUMBER_PREFIX,
+    CJK_BRACKETED_NUMBER_PREFIX,
     DASH_BULLET_PREFIX,
     /^\d+[.)]\s+/,
     /^\d+:\s+/,

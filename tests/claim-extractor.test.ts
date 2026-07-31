@@ -14,6 +14,21 @@ test("returns a queue-routing signal alongside normalized claims", () => {
   });
 });
 
+test("extracts clean claims from CJK bracketed numbered lists", () => {
+  const claims = extractClaims(`Policy notes:
+
+【１】 Employees receive 12 weeks of paid parental leave
+〔2〕 Healthcare coverage begins after 30 days of employment
+［3］ Contractors do not receive paid vacation
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave",
+    "Healthcare coverage begins after 30 days of employment",
+    "Contractors do not receive paid vacation",
+  ]);
+});
+
 test("preserves short claims instead of silently dropping them", () => {
   const claims = extractClaims(`
 - No refunds.
