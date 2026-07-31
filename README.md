@@ -3,6 +3,10 @@
 The packaged CLI smoke gate now verifies direct XML answer and approved-source
 exports, keeping the published structured-format contract release-gated.
 
+The packaged CLI smoke gate now verifies both AsciiDoc aliases for direct
+answers and approved sources, keeping installed document discovery aligned with
+the published `.adoc` and `.asciidoc` contract.
+
 The packaged batch smoke gate now verifies YAML answer and `.yml` policy-source
 discovery, keeping structured-format coverage aligned between single-file and
 directory verification workflows.
