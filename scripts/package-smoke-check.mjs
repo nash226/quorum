@@ -670,8 +670,8 @@ const cliCsvPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-csv-"));
 try {
   const answerPath = join(cliCsvPackageDir, "answer.csv");
   const sourcePath = join(cliCsvPackageDir, "policy.csv");
-  writeFileSync(answerPath, "claim\nEmployees receive 12 weeks of paid parental leave.\n");
-  writeFileSync(sourcePath, "policy\nEmployees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(answerPath, "claim,context\n\"Employees receive 12 weeks of paid parental leave.\",\"HR, People Ops\"\n");
+  writeFileSync(sourcePath, "policy,owner\n\"Employees receive 12 weeks of paid parental leave.\",\"People Ops, Benefits\"\n");
 
   const csvOutput = execFileSync(
     "node",
