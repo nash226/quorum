@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies reStructuredText answer and approved-
+source files, keeping documentation-tool exports release-gated with their
+fallback titles and evidence paths intact.
+
 The packaged CLI smoke gate now verifies a TSV answer against a CSV approved
 source, keeping delimited policy exports release-gated in published artifacts.
 

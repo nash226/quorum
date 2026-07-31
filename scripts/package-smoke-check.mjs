@@ -130,7 +130,7 @@ try {
   const answerPath = join(emptySourcePackageDir, "answer.md");
   const sourceDir = join(emptySourcePackageDir, "sources");
   mkdirSync(sourceDir);
-  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(answerPath, "Parental Leave\n==============\n\nEmployees receive 12 weeks of paid parental leave.\n");
   await libraryEntry.verifyAnswerFileInputs({ answerPath, sourcePaths: [], sourceDirs: [sourceDir] });
   throw new Error("Package artifact accepted an empty approved source directory.");
 } catch (error) {
