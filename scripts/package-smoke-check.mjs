@@ -2135,6 +2135,29 @@ try {
   rmSync(markdownAliasTempDir, { recursive: true, force: true });
 }
 
+const asciidocAliasTempDir = mkdtempSync(join(tmpdir(), "quorum-package-asciidoc-aliases-"));
+try {
+  for (const [answerExtension, sourceExtension] of [["adoc", "asciidoc"], ["asciidoc", "adoc"]]) {
+    const answerPath = join(asciidocAliasTempDir, `answer.${answerExtension}`);
+    const sourcePath = join(asciidocAliasTempDir, `policy.${sourceExtension}`);
+    writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+    writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+    const asciidocAliasResult = JSON.parse(execFileSync(process.execPath, [
+      fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ], { cwd: repoRoot, encoding: "utf8" }));
+    if (
+      asciidocAliasResult.summary?.verified !== 1 ||
+      asciidocAliasResult.answerPath !== answerPath ||
+      asciidocAliasResult.sources?.[0]?.sourcePath !== sourcePath
+    ) {
+      throw new Error(`Package artifact did not verify the expected AsciiDoc alias contract for .${answerExtension}/.${sourceExtension}.`);
+    }
+  }
+} finally {
+  rmSync(asciidocAliasTempDir, { recursive: true, force: true });
+}
+
 const ndjsonAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-ndjson-answer-"));
 try {
   const ndjsonAnswerPath = join(ndjsonAnswerTempDir, "answer.ndjson");
