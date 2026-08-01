@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged HTTP reviewer-queue smoke gate now verifies the support-domain
+filter against all 56 support fixtures, keeping API handoffs aligned with the
+CLI queue contract and current evaluation inventory.
+
 The packaged reviewer-queue smoke gate now exercises
 `review-queue --domain support` against the current 56-fixture support
 benchmark, keeping domain-filtered queue validation aligned with the

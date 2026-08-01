@@ -1438,6 +1438,37 @@ try {
     throw new Error("Package artifact server did not serve the expected reviewer queue contract.");
   }
 
+  const supportReviewQueueResponse = await fetch(`${packagedServer.url}/review-queue`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      reviewCsvContent: [
+        "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+        "Packaged support queue packet,answers/support.md,claim_1,Support agents verify account ownership before discussing billing details.,verified,Matched approved policy,Support Policy,Support agents verify account ownership before discussing billing details.,verified,Approved by support",
+        "",
+      ].join("\n"),
+      queueStatus: "reviewed",
+      domains: ["support"],
+      fixtures: [{
+        fixturePath: join(repoRoot, "examples", "evaluations", "support-policy.json"),
+        content: readFileSync(join(repoRoot, "examples", "evaluations", "support-policy.json"), "utf8"),
+      }],
+    }),
+  });
+  const supportReviewQueuePayload = await supportReviewQueueResponse.json();
+  if (
+    supportReviewQueueResponse.status !== 200 ||
+    supportReviewQueuePayload.review?.totalAnswers !== 1 ||
+    supportReviewQueuePayload.review?.reviewedAnswers !== 1 ||
+    supportReviewQueuePayload.review?.verdicts?.verified !== 1 ||
+    supportReviewQueuePayload.queueStatus !== "reviewed" ||
+    supportReviewQueuePayload.domains?.length !== 1 ||
+    supportReviewQueuePayload.domains[0] !== "support" ||
+    supportReviewQueuePayload.evaluation?.fixtureCount !== 1
+  ) {
+    throw new Error("Package artifact server did not preserve the support reviewer queue domain contract.");
+  }
+
   const noClaimsQueueResponse = await fetch(`${packagedServer.url}/review-queue`, {
     method: "POST",
     headers: { "content-type": "application/json" },
