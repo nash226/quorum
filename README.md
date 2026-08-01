@@ -172,6 +172,9 @@ Claim extraction now strips alternate CJK numbered-list punctuation such as
 Claim extraction now strips fullwidth numeric list markers such as `１．` and
 `２）`, keeping localized policy exports atomic before evidence verification.
 
+Claim extraction now strips katakana middle-dot bullets such as `・`, keeping
+localized checklist exports atomic before evidence verification.
+
 Claim extraction now strips Unicode checklist markers such as `☐`, `☑`, and
 `✅`, keeping copied policy checklists atomic before evidence verification.
 
