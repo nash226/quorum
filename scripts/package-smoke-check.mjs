@@ -2460,6 +2460,7 @@ try {
   const reviewCsvPath = join(reviewQueueTempDir, "review.csv");
   const queueJsonPath = join(reviewQueueTempDir, "queue.json");
   const pendingQueueJsonPath = join(reviewQueueTempDir, "pending-queue.json");
+  const reviewedQueueJsonPath = join(reviewQueueTempDir, "reviewed-queue.json");
   const hrQueueJsonPath = join(reviewQueueTempDir, "hr-queue.json");
   const supportQueueJsonPath = join(reviewQueueTempDir, "support-queue.json");
   const queueCsvPath = join(reviewQueueTempDir, "queue.csv");
@@ -2481,6 +2482,15 @@ try {
     "--queue-status", "pending", "--generated-at", "2026-07-24T00:00:00.000Z",
     "--json", "--out", pendingQueueJsonPath,
   ], { encoding: "utf8" });
+  writeFileSync(reviewCsvPath, [
+    "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+    "HR reviewer packet,answers/hr.md,claim_1,Employees receive 12 weeks of paid parental leave.,verified,Matched,HR Policy,Employees receive 12 weeks of paid parental leave.,verified,Approved",
+  ].join("\n") + "\n");
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "review-queue", "--review-csv", reviewCsvPath,
+    "--queue-status", "reviewed", "--generated-at", "2026-07-24T00:00:00.000Z",
+    "--json", "--out", reviewedQueueJsonPath,
+  ], { encoding: "utf8" });
   execFileSync(process.execPath, [
     fileURLToPath(cliPath), "review-queue", "--review-csv", reviewCsvPath,
     "--fixture-dir", fileURLToPath(new URL("examples/evaluations", packageRoot)),
@@ -2493,6 +2503,7 @@ try {
   ], { encoding: "utf8" });
   const queueJson = JSON.parse(readFileSync(queueJsonPath, "utf8"));
   const pendingQueueJson = JSON.parse(readFileSync(pendingQueueJsonPath, "utf8"));
+  const reviewedQueueJson = JSON.parse(readFileSync(reviewedQueueJsonPath, "utf8"));
   const hrQueueJson = JSON.parse(readFileSync(hrQueueJsonPath, "utf8"));
   const supportQueueJson = JSON.parse(readFileSync(supportQueueJsonPath, "utf8"));
   const queueCsv = readFileSync(queueCsvPath, "utf8");
@@ -2504,6 +2515,10 @@ try {
     pendingQueueJson.queueStatus !== "pending" ||
     pendingQueueJson.review?.totalAnswers !== 1 ||
     pendingQueueJson.review?.pendingAnswers !== 1 ||
+    reviewedQueueJson.queueStatus !== "reviewed" ||
+    reviewedQueueJson.review?.totalAnswers !== 1 ||
+    reviewedQueueJson.review?.reviewedAnswers !== 1 ||
+    reviewedQueueJson.review?.pendingAnswers !== 0 ||
     JSON.stringify(hrQueueJson.domains) !== JSON.stringify(["hr"]) ||
     hrQueueJson.evaluation?.fixtureCount !== 30 ||
     hrQueueJson.evaluation?.mismatchCount !== 0 ||
