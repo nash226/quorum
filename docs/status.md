@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `10c53a2` on 2026-08-01, feat: support mdwn Markdown exports
+- Latest shipped change: `332d459` on 2026-08-01, feat: normalize Markdown blockquote claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | [#1662](https://github.com/nash226/quorum/pull/1662) | feat: normalize Markdown blockquote claims | `332d459` |
 | 2026-08-01 | Direct push | feat: support mdwn Markdown exports | `10c53a2` |
 | 2026-08-01 | Direct push | test: smoke-check config alias package verification | `08a2203` |
 | 2026-08-01 | Direct push | feat: discover common config export aliases | `c2b8cff` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | test: smoke-check packaged YML alias | `8432185` |
 | 2026-08-01 | Direct push | docs: clarify shipped batch verification surface | `d9edc37` |
 | 2026-08-01 | Direct push | test: smoke-check direct JSON extension exports | `249f804` |
-| 2026-08-01 | Direct push | feat: discover JSONC input exports | `8ab5c27` |
 
