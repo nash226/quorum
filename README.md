@@ -2,7 +2,8 @@
 
 The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
-extensions before wiring an integration.
+extensions before wiring an integration; the human-readable form now prints
+the contract version alongside those extension lists.
 
 Batch verification is shipped as a foundation: the CLI and local HTTP API can
 review multiple answers, preserve reviewer decisions, and produce queue-ready

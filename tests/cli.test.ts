@@ -209,6 +209,7 @@ test("verify-batch discovers nested XML answers and sources", async () => {
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
+  assert.match(stdout, /Contract version: 0\.1\.0/);
   assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
   assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
