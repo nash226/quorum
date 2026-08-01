@@ -1,5 +1,9 @@
 # Quorum
 
+Directory verification now recognizes `.mdwn` Markdown exports for both
+answers and approved sources, keeping another common Markdown alias on the
+published format contract.
+
 The packaged CLI smoke gate now verifies direct `.conf` and `.cfg` answer and
 approved-source exports, keeping common configuration aliases release-gated.
 
