@@ -923,6 +923,9 @@ Integrations can consume the same contract as sorted JSON arrays with:
 npm run formats -- --json
 ```
 
+The package-script contract test verifies that this wrapper forwards `--json`
+and exposes the same source and answer extensions as the library API.
+
 Run `npm run help` for the complete installed CLI command reference.
 
 Every shipped command also accepts `--help` or `-h`, so integrations and
