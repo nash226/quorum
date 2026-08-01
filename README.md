@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct LaTeX answer and approved-source
+verification, keeping normalized `.tex` policy evidence release-gated for
+installed integrations.
+
 The packaged CLI smoke gate now verifies direct YAML approved-source exports,
 keeping structured source discovery release-gated symmetrically with YAML
 answers.

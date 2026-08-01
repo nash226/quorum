@@ -251,6 +251,36 @@ try {
   assert.equal(pdfReport.summary.verified, 1);
   assert.equal(pdfReport.sources[0].title, "PDF HR Policy");
 
+  const latexAnswerPath = join(tempDir, "latex-answer.tex");
+  const latexSourcePath = join(tempDir, "latex-policy.tex");
+  const latexReportPath = join(tempDir, "latex-report.json");
+
+  writeFileSync(
+    latexAnswerPath,
+    "\\textbf{Employees} receive 12 weeks of paid parental leave.\n",
+    "utf8",
+  );
+  writeFileSync(
+    latexSourcePath,
+    "\\section{HR Policy}\nEmployees receive 12 weeks of paid parental leave.\n",
+    "utf8",
+  );
+
+  const latexStdout = runCli([
+    "verify",
+    "--answer",
+    latexAnswerPath,
+    "--source",
+    latexSourcePath,
+    "--out",
+    latexReportPath,
+  ]);
+
+  const latexReport = readJson(latexReportPath);
+  assert.match(latexStdout, /Quorum Verification Report/);
+  assert.equal(latexReport.summary.verified, 1);
+  assert.equal(latexReport.sources[0].title, "latex-policy");
+
   const batchReportPath = join(tempDir, "batch-report.json");
   const batchReviewCsvPath = join(tempDir, "batch-review.csv");
   const batchSummaryCsvPath = join(tempDir, "batch-summary.csv");
