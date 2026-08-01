@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies `extract-claims --result-json`, keeping
+claim previews and answer provenance release-gated for installed integrations.
+
 The OpenAPI export now keeps the packaged claim-extraction endpoint visible
 alongside verification and evaluation routes, protecting the machine-readable
 integration contract used by agent clients.
