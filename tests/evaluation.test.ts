@@ -74,6 +74,21 @@ test("evaluation directory discovery ignores hidden fixture directories", async 
   }
 });
 
+test("every shipped HR and support fixture remains loadable", async () => {
+  const fixturePaths = await resolveEvaluationFixturePaths([], [
+    resolve("examples/evaluations/hr"),
+    resolve("examples/evaluations/support"),
+  ]);
+
+  assert.ok(fixturePaths.length > 0);
+  for (const fixturePath of fixturePaths) {
+    const fixture = await loadEvaluationFixture(fixturePath);
+    assert.ok(fixture.name, fixturePath);
+    assert.ok(fixture.domain === "hr" || fixture.domain === "support", fixturePath);
+    assert.ok(fixture.expectedSummary, fixturePath);
+  }
+});
+
 test("evaluates a shipped inline HR medical leave fixture across policy claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/medical-leave-policy.json"),

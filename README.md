@@ -3,6 +3,10 @@
 Claim extraction now strips Markdown blockquote markers, keeping quoted policy
 exports atomic and comparable with approved-source evidence.
 
+The test suite now validates every checked-in HR and support evaluation fixture
+can still be loaded, keeping the benchmark inventory structurally valid before
+the score gate runs.
+
 Markdown table answers with unlabeled rows are also normalized into readable
 claims, so policy exports do not lose evidence when a row has no label cell.
 
