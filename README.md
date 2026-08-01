@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now strips warning-sign bullets (`⚠` and `⚠️`) from exported
+checklists, keeping the policy statement itself available for evidence review.
+
 Claim extraction now strips Unicode directional bullets (`⁌` and `⁍`) from
 localized checklist exports, keeping those policy statements atomic for
 evidence verification.
