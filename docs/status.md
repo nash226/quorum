@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `78e277d` on 2026-08-01, docs: show formats contract response shape
+- Latest shipped change: `06842de` on 2026-08-01, fix: normalize warning-sign claim bullets
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | fix: normalize warning-sign claim bullets | `06842de` |
 | 2026-08-01 | Direct push | docs: show formats contract response shape | `78e277d` |
 | 2026-08-01 | Direct push | fix: strip directional Unicode claim bullets | `0036fe4` |
 | 2026-08-01 | Direct push | fix: normalize ballot-box check claims | `bd832a0` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | fix: strip ballot-box X task markers | `2aff8b4` |
 | 2026-08-01 | Direct push | docs: clarify shipped input format aliases | `11f7845` |
 | 2026-08-01 | [#1663](https://github.com/nash226/quorum/pull/1663) | test: cover unlabeled Markdown table claims | `dd4b3f4` |
-| 2026-08-01 | [#1662](https://github.com/nash226/quorum/pull/1662) | feat: normalize Markdown blockquote claims | `332d459` |
 
