@@ -2357,6 +2357,27 @@ try {
   rmSync(yamlAnswerTempDir, { recursive: true, force: true });
 }
 
+const yamlSourceTempDir = mkdtempSync(join(tmpdir(), "quorum-package-yaml-source-"));
+try {
+  const yamlAnswerPath = join(yamlSourceTempDir, "answer.md");
+  const yamlSourcePath = join(yamlSourceTempDir, "policy.yaml");
+  writeFileSync(yamlAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(yamlSourcePath, "title: Parental Leave Policy\npolicy: Employees receive 12 weeks of paid parental leave.\n");
+  const yamlSourceResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", yamlAnswerPath, "--source", yamlSourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    yamlSourceResult.summary?.verified !== 1 ||
+    yamlSourceResult.answerPath !== yamlAnswerPath ||
+    yamlSourceResult.sources?.[0]?.sourcePath !== yamlSourcePath ||
+    yamlSourceResult.sources?.[0]?.title !== "Parental Leave Policy"
+  ) {
+    throw new Error("Package artifact did not preserve the direct YAML source contract.");
+  }
+} finally {
+  rmSync(yamlSourceTempDir, { recursive: true, force: true });
+}
+
 const jsonAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-json-answer-"));
 try {
   const jsonAnswerPath = join(jsonAnswerTempDir, "answer.json");

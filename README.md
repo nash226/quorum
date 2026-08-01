@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct YAML approved-source exports,
+keeping structured source discovery release-gated symmetrically with YAML
+answers.
+
 Claim extraction now joins Markdown backslash hard breaks within one claim, so
 wrapped policy answers keep their reviewer evidence context intact.
 
