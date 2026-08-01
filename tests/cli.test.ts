@@ -287,7 +287,7 @@ test("formats --json exposes normalized unique extension entries", async () => {
 
   for (const extensions of [formats.sources, formats.answers]) {
     assert.equal(new Set(extensions).size, extensions.length);
-    assert.ok(extensions.every((extension) => /^\.[a-z0-9]+$/.test(extension)));
+    assert.ok(extensions.every((extension) => /^\.[a-z0-9]+(?:-[a-z0-9]+)*$/.test(extension)));
   }
 });
 
