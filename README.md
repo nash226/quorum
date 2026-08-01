@@ -2,6 +2,8 @@
 
 Directory-based verification now discovers `.json5` answer and approved-source exports alongside JSON, JSONL, and NDJSON.
 
+The packaged CLI smoke gate now verifies direct JSON5 answers and approved sources, keeping the published format contract release-gated.
+
 Quorum’s shipped foundation now covers single-answer and batch verification,
 reviewer decision handoffs, and the local HTTP API. The next product boundary
 is a durable API service for agent integrations; deployment and persistence

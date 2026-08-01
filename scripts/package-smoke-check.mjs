@@ -1034,6 +1034,34 @@ try {
   rmSync(cliYamlPackageDir, { recursive: true, force: true });
 }
 
+const cliJson5PackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-json5-"));
+try {
+  const answerPath = join(cliJson5PackageDir, "answer.json5");
+  const sourcePath = join(cliJson5PackageDir, "policy.json5");
+  writeFileSync(answerPath, '{"claim": "Employees receive 12 weeks of paid parental leave."}\n');
+  writeFileSync(
+    sourcePath,
+    '{"title": "Parental Leave Policy", "rule": "Employees receive 12 weeks of paid parental leave."}\n',
+  );
+
+  const json5Output = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const json5Payload = JSON.parse(json5Output);
+  if (
+    json5Payload.summary?.verified !== 1 ||
+    json5Payload.answerPath !== answerPath ||
+    json5Payload.sources?.[0]?.title !== "Parental Leave Policy" ||
+    json5Payload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected JSON5 answer/source contract.");
+  }
+} finally {
+  rmSync(cliJson5PackageDir, { recursive: true, force: true });
+}
+
 const cliFrontmatterPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-frontmatter-"));
 try {
   const answerPath = join(cliFrontmatterPackageDir, "answer.md");
