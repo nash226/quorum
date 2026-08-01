@@ -1,5 +1,10 @@
 # Quorum
 
+Quorum’s shipped foundation now covers single-answer and batch verification,
+reviewer decision handoffs, and the local HTTP API. The next product boundary
+is a durable API service for agent integrations; deployment and persistence
+choices remain tracked in the roadmap and decision queue.
+
 The packaged CLI smoke gate now verifies direct LaTeX answer and approved-source
 verification, keeping normalized `.tex` policy evidence release-gated for
 installed integrations.
