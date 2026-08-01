@@ -163,6 +163,12 @@ Run the checked-in HR or support scorecards with
 [CLI guide](docs/cli-guide.md), and [evaluation fixture guide](docs/evaluation-fixtures.md)
 describe the request, report, and scorecard workflows in detail.
 
+The local API does not provide accounts, API keys, or bearer-token validation;
+for anything beyond a trusted local or private-network process, put an
+authenticated gateway in front of it. CORS origin configuration controls
+browser access only and is not an authentication boundary. See the
+[deployment guide](docs/api-deployment.md) before exposing the service.
+
 CSV and TSV approved-policy exports are normalized into readable evidence
 lines, including title, freshness, and trust metadata columns.
 
