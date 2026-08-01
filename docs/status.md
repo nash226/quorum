@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `12e91dc` on 2026-08-01, feat: discover Org-mode alias files
+- Latest shipped change: `fdc68d1` on 2026-08-01, feat: discover JSON5 input exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | feat: discover JSON5 input exports | `fdc68d1` |
 | 2026-08-01 | [#1642](https://github.com/nash226/quorum/pull/1642) | feat: discover Org-mode alias files | `12e91dc` |
 | 2026-08-01 | Direct push | test: smoke-check direct Org-mode verification | `700aa3a` |
 | 2026-08-01 | Direct push | test: verify xhtml source title normalization | `b7a7167` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | test: smoke-check direct LaTeX verification | `ecf4d69` |
 | 2026-08-01 | Direct push | test: smoke-check nested reviewer queue outputs | `e5563b5` |
 | 2026-08-01 | Direct push | test: smoke-check nested OpenAPI exports | `466916b` |
-| 2026-08-01 | [#1632](https://github.com/nash226/quorum/pull/1632) | test: smoke-check direct YAML sources | `884ea49` |
 
