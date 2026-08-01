@@ -203,6 +203,11 @@ Run the checked-in HR or support scorecards with
 [CLI guide](docs/cli-guide.md), and [evaluation fixture guide](docs/evaluation-fixtures.md)
 describe the request, report, and scorecard workflows in detail.
 
+Before opening a change, run `npm run check` to execute the full repository
+gate: unit tests, the TypeScript build, CLI and packaged-CLI smoke checks, and
+the evaluation scorecard threshold. This is the same command used by the
+repository's release-oriented CI workflow.
+
 CSV and TSV approved-policy exports are normalized into readable evidence
 lines, including title, freshness, and trust metadata columns.
 
