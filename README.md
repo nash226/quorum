@@ -522,6 +522,8 @@ CLI usage preserves the same format-discovery help contract.
 The packaged CLI smoke gate now verifies AsciiDoc (`.adoc`/`.asciidoc`) and
 Org-mode (`.org`) answer and approved-source exports, keeping these documented
 policy formats executable after publishing.
+Batch directory discovery also accepts the `.org-mode` alias for both answers
+and approved sources.
 
 The evaluation suite now covers the support price-adjustment policy fixture,
 including eligibility, retailer restriction, and refund-routing outcomes.
