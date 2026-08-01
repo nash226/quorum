@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9a3786a` on 2026-08-01, docs: document the full repository check gate
+- Latest shipped change: `c2b8cff` on 2026-08-01, feat: discover common config export aliases
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | feat: discover common config export aliases | `c2b8cff` |
 | 2026-08-01 | Direct push | docs: document the full repository check gate | `9a3786a` |
 | 2026-08-01 | Direct push | test: smoke-check packaged YML alias | `8432185` |
 | 2026-08-01 | Direct push | docs: clarify shipped batch verification surface | `d9edc37` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | feat: discover JSONC input exports | `8ab5c27` |
 | 2026-08-01 | Direct push | feat: discover JSON5 input exports | `fdc68d1` |
 | 2026-08-01 | [#1642](https://github.com/nash226/quorum/pull/1642) | feat: discover Org-mode alias files | `12e91dc` |
-| 2026-08-01 | Direct push | test: smoke-check direct Org-mode verification | `700aa3a` |
 
