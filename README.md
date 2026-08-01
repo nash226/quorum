@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now strips Unicode directional bullets (`⁌` and `⁍`) from
+localized checklist exports, keeping those policy statements atomic for
+evidence verification.
+
 Claim extraction now strips the ballot-box-with-X marker (`☒`) from Markdown
 task lists, keeping exported checklist claims comparable with approved-source
 evidence.
