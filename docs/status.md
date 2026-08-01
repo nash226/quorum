@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bd832a0` on 2026-08-01, fix: normalize ballot-box check claims
+- Latest shipped change: `0036fe4` on 2026-08-01, fix: strip directional Unicode claim bullets
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | fix: strip directional Unicode claim bullets | `0036fe4` |
 | 2026-08-01 | Direct push | fix: normalize ballot-box check claims | `bd832a0` |
 | 2026-08-01 | Direct push | test: smoke-check packaged claim labels | `aa235b9` |
 | 2026-08-01 | Direct push | fix: strip ballot-box X task markers | `2aff8b4` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | [#1663](https://github.com/nash226/quorum/pull/1663) | test: cover unlabeled Markdown table claims | `dd4b3f4` |
 | 2026-08-01 | [#1662](https://github.com/nash226/quorum/pull/1662) | feat: normalize Markdown blockquote claims | `332d459` |
 | 2026-08-01 | Direct push | feat: support mdwn Markdown exports | `10c53a2` |
-| 2026-08-01 | Direct push | test: smoke-check config alias package verification | `08a2203` |
 
