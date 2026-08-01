@@ -474,6 +474,18 @@ test("extracts claims from one-column markdown table answers", () => {
   );
 });
 
+test("keeps unlabeled markdown table rows as readable claims", () => {
+  const claims = extractClaims(`| Policy | Details |
+| --- | --- |
+| | Employees receive 12 weeks of paid parental leave. |
+| | Managers approve exceptions within five business days. |`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Managers approve exceptions within five business days.",
+  ]);
+});
+
 test("extracts markdown tables without trailing pipe punctuation noise", () => {
   const claims = extractClaims(`| Queue | Policy |
 | --- | --- |
