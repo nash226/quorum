@@ -132,6 +132,11 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(yamlSource.title, "leave-policy");
 });
 
+test("strips the Org-mode alias from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile("policies/benefits.org-mode", "Policy text", 0);
+  assert.equal(source.title, "benefits");
+});
+
 test("normalizes quoted csv policy exports and reads metadata columns", async () => {
   const source = await sourceDocumentFromFile(
     "exports/benefits.CSV",
