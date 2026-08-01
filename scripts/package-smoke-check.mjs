@@ -172,10 +172,12 @@ try {
   mkdirSync(answerDir, { recursive: true });
   mkdirSync(sourceDir, { recursive: true });
   writeFileSync(join(answerDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(join(answerDir, "answer.textile"), "Managers approve exceptions within five business days.\n");
   writeFileSync(
     join(sourceDir, "policy.json"),
     JSON.stringify({ policy: "Employees receive 12 weeks of paid parental leave." }),
   );
+  writeFileSync(join(sourceDir, "exceptions.textile"), "Managers approve exceptions within five business days.\n");
 
   const batchOutput = execFileSync(
     "node",
@@ -191,12 +193,15 @@ try {
     { cwd: repoRoot, encoding: "utf8" },
   );
   const batchPayload = JSON.parse(batchOutput);
+  const markdownSources = batchPayload.answers?.[0]?.report?.sources ?? [];
+  const textileSources = batchPayload.answers?.[1]?.report?.sources ?? [];
   if (
-    batchPayload.summary?.answersWithClaims !== 1 ||
+    batchPayload.summary?.answersWithClaims !== 2 ||
     batchPayload.summary?.answersWithoutClaims !== 0 ||
     batchPayload.answers?.[0]?.answerPath !== join(answerDir, "answer.md") ||
-    batchPayload.answers?.[0]?.report?.sources?.[0]?.sourcePath !== join(sourceDir, "policy.json") ||
-    batchPayload.answers?.[0]?.report?.sources?.[0]?.title !== "policy"
+    !markdownSources.some((source) => source.sourcePath === join(sourceDir, "policy.json") && source.title === "policy") ||
+    batchPayload.answers?.[1]?.answerPath !== join(answerDir, "answer.textile") ||
+    !textileSources.some((source) => source.sourcePath === join(sourceDir, "exceptions.textile") && source.title === "exceptions")
   ) {
     throw new Error("Package artifact did not preserve JSON source discovery in the packaged CLI contract.");
   }

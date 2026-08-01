@@ -3,6 +3,10 @@
 Claim extraction now strips Markdown blockquote markers, keeping quoted policy
 exports atomic and comparable with approved-source evidence.
 
+The packaged batch verification smoke gate now covers nested Textile answers and
+approved sources, keeping this supported policy format release-gated in
+recursive workflows as well as direct verification.
+
 Markdown table answers with unlabeled rows are also normalized into readable
 claims, so policy exports do not lose evidence when a row has no label cell.
 
