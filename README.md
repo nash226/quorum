@@ -1,5 +1,9 @@
 # Quorum
 
+The HTTP `/review-queue` API can now return the reviewer queue summary CSV as
+an optional artifact, so integrations can hand off the same queue totals the
+CLI reports without reimplementing CSV rendering.
+
 The HTTP `/review-queue` API now returns per-domain benchmark counts alongside
 overall drift metrics, so filtered reviewer dashboards can explain where a
 score comes from without rerunning evaluation locally.

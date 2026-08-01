@@ -5216,6 +5216,31 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
   }
 });
 
+test("programmatic API can return a reviewer queue CSV handoff artifact", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        includeArtifacts: ["queue_summary_csv"],
+        reviewCsvContent: [
+          "answer_label,answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "Pending packet,answers/pending.md,claim_1,Employees receive paid leave.,verified,Matched,HR Policy,Employees receive paid leave.,,",
+        ].join("\n"),
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as ApiReviewQueueResponse;
+    assert.match(result.artifacts?.queue_summary_csv ?? "", /^generated_at,total_answers,pending_answers/);
+    assert.match(result.artifacts?.queue_summary_csv ?? "", /,1,1,0,0,1,0,1,0,1,0,0,0,clear,/);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API filters reviewer queue overview by queue status", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
