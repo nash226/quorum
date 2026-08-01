@@ -1,5 +1,12 @@
 # Quorum
 
+The local HTTP API can be started with `npm run dev -- serve --port 3000`;
+integrations can fetch `http://127.0.0.1:3000/capabilities` to discover the
+running contract, supported formats, request limits, queue statuses, and
+available report artifacts. See [HTTP API integration](docs/api-integration.md)
+and [API deployment guidance](docs/api-deployment.md) for request and network
+boundary details.
+
 The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
 extensions before wiring an integration.
