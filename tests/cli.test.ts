@@ -2051,14 +2051,21 @@ test("openapi prints the machine-readable API description", async () => {
   const stdout = await runCli(["openapi"]);
   const openApi = JSON.parse(stdout) as {
     openapi: string;
-    paths: Record<string, unknown>;
+    paths: Record<string, any>;
+    components?: { schemas?: Record<string, any> };
   };
 
   assert.equal(openApi.openapi, "3.1.0");
   assert.ok("/verify" in openApi.paths);
   assert.ok("/verify-batch" in openApi.paths);
   assert.ok("/import-review" in openApi.paths);
+  assert.ok("/review-queue" in openApi.paths);
   assert.ok("/evaluate" in openApi.paths);
+
+  const reviewQueuePost = openApi.paths["/review-queue"]?.post;
+  const includeArtifacts = reviewQueuePost?.requestBody?.content?.["application/json"]?.schema?.properties?.includeArtifacts;
+  assert.deepEqual(includeArtifacts?.items?.enum, ["queue_summary_csv"]);
+  assert.equal(openApi.components?.schemas?.ApiReviewQueueResponse?.properties?.artifacts?.properties?.queue_summary_csv?.type, "string");
 });
 
 test("openapi writes the machine-readable API description to disk", async () => {
