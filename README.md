@@ -1,5 +1,9 @@
 # Quorum
 
+The installed package exposes `npm run formats` (and
+`npm run formats -- --json`) for discovering the supported answer and source
+extensions before wiring an integration.
+
 Batch verification is shipped as a foundation: the CLI and local HTTP API can
 review multiple answers, preserve reviewer decisions, and produce queue-ready
 summaries. The next product boundary is a durable API service, which remains
