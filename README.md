@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction ignores both ATX (`# Heading`) and setext (`Heading` followed
+by `===` or `---`) Markdown headings, so document structure does not become
+reviewable business claims.
+
 Claim extraction now joins Markdown backslash hard breaks within one claim, so
 wrapped policy answers keep their reviewer evidence context intact.
 
