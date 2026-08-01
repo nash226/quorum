@@ -3,6 +3,9 @@
 The packaged HTTP smoke gate now verifies reviewer-queue CSV handoffs, keeping
 the built API artifact aligned with the CLI queue summary contract.
 
+The packaged CLI smoke gate now verifies reviewed reviewer-queue filtering,
+keeping published handoffs release-gated after reviewer decisions are recorded.
+
 The HTTP `/review-queue` API can now return the reviewer queue summary CSV as
 an optional artifact, so integrations can hand off the same queue totals the
 CLI reports without reimplementing CSV rendering.
