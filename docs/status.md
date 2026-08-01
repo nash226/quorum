@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b7a7167` on 2026-08-01, test: verify xhtml source title normalization
+- Latest shipped change: `700aa3a` on 2026-08-01, test: smoke-check direct Org-mode verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | test: smoke-check direct Org-mode verification | `700aa3a` |
 | 2026-08-01 | Direct push | test: verify xhtml source title normalization | `b7a7167` |
 | 2026-08-01 | Direct push | docs: surface shipped product foundation | `f60fd25` |
 | 2026-08-01 | Direct push | test: smoke-check direct LaTeX verification | `ecf4d69` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | test: smoke-check nested OpenAPI exports | `466916b` |
 | 2026-08-01 | [#1632](https://github.com/nash226/quorum/pull/1632) | test: smoke-check direct YAML sources | `884ea49` |
 | 2026-08-01 | [#1625](https://github.com/nash226/quorum/pull/1625) | fix: preserve markdown hard-break claims | `74d2098` |
-| 2026-08-01 | Direct push | test: preserve packaged version headers | `32457e0` |
 
