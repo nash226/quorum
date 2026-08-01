@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct TOML answers against Markdown
+approved sources, keeping structured answer exports release-gated alongside
+TOML source and batch coverage.
+
 The packaged CLI smoke gate now verifies direct YAML approved-source exports,
 keeping structured source discovery release-gated symmetrically with YAML
 answers.
