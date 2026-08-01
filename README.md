@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct `.markdown`, `.mdown`, and
+`.mkdn` answer and approved-source verification, keeping Markdown aliases
+release-gated alongside the primary `.md` format.
+
 Directory-based verification now discovers `.jsonc` answer and approved-source exports, including files with `//` comments.
 
 Directory-based verification now discovers `.json5` answer and approved-source exports alongside JSON, JSONL, and NDJSON.
