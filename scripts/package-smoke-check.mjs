@@ -981,6 +981,30 @@ try {
   rmSync(cliTomlSourcePackageDir, { recursive: true, force: true });
 }
 
+const cliTomlAnswerPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-toml-answer-"));
+try {
+  const answerPath = join(cliTomlAnswerPackageDir, "answer.toml");
+  const sourcePath = join(cliTomlAnswerPackageDir, "policy.md");
+  writeFileSync(answerPath, 'response = "Employees receive 12 weeks of paid parental leave."\n');
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const tomlAnswerOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const tomlAnswerPayload = JSON.parse(tomlAnswerOutput);
+  if (
+    tomlAnswerPayload.summary?.verified !== 1 ||
+    tomlAnswerPayload.answerPath !== answerPath ||
+    tomlAnswerPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected direct TOML answer contract.");
+  }
+} finally {
+  rmSync(cliTomlAnswerPackageDir, { recursive: true, force: true });
+}
+
 const cliYamlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-"));
 try {
   const answerPath = join(cliYamlPackageDir, "answer.yaml");
