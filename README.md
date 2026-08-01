@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now strips numbered-list markers from any Unicode decimal-digit
+script, keeping localized policy exports atomic for reviewer evidence.
+
 The packaged HTTP smoke gate now verifies reviewer-queue CSV handoffs, keeping
 the built API artifact aligned with the CLI queue summary contract.
 
