@@ -1,5 +1,9 @@
 # Quorum
 
+The OpenAPI regression gate now verifies that `/review-queue` advertises its
+optional `queue_summary_csv` handoff artifact, keeping generated agent clients
+aligned with the shipped reviewer queue contract.
+
 Claim extraction now strips numbered-list markers from any Unicode decimal-digit
 script, keeping localized policy exports atomic for reviewer evidence.
 
