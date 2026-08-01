@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now strips the ballot-box-with-X marker (`☒`) from Markdown
+task lists, keeping exported checklist claims comparable with approved-source
+evidence.
+
 The CLI guide now documents the exact Markdown-family and configuration-file
 aliases supported for direct verification and recursive directory discovery;
 use `quorum formats --json` to consume the same contract programmatically.
