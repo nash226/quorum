@@ -1,7 +1,8 @@
 # Quorum
 
-The packaged reviewer-queue smoke gate now tracks the current 56-fixture
-support benchmark, keeping domain-filtered queue validation aligned with the
+The packaged reviewer-queue smoke gate now exercises
+`review-queue --domain support` against the current 56-fixture support
+benchmark, keeping domain-filtered queue validation aligned with the
 checked-in evaluation inventory.
 
 The packaged batch smoke gate now verifies nested `.ini` and `.properties`
