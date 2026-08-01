@@ -152,6 +152,50 @@ test("verify-batch discovers nested XML answers and sources", async () => {
   }
 });
 
+test("verify-batch discovers nested XHTML answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xhtml-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    const sourceDir = join(tempDir, "sources", "nested");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(
+        join(answerDir, "leave.xhtml"),
+        "<html xmlns=\"http://www.w3.org/1999/xhtml\"><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.xhtml"),
+        "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>HR Benefits Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      join(tempDir, "answers"),
+      "--source-dir",
+      join(tempDir, "sources"),
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answers.length, 1);
+    assert.match(report.answers[0]?.answerPath ?? "", /answers\/nested\/leave\.xhtml$/);
+    assert.deepEqual(report.sources.map((source) => source.title), ["HR Benefits Policy"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
