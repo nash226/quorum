@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e52f075` on 2026-07-31, test: smoke-check evaluation score thresholds
+- Latest shipped change: `768956f` on 2026-08-01, fix: normalize unicode decimal list markers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | fix: normalize unicode decimal list markers | `768956f` |
 | 2026-07-31 | Direct push | test: smoke-check evaluation score thresholds | `e52f075` |
 | 2026-07-31 | Direct push | test: smoke-check reviewed queue filtering | `3e2abf7` |
 | 2026-07-31 | [#1609](https://github.com/nash226/quorum/pull/1609) | test: smoke-check reviewer queue CSV artifact | `7a73565` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | feat: expose review queue domain drift | `de62f48` |
 | 2026-07-31 | Direct push | docs: align roadmap status note | `21abdba` |
 | 2026-07-31 | Direct push | test: cover atomic report output cleanup | `c7f08bd` |
-| 2026-07-31 | Direct push | test: smoke-check support reviewer queue API domain | `39254ef` |
 
