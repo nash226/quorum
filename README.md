@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct `.txt` and `.text` answer and
+approved-source exports, keeping both documented plain-text aliases release-gated.
+
 Claim extraction now strips Markdown blockquote markers, keeping quoted policy
 exports atomic and comparable with approved-source evidence.
 

@@ -449,6 +449,33 @@ try {
   rmSync(cliLogPackageDir, { recursive: true, force: true });
 }
 
+const cliTextExtensionsPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-text-extensions-"));
+try {
+  for (const extension of ["txt", "text"]) {
+    const answerPath = join(cliTextExtensionsPackageDir, `answer.${extension}`);
+    const sourcePath = join(cliTextExtensionsPackageDir, `policy.${extension}`);
+    writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+    writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+    const textOutput = execFileSync(
+      "node",
+      [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+      { cwd: repoRoot, encoding: "utf8" },
+    );
+    const textPayload = JSON.parse(textOutput);
+    if (
+      textPayload.summary?.verified !== 1 ||
+      textPayload.answerPath !== answerPath ||
+      textPayload.sources?.[0]?.title !== "policy" ||
+      textPayload.sources?.[0]?.sourcePath !== sourcePath
+    ) {
+      throw new Error(`Package artifact did not verify the expected .${extension} answer/source contract.`);
+    }
+  }
+} finally {
+  rmSync(cliTextExtensionsPackageDir, { recursive: true, force: true });
+}
+
 const cliTextilePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-textile-"));
 try {
   const answerPath = join(cliTextilePackageDir, "answer.textile");
