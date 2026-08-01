@@ -1541,6 +1541,26 @@ try {
   ) {
     throw new Error("Package artifact server did not preserve the evaluation mismatch gate contract.");
   }
+
+  const evaluationScoreFailureResponse = await fetch(`${packagedServer.url}/evaluate`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      fixtures: [{ fixturePath: evaluationFixturePath, content: JSON.stringify(mismatchedFixture) }],
+      minScore: 1,
+      failOnStatus: true,
+    }),
+  });
+  const evaluationScoreFailurePayload = await evaluationScoreFailureResponse.json();
+  if (
+    evaluationScoreFailureResponse.status !== 409 ||
+    evaluationScoreFailurePayload.shouldFail !== true ||
+    evaluationScoreFailurePayload.failureReasons?.join(",") !== "mismatch,min_score" ||
+    evaluationScoreFailurePayload.minScore !== 1 ||
+    evaluationScoreFailurePayload.scoreThresholdPassed !== false
+  ) {
+    throw new Error("Package artifact server did not preserve the evaluation minimum-score gate contract.");
+  }
 } finally {
   await packagedServer.close();
 }

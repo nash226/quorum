@@ -45,6 +45,10 @@ The packaged HTTP smoke gate now verifies that configured request-size and
 request-timeout limits are exposed through `/capabilities`, keeping deployed
 agent clients aligned with the server's runtime guardrails.
 
+The packaged HTTP smoke gate now verifies that `/evaluate --min-score` returns
+a structured `409` failure when a benchmark score misses its configured
+threshold, keeping release gates aligned with the CLI evaluation contract.
+
 The local HTTP API now regression-tests its configured request-size guard for
 both declared and chunked JSON bodies, keeping oversized agent requests
 fail-closed with a structured `413` response.
