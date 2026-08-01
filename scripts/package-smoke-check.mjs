@@ -700,6 +700,31 @@ try {
   rmSync(cliOrgPackageDir, { recursive: true, force: true });
 }
 
+const cliOrgModePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-org-mode-"));
+try {
+  const answerPath = join(cliOrgModePackageDir, "answer.org-mode");
+  const sourcePath = join(cliOrgModePackageDir, "policy.org-mode");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "* Parental Leave Policy\n\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const orgModeOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const orgModePayload = JSON.parse(orgModeOutput);
+  if (
+    orgModePayload.summary?.verified !== 1 ||
+    orgModePayload.answerPath !== answerPath ||
+    orgModePayload.sources?.[0]?.title !== "policy" ||
+    orgModePayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected .org-mode answer/source contract.");
+  }
+} finally {
+  rmSync(cliOrgModePackageDir, { recursive: true, force: true });
+}
+
 const cliMarkdownPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-markdown-"));
 try {
   const answerPath = join(cliMarkdownPackageDir, "answer.markdown");
