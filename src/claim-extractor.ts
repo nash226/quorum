@@ -135,6 +135,7 @@ function normalizeAnswer(answer: string): string {
     .split("\n");
   const normalizedLines: string[] = [];
   let previousLineCanContinue = false;
+  let previousLineHasHardBreak = false;
   let previousLineBelongsToMarkdownClaim: boolean = false;
   let activeFenceCharacter: "`" | "~" | undefined;
   let insideIndentedCodeBlock = false;
@@ -260,27 +261,29 @@ function normalizeAnswer(answer: string): string {
     }
 
     const explicitClaimPrefix = hasMarkdownClaimPrefix(line);
-    const normalizedLine = stripMarkdownClaimPrefix(line);
+    const normalizedLine = stripMarkdownClaimPrefix(line).replace(/\\\s*$/, "");
     const belongsToMarkdownClaim: boolean =
       explicitClaimPrefix ||
       (previousLineBelongsToMarkdownClaim && isIndentedContinuation(rawLine));
     const currentLineCanContinue =
       explicitClaimPrefix ||
-      canContinuePlainLine(normalizedLine, lines, index, belongsToMarkdownClaim);
+      canContinuePlainLine(normalizedLine, lines, index, belongsToMarkdownClaim) ||
+      /\\$/.test(line);
 
     if (
       previousLineCanContinue &&
       normalizedLines.length > 0 &&
-      shouldMergeWithPreviousLine(
+      (previousLineHasHardBreak || shouldMergeWithPreviousLine(
         line,
         rawLine,
         normalizedLine,
         explicitClaimPrefix,
         previousLineBelongsToMarkdownClaim,
-      )
+      ))
     ) {
       normalizedLines[normalizedLines.length - 1] += ` ${normalizedLine}`;
       previousLineCanContinue = currentLineCanContinue;
+      previousLineHasHardBreak = /\\$/.test(line);
       previousLineBelongsToMarkdownClaim = belongsToMarkdownClaim;
       continue;
     }
@@ -290,6 +293,7 @@ function normalizeAnswer(answer: string): string {
     );
     seenBodyContent = true;
     previousLineCanContinue = currentLineCanContinue;
+    previousLineHasHardBreak = /\\$/.test(line);
     previousLineBelongsToMarkdownClaim = belongsToMarkdownClaim;
   }
 
