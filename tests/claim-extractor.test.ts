@@ -1792,3 +1792,12 @@ test("extracts clean claims from fullwidth lettered markdown lists", () => {
     "Contractors do not receive paid vacation.",
   ]);
 });
+
+test("joins markdown backslash hard breaks inside one claim", () => {
+  const claims = extractClaims(`Employees receive 12 weeks of paid parental leave and\\
+The leave must be requested through the HR portal.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave and The leave must be requested through the HR portal.",
+  ]);
+});

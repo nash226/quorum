@@ -260,13 +260,14 @@ function normalizeAnswer(answer: string): string {
     }
 
     const explicitClaimPrefix = hasMarkdownClaimPrefix(line);
-    const normalizedLine = stripMarkdownClaimPrefix(line);
+    const normalizedLine = stripMarkdownClaimPrefix(line).replace(/\\\s*$/, "");
     const belongsToMarkdownClaim: boolean =
       explicitClaimPrefix ||
       (previousLineBelongsToMarkdownClaim && isIndentedContinuation(rawLine));
     const currentLineCanContinue =
       explicitClaimPrefix ||
-      canContinuePlainLine(normalizedLine, lines, index, belongsToMarkdownClaim);
+      canContinuePlainLine(normalizedLine, lines, index, belongsToMarkdownClaim) ||
+      /\\$/.test(line);
 
     if (
       previousLineCanContinue &&
