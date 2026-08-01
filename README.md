@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now has regression coverage for `+`-prefixed Markdown lists,
+keeping another standard policy-export list style normalized into atomic claims.
+
 Claim extraction now strips Markdown blockquote markers, keeping quoted policy
 exports atomic and comparable with approved-source evidence.
 
