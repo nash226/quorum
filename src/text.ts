@@ -50,6 +50,7 @@ const HTML_PREVIEW_BLOCK_BREAK_TAGS =
   /<(br|\/p|\/div|\/li|\/section|\/article|\/main|\/header|\/footer|\/aside|\/blockquote|\/figure|\/figcaption|\/h[1-6]|\/tr|\/td|\/th|\/dt|\/dd)\b[^>]*>/gi;
 const HTML_PREVIEW_STRIP_TAGS = /<\/?[^>\n]+>/g;
 const LIST_PREFIX_PATTERNS = [
+  /^>\s+/,
   /^[-*+]\s+/,
   /^(?:[\u2022\u2023\u25E6\u2043\u2219])\s+/,
   /^(?:[\u2013\u2014])\s+/,

@@ -120,6 +120,18 @@ test("strips inline list markers when splitting sentences", () => {
   );
 });
 
+test("strips Markdown blockquote markers when splitting quoted policy claims", () => {
+  assert.deepEqual(
+    splitIntoSentences(
+      "> Employees receive 12 weeks of paid leave.\n> Managers approve exceptions.",
+    ),
+    [
+      "Employees receive 12 weeks of paid leave.",
+      "Managers approve exceptions.",
+    ],
+  );
+});
+
 test("strips inline numeric-colon list markers when splitting sentences", () => {
   assert.deepEqual(
     splitIntoSentences(

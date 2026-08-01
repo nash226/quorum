@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now strips Markdown blockquote markers, keeping quoted policy
+exports atomic and comparable with approved-source evidence.
+
 Directory verification now recognizes `.mdwn` Markdown exports for both
 answers and approved sources, keeping another common Markdown alias on the
 published format contract.
