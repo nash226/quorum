@@ -1,5 +1,9 @@
 # Quorum
 
+The generated status page now reflects the current reviewer-queue and local API
+foundations, so repository readers can see the shipped product surface before
+choosing the next decision-gated service work.
+
 The HTTP `/review-queue` API now returns per-domain benchmark counts alongside
 overall drift metrics, so filtered reviewer dashboards can explain where a
 score comes from without rerunning evaluation locally.
