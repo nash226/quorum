@@ -3,6 +3,10 @@
 Run `npm run dev -- formats --json` to discover the versioned answer and source
 format contract used by direct and recursive verification.
 
+The API integration guide now includes the shipped `/extract-claims` preflight
+flow for previewing normalized claims and routing claim-less answers before
+evidence verification.
+
 The packaged CLI smoke gate now verifies `extract-claims --result-json`, keeping
 claim previews and answer provenance release-gated for installed integrations.
 

@@ -132,6 +132,33 @@ the same handoff; omit it when the service should stamp the request time.
 If a browser client uses the wrong method, it can read the exposed `Allow`
 header on the `405` response to discover the route's supported method.
 
+## Preview claims before verification
+
+Use `POST /extract-claims` when an agent workflow needs to inspect the claims
+Quorum will verify before choosing sources or presenting a reviewer handoff.
+The endpoint performs the same normalization used by verification, but does
+not load sources or assign evidence verdicts:
+
+```bash
+curl -sS http://127.0.0.1:3000/extract-claims \
+  -H 'content-type: application/json' \
+  -H 'X-Quorum-Request-Id: claim-preview-2026-08-01' \
+  -d '{
+    "answer": "Employees receive 12 weeks of paid parental leave.",
+    "answerPath": "answers/hr-answer.md",
+    "answerLabel": "HR reviewer packet"
+  }'
+```
+
+The response includes `answerHasClaims`, normalized claim IDs and text, and
+the supplied answer provenance. An answer with no actionable claims returns an
+empty `claims` array and `answerHasClaims: false`; callers can route that case
+to an explicit no-claims review queue instead of treating it as verified.
+
+The request ID is echoed in both the JSON response and the
+`X-Quorum-Request-Id` response header, so a preview can be correlated with the
+later verification request.
+
 ## Summarize a reviewer queue
 
 Use `POST /review-queue` when a queue consumer needs reviewer workload and
