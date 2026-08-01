@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `21abdba` on 2026-07-31, docs: align roadmap status note
+- Latest shipped change: `de62f48` on 2026-07-31, feat: expose review queue domain drift
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | feat: expose review queue domain drift | `de62f48` |
 | 2026-07-31 | Direct push | docs: align roadmap status note | `21abdba` |
 | 2026-07-31 | Direct push | test: cover atomic report output cleanup | `c7f08bd` |
 | 2026-07-31 | Direct push | test: smoke-check support reviewer queue API domain | `39254ef` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: cover support reviewer queue smoke contract | `00b2e7a` |
 | 2026-07-31 | Direct push | test: cover support renewal notice fixture | `6bdfefc` |
 | 2026-07-31 | [#1592](https://github.com/nash226/quorum/pull/1592) | test: smoke-check packaged config batches | `f57dcd6` |
-| 2026-07-31 | [#1591](https://github.com/nash226/quorum/pull/1591) | test: smoke-check packaged TOML batches | `abc4ad1` |
 
