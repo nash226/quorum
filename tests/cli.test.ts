@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { spawn } from "node:child_process";
@@ -1849,6 +1849,47 @@ test("verify result-json includes gate metadata and can be written to disk", asy
     assert.deepEqual(parsed.failVerdicts, ["contradicted"]);
     assert.equal(parsed.report.summary.contradicted, 1);
     assert.deepEqual(JSON.parse(await readFile(resultJsonOutPath, "utf8")), parsed);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("report outputs replace existing files without leaving temporary artifacts", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-atomic-output-"));
+  const answerPath = join(tempDir, "answer.md");
+  const sourcePath = join(tempDir, "source.md");
+  const reportPath = join(tempDir, "reports", "report.json");
+
+  try {
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+
+    await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--result-json-out",
+      reportPath,
+    ]);
+    await writeFile(reportPath, "stale report\n", "utf8");
+    await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--result-json-out",
+      reportPath,
+    ]);
+
+    const report = JSON.parse(await readFile(reportPath, "utf8")) as { report: { answer: string } };
+    assert.match(report.report.answer, /12 weeks of paid parental leave/);
+    assert.deepEqual(
+      (await readdir(dirname(reportPath))).filter((name) => name.endsWith(".tmp")),
+      [],
+    );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

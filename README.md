@@ -1,5 +1,9 @@
 # Quorum
 
+CLI report outputs replace existing files atomically and clean up temporary
+artifacts, so queue watchers never observe partially written JSON or handoff
+reports.
+
 The packaged HTTP reviewer-queue smoke gate now verifies the support-domain
 filter against all 56 support fixtures, keeping API handoffs aligned with the
 CLI queue contract and current evaluation inventory.
