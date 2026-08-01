@@ -6,6 +6,8 @@ Directory-based verification now discovers `.json5` answer and approved-source e
 
 The packaged CLI smoke gate now verifies direct JSON5 and JSONC answer and approved-source exports, keeping comment-friendly structured policy files release-gated alongside JSON.
 
+The packaged CLI smoke gate now verifies that recursive batch discovery ignores editor backup files such as `*.md~`, keeping transient local files out of release-gated evidence checks.
+
 Quorum’s shipped foundation now covers single-answer and batch verification,
 including recursive mixed-format answer directories against one approved
 source set,
