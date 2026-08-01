@@ -715,6 +715,8 @@ Unicode checkbox markers (`☐`, `☑`, and `☒`) are also normalized when answ
 come from exported task lists.
 Nested Markdown blockquotes and lists are normalized too, so claims copied from
 quoted review threads do not retain repeated `>` or list markers.
+Backtick- and tilde-fenced Markdown code examples are ignored during claim
+extraction, so executable configuration snippets do not enter evidence review.
 
 The shipped product surface now covers the full review loop:
 
