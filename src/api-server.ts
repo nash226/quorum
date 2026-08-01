@@ -127,6 +127,11 @@ export interface ApiReviewQueueResponse {
     score: number | null;
     scoreLabel: string;
     scoreThresholdPassed: boolean;
+    domains: Array<{
+      domain: string;
+      fixtureCount: number;
+      mismatchCount: number;
+    }>;
   } | null;
 }
 
@@ -1664,6 +1669,11 @@ async function handleApiRequest(
             score: evaluation.summary.score,
             scoreLabel: evaluation.summary.scoreLabel,
             scoreThresholdPassed: evaluation.scoreThresholdPassed ?? true,
+            domains: evaluation.summary.domains.map((domain) => ({
+              domain: domain.domain,
+              fixtureCount: domain.fixtureCount,
+              mismatchCount: domain.mismatchCount,
+            })),
           }
         : null,
     };
@@ -4065,8 +4075,20 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                     score: { type: ["number", "null"], minimum: 0, maximum: 1 },
                     scoreLabel: { type: "string" },
                     scoreThresholdPassed: { type: "boolean" },
+                    domains: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          domain: { type: "string" },
+                          fixtureCount: { type: "integer", minimum: 0 },
+                          mismatchCount: { type: "integer", minimum: 0 },
+                        },
+                        required: ["domain", "fixtureCount", "mismatchCount"],
+                      },
+                    },
                   },
-                  required: ["fixtureCount", "mismatchCount", "mismatchRate", "score", "scoreLabel", "scoreThresholdPassed"],
+                  required: ["fixtureCount", "mismatchCount", "mismatchRate", "score", "scoreLabel", "scoreThresholdPassed", "domains"],
                 },
               ],
             },

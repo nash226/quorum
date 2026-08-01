@@ -1,5 +1,9 @@
 # Quorum
 
+The HTTP `/review-queue` API now returns per-domain benchmark counts alongside
+overall drift metrics, so filtered reviewer dashboards can explain where a
+score comes from without rerunning evaluation locally.
+
 The roadmap now records batch verification and reviewer-queue handoffs as
 shipped local foundations; durable API hosting and queue persistence remain
 decision-gated.

@@ -5210,6 +5210,7 @@ test("programmatic API serves reviewer queue overview over HTTP", async () => {
     assert.equal(result.evaluation?.fixtureCount, 1);
     assert.equal(result.evaluation?.mismatchCount, 0);
     assert.equal(result.evaluation?.scoreLabel, "100%");
+    assert.deepEqual(result.evaluation?.domains, [{ domain: "hr", fixtureCount: 1, mismatchCount: 0 }]);
   } finally {
     await api.close();
   }
