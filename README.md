@@ -145,6 +145,9 @@ The packaged CLI smoke gate now verifies every non-canonical Markdown-family
 alias, keeping installed answer and source discovery aligned with the published
 `.markdown`, `.mdown`, `.mkdn`, `.mdx`, and `.qmd` format contract.
 
+XHTML source exports also use clean fallback titles without the `.xhtml`
+extension.
+
 Evaluation fixture discovery recursively skips hidden files and directories,
 so local caches and repository metadata cannot change benchmark counts.
 
