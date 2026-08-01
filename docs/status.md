@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d8fc145` on 2026-08-01, test: guard claim extraction OpenAPI route
+- Latest shipped change: `f255357` on 2026-08-01, test: smoke-check packaged claim previews
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | test: smoke-check packaged claim previews | `f255357` |
 | 2026-08-01 | Direct push | test: guard claim extraction OpenAPI route | `d8fc145` |
 | 2026-08-01 | Direct push | test: pin packaged HTTP version contract | `2463bd7` |
 | 2026-08-01 | Direct push | fix: normalize unicode decimal list markers | `768956f` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: smoke-check reviewed queue filtering | `3e2abf7` |
 | 2026-07-31 | [#1609](https://github.com/nash226/quorum/pull/1609) | test: smoke-check reviewer queue CSV artifact | `7a73565` |
 | 2026-07-31 | Direct push | feat: export reviewer queue csv artifact | `404294e` |
-| 2026-07-31 | Direct push | feat: expose review queue domain drift | `de62f48` |
 
