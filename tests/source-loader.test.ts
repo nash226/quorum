@@ -99,6 +99,16 @@ test("strips supported text extensions from fallback source titles", async () =>
     "leave.weeks=12\nleave.paid=true\n",
     6,
   );
+  const confSource = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.conf",
+    "leave.weeks=12\n",
+    7,
+  );
+  const cfgSource = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.cfg",
+    "leave.weeks=12\n",
+    8,
+  );
   const textileSource = await sourceDocumentFromFile(
     "docs/policies/leave-policy.textile",
     "Employees receive 12 weeks of paid parental leave.",
@@ -126,6 +136,10 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(iniSource.content, "[leave]\nweeks=12\n");
   assert.equal(propertiesSource.title, "leave-policy");
   assert.equal(propertiesSource.content, "leave.weeks=12\nleave.paid=true\n");
+  assert.equal(confSource.title, "leave-policy");
+  assert.equal(confSource.content, "leave.weeks=12\n");
+  assert.equal(cfgSource.title, "leave-policy");
+  assert.equal(cfgSource.content, "leave.weeks=12\n");
   assert.equal(textileSource.title, "leave-policy");
   assert.equal(ndjsonSource.title, "leave-policy");
   assert.match(ndjsonSource.content, /Employees receive 12 weeks/);
