@@ -1,5 +1,22 @@
 # Quorum
 
+Quorum reports are designed for three handoff paths: use JSON for automation,
+Markdown or HTML for human review, and CSV for spreadsheet or queue workflows.
+Single-answer verification writes these with `--out`, `--markdown-out`,
+`--html-out`, and `--review-csv-out`; batch verification adds
+`--summary-csv-out` for one queue-routing row per answer.
+
+For example, this produces both a reviewer handoff and a queue summary from a
+batch run:
+
+```bash
+npm run dev -- verify-batch \
+  --answer-dir examples/answers \
+  --source-dir examples/sources \
+  --markdown-out reports/batch-review.md \
+  --summary-csv-out reports/batch-summary.csv
+```
+
 The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
 extensions before wiring an integration.
