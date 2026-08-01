@@ -98,6 +98,9 @@ verification.
 The packaged CLI smoke gate now verifies direct XML answer and approved-source
 exports, keeping the published structured-format contract release-gated.
 
+The packaged batch smoke gate also verifies XML answer-directory discovery,
+including verified claims and source metadata after publishing.
+
 The packaged batch smoke gate now verifies YAML answer and `.yml` policy-source
 discovery, keeping structured-format coverage aligned between single-file and
 directory verification workflows.
