@@ -844,6 +844,28 @@ are mixed.
 Localized claim extraction also recognizes Arabic, Indic, CJK, and fullwidth
 sentence terminators.
 
+## Queue, Evaluation, and API Workflows
+
+After reviewers fill in a decision CSV, `review-queue` combines pending
+workload with benchmark drift for routing:
+
+```bash
+npm run dev -- review-queue --review-csv reports/hr-review-import.csv --fixture-dir examples/evaluations --queue-status pending --json --csv-out reports/reviewer-queue.csv
+```
+
+Use `evaluate` for checked-in HR and support scorecards, and `serve` when an
+agent needs the local HTTP API and its discovery, health, readiness, liveness,
+version, and OpenAPI contracts:
+
+```bash
+npm run dev -- evaluate --fixture-dir examples/evaluations --summary-csv-out reports/evaluation.csv
+npm run dev -- serve --port 8787
+curl http://127.0.0.1:8787/health
+```
+
+`formats --json` prints the currently discoverable source and answer
+extensions before an exported policy is added to a batch.
+
 ## Quick Start
 
 After installing dependencies, run the complete pre-PR validation gate with:
