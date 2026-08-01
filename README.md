@@ -1,5 +1,8 @@
 # Quorum
 
+The evaluation fixture guide now matches the shipped benchmark inventory: 86
+fixtures across 30 HR and 56 support workflows.
+
 The packaged HTTP smoke gate now verifies reviewer-queue CSV handoffs, keeping
 the built API artifact aligned with the CLI queue summary contract.
 
