@@ -550,6 +550,10 @@ published commands.
 The packaged CLI smoke gate also verifies `extract-claims --answer -`, keeping
 pipe-based claim previews release-gated alongside file-based previews.
 
+It also verifies the packaged `extract-claims --answer-label` contract, so
+reviewer-facing provenance labels survive the published CLI boundary alongside
+the original answer path.
+
 Direct CLI verification now regression-tests reStructuredText (`.rst`) answers,
 keeping single-answer documentation exports on the same evidence path as
 batch-discovered `.rst` files.

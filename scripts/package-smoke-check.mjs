@@ -94,13 +94,22 @@ try {
 
   const claimPreviewOutput = execFileSync(
     "node",
-    [fileURLToPath(cliPath), "extract-claims", "--answer", answerPath, "--result-json"],
+    [
+      fileURLToPath(cliPath),
+      "extract-claims",
+      "--answer",
+      answerPath,
+      "--answer-label",
+      "HR reviewer packet",
+      "--result-json",
+    ],
     { cwd: repoRoot, encoding: "utf8" },
   );
   const claimPreview = JSON.parse(claimPreviewOutput);
   if (
     claimPreview.answerHasClaims !== true ||
     claimPreview.answerPath !== answerPath ||
+    claimPreview.answerLabel !== "HR reviewer packet" ||
     claimPreview.claims?.length !== 1 ||
     claimPreview.claims?.[0]?.id !== "claim_1" ||
     claimPreview.claims?.[0]?.text !== "Employees receive 12 weeks of paid parental leave."
