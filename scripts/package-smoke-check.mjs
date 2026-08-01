@@ -300,6 +300,31 @@ try {
   rmSync(cliYamlBatchPackageDir, { recursive: true, force: true });
 }
 
+const cliDocxPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-docx-"));
+try {
+  const answerPath = join(cliDocxPackageDir, "answer.docx");
+  const sourcePath = join(cliDocxPackageDir, "policy.docx");
+  const docxFixture = readFileSync(join(repoRoot, "node_modules", "mammoth", "test", "test-data", "single-paragraph.docx"));
+  writeFileSync(answerPath, docxFixture);
+  writeFileSync(sourcePath, docxFixture);
+
+  const docxOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const docxPayload = JSON.parse(docxOutput);
+  if (
+    docxPayload.summary?.verified !== 1 ||
+    docxPayload.answerPath !== answerPath ||
+    docxPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected DOCX answer/source contract.");
+  }
+} finally {
+  rmSync(cliDocxPackageDir, { recursive: true, force: true });
+}
+
 const cliYamlDirectPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-direct-"));
 try {
   const answerPath = join(cliYamlDirectPackageDir, "answer.yaml");

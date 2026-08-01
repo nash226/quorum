@@ -139,6 +139,10 @@ describe the request, report, and scorecard workflows in detail.
 CSV and TSV approved-policy exports are normalized into readable evidence
 lines, including title, freshness, and trust metadata columns.
 
+The packaged CLI smoke check also verifies DOCX answers and approved sources,
+so the published artifact exercises the same document-ingestion path as local
+verification.
+
 Recursive directory discovery skips hidden files, hidden directories, and
 common editor temporary files so verification batches include only intentional
 documents.
