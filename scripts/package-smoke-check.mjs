@@ -1063,10 +1063,14 @@ try {
     }
   }
 
-  const versionResponse = await fetch(`${packagedServer.url}/version`);
+  const versionResponse = await fetch(`${packagedServer.url}/version`, {
+    headers: { "X-Quorum-Request-Id": "packaged-version-contract" },
+  });
   const versionPayload = await versionResponse.json();
   if (
     versionResponse.status !== 200 ||
+    versionPayload.requestId !== "packaged-version-contract" ||
+    versionResponse.headers.get("x-quorum-request-id") !== "packaged-version-contract" ||
     versionPayload.service !== "quorum" ||
     versionPayload.version !== packageJson.version
   ) {
