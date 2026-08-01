@@ -104,6 +104,28 @@ test("verify-batch discovers .json5 exports for answers and sources", async () =
   }
 });
 
+test("verify-batch discovers .jsonc exports for answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-jsonc-alias-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([mkdir(answerDir, { recursive: true }), mkdir(sourceDir, { recursive: true })]);
+    await Promise.all([
+      writeFile(join(answerDir, "leave.jsonc"), '{\n  // approved policy value\n  "leaveWeeks": 12\n}\n', "utf8"),
+      writeFile(join(sourceDir, "hr-policy.jsonc"), '{\n  "leaveWeeks": 12\n}\n', "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]);
+    const report = JSON.parse(stdout) as { answerCount: number; sourceCount: number };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers nested .log answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-log-discovery-"));
 
@@ -209,6 +231,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.textile/);
   assert.match(stdout, /Source files: .*\.json5/);
   assert.match(stdout, /Answer files: .*\.json5/);
+  assert.match(stdout, /Source files: .*\.jsonc/);
+  assert.match(stdout, /Answer files: .*\.jsonc/);
   assert.match(stdout, /Source files: .*\.log/);
   assert.match(stdout, /Answer files: .*\.log/);
 });
