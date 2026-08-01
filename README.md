@@ -3,6 +3,9 @@
 Claim extraction now joins Markdown backslash hard breaks within one claim, so
 wrapped policy answers keep their reviewer evidence context intact.
 
+The hard-break regression is covered for uppercase continuation lines too, so
+Markdown wrapping does not split a single policy statement into two claims.
+
 The packaged HTTP smoke gate now verifies `/version` request correlation and
 discovery headers, keeping installed API clients aligned with the runtime
 identity contract.
