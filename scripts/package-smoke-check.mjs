@@ -476,7 +476,7 @@ try {
 
 const cliConfigPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-config-"));
 try {
-  for (const extension of ["ini", "properties"]) {
+  for (const extension of ["ini", "properties", "conf", "cfg"]) {
     const answerPath = join(cliConfigPackageDir, `answer.${extension}`);
     const sourcePath = join(cliConfigPackageDir, `policy.${extension}`);
     writeFileSync(answerPath, "leave.policy=Employees receive 12 weeks of paid parental leave.\n");

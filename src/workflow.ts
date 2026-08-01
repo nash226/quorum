@@ -173,7 +173,7 @@ export interface ReviewerDecisionFileImportResultOptions
   failOn?: ClaimVerdict[];
 }
 
-export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdown", ".mkdn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv"]);
+export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdown", ".mkdn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv"]);
 export const ANSWER_EXTENSIONS = new Set([
   ".md",
   ".markdown",
@@ -195,6 +195,8 @@ export const ANSWER_EXTENSIONS = new Set([
   ".log",
   ".ini",
   ".properties",
+  ".conf",
+  ".cfg",
   ".html",
   ".htm",
   ".xhtml",
