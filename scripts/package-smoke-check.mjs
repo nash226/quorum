@@ -1418,6 +1418,7 @@ try {
       ].join("\n"),
       queueStatus: "reviewed",
       domains: ["hr"],
+      includeArtifacts: ["queue_summary_csv"],
       fixtures: [{
         fixturePath: join(repoRoot, "examples", "evaluations", "hr-policy.json"),
         content: readFileSync(join(repoRoot, "examples", "evaluations", "hr-policy.json"), "utf8"),
@@ -1433,7 +1434,8 @@ try {
     reviewQueuePayload.queueStatus !== "reviewed" ||
     reviewQueuePayload.domains?.length !== 1 ||
     reviewQueuePayload.domains[0] !== "hr" ||
-    reviewQueuePayload.evaluation?.fixtureCount !== 1
+    reviewQueuePayload.evaluation?.fixtureCount !== 1 ||
+    reviewQueuePayload.artifacts?.queue_summary_csv?.startsWith("generated_at,total_answers,pending_answers") !== true
   ) {
     throw new Error("Package artifact server did not serve the expected reviewer queue contract.");
   }
