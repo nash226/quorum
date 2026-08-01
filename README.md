@@ -1,5 +1,9 @@
 # Quorum
 
+The roadmap now records batch verification and reviewer-queue handoffs as
+shipped local foundations; durable API hosting and queue persistence remain
+decision-gated.
+
 CLI report outputs replace existing files atomically and clean up temporary
 artifacts, so queue watchers never observe partially written JSON or handoff
 reports.
