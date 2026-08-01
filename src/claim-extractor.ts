@@ -473,7 +473,7 @@ function hasMarkdownClaimPrefix(line: string): boolean {
 }
 
 function isHeading(line: string): boolean {
-  return /^#{1,6}\s+/.test(line);
+  return /^(?:#{1,6}|={1,6})\s+/.test(line);
 }
 
 function getOpeningFenceCharacter(line: string): "`" | "~" | undefined {
