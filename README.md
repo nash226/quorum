@@ -732,9 +732,9 @@ Direct single-answer verification also covers XML answer exports, preserving the
 answer path and verified claim evidence without requiring batch discovery.
 The top-level CLI help now advertises CSV and TSV together, matching the
 format contract used by direct verification and directory discovery.
-reStructuredText (`.rst`) exports are also discovered recursively for both
-answers and approved sources, so documentation-tool exports can enter the same
-verification flow without renaming. When an `.rst` file has no title metadata,
+reStructuredText (`.rst` and `.rest`) exports are also discovered recursively
+for both answers and approved sources, so documentation-tool exports can enter
+the same verification flow without renaming. When these files have no title metadata,
 its reviewer-facing fallback title now also drops the extension, matching the
 other supported document formats.
 Explicit `--source` paths for JSON and YAML policy exports are also covered by
