@@ -40,6 +40,13 @@ the artifact arrays let queue workers avoid hard-coded routing choices. Treat
 unknown capability values as unsupported and refresh the cached response when
 the `ETag` changes.
 
+The extension values include their leading dot and are normalized to lowercase
+in the published contract. Directory verification matches them
+case-insensitively, so a client can validate an uploaded `POLICY.MD` against
+`.md` without maintaining a second alias table. Keep the advertised arrays as
+the source of truth when accepting file-backed inputs, and reserve
+`requestContentTypes` for the separate JSON transport contract.
+
 For container or load-balancer probes, the liveness endpoint is intentionally
 independent of source loading and reviewer queue state:
 

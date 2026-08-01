@@ -1,5 +1,9 @@
 # Quorum
 
+The local HTTP API advertises its complete, lowercase file-format contract in
+`GET /capabilities`, so integrations can validate answer and approved-source
+extensions without maintaining a duplicate alias list.
+
 The packaged CLI smoke gate now verifies direct `.conf` and `.cfg` answer and
 approved-source exports, keeping common configuration aliases release-gated.
 
