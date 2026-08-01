@@ -1777,7 +1777,7 @@ try {
 
 const openApiTempDir = mkdtempSync(join(tmpdir(), "quorum-package-openapi-"));
 try {
-  const openApiPath = join(openApiTempDir, "openapi.json");
+  const openApiPath = join(openApiTempDir, "reports", "openapi.json");
   execFileSync(process.execPath, [fileURLToPath(cliPath), "openapi", "--out", openApiPath], { encoding: "utf8" });
   const openApiDocument = JSON.parse(readFileSync(openApiPath, "utf8"));
   if (openApiDocument.openapi !== "3.1.0" || openApiDocument.info?.title !== "Quorum Local API" || !openApiDocument.paths?.["/verify"]) {

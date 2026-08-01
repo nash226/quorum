@@ -4,6 +4,10 @@ The packaged CLI smoke gate now verifies direct YAML approved-source exports,
 keeping structured source discovery release-gated symmetrically with YAML
 answers.
 
+The packaged CLI smoke gate now verifies that `openapi --out` creates nested
+parent directories, keeping the documented `reports/openapi.json` export
+workflow release-gated for installed integrations.
+
 Claim extraction now joins Markdown backslash hard breaks within one claim, so
 wrapped policy answers keep their reviewer evidence context intact.
 
