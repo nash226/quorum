@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `466916b` on 2026-08-01, test: smoke-check nested OpenAPI exports
+- Latest shipped change: `e5563b5` on 2026-08-01, test: smoke-check nested reviewer queue outputs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | test: smoke-check nested reviewer queue outputs | `e5563b5` |
 | 2026-08-01 | Direct push | test: smoke-check nested OpenAPI exports | `466916b` |
 | 2026-08-01 | [#1632](https://github.com/nash226/quorum/pull/1632) | test: smoke-check direct YAML sources | `884ea49` |
 | 2026-08-01 | [#1625](https://github.com/nash226/quorum/pull/1625) | fix: preserve markdown hard-break claims | `74d2098` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | docs: document format discovery command | `6205dbb` |
 | 2026-08-01 | Direct push | test: smoke-check packaged claim previews | `f255357` |
 | 2026-08-01 | Direct push | test: guard claim extraction OpenAPI route | `d8fc145` |
-| 2026-08-01 | Direct push | test: pin packaged HTTP version contract | `2463bd7` |
 
