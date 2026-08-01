@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies the `.yml` YAML alias for direct
+answers and approved sources, keeping both documented YAML extensions covered
+at the release boundary.
+
 Directory-based verification now discovers `.jsonc` answer and approved-source exports, including files with `//` comments.
 
 Directory-based verification now discovers `.json5` answer and approved-source exports alongside JSON, JSONL, and NDJSON.
