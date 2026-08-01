@@ -3,6 +3,10 @@
 Claim extraction now strips numbered-list markers from any Unicode decimal-digit
 script, keeping localized policy exports atomic for reviewer evidence.
 
+The packaged evaluation smoke gate now enforces both fixture mismatch failures
+and the configured minimum score, keeping low-confidence benchmark regressions
+from passing release checks silently.
+
 The packaged HTTP smoke gate now verifies reviewer-queue CSV handoffs, keeping
 the built API artifact aligned with the CLI queue summary contract.
 
