@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2aff8b4` on 2026-08-01, fix: strip ballot-box X task markers
+- Latest shipped change: `aa235b9` on 2026-08-01, test: smoke-check packaged claim labels
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | test: smoke-check packaged claim labels | `aa235b9` |
 | 2026-08-01 | Direct push | fix: strip ballot-box X task markers | `2aff8b4` |
 | 2026-08-01 | Direct push | docs: clarify shipped input format aliases | `11f7845` |
 | 2026-08-01 | [#1663](https://github.com/nash226/quorum/pull/1663) | test: cover unlabeled Markdown table claims | `dd4b3f4` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | feat: support mdwn Markdown exports | `10c53a2` |
 | 2026-08-01 | Direct push | test: smoke-check config alias package verification | `08a2203` |
 | 2026-08-01 | Direct push | feat: discover common config export aliases | `c2b8cff` |
-| 2026-08-01 | Direct push | docs: document the full repository check gate | `9a3786a` |
 
