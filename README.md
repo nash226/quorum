@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged HTTP smoke gate now verifies request-ID propagation on the
+machine-readable `/version` endpoint, keeping agent correlation metadata
+intact in published API artifacts.
+
 The OpenAPI export now keeps the packaged claim-extraction endpoint visible
 alongside verification and evaluation routes, protecting the machine-readable
 integration contract used by agent clients.
