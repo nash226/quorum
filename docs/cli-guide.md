@@ -53,7 +53,11 @@ npm run formats -- --json
 ```
 
 Each array contains the lowercase extensions accepted for that role, such as
-`.md`, `.pdf`, and `.jsonl`, plus a `version` field matching the API contract.
+`.md`, `.mdwn`, `.conf`, `.cfg`, `.pdf`, and `.jsonl`, plus a `version` field
+matching the API contract. Markdown-family aliases (`.mdown`, `.mkdn`,
+`.mdwn`, `.mdx`, and `.qmd`) and common configuration aliases (`.ini`,
+`.properties`, `.conf`, and `.cfg`) are supported for both direct files and
+recursive directory discovery.
 Use these arrays to make an allow-list decision before submitting a file to
 `verify` or `verify-batch`; they are the same format contract exported by the
 programmatic API.
@@ -85,9 +89,10 @@ npm run dev -- verify \
   --summary-csv-out reports/hr-summary.csv
 ```
 
-Supported answer and source files include Markdown/MDX/Quarto/reStructuredText,
-AsciiDoc, Org-mode, MediaWiki, text, exported HTML/XHTML, JSON, YAML/YML, XML,
-TOML, CSV, PDF, and DOCX.
+Supported answer and source files include Markdown-family aliases
+(including MDX, Quarto, and `.mdwn`), reStructuredText, AsciiDoc, Org-mode,
+MediaWiki, text/configuration aliases, exported HTML/XHTML, JSON, YAML/YML,
+XML, TOML, CSV, PDF, and DOCX.
 Structured JSON, YAML, XML, and TOML exports are normalized into claim-readable
 evidence text. Recursive answer and source directories discover the same
 supported formats, skip hidden paths, and sort the complete flattened path set.

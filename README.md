@@ -1,5 +1,9 @@
 # Quorum
 
+The CLI guide now documents the exact Markdown-family and configuration-file
+aliases supported for direct verification and recursive directory discovery;
+use `quorum formats --json` to consume the same contract programmatically.
+
 Claim extraction now strips Markdown blockquote markers, keeping quoted policy
 exports atomic and comparable with approved-source evidence.
 
