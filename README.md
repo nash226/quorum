@@ -1,5 +1,9 @@
 # Quorum
 
+The current roadmap treats batch verification, reviewer queues, evaluation,
+and the local HTTP API as shipped foundations; near-term work focuses on
+reliability, fixture coverage, and reviewer handoff quality.
+
 The packaged CLI smoke gate now verifies the `.yml` YAML alias for direct
 answers and approved sources, keeping both documented YAML extensions covered
 at the release boundary.
