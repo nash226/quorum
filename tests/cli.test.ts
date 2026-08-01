@@ -2055,6 +2055,7 @@ test("openapi prints the machine-readable API description", async () => {
   };
 
   assert.equal(openApi.openapi, "3.1.0");
+  assert.ok("/extract-claims" in openApi.paths);
   assert.ok("/verify" in openApi.paths);
   assert.ok("/verify-batch" in openApi.paths);
   assert.ok("/import-review" in openApi.paths);

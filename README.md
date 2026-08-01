@@ -1,5 +1,9 @@
 # Quorum
 
+The OpenAPI export now keeps the packaged claim-extraction endpoint visible
+alongside verification and evaluation routes, protecting the machine-readable
+integration contract used by agent clients.
+
 Claim extraction now strips numbered-list markers from any Unicode decimal-digit
 script, keeping localized policy exports atomic for reviewer evidence.
 
