@@ -224,6 +224,53 @@ test("OpenAPI documents bodyless HEAD response headers for every GET endpoint", 
   }
 });
 
+test("OpenAPI documents the artifact choices for every report workflow", () => {
+  const openApi = createOpenApiDocument();
+  const expectedArtifacts: Record<string, string[]> = {
+    [VERIFY_PATH]: ["text", "markdown", "html", "result_json", "review_csv", "summary_csv"],
+    [VERIFY_BATCH_PATH]: [
+      "text",
+      "markdown",
+      "html",
+      "result_json",
+      "review_csv",
+      "summary_csv",
+      "aggregate_summary_csv",
+    ],
+    [IMPORT_REVIEW_PATH]: ["text", "markdown", "html", "result_json", "summary_csv", "queue_summary_csv"],
+    [REVIEW_QUEUE_PATH]: ["queue_summary_csv"],
+    [EVALUATE_PATH]: [
+      "text",
+      "markdown",
+      "html",
+      "result_json",
+      "summary_csv",
+      "domain_summary_csv",
+      "aggregate_summary_csv",
+    ],
+  };
+
+  for (const [path, expected] of Object.entries(expectedArtifacts)) {
+    const paths = openApi.paths as Record<string, {
+      post?: {
+        requestBody?: { content?: { [mediaType: string]: { schema?: unknown } } };
+      };
+    }>;
+    const schema = (paths[path]?.post?.requestBody?.content?.["application/json"]?.schema ?? {}) as {
+      properties?: Record<string, { items?: { $ref?: string; enum?: string[] } }>;
+    };
+    const artifactSchemaRef = schema.properties?.includeArtifacts?.items?.$ref;
+    if (artifactSchemaRef) {
+      const artifactSchemaName = artifactSchemaRef.replace("#/components/schemas/", "");
+      const schemas = openApi.components?.schemas as Record<string, unknown>;
+      const artifactSchema = schemas[artifactSchemaName] as { enum?: string[] } | undefined;
+      assert.deepEqual(artifactSchema?.enum, expected, path);
+    } else {
+      assert.deepEqual(schema.properties?.includeArtifacts?.items?.enum, expected, path);
+    }
+  }
+});
+
 test("API CORS exposed headers contain each browser-visible header once", () => {
   const exposedHeaders = API_CORS_EXPOSED_HEADERS.split(", ");
 

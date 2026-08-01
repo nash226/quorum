@@ -1,5 +1,9 @@
 # Quorum
 
+The API contract tests now pin the documented artifact choices for every
+verification, reviewer, queue, and evaluation workflow, keeping generated
+clients aligned with the report formats the service accepts.
+
 The OpenAPI export now keeps the packaged claim-extraction endpoint visible
 alongside verification and evaluation routes, protecting the machine-readable
 integration contract used by agent clients.
