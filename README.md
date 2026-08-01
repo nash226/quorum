@@ -1598,6 +1598,8 @@ Use `POST /extract-claims` when a workflow needs to preview normalized claim IDs
 and route empty drafts before loading approved sources; the [HTTP integration
 guide](docs/api-integration.md#preview-claims-before-verification) includes the
 request shape and base64 document example.
+Pass an optional `answerPath` and `answerLabel` to keep the preview tied to the
+same file and reviewer-facing name used by later verification and queue work.
 The packaged HTTP smoke gate verifies both plain-text and base64 answer preview
 inputs, keeping uploaded answer integrations aligned with the published artifact.
 It also verifies that the packaged `/capabilities` response advertises every
