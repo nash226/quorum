@@ -1,5 +1,10 @@
 # Quorum
 
+Batch verification is shipped as a foundation: the CLI and local HTTP API can
+review multiple answers, preserve reviewer decisions, and produce queue-ready
+summaries. The next product boundary is a durable API service, which remains
+deployment-decision gated.
+
 Claim extraction now strips warning-sign bullets (`⚠` and `⚠️`) from exported
 checklists, keeping the policy statement itself available for evidence review.
 
