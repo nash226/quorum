@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `39254ef` on 2026-07-31, test: smoke-check support reviewer queue API domain
+- Latest shipped change: `c7f08bd` on 2026-07-31, test: cover atomic report output cleanup
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | test: cover atomic report output cleanup | `c7f08bd` |
 | 2026-07-31 | Direct push | test: smoke-check support reviewer queue API domain | `39254ef` |
 | 2026-07-31 | Direct push | docs: record reviewer queue smoke coverage | `b7dd957` |
 | 2026-07-31 | Direct push | test: cover support reviewer queue smoke contract | `00b2e7a` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | [#1592](https://github.com/nash226/quorum/pull/1592) | test: smoke-check packaged config batches | `f57dcd6` |
 | 2026-07-31 | [#1591](https://github.com/nash226/quorum/pull/1591) | test: smoke-check packaged TOML batches | `abc4ad1` |
 | 2026-07-31 | Direct push | docs: show machine-readable format discovery | `7d01859` |
-| 2026-07-31 | Direct push | test: smoke-check packaged CSV and TSV verification | `52ce90d` |
 
