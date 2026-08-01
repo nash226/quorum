@@ -2246,6 +2246,9 @@ the TypeScript build, local HTTP smoke checks, packaged-entrypoint smoke checks,
 and the evaluation score gate. Run the individual commands when narrowing down
 a failure.
 
+For integration discovery, `npm run dev -- formats` prints the supported answer
+and source export contract, including the formats accepted by the packaged CLI.
+
 ```text
 src/          verifier, CLI, reports, workflow, and HTTP API
 tests/        unit, API, CLI, smoke, and fixture coverage
