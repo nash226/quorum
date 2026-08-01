@@ -135,6 +135,7 @@ function normalizeAnswer(answer: string): string {
     .split("\n");
   const normalizedLines: string[] = [];
   let previousLineCanContinue = false;
+  let previousLineHasHardBreak = false;
   let previousLineBelongsToMarkdownClaim: boolean = false;
   let activeFenceCharacter: "`" | "~" | undefined;
   let insideIndentedCodeBlock = false;
@@ -272,16 +273,17 @@ function normalizeAnswer(answer: string): string {
     if (
       previousLineCanContinue &&
       normalizedLines.length > 0 &&
-      shouldMergeWithPreviousLine(
+      (previousLineHasHardBreak || shouldMergeWithPreviousLine(
         line,
         rawLine,
         normalizedLine,
         explicitClaimPrefix,
         previousLineBelongsToMarkdownClaim,
-      )
+      ))
     ) {
       normalizedLines[normalizedLines.length - 1] += ` ${normalizedLine}`;
       previousLineCanContinue = currentLineCanContinue;
+      previousLineHasHardBreak = /\\$/.test(line);
       previousLineBelongsToMarkdownClaim = belongsToMarkdownClaim;
       continue;
     }
@@ -291,6 +293,7 @@ function normalizeAnswer(answer: string): string {
     );
     seenBodyContent = true;
     previousLineCanContinue = currentLineCanContinue;
+    previousLineHasHardBreak = /\\$/.test(line);
     previousLineBelongsToMarkdownClaim = belongsToMarkdownClaim;
   }
 
