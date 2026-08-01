@@ -101,6 +101,7 @@ export interface ApiReviewQueueRequest {
   domains?: string[];
   generatedAt?: string;
   queueStatus?: ReviewerQueueStatus;
+  includeArtifacts?: ["queue_summary_csv"];
 }
 
 export interface ApiReviewQueueResponse {
@@ -133,6 +134,7 @@ export interface ApiReviewQueueResponse {
       mismatchCount: number;
     }>;
   } | null;
+  artifacts?: { queue_summary_csv: string };
 }
 
 export interface ApiSourceInput {
@@ -1677,7 +1679,10 @@ async function handleApiRequest(
           }
         : null,
     };
-    writeJson(response, 200, result);
+    const artifacts = body.includeArtifacts
+      ? { queue_summary_csv: renderReviewerDecisionImportQueueSummaryCsv(reviewReport, []) }
+      : undefined;
+    writeJson(response, 200, artifacts ? { ...result, artifacts } : result);
     return;
   }
 
@@ -1876,6 +1881,9 @@ function parseReviewQueueRequest(value: unknown): ApiReviewQueueRequest {
     queueStatus: record.queueStatus === undefined
       ? undefined
       : parseApiReviewerQueueStatus(record.queueStatus),
+    includeArtifacts: record.includeArtifacts === undefined
+      ? undefined
+      : parseOptionalArtifacts(record.includeArtifacts, ["queue_summary_csv"], "includeArtifacts") as ["queue_summary_csv"],
   };
 }
 
@@ -3259,6 +3267,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                       },
                       description: "Optional evaluation fixtures used to add benchmark drift metrics.",
                     },
+                    includeArtifacts: {
+                      type: "array",
+                      items: { type: "string", enum: ["queue_summary_csv"] },
+                      description: "Optional reviewer handoff artifacts to include in the response.",
+                    },
                   },
                   required: ["reviewCsvContent"],
                 },
@@ -4091,6 +4104,11 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
                   required: ["fixtureCount", "mismatchCount", "mismatchRate", "score", "scoreLabel", "scoreThresholdPassed", "domains"],
                 },
               ],
+            },
+            artifacts: {
+              type: "object",
+              properties: { queue_summary_csv: { type: "string" } },
+              required: ["queue_summary_csv"],
             },
           },
           required: ["requestId", "generatedAt", "queueStatus", "domains", "review", "evaluation"],
