@@ -710,6 +710,47 @@ test("verify-batch preserves explicit answer order ahead of directory-discovered
   }
 });
 
+test("verify-batch discovers mdx answers and sources recursively", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-mdx-discovery-"));
+  const answerDir = join(tempDir, "answers");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await mkdir(join(answerDir, "nested"), { recursive: true });
+    await mkdir(join(sourceDir, "nested"), { recursive: true });
+    await writeFile(
+      join(answerDir, "nested", "answer.mdx"),
+      "Employees receive 12 weeks of paid parental leave.\n",
+      "utf8",
+    );
+    await writeFile(
+      join(sourceDir, "nested", "policy.mdx"),
+      "Employees receive 12 weeks of paid parental leave.\n",
+      "utf8",
+    );
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ title: string }>;
+    };
+
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [
+      join(answerDir, "nested", "answer.mdx"),
+    ]);
+    assert.deepEqual(report.sources.map((source) => source.title), ["policy"]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch dedupes repeated answer files that use different path spellings", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-answer-dedupe-"));
 
