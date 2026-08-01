@@ -1087,14 +1087,20 @@ try {
     }
   }
 
-  const versionResponse = await fetch(`${packagedServer.url}/version`);
+  const versionResponse = await fetch(`${packagedServer.url}/version`, {
+    headers: { "X-Quorum-Request-Id": "packaged-version" },
+  });
   const versionPayload = await versionResponse.json();
   if (
     versionResponse.status !== 200 ||
+    versionPayload.requestId !== "packaged-version" ||
+    versionResponse.headers.get("x-quorum-request-id") !== "packaged-version" ||
+    versionResponse.headers.get("x-quorum-service") !== "quorum" ||
+    versionResponse.headers.get("x-quorum-version") !== packageJson.version ||
     versionPayload.service !== "quorum" ||
     versionPayload.version !== packageJson.version
   ) {
-    throw new Error("Package artifact server did not serve the expected version contract.");
+    throw new Error("Package artifact server did not preserve the version correlation and discovery contract.");
   }
 
   const openApiResponse = await fetch(`${packagedServer.url}/openapi.json`);

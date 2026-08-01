@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged HTTP smoke gate now verifies `/version` request correlation and
+discovery headers, keeping installed API clients aligned with the runtime
+identity contract.
+
 Run `npm run dev -- formats --json` to discover the versioned answer and source
 format contract used by direct and recursive verification.
 
