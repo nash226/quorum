@@ -1479,6 +1479,11 @@ try {
         "",
       ].join("\n"),
       queueStatus: "no_claims",
+      domains: ["support"],
+      fixtures: [{
+        fixturePath: join(repoRoot, "examples", "evaluations", "support-policy.json"),
+        content: readFileSync(join(repoRoot, "examples", "evaluations", "support-policy.json"), "utf8"),
+      }],
     }),
   });
   const noClaimsQueuePayload = await noClaimsQueueResponse.json();
@@ -1487,9 +1492,14 @@ try {
     noClaimsQueuePayload.review?.totalAnswers !== 1 ||
     noClaimsQueuePayload.review?.noClaimsAnswers !== 1 ||
     noClaimsQueuePayload.review?.totalClaims !== 0 ||
-    noClaimsQueuePayload.queueStatus !== "no_claims"
+    noClaimsQueuePayload.queueStatus !== "no_claims" ||
+    noClaimsQueuePayload.domains?.length !== 1 ||
+    noClaimsQueuePayload.domains[0] !== "support" ||
+    noClaimsQueuePayload.evaluation?.fixtureCount !== 1 ||
+    noClaimsQueuePayload.evaluation?.domains?.length !== 1 ||
+    noClaimsQueuePayload.evaluation?.domains[0]?.domain !== "support"
   ) {
-    throw new Error("Package artifact server did not preserve no-claims reviewer queue routing.");
+    throw new Error("Package artifact server did not preserve no-claims support reviewer queue routing.");
   }
 
   const evaluationFixturePath = join(repoRoot, "examples", "evaluations", "hr-policy.json");

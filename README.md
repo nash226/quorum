@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged HTTP smoke gate now verifies that a no-claims reviewer queue can
+carry a support-domain benchmark filter, keeping empty-answer routing and
+domain-scoped evaluation handoffs covered together.
+
 The HTTP `/review-queue` API now returns per-domain benchmark counts alongside
 overall drift metrics, so filtered reviewer dashboards can explain where a
 score comes from without rerunning evaluation locally.
