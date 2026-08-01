@@ -254,6 +254,35 @@ try {
   rmSync(cliNdjsonPackageDir, { recursive: true, force: true });
 }
 
+const cliJsonExtensionsPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-json-extensions-"));
+try {
+  for (const extension of ["json5", "jsonc"]) {
+    const answerPath = join(cliJsonExtensionsPackageDir, `answer.${extension}`);
+    const sourcePath = join(cliJsonExtensionsPackageDir, `policy.${extension}`);
+    const answer = '{"claim":"Employees receive 12 weeks of paid parental leave."}\n';
+    const source = '{"title":"Parental Leave Policy","claim":"Employees receive 12 weeks of paid parental leave."}\n';
+    writeFileSync(answerPath, answer);
+    writeFileSync(sourcePath, source);
+
+    const jsonExtensionOutput = execFileSync(
+      "node",
+      [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+      { cwd: repoRoot, encoding: "utf8" },
+    );
+    const jsonExtensionPayload = JSON.parse(jsonExtensionOutput);
+    if (
+      jsonExtensionPayload.summary?.verified !== 1 ||
+      jsonExtensionPayload.answerPath !== answerPath ||
+      jsonExtensionPayload.sources?.[0]?.title !== "Parental Leave Policy" ||
+      jsonExtensionPayload.sources?.[0]?.sourcePath !== sourcePath
+    ) {
+      throw new Error(`Package artifact did not verify the expected .${extension} answer/source contract.`);
+    }
+  }
+} finally {
+  rmSync(cliJsonExtensionsPackageDir, { recursive: true, force: true });
+}
+
 const cliDelimitedPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-delimited-"));
 try {
   const answerPath = join(cliDelimitedPackageDir, "answer.tsv");
