@@ -2428,6 +2428,7 @@ try {
   const queueJsonPath = join(reviewQueueTempDir, "queue.json");
   const pendingQueueJsonPath = join(reviewQueueTempDir, "pending-queue.json");
   const hrQueueJsonPath = join(reviewQueueTempDir, "hr-queue.json");
+  const supportQueueJsonPath = join(reviewQueueTempDir, "support-queue.json");
   const queueCsvPath = join(reviewQueueTempDir, "queue.csv");
   execFileSync(process.execPath, [
     fileURLToPath(cliPath), "verify", "--answer", "-", "--source",
@@ -2452,9 +2453,15 @@ try {
     "--fixture-dir", fileURLToPath(new URL("examples/evaluations", packageRoot)),
     "--domain", "hr", "--json", "--out", hrQueueJsonPath,
   ], { encoding: "utf8" });
+  execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "review-queue", "--review-csv", reviewCsvPath,
+    "--fixture-dir", fileURLToPath(new URL("examples/evaluations", packageRoot)),
+    "--domain", "support", "--json", "--out", supportQueueJsonPath,
+  ], { encoding: "utf8" });
   const queueJson = JSON.parse(readFileSync(queueJsonPath, "utf8"));
   const pendingQueueJson = JSON.parse(readFileSync(pendingQueueJsonPath, "utf8"));
   const hrQueueJson = JSON.parse(readFileSync(hrQueueJsonPath, "utf8"));
+  const supportQueueJson = JSON.parse(readFileSync(supportQueueJsonPath, "utf8"));
   const queueCsv = readFileSync(queueCsvPath, "utf8");
   if (
     queueJson.generatedAt !== "2026-07-24T00:00:00.000Z" ||
@@ -2467,6 +2474,9 @@ try {
     JSON.stringify(hrQueueJson.domains) !== JSON.stringify(["hr"]) ||
     hrQueueJson.evaluation?.fixtureCount !== 30 ||
     hrQueueJson.evaluation?.mismatchCount !== 0 ||
+    JSON.stringify(supportQueueJson.domains) !== JSON.stringify(["support"]) ||
+    supportQueueJson.evaluation?.fixtureCount !== 55 ||
+    supportQueueJson.evaluation?.mismatchCount !== 0 ||
     !queueCsv.startsWith('"generated_at","queue_status","domains","total_answers",') ||
     !queueCsv.includes('"1","1","0","0","1","1","0","1","0","0","0"')
   ) {

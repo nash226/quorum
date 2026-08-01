@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged reviewer-queue smoke gate now verifies both HR and support domain
+filters, keeping benchmark drift scoped to the policy domain being handed off.
+
 The packaged batch smoke gate now verifies nested `.ini` and `.properties`
 answers against matching approved sources, keeping configuration-policy exports
 release-gated in directory workflows.
