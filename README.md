@@ -109,6 +109,10 @@ alias, keeping installed answer and source discovery aligned with the published
 Evaluation fixture discovery recursively skips hidden files and directories,
 so local caches and repository metadata cannot change benchmark counts.
 
+Recursive answer and approved-source discovery also skips common editor backup
+files such as `.bak`, `.swp`, `.swo`, and Office lock files, keeping verification
+batches focused on intentional documents.
+
 The packaged HTTP smoke gate now exercises `/healthz`, `/readyz`, and `/livez`
 against a running server, keeping Kubernetes-style readiness and liveness
 probes release-gated with the same uncached JSON contract as `/health`.
