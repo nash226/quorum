@@ -2534,12 +2534,13 @@ try {
 const reviewQueueTempDir = mkdtempSync(join(tmpdir(), "quorum-package-review-queue-"));
 try {
   const reviewCsvPath = join(reviewQueueTempDir, "review.csv");
-  const queueJsonPath = join(reviewQueueTempDir, "queue.json");
   const pendingQueueJsonPath = join(reviewQueueTempDir, "pending-queue.json");
   const reviewedQueueJsonPath = join(reviewQueueTempDir, "reviewed-queue.json");
   const hrQueueJsonPath = join(reviewQueueTempDir, "hr-queue.json");
   const supportQueueJsonPath = join(reviewQueueTempDir, "support-queue.json");
-  const queueCsvPath = join(reviewQueueTempDir, "queue.csv");
+  const queueOutputDir = join(reviewQueueTempDir, "reports", "reviewer-queue");
+  const queueJsonOutputPath = join(queueOutputDir, "queue.json");
+  const queueCsvPath = join(queueOutputDir, "queue.csv");
   execFileSync(process.execPath, [
     fileURLToPath(cliPath), "verify", "--answer", "-", "--source",
     fileURLToPath(new URL("examples/sources/hr-policy.md", packageRoot)),
@@ -2550,7 +2551,7 @@ try {
   });
   execFileSync(process.execPath, [
     fileURLToPath(cliPath), "review-queue", "--review-csv", reviewCsvPath,
-    "--generated-at", "2026-07-24T00:00:00.000Z", "--json", "--out", queueJsonPath,
+    "--generated-at", "2026-07-24T00:00:00.000Z", "--json", "--out", queueJsonOutputPath,
     "--csv-out", queueCsvPath,
   ], { encoding: "utf8" });
   execFileSync(process.execPath, [
@@ -2577,7 +2578,7 @@ try {
     "--fixture-dir", fileURLToPath(new URL("examples/evaluations", packageRoot)),
     "--domain", "support", "--json", "--out", supportQueueJsonPath,
   ], { encoding: "utf8" });
-  const queueJson = JSON.parse(readFileSync(queueJsonPath, "utf8"));
+  const queueJson = JSON.parse(readFileSync(queueJsonOutputPath, "utf8"));
   const pendingQueueJson = JSON.parse(readFileSync(pendingQueueJsonPath, "utf8"));
   const reviewedQueueJson = JSON.parse(readFileSync(reviewedQueueJsonPath, "utf8"));
   const hrQueueJson = JSON.parse(readFileSync(hrQueueJsonPath, "utf8"));
