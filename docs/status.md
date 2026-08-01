@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `404294e` on 2026-07-31, feat: export reviewer queue csv artifact
+- Latest shipped change: `7a73565` on 2026-07-31, test: smoke-check reviewer queue CSV artifact
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | [#1609](https://github.com/nash226/quorum/pull/1609) | test: smoke-check reviewer queue CSV artifact | `7a73565` |
 | 2026-07-31 | Direct push | feat: export reviewer queue csv artifact | `404294e` |
 | 2026-07-31 | Direct push | feat: expose review queue domain drift | `de62f48` |
 | 2026-07-31 | Direct push | docs: align roadmap status note | `21abdba` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | test: smoke-check support reviewer queue API domain | `39254ef` |
 | 2026-07-31 | Direct push | docs: record reviewer queue smoke coverage | `b7dd957` |
 | 2026-07-31 | Direct push | test: cover support reviewer queue smoke contract | `00b2e7a` |
-| 2026-07-31 | Direct push | test: cover support renewal notice fixture | `6bdfefc` |
 
