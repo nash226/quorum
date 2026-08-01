@@ -1946,6 +1946,7 @@ function printFormats(asJson = false): void {
 
   console.log(`Quorum input formats
 
+Contract version: ${API_VERSION}
 Source files: ${formatExtensions(SOURCE_EXTENSIONS)}
 Answer files: ${formatExtensions(ANSWER_EXTENSIONS)}
 `);
