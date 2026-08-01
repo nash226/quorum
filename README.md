@@ -13,6 +13,10 @@ The packaged CLI smoke gate now verifies direct YAML approved-source exports,
 keeping structured source discovery release-gated symmetrically with YAML
 answers.
 
+The packaged CLI smoke gate now verifies direct Org-mode answer and approved-source
+exports, keeping `.org` policy handoffs release-gated alongside other document
+formats.
+
 The packaged CLI smoke gate now verifies that reviewer-queue JSON and CSV
 artifacts create missing nested output directories, keeping the documented
 `reports/...` handoff paths safe for clean integrations.
