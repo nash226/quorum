@@ -1,5 +1,8 @@
 # Quorum
 
+Run `npm run check` before publishing or opening a pull request; it is the same
+full test, build, smoke, packaged-artifact, and evaluation gate used by CI.
+
 The packaged HTTP smoke gate now verifies `/version` request correlation and
 discovery headers, keeping installed API clients aligned with the runtime
 identity contract.
