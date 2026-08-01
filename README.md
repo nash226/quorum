@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct `.conf` and `.cfg` answer and
+approved-source exports, keeping common configuration aliases release-gated.
+
 The packaged CLI smoke gate now verifies the `.yml` YAML alias for direct
 answers and approved sources, keeping both documented YAML extensions covered
 at the release boundary.

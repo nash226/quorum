@@ -1008,6 +1008,33 @@ try {
   rmSync(cliIniPackageDir, { recursive: true, force: true });
 }
 
+const cliConfigAliasPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-config-aliases-"));
+try {
+  for (const extension of ["conf", "cfg"]) {
+    const answerPath = join(cliConfigAliasPackageDir, `answer.${extension}`);
+    const sourcePath = join(cliConfigAliasPackageDir, `policy.${extension}`);
+    writeFileSync(answerPath, "claim=Employees receive 12 weeks of paid parental leave.\n");
+    writeFileSync(sourcePath, "policy=Employees receive 12 weeks of paid parental leave.\n");
+
+    const output = execFileSync(
+      "node",
+      [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+      { cwd: repoRoot, encoding: "utf8" },
+    );
+    const payload = JSON.parse(output);
+    if (
+      payload.summary?.verified !== 1 ||
+      payload.answerPath !== answerPath ||
+      payload.sources?.[0]?.title !== "policy" ||
+      payload.sources?.[0]?.sourcePath !== sourcePath
+    ) {
+      throw new Error(`Package artifact did not verify the expected .${extension} answer/source contract.`);
+    }
+  }
+} finally {
+  rmSync(cliConfigAliasPackageDir, { recursive: true, force: true });
+}
+
 const cliTomlSourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-toml-source-"));
 try {
   const answerPath = join(cliTomlSourcePackageDir, "answer.md");
