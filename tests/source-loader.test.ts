@@ -206,6 +206,16 @@ test("strips MDX extensions from fallback source titles", async () => {
   assert.equal(source.content, "Employees receive 12 weeks of paid parental leave.\n");
 });
 
+test("strips XHTML extensions from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/refunds.xhtml",
+    "Customers can request refunds within 30 days.",
+    0,
+  );
+
+  assert.equal(source.title, "refunds");
+});
+
 test("strips Quarto Markdown extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/leave-policy.qmd",
