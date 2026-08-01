@@ -1,5 +1,7 @@
 # Quorum
 
+Directory-based verification now discovers `.jsonc` answer and approved-source exports, including files with `//` comments.
+
 Directory-based verification now discovers `.json5` answer and approved-source exports alongside JSON, JSONL, and NDJSON.
 
 Quorum’s shipped foundation now covers single-answer and batch verification,
