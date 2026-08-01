@@ -1550,6 +1550,10 @@ bodyless 204 response, so web-based queue consumers keep the same CORS contract
 as the packaged smoke gate.
 It also verifies the version endpoint's JSON response, bodyless `HEAD` probe,
 and conditional `304` response in the packaged HTTP smoke gate.
+
+The packaged HTTP smoke gate now verifies that `GET /version` returns both the
+Quorum service identifier and the installed package/API version, keeping runtime
+discovery aligned with the published contract.
 The [HTTP integration guide](docs/api-integration.md#handle-malformed-json)
 includes a copy-pasteable malformed-body example and distinguishes this client
 error from route validation (`400`) and request-size (`413`) failures.

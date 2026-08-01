@@ -1064,7 +1064,12 @@ try {
   }
 
   const versionResponse = await fetch(`${packagedServer.url}/version`);
-  if (versionResponse.status !== 200 || (await versionResponse.json()).service !== "quorum") {
+  const versionPayload = await versionResponse.json();
+  if (
+    versionResponse.status !== 200 ||
+    versionPayload.service !== "quorum" ||
+    versionPayload.version !== packageJson.version
+  ) {
     throw new Error("Package artifact server did not serve the expected version contract.");
   }
 
