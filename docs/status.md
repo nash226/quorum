@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `00b2e7a` on 2026-07-31, test: cover support reviewer queue smoke contract
+- Latest shipped change: `b7dd957` on 2026-07-31, docs: record reviewer queue smoke coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-07-31 | Direct push | docs: record reviewer queue smoke coverage | `b7dd957` |
 | 2026-07-31 | Direct push | test: cover support reviewer queue smoke contract | `00b2e7a` |
 | 2026-07-31 | Direct push | test: cover support renewal notice fixture | `6bdfefc` |
 | 2026-07-31 | [#1592](https://github.com/nash226/quorum/pull/1592) | test: smoke-check packaged config batches | `f57dcd6` |
@@ -56,5 +57,4 @@
 | 2026-07-31 | Direct push | docs: show machine-readable format discovery | `7d01859` |
 | 2026-07-31 | Direct push | test: smoke-check packaged CSV and TSV verification | `52ce90d` |
 | 2026-07-31 | Direct push | test: smoke-check configured API limits | `70b7fd2` |
-| 2026-07-31 | [#1581](https://github.com/nash226/quorum/pull/1581) | test: guard chunked API request sizes | `5a888de` |
 
