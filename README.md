@@ -1,7 +1,8 @@
 # Quorum
 
 Claim extraction now strips Markdown blockquote markers, keeping quoted policy
-exports atomic and comparable with approved-source evidence.
+exports atomic and comparable with approved-source evidence. Wrapped and nested
+blockquote/list lines are normalized into the same claim before matching.
 
 Markdown table answers with unlabeled rows are also normalized into readable
 claims, so policy exports do not lose evidence when a row has no label cell.
