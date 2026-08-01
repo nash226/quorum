@@ -117,6 +117,16 @@ test("strips ballot-box X markers from Markdown task lists", () => {
   ]);
 });
 
+test("strips ballot-box-with-check markers from exported checklists", () => {
+  const claims = extractClaims(`🗹 Employees receive 12 weeks of paid parental leave.
+🗹 Healthcare coverage begins after 30 days of employment.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Healthcare coverage begins after 30 days of employment.",
+  ]);
+});
+
 test("strips reference marks from exported checklist answers", () => {
   const claims = extractClaims(`※ Employees receive 12 weeks of paid parental leave.
 ⁕ Healthcare coverage begins after 30 days of employment.`);
