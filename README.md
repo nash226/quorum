@@ -968,6 +968,15 @@ includes a `version` field (currently `0.1.0`) so integrations can reject an une
 contract before submitting an export. The packaged smoke check compares both
 the human-readable and JSON arrays with the library export,
 so published CLI and API format capabilities cannot silently drift apart.
+
+The response shape is intentionally small and stable:
+
+```json
+{"version":"0.1.0","sources":[".csv",".md"],"answers":[".csv",".md"]}
+```
+
+The real arrays include every supported alias and are sorted alphabetically;
+the abbreviated example shows the contract shape rather than the full list.
 The repository test suite also invokes this npm alias end to end, keeping the
 documented command wired to the same contract during development.
 The directory contract includes the standard `.markdown` alias for both
