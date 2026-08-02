@@ -1,5 +1,8 @@
 # Quorum
 
+Source frontmatter parsing now preserves titles, freshness, and trust metadata
+from Windows-style CRLF policy exports as well as Unix-style files.
+
 The batch CLI now documents its input-routing contract: explicit `--answer`
 paths stay ordered ahead of recursive `--answer-dir` discovery, duplicates are
 removed, and an empty answer directory fails clearly instead of producing a
