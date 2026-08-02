@@ -1510,6 +1510,9 @@ Batch answer-directory discovery is regression-tested for `.html`, `.htm`, and
 answer explicitly.
 Direct XHTML answer verification is also regression-tested, preserving the
 single-answer path for XML-compatible knowledge-base exports.
+Direct Org-mode answers and approved sources are also supported, with shipped
+smoke coverage verifying that `.org` files preserve the same claim verdict and
+evidence flow as the other supported document formats.
 When a batch report is written inside an answer directory, its configured
 output path is excluded from recursive answer discovery so reruns do not verify
 their own generated report.
