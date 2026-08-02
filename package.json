@@ -36,6 +36,7 @@
     "help": "npm run dev -- --help",
     "formats": "npm run dev -- formats",
     "prepublishOnly": "npm run check",
+    "serve": "npm run dev -- serve",
     "smoke": "node scripts/smoke-check.mjs",
     "package:smoke": "node scripts/package-smoke-check.mjs",
     "evaluate:ci": "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch",

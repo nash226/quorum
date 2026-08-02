@@ -5,6 +5,10 @@ verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
 API surface; durable hosting and queue storage remain roadmap decisions.
 
+Start the local HTTP API with `npm run serve` (equivalent to
+`npm run dev -- serve`) when an agent integration needs the documented local
+service boundary.
+
 The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
