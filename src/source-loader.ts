@@ -120,7 +120,7 @@ function tryParseTrustLevel(value: string): SourceTrustLevel | undefined {
 }
 
 function isHtmlSource(sourcePath: string): boolean {
-  return /\.html?$/i.test(sourcePath);
+  return /\.(?:html?|xhtml)$/i.test(sourcePath);
 }
 
 function isPdfSource(sourcePath: string): boolean {
@@ -128,7 +128,7 @@ function isPdfSource(sourcePath: string): boolean {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|xhtml|pdf)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {

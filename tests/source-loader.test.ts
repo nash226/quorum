@@ -196,6 +196,32 @@ test("falls back to the html file name when the page has no title", async () => 
   assert.equal(source.content, "Escalate priority incidents immediately.");
 });
 
+test("treats xhtml sources like html exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.xhtml",
+    `<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Refund Policy</title>
+    <meta name="last-modified" content="2026-06-21" />
+  </head>
+  <body><p>Customers can request refunds within 30 days.</p></body>
+</html>`,
+    4,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.equal(source.updatedAt, "2026-06-21");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+
+  const untitled = await sourceDocumentFromFile(
+    "docs/help-center/escalations.xhtml",
+    "<html><body><p>Escalate incidents immediately.</p></body></html>",
+    5,
+  );
+  assert.equal(untitled.title, "escalations");
+});
+
 test("extracts readable text from pdf sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.pdf",

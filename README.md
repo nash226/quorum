@@ -37,7 +37,7 @@ The current CLI can:
 - read an AI-generated answer from a Markdown or text file
 - batch verify multiple AI-generated answers from a directory
 - read one or more approved Markdown, text, or exported HTML source documents
-- read one or more approved Markdown, text, exported HTML, or PDF source documents
+- read one or more approved Markdown, text, exported HTML/XHTML, or PDF source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
 - split the answer into atomic claims
@@ -253,7 +253,11 @@ Supported source extensions today:
 - `.txt`
 - `.html`
 - `.htm`
+- `.xhtml`
 - `.pdf`
+
+XHTML approved sources use the same title, metadata, and readable-text
+extraction as HTML sources, including extension-free fallback titles.
 
 ## Project Structure
 
