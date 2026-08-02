@@ -17,6 +17,9 @@ test("package scripts keep the documented repository check gate intact", async (
   assert.equal(scripts.check, "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci");
   assert.equal(scripts.formats, "npm run dev -- formats");
   assert.equal(scripts.evaluate, "npm run dev -- evaluate");
+  assert.equal(scripts.verify, "npm run dev -- verify");
+  assert.equal(scripts["verify-batch"], "npm run dev -- verify-batch");
+  assert.equal(scripts["extract-claims"], "npm run dev -- extract-claims");
   assert.equal(scripts["import-review"], "npm run dev -- import-review");
   assert.equal(scripts.smoke, "node scripts/smoke-check.mjs");
   assert.equal(scripts.openapi, "npm run dev -- openapi");
@@ -47,4 +50,21 @@ test("formats package script forwards command-specific help flags", async () => 
 
   assert.match(stdout, /Usage:\s+quorum formats \[--json\]/);
   assert.match(stdout, /Print the extensions discovered/);
+});
+
+test("core package scripts forward command-specific help flags", async () => {
+  const commands = [
+    ["verify", /Usage:\s+quorum verify/],
+    ["verify-batch", /Usage:\s+quorum verify-batch/],
+    ["extract-claims", /Usage:\s+quorum extract-claims/],
+  ] as const;
+
+  for (const [command, usagePattern] of commands) {
+    const { stdout } = await execFileAsync("npm", ["run", "--silent", command, "--", "--help"], {
+      cwd: new URL("..", import.meta.url),
+      maxBuffer: 1024 * 1024,
+    });
+
+    assert.match(stdout, usagePattern);
+  }
 });
