@@ -21,6 +21,9 @@ The HR fixture set now includes an ergonomic-reimbursement answer that omits
 the approved manager condition, keeping incomplete policy context routed to
 `needs_review` instead of silently treating it as verified.
 
+The HR fixture set now also covers equipment reimbursement limits, including a
+contradicted over-limit request and an unsupported home-internet promise.
+
 The reviewer-queue CLI now includes a complete filtered handoff example,
 combining pending-answer status, domain-scoped benchmark drift, JSON output,
 and a one-row CSV export in one runnable command.

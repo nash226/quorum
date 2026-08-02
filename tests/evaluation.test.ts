@@ -72,6 +72,49 @@ test("evaluates the shipped support enterprise response-time fixture", async () 
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the HR equipment reimbursement fixture across risk outcomes", async () => {
+  const scorecard = await evaluateFixtureContent({
+    content: JSON.stringify({
+      name: "HR equipment reimbursement policy example",
+      domain: "hr",
+      answer:
+        "Employees may request reimbursement for an ergonomic keyboard up to $150.\nEmployees may request reimbursement for an ergonomic keyboard up to $300.\nThe company reimburses home internet service for every employee.\n",
+      answerLabel: "HR equipment reimbursement reviewer packet",
+      sources: [
+        {
+          sourcePath: "people-ops/equipment-reimbursement.md",
+          id: "people-ops/equipment-reimbursement@2026-08-02",
+          title: "HR Equipment Reimbursement Policy",
+          updatedAt: "2026-08-02",
+          trustLevel: "high",
+          content:
+            "Employees may request reimbursement for an ergonomic keyboard up to $150.\nReceipts are required for reimbursement requests.\nHome internet service is not reimbursed.\n",
+        },
+      ],
+      expectedSummary: { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 },
+      expectedClaimVerdicts: ["verified", "contradicted", "unsupported"],
+    }),
+    fixturePath: "/tmp/hr-equipment-reimbursement-policy.json",
+    generatedAt: "2026-08-02T03:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR equipment reimbursement policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates the shipped support plan-upgrade fixture across billing claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/plan-upgrade-policy.json"),
