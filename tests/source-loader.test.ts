@@ -531,6 +531,20 @@ Employees get 12 weeks.
   assert.equal(parsed.body, "Employees get 12 weeks.\n");
 });
 
+test("parses source frontmatter with Windows line endings", () => {
+  const parsed = parseSource(
+    "docs/hr-policy.md",
+    "---\r\ntitle: HR Benefits Policy\r\nupdatedAt: 2026-05-31\r\ntrustLevel: high\r\n---\r\nEmployees get 12 weeks.\r\n",
+  );
+
+  assert.deepEqual(parsed.metadata, {
+    title: "HR Benefits Policy",
+    updatedAt: "2026-05-31",
+    trustLevel: "high",
+  });
+  assert.equal(parsed.body, "Employees get 12 weeks.\n");
+});
+
 test("strips a UTF-8 BOM from binary source exports before parsing", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",
