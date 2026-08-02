@@ -440,6 +440,22 @@ The response includes `scorecards`, aggregate `mismatchCount` and `score`,
   retained as a `no_claims` row in the summary artifact, and `failOnStatus`
   can turn any matching batch verdict into an HTTP `409` while preserving the
   complete response body.
+
+  For example, a queue worker can route the response without inspecting every
+  claim row:
+
+  ```bash
+  curl -sS http://127.0.0.1:3000/verify-batch \
+    -H 'content-type: application/json' \
+    -d '{"answers":[{"answer":"Employees receive 12 weeks of paid parental leave."},{"answer":""}],"sources":[{"content":"Employees receive 12 weeks of paid parental leave."}]}' \
+    | jq '{claimBearing: .report.summary.answersWithClaims, emptyDrafts: .report.summary.answersWithoutClaims, queueRows: .report.answerCount}'
+  # {"claimBearing":1,"emptyDrafts":1,"queueRows":2}
+  ```
+
+  Treat `answersWithoutClaims` as an explicit empty-draft queue, not as a
+  missing answer. The top-level `answerCount` (shown as `queueRows` above)
+  includes both categories and should match the rows in the optional
+  `review_csv` artifact.
 - `POST /import-review` imports reviewer CSV content and returns grouped answer
   summaries.
 - `POST /evaluate` scores JSON fixtures and can return benchmark CSV artifacts.
