@@ -1234,6 +1234,31 @@ test("evaluates a shipped inline support payment method fixture across billing c
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped support payment failure fixture across retry claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/payment-failure-policy.json"),
+    generatedAt: "2026-08-02T04:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support payment failure policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support payment failure reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 2,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "unsupported",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/payment-failure@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped support authorized contact fixture across account controls", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/authorized-contact-policy.json"),
