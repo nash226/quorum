@@ -2314,6 +2314,10 @@ the TypeScript build, local HTTP smoke checks, packaged-entrypoint smoke checks,
 and the evaluation score gate. Run the individual commands when narrowing down
 a failure.
 
+The same gate also verifies the packaged `formats --json` contract, so an
+integration can use `npm run formats -- --json` to discover the exact supported
+answer and source extensions before submitting files.
+
 ```text
 src/          verifier, CLI, reports, workflow, and HTTP API
 tests/        unit, API, CLI, smoke, and fixture coverage
