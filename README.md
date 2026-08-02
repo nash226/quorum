@@ -1,5 +1,9 @@
 # Quorum
 
+Integrations can verify the installed contract before sending work: use
+`quorum version --json` (or `quorum --version --json`) for the shared CLI/API
+version, and `quorum formats --json` for supported answer and source formats.
+
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 
