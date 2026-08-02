@@ -77,8 +77,9 @@ test("evaluates the HR equipment reimbursement fixture across risk outcomes", as
     content: JSON.stringify({
       name: "HR equipment reimbursement policy example",
       domain: "hr",
+      answerPath: "answers/hr-equipment-reimbursement-answer.md",
       answer:
-        "Employees may request reimbursement for an ergonomic keyboard up to $150.\nEmployees may request reimbursement for an ergonomic keyboard up to $300.\nThe company reimburses home internet service for every employee.\n",
+        "Employees may request reimbursement for an ergonomic keyboard up to $150.\nEmployees may request reimbursement for an ergonomic keyboard up to $300.\nThe company provides catered lunch every Friday.\n",
       answerLabel: "HR equipment reimbursement reviewer packet",
       sources: [
         {
