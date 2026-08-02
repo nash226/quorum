@@ -25,6 +25,9 @@ The packaged batch smoke gate now verifies nested XML answers and approved
 sources, keeping recursive XML policy workflows release-gated alongside direct
 verification.
 
+The fresh-build CLI smoke gate now checks the human-readable `--version` and
+`-v` aliases alongside the machine-readable version contract.
+
 Top-level CLI help now shows the optional `--json` flag for `quorum formats`,
 making the machine-readable format-discovery path visible during onboarding.
 
