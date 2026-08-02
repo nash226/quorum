@@ -2314,6 +2314,9 @@ the TypeScript build, local HTTP smoke checks, packaged-entrypoint smoke checks,
 and the evaluation score gate. Run the individual commands when narrowing down
 a failure.
 
+The evaluation gate runs the checked-in HR and support fixture set at a minimum
+score threshold and fails closed when an expected verdict drifts.
+
 ```text
 src/          verifier, CLI, reports, workflow, and HTTP API
 tests/        unit, API, CLI, smoke, and fixture coverage
