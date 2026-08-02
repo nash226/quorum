@@ -4,6 +4,10 @@ The evaluation suite now covers a support refund-escalation packet with a
 verified refund window and unsupported approval promises, keeping reviewer
 risk coverage grounded in a concrete customer-support workflow.
 
+The evaluation suite now also regression-tests payment-failure handling,
+covering a verified retry action and unsupported automatic-retry or
+unverified-card-update promises.
+
 The packaged CLI smoke gate now verifies the `.mdwn` Markdown alias for both
 answers and approved sources, keeping the published format contract aligned
 with direct verification.
