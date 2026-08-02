@@ -5184,6 +5184,38 @@ test("HTTP reviewer imports can filter answer groups by queue status", async () 
   }
 });
 
+test("HTTP reviewer queue exposes per-answer routing rows", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/review-queue`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        reviewCsvContent: [
+          "answer_label,answer_path,answer_has_claims,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+          "Support answer,answers/support.md,true,claim_1,Refunds are available.,unsupported,Needs evidence,Support Policy,Refunds are available within 30 days.,,",
+        ].join("\n"),
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      answerGroups: Array<Record<string, unknown>>;
+    };
+    assert.deepEqual(result.answerGroups, [{
+      label: "Support answer",
+      answerPath: "answers/support.md",
+      reviewStatus: "pending",
+      totalClaims: 1,
+      reviewedClaims: 0,
+      pendingClaims: 1,
+    }]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves reviewer queue overview over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   const generatedAt = "2026-07-07T19:30:00.000Z";

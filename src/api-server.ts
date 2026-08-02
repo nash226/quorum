@@ -121,6 +121,15 @@ export interface ApiReviewQueueResponse {
     reviewedClaims: number;
     verdicts: Record<ClaimVerdict, number>;
   };
+  /** Per-answer routing rows for queue consumers that need to assign work. */
+  answerGroups: Array<{
+    label: string;
+    answerPath?: string;
+    reviewStatus: ReviewerQueueStatus;
+    totalClaims: number;
+    reviewedClaims: number;
+    pendingClaims: number;
+  }>;
   evaluation: {
     fixtureCount: number;
     mismatchCount: number;
@@ -1663,6 +1672,14 @@ async function handleApiRequest(
           needs_review: reviewReport.summary.needs_review,
         },
       },
+      answerGroups: reviewReport.answerGroups.map((group) => ({
+        label: group.label,
+        answerPath: group.answerPath,
+        reviewStatus: group.reviewStatus,
+        totalClaims: group.summary.totalClaims,
+        reviewedClaims: group.summary.reviewedClaims,
+        pendingClaims: group.summary.pendingClaims,
+      })),
       evaluation: evaluation
         ? {
             fixtureCount: evaluation.summary.fixtureCount,
@@ -4076,6 +4093,21 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               },
               required: ["totalAnswers", "pendingAnswers", "reviewedAnswers", "noClaimsAnswers", "totalClaims", "pendingClaims", "reviewedClaims", "verdicts"],
             },
+            answerGroups: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  label: { type: "string" },
+                  answerPath: { type: "string" },
+                  reviewStatus: { type: "string", enum: ["pending", "reviewed", "no_claims"] },
+                  totalClaims: { type: "integer", minimum: 0 },
+                  reviewedClaims: { type: "integer", minimum: 0 },
+                  pendingClaims: { type: "integer", minimum: 0 },
+                },
+                required: ["label", "reviewStatus", "totalClaims", "reviewedClaims", "pendingClaims"],
+              },
+            },
             evaluation: {
               oneOf: [
                 { type: "null" },
@@ -4111,7 +4143,7 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
               required: ["queue_summary_csv"],
             },
           },
-          required: ["requestId", "generatedAt", "queueStatus", "domains", "review", "evaluation"],
+          required: ["requestId", "generatedAt", "queueStatus", "domains", "review", "answerGroups", "evaluation"],
         },
         EvaluationClaimScore: {
           type: "object",

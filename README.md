@@ -13,6 +13,10 @@ The packaged batch smoke gate now verifies nested XML answers and approved
 sources, keeping recursive XML policy workflows release-gated alongside direct
 verification.
 
+The HTTP reviewer-queue response now includes per-answer routing rows with
+pending, reviewed, or no-claims status and claim counts, so integrations can
+assign queue work without reconstructing the imported CSV.
+
 Top-level CLI help now shows the optional `--json` flag for `quorum formats`,
 making the machine-readable format-discovery path visible during onboarding.
 
