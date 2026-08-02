@@ -2405,6 +2405,35 @@ try {
   rmSync(tomlBatchTempDir, { recursive: true, force: true });
 }
 
+const editorBackupTempDir = mkdtempSync(join(tmpdir(), "quorum-package-editor-backup-"));
+try {
+  const answerDir = join(editorBackupTempDir, "answers");
+  const sourceDir = join(editorBackupTempDir, "sources");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "answer.md");
+  const sourcePath = join(sourceDir, "policy.md");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(join(answerDir, "answer.md~"), "This editor backup must be ignored.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(join(sourceDir, "policy.md~"), "This editor backup must be ignored.\n");
+  const editorBackupResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch", "--answer-dir", answerDir,
+    "--source-dir", sourceDir, "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    editorBackupResult.summary?.answersWithClaims !== 1 ||
+    editorBackupResult.answers?.length !== 1 ||
+    editorBackupResult.answers?.[0]?.answerPath !== answerPath ||
+    editorBackupResult.answers?.[0]?.report?.summary?.verified !== 1 ||
+    editorBackupResult.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not ignore editor backup files during batch discovery.");
+  }
+} finally {
+  rmSync(editorBackupTempDir, { recursive: true, force: true });
+}
+
 const uppercaseFormatTempDir = mkdtempSync(join(tmpdir(), "quorum-package-uppercase-format-"));
 try {
   const answerPath = join(uppercaseFormatTempDir, "ANSWER.JSON");
