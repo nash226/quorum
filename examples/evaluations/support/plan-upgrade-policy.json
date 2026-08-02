@@ -1,0 +1,24 @@
+{
+  "name": "Support plan upgrade policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-plan-upgrade-answer.md",
+  "answer": "Customers can upgrade plans immediately from the billing page.\nCustomers can upgrade plans only at the next renewal.\nPlan upgrades automatically refund the unused portion of the current term.\n",
+  "answerLabel": "Support plan upgrade reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-plan-upgrade-policy.md",
+      "id": "support/plan-upgrade@2026-08-02",
+      "title": "Support Plan Upgrade Policy",
+      "updatedAt": "2026-08-02",
+      "trustLevel": "high",
+      "content": "Customers can upgrade plans immediately from the billing page.\nThe new plan takes effect immediately and the customer is charged a prorated amount for the remainder of the billing period.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
