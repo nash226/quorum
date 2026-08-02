@@ -1513,6 +1513,32 @@ test("evaluates a shipped HR leave fixture across risk verdicts", async () => {
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped HR overtime fixture across payroll claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/hr/overtime-policy.json"),
+    generatedAt: "2026-07-29T13:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR overtime policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.equal(scorecard.answerLabel, "HR overtime reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-overtime@2026-07-29");
+  assert.equal(scorecard.report.sources[0]?.title, "HR Overtime Policy");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline HR leave carryover fixture across policy claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/leave-carryover-policy.json"),
