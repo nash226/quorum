@@ -324,7 +324,8 @@ curl http://127.0.0.1:3000/openapi.json
 ```
 
 Run the checked-in HR or support scorecards with
-`npm run dev -- evaluate --domain support`. The [API integration guide](docs/api-integration.md),
+`npm run evaluate -- --fixture-dir examples/evaluations --domain support`. Export the machine-readable API contract
+with `npm run openapi -- --out reports/quorum-openapi.json`. The [API integration guide](docs/api-integration.md),
 [CLI guide](docs/cli-guide.md), and [evaluation fixture guide](docs/evaluation-fixtures.md)
 describe the request, report, and scorecard workflows in detail.
 
