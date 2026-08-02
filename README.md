@@ -9,6 +9,9 @@ The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
 
+Top-level CLI help now shows the optional `--json` flag for `quorum formats`,
+making the machine-readable format-discovery path visible during onboarding.
+
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 

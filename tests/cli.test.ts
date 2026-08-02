@@ -1310,6 +1310,7 @@ test("top-level help lists every shipped command", async () => {
   }
 
   assert.match(stdout, /Supported files:/);
+  assert.match(stdout, /quorum formats \[--json\]/);
   assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
   assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL, YAML, XML, CSV\/TSV, PDF, DOCX, and TOML/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files, hidden directories, and common editor temporary files/);
