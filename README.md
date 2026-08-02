@@ -35,6 +35,10 @@ and `sourceExtensions` alongside the supported verdicts, trust levels, and
 request limits. Use those fields to validate uploaded files before sending
 them to `/verify` or `/verify-batch`.
 
+TypeScript integrations can read the same canonical sets directly from the
+package entrypoint as `ANSWER_EXTENSIONS` and `SOURCE_EXTENSIONS`, avoiding a
+second hard-coded list when validating files before submission.
+
 Batch verification is shipped as a foundation: the CLI and local HTTP API can
 review multiple answers, preserve reviewer decisions, and produce queue-ready
 summaries. The next product boundary is a durable API service, which remains
