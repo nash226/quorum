@@ -902,6 +902,11 @@ policy files and move to an agent integration without changing the evidence
 report shape. The current service is intentionally a local HTTP boundary;
 durable hosting and queue storage remain roadmap decisions.
 
+The local HTTP API is a shipped integration surface: its verification and
+reviewer-queue report shapes match the CLI, and clients can use
+`GET /capabilities` to discover supported formats and request limits before
+submitting work.
+
 Those decision-gated boundaries are called out explicitly in
 [`docs/roadmap.md`](docs/roadmap.md), so implementation work can continue on
 the unblocked local CLI/API and evaluation surfaces without assuming hosting
