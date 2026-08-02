@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2dc7f057` on 2026-08-02, docs: surface shipped local product loop
+- Latest shipped change: `ce3fb305` on 2026-08-02, test: make status hash assertion portable
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | test: make status hash assertion portable | `ce3fb305` |
 | 2026-08-02 | Direct push | docs: surface shipped local product loop | `2dc7f057` |
 | 2026-08-02 | Direct push | docs: reconcile shipped batch roadmap | `ae5ee8d1` |
 | 2026-08-02 | Direct push | docs: clarify local product boundary | `cd9ffd49` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | test: ignore unsupported batch directory files | `67407b3c` |
 | 2026-08-02 | Direct push | docs: document shared version probe | `33d6ede0` |
 | 2026-08-02 | Direct push | docs: clarify machine-readable version checks | `999f574c` |
-| 2026-08-02 | Direct push | test: cover CRLF source frontmatter | `aba6ec0c` |
 
