@@ -107,6 +107,9 @@ The packaged CLI smoke gate now verifies direct Org-mode answer and approved-sou
 exports, keeping `.org` policy handoffs release-gated alongside other document
 formats.
 
+Claim extraction now skips AsciiDoc section headings, so `.adoc` and `.asciidoc`
+answers retain only policy statements as reviewable claims.
+
 The packaged CLI smoke gate now verifies that reviewer-queue JSON and CSV
 artifacts create missing nested output directories, keeping the documented
 `reports/...` handoff paths safe for clean integrations.

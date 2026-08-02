@@ -344,6 +344,31 @@ for full-time staff only.
   ]);
 });
 
+test("skips AsciiDoc headings before list claims", () => {
+  const claims = extractClaims(`== HR Policy Summary
+
+* Employees receive 12 weeks of paid parental leave.
+* Managers approve requests within five business days.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Managers approve requests within five business days.",
+  ]);
+});
+
+test("skips nested AsciiDoc headings before wrapped claims", () => {
+  const claims = extractClaims(`=== Support Notes
+
+Customers receive refunds within 30 days of purchase
+when the order meets the return policy.
+`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Customers receive refunds within 30 days of purchase when the order meets the return policy.",
+  ]);
+});
+
 test("keeps claims that appear before markdown thematic breaks", () => {
   const claims = extractClaims(`Employees receive 12 weeks of paid parental leave.
 ---
