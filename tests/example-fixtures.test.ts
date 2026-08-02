@@ -57,8 +57,8 @@ test("support example produces one verified, contradicted, and unsupported claim
 
 test("support escalation example routes a related gift-card claim to review", async () => {
   const report = await verifyExample(
-    "examples/answers/support-gift-card-review-answer.md",
-    "examples/sources/support-escalation-policy.md",
+    "tests/fixtures/support-gift-card-review-answer.md",
+    "tests/fixtures/support-escalation-policy.md",
   );
 
   assert.deepEqual(report.summary, {
