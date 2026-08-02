@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `0ccf725` on 2026-08-02, docs: correct local API quickstart port
+- Latest shipped change: `0611d9b` on 2026-08-02, test: cover support data retention evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | test: cover support data retention evaluation | `0611d9b` |
 | 2026-08-02 | Direct push | docs: correct local API quickstart port | `0ccf725` |
 | 2026-08-02 | Direct push | docs: clarify batch answer routing | `bff5439` |
 | 2026-08-02 | Direct push | test: cover support shipping address policy | `fdd77c6` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | test: cover support refund escalation claims | `42c704e` |
 | 2026-08-01 | [#1694](https://github.com/nash226/quorum/pull/1694) | fix: align scorecard benchmark expectations | `00afc86` |
 | 2026-08-01 | [#1692](https://github.com/nash226/quorum/pull/1692) | test: smoke-check packaged mdwn alias | `fa3f015` |
-| 2026-08-01 | Direct push | fix: exclude all batch report outputs | `06cd496` |
 
