@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e955f954` on 2026-08-02, test: cover file-backed gift card evaluation
+- Latest shipped change: `aff5f422` on 2026-08-02, feat: add local API serve script
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | [#1753](https://github.com/nash226/quorum/pull/1753) | feat: add local API serve script | `aff5f422` |
 | 2026-08-02 | Direct push | test: cover file-backed gift card evaluation | `e955f954` |
 | 2026-08-02 | Direct push | docs: add reviewer queue handoff example | `13d5fc72` |
 | 2026-08-02 | [#1744](https://github.com/nash226/quorum/pull/1744) | test: cover conditional OpenAPI head probes | `d0b399fb` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | docs: expose formats json flag in cli help | `5e40c055` |
 | 2026-08-02 | Direct push | test: lock formats contract version | `d71000cd` |
 | 2026-08-02 | Direct push | docs: explain recursive source benchmark coverage | `7491d767` |
-| 2026-08-02 | Direct push | docs: refresh verification gate count | `f7ce48c0` |
 
