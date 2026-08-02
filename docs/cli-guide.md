@@ -170,6 +170,21 @@ Batch summaries include per-answer verdict totals, source context, and
 `answer_has_claims`. Empty answers remain explicit queue rows instead of being
 silently discarded.
 
+You can combine an explicit, ordered set of answers with a recursive directory:
+
+```bash
+npm run dev -- verify-batch \
+  --answer examples/answers/hr-answer.md \
+  --answer-dir examples/answers \
+  --source-dir examples/sources
+```
+
+Explicit paths are kept first and directory-discovered paths are appended. The
+same file is included only once, while passing the same explicit answer twice
+is rejected so reviewer queues cannot contain accidental duplicate rows. If an
+answer directory contains no supported files, the command fails with a clear
+`No answer files found` error instead of producing an empty batch report.
+
 ## Import reviewer decisions
 
 After a reviewer fills in `reviewer_verdict` and `reviewer_notes`, import the

@@ -1,5 +1,10 @@
 # Quorum
 
+The batch CLI now documents its input-routing contract: explicit `--answer`
+paths stay ordered ahead of recursive `--answer-dir` discovery, duplicates are
+removed, and an empty answer directory fails clearly instead of producing a
+misleading empty report.
+
 The evaluation suite now covers a support refund-escalation packet with a
 verified refund window and unsupported approval promises, keeping reviewer
 risk coverage grounded in a concrete customer-support workflow.
