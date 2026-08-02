@@ -23,6 +23,9 @@ Run `npm run check` to verify the shipped local product end to end: unit tests,
 the TypeScript build, source and packaged HTTP/CLI smoke checks, and the
 evaluation score gate all run from one release command.
 
+From a fresh checkout, run `npm install` first; the current local gate passes
+with 354 automated tests before the build and smoke checks run.
+
 The batch CLI now documents its input-routing contract: explicit `--answer`
 paths stay ordered ahead of recursive `--answer-dir` discovery, duplicates are
 removed, and an empty answer directory fails clearly instead of producing a
