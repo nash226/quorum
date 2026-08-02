@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cb221a3` on 2026-08-01, docs: document the full CLI command surface
+- Latest shipped change: `06cd496` on 2026-08-01, fix: exclude all batch report outputs
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | fix: exclude all batch report outputs | `06cd496` |
 | 2026-08-01 | Direct push | docs: document the full CLI command surface | `cb221a3` |
 | 2026-08-01 | Direct push | test: expand support response-time benchmark | `8991d10` |
 | 2026-08-01 | [#1682](https://github.com/nash226/quorum/pull/1682) | docs: surface package format discovery | `a93e0cc` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | fix: normalize warning-sign claim bullets | `06842de` |
 | 2026-08-01 | Direct push | docs: show formats contract response shape | `78e277d` |
 | 2026-08-01 | Direct push | fix: strip directional Unicode claim bullets | `0036fe4` |
-| 2026-08-01 | Direct push | fix: normalize ballot-box check claims | `bd832a0` |
 
