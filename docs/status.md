@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a2e0efa9` on 2026-08-02, test: gate packaged reStructuredText verification
+- Latest shipped change: `e6476d90` on 2026-08-02, test: cover HR reimbursement review fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | test: cover HR reimbursement review fixture | `e6476d90` |
 | 2026-08-02 | [#1771](https://github.com/nash226/quorum/pull/1771) | test: gate packaged reStructuredText verification | `a2e0efa9` |
 | 2026-08-02 | [#1761](https://github.com/nash226/quorum/pull/1761) | feat: add reviewer workflow package wrappers | `63efd6e4` |
 | 2026-08-02 | [#1760](https://github.com/nash226/quorum/pull/1760) | feat: add evaluation and openapi package wrappers | `83234d64` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | [#1757](https://github.com/nash226/quorum/pull/1757) | test: cover file-backed phone support evaluation | `559b527f` |
 | 2026-08-02 | [#1753](https://github.com/nash226/quorum/pull/1753) | feat: add local API serve script | `aff5f422` |
 | 2026-08-02 | Direct push | test: cover file-backed gift card evaluation | `e955f954` |
-| 2026-08-02 | Direct push | docs: add reviewer queue handoff example | `13d5fc72` |
 
