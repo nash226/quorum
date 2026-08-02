@@ -58,6 +58,24 @@ Employees get 12 weeks.
   assert.doesNotMatch(parsed.body, /People Ops/);
 });
 
+test("parses frontmatter when a text export starts with a UTF-8 BOM", () => {
+  const parsed = parseSource(
+    "docs/hr-policy.md",
+    `\uFEFF---
+title: HR Benefits Policy
+trustLevel: high
+---
+Employees get 12 weeks.
+`,
+  );
+
+  assert.deepEqual(parsed.metadata, {
+    title: "HR Benefits Policy",
+    trustLevel: "high",
+  });
+  assert.equal(parsed.body, "Employees get 12 weeks.\n");
+});
+
 test("keeps frontmatter trust levels ahead of the default override", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",

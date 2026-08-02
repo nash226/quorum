@@ -174,6 +174,9 @@ trustLevel: high
 ---
 ```
 
+UTF-8 BOM-prefixed Markdown and text exports are also supported, so metadata
+is preserved when files come from editors or document systems that add a BOM.
+
 Quorum includes this metadata in reports so reviewers can see which approved
 source supported or contradicted each claim. `trustLevel` accepts `high`,
 `medium`, or `low` and helps Quorum prefer stronger approved sources when

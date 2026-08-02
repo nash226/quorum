@@ -56,7 +56,7 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseHtmlSource(content);
   }
 
-  const normalized = content.replace(/\r\n/g, "\n");
+  const normalized = content.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
   const match = normalized.match(/^---\n([\s\S]*?)\n---\n?/);
 
   if (!match) {
