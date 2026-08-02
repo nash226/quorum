@@ -1434,7 +1434,7 @@ test("evaluates a shipped support phone fixture across availability claims", asy
     "needs_review",
     "unsupported",
   ]);
-  assert.equal(scorecard.report.sources[0]?.id, "support/phone-support@2026-07-21");
+  assert.equal(scorecard.report.sources[0]?.id, "source_1");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
 });
