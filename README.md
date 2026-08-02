@@ -9,6 +9,10 @@ The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
 
+HTTP integrations can read the configured request-size and request-timeout
+limits from `/capabilities` and discovery headers before submitting work, so
+clients can fail fast when their payload or processing budget is too large.
+
 The reviewer-queue CLI now includes a complete filtered handoff example,
 combining pending-answer status, domain-scoped benchmark drift, JSON output,
 and a one-row CSV export in one runnable command.
