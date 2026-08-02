@@ -9,6 +9,10 @@ The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
 
+The reviewer-queue CLI now includes a complete filtered handoff example,
+combining pending-answer status, domain-scoped benchmark drift, JSON output,
+and a one-row CSV export in one runnable command.
+
 The packaged batch smoke gate now verifies nested XML answers and approved
 sources, keeping recursive XML policy workflows release-gated alongside direct
 verification.

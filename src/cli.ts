@@ -1801,6 +1801,9 @@ Options:
   --csv-out <path>           Write the queue overview as one CSV row
 
 The overview combines reviewer queue workload with optional benchmark drift.
+
+Example:
+  npm run dev -- review-queue --review-csv reports/hr-review.csv --queue-status pending --fixture-dir examples/evaluations --domain hr --json --out reports/hr-queue.json --csv-out reports/hr-queue.csv
 `,
     evaluate: `Quorum evaluate
 
