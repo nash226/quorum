@@ -17,8 +17,10 @@ test("package scripts keep the documented repository check gate intact", async (
   assert.equal(scripts.check, "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci");
   assert.equal(scripts.formats, "npm run dev -- formats");
   assert.equal(scripts.evaluate, "npm run dev -- evaluate");
+  assert.equal(scripts["import-review"], "npm run dev -- import-review");
   assert.equal(scripts.smoke, "node scripts/smoke-check.mjs");
   assert.equal(scripts.openapi, "npm run dev -- openapi");
+  assert.equal(scripts["review-queue"], "npm run dev -- review-queue");
   assert.equal(scripts["package:smoke"], "node scripts/package-smoke-check.mjs");
   assert.equal(scripts["evaluate:ci"], "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch");
   assert.equal(scripts.serve, "npm run dev -- serve");
