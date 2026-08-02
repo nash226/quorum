@@ -2405,6 +2405,34 @@ try {
   rmSync(tomlBatchTempDir, { recursive: true, force: true });
 }
 
+const xmlBatchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-xml-batch-"));
+try {
+  const answerDir = join(xmlBatchTempDir, "answers", "nested");
+  const sourceDir = join(xmlBatchTempDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "answer.xml");
+  const sourcePath = join(sourceDir, "policy.xml");
+  writeFileSync(answerPath, '<?xml version="1.0"?><answer><claim>Employees receive 12 weeks of paid parental leave.</claim></answer>');
+  writeFileSync(sourcePath, '<?xml version="1.0"?><policy><title>Parental Leave Policy</title><rule>Employees receive 12 weeks of paid parental leave.</rule></policy>');
+  const xmlBatchResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch", "--answer-dir", join(xmlBatchTempDir, "answers"),
+    "--source-dir", join(xmlBatchTempDir, "sources"), "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    xmlBatchResult.summary?.answersWithClaims !== 1 ||
+    xmlBatchResult.summary?.answersWithoutClaims !== 0 ||
+    xmlBatchResult.answers?.[0]?.answerPath !== answerPath ||
+    xmlBatchResult.answers?.[0]?.report?.summary?.verified !== 1 ||
+    xmlBatchResult.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath ||
+    xmlBatchResult.answers?.[0]?.report?.sources?.[0]?.title !== "Parental Leave Policy"
+  ) {
+    throw new Error("Package artifact did not preserve XML answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(xmlBatchTempDir, { recursive: true, force: true });
+}
+
 const uppercaseFormatTempDir = mkdtempSync(join(tmpdir(), "quorum-package-uppercase-format-"));
 try {
   const answerPath = join(uppercaseFormatTempDir, "ANSWER.JSON");
