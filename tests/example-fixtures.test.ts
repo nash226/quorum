@@ -27,6 +27,21 @@ test("HR example produces one verified, contradicted, and unsupported claim", as
   });
 });
 
+test("HR benefits fixture preserves missing approval context for review", async () => {
+  const report = await verifyExample(
+    "examples/fixtures/hr-benefits-answer.md",
+    "examples/sources/hr-policy.md",
+  );
+
+  assert.deepEqual(report.summary, {
+    verified: 1,
+    unsupported: 0,
+    contradicted: 0,
+    needs_review: 1,
+  });
+  assert.equal(report.assessments[1]?.verdict, "needs_review");
+});
+
 test("support security example covers verification and escalation claims", async () => {
   const report = await verifyExample(
     "examples/fixtures/support-security-answer.md",
