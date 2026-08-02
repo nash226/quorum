@@ -14,7 +14,8 @@ approved support playbook.
 
 The benchmark inventory checks now include the new support packet across CLI,
 API, queue, and packaged smoke expectations, keeping the 88-fixture scorecard
-green when benchmark coverage expands.
+green when benchmark coverage expands. The latest release gate also aligns
+those expectations with the shipped support plan-upgrade fixture.
 
 The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
