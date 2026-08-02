@@ -151,6 +151,20 @@ test("strips the Org-mode alias from fallback source titles", async () => {
   assert.equal(source.title, "benefits");
 });
 
+test("keeps fallback titles aligned with every supported source extension", async () => {
+  const extensions = [
+    "md", "markdown", "mdown", "mkdn", "mdwn", "mdx", "qmd", "adoc", "asciidoc",
+    "org", "org-mode", "mediawiki", "wiki", "rst", "tex", "textile", "txt", "text",
+    "log", "ini", "properties", "conf", "cfg", "html", "htm", "xhtml",
+    "json", "jsonl", "ndjson", "json5", "jsonc", "yaml", "yml", "xml", "toml", "csv", "tsv",
+  ];
+
+  for (const [index, extension] of extensions.entries()) {
+    const source = await sourceDocumentFromFile(`policies/leave-policy.${extension}`, "Policy text", index);
+    assert.equal(source.title, "leave-policy", extension);
+  }
+});
+
 test("normalizes quoted csv policy exports and reads metadata columns", async () => {
   const source = await sourceDocumentFromFile(
     "exports/benefits.CSV",
