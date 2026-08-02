@@ -1876,6 +1876,32 @@ test("extract-claims reads stdin and prints claim ids", async () => {
   );
 });
 
+test("verify-batch accepts one stdin answer alongside file answers", async () => {
+  const stdout = await runCli(
+    [
+      "verify-batch",
+      "--answer",
+      "-",
+      "--answer",
+      "examples/answers/support-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--json",
+    ],
+    { stdin: "Employees receive 12 weeks of paid parental leave.\n" },
+  );
+
+  const report = JSON.parse(stdout) as {
+    answerCount: number;
+    answers: Array<{ answerPath: string; report: { summary: { verified: number } } }>;
+  };
+
+  assert.equal(report.answerCount, 2);
+  assert.equal(report.answers[0]?.answerPath, "<stdin>");
+  assert.equal(report.answers[0]?.report.summary.verified, 1);
+  assert.equal(report.answers[1]?.answerPath, "examples/answers/support-answer.md");
+});
+
 test("extract-claims prints an optional reviewer-facing answer label", async () => {
   const result = await runCli([
     "extract-claims",
