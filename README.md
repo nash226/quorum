@@ -978,6 +978,11 @@ npm run dev -- evaluate --help
 npm run dev -- serve --help
 ```
 
+Use `npm run dev -- help <command>` when a workflow needs to select its
+options before providing input files. Unknown commands fail with a non-zero
+exit status and an error on stderr, so automation can distinguish a bad
+invocation from a verification result without parsing misleading usage output.
+
 ## Quick Start
 
 After installing dependencies, run the complete pre-PR validation gate with:
