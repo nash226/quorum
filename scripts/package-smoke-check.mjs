@@ -2259,7 +2259,7 @@ try {
 
 const markdownAliasTempDir = mkdtempSync(join(tmpdir(), "quorum-package-markdown-aliases-"));
 try {
-  for (const extension of ["markdown", "mdown", "mkdn", "mdx", "qmd"]) {
+  for (const extension of ["markdown", "mdown", "mkdn", "mdwn", "mdx", "qmd"]) {
     const answerPath = join(markdownAliasTempDir, `answer.${extension}`);
     const sourcePath = join(markdownAliasTempDir, `policy.${extension}`);
     writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");

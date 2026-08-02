@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies the `.mdwn` Markdown alias for both
+answers and approved sources, keeping the published format contract aligned
+with direct verification.
+
 Batch directory verification now excludes every configured report output,
 including aggregate CSV and gate-aware result JSON files, so reruns do not
 re-ingest their own generated artifacts as answers.
