@@ -2673,7 +2673,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
 
   assert.equal(batchResult.shouldFail, false);
   assert.equal(batchResult.mismatchCount, 0);
-  assert.equal(batchResult.summary.fixtureCount, 87);
+  assert.equal(batchResult.summary.fixtureCount, 88);
   assert.equal(batchResult.summary.mismatchCount, 0);
   assert.equal(batchResult.summary.matchedClaims, 261);
   assert.equal(batchResult.summary.totalExpectedClaims, 261);
@@ -2696,20 +2696,20 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
     },
     {
       domain: "support",
-      fixtureCount: 57,
+      fixtureCount: 58,
       mismatchCount: 0,
       mismatchRate: 0,
-      answersWithClaims: 56,
+      answersWithClaims: 57,
       answersWithoutClaims: 1,
-      matchedClaims: 167,
-      totalExpectedClaims: 167,
+      matchedClaims: 170,
+      totalExpectedClaims: 170,
       score: 1,
       scoreLabel: "100%",
-      expectedSummary: { verified: 63, contradicted: 38, unsupported: 48, needs_review: 18 },
-      actualSummary: { verified: 63, contradicted: 38, unsupported: 48, needs_review: 18 },
+      expectedSummary: { verified: 64, contradicted: 38, unsupported: 49, needs_review: 19 },
+      actualSummary: { verified: 64, contradicted: 38, unsupported: 49, needs_review: 19 },
     },
   ]);
-  assert.equal(batchResult.scorecards.length, 87);
+  assert.equal(batchResult.scorecards.length, 88);
   assert.equal(singleResult.hasMismatch, false);
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
   assert.equal(contentResult.hasMismatch, false);
@@ -6371,9 +6371,9 @@ test("programmatic API exports batch evaluation helpers", async () => {
 
   const rendered = renderEvaluationTextReport(scorecards);
 
-  assert.equal(scorecards.length, 87);
+  assert.equal(scorecards.length, 88);
   assert.equal(scorecards.some(hasEvaluationMismatch), false);
-  assert.match(rendered, /Fixtures: 87/);
+  assert.match(rendered, /Fixtures: 88/);
   assert.match(renderEvaluationHtmlReport(scorecards), /<!doctype html>/i);
   assert.match(renderEvaluationSummaryCsv(scorecards), /generated_at,fixture_name,domain,fixture_path,answer_path/);
 });

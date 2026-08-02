@@ -57,6 +57,9 @@ published format contract.
 The packaged CLI smoke gate now verifies direct `.conf` and `.cfg` answer and
 approved-source exports, keeping common configuration aliases release-gated.
 
+The evaluation scorecard now covers 88 checked-in HR and support fixtures,
+including direct support plan-upgrade claims.
+
 The packaged CLI smoke gate now verifies the `.yml` YAML alias for direct
 answers and approved sources, keeping both documented YAML extensions covered
 at the release boundary.
