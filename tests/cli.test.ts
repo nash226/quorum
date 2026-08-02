@@ -337,6 +337,10 @@ test("formats --json exposes a versioned machine-readable input contract", async
   assert.deepEqual(formats.sources, formats.answers);
   assert.ok(formats.sources.includes(".md"));
   assert.ok(formats.sources.includes(".json"));
+  for (const markdownAlias of [".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd"]) {
+    assert.ok(formats.sources.includes(markdownAlias));
+    assert.ok(formats.answers.includes(markdownAlias));
+  }
 });
 
 test("formats --json exposes normalized unique extension entries", async () => {
