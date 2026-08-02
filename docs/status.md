@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5e40c055` on 2026-08-02, docs: expose formats json flag in cli help
+- Latest shipped change: `bf8f7d92` on 2026-08-02, test: cover packaged XML batch verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | test: cover packaged XML batch verification | `bf8f7d92` |
 | 2026-08-02 | Direct push | docs: expose formats json flag in cli help | `5e40c055` |
 | 2026-08-02 | Direct push | test: lock formats contract version | `d71000cd` |
 | 2026-08-02 | Direct push | docs: explain recursive source benchmark coverage | `7491d767` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | docs: document the complete local verification gate | `37864bc7` |
 | 2026-08-02 | Direct push | test: make status hash assertion portable | `ce3fb305` |
 | 2026-08-02 | Direct push | docs: surface shipped local product loop | `2dc7f057` |
-| 2026-08-02 | Direct push | docs: reconcile shipped batch roadmap | `ae5ee8d1` |
 
