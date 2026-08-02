@@ -8,6 +8,10 @@ API surface; durable hosting and queue storage remain roadmap decisions.
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 
+The HTTP API now has regression coverage for vendor `+json` content types on
+batch verification, keeping gateway-friendly media types aligned with the
+published integration contract.
+
 Run `npm run check` to verify the shipped local product end to end: unit tests,
 the TypeScript build, source and packaged HTTP/CLI smoke checks, and the
 evaluation score gate all run from one release command.

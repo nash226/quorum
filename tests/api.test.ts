@@ -5061,6 +5061,46 @@ test("programmatic API accepts vendor JSON content types", async () => {
   }
 });
 
+test("programmatic batch verification accepts vendor JSON content types", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify-batch`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/vnd.quorum.batch-verification+json",
+      },
+      body: JSON.stringify({
+        answers: [
+          {
+            answer: "Employees receive 12 weeks of paid parental leave.",
+            answerLabel: "HR policy answer",
+          },
+        ],
+        sources: [
+          {
+            sourcePath: "sources/hr-policy.md",
+            content: "Employees receive 12 weeks of paid parental leave.",
+          },
+        ],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as {
+      report: {
+        answerCount: number;
+        answers: Array<{ answerLabel?: string }>;
+      };
+    };
+
+    assert.equal(result.report.answerCount, 1);
+    assert.equal(result.report.answers[0]?.answerLabel, "HR policy answer");
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves reviewer CSV import over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
