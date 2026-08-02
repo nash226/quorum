@@ -302,7 +302,7 @@ try {
   ]);
 
   assert.match(batchStdout, /Quorum Batch Verification Report/);
-  assert.equal(readJson(batchReportPath).answerCount, 42);
+  assert.equal(readJson(batchReportPath).answerCount, 43);
   assert.match(readFileSync(batchReviewCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
   const batchSummaryCsv = readFileSync(batchSummaryCsvPath, "utf8");
   assert.match(
@@ -333,7 +333,7 @@ try {
   assert.equal(timestampedQueueOverview.generatedAt, "2026-07-15T04:00:00.000Z");
   assert.match(
     readFileSync(queueOverviewCsvPath, "utf8"),
-    /^"generated_at","queue_status","domains","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","","42",/m,
+    /^"generated_at","queue_status","domains","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","","43",/m,
   );
 
   const pendingQueueOverview = JSON.parse(
@@ -347,14 +347,14 @@ try {
     ]),
   );
   assert.deepEqual(pendingQueueOverview.review, {
-    totalAnswers: 41,
-    pendingAnswers: 41,
+    totalAnswers: 42,
+    pendingAnswers: 42,
     reviewedAnswers: 0,
     noClaimsAnswers: 0,
-    totalClaims: 122,
-    pendingClaims: 122,
+    totalClaims: 125,
+    pendingClaims: 125,
     reviewedClaims: 0,
-    verdicts: { verified: 32, contradicted: 21, unsupported: 30, needs_review: 39 },
+    verdicts: { verified: 32, contradicted: 21, unsupported: 31, needs_review: 41 },
   });
 
   const noClaimsQueueOverview = JSON.parse(
@@ -435,7 +435,7 @@ try {
   );
 
   assert.match(importStdout, /Quorum Reviewer Decision Import/);
-  assert.equal(readJson(importReportPath).answerGroups.length, 42);
+  assert.equal(readJson(importReportPath).answerGroups.length, 43);
   assert.match(readFileSync(importSummaryCsvPath, "utf8"), /^generated_at,answer_label,answer_path,/);
 
   const evaluationReportPath = join(tempDir, "evaluation-report.md");
