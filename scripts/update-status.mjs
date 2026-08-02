@@ -111,7 +111,7 @@ export function loadRecentShipments(historyRef = resolveStatusHistoryRef()) {
 
     return {
       commit,
-      shortCommit: commit.slice(0, 7),
+      shortCommit: git(["log", "-1", "--format=%h", commit]),
       date,
       prNumber,
       subject,

@@ -2341,7 +2341,9 @@ docs/         product, workflow, integration, and status context
 
 Quorum is growing from a local verifier toward an evidence layer in front of
 enterprise agent workflows. Near-term work is to expand HR and support policy
-coverage and choose the durable queue backend and dashboard boundary.
+coverage and choose the durable queue backend and dashboard boundary. Batch
+verification and reviewer-queue exports are shipped foundation capabilities,
+not pending roadmap work.
 
 The same verification workflows are available as a local HTTP service for
 agent integrations. Start it with `npm run dev -- serve --port 3000`, then use
