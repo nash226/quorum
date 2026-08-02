@@ -1904,7 +1904,7 @@ Options:
 
 Usage:
   quorum help [<command>]
-  quorum formats
+  quorum formats [--json]
   quorum verify --answer <path|-> (--source <path> | --source-dir <path>) [--answer-label <label>] [--source-id <id>] [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--fail-on <verdict>]
   quorum verify-batch (--answer <path|-> [--answer-label <label>] | --answer-dir <path>)... (--source <path> | --source-dir <path>) [--source-id <id>] [--default-trust-level <level>] [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on <verdict>]
   quorum extract-claims --answer <path|-> [--answer-label <label>] [--json|--result-json] [--result-json-out <path>]
