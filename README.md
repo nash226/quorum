@@ -263,6 +263,10 @@ The roadmap now treats batch verification and reviewer-queue exports as shipped
 foundations; the next roadmap step is a durable API service boundary, which
 remains decision-gated while local CLI and HTTP reliability work continues.
 
+The evaluation suite now locks the support data-retention scenario, including a
+verified deletion-request claim, a contradicted deletion deadline, and an
+unsupported recoverability promise.
+
 ## Start the Local API and Evaluation Workflow
 
 Start the shipped local HTTP API with `npm run dev -- serve`, then inspect its
