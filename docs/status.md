@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `37864bc7` on 2026-08-02, docs: document the complete local verification gate
+- Latest shipped change: `f7ce48c0` on 2026-08-02, docs: refresh verification gate count
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | docs: refresh verification gate count | `f7ce48c0` |
 | 2026-08-02 | Direct push | docs: document the complete local verification gate | `37864bc7` |
 | 2026-08-02 | Direct push | test: make status hash assertion portable | `ce3fb305` |
 | 2026-08-02 | Direct push | docs: surface shipped local product loop | `2dc7f057` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | docs: clarify local product boundary | `cd9ffd49` |
 | 2026-08-02 | Direct push | test: cover source directory filtering | `668b5cef` |
 | 2026-08-02 | Direct push | test: ignore unsupported batch directory files | `67407b3c` |
-| 2026-08-02 | Direct push | docs: document shared version probe | `33d6ede0` |
 
