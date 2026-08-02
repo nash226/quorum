@@ -1,5 +1,13 @@
 # Quorum
 
+The support benchmark now includes an enterprise response-time packet, covering
+verified, contradicted, and unsupported first-response claims against the
+approved support playbook.
+
+The benchmark inventory checks now include the new support packet across CLI,
+API, queue, and packaged smoke expectations, keeping the 87-fixture scorecard
+green when benchmark coverage expands.
+
 The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
 extensions before wiring an integration.
@@ -128,7 +136,7 @@ filter against all 56 support fixtures, keeping API handoffs aligned with the
 CLI queue contract and current evaluation inventory.
 
 The packaged reviewer-queue smoke gate now exercises
-`review-queue --domain support` against the current 56-fixture support
+`review-queue --domain support` against the current 57-fixture support
 benchmark, keeping domain-filtered queue validation aligned with the
 checked-in evaluation inventory.
 
@@ -1766,7 +1774,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 86-fixture benchmark spans 30 HR and 56 support workflows, including
+The checked-in 87-fixture benchmark spans 30 HR and 57 support workflows, including
 leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
@@ -1783,7 +1791,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 86-fixture total explicit, so new benchmark packets cannot drift
+the published 87-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.
@@ -1792,7 +1800,7 @@ matched-claim counts drift, keeping scorecard and aggregate gates reviewable.
 The fixture loader now applies the same fail-closed rule to unknown top-level
 fields, so misspelled answer, source, or expectation keys fail before scoring.
 The evaluator also regression-tests the support-only domain filter, keeping
-focused support scorecards aligned with the 56-fixture benchmark slice.
+focused support scorecards aligned with the 57-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
@@ -2210,7 +2218,7 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
-The checked-in HR and support benchmark currently contains 86 fixtures and 255
+The checked-in HR and support benchmark currently contains 87 fixtures and 258
 expected claims, including a support plan-downgrade scenario with one verified,
 one contradicted, and one unsupported claim.
 

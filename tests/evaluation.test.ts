@@ -49,6 +49,29 @@ test("loads and evaluates the HR example fixture", async () => {
   );
 });
 
+test("evaluates the shipped support enterprise response-time fixture", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/enterprise-response-time-policy.json"),
+    generatedAt: "2026-08-02T00:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support enterprise response-time policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluation directory discovery ignores hidden fixture directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-evaluation-hidden-directory-"));
   try {
@@ -2434,6 +2457,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/support/data-export-policy.json"),
     resolve("examples/evaluations/support/data-retention-policy.json"),
     resolve("examples/evaluations/support/delivery-delay-policy.json"),
+    resolve("examples/evaluations/support/enterprise-response-time-policy.json"),
     resolve("examples/evaluations/support/escalation-policy.json"),
     resolve("examples/evaluations/support/gift-card-policy.json"),
     resolve("examples/evaluations/support/guest-access-policy.json"),
@@ -2551,7 +2575,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 86);
+  assert.equal(scorecards.length, 87);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2604,6 +2628,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "Support data export policy example",
       "Support data retention policy example",
       "Support delivery delay policy example",
+      "Support enterprise response-time policy example",
       "Support escalation policy example",
       "Support gift card policy example",
       "Support guest access policy example",
@@ -2712,7 +2737,7 @@ test("filters the support evaluation fixture set by domain", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 56);
+  assert.equal(scorecards.length, 57);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "support"));
 });
 

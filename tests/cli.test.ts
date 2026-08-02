@@ -2447,7 +2447,7 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
       /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
     assert.match(summaryCsv, /^[^,\n]+,hr,30,0,0\.000,30,0,91,91,1\.000,100%,36,20,25,10,36,20,25,10$/m);
-    assert.match(summaryCsv, /^[^,\n]+,support,56,0,0\.000,55,1,164,164,1\.000,100%,62,37,47,18,62,37,47,18$/m);
+    assert.match(summaryCsv, /^[^,\n]+,support,57,0,0\.000,56,1,167,167,1\.000,100%,63,38,48,18,63,38,48,18$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -2472,7 +2472,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /,86,85,1,0,0\.000,255,255,1\.000,100%,hr .*98,57,72,28,98,57,72,28/);
+    assert.match(summaryCsv, /,87,86,1,0,0\.000,258,258,1\.000,100%,hr .*99,58,73,28,99,58,73,28/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -2724,7 +2724,7 @@ test("evaluate writes the gate-aware result JSON to disk", async () => {
     assert.equal(payload.shouldFail, false);
     assert.deepEqual(payload.failureReasons, []);
     assert.equal(payload.mismatchCount, 0);
-    assert.equal(payload.summary.fixtureCount, 86);
+    assert.equal(payload.summary.fixtureCount, 87);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -6612,10 +6612,10 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       evaluation: { fixtureCount: number; mismatchCount: number };
     };
 
-    assert.equal(overview.review.totalAnswers, 41);
-    assert.equal(overview.review.pendingAnswers, 40);
+    assert.equal(overview.review.totalAnswers, 42);
+    assert.equal(overview.review.pendingAnswers, 41);
     assert.equal(overview.queueStatus, null);
-    assert.equal(overview.evaluation.fixtureCount, 86);
+    assert.equal(overview.evaluation.fixtureCount, 87);
     assert.equal(overview.evaluation.mismatchCount, 0);
     assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
 
@@ -6626,9 +6626,9 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       "--fixture-dir",
       "examples/evaluations",
     ]);
-    assert.match(text, /Reviewer queue: 41 answers \(40 pending, 0 reviewed, 1 no claims\)/);
-    assert.match(text, /Final verdicts: 31 verified, 20 contradicted, 30 unsupported, 38 needs review/);
-    assert.match(text, /Benchmark drift: 0\/86 mismatches \(0%\)/);
+    assert.match(text, /Reviewer queue: 42 answers \(41 pending, 0 reviewed, 1 no claims\)/);
+    assert.match(text, /Final verdicts: 32 verified, 21 contradicted, 30 unsupported, 39 needs review/);
+    assert.match(text, /Benchmark drift: 0\/87 mismatches \(0%\)/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -6698,14 +6698,14 @@ test("review-queue scopes workload to a queue status", async () => {
       review: Record<string, number>;
     };
     assert.deepEqual(pendingOverview.review, {
-      totalAnswers: 40,
-      pendingAnswers: 40,
+      totalAnswers: 41,
+      pendingAnswers: 41,
       reviewedAnswers: 0,
       noClaimsAnswers: 0,
-      totalClaims: 119,
-      pendingClaims: 119,
+      totalClaims: 122,
+      pendingClaims: 122,
       reviewedClaims: 0,
-      verdicts: { verified: 31, contradicted: 20, unsupported: 30, needs_review: 38 },
+      verdicts: { verified: 32, contradicted: 21, unsupported: 30, needs_review: 39 },
     });
     assert.equal(pendingOverview.queueStatus, "pending");
 
