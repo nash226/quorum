@@ -1,5 +1,9 @@
 # Quorum
 
+The API integration guide now documents conditional discovery caching: clients
+can use `ETag` and `If-None-Match` to refresh `/capabilities` and related
+contract endpoints without repeatedly downloading unchanged JSON.
+
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 
