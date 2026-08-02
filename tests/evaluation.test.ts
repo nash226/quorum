@@ -723,6 +723,11 @@ test("evaluates a shipped support account recovery fixture across security contr
     "contradicted",
     "unsupported",
   ]);
+  assert.deepEqual(scorecard.claims.map((claim) => claim.claimText), [
+    "Customers must verify the email address on their account before support can change it.",
+    "Support can unlock an account after 24 hours following identity verification.",
+    "Support can reset multi-factor authentication immediately on request.",
+  ]);
   assert.equal(scorecard.report.sources[0]?.id, "support/account-recovery@2026-07-15");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);

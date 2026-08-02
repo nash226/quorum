@@ -1,5 +1,8 @@
 # Quorum
 
+The support evaluation scorecard now includes account-recovery claims, covering
+verified, contradicted, and unsupported identity-policy answers end to end.
+
 The packaged CLI smoke gate now verifies the `.mdwn` Markdown alias for both
 answers and approved sources, keeping the published format contract aligned
 with direct verification.
