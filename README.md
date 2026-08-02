@@ -774,6 +774,9 @@ The packaged CLI smoke gate now verifies both the human-readable and
 `--json` format contracts against the library export, so published CLI and API
 capabilities cannot silently drift apart.
 
+The packaged CLI smoke gate now verifies UTF-8 BOM-prefixed Markdown
+frontmatter, keeping exported policy metadata intact after publishing.
+
 The packaged CLI smoke gate also verifies direct YAML answers against `.yml`
 approved sources, keeping single-file structured verification aligned with the
 published batch-discovery contract.

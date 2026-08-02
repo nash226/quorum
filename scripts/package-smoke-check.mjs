@@ -1109,7 +1109,7 @@ try {
   );
   writeFileSync(
     sourcePath,
-    "---\ntitle: Parental Leave Policy\nupdated_at: 2026-07-27\ntrust_level: high\n---\n\nEmployees receive 12 weeks of paid parental leave.\n",
+    "\uFEFF---\ntitle: Parental Leave Policy\nupdated_at: 2026-07-27\ntrust_level: high\n---\n\nEmployees receive 12 weeks of paid parental leave.\n",
   );
 
   const frontmatterOutput = execFileSync(
@@ -1128,7 +1128,7 @@ try {
     frontmatterSource?.trustLevel !== "high" ||
     frontmatterSource?.sourcePath !== sourcePath
   ) {
-    throw new Error("Package artifact did not preserve the expected Markdown front matter contract.");
+    throw new Error("Package artifact did not preserve the expected BOM-prefixed Markdown front matter contract.");
   }
 } finally {
   rmSync(cliFrontmatterPackageDir, { recursive: true, force: true });
