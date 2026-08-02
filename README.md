@@ -4,6 +4,10 @@ The support benchmark now includes an enterprise response-time packet, covering
 verified, contradicted, and unsupported first-response claims against the
 approved support playbook.
 
+The benchmark inventory checks now include the new support packet across CLI,
+API, queue, and packaged smoke expectations, keeping the 87-fixture scorecard
+green when benchmark coverage expands.
+
 The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
 extensions before wiring an integration.
@@ -132,7 +136,7 @@ filter against all 56 support fixtures, keeping API handoffs aligned with the
 CLI queue contract and current evaluation inventory.
 
 The packaged reviewer-queue smoke gate now exercises
-`review-queue --domain support` against the current 56-fixture support
+`review-queue --domain support` against the current 57-fixture support
 benchmark, keeping domain-filtered queue validation aligned with the
 checked-in evaluation inventory.
 
@@ -1796,7 +1800,7 @@ matched-claim counts drift, keeping scorecard and aggregate gates reviewable.
 The fixture loader now applies the same fail-closed rule to unknown top-level
 fields, so misspelled answer, source, or expectation keys fail before scoring.
 The evaluator also regression-tests the support-only domain filter, keeping
-focused support scorecards aligned with the 56-fixture benchmark slice.
+focused support scorecards aligned with the 57-fixture benchmark slice.
 Reviewer-queue JSON and CSV handoffs now echo any selected benchmark domains,
 so downstream consumers can audit the scope that produced their drift metrics.
 The packed smoke check also verifies that the evaluation summary CSV contains
@@ -2214,7 +2218,7 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
-The checked-in HR and support benchmark currently contains 86 fixtures and 255
+The checked-in HR and support benchmark currently contains 87 fixtures and 258
 expected claims, including a support plan-downgrade scenario with one verified,
 one contradicted, and one unsupported claim.
 
