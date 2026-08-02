@@ -40,6 +40,25 @@ the artifact arrays let queue workers avoid hard-coded routing choices. Treat
 unknown capability values as unsupported and refresh the cached response when
 the `ETag` changes.
 
+To refresh a cached discovery response without downloading it again, send its
+ETag with `If-None-Match`. Quorum returns `304 Not Modified` with an empty body
+when the contract is unchanged; a changed response returns the new body and
+ETag. The same conditional request pattern works for `/`, `/capabilities`,
+`/version`, and `/openapi.json`:
+
+```bash
+ETAG="$(curl -fsSI http://127.0.0.1:3000/capabilities \
+  | awk -F': ' 'tolower($1) == "etag" { print $2 }' \
+  | tr -d '\r')"
+curl -i http://127.0.0.1:3000/capabilities \
+  -H "If-None-Match: ${ETAG}"
+# HTTP/1.1 304 Not Modified
+```
+
+Cache the body and its ETag together, and replace both only after a `200`
+response. Discovery `HEAD` requests expose the same cache validators without
+returning a body, which is useful for lightweight worker polling.
+
 For container or load-balancer probes, the liveness endpoint is intentionally
 independent of source loading and reviewer queue state:
 
