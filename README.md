@@ -162,6 +162,9 @@ npm run build
 npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv
 ```
 
+For release or support diagnostics, print the installed CLI version with
+`npx quorum --version` (or the short `-v` form).
+
 ## Source Metadata
 
 Source files may include optional frontmatter metadata:

@@ -6,6 +6,11 @@ import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 
+test("prints the package version for release diagnostics", async () => {
+  assert.equal(await runCli(["--version"]), "0.1.0\n");
+  assert.equal(await runCli(["-v"]), "0.1.0\n");
+});
+
 test("verify applies the default trust override only to sources without metadata", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-"));
 
