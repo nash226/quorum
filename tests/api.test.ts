@@ -540,6 +540,27 @@ test("HTTP API serves bodyless HEAD responses for contract discovery", async () 
   }
 });
 
+test("HTTP API revalidates bodyless OpenAPI probes with conditional HEAD", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const initial = await fetch(`${api.url}/openapi.json`, { method: "HEAD" });
+    const etag = initial.headers.get("etag");
+    assert.match(etag ?? "", /^\"[a-f0-9]{64}\"$/);
+
+    const revalidated = await fetch(`${api.url}/openapi.json`, {
+      method: "HEAD",
+      headers: { "if-none-match": etag! },
+    });
+
+    assert.equal(revalidated.status, 304);
+    assert.equal(revalidated.headers.get("etag"), etag);
+    assert.equal(await revalidated.text(), "");
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API exposes CORS preflight metadata for operational probes", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
