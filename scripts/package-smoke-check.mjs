@@ -2713,7 +2713,7 @@ try {
     hrQueueJson.evaluation?.fixtureCount !== 30 ||
     hrQueueJson.evaluation?.mismatchCount !== 0 ||
     JSON.stringify(supportQueueJson.domains) !== JSON.stringify(["support"]) ||
-    supportQueueJson.evaluation?.fixtureCount !== 56 ||
+    supportQueueJson.evaluation?.fixtureCount !== 57 ||
     supportQueueJson.evaluation?.mismatchCount !== 0 ||
     !queueCsv.startsWith('"generated_at","queue_status","domains","total_answers",') ||
     !queueCsv.includes('"1","1","0","0","1","1","0","1","0","0","0"')
