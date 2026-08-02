@@ -775,6 +775,13 @@ breaks an answer into claims, compares each claim with source evidence, and
 returns reviewer-ready `verified`, `contradicted`, `unsupported`, or
 `needs_review` verdicts. The first wedge is HR and customer-support policy
 verification, where grounded answers are high-volume and costly to get wrong.
+
+The current product boundary is local execution: the CLI and local HTTP API
+cover single-answer and batch verification, reviewer handoffs, and evaluation
+workflows. Durable API hosting and queue persistence remain roadmap decisions,
+so integrations can adopt the verified local contracts without implying a
+hosting or storage commitment.
+
 The checked-in examples also include a support-security scenario covering
 password-reset expiry, account-change verification, escalation requirements,
 and an unsupported premium-service claim.
