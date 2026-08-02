@@ -42,6 +42,12 @@ continue on fixture coverage and local CLI/API reliability without choosing a
 hosting provider, adding credentials, or committing to a durable storage
 backend.
 
+The next safe increment is another labeled HR or support fixture only when it
+adds a distinct policy pattern and keeps the full benchmark score at its CI
+threshold. Fixture additions should include a focused evaluator assertion and
+an update to the reviewer-facing README notes so the coverage remains
+discoverable.
+
 Batch verification is shipped and should be treated as a foundation for these
 next steps, not as a separate roadmap item: its directory and explicit-path
 workflows already produce reviewer decisions and queue-routing summaries.

@@ -287,6 +287,9 @@ The evaluation suite now locks the support data-retention scenario, including a
 verified deletion-request claim, a contradicted deletion deadline, and an
 unsupported recoverability promise.
 
+The roadmap now defines the next safe evaluation increment as a distinct HR or
+support fixture backed by a focused assertion and the full benchmark gate.
+
 ## Start the Local API and Evaluation Workflow
 
 Start the shipped local HTTP API with `npm run dev -- serve`, then inspect its
