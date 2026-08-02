@@ -206,6 +206,55 @@ test("verify-batch discovers nested XML answers and sources", async () => {
   }
 });
 
+test("verify-batch ignores unsupported files while discovering nested inputs", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-unsupported-files-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([
+      mkdir(join(answerDir, "regional"), { recursive: true }),
+      mkdir(join(sourceDir, "regional"), { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(
+        join(answerDir, "regional", "answer.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(join(answerDir, "regional", "notes.doc"), "Ignore this file.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "regional", "policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(join(sourceDir, "regional", "draft.doc"), "Ignore this file.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      sourceCount: number;
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ sourcePath: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "regional", "answer.md"));
+    assert.equal(report.sources[0]?.sourcePath, join(sourceDir, "regional", "policy.md"));
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
