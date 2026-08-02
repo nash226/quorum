@@ -2427,6 +2427,49 @@ test("evaluate writes a one-row-per-fixture summary csv", async () => {
   }
 });
 
+test("evaluate creates missing nested directories for report outputs", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-nested-outputs-"));
+
+  try {
+    const outputDir = join(tempDir, "reports", "evaluation", "daily");
+    const outputPaths = {
+      json: join(outputDir, "evaluation.json"),
+      markdown: join(outputDir, "evaluation.md"),
+      html: join(outputDir, "evaluation.html"),
+      summary: join(outputDir, "summary.csv"),
+      domainSummary: join(outputDir, "domain-summary.csv"),
+      aggregateSummary: join(outputDir, "aggregate-summary.csv"),
+    };
+
+    const stdout = await runCli([
+      "evaluate",
+      "--fixture",
+      "examples/evaluations/hr-policy.json",
+      "--out",
+      outputPaths.json,
+      "--markdown-out",
+      outputPaths.markdown,
+      "--html-out",
+      outputPaths.html,
+      "--summary-csv-out",
+      outputPaths.summary,
+      "--domain-summary-csv-out",
+      outputPaths.domainSummary,
+      "--aggregate-summary-csv-out",
+      outputPaths.aggregateSummary,
+    ]);
+
+    await Promise.all(Object.values(outputPaths).map(async (path) => {
+      const content = await readFile(path, "utf8");
+      assert.ok(content.length > 0, path);
+    }));
+    assert.match(stdout, /Evaluation report written to/);
+    assert.match(stdout, /Evaluation aggregate summary CSV written to/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("evaluate writes a one-row-per-domain summary csv", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-evaluate-domain-summary-"));
 
