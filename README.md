@@ -52,6 +52,9 @@ The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
 extensions before wiring an integration.
 
+The repository also exposes `npm run version -- --json` for checking the same
+version contract without remembering the direct CLI entrypoint.
+
 The CLI and local HTTP API share a machine-readable contract version. Run
 `npm run dev -- version --json` to verify the installed CLI version before
 connecting an integration; the API exposes the same value at `GET /version`.

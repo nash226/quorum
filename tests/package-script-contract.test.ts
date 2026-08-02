@@ -16,6 +16,7 @@ test("package scripts keep the documented repository check gate intact", async (
 
   assert.equal(scripts.check, "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci");
   assert.equal(scripts.formats, "npm run dev -- formats");
+  assert.equal(scripts.version, "npm run dev -- version");
   assert.equal(scripts.smoke, "node scripts/smoke-check.mjs");
   assert.equal(scripts["package:smoke"], "node scripts/package-smoke-check.mjs");
   assert.equal(scripts["evaluate:ci"], "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch");
@@ -32,6 +33,15 @@ test("formats package script exposes the machine-readable input contract", async
   assert.equal(formats.version, API_VERSION);
   assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
+});
+
+test("version package script forwards the machine-readable contract", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "version", "--", "--json"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.deepEqual(JSON.parse(stdout), { service: "quorum", version: API_VERSION });
 });
 
 test("formats package script forwards command-specific help flags", async () => {

@@ -35,6 +35,7 @@
     "dev": "tsx src/cli.ts",
     "help": "npm run dev -- --help",
     "formats": "npm run dev -- formats",
+    "version": "npm run dev -- version",
     "prepublishOnly": "npm run check",
     "smoke": "node scripts/smoke-check.mjs",
     "package:smoke": "node scripts/package-smoke-check.mjs",
