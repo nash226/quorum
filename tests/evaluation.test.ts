@@ -95,6 +95,29 @@ test("evaluates the shipped support plan-upgrade fixture across billing claims",
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped support usage-limits fixture across quota claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/usage-limits-policy.json"),
+    generatedAt: "2026-08-02T05:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support usage limits policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluation directory discovery ignores hidden fixture directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-evaluation-hidden-directory-"));
   try {
