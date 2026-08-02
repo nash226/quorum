@@ -39,7 +39,7 @@ test("loadRecentShipments reads the supplied history ref", () => {
   assert.ok(latestShipmentShortCommit);
 
   assert.ok(shipments.length > 0);
-  assert.equal(shipments[0]?.shortCommit, latestShipmentShortCommit);
+  assert.equal(shipments[0]?.shortCommit, latestShipmentShortCommit.slice(0, 7));
   assert.match(shipments[0]?.title ?? "", /\S/);
 });
 
