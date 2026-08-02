@@ -1,5 +1,8 @@
 # Quorum
 
+Structured JSONL/NDJSON, YAML/YML, and TOML source exports now keep the
+filename stem as their fallback evidence title, including uppercase aliases.
+
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 
