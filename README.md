@@ -9,6 +9,10 @@ The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
 
+The packaged batch smoke gate now verifies nested XML answers and approved
+sources, keeping recursive XML policy workflows release-gated alongside direct
+verification.
+
 Top-level CLI help now shows the optional `--json` flag for `quorum formats`,
 making the machine-readable format-discovery path visible during onboarding.
 
