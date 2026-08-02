@@ -2454,6 +2454,27 @@ try {
   rmSync(uppercaseFormatTempDir, { recursive: true, force: true });
 }
 
+const rstFormatTempDir = mkdtempSync(join(tmpdir(), "quorum-package-rst-format-"));
+try {
+  const answerPath = join(rstFormatTempDir, "answer.rst");
+  const sourcePath = join(rstFormatTempDir, "policy.rst");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Parental Leave Policy\n======================\n\nEmployees receive 12 weeks of paid parental leave.\n");
+  const result = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    result.summary?.verified !== 1 ||
+    result.answerPath !== answerPath ||
+    result.sources?.[0]?.sourcePath !== sourcePath ||
+    result.sources?.[0]?.title !== "policy"
+  ) {
+    throw new Error("Package artifact CLI did not preserve direct reStructuredText answer/source verification.");
+  }
+} finally {
+  rmSync(rstFormatTempDir, { recursive: true, force: true });
+}
+
 const yamlAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-yaml-answer-"));
 try {
   const yamlAnswerPath = join(yamlAnswerTempDir, "answer.yaml");
