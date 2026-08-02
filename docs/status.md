@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d71000cd` on 2026-08-02, test: lock formats contract version
+- Latest shipped change: `5e40c055` on 2026-08-02, docs: expose formats json flag in cli help
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | docs: expose formats json flag in cli help | `5e40c055` |
 | 2026-08-02 | Direct push | test: lock formats contract version | `d71000cd` |
 | 2026-08-02 | Direct push | docs: explain recursive source benchmark coverage | `7491d767` |
 | 2026-08-02 | Direct push | docs: refresh verification gate count | `f7ce48c0` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | test: make status hash assertion portable | `ce3fb305` |
 | 2026-08-02 | Direct push | docs: surface shipped local product loop | `2dc7f057` |
 | 2026-08-02 | Direct push | docs: reconcile shipped batch roadmap | `ae5ee8d1` |
-| 2026-08-02 | Direct push | docs: clarify local product boundary | `cd9ffd49` |
 
