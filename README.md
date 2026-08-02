@@ -1,5 +1,9 @@
 # Quorum
 
+Batch directory verification now excludes every configured report output,
+including aggregate CSV and gate-aware result JSON files, so reruns do not
+re-ingest their own generated artifacts as answers.
+
 The support benchmark now includes an enterprise response-time packet, covering
 verified, contradicted, and unsupported first-response claims against the
 approved support playbook.
