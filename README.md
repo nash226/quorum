@@ -266,11 +266,11 @@ remains decision-gated while local CLI and HTTP reliability work continues.
 ## Start the Local API and Evaluation Workflow
 
 Start the shipped local HTTP API with `npm run dev -- serve`, then inspect its
-health and contract surfaces:
+health and contract surfaces on the default port `3000`:
 
 ```bash
-curl http://127.0.0.1:8787/health
-curl http://127.0.0.1:8787/openapi.json
+curl http://127.0.0.1:3000/health
+curl http://127.0.0.1:3000/openapi.json
 ```
 
 Run the checked-in HR or support scorecards with
