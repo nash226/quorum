@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5b46ddc` on 2026-08-02, docs: explain API format discovery
+- Latest shipped change: `fdd77c6` on 2026-08-02, test: cover support shipping address policy
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | test: cover support shipping address policy | `fdd77c6` |
 | 2026-08-02 | Direct push | docs: explain API format discovery | `5b46ddc` |
 | 2026-08-01 | Direct push | test: cover support refund escalation claims | `42c704e` |
 | 2026-08-01 | [#1694](https://github.com/nash226/quorum/pull/1694) | fix: align scorecard benchmark expectations | `00afc86` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | fix: exclude all batch report outputs | `06cd496` |
 | 2026-08-01 | Direct push | docs: document the full CLI command surface | `cb221a3` |
 | 2026-08-01 | Direct push | test: expand support response-time benchmark | `8991d10` |
-| 2026-08-01 | [#1682](https://github.com/nash226/quorum/pull/1682) | docs: surface package format discovery | `a93e0cc` |
 
