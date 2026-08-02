@@ -21,6 +21,10 @@ The packaged batch smoke gate now verifies nested XML answers and approved
 sources, keeping recursive XML policy workflows release-gated alongside direct
 verification.
 
+The current shipped surface includes batch verification and a contract-tested
+local HTTP API for verification, claim previews, reviewer imports, queue
+overviews, and evaluation; durable hosting remains a roadmap decision.
+
 Top-level CLI help now shows the optional `--json` flag for `quorum formats`,
 making the machine-readable format-discovery path visible during onboarding.
 

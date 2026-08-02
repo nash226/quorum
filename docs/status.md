@@ -41,6 +41,7 @@
 
 ### Next In docs/roadmap.md
 
+- Harden the local API integration boundary with stable discovery, probe, and artifact contracts before choosing a durable deployment boundary.
 - Add a durable API service boundary for agent integrations beyond the local HTTP server (requires a deployment decision).
 - Choose the durable queue backend for reviewer work queues and audit history; the dashboard boundary is tracked separately in [decision issue #683](https://github.com/nash226/quorum/issues/683).
 - Expand the HR and support fixture set as policy coverage grows.

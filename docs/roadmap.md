@@ -31,6 +31,8 @@ surfaces rather than add another parallel workflow.
 
 ## Next
 
+- Harden the local API integration boundary with stable discovery, probe, and
+  artifact contracts before choosing a durable deployment boundary.
 - Add a durable API service boundary for agent integrations beyond the local
   HTTP server (requires a deployment decision).
 - Choose the durable queue backend for reviewer work queues and audit history;
