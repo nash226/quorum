@@ -1863,8 +1863,12 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 88-fixture benchmark spans 30 HR and 58 support workflows, including
-leave, onboarding, payroll, accommodations, refunds, refund status, account
+The checked-in 88-fixture benchmark spans 30 HR and 58 support workflows. It also
+includes source-directory evaluation coverage that verifies the same support
+answer through recursive approved-source discovery as well as direct source
+inputs.
+
+The benchmark spans leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
 sources. JSON and XML exports are normalized into evidence text so structured
