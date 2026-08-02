@@ -5,6 +5,10 @@ verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
 API surface; durable hosting and queue storage remain roadmap decisions.
 
+The release contract test now verifies that `quorum formats --json` reports the
+same version as the HTTP API, so format-discovery clients can detect contract
+drift before submitting files.
+
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 

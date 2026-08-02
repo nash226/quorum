@@ -3,6 +3,7 @@ import { execFile } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 import test from "node:test";
+import { API_VERSION } from "../src/api-server.js";
 import { ANSWER_EXTENSIONS, SOURCE_EXTENSIONS } from "../src/workflow.js";
 
 const execFileAsync = promisify(execFile);
@@ -26,8 +27,9 @@ test("formats package script exposes the machine-readable input contract", async
     cwd: new URL("..", import.meta.url),
     maxBuffer: 1024 * 1024,
   });
-  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };
+  const formats = JSON.parse(stdout) as { version: string; sources: string[]; answers: string[] };
 
+  assert.equal(formats.version, API_VERSION);
   assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
 });
