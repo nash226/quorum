@@ -382,6 +382,10 @@ The benchmark also covers support plan-downgrade claims across verified,
 contradicted, and unsupported outcomes, making this subscription workflow part
 of the regression gate.
 
+The support phone-support benchmark now loads its approved policy from a
+checked-in source file, verifying the same file-backed ingestion path used by
+customer policy exports.
+
 The current roadmap prioritizes strengthening the local CLI and HTTP API for
 reviewer handoffs; durable hosting and queue persistence remain decision-gated.
 
