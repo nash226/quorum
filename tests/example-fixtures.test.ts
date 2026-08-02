@@ -55,6 +55,21 @@ test("support example produces one verified, contradicted, and unsupported claim
   });
 });
 
+test("support escalation example routes a related gift-card claim to review", async () => {
+  const report = await verifyExample(
+    "examples/answers/support-gift-card-review-answer.md",
+    "examples/sources/support-escalation-policy.md",
+  );
+
+  assert.deepEqual(report.summary, {
+    verified: 0,
+    unsupported: 0,
+    contradicted: 0,
+    needs_review: 1,
+  });
+  assert.equal(report.assessments[0]?.verdict, "needs_review");
+});
+
 test("support HTML example produces one verified, contradicted, and unsupported claim", async () => {
   const report = await verifyExample(
     "examples/answers/support-billing-answer.html",
