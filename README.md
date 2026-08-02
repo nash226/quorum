@@ -2318,6 +2318,9 @@ with verified, needs-review, contradicted, and unsupported claims.
 - [Status](docs/status.md) is regenerated from the default branch with the current capability, roadmap, and recent-change snapshot.
 - [Product brief](docs/product-brief.md): problem, initial user, and product principles.
 
+The status snapshot derives commit abbreviations from Git at refresh time, so
+it remains portable across repositories with different abbreviation lengths.
+
 ## Demo Video
 
 <a href="docs/assets/quorum-demo.mp4">
@@ -2345,9 +2348,10 @@ docs/         product, workflow, integration, and status context
 ```
 
 Quorum is growing from a local verifier toward an evidence layer in front of
-enterprise agent workflows. Near-term work is to expand HR and support policy
-coverage and choose the durable queue backend and dashboard boundary. Batch
-verification and reviewer-queue exports are shipped foundation capabilities,
+enterprise agent workflows. The next unblocked work is to expand HR and
+support policy coverage; durable API hosting and queue storage remain
+decision-gated. Batch verification, reviewer-queue exports, and local HTTP
+integration contracts are shipped foundation capabilities,
 not pending roadmap work.
 
 The same verification workflows are available as a local HTTP service for
