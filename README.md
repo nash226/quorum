@@ -1,5 +1,9 @@
 # Quorum
 
+Source paths supplied through overlapping `--source` and `--source-dir`
+arguments are deduplicated while preserving the first supplied order, so
+evidence references remain stable when integrations combine input sources.
+
 The batch CLI now documents its input-routing contract: explicit `--answer`
 paths stay ordered ahead of recursive `--answer-dir` discovery, duplicates are
 removed, and an empty answer directory fails clearly instead of producing a
