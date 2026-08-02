@@ -6,7 +6,7 @@
   "answerLabel": "Support gift card reviewer packet",
   "sources": [
     {
-      "sourcePath": "../../sources/support-gift-card-policy.md",
+      "sourcePath": "support-gift-card-policy.md",
       "id": "support/gift-card@2026-07-15",
       "title": "Support Gift Card Policy",
       "updatedAt": "2026-07-15",

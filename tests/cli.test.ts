@@ -6698,8 +6698,8 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       evaluation: { fixtureCount: number; mismatchCount: number };
     };
 
-    assert.equal(overview.review.totalAnswers, 42);
-    assert.equal(overview.review.pendingAnswers, 41);
+    assert.equal(overview.review.totalAnswers, 43);
+    assert.equal(overview.review.pendingAnswers, 42);
     assert.equal(overview.queueStatus, null);
     assert.equal(overview.evaluation.fixtureCount, 88);
     assert.equal(overview.evaluation.mismatchCount, 0);
@@ -6712,8 +6712,8 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       "--fixture-dir",
       "examples/evaluations",
     ]);
-    assert.match(text, /Reviewer queue: 42 answers \(41 pending, 0 reviewed, 1 no claims\)/);
-    assert.match(text, /Final verdicts: 32 verified, 21 contradicted, 30 unsupported, 39 needs review/);
+    assert.match(text, /Reviewer queue: 43 answers \(42 pending, 0 reviewed, 1 no claims\)/);
+    assert.match(text, /Final verdicts: 32 verified, 21 contradicted, 31 unsupported, 41 needs review/);
     assert.match(text, /Benchmark drift: 0\/88 mismatches \(0%\)/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -6784,14 +6784,14 @@ test("review-queue scopes workload to a queue status", async () => {
       review: Record<string, number>;
     };
     assert.deepEqual(pendingOverview.review, {
-      totalAnswers: 41,
-      pendingAnswers: 41,
+      totalAnswers: 42,
+      pendingAnswers: 42,
       reviewedAnswers: 0,
       noClaimsAnswers: 0,
-      totalClaims: 122,
-      pendingClaims: 122,
+      totalClaims: 125,
+      pendingClaims: 125,
       reviewedClaims: 0,
-      verdicts: { verified: 32, contradicted: 21, unsupported: 30, needs_review: 39 },
+      verdicts: { verified: 32, contradicted: 21, unsupported: 31, needs_review: 41 },
     });
     assert.equal(pendingOverview.queueStatus, "pending");
 
