@@ -4,6 +4,8 @@ import {
   API_ALLOWED_METHODS,
   API_CAPABILITIES,
   API_REQUEST_CONTENT_TYPES,
+  ANSWER_EXTENSIONS,
+  SOURCE_EXTENSIONS,
   extractClaims,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
@@ -62,6 +64,14 @@ test("public package entrypoint exports the canonical HTTP method contract", () 
 test("public package entrypoint exports the canonical JSON media-type contract", () => {
   assert.deepEqual(API_REQUEST_CONTENT_TYPES, ["application/json", "application/*+json"]);
   assert.deepEqual(API_CAPABILITIES.requestContentTypes, [...API_REQUEST_CONTENT_TYPES]);
+});
+
+test("public package entrypoint exports the canonical input format contract", () => {
+  assert.ok(ANSWER_EXTENSIONS instanceof Set);
+  assert.ok(SOURCE_EXTENSIONS instanceof Set);
+  assert.ok(ANSWER_EXTENSIONS.has(".md"));
+  assert.ok(SOURCE_EXTENSIONS.has(".pdf"));
+  assert.deepEqual([...ANSWER_EXTENSIONS].sort(), [...SOURCE_EXTENSIONS].sort());
 });
 
 test("public package entrypoint exports the HTTP error response contract", () => {
