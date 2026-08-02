@@ -32,6 +32,10 @@ The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
 extensions before wiring an integration.
 
+The CLI and local HTTP API share a machine-readable contract version. Run
+`npm run dev -- version --json` to verify the installed CLI version before
+connecting an integration; the API exposes the same value at `GET /version`.
+
 Local API clients can discover the same versioned extension contract without
 starting a verification request: `GET /capabilities` returns `answerExtensions`
 and `sourceExtensions` alongside the supported verdicts, trust levels, and
