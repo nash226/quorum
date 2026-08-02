@@ -101,6 +101,10 @@ The packaged CLI smoke gate now verifies that `openapi --out` creates nested
 parent directories, keeping the documented `reports/openapi.json` export
 workflow release-gated for installed integrations.
 
+Evaluation report exports now create missing nested parent directories for JSON,
+Markdown, HTML, and CSV scorecards, so clean integrations can write a complete
+evaluation handoff under a new `reports/...` path in one command.
+
 Claim extraction now joins Markdown backslash hard breaks within one claim, so
 wrapped policy answers keep their reviewer evidence context intact.
 
