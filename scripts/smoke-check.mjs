@@ -32,8 +32,8 @@ function runCommand(command, args, options = {}) {
   });
 }
 
-async function startCliServer(args) {
-  const child = spawn("node", [cliPath, "serve", ...args], {
+async function startServer(command, args) {
+  const child = spawn(command, args, {
     cwd: repoRoot,
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -87,6 +87,14 @@ async function startCliServer(args) {
       });
     },
   };
+}
+
+async function startCliServer(args) {
+  return startServer("node", [cliPath, "serve", ...args]);
+}
+
+async function startNpmServer(args) {
+  return startServer("npm", ["run", "--silent", "serve", "--", ...args]);
 }
 
 function readJson(path) {
@@ -883,6 +891,16 @@ Employees receive 12 weeks of paid parental leave.
     "--cors-origin",
     "https://console.example.com",
   ]);
+
+  const npmServer = await startNpmServer(["--port", "0"]);
+  try {
+    const npmHealthResponse = await fetch(`${npmServer.url}/health`);
+    assert.equal(npmHealthResponse.status, 200);
+    assert.equal(npmHealthResponse.headers.get("x-quorum-service"), "quorum");
+    assert.equal((await npmHealthResponse.json()).ok, true);
+  } finally {
+    await npmServer.stop();
+  }
 
   try {
     const reviewQueueResponse = await fetch(`${server.url}/review-queue`, {

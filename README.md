@@ -7,7 +7,8 @@ API surface; durable hosting and queue storage remain roadmap decisions.
 
 Start the local HTTP API with `npm run serve` (equivalent to
 `npm run dev -- serve`) when an agent integration needs the documented local
-service boundary.
+service boundary. The packaged smoke check now starts that npm wrapper and
+probes `/health`, keeping the documented onboarding command release-gated.
 
 The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
