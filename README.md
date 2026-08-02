@@ -1,5 +1,10 @@
 # Quorum
 
+The shipped local product covers the full review loop: CLI and HTTP API
+verification, reviewer-queue imports and summaries, and HR/support evaluation
+scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
+API surface; durable hosting and queue storage remain roadmap decisions.
+
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 
