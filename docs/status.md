@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `33d6ede` on 2026-08-02, docs: document shared version probe
+- Latest shipped change: `67407b3` on 2026-08-02, test: ignore unsupported batch directory files
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | test: ignore unsupported batch directory files | `67407b3` |
 | 2026-08-02 | Direct push | docs: document shared version probe | `33d6ede` |
 | 2026-08-02 | Direct push | docs: clarify machine-readable version checks | `999f574` |
 | 2026-08-02 | Direct push | test: cover CRLF source frontmatter | `aba6ec0` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | docs: correct local API quickstart port | `0ccf725` |
 | 2026-08-02 | Direct push | docs: clarify batch answer routing | `bff5439` |
 | 2026-08-02 | Direct push | test: cover support shipping address policy | `fdd77c6` |
-| 2026-08-02 | Direct push | docs: explain API format discovery | `5b46ddc` |
 
