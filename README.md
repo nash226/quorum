@@ -13,6 +13,10 @@ The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
 
+The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
+answers and approved sources, keeping the documented format contract covered
+for installed integrations.
+
 The reviewer-queue CLI now includes a complete filtered handoff example,
 combining pending-answer status, domain-scoped benchmark drift, JSON output,
 and a one-row CSV export in one runnable command.
