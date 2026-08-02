@@ -6,6 +6,12 @@ import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 
+test("version prints the packaged CLI version", async () => {
+  const stdout = await runCli(["--version"]);
+
+  assert.equal(stdout.trim(), "0.1.0");
+});
+
 test("verify applies the default trust override only to sources without metadata", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-"));
 

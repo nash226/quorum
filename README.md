@@ -34,6 +34,7 @@ auditable evidence report before an agent response becomes a business action.
 
 The current CLI can:
 
+- print its packaged version with `quorum --version` for deployment and support checks
 - read an AI-generated answer from a Markdown or text file
 - batch verify multiple AI-generated answers from a directory
 - read one or more approved Markdown, text, or exported HTML source documents

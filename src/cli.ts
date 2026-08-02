@@ -36,6 +36,7 @@ import {
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
 import { renderAnswerLabels, renderAnswerPreview } from "./text.js";
+import { QUORUM_VERSION } from "./version.js";
 
 interface VerifyArgs {
   sourcePaths: string[];
@@ -78,6 +79,11 @@ const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
+
+  if (command === "--version" || command === "-v") {
+    console.log(QUORUM_VERSION);
+    return;
+  }
 
   if (command === "verify") {
     await runVerify(args);
@@ -760,6 +766,8 @@ async function writeReportFile(
 
 function printHelp(): void {
   console.log(`Quorum
+
+Version: ${QUORUM_VERSION}
 
 Usage:
   quorum verify --answer <path> (--source <path> | --source-dir <path>) [--default-trust-level <level>] [--json] [--out <path>] [--markdown-out <path>] [--html-out <path>] [--review-csv-out <path>] [--fail-on <verdict>]
