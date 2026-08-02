@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a93e0cc` on 2026-08-01, docs: surface package format discovery
+- Latest shipped change: `8991d10` on 2026-08-01, test: expand support response-time benchmark
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | test: expand support response-time benchmark | `8991d10` |
 | 2026-08-01 | [#1682](https://github.com/nash226/quorum/pull/1682) | docs: surface package format discovery | `a93e0cc` |
 | 2026-08-01 | Direct push | docs: clarify shipped batch foundation | `b03c79d` |
 | 2026-08-01 | Direct push | fix: normalize warning-sign claim bullets | `06842de` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | fix: strip directional Unicode claim bullets | `0036fe4` |
 | 2026-08-01 | Direct push | fix: normalize ballot-box check claims | `bd832a0` |
 | 2026-08-01 | Direct push | test: smoke-check packaged claim labels | `aa235b9` |
-| 2026-08-01 | Direct push | fix: strip ballot-box X task markers | `2aff8b4` |
 
