@@ -35,6 +35,10 @@ review multiple answers, preserve reviewer decisions, and produce queue-ready
 summaries. The next product boundary is a durable API service, which remains
 deployment-decision gated.
 
+Markdown claim extraction ignores both ATX headings (`# Heading`) and setext
+headings (`Heading` followed by `===` or `---`), so section labels do not enter
+reviewer evidence as claims.
+
 Claim extraction now strips warning-sign bullets (`⚠` and `⚠️`) from exported
 checklists, keeping the policy statement itself available for evidence review.
 
