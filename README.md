@@ -107,6 +107,10 @@ The packaged CLI smoke gate now verifies direct Org-mode answer and approved-sou
 exports, keeping `.org` policy handoffs release-gated alongside other document
 formats.
 
+The packaged CLI smoke gate also verifies direct `.org-mode` answer and
+approved-source exports, keeping the shipped Org-mode alias release-gated for
+installed integrations.
+
 The packaged CLI smoke gate now verifies that reviewer-queue JSON and CSV
 artifacts create missing nested output directories, keeping the documented
 `reports/...` handoff paths safe for clean integrations.
