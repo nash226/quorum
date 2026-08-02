@@ -12,6 +12,19 @@ The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
 extensions before wiring an integration.
 
+The checked-in evaluation scorecard currently covers 85 HR and support policy
+fixtures (30 HR and 55 support) and protects a 0.95 minimum score in CI. Run a
+focused domain scorecard locally with:
+
+```bash
+npm run dev -- evaluate --fixture-dir examples/evaluations \
+  --domain support --min-score 0.95 --fail-on-mismatch
+```
+
+Use `--domain hr` for the HR slice, or omit the filter to run the full
+repository gate. See the [evaluation fixture guide](docs/evaluation-fixtures.md)
+for the fixture contract and extension workflow.
+
 Batch verification is shipped as a foundation: the CLI and local HTTP API can
 review multiple answers, preserve reviewer decisions, and produce queue-ready
 summaries. The next product boundary is a durable API service, which remains
