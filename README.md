@@ -1,5 +1,9 @@
 # Quorum
 
+The support evaluation suite now directly locks usage-limit claims across
+verified, needs-review, and unsupported outcomes, strengthening quota-policy
+evidence coverage beyond inventory-only fixture checks.
+
 The evaluation suite now covers a support refund-escalation packet with a
 verified refund window and unsupported approval promises, keeping reviewer
 risk coverage grounded in a concrete customer-support workflow.
