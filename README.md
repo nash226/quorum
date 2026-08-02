@@ -2332,6 +2332,8 @@ command to fail closed when aggregate claim quality falls below the threshold.
 The checked-in HR and support benchmark currently contains 88 fixtures and 261
 expected claims, including support plan-upgrade and plan-downgrade scenarios
 with verified, needs-review, contradicted, and unsupported claims.
+The gift-card benchmark also runs through checked-in answer and source files,
+covering file-backed support-policy ingestion alongside inline fixture coverage.
 
 ## Documentation Map
 
