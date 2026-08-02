@@ -1,5 +1,8 @@
 # Quorum
 
+The evaluation fixture guide now matches the shipped 88-fixture benchmark,
+covering 30 HR and 58 support workflows for reliable scorecard interpretation.
+
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 
