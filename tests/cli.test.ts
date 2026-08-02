@@ -6867,12 +6867,24 @@ test("verify-batch excludes configured report outputs from answer directory disc
     const answerDir = join(tempDir, "answers");
     const sourceDir = join(tempDir, "sources");
     const markdownOutPath = join(answerDir, "batch-report.md");
+    const aggregateSummaryCsvOutPath = join(answerDir, "batch-aggregate-summary.csv");
+    const resultJsonOutPath = join(answerDir, "batch-result.json");
     await mkdir(answerDir, { recursive: true });
     await mkdir(sourceDir, { recursive: true });
     await writeFile(join(answerDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8");
     await writeFile(markdownOutPath, "A previous generated report.\n", "utf8");
+    await writeFile(aggregateSummaryCsvOutPath, "A previous generated report.\n", "utf8");
+    await writeFile(resultJsonOutPath, "A previous generated report.\n", "utf8");
     await writeFile(join(sourceDir, "hr-policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8");
-    const stdout = await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--markdown-out", markdownOutPath, "--json"]);
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir", answerDir,
+      "--source-dir", sourceDir,
+      "--markdown-out", markdownOutPath,
+      "--aggregate-summary-csv-out", aggregateSummaryCsvOutPath,
+      "--result-json-out", resultJsonOutPath,
+      "--json",
+    ]);
     const report = JSON.parse(stdout) as { answerCount: number; answers: Array<{ answerPath: string }> };
     assert.equal(report.answerCount, 1);
     assert.deepEqual(report.answers.map((answer) => answer.answerPath), [join(answerDir, "answer.md")]);

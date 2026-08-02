@@ -413,6 +413,8 @@ async function runVerifyBatch(args: string[]): Promise<void> {
       parsed.htmlOutPath,
       parsed.reviewCsvOutPath,
       parsed.summaryCsvOutPath,
+      parsed.aggregateSummaryCsvOutPath,
+      parsed.resultJsonOutPath,
     ].filter((path): path is string => path !== undefined),
   });
   const jsonReport = JSON.stringify(batchReport, null, 2);
