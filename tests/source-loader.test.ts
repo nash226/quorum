@@ -282,6 +282,21 @@ test("strips JSON extensions from fallback source titles", async () => {
   assert.equal(source.content, "policy: Employees get 12 weeks.");
 });
 
+test("strips structured export extensions from fallback source titles", async () => {
+  const sources = await Promise.all([
+    sourceDocumentFromFile("docs/policies/benefits.jsonl", "policy", 0),
+    sourceDocumentFromFile("docs/policies/benefits.NDJSON", "policy", 1),
+    sourceDocumentFromFile("docs/policies/benefits.yaml", "policy", 2),
+    sourceDocumentFromFile("docs/policies/benefits.YML", "policy", 3),
+    sourceDocumentFromFile("docs/policies/benefits.toml", "policy", 4),
+  ]);
+
+  assert.deepEqual(
+    sources.map((source) => source.title),
+    ["benefits", "benefits", "benefits", "benefits", "benefits"],
+  );
+});
+
 test("strips XML extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile("docs/policies/benefits.xml", "<policy>Employees get 12 weeks.</policy>", 0);
 
