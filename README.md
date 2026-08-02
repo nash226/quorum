@@ -8,6 +8,10 @@ API surface; durable hosting and queue storage remain roadmap decisions.
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 
+Run `npm run check` to verify the shipped local product end to end: unit tests,
+the TypeScript build, source and packaged HTTP/CLI smoke checks, and the
+evaluation score gate all run from one release command.
+
 The batch CLI now documents its input-routing contract: explicit `--answer`
 paths stay ordered ahead of recursive `--answer-dir` discovery, duplicates are
 removed, and an empty answer directory fails clearly instead of producing a
