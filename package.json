@@ -31,7 +31,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "check": "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci",
+    "check": "npm run clean && npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "dev": "tsx src/cli.ts",
     "help": "npm run dev -- --help",
     "formats": "npm run dev -- formats",
