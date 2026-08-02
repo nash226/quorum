@@ -2,16 +2,10 @@
   "name": "Support gift card policy example",
   "domain": "support",
   "answerPath": "../../answers/support-gift-card-answer.md",
-  "answer": "Customers must verify account ownership before redeeming a gift card.\nGift cards remain valid for 24 months after purchase.\nSupport automatically refunds unused gift cards after a failed redemption.\n",
   "answerLabel": "Support gift card reviewer packet",
   "sources": [
     {
-      "sourcePath": "../../sources/support-gift-card-policy.md",
-      "id": "support/gift-card@2026-07-15",
-      "title": "Support Gift Card Policy",
-      "updatedAt": "2026-07-15",
-      "trustLevel": "high",
-      "content": "Customers must verify account ownership before redeeming a gift card.\nGift cards remain valid for 12 months after purchase.\n"
+      "sourcePath": "../../sources/support-gift-card-policy.md"
     }
   ],
   "expectedSummary": {
