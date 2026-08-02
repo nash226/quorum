@@ -17,6 +17,10 @@ The reviewer-queue CLI now includes a complete filtered handoff example,
 combining pending-answer status, domain-scoped benchmark drift, JSON output,
 and a one-row CSV export in one runnable command.
 
+Installed integrations can now invoke the same reviewer handoff workflows with
+`npm run import-review -- ...` and `npm run review-queue -- ...`, without
+repeating the underlying `npm run dev --` command prefix.
+
 The packaged batch smoke gate now verifies nested XML answers and approved
 sources, keeping recursive XML policy workflows release-gated alongside direct
 verification.
