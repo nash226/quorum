@@ -5,6 +5,12 @@ verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
 API surface; durable hosting and queue storage remain roadmap decisions.
 
+For a first local verification, place an approved policy in `policies/` and an
+AI answer in `answers/`, then run `npm run dev -- verify --answer
+answers/answer.md --source-dir policies --json`. The JSON report contains the
+claim verdicts and evidence needed for a reviewer handoff; run `npm run check`
+to exercise the complete release gate afterward.
+
 The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
