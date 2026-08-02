@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d0b399fb` on 2026-08-02, test: cover conditional OpenAPI head probes
+- Latest shipped change: `13d5fc72` on 2026-08-02, docs: add reviewer queue handoff example
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | docs: add reviewer queue handoff example | `13d5fc72` |
 | 2026-08-02 | [#1744](https://github.com/nash226/quorum/pull/1744) | test: cover conditional OpenAPI head probes | `d0b399fb` |
 | 2026-08-02 | Direct push | test: cover packaged XML batch verification | `bf8f7d92` |
 | 2026-08-02 | Direct push | docs: expose formats json flag in cli help | `5e40c055` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | docs: explain recursive source benchmark coverage | `7491d767` |
 | 2026-08-02 | Direct push | docs: refresh verification gate count | `f7ce48c0` |
 | 2026-08-02 | Direct push | docs: document the complete local verification gate | `37864bc7` |
-| 2026-08-02 | Direct push | test: make status hash assertion portable | `ce3fb305` |
 
