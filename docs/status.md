@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `00afc86` on 2026-08-01, fix: align scorecard benchmark expectations
+- Latest shipped change: `42c704e` on 2026-08-01, test: cover support refund escalation claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-01 | Direct push | test: cover support refund escalation claims | `42c704e` |
 | 2026-08-01 | [#1694](https://github.com/nash226/quorum/pull/1694) | fix: align scorecard benchmark expectations | `00afc86` |
 | 2026-08-01 | [#1692](https://github.com/nash226/quorum/pull/1692) | test: smoke-check packaged mdwn alias | `fa3f015` |
 | 2026-08-01 | Direct push | fix: exclude all batch report outputs | `06cd496` |
@@ -56,5 +57,4 @@
 | 2026-08-01 | Direct push | test: expand support response-time benchmark | `8991d10` |
 | 2026-08-01 | [#1682](https://github.com/nash226/quorum/pull/1682) | docs: surface package format discovery | `a93e0cc` |
 | 2026-08-01 | Direct push | docs: clarify shipped batch foundation | `b03c79d` |
-| 2026-08-01 | Direct push | fix: normalize warning-sign claim bullets | `06842de` |
 
