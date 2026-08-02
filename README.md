@@ -942,6 +942,31 @@ are mixed.
 Localized claim extraction also recognizes Arabic, Indic, CJK, and fullwidth
 sentence terminators.
 
+## Other CLI Commands
+
+The CLI also exposes focused commands for discovery, evaluation, review
+operations, and integrations:
+
+- `formats`: print the supported answer and source format contract, with
+  `--json` for automation.
+- `extract-claims`: inspect the atomic claims Quorum would verify from an
+  answer file.
+- `evaluate`: run evaluation fixtures and export scorecards for regression
+  checks and domain comparisons.
+- `review-queue`: turn evaluation results into a reviewer work queue, filtered
+  by domain or queue status when needed.
+- `serve`: start the local HTTP API for agent integrations.
+- `openapi`: export the API contract without starting the server.
+- `version`: print the CLI/API version, with `--json` for health checks.
+
+Each command has focused help available without input files:
+
+```bash
+npm run dev -- formats --help
+npm run dev -- evaluate --help
+npm run dev -- serve --help
+```
+
 ## Quick Start
 
 After installing dependencies, run the complete pre-PR validation gate with:
