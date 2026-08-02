@@ -433,6 +433,54 @@ test("evaluates a shipped support escalation fixture across routing verdicts", a
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates support refund escalation claims across risk outcomes", async () => {
+  const scorecard = await evaluateFixture(
+    {
+      name: "Support refund escalation policy example",
+      domain: "support",
+      answerPath: "answers/support-refund-escalation-answer.md",
+      answer:
+        "Customers can request a refund within 30 days of purchase.\n" +
+        "Enterprise customers can request a refund within 90 days of purchase.\n" +
+        "Support can approve refunds for any reason without review.\n",
+      answerLabel: "Support refund escalation reviewer packet",
+      sources: [
+        {
+          sourcePath: "sources/support-refund-escalation-policy.md",
+          id: "support/refund-escalation@2026-08-02",
+          title: "Support Refund Escalation Policy",
+          updatedAt: "2026-08-02",
+          trustLevel: "high",
+          content:
+            "Customers can request a refund within 30 days of purchase.\n" +
+            "Enterprise refund requests require review by the account team.\n",
+        },
+      ],
+      expectedSummary: { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 },
+      expectedClaimVerdicts: ["verified", "contradicted", "unsupported"],
+    },
+    { generatedAt: "2026-08-02T03:30:00.000Z" },
+  );
+
+  assert.equal(scorecard.fixtureName, "Support refund escalation policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support refund escalation reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/refund-escalation@2026-08-02");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped support guest access fixture across membership claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/guest-access-policy.json"),

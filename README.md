@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation suite now covers a support refund-escalation packet with a
+verified refund window and unsupported approval promises, keeping reviewer
+risk coverage grounded in a concrete customer-support workflow.
+
 The packaged CLI smoke gate now verifies the `.mdwn` Markdown alias for both
 answers and approved sources, keeping the published format contract aligned
 with direct verification.
