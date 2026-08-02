@@ -423,6 +423,16 @@ test("strips emoji-presentation checkbox markers from exported task lists", () =
   ]);
 });
 
+test("strips standalone emoji check marks from exported task lists", () => {
+  const claims = extractClaims(`✅ Employees receive 12 weeks of paid parental leave.
+✅ Healthcare coverage begins after 30 days of employment.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Healthcare coverage begins after 30 days of employment.",
+  ]);
+});
+
 test("extracts clean claims from markdown definition lists", () => {
   const claims = extractClaims(`Leave policy
 : Employees receive 12 weeks of paid parental leave.

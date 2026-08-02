@@ -15,6 +15,9 @@ making the machine-readable format-discovery path visible during onboarding.
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 
+Standalone emoji check marks (`✅`) are now removed from exported task lists,
+keeping those policy statements atomic for evidence verification.
+
 Run `npm run check` to verify the shipped local product end to end: unit tests,
 the TypeScript build, source and packaged HTTP/CLI smoke checks, and the
 evaluation score gate all run from one release command.
