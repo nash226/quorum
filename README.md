@@ -25,6 +25,10 @@ The evaluation suite now directly guards the HR overtime packet across verified,
 contradicted, and unsupported payroll claims, keeping that benchmark scenario
 protected from verdict regressions.
 
+The evaluation suite now directly guards the support price-adjustment packet,
+including its `needs_review` outcome when a customer names an unapproved
+competitor.
+
 The reviewer-queue CLI now includes a complete filtered handoff example,
 combining pending-answer status, domain-scoped benchmark drift, JSON output,
 and a one-row CSV export in one runnable command.
