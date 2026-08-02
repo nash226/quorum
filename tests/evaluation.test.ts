@@ -72,6 +72,29 @@ test("evaluates the shipped support enterprise response-time fixture", async () 
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped support price-adjustment fixture across eligibility claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/price-adjustment-policy.json"),
+    generatedAt: "2026-08-02T00:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support price adjustment policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 2,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "verified",
+  ]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates the shipped support plan-upgrade fixture across billing claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/plan-upgrade-policy.json"),
