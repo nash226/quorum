@@ -49,6 +49,29 @@ test("loads and evaluates the HR example fixture", async () => {
   );
 });
 
+test("evaluates the shipped support enterprise response-time fixture", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/enterprise-response-time-policy.json"),
+    generatedAt: "2026-08-02T00:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support enterprise response-time policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluation directory discovery ignores hidden fixture directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-evaluation-hidden-directory-"));
   try {
