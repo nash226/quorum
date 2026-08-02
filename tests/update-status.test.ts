@@ -41,7 +41,11 @@ test("loadRecentShipments reads the supplied history ref", () => {
   assert.ok(latestShipmentCommit);
 
   assert.ok(shipments.length > 0);
-  assert.equal(shipments[0]?.shortCommit, latestShipmentCommit.slice(0, 7));
+  assert.equal(shipments[0]?.shortCommit, execFileSync(
+    "git",
+    ["log", "-1", "--format=%h", latestShipmentCommit],
+    { encoding: "utf8" },
+  ).trim());
   assert.match(shipments[0]?.title ?? "", /\S/);
 });
 
