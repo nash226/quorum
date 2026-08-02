@@ -1185,7 +1185,8 @@ The direct CLI form, `quorum formats --json`, is covered against the same
 library constants so integrations can rely on the published discovery contract.
 Recursive answer and source directories discover those same extensions
 case-insensitively, keeping structured and binary batches aligned with explicit
-file verification. JSON, YAML, XML, and TOML source exports are normalized into
+file verification; unsupported files in those directories are ignored. JSON,
+YAML, XML, and TOML source exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
 reviewed without a separate conversion step. Use `--source-dir` for a mixed
 directory of policy files;
