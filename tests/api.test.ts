@@ -4949,6 +4949,51 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("HTTP batch verification accepts base64 answers and approved sources", async () => {
+  const api = await startApiServer({ port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify-batch`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answers: [{
+          answerPath: "answers/parental-leave.md",
+          answerBase64: Buffer.from("Employees receive 12 weeks of paid parental leave.").toString("base64"),
+          answerLabel: "Encoded HR packet",
+        }],
+        sources: [{
+          sourcePath: "sources/hr-policy.md",
+          contentBase64: Buffer.from("Employees receive 12 weeks of paid parental leave.").toString("base64"),
+          trustLevel: "high",
+        }],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const payload = await response.json() as {
+      report: {
+        summary: Record<string, number>;
+        answers: Array<{ answerPath: string; answerLabel: string; answerHasClaims: boolean }>;
+      };
+    };
+    assert.deepEqual(payload.report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+      answersWithClaims: 1,
+      answersWithoutClaims: 0,
+      answersWithFailures: 0,
+    });
+    assert.equal(payload.report.answers[0]?.answerPath, "answers/parental-leave.md");
+    assert.equal(payload.report.answers[0]?.answerLabel, "Encoded HR packet");
+    assert.equal(payload.report.answers[0]?.answerHasClaims, true);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API requires a JSON content type for POST endpoints", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
