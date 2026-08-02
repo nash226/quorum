@@ -907,7 +907,9 @@ The CLI regression suite locks this behavior for mixed-case Markdown filenames.
   queue items for reviewer triage.
 - Reviewer decision CSV imports accept UTF-8 BOM prefixes emitted by some
   spreadsheet tools.
-- `evaluate` runs checked-in policy fixtures as a CI mismatch and score gate.
+- `evaluate` runs checked-in HR and support policy fixtures as a CI mismatch and
+  score gate, including shipping-address control, timing, and unsupported
+  promise coverage.
 - `serve` exposes the same workflows through a local HTTP API, while `openapi`
   exports its integration contract.
 - OpenAPI request-error examples include the same correlation ID required by

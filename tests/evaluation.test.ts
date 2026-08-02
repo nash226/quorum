@@ -2285,6 +2285,44 @@ test("evaluates a shipped support order tracking fixture across delivery claims"
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates support shipping-address claims across control and timing risks", async () => {
+  const scorecard = await evaluateFixture({
+    name: "Support shipping address policy example",
+    domain: "support",
+    answerPath: "answers/support-shipping-address-answer.md",
+    answer: "Customers may change a shipping address before an order ships.\nCustomers may change a shipping address within 48 hours of delivery.\nEvery address change includes free priority support.\n",
+    answerLabel: "Support shipping address reviewer packet",
+    sources: [{
+      sourcePath: "sources/support-shipping-address-policy.md",
+      id: "support/shipping-address@2026-08-02",
+      title: "Support Shipping Address Policy",
+      updatedAt: "2026-08-02",
+      trustLevel: "high",
+      content: "Customers may change a shipping address before an order ships. Customers may change a shipping address within 24 hours of delivery. Address changes are not guaranteed after carrier handoff.",
+    }],
+    expectedSummary: { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 },
+    expectedClaimVerdicts: ["verified", "contradicted", "unsupported"],
+  }, { generatedAt: "2026-08-02T05:30:00.000Z" });
+
+  assert.equal(scorecard.fixtureName, "Support shipping address policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support shipping address reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/shipping-address@2026-08-02");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped inline support account suspension fixture across policy claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/account-suspension-policy.json"),
