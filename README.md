@@ -1,5 +1,9 @@
 # Quorum
 
+The support warranty fixture now has a direct regression test covering verified,
+contradicted, and unsupported eligibility claims, keeping this reviewer-risk
+workflow locked independently of the aggregate benchmark.
+
 The evaluation suite now covers a support refund-escalation packet with a
 verified refund window and unsupported approval promises, keeping reviewer
 risk coverage grounded in a concrete customer-support workflow.
