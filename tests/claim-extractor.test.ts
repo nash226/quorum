@@ -179,6 +179,16 @@ test("strips middle-dot bullets from localized answers", () => {
   ]);
 });
 
+test("strips small square bullets from rich-text exports", () => {
+  const claims = extractClaims(`▪ Employees receive 12 weeks of paid parental leave.
+▫ Healthcare coverage begins after 30 days of employment.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Healthcare coverage begins after 30 days of employment.",
+  ]);
+});
+
 test("strips triangular bullets from exported answers", () => {
   const claims = extractClaims(`▸ Employees receive 12 weeks of paid parental leave.
 ▹ Healthcare coverage begins after 30 days of employment.

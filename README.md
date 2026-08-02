@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now recognizes filled and hollow small-square bullets (`▪` and
+`▫`) commonly emitted by rich-text policy exports, preserving those lines as
+clean claims for verification.
+
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
 from Windows-style CRLF policy exports as well as Unix-style files.
 
