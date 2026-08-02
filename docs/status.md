@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a83f4c40` on 2026-08-02, test: gate packaged BOM frontmatter support
+- Latest shipped change: `b8dc8c69` on 2026-08-02, test: cover support price adjustment evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | test: cover support price adjustment evaluation | `b8dc8c69` |
 | 2026-08-02 | Direct push | test: gate packaged BOM frontmatter support | `a83f4c40` |
 | 2026-08-02 | Direct push | test: cover HR overtime evaluation | `4c6fdfc3` |
 | 2026-08-02 | Direct push | test: cover HR reimbursement review fixture | `e6476d90` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | [#1761](https://github.com/nash226/quorum/pull/1761) | feat: add reviewer workflow package wrappers | `63efd6e4` |
 | 2026-08-02 | [#1760](https://github.com/nash226/quorum/pull/1760) | feat: add evaluation and openapi package wrappers | `83234d64` |
 | 2026-08-02 | Direct push | test: cover HTML billing answer evaluation | `1393d506` |
-| 2026-08-02 | [#1757](https://github.com/nash226/quorum/pull/1757) | test: cover file-backed phone support evaluation | `559b527f` |
 
