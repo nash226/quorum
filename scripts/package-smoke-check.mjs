@@ -51,6 +51,14 @@ try {
   ) {
     throw new Error("Installed package artifact did not preserve root, server, and CLI entry points.");
   }
+
+  const serveHelp = execFileSync("npm", ["run", "--silent", "serve", "--", "--help"], {
+    cwd: join(packedPackageDir, "node_modules/quorum"),
+    encoding: "utf8",
+  });
+  if (!/^Usage:\s+quorum serve/m.test(serveHelp) || !serveHelp.includes("Host interface to bind")) {
+    throw new Error("Installed package did not preserve the npm serve wrapper help contract.");
+  }
 } finally {
   rmSync(packedPackageDir, { recursive: true, force: true });
 }
