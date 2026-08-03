@@ -103,6 +103,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseDelimitedSource(normalizedContent, /\.tsv$/i.test(sourcePath));
   }
 
+  if (isEmailSource(sourcePath)) {
+    return parseEmailSource(normalizedContent);
+  }
+
   if (isLatexSource(sourcePath)) {
     return { metadata: {}, body: normalizeLatexSource(normalizedContent) };
   }
@@ -247,7 +251,39 @@ function normalizeLatexSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|tex|textile|txt|text|log|ini|properties|conf|cfg|eml|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv)$/i, "");
+}
+
+function isEmailSource(sourcePath: string): boolean {
+  return /\.eml$/i.test(sourcePath);
+}
+
+function parseEmailSource(content: string): ParsedSource {
+  const normalized = content.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  const separator = normalized.search(/\n\s*\n/);
+  const headerBlock = separator >= 0 ? normalized.slice(0, separator) : normalized;
+  const body = separator >= 0 ? normalized.slice(separator).replace(/^\n\s*\n/, "") : "";
+  const headers = new Map<string, string>();
+  let current: string | undefined;
+  for (const line of headerBlock.split("\n")) {
+    if (/^[ \t]/.test(line) && current) {
+      headers.set(current, `${headers.get(current) ?? ""} ${line.trim()}`);
+      continue;
+    }
+    const match = line.match(/^([^:\s]+):\s*(.*)$/);
+    if (!match) continue;
+    current = match[1]?.toLowerCase();
+    headers.set(current, match[2] ?? "");
+  }
+  const date = headers.get("date");
+  const parsedDate = date ? new Date(date) : undefined;
+  return {
+    metadata: {
+      title: headers.get("subject") || undefined,
+      updatedAt: parsedDate && !Number.isNaN(parsedDate.valueOf()) ? parsedDate.toISOString() : undefined,
+    },
+    body: body || normalized,
+  };
 }
 
 function parseHtmlSource(content: string): ParsedSource {

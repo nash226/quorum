@@ -1,5 +1,9 @@
 # Quorum
 
+Exported email (`.eml`) files are supported as answer and approved-source
+inputs; Quorum uses the message Subject as the report title and Date as source
+freshness metadata.
+
 The shipped local product covers the full review loop: CLI and HTTP API
 verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
