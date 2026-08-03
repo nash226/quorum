@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `50b80213` on 2026-08-03, docs: clarify supported source formats
+- Latest shipped change: `e71d3f91` on 2026-08-03, test: smoke-check npm version wrapper
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-03 | Direct push | test: smoke-check npm version wrapper | `e71d3f91` |
 | 2026-08-03 | Direct push | docs: clarify supported source formats | `50b80213` |
 | 2026-08-03 | Direct push | feat: expose package version probe | `9190408e` |
 | 2026-08-03 | [#1812](https://github.com/nash226/quorum/pull/1812) | feat: expose reviewer queue csv renderer | `d3a8c2ca` |
@@ -56,5 +57,4 @@
 | 2026-08-03 | Direct push | feat: add extract claims package wrapper | `f7544ced` |
 | 2026-08-03 | Direct push | test: gate reStructuredText aliases in package smoke | `f6b8f1e0` |
 | 2026-08-02 | [#1790](https://github.com/nash226/quorum/pull/1790) | fix: align recognition benchmark contracts | `4651352a` |
-| 2026-08-02 | Direct push | test: gate packaged CSV verification | `effc457f` |
 
