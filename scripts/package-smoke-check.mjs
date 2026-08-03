@@ -483,6 +483,31 @@ try {
   rmSync(cliTextilePackageDir, { recursive: true, force: true });
 }
 
+const cliTextAliasPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-text-alias-"));
+try {
+  const answerPath = join(cliTextAliasPackageDir, "answer.text");
+  const sourcePath = join(cliTextAliasPackageDir, "policy.text");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const textOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const textPayload = JSON.parse(textOutput);
+  if (
+    textPayload.summary?.verified !== 1 ||
+    textPayload.answerPath !== answerPath ||
+    textPayload.sources?.[0]?.title !== "policy" ||
+    textPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected .text answer/source contract.");
+  }
+} finally {
+  rmSync(cliTextAliasPackageDir, { recursive: true, force: true });
+}
+
 const cliConfigPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-config-"));
 try {
   for (const extension of ["ini", "properties", "conf", "cfg"]) {
