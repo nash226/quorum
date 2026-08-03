@@ -25,6 +25,10 @@ The evaluation suite now directly guards the HR overtime packet across verified,
 contradicted, and unsupported payroll claims, keeping that benchmark scenario
 protected from verdict regressions.
 
+The evaluation suite now directly guards the HR dependent-benefits packet across
+enrollment, qualifying-event, and unsupported-benefit claims, keeping a common
+open-enrollment workflow protected from verdict regressions.
+
 The evaluation suite now directly guards the support price-adjustment packet,
 including its `needs_review` outcome when a customer names an unapproved
 competitor.
