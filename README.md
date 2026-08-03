@@ -32,6 +32,10 @@ Start the local HTTP API with `npm run serve` (equivalent to
 `npm run dev -- serve`) when an agent integration needs the documented local
 service boundary.
 
+The HTTP integration guide starts the local service through the published
+`npm run serve -- --port 3000` wrapper, so installed consumers can follow the
+same documented entry point without reaching into the development CLI.
+
 The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
