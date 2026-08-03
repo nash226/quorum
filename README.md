@@ -22,7 +22,8 @@ for installed integrations.
 
 Recursive answer and source discovery now accepts the standard reStructuredText
 `.rest` alias alongside `.rst`, and exposes both extensions through the format
-discovery contract.
+discovery contract. Direct `.rest` answer verification is covered as well, so
+integrations can use either standard extension without renaming exports.
 
 The HR fixture set now includes an ergonomic-reimbursement answer that omits
 the approved manager condition, keeping incomplete policy context routed to
