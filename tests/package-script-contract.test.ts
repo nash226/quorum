@@ -25,6 +25,8 @@ test("package scripts keep the documented repository check gate intact", async (
   assert.equal(scripts["package:smoke"], "node scripts/package-smoke-check.mjs");
   assert.equal(scripts["evaluate:ci"], "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch");
   assert.equal(scripts.serve, "npm run dev -- serve");
+  assert.equal(scripts.verify, "npm run dev -- verify");
+  assert.equal(scripts["verify-batch"], "npm run dev -- verify-batch");
   assert.equal(scripts["status:refresh"], "node scripts/update-status.mjs");
 });
 

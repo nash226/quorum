@@ -42,6 +42,8 @@
     "formats": "npm run dev -- formats",
     "prepublishOnly": "npm run check",
     "serve": "npm run dev -- serve",
+    "verify": "npm run dev -- verify",
+    "verify-batch": "npm run dev -- verify-batch",
     "smoke": "node scripts/smoke-check.mjs",
     "package:smoke": "node scripts/package-smoke-check.mjs",
     "evaluate:ci": "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch",
