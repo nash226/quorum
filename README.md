@@ -67,6 +67,10 @@ paths stay ordered ahead of recursive `--answer-dir` discovery, duplicates are
 removed, and an empty answer directory fails clearly instead of producing a
 misleading empty report.
 
+The HTTP integration guide now shows how batch clients can route
+claim-bearing answers and explicit empty drafts from summary counts, including
+the `queueRows` total that should match the optional reviewer CSV artifact.
+
 The evaluation suite now covers a support refund-escalation packet with a
 verified refund window and unsupported approval promises, keeping reviewer
 risk coverage grounded in a concrete customer-support workflow.
