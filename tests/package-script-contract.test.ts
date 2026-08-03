@@ -60,3 +60,12 @@ test("formats package script forwards command-specific help flags", async () => 
   assert.match(stdout, /Usage:\s+quorum formats \[--json\]/);
   assert.match(stdout, /Print the extensions discovered/);
 });
+
+test("import-review package script forwards command-specific help flags", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "import-review", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+  assert.match(stdout, /Usage:\s+quorum import-review/);
+  assert.match(stdout, /--review-csv <path\|->/);
+});
