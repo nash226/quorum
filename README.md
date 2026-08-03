@@ -8,6 +8,9 @@ API surface; durable hosting and queue storage remain roadmap decisions.
 The package also exports `renderReviewerQueueCsv`, allowing Node integrations
 to produce the same queue overview CSV as the `review-queue` CLI command.
 
+The [CLI guide](docs/cli-guide.md#commands-at-a-glance) also shows the
+installed-package wrappers for format, version, and claim-preview checks.
+
 Installed packages now expose `npm run version -- --json` for the same stable
 CLI/API contract-version probe used by integration health checks.
 
