@@ -107,6 +107,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return { metadata: {}, body: normalizeLatexSource(normalizedContent) };
   }
 
+  if (isRtfSource(sourcePath)) {
+    return { metadata: {}, body: normalizeRtfSource(normalizedContent) };
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -234,6 +238,27 @@ function isLatexSource(sourcePath: string): boolean {
   return /\.tex$/i.test(sourcePath);
 }
 
+function isRtfSource(sourcePath: string): boolean {
+  return /\.rtf$/i.test(sourcePath);
+}
+
+function normalizeRtfSource(content: string): string {
+  return content
+    .replace(/^\uFEFF/, "")
+    .replace(/\{\\(?:fonttbl|colortbl)[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/gi, "")
+    .replace(/\\par(?=\d*\s|[{}])\d*\s?/gi, "__QUORUM_RTF_PAR__")
+    .replace(/\\line\s?/gi, "\n")
+    .replace(/\\tab\s?/gi, "\t")
+    .replace(/\\'[0-9a-f]{2}/gi, (match) => String.fromCharCode(Number.parseInt(match.slice(2), 16)))
+    .replace(/\\u(-?\d+)\??/gi, (_, code: string) => String.fromCharCode(Number.parseInt(code, 10)))
+    .replace(/\\[a-z]+-?\d*\s?/gi, "")
+    .replaceAll("__QUORUM_RTF_PAR__", "\n")
+    .replace(/[{}]/g, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 function normalizeLatexSource(content: string): string {
   return content
     .replace(/(^|\n)\s*%[^\n]*/g, "$1")
@@ -247,7 +272,7 @@ function normalizeLatexSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|tex|rtf|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {

@@ -1535,7 +1535,8 @@ The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
 AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
 `.wiki`, `.tex`), plain text and configuration exports (`.txt`, `.text`,
 `.log`, `.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
-PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL/NDJSON (`.json`, `.jsonl`,
+PDF (`.pdf`), Word documents (`.docx`), and Rich Text Format (`.rtf`) exports,
+JSON/JSONL/NDJSON (`.json`, `.jsonl`,
 `.ndjson`), TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and
 CSV/TSV (`.csv`, `.tsv`).
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
