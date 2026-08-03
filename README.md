@@ -1122,6 +1122,14 @@ are mixed.
 Localized claim extraction also recognizes Arabic, Indic, CJK, and fullwidth
 sentence terminators.
 
+## Directory Discovery
+
+Batch verification recursively discovers supported answer files and approved
+sources inside nested directories. Hidden files, hidden directories, and
+common editor temporary files are skipped, so teams can organize policy
+libraries by domain without flattening them first. The same format contract is
+available to integrations with `npm run dev -- formats --json`.
+
 ## Other CLI Commands
 
 The CLI also exposes focused commands for discovery, evaluation, review
