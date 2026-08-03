@@ -14,6 +14,18 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("extracts subject and date metadata from exported email sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/benefits.eml",
+    "From: people-ops@example.com\r\nSubject: Benefits Policy Update\r\nDate: Tue, 21 Jul 2026 14:30:00 +0000\r\n\r\nEmployees receive 12 weeks of paid leave.\r\n",
+    0,
+  );
+
+  assert.equal(source.title, "Benefits Policy Update");
+  assert.equal(source.updatedAt, "2026-07-21T14:30:00.000Z");
+  assert.equal(source.content, "Employees receive 12 weeks of paid leave.\n");
+});
+
 test("extracts HTML metadata after a UTF-8 BOM", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.html",
