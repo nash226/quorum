@@ -41,7 +41,7 @@
     "review-queue": "npm run dev -- review-queue",
     "formats": "npm run dev -- formats",
     "prepublishOnly": "npm run check",
-    "serve": "npm run dev -- serve",
+    "serve": "node dist/src/cli.js serve",
     "version": "npm run dev -- version",
     "smoke": "node scripts/smoke-check.mjs",
     "package:smoke": "node scripts/package-smoke-check.mjs",

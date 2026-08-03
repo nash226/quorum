@@ -28,9 +28,11 @@ The packaged smoke gate now executes that npm wrapper against a real answer
 file, so installed claim-preview integrations are checked for argument
 forwarding as well as direct CLI behavior.
 
-Start the local HTTP API with `npm run serve` (equivalent to
-`npm run dev -- serve`) when an agent integration needs the documented local
-service boundary.
+Start the local HTTP API with `npm run serve` (the published-package wrapper
+for `quorum serve`) when an agent integration needs the documented local
+service boundary. The published package now routes that wrapper through its
+compiled CLI, and the package smoke gate verifies `npm run serve -- --help` from
+a clean installed consumer.
 
 The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
