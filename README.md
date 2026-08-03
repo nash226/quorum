@@ -1133,6 +1133,10 @@ npm run dev -- serve --help
 
 ## Quick Start
 
+The evaluation suite regression-tests the support data-retention policy, including
+verified retention guidance, a contradicted retention claim, and an unsupported
+claim that must be routed for review.
+
 After installing dependencies, run the complete pre-PR validation gate with:
 
 ```bash

@@ -1082,6 +1082,9 @@ test("evaluates a shipped support data retention fixture across deletion claims"
     "unsupported",
   ]);
   assert.equal(scorecard.report.sources[0]?.id, "support/data-retention@2026-07-15");
+  assert.equal(scorecard.report.sources[0]?.title, "Support Data Retention Policy");
+  assert.equal(scorecard.report.sources[0]?.trustLevel, "high");
+  assert.equal(scorecard.report.sources[0]?.updatedAt, "2026-07-15");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
 });
