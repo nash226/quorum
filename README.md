@@ -5,6 +5,11 @@ verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
 API surface; durable hosting and queue storage remain roadmap decisions.
 
+Approved sources and answers can be supplied as Markdown, text, exported
+HTML/XHTML, PDF, or DOCX files (alongside the structured formats listed below).
+Use `quorum formats --json` to inspect the exact extension contract before
+wiring an integration.
+
 Start the local HTTP API with `npm run serve` (equivalent to
 `npm run dev -- serve`) when an agent integration needs the documented local
 service boundary.
