@@ -103,6 +103,10 @@ paths stay ordered ahead of recursive `--answer-dir` discovery, duplicates are
 removed, and an empty answer directory fails clearly instead of producing a
 misleading empty report.
 
+Recursive directory discovery is also path-stable: matching answer and source
+files are returned in deterministic order, keeping repeated batch reports and
+reviewer queue rows reproducible.
+
 The evaluation suite now covers a support refund-escalation packet with a
 verified refund window and unsupported approval promises, keeping reviewer
 risk coverage grounded in a concrete customer-support workflow.
