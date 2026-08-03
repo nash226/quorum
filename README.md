@@ -10,6 +10,8 @@ to produce the same queue overview CSV as the `review-queue` CLI command.
 
 Installed packages now expose `npm run version -- --json` for the same stable
 CLI/API contract-version probe used by integration health checks.
+The package smoke check runs this wrapper too, keeping the documented npm entry
+point aligned with the direct `quorum version --json` contract.
 
 Installed packages now expose `npm run extract-claims -- ...` for the claim
 preview workflow, keeping answer inspection available without repeating the

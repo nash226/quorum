@@ -26,6 +26,14 @@ const libraryEntry = await import(new URL("dist/src/index.js", packageRoot));
 const serverEntry = await import(new URL("dist/src/api-server.js", packageRoot));
 const cliPath = new URL("dist/src/cli.js", packageRoot);
 
+const npmVersionJson = JSON.parse(execFileSync("npm", ["run", "--silent", "version", "--", "--json"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+}));
+if (npmVersionJson.service !== "quorum" || npmVersionJson.version !== packageJson.version) {
+  throw new Error("The npm version wrapper did not preserve the machine-readable version contract.");
+}
+
 const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS].sort();
 const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS].sort();
 const formatExtensions = (extensions) => [...extensions].sort().join(", ");
