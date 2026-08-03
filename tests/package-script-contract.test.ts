@@ -27,6 +27,26 @@ test("package scripts keep the documented repository check gate intact", async (
   assert.equal(scripts["status:refresh"], "node scripts/update-status.mjs");
 });
 
+test("package metadata keeps the documented consumer entrypoints aligned", async () => {
+  const packageJson = JSON.parse(
+    await readFile(new URL("../package.json", import.meta.url), "utf8"),
+  ) as {
+    main?: string;
+    types?: string;
+    exports?: Record<string, unknown>;
+    bin?: Record<string, string>;
+  };
+
+  assert.equal(packageJson.main, "./dist/src/index.js");
+  assert.equal(packageJson.types, "./dist/src/index.d.ts");
+  assert.deepEqual(packageJson.exports, {
+    ".": { types: "./dist/src/index.d.ts", import: "./dist/src/index.js", default: "./dist/src/index.js" },
+    "./server": { types: "./dist/src/api-server.d.ts", import: "./dist/src/api-server.js", default: "./dist/src/api-server.js" },
+    "./cli": { types: "./dist/src/cli.d.ts", import: "./dist/src/cli.js", default: "./dist/src/cli.js" },
+  });
+  assert.deepEqual(packageJson.bin, { quorum: "./dist/src/cli.js" });
+});
+
 test("formats package script exposes the machine-readable input contract", async () => {
   const { stdout } = await execFileAsync("npm", ["run", "--silent", "formats", "--", "--json"], {
     cwd: new URL("..", import.meta.url),

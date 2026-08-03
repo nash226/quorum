@@ -163,6 +163,11 @@ The packaged CLI smoke gate now verifies direct YAML approved-source exports,
 keeping structured source discovery release-gated symmetrically with YAML
 answers.
 
+Node.js integrations can consume the published `quorum` package directly;
+`quorum/server` exposes HTTP server helpers and `quorum/cli` exposes the CLI
+entrypoint. These consumer paths are covered by the package metadata contract
+test and target Node.js 22 or newer.
+
 The packaged CLI smoke gate now verifies direct Org-mode answer and approved-source
 exports, keeping `.org` policy handoffs release-gated alongside other document
 formats.
