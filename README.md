@@ -1,5 +1,9 @@
 # Quorum
 
+The CLI guide now documents the installed-package `npm run import-review --`
+and `npm run review-queue --` wrappers, including npm argument forwarding for
+reviewer handoffs.
+
 The evaluation fixture guide now matches the shipped benchmark inventory: 91
 checked-in fixtures across HR, support, and shared edge-case workflows.
 

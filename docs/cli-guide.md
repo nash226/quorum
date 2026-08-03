@@ -74,6 +74,27 @@ npm run dev -- version --json
 
 The plain `version`, `--version`, and `-v` forms print a human-readable value.
 
+## Use installed package wrappers
+
+After installing Quorum, the reviewer workflow commands are also available as
+package scripts. Pass command arguments after `--` so npm forwards them to the
+CLI:
+
+```bash
+npm run import-review -- \
+  --review-csv reports/hr-review.csv \
+  --summary-csv-out reports/hr-review-summary.csv
+
+npm run review-queue -- \
+  --review-csv reports/hr-review.csv \
+  --queue-status pending \
+  --json --out reports/hr-queue.json
+```
+
+These wrappers are equivalent to `npm run dev -- import-review -- ...` and
+`npm run dev -- review-queue -- ...`, while keeping the commands usable from a
+published package installation.
+
 ## Verify one answer
 
 Verify an answer against one or more approved sources:
