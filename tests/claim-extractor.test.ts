@@ -807,6 +807,20 @@ within four business hours.
   );
 });
 
+test("keeps hard-wrapped plain claims when a continuation starts uppercase", () => {
+  const claims = extractClaims(`Employees receive 12 weeks of paid leave for
+Full-time staff only.\nManagers approve travel within
+Five business days.`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid leave for Full-time staff only.",
+      "Managers approve travel within Five business days.",
+    ],
+  );
+});
+
 test("keeps indented uppercase markdown list continuations with the same claim", () => {
   const claims = extractClaims(`# Policy Notes
 
