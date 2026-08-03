@@ -1609,6 +1609,7 @@ test("verify rejects an empty source directory before producing unsupported clai
 
     assert.notEqual(result.code, 0);
     assert.match(result.stderr, /No approved source files found/);
+    assert.match(result.stderr, /Supported source extensions: .*\.csv/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
