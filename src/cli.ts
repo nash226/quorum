@@ -50,6 +50,7 @@ import { API_VERSION, createOpenApiDocument, startApiServer } from "./api-server
 import { parseSourceTrustLevel } from "./source-loader.js";
 import { extractClaimsResult } from "./claim-extractor.js";
 import { renderAnswerPreview, stripByteOrderMark } from "./text.js";
+import { renderReviewerQueueCsv } from "./reviewer-queue.js";
 import {
   importReviewerDecisionFile,
   ANSWER_EXTENSIONS,
@@ -689,7 +690,7 @@ async function runReviewQueue(args: string[]): Promise<void> {
       : null,
   };
   const json = JSON.stringify(overview, null, 2);
-  const csv = renderReviewQueueCsv(overview);
+  const csv = renderReviewerQueueCsv(overview);
 
   if (parsed.outPath) await writeReportFile(parsed.outPath, json);
   if (parsed.csvOutPath) await writeReportFile(parsed.csvOutPath, csv);
@@ -741,41 +742,6 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
   return { reviewCsvPath, fixturePaths, fixtureDirPaths, domains, queueStatus, generatedAt, json, outPath, csvOutPath };
 }
 
-function renderReviewQueueCsv(overview: {
-  generatedAt: string;
-  queueStatus: import("./reviewer-decision-import.js").ReviewerQueueStatus | null;
-  domains: string[];
-  review: { totalAnswers: number; pendingAnswers: number; reviewedAnswers: number; noClaimsAnswers: number; totalClaims: number; pendingClaims: number; reviewedClaims: number; verdicts: Record<ClaimVerdict, number> };
-  evaluation: { fixtureCount: number; mismatchCount: number; mismatchRate: number | null; score: number | null; scoreLabel: string; scoreThresholdPassed: boolean } | null;
-}): string {
-  const values = [
-    overview.generatedAt,
-    overview.queueStatus ?? "",
-    overview.domains.join(";"),
-    overview.review.totalAnswers,
-    overview.review.pendingAnswers,
-    overview.review.reviewedAnswers,
-    overview.review.noClaimsAnswers,
-    overview.review.totalClaims,
-    overview.review.pendingClaims,
-    overview.review.reviewedClaims,
-    overview.review.verdicts.verified,
-    overview.review.verdicts.contradicted,
-    overview.review.verdicts.unsupported,
-    overview.review.verdicts.needs_review,
-    overview.evaluation?.fixtureCount ?? "",
-    overview.evaluation?.mismatchCount ?? "",
-    overview.evaluation?.mismatchRate ?? "",
-    overview.evaluation?.score ?? "",
-    overview.evaluation?.scoreLabel ?? "",
-    overview.evaluation?.scoreThresholdPassed ?? "",
-  ];
-  const escape = (value: string | number | boolean) => `"${String(value).replaceAll('"', '""')}"`;
-  return `${[
-    ["generated_at", "queue_status", "domains", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "verified", "contradicted", "unsupported", "needs_review", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
-    values,
-  ].map((row) => row.map(escape).join(",")).join("\n")}\n`;
-}
 
 async function runEvaluate(args: string[]): Promise<void> {
   const parsed = parseEvaluateArgs(args);
