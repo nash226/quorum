@@ -151,6 +151,10 @@ The CLI and local HTTP API share a machine-readable contract version. Run
 `npm run dev -- version --json` to verify the installed CLI version before
 connecting an integration; the API exposes the same value at `GET /version`.
 
+The CLI regression suite now verifies that `verify --source-dir` finds supported
+approved sources in nested folders while ignoring unrelated files, documenting
+the recursive source-library behavior used by local policy workflows.
+
 Local API clients can discover the same versioned extension contract without
 starting a verification request: `GET /capabilities` returns `answerExtensions`
 and `sourceExtensions` alongside the supported verdicts, trust levels, and

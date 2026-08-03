@@ -5226,6 +5226,46 @@ test("verify-batch ignores hidden answer files and hidden answer subdirectories"
   }
 });
 
+test("verify discovers supported sources in nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-nested-sources-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    const nestedSourceDir = join(sourceDir, "policies", "hr");
+    const answerPath = join(tempDir, "answer.md");
+
+    await mkdir(nestedSourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        join(nestedSourceDir, "benefits.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(join(sourceDir, "README.tmp"), "This file is not an approved source.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["benefits"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch disambiguates duplicate answer labels across directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-duplicate-labels-"));
 
