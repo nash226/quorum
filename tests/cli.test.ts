@@ -5578,6 +5578,46 @@ test("verify discovers supported sources in nested source directories", async ()
   }
 });
 
+test("verify discovers nested DOCX sources in source directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-docx-source-dir-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+    const nestedSourceDir = join(sourceDir, "regional");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+
+    await mkdir(nestedSourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid leave.\n", "utf8"),
+      readFile(docxFixturePath).then((content) =>
+        writeFile(join(nestedSourceDir, "leave-policy.docx"), content),
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ sourcePath: string }>;
+      summary: { verified: number };
+    };
+
+    assert.deepEqual(report.sources.map((source) => source.sourcePath), [
+      join(nestedSourceDir, "leave-policy.docx"),
+    ]);
+    assert.equal(report.summary.verified, 0);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch sorts nested directory answers by full path", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-nested-order-"));
 

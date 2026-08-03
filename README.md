@@ -819,6 +819,9 @@ structured claim text and answer-path provenance after publishing.
 The packaged smoke gate also verifies a Markdown answer against a DOCX policy
 source, keeping the published artifact's Word-based evidence path covered.
 
+Recursive approved-source discovery is also regression-tested for nested DOCX
+policy files, so document-based source directories preserve that evidence path.
+
 The OpenAPI contract also documents the shared discovery and request-correlation
 headers on every POST success response, so API clients can consistently identify
 the running service, contract version, limits, and request that produced a
