@@ -2392,6 +2392,9 @@ covering file-backed support-policy ingestion alongside inline fixture coverage.
 The HR benchmark now also includes a file-backed recognition-policy packet,
 covering spot-award eligibility, approval controls, and an unsupported transit
 benefit claim.
+Run the evaluation gate with `--domain hr` or `--domain support` when reviewing
+one policy domain at a time; both filters use the same checked-in scorecard
+contract as the full benchmark.
 
 ## Documentation Map
 
