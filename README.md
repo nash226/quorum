@@ -1143,7 +1143,9 @@ sorted machine-readable `sources` and `answers` arrays. The JSON response also
 includes a `version` field (currently `0.1.0`) so integrations can reject an unexpected
 contract before submitting an export. The packaged smoke check compares both
 the human-readable and JSON arrays with the library export,
-so published CLI and API format capabilities cannot silently drift apart.
+so published CLI and API format capabilities cannot silently drift apart. It
+also executes the documented `npm run formats -- --json` wrapper against the
+same contract.
 
 The response shape is intentionally small and stable:
 

@@ -52,6 +52,15 @@ if (
   throw new Error("Package artifact CLI JSON formats output drifted from the library input contract.");
 }
 
+const npmFormatsJsonOutput = execFileSync("npm", ["run", "formats", "--", "--json"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+});
+const npmFormatsJson = JSON.parse(npmFormatsJsonOutput);
+if (JSON.stringify(npmFormatsJson) !== JSON.stringify(formatsJson)) {
+  throw new Error("The documented npm formats wrapper drifted from the packaged CLI contract.");
+}
+
 const openApiPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-openapi-"));
 try {
   const openApiPath = join(openApiPackageDir, "openapi.json");
