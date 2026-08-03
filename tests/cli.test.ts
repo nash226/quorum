@@ -72,6 +72,34 @@ test("verify-batch discovers the .text plain-text alias for answers and sources"
   }
 });
 
+test("verify-batch discovers Quarto .qmd answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-qmd-alias-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([mkdir(answerDir, { recursive: true }), mkdir(sourceDir, { recursive: true })]);
+    await Promise.all([
+      writeFile(join(answerDir, "leave.qmd"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "hr-policy.qmd"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch",
+      "--answer-dir", answerDir,
+      "--source-dir", sourceDir,
+      "--json",
+    ])) as { answerCount: number; sourceCount: number; answers: Array<{ answerPath: string }>; sources: Array<{ title: string }> };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "leave.qmd"));
+    assert.equal(report.sources[0]?.title, "hr-policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .json5 exports for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json5-alias-"));
 

@@ -208,6 +208,10 @@ identity contract.
 Run `npm run dev -- formats --json` to discover the versioned answer and source
 format contract used by direct and recursive verification.
 
+Recursive verification also preserves Quarto `.qmd` answer and source files as
+first-class Markdown-family inputs; the CLI regression suite covers the paired
+directory workflow.
+
 The packaged CLI smoke gate now verifies `extract-claims --result-json`, keeping
 claim previews and answer provenance release-gated for installed integrations.
 
