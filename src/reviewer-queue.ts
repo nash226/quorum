@@ -25,6 +25,11 @@ export interface ReviewerQueueOverview {
   } | null;
 }
 
+/** Render the queue overview as stable, machine-readable JSON. */
+export function renderReviewerQueueJson(overview: ReviewerQueueOverview): string {
+  return `${JSON.stringify(overview, null, 2)}\n`;
+}
+
 /** Render the queue overview used by CLI and workflow integrations. */
 export function renderReviewerQueueCsv(overview: ReviewerQueueOverview): string {
   const values = [
