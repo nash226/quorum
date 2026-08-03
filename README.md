@@ -835,6 +835,9 @@ explicit answer paths, exports claim-level reviewer decisions, and produces
 one-row-per-answer summaries for queue routing. Durable queue persistence is
 the next product step, pending the backend choice tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
+The local HTTP API also exposes `/health`, `/healthz`, `/readyz`, and `/livez`
+as equivalent JSON operational probes for deployment and monitoring clients.
+
 The HR evaluation suite also covers equipment-return claims, including a
 verified return deadline, a contradicted deadline, and an unsupported
 personal-device reimbursement claim.

@@ -944,22 +944,24 @@ test("HTTP API routes valid requests with query strings by pathname", async () =
   }
 });
 
-test("HTTP API serves the Kubernetes readiness alias as a JSON probe", async () => {
+test("HTTP API serves every operational probe alias as a JSON probe", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
   try {
-    const response = await fetch(`${api.url}/readyz?probe=kubernetes`);
+    for (const path of ["/health", "/healthz", "/readyz", "/livez"]) {
+      const response = await fetch(`${api.url}${path}?probe=kubernetes`);
 
-    assert.equal(response.status, 200);
-    assert.equal(response.headers.get("cache-control"), "no-store");
-    const payload = await response.json() as ApiHealthResponse;
-    assert.deepEqual({ ...payload, requestId: "" }, {
-      ok: true,
-      requestId: "",
-      service: "quorum",
-      version: "0.1.0",
-    });
-    assert.equal(payload.requestId, response.headers.get("x-quorum-request-id"));
+      assert.equal(response.status, 200, path);
+      assert.equal(response.headers.get("cache-control"), "no-store", path);
+      const payload = await response.json() as ApiHealthResponse;
+      assert.deepEqual({ ...payload, requestId: "" }, {
+        ok: true,
+        requestId: "",
+        service: "quorum",
+        version: "0.1.0",
+      }, path);
+      assert.equal(payload.requestId, response.headers.get("x-quorum-request-id"), path);
+    }
   } finally {
     await api.close();
   }
