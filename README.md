@@ -1,5 +1,9 @@
 # Quorum
 
+The HTTP `POST /extract-claims` endpoint returns normalized claim IDs and an
+`answerHasClaims` flag, letting integrations route claim-less responses before
+they spend resources loading approved sources.
+
 The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
