@@ -1,5 +1,8 @@
 # Quorum
 
+Short Armenian and Ethiopic policy claims now remain eligible for evidence
+review when they end with their scripts' native full-stop punctuation.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 
