@@ -33,6 +33,7 @@ const UPPERCASE_ROMAN_NUMERAL_PREFIX = /^([IVXLCDM]{2,})[.)]\s+/;
 const LOWERCASE_ROMAN_NUMERAL_DOT_PREFIX = /^([ivxlcdm]{2,})\.\s+/;
 const PARENTHESIZED_ROMAN_NUMERAL_PREFIX = /^\(([IVXLCDMivxlcdm]{2,})\)\s+/;
 const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
+const HEBREW_LETTER_PREFIX = /^[אבגדהוזחטיכלמנסעפצקרשת][.)]\s+/;
 const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 const HTML_PREVIEW_MARKUP_PATTERN =
   /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|blockquote|ul|ol|li|p|div|span|br|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code)\b/i;
@@ -59,6 +60,7 @@ const LIST_PREFIX_PATTERNS = [
   /^\d+:\s+/,
   /^\(\d+\)\s+/,
   /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
+  HEBREW_LETTER_PREFIX,
   /^[Ａ-Ｚａ-ｚ][.)．）]\s+/,
   /^\([Ａ-Ｚａ-ｚ]\)\s+/,
   /^\[[ xX]\]\s+/,
@@ -81,7 +83,8 @@ export function splitIntoSentences(text: string): string[] {
       const trailingPunctuation = url.match(/[.!?]+$/)?.[0] ?? "";
       const urlBody = trailingPunctuation ? url.slice(0, -trailingPunctuation.length) : url;
       return `${urlBody.replaceAll(".", urlMarker)}${trailingPunctuation}`;
-    });
+    })
+    .replace(/(^|\n)([אבגדהוזחטיכלמנסעפצקרשת])\.\s+/g, "$1$2) ");
 
   return protectedText
     .replace(/[\r\u2028\u2029]/g, "\n")

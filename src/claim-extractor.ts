@@ -7,6 +7,7 @@ const PARENTHESIZED_ROMAN_NUMERAL_PREFIX = /^\(([IVXLCDMivxlcdm]{2,})\)\s+/;
 const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
 const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 const FULLWIDTH_LETTER_PREFIX = /^[Ａ-Ｚａ-ｚ][.)．）]\s+/;
+const HEBREW_LETTER_PREFIX = /^[אבגדהוזחטיכלמנסעפצקרשת][.)]\s+/;
 const UNICODE_BULLET_PREFIX = /^(?:[\u00B7\u2022\u2023\u25AA\u25AB\u25CB\u25CF\u25E6\u2043\u2219\u25B8\u25B9\u276F\u2771])\s+/;
 const UNICODE_COLORED_DIAMOND_BULLET_PREFIX = /^(?:\u{1F538}|\u{1F539})\s+/u;
 const UNICODE_DIAMOND_BULLET_PREFIX = /^(?:[\u25C6\u25C7])\s+/;
@@ -601,6 +602,7 @@ function stripOneMarkdownClaimPrefix(line: string): string {
     /^\(\d+\)\s+/,
     /^(?:[a-zA-Z][.)]|\([a-zA-Z]\))\s+/,
     FULLWIDTH_LETTER_PREFIX,
+    HEBREW_LETTER_PREFIX,
     /^\([Ａ-Ｚａ-ｚ]\)\s+/,
     /^\[[ xX\u2610\u2611\u2612\u2705]\]\s+/,
     /^[\u2610\u2611\u2705]\s+/,

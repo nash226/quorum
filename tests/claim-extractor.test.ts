@@ -83,6 +83,16 @@ test("extracts clean claims from markdown list answers", () => {
   );
 });
 
+test("extracts clean claims from Hebrew alphabetic lists", () => {
+  const claims = extractClaims(`א. העובדים מקבלים חופשה בתשלום במשך שנים עשר שבועות.
+ב) המנהלים מאשרים חריגים בתוך חמישה ימים.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "העובדים מקבלים חופשה בתשלום במשך שנים עשר שבועות.",
+    "המנהלים מאשרים חריגים בתוך חמישה ימים.",
+  ]);
+});
+
 test("strips bracketed numeric markers from exported answers", () => {
   const claims = extractClaims(`[1] Employees receive 12 weeks of paid parental leave.
 [2] Healthcare coverage begins after 30 days of employment.
