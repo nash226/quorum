@@ -116,6 +116,10 @@ Recursive answer and source directory discovery filters files by the supported
 format contract, so unrelated exports can remain beside policy inputs without
 being treated as evidence or answers.
 
+The published package also exposes the reviewer handoff workflow as
+`npm run import-review`, with a package-script contract test protecting that
+direct invocation path.
+
 The support benchmark now includes an enterprise response-time packet, covering
 verified, contradicted, and unsupported first-response claims against the
 approved support playbook.
