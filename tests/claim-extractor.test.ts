@@ -1334,6 +1334,14 @@ Customers can request store credit within 30 days.
   ]);
 });
 
+test("keeps short claims with localized sentence terminators", () => {
+  assert.deepEqual(extractClaims("نعم موافق؟ नम ठीक है। Done now…").map((claim) => claim.text), [
+    "نعم موافق؟",
+    "नम ठीक है।",
+    "Done now…",
+  ]);
+});
+
 test("keeps wrapped plain-text lines as one claim when the next line is a continuation", () => {
   const claims = extractClaims(`Employees receive 12 weeks of paid parental leave
 for full-time staff only.
