@@ -67,5 +67,5 @@ test("import-review package script forwards command-specific help flags", async 
     maxBuffer: 1024 * 1024,
   });
   assert.match(stdout, /Usage:\s+quorum import-review/);
-  assert.match(stdout, /--review-csv <path>/);
+  assert.match(stdout, /--review-csv <path\|->/);
 });
