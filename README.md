@@ -1,5 +1,9 @@
 # Quorum
 
+The support fixture suite includes a related gift-card refund claim that is
+intentionally routed to `needs_review`, showing how Quorum preserves uncertainty
+when a source is relevant but does not fully support the answer.
+
 The shipped local product covers the full review loop: CLI and HTTP API
 verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
