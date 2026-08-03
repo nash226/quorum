@@ -1295,6 +1295,8 @@ not depend on a filename extension.
 The help output now names every extension family exposed by discovery, including
 MediaWiki, reStructuredText, LaTeX, JSONL, and CSV, keeping the human-readable
 contract aligned with `quorum formats`.
+Nested source-directory verification also ignores unsupported editor artifacts,
+so temporary files can live beside approved policies without entering evidence.
 the programmatic API applies the same YAML/YML normalization to in-memory sources and file-backed
 source directories.
 answer and source directories are searched recursively, so nested policy or

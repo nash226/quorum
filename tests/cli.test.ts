@@ -5533,6 +5533,7 @@ test("verify discovers supported sources in nested source directories", async ()
         "Employees receive 12 weeks of paid parental leave.\n",
         "utf8",
       ),
+      writeFile(join(nestedSourceDir, "editor-notes.tmp"), "Ignore this draft.\n", "utf8"),
     ]);
 
     const stdout = await runCli([
