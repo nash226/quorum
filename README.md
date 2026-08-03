@@ -5,9 +5,6 @@ verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
 API surface; durable hosting and queue storage remain roadmap decisions.
 
-The [CLI guide](docs/cli-guide.md) is the concise operator path for the
-shipped verification, review-import, format-discovery, and local API flows.
-
 The package also exports `renderReviewerQueueCsv`, allowing Node integrations
 to produce the same queue overview CSV as the `review-queue` CLI command.
 
