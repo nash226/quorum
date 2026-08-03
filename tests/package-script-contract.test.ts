@@ -15,6 +15,8 @@ test("package scripts keep the documented repository check gate intact", async (
   const scripts = packageJson.scripts ?? {};
 
   assert.equal(scripts.check, "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci");
+  assert.equal(scripts.verify, "npm run dev -- verify");
+  assert.equal(scripts["verify-batch"], "npm run dev -- verify-batch");
   assert.equal(scripts["extract-claims"], "npm run dev -- extract-claims");
   assert.equal(scripts.formats, "npm run dev -- formats");
   assert.equal(scripts.evaluate, "npm run dev -- evaluate");
@@ -37,6 +39,22 @@ test("version package script forwards JSON contract probes", async () => {
   const version = JSON.parse(stdout) as { service: string; version: string };
 
   assert.deepEqual(version, { service: "quorum", version: API_VERSION });
+});
+
+test("verification package scripts forward command-specific help flags", async () => {
+  const [verify, batch] = await Promise.all([
+    execFileAsync("npm", ["run", "--silent", "verify", "--", "--help"], {
+      cwd: new URL("..", import.meta.url),
+      maxBuffer: 1024 * 1024,
+    }),
+    execFileAsync("npm", ["run", "--silent", "verify-batch", "--", "--help"], {
+      cwd: new URL("..", import.meta.url),
+      maxBuffer: 1024 * 1024,
+    }),
+  ]);
+
+  assert.match(verify.stdout, /Usage:\s+quorum verify/);
+  assert.match(batch.stdout, /Usage:\s+quorum verify-batch/);
 });
 
 test("formats package script exposes the machine-readable input contract", async () => {
