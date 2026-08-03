@@ -1,5 +1,8 @@
 # Quorum
 
+The evaluation fixture guide now matches the shipped benchmark inventory: 91
+checked-in fixtures across HR, support, and shared edge-case workflows.
+
 The shipped local product covers the full review loop: CLI and HTTP API
 verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
