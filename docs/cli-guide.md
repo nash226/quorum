@@ -349,6 +349,19 @@ status and domain scope so downstream workers can audit the handoff.
 
 ## Commands at a glance
 
+After installing the package, use `quorum <command>` for the same workflows
+shown above. The supported npm wrappers are also available without repeating
+the `npm run dev --` prefix:
+
+```bash
+npm run formats -- --json
+npm run version -- --json
+npm run extract-claims -- --answer examples/answers/hr-answer.md --result-json
+```
+
+These wrappers keep local onboarding and published-package smoke checks on the
+same CLI contracts.
+
 | Command | Purpose |
 | --- | --- |
 | `verify` | Verify one answer and render reports. |
