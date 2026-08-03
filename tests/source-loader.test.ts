@@ -593,6 +593,21 @@ Employees get 12 weeks.
   );
 });
 
+test("rejects invalid snake_case source freshness metadata", async () => {
+  await assert.rejects(
+    sourceDocumentFromFile(
+      "docs/hr-policy.md",
+      `---
+updated_at: not-a-timestamp
+---
+Employees get 12 weeks.
+`,
+      0,
+    ),
+    /Invalid updatedAt timestamp for source: docs\/hr-policy\.md/,
+  );
+});
+
 test("prefers explicit source metadata overrides over parsed metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",
