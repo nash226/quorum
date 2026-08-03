@@ -185,6 +185,16 @@ JSON
 The response echoes `queueStatus: "no_claims"` and reports the filtered
 `noClaimsAnswers` total, keeping empty drafts distinct from reviewed answers.
 
+## Score benchmark fixtures over HTTP
+
+Use `POST /evaluate` when an integration needs to score checked-in evaluation
+fixtures without invoking the CLI. Each item supplies the fixture path and its
+JSON content; the path is retained in the scorecard so callers can trace a
+mismatch back to the source packet. The request accepts `domains` to scope the
+run, `minScore` for a score gate, and `includeArtifacts` for benchmark CSV
+outputs. An unmatched domain is rejected so a filtered run cannot silently
+report an empty benchmark.
+
 ## Discover and probe the service
 
 An integration can bootstrap without hard-coding the full route inventory:

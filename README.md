@@ -5,6 +5,10 @@ verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
 API surface; durable hosting and queue storage remain roadmap decisions.
 
+The HTTP integration guide now includes a copy-pasteable `POST /evaluate`
+benchmark-scoring request, including domain filters, score gates, and CSV
+artifacts for callers that need evaluation without invoking the CLI.
+
 The package also exports `renderReviewerQueueCsv`, allowing Node integrations
 to produce the same queue overview CSV as the `review-queue` CLI command.
 
