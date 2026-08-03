@@ -158,6 +158,13 @@ test("splits Arabic and Indic sentence terminators", () => {
   );
 });
 
+test("splits Unicode ellipsis sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("The review is pending… Managers approve exceptions."),
+    ["The review is pending…", "Managers approve exceptions."],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
