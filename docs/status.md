@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `07cbf092` on 2026-08-03, test: cover nested source discovery
+- Latest shipped change: `34c813ce` on 2026-08-03, docs: document installed reviewer wrappers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-03 | [#1846](https://github.com/nash226/quorum/pull/1846) | docs: document installed reviewer wrappers | `34c813ce` |
 | 2026-08-03 | Direct push | test: cover nested source discovery | `07cbf092` |
 | 2026-08-03 | Direct push | test: verify installed package entrypoints | `4a35b37c` |
 | 2026-08-03 | Direct push | docs: clarify stable batch discovery | `e175fd9f` |
@@ -56,5 +57,4 @@
 | 2026-08-03 | Direct push | test: smoke-check evaluate wrapper | `c507f3a6` |
 | 2026-08-03 | Direct push | test: smoke-check import-review wrapper | `b817a6db` |
 | 2026-08-03 | Direct push | test: smoke-check review queue wrapper | `75d08793` |
-| 2026-08-03 | Direct push | test: cover HR travel expense policy | `4bf9388e` |
 
