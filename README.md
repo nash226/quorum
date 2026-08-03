@@ -85,6 +85,10 @@ The packaged batch smoke gate now verifies nested XML answers and approved
 sources, keeping recursive XML policy workflows release-gated alongside direct
 verification.
 
+Claim extraction now strips plain and emoji-presenting heavy check-mark bullets
+(`✔` and `✔️`), keeping another common checklist export atomic before evidence
+verification.
+
 Top-level CLI help now shows the optional `--json` flag for `quorum formats`,
 making the machine-readable format-discovery path visible during onboarding.
 
