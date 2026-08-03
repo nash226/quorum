@@ -67,6 +67,18 @@ paths stay ordered ahead of recursive `--answer-dir` discovery, duplicates are
 removed, and an empty answer directory fails clearly instead of producing a
 misleading empty report.
 
+Batch reviewers can pass `--answer-label` beside an explicit `--answer` to use
+a human-friendly name in batch reports and review CSV exports while preserving
+the original `answer_path` for traceability:
+
+```bash
+npm run dev -- verify-batch \
+  --answer examples/answers/hr-answer.md \
+  --answer-label "HR benefits response" \
+  --source-dir examples/sources \
+  --review-csv-out reports/labeled-review.csv
+```
+
 The evaluation suite now covers a support refund-escalation packet with a
 verified refund window and unsupported approval promises, keeping reviewer
 risk coverage grounded in a concrete customer-support workflow.
