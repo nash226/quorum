@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6453b838` on 2026-08-03, test: smoke-check extract claims wrapper
+- Latest shipped change: `d3a8c2ca` on 2026-08-03, feat: expose reviewer queue csv renderer
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-03 | [#1812](https://github.com/nash226/quorum/pull/1812) | feat: expose reviewer queue csv renderer | `d3a8c2ca` |
 | 2026-08-03 | Direct push | test: smoke-check extract claims wrapper | `6453b838` |
 | 2026-08-03 | Direct push | feat: add extract claims package wrapper | `f7544ced` |
 | 2026-08-03 | Direct push | test: gate reStructuredText aliases in package smoke | `f6b8f1e0` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | test: gate packaged CSV verification | `effc457f` |
 | 2026-08-02 | Direct push | test: cover direct reStructuredText answer alias | `695b127a` |
 | 2026-08-02 | Direct push | feat: support reStructuredText rest aliases | `73ebbf0c` |
-| 2026-08-02 | Direct push | test: smoke-check direct TOML answers | `f13f06a1` |
 
