@@ -269,7 +269,10 @@ export async function loadSourceDocuments(
 
   if (sourcePaths.length === 0) {
     const locations = [...options.sourcePaths, ...options.sourceDirs].join(", ");
-    throw new Error(`No approved source files found in ${locations}`);
+    const supportedExtensions = [...SOURCE_EXTENSIONS].sort().join(", ");
+    throw new Error(
+      `No approved source files found in ${locations}. Supported source extensions: ${supportedExtensions}`,
+    );
   }
 
   return Promise.all(

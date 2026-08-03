@@ -1651,6 +1651,8 @@ copy-pasteable example.
 Verification also stops with `No approved source files found` when the supplied
 source paths and directories contain no supported files, instead of producing a
 report where every claim is unsupported.
+The error also lists the source extensions Quorum accepts, which makes an
+empty or misnamed source directory easier to correct.
 
 Integrations can check the installed CLI and API contract version without
 starting the server:
