@@ -97,7 +97,7 @@ verified, contradicted, and unsupported first-response claims against the
 approved support playbook.
 
 The benchmark inventory checks now include the new support packet across CLI,
-API, queue, and packaged smoke expectations, keeping the 89-fixture scorecard
+API, queue, and packaged smoke expectations, keeping the 90-fixture scorecard
 green when benchmark coverage expands.
 
 The installed package exposes `npm run formats` (and
@@ -151,7 +151,7 @@ published format contract.
 The packaged CLI smoke gate now verifies direct `.conf` and `.cfg` answer and
 approved-source exports, keeping common configuration aliases release-gated.
 
-The evaluation scorecard now covers 89 checked-in HR and support fixtures,
+The evaluation scorecard now covers 90 checked-in HR and support fixtures,
 including direct support plan-upgrade claims.
 
 The packaged CLI smoke gate now verifies the `.yml` YAML alias for direct
@@ -1933,7 +1933,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 89-fixture benchmark spans 30 HR and 59 support workflows. It also
+The checked-in 90-fixture benchmark spans 31 HR and 59 support workflows. It also
 includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
@@ -1954,7 +1954,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 89-fixture total explicit, so new benchmark packets cannot drift
+the published 90-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.
@@ -2381,7 +2381,7 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
-The checked-in HR and support benchmark currently contains 89 fixtures and 264
+The checked-in HR and support benchmark currently contains 90 fixtures and 267
 expected claims, including support plan-upgrade and plan-downgrade scenarios
 with verified, needs-review, contradicted, and unsupported claims.
 The HR employee-assistance policy is also covered as a file-backed reviewer
@@ -2389,6 +2389,9 @@ packet, preserving confidential counseling limits and community-resource
 routing alongside a review-worthy unlimited-counseling claim.
 The gift-card benchmark also runs through checked-in answer and source files,
 covering file-backed support-policy ingestion alongside inline fixture coverage.
+The HR benchmark now also includes a file-backed recognition-policy packet,
+covering spot-award eligibility, approval controls, and an unsupported transit
+benefit claim.
 
 ## Documentation Map
 

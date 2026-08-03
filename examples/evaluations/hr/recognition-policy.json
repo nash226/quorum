@@ -1,0 +1,24 @@
+{
+  "name": "HR recognition policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-recognition-answer.md",
+  "answer": "Employees may receive a $500 spot award for exceptional contributions.\nManagers may approve unlimited spot awards without People Operations review.\nThe company provides a monthly public-transportation stipend.\n",
+  "answerLabel": "HR recognition reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-recognition-policy.md",
+      "id": "people-ops/hr-recognition@2026-08-03",
+      "title": "HR Recognition Policy",
+      "updatedAt": "2026-08-03",
+      "trustLevel": "high",
+      "content": "Employees may receive a $500 spot award for exceptional contributions.\nSpot awards require manager nomination and People Operations approval before payment.\nPeople Operations reviews the annual spot-award budget each quarter.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}

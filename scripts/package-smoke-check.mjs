@@ -2064,10 +2064,10 @@ const domainEvaluationResult = JSON.parse(execFileSync(process.execPath, [
 ], { encoding: "utf8" }));
 if (
   domainEvaluationResult.shouldFail !== false ||
-  domainEvaluationResult.summary?.fixtureCount !== 30 ||
+  domainEvaluationResult.summary?.fixtureCount !== 31 ||
   domainEvaluationResult.summary?.domains?.length !== 1 ||
   domainEvaluationResult.summary?.domains?.[0]?.domain !== "hr" ||
-  domainEvaluationResult.summary?.domains?.[0]?.fixtureCount !== 30
+  domainEvaluationResult.summary?.domains?.[0]?.fixtureCount !== 31
 ) {
   throw new Error("Package artifact did not preserve evaluation domain filtering.");
 }
@@ -2804,7 +2804,7 @@ try {
     reviewedQueueJson.review?.reviewedAnswers !== 1 ||
     reviewedQueueJson.review?.pendingAnswers !== 0 ||
     JSON.stringify(hrQueueJson.domains) !== JSON.stringify(["hr"]) ||
-    hrQueueJson.evaluation?.fixtureCount !== 30 ||
+    hrQueueJson.evaluation?.fixtureCount !== 31 ||
     hrQueueJson.evaluation?.mismatchCount !== 0 ||
     JSON.stringify(supportQueueJson.domains) !== JSON.stringify(["support"]) ||
     supportQueueJson.evaluation?.fixtureCount !== 59 ||
