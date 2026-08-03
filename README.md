@@ -9,6 +9,10 @@ Installed packages now expose `npm run extract-claims -- ...` for the claim
 preview workflow, keeping answer inspection available without repeating the
 underlying `npm run dev --` command prefix.
 
+The packaged smoke gate now executes that npm wrapper against a real answer
+file, so installed claim-preview integrations are checked for argument
+forwarding as well as direct CLI behavior.
+
 Start the local HTTP API with `npm run serve` (equivalent to
 `npm run dev -- serve`) when an agent integration needs the documented local
 service boundary.
