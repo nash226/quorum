@@ -214,6 +214,17 @@ test("normalizes common LaTeX markup into readable source evidence", async () =>
   assert.equal(source.content, "Leave Policy\nEmployees receive 12 weeks of paid parental leave.");
 });
 
+test("normalizes Rich Text Format exports into readable source evidence", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.RTF",
+    "{\\rtf1\\ansi\\deff0 {\\fonttbl {\\f0 Arial;}}\\pard\\b Leave Policy\\b0\\par Employees receive 12 weeks of paid parental leave.\\par}",
+    0,
+  );
+
+  assert.equal(source.title, "leave-policy");
+  assert.equal(source.content, "Leave Policy\nEmployees receive 12 weeks of paid parental leave.");
+});
+
 test("strips MDX extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/leave-policy.mdx",
