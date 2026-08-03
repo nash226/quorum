@@ -2580,7 +2580,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /,90,89,1,0,0\.000,267,267,1\.000,100%,hr .*102,59,76,30,102,59,76,30/);
+    assert.match(summaryCsv, /,91,90,1,0,0\.000,270,270,1\.000,100%,hr .*103,60,77,30,103,60,77,30/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

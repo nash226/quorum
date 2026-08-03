@@ -46,6 +46,30 @@ test("evaluates the shipped HR recognition fixture across award claims", async (
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped HR travel expense fixture across timing claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/hr/travel-expense-policy.json"),
+    generatedAt: "2026-08-03T12:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR travel expense policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-travel-expense@2026-08-03");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("loads and evaluates the HR example fixture", async () => {
   const fixturePath = resolve("examples/evaluations/hr-policy.json");
   const fixture = await loadEvaluationFixture(fixturePath);
@@ -2861,7 +2885,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 90);
+  assert.equal(scorecards.length, 91);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2979,7 +3003,7 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 31);
+  assert.equal(scorecards.length, 32);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -3039,7 +3063,7 @@ test("matches evaluation domains case-insensitively", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 31);
+  assert.equal(scorecards.length, 32);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "hr"));
 });
 

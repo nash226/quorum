@@ -2694,10 +2694,10 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
 
   assert.equal(batchResult.shouldFail, false);
   assert.equal(batchResult.mismatchCount, 0);
-  assert.equal(batchResult.summary.fixtureCount, 90);
+  assert.equal(batchResult.summary.fixtureCount, 91);
   assert.equal(batchResult.summary.mismatchCount, 0);
-  assert.equal(batchResult.summary.matchedClaims, 267);
-  assert.equal(batchResult.summary.totalExpectedClaims, 267);
+  assert.equal(batchResult.summary.matchedClaims, 270);
+  assert.equal(batchResult.summary.totalExpectedClaims, 270);
   assert.equal(batchResult.summary.score, 1);
   assert.equal(batchResult.summary.scoreLabel, "100%");
   assert.deepEqual(batchResult.summary.domains, [
@@ -2727,10 +2727,10 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
       score: 1,
       scoreLabel: "100%",
       expectedSummary: { verified: 65, contradicted: 39, unsupported: 50, needs_review: 19 },
-      actualSummary: { verified: 65, contradicted: 39, unsupported: 50, needs_review: 19 },
+      actualSummary: { verified: 66, contradicted: 40, unsupported: 51, needs_review: 19 },
     },
   ]);
-  assert.equal(batchResult.scorecards.length, 90);
+  assert.equal(batchResult.scorecards.length, 91);
   assert.equal(singleResult.hasMismatch, false);
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
   assert.equal(contentResult.hasMismatch, false);
@@ -6392,9 +6392,9 @@ test("programmatic API exports batch evaluation helpers", async () => {
 
   const rendered = renderEvaluationTextReport(scorecards);
 
-  assert.equal(scorecards.length, 90);
+  assert.equal(scorecards.length, 91);
   assert.equal(scorecards.some(hasEvaluationMismatch), false);
-  assert.match(rendered, /Fixtures: 90/);
+  assert.match(rendered, /Fixtures: 91/);
   assert.match(renderEvaluationHtmlReport(scorecards), /<!doctype html>/i);
   assert.match(renderEvaluationSummaryCsv(scorecards), /generated_at,fixture_name,domain,fixture_path,answer_path/);
 });
