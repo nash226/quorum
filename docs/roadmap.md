@@ -23,7 +23,8 @@ surfaces rather than add another parallel workflow.
   optional benchmark drift.
 - Packaged CLI verification covers Markdown and text documents, HTML/XHTML,
   PDF/DOCX, and structured JSON/YAML/XML/TOML/CSV answer and source exports;
-  the supported extension contract is exposed through `quorum formats`.
+  the supported extension contract is exposed through `quorum formats` and
+  documented in the [CLI guide](cli-guide.md).
 - Deployment and integration guides document the local API's authentication
   boundary, operational limits, and durable source identifiers.
 - The CLI and local HTTP API expose the same verification and reviewer-queue
