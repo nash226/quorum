@@ -20,6 +20,10 @@ The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
 answers and approved sources, keeping the documented format contract covered
 for installed integrations.
 
+The packaged CLI smoke gate now verifies direct CSV answers and approved
+sources, keeping tabular policy exports release-gated for installed
+integrations.
+
 Recursive answer and source discovery now accepts the standard reStructuredText
 `.rest` alias alongside `.rst`, and exposes both extensions through the format
 discovery contract. Direct `.rest` answer verification is covered as well, so

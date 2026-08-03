@@ -2499,6 +2499,27 @@ try {
   rmSync(rstFormatTempDir, { recursive: true, force: true });
 }
 
+const csvFormatTempDir = mkdtempSync(join(tmpdir(), "quorum-package-csv-format-"));
+try {
+  const answerPath = join(csvFormatTempDir, "answer.csv");
+  const sourcePath = join(csvFormatTempDir, "policy.csv");
+  writeFileSync(answerPath, "field,response\npolicy,Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "policy,details\nleave,Employees receive 12 weeks of paid parental leave.\n");
+  const result = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    result.summary?.verified !== 1 ||
+    result.answerPath !== answerPath ||
+    result.sources?.[0]?.sourcePath !== sourcePath ||
+    result.sources?.[0]?.title !== "policy"
+  ) {
+    throw new Error("Package artifact CLI did not preserve direct CSV answer/source verification.");
+  }
+} finally {
+  rmSync(csvFormatTempDir, { recursive: true, force: true });
+}
+
 const yamlAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-yaml-answer-"));
 try {
   const yamlAnswerPath = join(yamlAnswerTempDir, "answer.yaml");
