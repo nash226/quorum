@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now treats Unicode ellipses (`…`) as sentence boundaries, so
+policy answers using typographic pauses remain separately reviewable.
+
 The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
