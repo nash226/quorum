@@ -1960,6 +1960,10 @@ includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
 
+The HR travel-expense fixture is included in the 32-fixture HR inventory, with
+aggregate expectations covering 97 claims across verified, contradicted, and
+unsupported policy outcomes.
+
 The benchmark spans leave, onboarding, payroll, accommodations, refunds, refund status, account
 security, billing, tax exemption, delivery, service levels, gift cards, and accessibility requests. Authentication-device security is also covered as a reviewer-facing support packet. Each packet exercises reviewer-facing
 verdict routing against approved Markdown, HTML, JSON, PDF, or directory-backed
