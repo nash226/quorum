@@ -1,7 +1,7 @@
 import type { AtomicClaim } from "./domain.js";
 import { splitIntoSentences, stripByteOrderMark } from "./text.js";
 
-const UPPERCASE_ROMAN_NUMERAL_PREFIX = /^([IVXLCDM]{2,})[.)]\s+/;
+const UPPERCASE_ROMAN_NUMERAL_PREFIX = /^([IVXLCDM]+)[.)]\s+/;
 const LOWERCASE_ROMAN_NUMERAL_DOT_PREFIX = /^([ivxlcdm]{2,})\.\s+/;
 const PARENTHESIZED_ROMAN_NUMERAL_PREFIX = /^\(([IVXLCDMivxlcdm]{2,})\)\s+/;
 const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;

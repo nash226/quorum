@@ -905,6 +905,22 @@ iv) Contractors do not receive paid vacation
   );
 });
 
+test("extracts clean claims from single-item roman numeral markdown lists", () => {
+  const claims = extractClaims(`Policy notes:
+
+I. Employees receive 12 weeks of paid parental leave
+V) Healthcare coverage begins after 30 days of employment
+`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "Employees receive 12 weeks of paid parental leave",
+      "Healthcare coverage begins after 30 days of employment",
+    ],
+  );
+});
+
 test("extracts clean claims from lowercase roman numeral markdown lists with periods", () => {
   const claims = extractClaims(`Policy notes:
 
