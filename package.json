@@ -33,6 +33,7 @@
     "build": "tsc -p tsconfig.json",
     "check": "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci",
     "dev": "tsx src/cli.ts",
+    "extract-claims": "npm run dev -- extract-claims",
     "evaluate": "npm run dev -- evaluate",
     "import-review": "npm run dev -- import-review",
     "help": "npm run dev -- --help",
