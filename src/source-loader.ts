@@ -103,6 +103,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseDelimitedSource(normalizedContent, /\.tsv$/i.test(sourcePath));
   }
 
+  if (isRtfSource(sourcePath)) {
+    return { metadata: {}, body: normalizeRtfSource(normalizedContent) };
+  }
+
   if (isLatexSource(sourcePath)) {
     return { metadata: {}, body: normalizeLatexSource(normalizedContent) };
   }
@@ -234,6 +238,26 @@ function isLatexSource(sourcePath: string): boolean {
   return /\.tex$/i.test(sourcePath);
 }
 
+function isRtfSource(sourcePath: string): boolean {
+  return /\.rtf$/i.test(sourcePath);
+}
+
+function normalizeRtfSource(content: string): string {
+  return content
+    .replace(/^\uFEFF?\{\\rtf[^ ]*\s*/, "")
+    .replace(/\{\\(?:fonttbl|colortbl|stylesheet|info|generator)[\s\S]*?\}/gi, "")
+    .replace(/\\'([0-9a-f]{2})/gi, (_, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)))
+    .replace(/\\(?:par|line)\b/g, "\n")
+    .replace(/\\tab\b/g, "\t")
+    .replace(/\\([{}\\])/g, "$1")
+    .replace(/\\[a-z]+-?\d*\s?/gi, "")
+    .replace(/[{}]/g, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n[ \t]+/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 function normalizeLatexSource(content: string): string {
   return content
     .replace(/(^|\n)\s*%[^\n]*/g, "$1")
@@ -247,7 +271,7 @@ function normalizeLatexSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|rtf|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
