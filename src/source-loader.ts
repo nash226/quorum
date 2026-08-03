@@ -244,7 +244,7 @@ function isRtfSource(sourcePath: string): boolean {
 
 function normalizeRtfSource(content: string): string {
   return content
-    .replace(/^\uFEFF?\{\\rtf[^ ]*\s*/, "")
+    .replace(/^\uFEFF?\{\\rtf\d+\s+\\ansi\s*/, "")
     .replace(/\{\\(?:fonttbl|colortbl|stylesheet|info|generator)(?:\{[^{}]*\}|[^{}])*\}/gi, "")
     .replace(/\\'([0-9a-f]{2})/gi, (_, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)))
     .replace(/\\(?:par|line)\b/g, "\n")
