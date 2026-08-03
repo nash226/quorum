@@ -48,3 +48,16 @@ test("formats package script forwards command-specific help flags", async () => 
   assert.match(stdout, /Usage:\s+quorum formats \[--json\]/);
   assert.match(stdout, /Print the extensions discovered/);
 });
+
+test("formats package script keeps human output labeled for both input roles", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "formats"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /^Quorum input formats/m);
+  assert.match(stdout, /^Source files: /m);
+  assert.match(stdout, /^Answer files: /m);
+  assert.match(stdout, /\.md/);
+  assert.match(stdout, /\.pdf/);
+});
