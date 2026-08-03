@@ -165,6 +165,13 @@ test("splits Unicode ellipsis sentence terminators", () => {
   );
 });
 
+test("strips Hebrew alphabetic list markers", () => {
+  assert.deepEqual(
+    splitIntoSentences("א. העובדים מקבלים חופשה. ב) המנהלים מאשרים חריגים."),
+    ["העובדים מקבלים חופשה.", "המנהלים מאשרים חריגים."],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>

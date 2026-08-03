@@ -3,6 +3,9 @@
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 
+Hebrew alphabetic list markers such as `א.` and `ב)` are also removed from
+claims, keeping Hebrew policy exports clean for verification.
+
 Claim extraction now treats Unicode ellipses (`…`) as sentence boundaries, so
 policy answers using typographic pauses remain separately reviewable.
 
