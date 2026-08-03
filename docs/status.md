@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c991bcfe` on 2026-08-03, docs: explain recursive input discovery
+- Latest shipped change: `5eedfa80` on 2026-08-03, docs: align roadmap with shipped batch verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-03 | Direct push | docs: align roadmap with shipped batch verification | `5eedfa80` |
 | 2026-08-03 | Direct push | docs: explain recursive input discovery | `c991bcfe` |
 | 2026-08-03 | [#1846](https://github.com/nash226/quorum/pull/1846) | docs: document installed reviewer wrappers | `34c813ce` |
 | 2026-08-03 | Direct push | test: cover nested source discovery | `07cbf092` |
@@ -56,5 +57,4 @@
 | 2026-08-03 | Direct push | docs: clarify stable batch discovery | `e175fd9f` |
 | 2026-08-03 | Direct push | docs: reconcile evaluation fixture inventory | `7da396a1` |
 | 2026-08-03 | Direct push | test: smoke-check evaluate wrapper | `c507f3a6` |
-| 2026-08-03 | Direct push | test: smoke-check import-review wrapper | `b817a6db` |
 
