@@ -2727,7 +2727,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
       score: 1,
       scoreLabel: "100%",
       expectedSummary: { verified: 65, contradicted: 39, unsupported: 50, needs_review: 19 },
-      actualSummary: { verified: 66, contradicted: 40, unsupported: 51, needs_review: 19 },
+      actualSummary: { verified: 65, contradicted: 39, unsupported: 50, needs_review: 19 },
     },
   ]);
   assert.equal(batchResult.scorecards.length, 91);

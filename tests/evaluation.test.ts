@@ -2717,6 +2717,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/hr/sabbatical-leave-policy.json"),
     resolve("examples/evaluations/hr/source-directory-policy.json"),
     resolve("examples/evaluations/hr/time-off-policy.json"),
+    resolve("examples/evaluations/hr/travel-expense-policy.json"),
     resolve("examples/evaluations/hr/travel-reimbursement-policy.json"),
     resolve("examples/evaluations/hr/tuition-reimbursement-policy.json"),
     resolve("examples/evaluations/hr/wellness-benefit-policy.json"),

@@ -2580,7 +2580,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /,92,91,1,0,0\.000,273,273,1\.000,100%,hr .*104,61,78,30,104,61,78,30/);
+    assert.match(summaryCsv, /,91,90,1,0,0\.000,270,270,1\.000,100%,hr .*103,60,77,30,103,60,77,30/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -2832,7 +2832,7 @@ test("evaluate writes the gate-aware result JSON to disk", async () => {
     assert.equal(payload.shouldFail, false);
     assert.deepEqual(payload.failureReasons, []);
     assert.equal(payload.mismatchCount, 0);
-    assert.equal(payload.summary.fixtureCount, 92);
+    assert.equal(payload.summary.fixtureCount, 91);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -6723,7 +6723,7 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
     assert.equal(overview.review.totalAnswers, 44);
     assert.equal(overview.review.pendingAnswers, 43);
     assert.equal(overview.queueStatus, null);
-    assert.equal(overview.evaluation.fixtureCount, 92);
+    assert.equal(overview.evaluation.fixtureCount, 91);
     assert.equal(overview.evaluation.mismatchCount, 0);
     assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
 
@@ -6736,7 +6736,7 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
     ]);
     assert.match(text, /Reviewer queue: 44 answers \(43 pending, 0 reviewed, 1 no claims\)/);
     assert.match(text, /Final verdicts: 33 verified, 21 contradicted, 32 unsupported, 42 needs review/);
-    assert.match(text, /Benchmark drift: 0\/92 mismatches \(0%\)/);
+    assert.match(text, /Benchmark drift: 0\/91 mismatches \(0%\)/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
