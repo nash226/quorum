@@ -11,7 +11,10 @@ front of enterprise agent workflows.
 
 ## Next
 
-- Support batch verification for multiple answers.
+- Add an evaluation harness with labeled verdict examples.
+- Expand batch exports and workflow hooks for reviewer queues.
+- Improve claim extraction for bullets, lists, and compound sentences.
+- Expose an API surface for agent integrations.
 
 ## Later
 

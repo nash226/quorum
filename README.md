@@ -151,6 +151,10 @@ found through `--answer-dir`. Batch Markdown and HTML reports also include each
 answer's claim-level verdicts and top evidence so reviewers can inspect risky
 answers without jumping straight to JSON.
 
+Batch verification is now the shipped workflow; the active roadmap focuses on
+evaluation fixtures, richer queue exports, claim-extraction improvements, and
+an API surface for agent integrations.
+
 ## Quick Start
 
 ```bash
