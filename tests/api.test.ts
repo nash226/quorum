@@ -5255,8 +5255,8 @@ test("programmatic API can return a reviewer queue CSV handoff artifact", async 
 
     assert.equal(response.status, 200);
     const result = await response.json() as ApiReviewQueueResponse;
-    assert.match(result.artifacts?.queue_summary_csv ?? "", /^generated_at,total_answers,pending_answers/);
-    assert.match(result.artifacts?.queue_summary_csv ?? "", /,1,1,0,0,1,0,1,0,1,0,0,0,clear,/);
+    assert.match(result.artifacts?.queue_summary_csv ?? "", /^"generated_at","queue_status","domains"/);
+    assert.match(result.artifacts?.queue_summary_csv ?? "", /"","","1","1","0","0","1","1","0","1","0","0","0"/);
   } finally {
     await api.close();
   }

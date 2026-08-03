@@ -42,6 +42,7 @@ import {
 } from "./reviewer-decision-import.js";
 import { parseSourceTrustLevel, sourceDocumentFromFile } from "./source-loader.js";
 import { renderAnswerPreview } from "./text.js";
+import { renderReviewerQueueCsv } from "./reviewer-queue.js";
 import {
   ANSWER_EXTENSIONS,
   SOURCE_EXTENSIONS,
@@ -1680,7 +1681,24 @@ async function handleApiRequest(
         : null,
     };
     const artifacts = body.includeArtifacts
-      ? { queue_summary_csv: renderReviewerDecisionImportQueueSummaryCsv(reviewReport, []) }
+      ? {
+          queue_summary_csv: renderReviewerQueueCsv({
+            generatedAt: result.generatedAt,
+            queueStatus: result.queueStatus,
+            domains: result.domains,
+            review: result.review,
+            evaluation: result.evaluation
+              ? {
+                  fixtureCount: result.evaluation.fixtureCount,
+                  mismatchCount: result.evaluation.mismatchCount,
+                  mismatchRate: result.evaluation.mismatchRate,
+                  score: result.evaluation.score,
+                  scoreLabel: result.evaluation.scoreLabel,
+                  scoreThresholdPassed: result.evaluation.scoreThresholdPassed,
+                }
+              : null,
+          }),
+        }
       : undefined;
     writeJson(response, 200, artifacts ? { ...result, artifacts } : result);
     return;
