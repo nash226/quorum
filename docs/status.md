@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4b60414b` on 2026-08-03, test: validate snake_case source freshness
+- Latest shipped change: `7f015443` on 2026-08-03, fix: split claims after Unicode ellipses
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-03 | Direct push | fix: split claims after Unicode ellipses | `7f015443` |
 | 2026-08-03 | Direct push | test: validate snake_case source freshness | `4b60414b` |
 | 2026-08-03 | Direct push | docs: align roadmap with shipped batch verification | `5eedfa80` |
 | 2026-08-03 | Direct push | docs: explain recursive input discovery | `c991bcfe` |
@@ -56,5 +57,4 @@
 | 2026-08-03 | Direct push | test: cover nested source discovery | `07cbf092` |
 | 2026-08-03 | Direct push | test: verify installed package entrypoints | `4a35b37c` |
 | 2026-08-03 | Direct push | docs: clarify stable batch discovery | `e175fd9f` |
-| 2026-08-03 | Direct push | docs: reconcile evaluation fixture inventory | `7da396a1` |
 
