@@ -873,6 +873,8 @@ promise.
 The support evaluation suite also covers identity verification, including a
 verified ownership check plus unsupported and needs-review shortcuts for
 mismatched identity documents and order-number-only disclosure.
+The checked-in support account-retention fixture also keeps changed deletion
+windows contradicted and unapproved restoration promises unsupported.
 Claim extraction also splits substantial semicolon-delimited policy claims and normalizes bracketed, Arabic-Indic, Persian, fullwidth, and CJK ideographic ordered-list
 markers plus common Unicode bullets such as middle dots and square bullets,
 keeping exported and localized answers clean before evidence matching. Markdown

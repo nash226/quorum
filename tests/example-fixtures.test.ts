@@ -83,3 +83,21 @@ test("support HTML example produces one verified, contradicted, and unsupported 
     needs_review: 0,
   });
 });
+
+test("support account retention fixture keeps risky lifecycle claims reviewer-visible", async () => {
+  const report = await verifyExample(
+    "tests/fixtures/support-account-retention-answer.md",
+    "tests/fixtures/support-account-retention-policy.md",
+  );
+
+  assert.deepEqual(report.summary, {
+    verified: 1,
+    unsupported: 1,
+    contradicted: 2,
+    needs_review: 0,
+  });
+  assert.deepEqual(
+    report.assessments.map((assessment) => assessment.verdict),
+    ["verified", "contradicted", "unsupported", "contradicted"],
+  );
+});
