@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b8dc8c69` on 2026-08-02, test: cover support price adjustment evaluation
+- Latest shipped change: `1d2d49df` on 2026-08-02, test: add file-backed employee assistance fixture
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | [#1778](https://github.com/nash226/quorum/pull/1778) | test: add file-backed employee assistance fixture | `1d2d49df` |
 | 2026-08-02 | Direct push | test: cover support price adjustment evaluation | `b8dc8c69` |
 | 2026-08-02 | Direct push | test: gate packaged BOM frontmatter support | `a83f4c40` |
 | 2026-08-02 | Direct push | test: cover HR overtime evaluation | `4c6fdfc3` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | [#1771](https://github.com/nash226/quorum/pull/1771) | test: gate packaged reStructuredText verification | `a2e0efa9` |
 | 2026-08-02 | [#1761](https://github.com/nash226/quorum/pull/1761) | feat: add reviewer workflow package wrappers | `63efd6e4` |
 | 2026-08-02 | [#1760](https://github.com/nash226/quorum/pull/1760) | feat: add evaluation and openapi package wrappers | `83234d64` |
-| 2026-08-02 | Direct push | test: cover HTML billing answer evaluation | `1393d506` |
 
