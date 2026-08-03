@@ -13,6 +13,9 @@ The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
 
+The packaged CLI smoke gate now verifies direct TOML answers against an approved
+source, keeping both sides of the documented TOML input contract release-gated.
+
 The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
 answers and approved sources, keeping the documented format contract covered
 for installed integrations.
