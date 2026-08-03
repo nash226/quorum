@@ -15,6 +15,11 @@ API surface; durable hosting and queue storage remain roadmap decisions.
 The package also exports `renderReviewerQueueCsv`, allowing Node integrations
 to produce the same queue overview CSV as the `review-queue` CLI command.
 
+Node integrations can also call `verifyAnswerContentsResult` or
+`verifyAnswerBatchContentsResult` with in-memory answer and source content;
+both return verdicts, evidence summaries, and the configured fail-policy result
+without staging temporary files.
+
 The packaged smoke gate now installs the generated tarball in a temporary
 consumer project and verifies the root library export, `quorum/server`
 subpath, and installed CLI binary together, catching publish-boundary drift.
