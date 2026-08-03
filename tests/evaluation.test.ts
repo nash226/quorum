@@ -1096,6 +1096,7 @@ test("evaluates a shipped support holiday-hours fixture across coverage claims",
   assert.equal(scorecard.fixtureName, "Support holiday hours policy example");
   assert.equal(scorecard.domain, "support");
   assert.equal(scorecard.answerLabel, "Support holiday hours reviewer packet");
+  assert.equal(scorecard.answerPath, resolve("examples/answers/support-holiday-hours-answer.md"));
   assert.deepEqual(scorecard.actualSummary, {
     verified: 1,
     contradicted: 0,
