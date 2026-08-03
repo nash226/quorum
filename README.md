@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now separates sentence-ending punctuation from a following
+quoted or parenthesized claim, keeping evidence matching precise for common
+policy-answer formatting.
+
 The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.

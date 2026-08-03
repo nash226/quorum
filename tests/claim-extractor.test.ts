@@ -1402,6 +1402,20 @@ test("strips inline markdown formatting from extracted claims", () => {
   );
 });
 
+test("splits claims after sentence punctuation with closing quotes or parentheses", () => {
+  const claims = extractClaims(
+    'The policy requires manager approval (see the handbook). "Benefits begin after 30 days."',
+  );
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    [
+      "The policy requires manager approval (see the handbook).",
+      '\"Benefits begin after 30 days.\"',
+    ],
+  );
+});
+
 test("ignores html comments between claims", () => {
   const claims = extractClaims(`Employees receive 12 weeks of paid parental leave.
 <!-- internal note: verify regional exceptions before publishing -->
