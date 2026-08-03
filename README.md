@@ -1077,6 +1077,16 @@ sentence terminators.
 
 ## Other CLI Commands
 
+To inspect the exact extensions accepted by the installed CLI, run:
+
+```bash
+npm run formats
+```
+
+The human-readable output labels source and answer extensions separately. Use
+`npm run formats -- --json` when an integration needs the versioned,
+machine-readable contract.
+
 The CLI also exposes focused commands for discovery, evaluation, review
 operations, and integrations:
 
