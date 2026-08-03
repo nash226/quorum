@@ -3,6 +3,9 @@
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 
+Claim extraction also preserves sentence boundaries and short claims marked
+with Myanmar, Khmer, Lao, and Mongolian full-stop punctuation.
+
 Claim extraction now treats Unicode ellipses (`…`) as sentence boundaries, so
 policy answers using typographic pauses remain separately reviewable.
 

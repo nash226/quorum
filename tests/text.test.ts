@@ -165,6 +165,13 @@ test("splits Unicode ellipsis sentence terminators", () => {
   );
 });
 
+test("splits Southeast Asian and Mongolian sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("Myanmar policy applies။ Khmer policy applies။ Lao policy appliesฯ Mongolian policy applies᠃ Next claim."),
+    ["Myanmar policy applies။", "Khmer policy applies។", "Lao policy appliesฯ", "Mongolian policy applies᠃", "Next claim."],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>

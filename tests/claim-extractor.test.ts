@@ -1342,6 +1342,11 @@ test("keeps short claims with localized sentence terminators", () => {
   ]);
 });
 
+test("keeps short claims with Southeast Asian and Mongolian terminators", () => {
+  const claims = extractClaims("Policy appliesฯ\nPolicy applies။\nPolicy applies។\nPolicy applies᠃");
+  assert.deepEqual(claims.map((claim) => claim.text), ["Policy appliesฯ", "Policy applies။", "Policy applies။", "Policy applies᠃"]);
+});
+
 test("keeps wrapped plain-text lines as one claim when the next line is a continuation", () => {
   const claims = extractClaims(`Employees receive 12 weeks of paid parental leave
 for full-time staff only.
