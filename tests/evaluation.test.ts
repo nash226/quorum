@@ -168,6 +168,31 @@ test("evaluates a shipped inline HR medical leave fixture across policy claims",
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates a shipped HR dependent benefits fixture across enrollment claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/hr/dependent-benefits-policy.json"),
+    generatedAt: "2026-07-15T23:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR dependent benefits policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.equal(scorecard.answerLabel, "HR dependent benefits reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-dependent-benefits@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates a shipped HR employee assistance fixture across benefit claims", async () => {
   const scorecard = await evaluateFixture({
     name: "HR employee assistance policy example",
