@@ -24,6 +24,10 @@ The packaged CLI smoke gate now verifies direct CSV answers and approved
 sources, keeping tabular policy exports release-gated for installed
 integrations.
 
+The evaluation fixture guide now matches the checked-in benchmark inventory:
+89 fixtures covering 30 HR and 59 support workflows, the same counts enforced
+by the CLI and HTTP evaluation checks.
+
 Recursive answer and source discovery now accepts the standard reStructuredText
 `.rest` alias alongside `.rst`, and exposes both extensions through the format
 discovery contract. Direct `.rest` answer verification is covered as well, so
