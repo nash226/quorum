@@ -1,365 +1,99 @@
-# CLI Guide
+# Quorum CLI Guide
 
-This guide contains the operational detail that used to make the repository
-README difficult to scan. It is the primary reference for local CLI workflows.
+Quorum verifies AI-generated answers against approved source documents and
+exports reviewer-ready evidence. This guide covers the installed-package
+workflow; run `npm run dev -- ...` instead of `quorum ...` while developing
+from a checkout.
 
 ## Capability Index
 
-This concise index is the source for the generated capability snapshot in
-`docs/status.md`. Detailed context and examples remain in this guide and the
-linked workflow documents.
-
-- read Markdown-family (including MDX and Quarto), AsciiDoc, Org-mode, MediaWiki, reStructuredText, LaTeX, Textile, text/log/configuration files, HTML/XHTML, PDF, DOCX, CSV/TSV, and structured JSON/JSONL/NDJSON/YAML/YML/XML/TOML answers and approved sources
-- discover approved sources from explicit paths or directories
-- load source titles, freshness, trust levels, and durable source IDs
-- extract normalized atomic claims, including common exported-answer formats
-- classify claims as `verified`, `contradicted`, `unsupported`, or `needs_review`
-- preserve reviewer labels, answer context, evidence, and audit timestamps
-- render text, JSON, Markdown, HTML, reviewer CSV, and summary CSV artifacts
-- write report artifacts atomically for queue watchers
-- batch verify answers with explicit empty-answer routing
-- import reviewer decisions with pending, reviewed, and no-claims queue states
-- export queue summaries and combine reviewer workload with benchmark drift
-- run HR and support evaluation fixtures with mismatch and score gates
-- expose evaluation scorecards, domain rollups, and aggregate summaries
-- serve a local HTTP API for verification, claim previews, reviewer imports, queue overviews, and evaluation
-- publish discovery, capabilities, health, readiness, liveness, version, and OpenAPI contracts
-- expose request limits, CORS settings, queue statuses, and supported encodings
-- support request IDs, method negotiation, ETags, and conditional contract requests
-- export stable programmatic API paths, methods, and error response types
-
-## Inspect supported input formats
-
-Use `formats` to print the exact source and answer extensions discovered by
-the local CLI:
-
-```bash
-npm run formats
-```
-
-The command prints separate `Source files` and `Answer files` lines. These are
-the directory-discovery contract used by `verify-batch` and `--answer-dir`;
-they are not a request-validation schema for the HTTP API. Machine-readable
-integrations should use the HTTP `/capabilities` response, which exposes the
-same format contract alongside the API limits and queue statuses.
-For a CLI-only integration, append `-- --json` to receive sorted
-machine-readable `sources` and `answers` arrays. After installing the package,
-the equivalent command is `quorum formats --json`.
-
-For example:
-
-```bash
-npm run formats -- --json
-```
-
-Each array contains the lowercase extensions accepted for that role, such as
-`.md`, `.mdwn`, `.conf`, `.cfg`, `.pdf`, and `.jsonl`, plus a `version` field
-matching the API contract. Markdown-family aliases (`.mdown`, `.mkdn`,
-`.mdwn`, `.mdx`, and `.qmd`) and common configuration aliases (`.ini`,
-`.properties`, `.conf`, and `.cfg`) are supported for both direct files and
-recursive directory discovery.
-Use these arrays to make an allow-list decision before submitting a file to
-`verify` or `verify-batch`; they are the same format contract exported by the
-programmatic API.
-
-## Check the contract version
-
-The CLI exposes the same version used by the HTTP API and generated OpenAPI
-contract. Use JSON output when an integration needs a stable probe:
-
-```bash
-npm run dev -- version --json
-# {"service":"quorum","version":"0.1.0"}
-```
-
-The plain `version`, `--version`, and `-v` forms print a human-readable value.
+- `verify`: compare one AI-generated answer with approved sources.
+- `verify-batch`: compare multiple answers with one approved source set.
+- `import-review`: apply reviewer decisions and produce queue-ready summaries.
+- `formats`: inspect supported answer and source extensions.
+- `extract-claims`: preview normalized claims before evidence matching.
+- `evaluate`: run domain scorecards against checked-in fixtures.
+- `review-queue`: summarize reviewer workload and benchmark drift.
+- `serve`: start the local HTTP API for agent integrations.
+- `openapi`: export the local API contract.
+- `version`: probe the CLI/API contract version.
 
 ## Verify one answer
 
-Verify an answer against one or more approved sources:
-
 ```bash
-npm run dev -- verify \
+quorum verify \
   --answer examples/answers/hr-answer.md \
-  --source examples/sources/hr-policy.md \
+  --source-dir examples/sources \
   --out reports/hr-report.json \
-  --markdown-out reports/hr-report.md \
   --html-out reports/hr-report.html \
   --review-csv-out reports/hr-review.csv \
-  --summary-csv-out reports/hr-summary.csv
+  --fail-on contradicted --fail-on unsupported
 ```
 
-Supported answer and source files include Markdown-family aliases
-(including MDX, Quarto, and `.mdwn`), reStructuredText (`.rst` and `.rest`), AsciiDoc, Org-mode,
-MediaWiki, text/configuration aliases, exported HTML/XHTML, JSON, YAML/YML,
-XML, TOML, CSV, PDF, and DOCX.
-Structured JSON, YAML, XML, and TOML exports are normalized into claim-readable
-evidence text. Recursive answer and source directories discover the same
-supported formats, skip hidden paths, and sort the complete flattened path set.
-Use `--source-dir` for a directory of approved sources and
-`--default-trust-level high` when sources do not carry trust metadata.
+Use `--source` more than once for a curated source set. Use `--answer -` to
+read an answer from standard input. A selected fail policy makes the command
+exit with status `2` when a risky verdict is present.
 
-For example, a JSON export can be verified directly from a mixed source
-directory:
+## Verify a batch
 
 ```bash
-npm run dev -- verify \
-  --answer examples/answers/hr-answer.md \
-  --source-dir exported-policies \
-  --json
-```
-
-The JSON file's basename becomes its fallback source title, while its contents
-remain available in matching evidence snippets.
-
-Use `--json` for the report-only machine-readable shape. Use `--result-json`
-or `--result-json-out <path>` when a workflow also needs `shouldFail` and
-`failVerdicts`.
-
-Answers can be streamed from stdin:
-
-```bash
-cat examples/answers/hr-answer.md | npm run dev -- verify \
-  --answer - --source-dir examples/sources --json
-```
-
-Approved Markdown or text sources can also be streamed from a pipeline when
-the policy content is generated or retrieved without a temporary file:
-
-```bash
-cat approved-policy.md | npm run dev -- verify \
-  --answer generated-answer.md --source - --json
-```
-
-Use exactly one `--source -`; stdin is consumed once, so it cannot be combined
-with another `--source`, `--source-dir`, or `--answer -` in the same command.
-PDF, DOCX, and HTML sources should use a file path or `--source-dir` so Quorum
-can identify their format from the file.
-PDF and DOCX answers follow the same rule: pass a file path with `--answer` or
-place them under `--answer-dir`; binary answer content cannot be supplied via
-stdin because the CLI uses the filename extension to select its parser.
-
-## Preview claims
-
-Preview normalized claims without loading sources:
-
-```bash
-npm run dev -- extract-claims \
-  --answer examples/answers/hr-answer.md \
-  --result-json
-```
-
-The default JSON output remains the claims array. `--result-json` adds the
-`answerHasClaims` routing flag, which lets queue integrations identify empty
-drafts without recounting claims. `--answer-label` adds a reviewer-facing
-label to human-readable output.
-
-## Batch verification
-
-Verify every answer in a directory and produce one reviewer handoff:
-
-```bash
-npm run dev -- verify-batch \
+quorum verify-batch \
   --answer-dir examples/answers \
   --source-dir examples/sources \
-  --review-csv-out reports/reviewer-queue.csv \
-  --summary-csv-out reports/reviewer-queue-summary.csv
+  --out reports/batch-report.json \
+  --review-csv-out reports/batch-review.csv \
+  --summary-csv-out reports/batch-summary.csv
 ```
 
-Batch summaries include per-answer verdict totals, source context, and
-`answer_has_claims`. Empty answers remain explicit queue rows instead of being
-silently discarded.
+Repeat `--answer <path>` when the batch is a curated list, and add
+`--answer-label <label>` after an explicit answer when reviewers need a
+business-facing name. `--answer-dir` may be combined with explicit answers;
+explicit paths remain ordered before discovered files.
 
-You can combine an explicit, ordered set of answers with a recursive directory:
+## Complete a review
+
+Open the generated reviewer CSV, fill in the reviewer verdict and notes, then
+import it:
 
 ```bash
-npm run dev -- verify-batch \
-  --answer examples/answers/hr-answer.md \
-  --answer-dir examples/answers \
-  --source-dir examples/sources
-```
-
-Explicit paths are kept first and directory-discovered paths are appended. The
-same file is included only once, while passing the same explicit answer twice
-is rejected so reviewer queues cannot contain accidental duplicate rows. If an
-answer directory contains no supported files, the command fails with a clear
-`No answer files found` error instead of producing an empty batch report.
-
-## Import reviewer decisions
-
-After a reviewer fills in `reviewer_verdict` and `reviewer_notes`, import the
-CSV into machine-readable and human-facing artifacts:
-
-```bash
-npm run dev -- import-review \
-  --review-csv reports/reviewer-queue.csv \
-  --result-json-out reports/reviewer-queue.json \
-  --markdown-out reports/reviewer-queue.md \
-  --html-out reports/reviewer-queue.html \
-  --summary-csv-out reports/reviewer-queue-final.csv
-```
-
-Use `--queue-status pending`, `reviewed`, or `no_claims` for a targeted
-handoff. These are the complete queue-status values; the filtered result
-recalculates answer groups, claims, queue totals,
-artifacts, and optional fail-policy results.
-
-For example, create a pending-only handoff with both machine-readable artifacts:
-
-```bash
-npm run dev -- import-review \
-  --review-csv reports/reviewer-queue.csv \
-  --queue-status pending \
-  --result-json-out reports/reviewer-queue-pending.json \
-  --summary-csv-out reports/reviewer-queue-pending.csv
-```
-
-Use `--queue-summary-csv-out <path>` when a downstream system accepts only a
-single CSV row of total, pending, reviewed, and no-claims queue totals.
-
-The full end-to-end handoff, including benchmark drift, is in
-[docs/reviewer-queue.md](reviewer-queue.md).
-
-## Evaluation fixtures
-
-Run the checked-in benchmark:
-
-```bash
-npm run dev -- evaluate \
-  --fixture-dir examples/evaluations \
-  --min-score 0.95 \
-  --fail-on-mismatch
-```
-
-Useful output options include:
-
-- `--json` or `--result-json-out <path>` for gate-aware scorecards.
-- `--markdown-out <path>` and `--html-out <path>` for review and demos.
-- `--summary-csv-out <path>` for one row per fixture.
-- `--domain-summary-csv-out <path>` for one row per domain.
-- `--aggregate-summary-csv-out <path>` for one overall benchmark row.
-- `--domain hr` or `--domain support` to run selected policy domains. Repeat
-  the flag to include more than one domain.
-
-The evaluation command separates the score report from the process gate. Use
-`--min-score <0..1>` to set the minimum aggregate score that passes the gate;
-the default is `0`, so reporting a score does not fail the command by itself.
-Use `--fail-on-mismatch` to fail when any fixture's expected verdicts or
-summary totals drift. When either gate fails, `--result-json` (or
-`--result-json-out`) still includes `shouldFail`, `failReasons`,
-`minScore`, and `scoreThresholdPassed` so CI callers can explain the failure
-without parsing human-readable output.
-
-When a domain filter is supplied, Quorum excludes fixtures from other domains
-before calculating scorecards, mismatch counts, and aggregate totals. This is
-useful when a team owns only one policy area and wants a focused gate:
-
-```bash
-npm run dev -- evaluate \
-  --fixture-dir examples/evaluations \
-  --domain support \
-  --min-score 0.95 \
-  --fail-on-mismatch \
-  --aggregate-summary-csv-out reports/support-evaluation.csv
-```
-
-The resulting aggregate CSV describes the selected support fixtures only; it
-does not represent the full HR-and-support benchmark. Omit `--domain` for the
-repository-wide gate used by CI.
-
-Fixture context and the process for adding coverage live in
-[docs/evaluation-fixtures.md](evaluation-fixtures.md).
-
-## Source metadata and stable identity
-
-Source frontmatter can provide `title`, `updatedAt`, and `trustLevel`:
-
-```markdown
----
-title: HR Benefits Policy
-updatedAt: 2026-06-15
-trustLevel: high
----
-```
-
-When an upstream system already has durable document IDs, preserve them for
-audit references:
-
-```bash
-npm run dev -- verify \
-  --answer examples/answers/hr-answer.md \
-  --source examples/sources/hr-policy.md \
-  --source-id people-ops/hr-policy@2026-07-14 \
-  --json
-```
-
-The API requires unique `sources[].id` values. Explicit CLI sources accept
-`--source-id`; directory sources retain positional fallback IDs.
-
-Report-producing workflows accept `--generated-at <timestamp>` so retries can
-reuse one audit timestamp across JSON, text, Markdown, HTML, and CSV output.
-
-## Fail-policy gates
-
-Select risky verdicts with repeated `--fail-on` flags:
-
-```bash
-npm run dev -- verify \
-  --answer examples/answers/hr-answer.md \
-  --source-dir examples/sources \
-  --fail-on contradicted \
-  --fail-on unsupported
-```
-
-Use `--fail-on needs_review` when an answer must not continue without human
-review. This also treats an answer with no extracted claims as a review-policy
-failure, so empty or unparseable handoffs cannot silently pass a gate:
-
-```bash
-npm run dev -- verify \
-  --answer examples/answers/empty-answer.md \
-  --source-dir examples/sources \
+quorum import-review \
+  --review-csv reports/batch-review.csv \
+  --out reports/review-import.json \
+  --markdown-out reports/review-import.md \
+  --summary-csv-out reports/review-import-summary.csv \
   --fail-on needs_review
 ```
 
-When a selected verdict appears, the CLI exits with status code `2`. The same
-decision is available as `shouldFail` and `failVerdicts` in result JSON.
+The JSON output groups imported claims by answer. The summary CSV has one row
+per answer for queue routing; both preserve the original answer path and
+reviewer-facing label.
 
-## Summarize reviewer queue work
+## Inspect the contract
 
-Use `review-queue` to combine reviewer workload with optional benchmark drift
-in one JSON or CSV handoff:
+Use command help before preparing inputs:
 
 ```bash
-npm run dev -- review-queue \
-  --review-csv reports/reviewer-queue.csv \
-  --fixture-dir examples/evaluations \
-  --queue-status pending \
-  --domain hr \
-  --json \
-  --out reports/reviewer-queue-overview.json \
-  --csv-out reports/reviewer-queue-overview.csv
+quorum --help
+quorum verify --help
+quorum formats --json
+quorum version --json
 ```
 
-`--queue-status` accepts `pending`, `reviewed`, or `no_claims` and recalculates
-the selected answer and claim totals. Repeat `--domain` with `hr` or `support`
-to scope benchmark drift to selected policy domains; a domain filter requires
-`--fixture` or `--fixture-dir`. Both output formats echo the applied queue
-status and domain scope so downstream workers can audit the handoff.
+`formats --json` is the source of truth for supported answer and source
+extensions. `version --json` returns the stable CLI/API contract version for
+integration health checks. The same commands are available as npm wrappers:
+`npm run formats -- --json` and `npm run version -- --json`.
 
-## Commands at a glance
+## Local API and validation
 
-| Command | Purpose |
-| --- | --- |
-| `verify` | Verify one answer and render reports. |
-| `verify-batch` | Verify a directory of answers and create a reviewer CSV. |
-| `extract-claims` | Preview normalized claims before verification. |
-| `import-review` | Import reviewer decisions and create queue artifacts. |
-| `review-queue` | Combine reviewer workload with optional benchmark drift. |
-| `evaluate` | Run checked-in evaluation fixtures and scorecards. |
-| `serve` | Start the local HTTP API. |
-| `openapi` | Export the generated OpenAPI contract. |
-| `version` | Print the CLI and API contract version. |
+Start the local API with `quorum serve`; export its OpenAPI document with
+`quorum openapi`. Before opening a PR or publishing a package, run:
 
-For HTTP usage, use [docs/api-integration.md](api-integration.md) rather than
-duplicating API payloads in this guide.
+```bash
+npm test
+npm run build
+npm run check
+```
+
+The check command also runs the CLI, packaged-artifact, API, and evaluation
+smoke checks.
