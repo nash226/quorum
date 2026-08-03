@@ -9,6 +9,9 @@ Start the local HTTP API with `npm run serve` (equivalent to
 `npm run dev -- serve`) when an agent integration needs the documented local
 service boundary.
 
+Integrations can validate answer and approved-source files against the shipped
+format contract before verification with `npm run formats -- --json`.
+
 The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.
