@@ -279,6 +279,7 @@ function normalizeAnswer(answer: string): string {
         line,
         rawLine,
         normalizedLine,
+        normalizedLines[normalizedLines.length - 1] ?? "",
         explicitClaimPrefix,
         previousLineBelongsToMarkdownClaim,
       ))
@@ -690,7 +691,7 @@ function canContinuePlainLine(
     }
 
     return (
-      /^[a-z0-9("'[]/.test(nextLine) ||
+      looksLikeContinuation(nextLine, line) ||
       (belongsToMarkdownClaim && isIndentedContinuation(nextRawLine))
     );
   }
@@ -702,6 +703,7 @@ function shouldMergeWithPreviousLine(
   line: string,
   rawLine: string,
   normalizedLine: string,
+  previousLine: string,
   explicitClaimPrefix: boolean,
   previousLineBelongsToMarkdownClaim: boolean,
 ): boolean {
@@ -710,8 +712,18 @@ function shouldMergeWithPreviousLine(
   }
 
   return (
-    /^[a-z0-9("'[]/.test(line) ||
+    looksLikeContinuation(line, previousLine) ||
     (previousLineBelongsToMarkdownClaim && isIndentedContinuation(rawLine))
+  );
+}
+
+function looksLikeContinuation(line: string, previousLine: string): boolean {
+  if (/^[a-z0-9("'[]/.test(line)) {
+    return true;
+  }
+
+  return /\b(?:and|or|for|within|including|such as|the|a|an|to|of|in|on|by)$/i.test(
+    previousLine,
   );
 }
 

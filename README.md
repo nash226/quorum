@@ -214,6 +214,10 @@ workflow release-gated for installed integrations.
 Claim extraction now joins Markdown backslash hard breaks within one claim, so
 wrapped policy answers keep their reviewer evidence context intact.
 
+Plain-text hard wraps also keep a continuation together when the preceding line
+ends with a common connector such as `for` or `within`, including uppercase
+continuation lines.
+
 The hard-break regression is covered for uppercase continuation lines too, so
 Markdown wrapping does not split a single policy statement into two claims.
 
