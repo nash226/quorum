@@ -76,9 +76,21 @@ The plain `version`, `--version`, and `-v` forms print a human-readable value.
 
 ## Use installed package wrappers
 
-After installing Quorum, the reviewer workflow commands are also available as
-package scripts. Pass command arguments after `--` so npm forwards them to the
-CLI:
+After installing Quorum, the verification and reviewer workflow commands are
+also available as package scripts. Pass command arguments after `--` so npm
+forwards them to the CLI:
+
+```bash
+npm run verify -- \
+  --answer examples/answers/hr-answer.md \
+  --source-dir examples/sources \
+  --json
+
+npm run verify-batch -- \
+  --answer-dir examples/answers \
+  --source-dir examples/sources \
+  --summary-csv-out reports/batch-summary.csv
+```
 
 ```bash
 npm run import-review -- \

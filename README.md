@@ -1,5 +1,10 @@
 # Quorum
 
+Installed packages now expose `npm run verify -- ...` and
+`npm run verify-batch -- ...` wrappers for the two core evidence-gate
+workflows, so integrations can verify one answer or a batch without repeating
+the underlying `npm run dev --` command prefix.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 
