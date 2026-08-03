@@ -17,6 +17,10 @@ Installed packages now expose `npm run extract-claims -- ...` for the claim
 preview workflow, keeping answer inspection available without repeating the
 underlying `npm run dev --` command prefix.
 
+The documented `npm run openapi -- --out <path>` wrapper is now covered by the
+package-script contract tests, including nested output paths and the exported
+OpenAPI version and `/verify` route.
+
 The packaged smoke gate now executes that npm wrapper against a real answer
 file, so installed claim-preview integrations are checked for argument
 forwarding as well as direct CLI behavior.
