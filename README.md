@@ -1566,13 +1566,15 @@ AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
 `.wiki`, `.tex`), plain text and configuration exports (`.txt`, `.text`,
 `.log`, `.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL/NDJSON (`.json`, `.jsonl`,
-`.ndjson`), TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and
+`.ndjson`, `.json5`, `.jsonc`), TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and
 CSV/TSV (`.csv`, `.tsv`).
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
 (`.xml`), and CSV/TSV (`.csv`, `.tsv`) policy exports. JSON, YAML, XML, and TOML exports
 are normalized into claim-readable text while preserving their source metadata
 in reports. CSV exports are discovered recursively as approved sources and are
-kept as readable row text for claim matching.
+kept as readable row text for claim matching. Files with other extensions are
+still accepted as plain-text inputs, so teams can preserve source-system
+filenames while supplying readable policy content.
 The packaged CLI smoke gate also verifies direct CSV answer and source exports,
 so published artifacts keep this common tabular handoff path working end to end.
 JSONL sources are normalized one record at a time, so newline-delimited policy
