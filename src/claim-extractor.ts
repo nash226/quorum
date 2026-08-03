@@ -103,7 +103,7 @@ function isShortPunctuatedClaim(text: string): boolean {
   return (
     text.length >= 8 &&
     text.length < 12 &&
-    /[.!?…\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
+    /[.!?…\u0589\u061F\u0964\u0965\u1362\u3002\uFF01\uFF1F]$/.test(text) &&
     /\p{L}{2,}/u.test(text)
   );
 }
