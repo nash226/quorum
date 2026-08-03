@@ -7,7 +7,7 @@ JSON responses instead of shelling out to the CLI.
 
 ```bash
 npm install
-npm run dev -- serve --port 3000
+npm run serve -- --port 3000
 ```
 
 The service publishes its machine-readable contract at
