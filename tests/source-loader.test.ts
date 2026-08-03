@@ -49,6 +49,17 @@ test("extracts readable text from DOCX source content", async () => {
   assert.equal(source.content, "Walking on imported air");
 });
 
+test("normalizes RTF source content into readable evidence", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.rtf",
+    String.raw`{\rtf1\ansi{\fonttbl{\f0 Arial;}} Employees receive 12 weeks of paid parental leave.\par Managers approve exceptions within five business days.}`,
+    0,
+  );
+
+  assert.equal(source.title, "hr-policy");
+  assert.equal(source.content, "Employees receive 12 weeks of paid parental leave.\nManagers approve exceptions within five business days.");
+});
+
 test("preserves a caller-supplied source identifier for DOCX content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0, {
