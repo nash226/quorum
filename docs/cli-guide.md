@@ -90,7 +90,7 @@ npm run dev -- verify \
 ```
 
 Supported answer and source files include Markdown-family aliases
-(including MDX, Quarto, and `.mdwn`), reStructuredText, AsciiDoc, Org-mode,
+(including MDX, Quarto, and `.mdwn`), reStructuredText (`.rst` and `.rest`), AsciiDoc, Org-mode,
 MediaWiki, text/configuration aliases, exported HTML/XHTML, JSON, YAML/YML,
 XML, TOML, CSV, PDF, and DOCX.
 Structured JSON, YAML, XML, and TOML exports are normalized into claim-readable
