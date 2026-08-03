@@ -2381,7 +2381,7 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
-The checked-in HR and support benchmark currently contains 89 fixtures and 264
+The checked-in HR and support benchmark currently contains 90 fixtures and 267
 expected claims, including support plan-upgrade and plan-downgrade scenarios
 with verified, needs-review, contradicted, and unsupported claims.
 The HR employee-assistance policy is also covered as a file-backed reviewer
@@ -2389,6 +2389,9 @@ packet, preserving confidential counseling limits and community-resource
 routing alongside a review-worthy unlimited-counseling claim.
 The gift-card benchmark also runs through checked-in answer and source files,
 covering file-backed support-policy ingestion alongside inline fixture coverage.
+The HR benchmark now also includes a file-backed recognition-policy packet,
+covering spot-award eligibility, approval controls, and an unsupported transit
+benefit claim.
 
 ## Documentation Map
 
