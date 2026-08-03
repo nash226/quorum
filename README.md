@@ -5,6 +5,10 @@ verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
 API surface; durable hosting and queue storage remain roadmap decisions.
 
+Installed packages now expose `npm run extract-claims -- ...` for the claim
+preview workflow, keeping answer inspection available without repeating the
+underlying `npm run dev --` command prefix.
+
 Start the local HTTP API with `npm run serve` (equivalent to
 `npm run dev -- serve`) when an agent integration needs the documented local
 service boundary.
