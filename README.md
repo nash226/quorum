@@ -13,6 +13,10 @@ CLI/API contract-version probe used by integration health checks.
 The package smoke check runs this wrapper too, keeping the documented npm entry
 point aligned with the direct `quorum version --json` contract.
 
+The packaged smoke gate also runs `npm run help` and checks the installed usage
+contract, so package consumers can discover the shipped verification commands
+through the documented wrapper.
+
 Installed packages now expose `npm run extract-claims -- ...` for the claim
 preview workflow, keeping answer inspection available without repeating the
 underlying `npm run dev --` command prefix.
