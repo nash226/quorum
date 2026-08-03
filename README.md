@@ -16,6 +16,11 @@ drift before submitting files.
 The packaged CLI smoke gate now verifies direct TOML answers against an approved
 source, keeping both sides of the documented TOML input contract release-gated.
 
+Installed packages now expose `npm run verify -- ...` and
+`npm run verify-batch -- ...` wrappers for the two primary evidence-checking
+workflows, so package users do not need to repeat the underlying `npm run dev
+--` command prefix.
+
 The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
 answers and approved sources, keeping the documented format contract covered
 for installed integrations.
