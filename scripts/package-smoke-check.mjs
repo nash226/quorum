@@ -157,6 +157,35 @@ try {
   rmSync(importReviewPackageDir, { recursive: true, force: true });
 }
 
+const reviewQueuePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-review-queue-"));
+try {
+  const reviewCsvPath = join(reviewQueuePackageDir, "review.csv");
+  writeFileSync(
+    reviewCsvPath,
+    [
+      "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+      `${join(reviewQueuePackageDir, "answer.md")},claim-1,Employees receive 12 weeks of paid leave.,verified,Matches approved policy,HR Policy,Employees receive 12 weeks of paid leave.,,`,
+    ].join("\n") + "\n",
+  );
+
+  const reviewQueueOutput = execFileSync(
+    "npm",
+    ["run", "--silent", "review-queue", "--", "--review-csv", reviewCsvPath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const reviewQueuePayload = JSON.parse(reviewQueueOutput);
+  if (
+    reviewQueuePayload.review?.totalAnswers !== 1 ||
+    reviewQueuePayload.review?.pendingAnswers !== 1 ||
+    reviewQueuePayload.review?.totalClaims !== 1 ||
+    reviewQueuePayload.review?.pendingClaims !== 1
+  ) {
+    throw new Error("The npm review-queue wrapper did not preserve the queue overview JSON contract.");
+  }
+} finally {
+  rmSync(reviewQueuePackageDir, { recursive: true, force: true });
+}
+
 if (
   typeof libraryEntry.verifyAnswer !== "function" ||
   typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
