@@ -2488,6 +2488,21 @@ agent integrations. Start it with `npm run dev -- serve --port 3000`, then use
 request and response contract. See the [HTTP API integration guide](docs/api-integration.md)
 for verification, reviewer-queue, and operational probe examples.
 
+Before sending verification work, an integration can use the lightweight
+operational probes below to confirm that the service is running and that its
+contract is the expected version:
+
+```bash
+curl -fsS http://127.0.0.1:3000/health
+curl -fsS http://127.0.0.1:3000/healthz
+curl -fsSI http://127.0.0.1:3000/version
+```
+
+`/health` and `/healthz` return a machine-readable `ok` response, while the
+`HEAD /version` probe returns the service and contract version in response
+headers without downloading a body. These probes are covered by the HTTP
+contract tests and are safe to run from startup checks.
+
 See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
 [docs/api-deployment.md](docs/api-deployment.md) for deployment boundaries.
 Human sign-off
