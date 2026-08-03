@@ -1015,6 +1015,8 @@ The CLI regression suite locks this behavior for mixed-case Markdown filenames.
 - Decimal values such as `95.5%` remain intact while claims are split into sentences.
 - `verify` and `verify-batch` produce reviewer reports and machine-readable
   fail-policy results.
+- Package scripts also expose `npm run verify -- ...` and
+  `npm run verify-batch -- ...` for CI jobs and shell tooling.
 - `verify-batch` rejects repeated explicit `--answer` paths before reading any
   files, preventing duplicate answer rows in reviewer queues.
 - `import-review` and `review-queue` turn reviewer decisions into queue-ready
