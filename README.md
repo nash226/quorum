@@ -1,5 +1,8 @@
 # Quorum
 
+The README documentation map is covered by a link-integrity test, so the
+onboarding guides linked below cannot silently drift out of the repository.
+
 The evaluation fixture guide now matches the shipped benchmark inventory: 91
 checked-in fixtures across HR, support, and shared edge-case workflows.
 
