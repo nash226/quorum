@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now regression-tests Latin letter checklist markers such as
+`A)`, `b.`, and `(C)`, keeping common exported policy lists atomic before
+evidence verification.
+
 The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
