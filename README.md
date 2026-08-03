@@ -24,6 +24,10 @@ The same packaged smoke gate now verifies the `.rest` reStructuredText alias
 for answers and approved sources, preventing installed integrations from
 drifting away from the recursive discovery contract.
 
+The packaged CLI smoke gate now verifies direct `.text` answers and approved
+sources, keeping plain-text policy exports release-gated for installed
+integrations.
+
 The packaged CLI smoke gate now verifies direct CSV answers and approved
 sources, keeping tabular policy exports release-gated for installed
 integrations.
