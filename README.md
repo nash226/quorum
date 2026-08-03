@@ -97,7 +97,7 @@ verified, contradicted, and unsupported first-response claims against the
 approved support playbook.
 
 The benchmark inventory checks now include the new support packet across CLI,
-API, queue, and packaged smoke expectations, keeping the 89-fixture scorecard
+API, queue, and packaged smoke expectations, keeping the 90-fixture scorecard
 green when benchmark coverage expands.
 
 The installed package exposes `npm run formats` (and
@@ -151,7 +151,7 @@ published format contract.
 The packaged CLI smoke gate now verifies direct `.conf` and `.cfg` answer and
 approved-source exports, keeping common configuration aliases release-gated.
 
-The evaluation scorecard now covers 89 checked-in HR and support fixtures,
+The evaluation scorecard now covers 90 checked-in HR and support fixtures,
 including direct support plan-upgrade claims.
 
 The packaged CLI smoke gate now verifies the `.yml` YAML alias for direct
@@ -1933,7 +1933,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 89-fixture benchmark spans 30 HR and 59 support workflows. It also
+The checked-in 90-fixture benchmark spans 31 HR and 59 support workflows. It also
 includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
@@ -1954,7 +1954,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 89-fixture total explicit, so new benchmark packets cannot drift
+the published 90-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.

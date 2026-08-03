@@ -2503,7 +2503,7 @@ test("evaluate filters shipped example fixtures by domain", async () => {
   assert.match(stdout, /Evaluation Fixture: HR onboarding policy example/);
   assert.match(stdout, /Evaluation Fixture: HR PDF policy example/);
   assert.doesNotMatch(stdout, /Evaluation Fixture: Support policy example/);
-  assert.match(stdout, /Fixtures: 30/);
+  assert.match(stdout, /Fixtures: 31/);
 });
 
 test("evaluate writes a one-row-per-fixture summary csv", async () => {
@@ -2554,7 +2554,7 @@ test("evaluate writes a one-row-per-domain summary csv", async () => {
       summaryCsv,
       /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /^[^,\n]+,hr,30,0,0\.000,30,0,91,91,1\.000,100%,36,20,25,10,36,20,25,10$/m);
+    assert.match(summaryCsv, /^[^,\n]+,hr,31,0,0\.000,31,0,94,94,1\.000,100%,37,20,26,11,37,20,26,11$/m);
     assert.match(summaryCsv, /^[^,\n]+,support,59,0,0\.000,58,1,173,173,1\.000,100%,65,39,50,19,65,39,50,19$/m);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -2580,7 +2580,7 @@ test("evaluate writes a one-row aggregate summary csv", async () => {
       summaryCsv,
       /^generated_at,fixture_count,answers_with_claims,answers_without_claims,mismatch_count,mismatch_rate,matched_claims,total_expected_claims,score,score_label,domains,domain_fixture_counts,domain_mismatch_counts,domain_mismatch_rates,domain_answers_with_claims,domain_answers_without_claims,domain_scores,domain_score_labels,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review$/m,
     );
-    assert.match(summaryCsv, /,89,88,1,0,0\.000,264,264,1\.000,100%,hr .*101,59,75,29,101,59,75,29/);
+    assert.match(summaryCsv, /,90,89,1,0,0\.000,267,267,1\.000,100%,hr .*102,59,76,30,102,59,76,30/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -2832,7 +2832,7 @@ test("evaluate writes the gate-aware result JSON to disk", async () => {
     assert.equal(payload.shouldFail, false);
     assert.deepEqual(payload.failureReasons, []);
     assert.equal(payload.mismatchCount, 0);
-    assert.equal(payload.summary.fixtureCount, 89);
+    assert.equal(payload.summary.fixtureCount, 90);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -6720,10 +6720,10 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       evaluation: { fixtureCount: number; mismatchCount: number };
     };
 
-    assert.equal(overview.review.totalAnswers, 43);
-    assert.equal(overview.review.pendingAnswers, 42);
+    assert.equal(overview.review.totalAnswers, 44);
+    assert.equal(overview.review.pendingAnswers, 43);
     assert.equal(overview.queueStatus, null);
-    assert.equal(overview.evaluation.fixtureCount, 89);
+    assert.equal(overview.evaluation.fixtureCount, 90);
     assert.equal(overview.evaluation.mismatchCount, 0);
     assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
 
@@ -6734,9 +6734,9 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
       "--fixture-dir",
       "examples/evaluations",
     ]);
-    assert.match(text, /Reviewer queue: 43 answers \(42 pending, 0 reviewed, 1 no claims\)/);
-    assert.match(text, /Final verdicts: 32 verified, 21 contradicted, 31 unsupported, 41 needs review/);
-    assert.match(text, /Benchmark drift: 0\/89 mismatches \(0%\)/);
+    assert.match(text, /Reviewer queue: 44 answers \(43 pending, 0 reviewed, 1 no claims\)/);
+    assert.match(text, /Final verdicts: 33 verified, 21 contradicted, 32 unsupported, 42 needs review/);
+    assert.match(text, /Benchmark drift: 0\/90 mismatches \(0%\)/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -6806,14 +6806,14 @@ test("review-queue scopes workload to a queue status", async () => {
       review: Record<string, number>;
     };
     assert.deepEqual(pendingOverview.review, {
-      totalAnswers: 42,
-      pendingAnswers: 42,
+      totalAnswers: 43,
+      pendingAnswers: 43,
       reviewedAnswers: 0,
       noClaimsAnswers: 0,
-      totalClaims: 125,
-      pendingClaims: 125,
+      totalClaims: 128,
+      pendingClaims: 128,
       reviewedClaims: 0,
-      verdicts: { verified: 32, contradicted: 21, unsupported: 31, needs_review: 41 },
+      verdicts: { verified: 33, contradicted: 21, unsupported: 32, needs_review: 42 },
     });
     assert.equal(pendingOverview.queueStatus, "pending");
 
@@ -6874,8 +6874,8 @@ test("review-queue scopes benchmark drift to selected domains", async () => {
     };
 
     assert.deepEqual(overview.domains, ["hr"]);
-    assert.equal(overview.evaluation.fixtureCount, 30);
-    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 30, mismatchCount: 0 }]);
+    assert.equal(overview.evaluation.fixtureCount, 31);
+    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 31, mismatchCount: 0 }]);
     const csvOutPath = join(tempDir, "queue.csv");
     const csv = await runCli([
       "review-queue",

@@ -2703,17 +2703,17 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
   assert.deepEqual(batchResult.summary.domains, [
     {
       domain: "hr",
-      fixtureCount: 30,
+      fixtureCount: 31,
       mismatchCount: 0,
       mismatchRate: 0,
-      answersWithClaims: 30,
+      answersWithClaims: 31,
       answersWithoutClaims: 0,
-      matchedClaims: 91,
-      totalExpectedClaims: 91,
+      matchedClaims: 94,
+      totalExpectedClaims: 94,
       score: 1,
       scoreLabel: "100%",
-      expectedSummary: { verified: 36, contradicted: 20, unsupported: 25, needs_review: 10 },
-      actualSummary: { verified: 36, contradicted: 20, unsupported: 25, needs_review: 10 },
+      expectedSummary: { verified: 37, contradicted: 20, unsupported: 26, needs_review: 11 },
+      actualSummary: { verified: 37, contradicted: 20, unsupported: 26, needs_review: 11 },
     },
     {
       domain: "support",
@@ -2730,7 +2730,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
       actualSummary: { verified: 65, contradicted: 39, unsupported: 50, needs_review: 19 },
     },
   ]);
-  assert.equal(batchResult.scorecards.length, 89);
+  assert.equal(batchResult.scorecards.length, 90);
   assert.equal(singleResult.hasMismatch, false);
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
   assert.equal(contentResult.hasMismatch, false);
