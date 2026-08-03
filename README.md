@@ -156,6 +156,9 @@ The CLI guide now documents the exact Markdown-family and configuration-file
 aliases supported for direct verification and recursive directory discovery;
 use `quorum formats --json` to consume the same contract programmatically.
 
+Answer directories are scanned recursively in stable path order, so nested
+team or regional folders can be verified without flattening the answer tree.
+
 Claim extraction now strips Markdown blockquote markers, keeping quoted policy
 exports atomic and comparable with approved-source evidence.
 
