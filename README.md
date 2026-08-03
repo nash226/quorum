@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction also handles compact CJK numbered policy lists such as `一、`
+and `二）`, so localized exports do not need an extra space after the marker.
+
 The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.

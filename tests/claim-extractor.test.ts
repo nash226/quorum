@@ -29,6 +29,18 @@ test("extracts clean claims from CJK bracketed numbered lists", () => {
   ]);
 });
 
+test("extracts claims from compact CJK numbered lists without a space", () => {
+  const claims = extractClaims(`一、Employees receive 12 weeks of paid parental leave
+二）Healthcare coverage begins after 30 days of employment
+三．Contractors do not receive paid vacation`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive 12 weeks of paid parental leave",
+    "Healthcare coverage begins after 30 days of employment",
+    "Contractors do not receive paid vacation",
+  ]);
+});
+
 test("strips decimal-digit list markers from localized answers", () => {
   const claims = extractClaims(`१. Employees receive 12 weeks of paid parental leave.
 (২) Healthcare coverage begins after 30 days of employment.
