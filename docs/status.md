@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e175fd9f` on 2026-08-03, docs: clarify stable batch discovery
+- Latest shipped change: `4a35b37c` on 2026-08-03, test: verify installed package entrypoints
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-03 | Direct push | test: verify installed package entrypoints | `4a35b37c` |
 | 2026-08-03 | Direct push | docs: clarify stable batch discovery | `e175fd9f` |
 | 2026-08-03 | Direct push | docs: reconcile evaluation fixture inventory | `7da396a1` |
 | 2026-08-03 | Direct push | test: smoke-check evaluate wrapper | `c507f3a6` |
@@ -56,5 +57,4 @@
 | 2026-08-03 | Direct push | test: smoke-check review queue wrapper | `75d08793` |
 | 2026-08-03 | Direct push | test: cover HR travel expense policy | `4bf9388e` |
 | 2026-08-03 | Direct push | test: smoke-check npm version wrapper | `e71d3f91` |
-| 2026-08-03 | Direct push | docs: clarify supported source formats | `50b80213` |
 
