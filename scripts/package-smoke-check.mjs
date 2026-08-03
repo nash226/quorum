@@ -1584,7 +1584,7 @@ try {
     reviewQueuePayload.domains?.length !== 1 ||
     reviewQueuePayload.domains[0] !== "hr" ||
     reviewQueuePayload.evaluation?.fixtureCount !== 1 ||
-    reviewQueuePayload.artifacts?.queue_summary_csv?.startsWith("generated_at,total_answers,pending_answers") !== true
+    reviewQueuePayload.artifacts?.queue_summary_csv?.startsWith('"generated_at","queue_status","domains"') !== true
   ) {
     throw new Error("Package artifact server did not serve the expected reviewer queue contract.");
   }

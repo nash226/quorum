@@ -7,6 +7,8 @@ API surface; durable hosting and queue storage remain roadmap decisions.
 
 The package also exports `renderReviewerQueueCsv`, allowing Node integrations
 to produce the same queue overview CSV as the `review-queue` CLI command.
+The HTTP `POST /review-queue` endpoint now returns that same quoted CSV schema
+when `includeArtifacts: ["queue_summary_csv"]` is requested.
 
 Installed packages now expose `npm run extract-claims -- ...` for the claim
 preview workflow, keeping answer inspection available without repeating the
