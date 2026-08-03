@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { renderReviewerQueueCsv, type ReviewerQueueOverview } from "../src/index.js";
+import { renderReviewerQueueCsv, renderReviewerQueueJson, type ReviewerQueueOverview } from "../src/index.js";
 
 test("renders a reviewer queue overview for programmatic integrations", () => {
   const overview: ReviewerQueueOverview = {
@@ -21,4 +21,8 @@ test("renders a reviewer queue overview for programmatic integrations", () => {
   assert.match(renderReviewerQueueCsv(overview), /^"generated_at","queue_status","domains"/);
   assert.match(renderReviewerQueueCsv(overview), /"pending","hr;support","3","1"/);
   assert.match(renderReviewerQueueCsv(overview), /"4","1","0\.25","0\.75","75%","false"/);
+
+  const renderedJson = renderReviewerQueueJson(overview);
+  assert.equal(renderedJson.endsWith("\n"), true);
+  assert.deepEqual(JSON.parse(renderedJson), overview);
 });
