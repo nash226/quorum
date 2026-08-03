@@ -1542,6 +1542,9 @@ For a single answer, `--summary-csv-out` writes the same queue-oriented
 one-row summary used by batch verification, including verdict totals, the
 primary finding, and fail-policy status. This is useful when a workflow wants
 to route one answer without parsing the full JSON report.
+The single-answer `--json` report also includes `failPolicy.matched` and
+`failPolicy.verdicts`, so local workflow runners can inspect the configured
+`--fail-on` result without parsing human-readable output.
 
 Word-based workflows use the same command and report formats:
 

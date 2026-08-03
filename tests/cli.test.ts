@@ -4300,6 +4300,34 @@ test("verify normalizes JSON answer exports before claim extraction", async () =
   }
 });
 
+test("verify includes fail-policy metadata in single-answer JSON", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-policy-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "hr-policy.md");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 18 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    await assert.rejects(
+      runCli([
+        "verify", "--answer", answerPath, "--source", sourcePath,
+        "--fail-on", "contradicted", "--json",
+      ]),
+      /CLI exited with code 2/,
+    );
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as { failPolicy: { matched: boolean; verdicts: string[] } };
+    assert.deepEqual(report.failPolicy, { matched: false, verdicts: [] });
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify writes reviewer csv fail-policy columns for single answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-single-review-fail-policy-"));
 

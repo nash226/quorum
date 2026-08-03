@@ -315,13 +315,20 @@ async function runVerify(args: string[]): Promise<void> {
   const parsed = parseVerifyArgs(args);
   const sources = await loadSources(parsed, outputPaths(parsed));
   const report = await verifyAnswerFile(parsed.answerPath, sources, parsed.generatedAt, parsed.answerLabel);
-  const jsonReport = JSON.stringify(report, null, 2);
+  const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
+  const shouldFail = failVerdicts.length > 0;
+  const jsonReport = JSON.stringify(
+    {
+      ...report,
+      failPolicy: { matched: shouldFail, verdicts: failVerdicts },
+    },
+    null,
+    2,
+  );
   const htmlReport = renderHtmlReport(report, parsed.failOn);
   const markdownReport = renderMarkdownReport(report, parsed.failOn);
   const reviewerDecisionCsv = renderReviewerDecisionCsv(report, parsed.failOn);
   const summaryCsv = renderSummaryCsv(report, parsed.failOn);
-  const failVerdicts = matchingFailVerdicts(report, parsed.failOn);
-  const shouldFail = failVerdicts.length > 0;
   const resultJson = JSON.stringify({ report, shouldFail, failVerdicts }, null, 2);
 
   if (parsed.outPath) {
