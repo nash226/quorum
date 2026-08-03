@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f13f06a1` on 2026-08-02, test: smoke-check direct TOML answers
+- Latest shipped change: `73ebbf0c` on 2026-08-02, feat: support reStructuredText rest aliases
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-02 | Direct push | feat: support reStructuredText rest aliases | `73ebbf0c` |
 | 2026-08-02 | Direct push | test: smoke-check direct TOML answers | `f13f06a1` |
 | 2026-08-02 | Direct push | test: cover HR dependent benefits evaluation | `4e207920` |
 | 2026-08-02 | [#1778](https://github.com/nash226/quorum/pull/1778) | test: add file-backed employee assistance fixture | `1d2d49df` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | test: gate packaged BOM frontmatter support | `a83f4c40` |
 | 2026-08-02 | Direct push | test: cover HR overtime evaluation | `4c6fdfc3` |
 | 2026-08-02 | Direct push | test: cover HR reimbursement review fixture | `e6476d90` |
-| 2026-08-02 | [#1771](https://github.com/nash226/quorum/pull/1771) | test: gate packaged reStructuredText verification | `a2e0efa9` |
 
