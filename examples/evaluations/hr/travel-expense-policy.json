@@ -1,0 +1,24 @@
+{
+  "name": "HR travel expense policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-travel-expense-answer.md",
+  "answer": "Employees may submit business travel expenses within 30 days of returning.\nEmployees may submit travel expenses within 90 days of returning.\nThe company provides a monthly home-office furniture allowance.\n",
+  "answerLabel": "HR travel expense reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-travel-expense-policy.md",
+      "id": "people-ops/hr-travel-expense@2026-08-03",
+      "title": "HR Travel Expense Policy",
+      "updatedAt": "2026-08-03",
+      "trustLevel": "high",
+      "content": "Employees may submit business travel expenses within 30 days of returning.\nTravel expenses require itemized receipts and manager approval.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}

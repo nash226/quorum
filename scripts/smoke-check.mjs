@@ -561,6 +561,7 @@ try {
   assert.match(evaluationStdout, /Support guest access policy example/);
   assert.match(evaluationStdout, /Support policy example/);
   assert.match(evaluationStdout, /HR time-off request policy example/);
+  assert.match(evaluationStdout, /HR travel expense policy example/);
   assert.match(evaluationStdout, /HR relocation policy example/);
   assert.match(evaluationStdout, /HR travel reimbursement policy example/);
   assert.match(evaluationStdout, /HR compensation review policy example/);
@@ -574,8 +575,8 @@ try {
   );
   assert.equal(
     evaluationSummaryCsv.trim().split("\n").length,
-    91,
-    "evaluation summary CSV should contain one header plus one row for each of the 90 benchmark scorecards",
+    92,
+    "evaluation summary CSV should contain one header plus one row for each of the 91 benchmark scorecards",
   );
   assert.match(
     evaluationSummaryCsv,
@@ -808,7 +809,7 @@ try {
     evaluationDomainSummaryCsv,
     /^generated_at,domain,fixture_count,mismatch_count,mismatch_rate,answers_with_claims,answers_without_claims,matched_claims,total_expected_claims,score,score_label,expected_verified,expected_contradicted,expected_unsupported,expected_needs_review,actual_verified,actual_contradicted,actual_unsupported,actual_needs_review\n/m,
   );
-  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,31,0,0\.000,31,0,94,94,1(?:\.0+)?\,100%,37,20,26,11,37,20,26,11$/m);
+  assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,hr,32,0,0\.000,32,0,97,97,1(?:\.0+)?\,100%,38,21,27,11,38,21,27,11$/m);
   assert.match(evaluationDomainSummaryCsv, /^[^,\n]+,support,59,0,0\.000,58,1,173,173,1(?:\.0+)?\,100%,65,39,50,19,65,39,50,19$/m);
   const fixtureDomainCounts = evaluationSummaryCsv
     .trim()
