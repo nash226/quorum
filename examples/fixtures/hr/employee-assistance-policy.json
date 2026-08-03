@@ -1,0 +1,9 @@
+{
+  "name": "HR employee assistance policy example",
+  "domain": "hr",
+  "answerPath": "employee-assistance-answer.md",
+  "sourcePaths": ["employee-assistance-policy.md"],
+  "answerLabel": "HR employee assistance reviewer packet",
+  "expectedSummary": { "verified": 2, "contradicted": 0, "unsupported": 0, "needs_review": 1 },
+  "expectedClaimVerdicts": ["verified", "needs_review", "verified"]
+}

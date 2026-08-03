@@ -206,6 +206,30 @@ test("evaluates a shipped HR employee assistance fixture across benefit claims",
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the file-backed HR employee assistance fixture", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/fixtures/hr/employee-assistance-policy.json"),
+    generatedAt: "2026-08-03T00:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR employee assistance policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.equal(scorecard.answerPath, resolve("examples/fixtures/hr/employee-assistance-answer.md"));
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 2,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 1,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "verified",
+  ]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates inline HR equipment return claims across all verdict types", async () => {
   const scorecard = await evaluateFixture({
     name: "HR equipment return policy example",
