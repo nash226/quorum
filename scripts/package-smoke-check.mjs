@@ -26,6 +26,35 @@ const libraryEntry = await import(new URL("dist/src/index.js", packageRoot));
 const serverEntry = await import(new URL("dist/src/api-server.js", packageRoot));
 const cliPath = new URL("dist/src/cli.js", packageRoot);
 
+const packedPackageDir = mkdtempSync(join(tmpdir(), "quorum-packed-package-"));
+try {
+  const packedArchive = execFileSync("npm", ["pack", "--ignore-scripts", "--pack-destination", packedPackageDir], {
+    cwd: repoRoot,
+    encoding: "utf8",
+  }).trim().split("\n").at(-1);
+  const packedArchivePath = join(packedPackageDir, packedArchive);
+  execFileSync("npm", ["install", "--ignore-scripts", "--no-save", packedArchivePath], {
+    cwd: packedPackageDir,
+    encoding: "utf8",
+    stdio: "ignore",
+  });
+
+  const installedPackage = await import("quorum");
+  const installedServer = await import("quorum/server");
+  const installedVersion = execFileSync(join(packedPackageDir, "node_modules/.bin/quorum"), ["--version"], {
+    encoding: "utf8",
+  }).trim();
+  if (
+    typeof installedPackage.verifyAnswer !== "function" ||
+    typeof installedServer.createApiServer !== "function" ||
+    installedVersion !== `quorum ${packageJson.version}`
+  ) {
+    throw new Error("Installed package artifact did not preserve root, server, and CLI entry points.");
+  }
+} finally {
+  rmSync(packedPackageDir, { recursive: true, force: true });
+}
+
 const npmVersionJson = JSON.parse(execFileSync("npm", ["run", "--silent", "version", "--", "--json"], {
   cwd: repoRoot,
   encoding: "utf8",
