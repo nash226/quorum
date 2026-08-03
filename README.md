@@ -173,6 +173,9 @@ review multiple answers, preserve reviewer decisions, and produce queue-ready
 summaries. The next product boundary is a durable API service, which remains
 deployment-decision gated.
 
+See [docs/roadmap.md](docs/roadmap.md) for the current decision-gated next
+steps and the safe fixture and reliability work that can proceed now.
+
 Claim extraction now strips warning-sign bullets (`⚠` and `⚠️`) from exported
 checklists, keeping the policy statement itself available for evidence review.
 
