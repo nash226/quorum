@@ -9,6 +9,10 @@ Start the local HTTP API with `npm run serve` (equivalent to
 `npm run dev -- serve`) when an agent integration needs the documented local
 service boundary.
 
+The packaged smoke gate now runs the documented `npm run formats -- --json`
+wrapper in silent mode, so its machine-readable output stays valid JSON even
+when integrations invoke the npm script directly.
+
 The release contract test now verifies that `quorum formats --json` reports the
 same version as the HTTP API, so format-discovery clients can detect contract
 drift before submitting files.

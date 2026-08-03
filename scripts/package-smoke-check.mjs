@@ -40,7 +40,8 @@ if (
   throw new Error("Package artifact CLI formats output drifted from the library input contract.");
 }
 
-const formatsJsonOutput = execFileSync("node", [fileURLToPath(cliPath), "formats", "--json"], {
+const formatsJsonOutput = execFileSync("npm", ["run", "--silent", "formats", "--", "--json"], {
+  cwd: repoRoot,
   encoding: "utf8",
 });
 const formatsJson = JSON.parse(formatsJsonOutput);
