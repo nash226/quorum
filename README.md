@@ -281,6 +281,9 @@ The packaged batch smoke gate now verifies nested `.ini` and `.properties`
 answers against matching approved sources, keeping configuration-policy exports
 release-gated in directory workflows.
 
+Configuration-policy source aliases `.conf` and `.cfg` are also covered by the
+source-loader contract, preserving their policy text and clean fallback titles.
+
 The packaged batch smoke gate now verifies nested TOML answer and approved-source
 discovery, keeping structured policy exports release-gated in directory workflows.
 

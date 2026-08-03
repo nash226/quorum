@@ -14,6 +14,24 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("preserves configuration-policy content and strips config aliases from titles", async () => {
+  const confSource = await sourceDocumentFromFile(
+    "policies/benefits.conf",
+    "policy=Employees receive 12 weeks of paid parental leave.\n",
+    0,
+  );
+  const cfgSource = await sourceDocumentFromFile(
+    "policies/benefits.cfg",
+    "policy=Employees receive 12 weeks of paid parental leave.\n",
+    1,
+  );
+
+  assert.equal(confSource.title, "benefits");
+  assert.equal(cfgSource.title, "benefits");
+  assert.match(confSource.content, /Employees receive 12 weeks of paid parental leave\./);
+  assert.match(cfgSource.content, /Employees receive 12 weeks of paid parental leave\./);
+});
+
 test("extracts HTML metadata after a UTF-8 BOM", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.html",
