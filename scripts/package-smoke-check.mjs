@@ -1847,6 +1847,22 @@ try {
   ) {
     throw new Error("Package artifact CLI did not preserve the stdin claim preview contract.");
   }
+
+  const extractClaimsWrapperResult = JSON.parse(execFileSync("npm", [
+    "run",
+    "--silent",
+    "extract-claims",
+    "--",
+    "--answer",
+    extractClaimsAnswerPath,
+    "--result-json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    extractClaimsWrapperResult.answerPath !== extractClaimsAnswerPath ||
+    extractClaimsWrapperResult.claims?.[0]?.text !== "Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("Package artifact npm wrapper did not forward claim extraction arguments.");
+  }
 } finally {
   rmSync(extractClaimsTempDir, { recursive: true, force: true });
 }
