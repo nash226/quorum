@@ -52,7 +52,7 @@ test("extracts readable text from DOCX source content", async () => {
 test("normalizes RTF source content into readable evidence", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.rtf",
-    String.raw`{\\rtf1\\ansi{\\fonttbl{\\f0 Arial;}} Employees receive 12 weeks of paid parental leave.\\par Managers approve exceptions within five business days.}`,
+    String.raw`{\rtf1\ansi{\fonttbl{\f0 Arial;}} Employees receive 12 weeks of paid parental leave.\par Managers approve exceptions within five business days.}`,
     0,
   );
 
