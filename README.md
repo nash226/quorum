@@ -3,6 +3,10 @@
 The evaluation fixture guide now matches the shipped benchmark inventory: 91
 checked-in fixtures across HR, support, and shared edge-case workflows.
 
+The current release gate is green on a fresh checkout: `npm test`, `npm run
+build`, the source and packaged smoke checks, and `npm run evaluate:ci` all pass
+with 91 fixtures, 270/270 matched claim verdicts, and a 100% score.
+
 The shipped local product covers the full review loop: CLI and HTTP API
 verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
