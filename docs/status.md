@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4651352a` on 2026-08-02, fix: align recognition benchmark contracts
+- Latest shipped change: `f6b8f1e0` on 2026-08-03, test: gate reStructuredText aliases in package smoke
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-03 | Direct push | test: gate reStructuredText aliases in package smoke | `f6b8f1e0` |
 | 2026-08-02 | [#1790](https://github.com/nash226/quorum/pull/1790) | fix: align recognition benchmark contracts | `4651352a` |
 | 2026-08-02 | Direct push | test: gate packaged CSV verification | `effc457f` |
 | 2026-08-02 | Direct push | test: cover direct reStructuredText answer alias | `695b127a` |
@@ -56,5 +57,4 @@
 | 2026-08-02 | Direct push | test: smoke-check direct TOML answers | `f13f06a1` |
 | 2026-08-02 | Direct push | test: cover HR dependent benefits evaluation | `4e207920` |
 | 2026-08-02 | [#1778](https://github.com/nash226/quorum/pull/1778) | test: add file-backed employee assistance fixture | `1d2d49df` |
-| 2026-08-02 | Direct push | test: cover support price adjustment evaluation | `b8dc8c69` |
 
