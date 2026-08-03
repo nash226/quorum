@@ -153,6 +153,17 @@ test("splits inline CJK and fullwidth sentences", () => {
 
 test("splits Arabic and Indic sentence terminators", () => {
   assert.deepEqual(
+    splitIntoSentences("يجب مراجعة الطلب؟ कर्मचारी अनुमोदन देते हैं।Support responds within four hours."),
+    [
+      "يجب مراجعة الطلب؟",
+      "कर्मचारी अनुमोदन देते हैं।",
+      "Support responds within four hours.",
+    ],
+  );
+});
+
+test("splits Arabic and Indic sentence terminators", () => {
+  assert.deepEqual(
     splitIntoSentences("هل تمت الموافقة؟ نعم تمت الموافقة। The policy applies॥"),
     ["هل تمت الموافقة؟", "نعم تمت الموافقة।", "The policy applies॥"],
   );
