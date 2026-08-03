@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { renderAnswerLabels } from "../src/text.js";
+import { renderAnswerLabels, splitIntoSentences } from "../src/text.js";
+
+test("splits full-width and CJK sentence punctuation", () => {
+  assert.deepEqual(
+    splitIntoSentences("育児休業は12週間です。医療保険は30日後に開始します！確認が必要です？"),
+    ["育児休業は12週間です。", "医療保険は30日後に開始します！", "確認が必要です？"],
+  );
+});
 
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(

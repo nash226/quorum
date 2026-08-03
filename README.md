@@ -40,7 +40,8 @@ The current CLI can:
 - read one or more approved Markdown, text, exported HTML, or PDF source documents
 - load source metadata such as `title`, `updatedAt`, and `trustLevel`
 - override the default trust level for sources that do not include metadata
-- split the answer into atomic claims
+- split the answer into atomic claims, including sentences separated by
+  full-width and common CJK punctuation
 - compare each claim against approved source snippets
 - label each claim as `verified`, `contradicted`, `unsupported`, or
   `needs_review`
