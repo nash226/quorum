@@ -84,6 +84,11 @@ test("strips supported text extensions from fallback source titles", async () =>
     "Escalate incidents within one hour.",
     3,
   );
+  const restSource = await sourceDocumentFromFile(
+    "docs/policies/incident-response.rest",
+    "Escalate incidents within one hour.",
+    4,
+  );
   const csvSource = await sourceDocumentFromFile(
     "docs/policies/leave-policy.csv",
     "policy,details\nleave,Employees get 12 weeks.\n",
@@ -130,6 +135,7 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(textExtensionSource.title, "returns-policy");
   assert.equal(logSource.title, "support-audit");
   assert.equal(rstSource.title, "incident-response");
+  assert.equal(restSource.title, "incident-response");
   assert.equal(csvSource.title, "leave-policy");
   assert.equal(csvSource.content, "policy: leave; details: Employees get 12 weeks.");
   assert.equal(iniSource.title, "leave-policy");

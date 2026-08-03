@@ -247,7 +247,7 @@ function normalizeLatexSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv)$/i, "");
 }
 
 function parseHtmlSource(content: string): ParsedSource {

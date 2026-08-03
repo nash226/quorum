@@ -20,6 +20,10 @@ The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
 answers and approved sources, keeping the documented format contract covered
 for installed integrations.
 
+Recursive answer and source discovery now accepts the standard reStructuredText
+`.rest` alias alongside `.rst`, and exposes both extensions through the format
+discovery contract.
+
 The HR fixture set now includes an ergonomic-reimbursement answer that omits
 the approved manager condition, keeping incomplete policy context routed to
 `needs_review` instead of silently treating it as verified.
