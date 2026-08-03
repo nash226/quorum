@@ -1125,6 +1125,9 @@ are mixed.
 Localized claim extraction also recognizes Arabic, Indic, CJK, and fullwidth
 sentence terminators.
 
+Regression coverage now keeps Arabic question marks and Indic danda punctuation
+as sentence boundaries too, so multilingual answers remain separately reviewable.
+
 ## Directory Discovery
 
 Batch verification recursively discovers supported answer files and approved
