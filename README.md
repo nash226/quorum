@@ -289,6 +289,10 @@ The support replacement evaluation fixture now runs end to end from its
 checked-in answer and policy source, covering verified, contradicted, and
 unsupported replacement-eligibility claims in the regression scorecard.
 
+The evaluation suite also covers shipping-address policy claims across a
+verified pre-shipment control, a contradicted delivery window, and an
+unsupported priority-support promise.
+
 The packaged HTTP smoke gate now verifies base64-encoded answers and approved
 sources through `/verify`, keeping binary-safe agent integrations release-gated
 alongside text request bodies.
