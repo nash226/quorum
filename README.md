@@ -28,6 +28,10 @@ The packaged smoke gate now executes that npm wrapper against a real answer
 file, so installed claim-preview integrations are checked for argument
 forwarding as well as direct CLI behavior.
 
+The package smoke gate now runs both the direct CLI and `npm run extract-claims`
+claim-preview paths against the same answer, keeping the published wrapper and
+compiled command aligned.
+
 Start the local HTTP API with `npm run serve` (equivalent to
 `npm run dev -- serve`) when an agent integration needs the documented local
 service boundary.

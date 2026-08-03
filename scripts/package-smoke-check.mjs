@@ -153,6 +153,21 @@ try {
   ) {
     throw new Error("Package artifact did not preserve the claim extraction result JSON contract.");
   }
+
+  const npmClaimPreview = JSON.parse(execFileSync("npm", [
+    "run", "--silent", "extract-claims", "--", "--answer", answerPath,
+    "--answer-label", "HR reviewer packet", "--result-json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    npmClaimPreview.answerHasClaims !== true ||
+    npmClaimPreview.answerPath !== answerPath ||
+    npmClaimPreview.answerLabel !== "HR reviewer packet" ||
+    npmClaimPreview.claims?.length !== 1 ||
+    npmClaimPreview.claims?.[0]?.id !== "claim_1" ||
+    npmClaimPreview.claims?.[0]?.text !== "Employees receive 12 weeks of paid parental leave."
+  ) {
+    throw new Error("The npm extract-claims wrapper did not preserve the claim extraction result JSON contract.");
+  }
 } finally {
   rmSync(claimPreviewPackageDir, { recursive: true, force: true });
 }
