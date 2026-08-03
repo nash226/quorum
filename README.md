@@ -73,6 +73,10 @@ Installed integrations can now invoke the same reviewer handoff workflows with
 `npm run import-review -- ...` and `npm run review-queue -- ...`, without
 repeating the underlying `npm run dev --` command prefix.
 
+The packaged smoke gate now verifies `npm run evaluate -- ... --result-json`,
+keeping installed evaluation integrations aligned with the gate-aware score,
+mismatch, and threshold result contract.
+
 The packaged smoke gate now executes the `npm run review-queue -- ... --json`
 wrapper against a pending reviewer decision, keeping installed queue handoffs
 covered alongside the direct CLI contract.

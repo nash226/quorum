@@ -186,6 +186,42 @@ try {
   rmSync(reviewQueuePackageDir, { recursive: true, force: true });
 }
 
+const evaluatePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-evaluate-"));
+try {
+  const fixturePath = join(evaluatePackageDir, "fixture.json");
+  writeFileSync(
+    fixturePath,
+    JSON.stringify({
+      name: "packaged evaluation smoke",
+      domain: "hr",
+      answerPath: "answer.md",
+      sourcePaths: ["policy.md"],
+      expectedSummary: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
+      expectedClaimVerdicts: ["verified"],
+    }),
+  );
+  writeFileSync(join(evaluatePackageDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(join(evaluatePackageDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n");
+
+  const evaluateOutput = execFileSync(
+    "npm",
+    ["run", "--silent", "evaluate", "--", "--fixture", fixturePath, "--result-json", "--fail-on-mismatch"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const evaluatePayload = JSON.parse(evaluateOutput);
+  if (
+    evaluatePayload.scorecards?.length !== 1 ||
+    evaluatePayload.scorecards?.[0]?.fixtureName !== "packaged evaluation smoke" ||
+    evaluatePayload.scorecards?.[0]?.actualSummary?.verified !== 1 ||
+    evaluatePayload.shouldFail !== false ||
+    evaluatePayload.mismatchCount !== 0
+  ) {
+    throw new Error("The npm evaluate wrapper did not preserve the gate-aware result JSON contract.");
+  }
+} finally {
+  rmSync(evaluatePackageDir, { recursive: true, force: true });
+}
+
 if (
   typeof libraryEntry.verifyAnswer !== "function" ||
   typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
