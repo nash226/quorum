@@ -10,8 +10,12 @@ The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
 
-The evaluation fixture guide now matches the shipped benchmark inventory: 91
+The evaluation fixture guide now matches the shipped benchmark inventory: 92
 checked-in fixtures across HR, support, and shared edge-case workflows.
+
+The evaluation scorecard now includes the file-backed support security packet,
+covering password-reset timing, billing-verification and escalation controls,
+and an unsupported premium-service promise.
 
 The shipped local product covers the full review loop: CLI and HTTP API
 verification, reviewer-queue imports and summaries, and HR/support evaluation
@@ -153,7 +157,7 @@ verified, contradicted, and unsupported first-response claims against the
 approved support playbook.
 
 The benchmark inventory checks now include the new support packet across CLI,
-API, queue, and packaged smoke expectations, keeping the 91-fixture scorecard
+API, queue, and packaged smoke expectations, keeping the 92-fixture scorecard
 green when benchmark coverage expands.
 
 The installed package exposes `npm run formats` (and
@@ -2003,7 +2007,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 91-fixture benchmark spans 32 HR and 59 support workflows. It also
+The checked-in 92-fixture benchmark spans 32 HR and 60 support workflows. It also
 includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
@@ -2028,7 +2032,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 91-fixture total explicit, so new benchmark packets cannot drift
+the published 92-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.
@@ -2455,7 +2459,7 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
-The checked-in HR and support benchmark currently contains 91 fixtures and 270
+The checked-in HR and support benchmark currently contains 92 fixtures and 274
 expected claims, including support plan-upgrade and plan-downgrade scenarios
 with verified, needs-review, contradicted, and unsupported claims.
 The HR employee-assistance policy is also covered as a file-backed reviewer

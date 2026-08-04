@@ -1,0 +1,9 @@
+{
+  "name": "Support security controls policy example",
+  "domain": "support",
+  "answerPath": "../../fixtures/support-security-answer.md",
+  "sourcePaths": ["../../fixtures/support-security-playbook.md"],
+  "answerLabel": "Support security controls reviewer packet",
+  "expectedSummary": { "verified": 1, "contradicted": 0, "unsupported": 1, "needs_review": 2 },
+  "expectedClaimVerdicts": ["verified", "needs_review", "needs_review", "unsupported"]
+}
