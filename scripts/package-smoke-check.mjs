@@ -25,6 +25,8 @@ const repoRoot = fileURLToPath(packageRoot);
 const libraryEntry = await import(new URL("dist/src/index.js", packageRoot));
 const serverEntry = await import(new URL("dist/src/api-server.js", packageRoot));
 const cliPath = new URL("dist/src/cli.js", packageRoot);
+const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS].sort();
+const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS].sort();
 
 const packedPackageDir = mkdtempSync(join(tmpdir(), "quorum-packed-package-"));
 try {
@@ -44,12 +46,20 @@ try {
   const installedVersion = execFileSync(join(packedPackageDir, "node_modules/.bin/quorum"), ["--version"], {
     encoding: "utf8",
   }).trim();
+  const installedFormats = JSON.parse(
+    execFileSync(join(packedPackageDir, "node_modules/.bin/quorum"), ["formats", "--json"], {
+      encoding: "utf8",
+    }),
+  );
   if (
     typeof installedPackage.verifyAnswer !== "function" ||
     typeof installedServer.createApiServer !== "function" ||
-    installedVersion !== `quorum ${packageJson.version}`
+    installedVersion !== `quorum ${packageJson.version}` ||
+    installedFormats.version !== packageJson.version ||
+    JSON.stringify(installedFormats.sources) !== JSON.stringify([...expectedSourceExtensions].sort()) ||
+    JSON.stringify(installedFormats.answers) !== JSON.stringify([...expectedAnswerExtensions].sort())
   ) {
-    throw new Error("Installed package artifact did not preserve root, server, and CLI entry points.");
+    throw new Error("Installed package artifact did not preserve root, server, version, and formats entry points.");
   }
 } finally {
   rmSync(packedPackageDir, { recursive: true, force: true });
@@ -63,8 +73,6 @@ if (npmVersionJson.service !== "quorum" || npmVersionJson.version !== packageJso
   throw new Error("The npm version wrapper did not preserve the machine-readable version contract.");
 }
 
-const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS].sort();
-const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS].sort();
 const formatExtensions = (extensions) => [...extensions].sort().join(", ");
 
 const formatsOutput = execFileSync("node", [fileURLToPath(cliPath), "formats"], { encoding: "utf8" });

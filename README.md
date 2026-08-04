@@ -950,6 +950,10 @@ personal-device reimbursement claim.
 XHTML exports are treated like HTML sources, including readable-text extraction
 and filename-based title fallback when an export has no title metadata.
 
+The packaged CLI smoke gate also runs `quorum formats --json` after npm
+installation, verifying that installed integrations discover the same versioned
+answer and source extensions as the library and built CLI.
+
 ## Why Quorum Exists
 
 AI answers can sound confident while drifting from approved policy. Quorum
