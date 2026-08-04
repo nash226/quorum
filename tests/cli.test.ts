@@ -5304,6 +5304,29 @@ test("verify discovers supported sources in nested directories", async () => {
   }
 });
 
+test("verify discovers RFC 822 email sources in nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-email-source-directory-"));
+  const answerPath = join(tempDir, "answer.md");
+  const sourceDir = join(tempDir, "sources", "mailbox");
+  const sourcePath = join(sourceDir, "refund-policy.eml");
+
+  await mkdir(sourceDir, { recursive: true });
+  await Promise.all([
+    writeFile(answerPath, "Customers can request refunds within 30 days.\n"),
+    writeFile(
+      sourcePath,
+      "From: support@example.com\r\nSubject: Refund policy\r\n\r\nCustomers can request refunds within 30 days.\r\n",
+    ),
+  ]);
+
+  const report = JSON.parse(
+    await runCli(["verify", "--answer", answerPath, "--source-dir", join(tempDir, "sources"), "--json"]),
+  ) as { summary: { verified: number }; sources: Array<{ sourcePath: string; title: string }> };
+
+  assert.equal(report.summary.verified, 1);
+  assert.deepEqual(report.sources, [{ sourcePath, title: "Refund policy" }]);
+});
+
 test("verify-batch disambiguates duplicate answer labels across directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-duplicate-labels-"));
 
