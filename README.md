@@ -1,5 +1,9 @@
 # Quorum
 
+Multipart RFC 822 (`.eml`) sources now select their plain-text body before
+verification, so HTML email alternatives do not replace reviewer-facing policy
+evidence.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 
