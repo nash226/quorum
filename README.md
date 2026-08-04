@@ -19,7 +19,8 @@ and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
 
 The evaluation fixture guide now matches the shipped benchmark inventory: 92
-checked-in fixtures across HR, support, and shared edge-case workflows.
+checked-in fixtures across 32 HR workflows, 60 support workflows, and one
+empty-answer edge case, with 274 claim verdicts currently matching.
 
 The evaluation scorecard now includes the file-backed support security packet,
 covering password-reset timing, billing-verification and escalation controls,
