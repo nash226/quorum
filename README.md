@@ -293,6 +293,9 @@ The packaged CLI smoke gate now verifies direct YAML approved-source exports,
 keeping structured source discovery release-gated symmetrically with YAML
 answers.
 
+The packaged HTTP smoke gate now verifies YAML approved sources through `/verify`,
+keeping structured policy exports covered for installed API integrations.
+
 The packaged CLI smoke gate now verifies direct Org-mode answer and approved-source
 exports, keeping `.org` policy handoffs release-gated alongside other document
 formats.

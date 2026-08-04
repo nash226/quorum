@@ -1570,6 +1570,28 @@ try {
     throw new Error("Package artifact server did not preserve base64 verification input.");
   }
 
+  const verifyYamlResponse = await fetch(`${packagedServer.url}/verify`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      answer: "Employees receive 12 weeks of paid parental leave.",
+      sources: [{
+        sourcePath: "policies/leave-policy.yaml",
+        content: "title: Leave Policy\npolicy: Employees receive 12 weeks of paid parental leave.\n",
+      }],
+    }),
+  });
+  const verifyYamlPayload = await verifyYamlResponse.json();
+  const yamlApiSource = verifyYamlPayload.report?.sources?.[0];
+  if (
+    verifyYamlResponse.status !== 200 ||
+    verifyYamlPayload.report?.summary?.verified !== 1 ||
+    yamlApiSource?.sourcePath !== "policies/leave-policy.yaml" ||
+    yamlApiSource?.title !== "Leave Policy"
+  ) {
+    throw new Error("Package artifact server did not preserve YAML source verification.");
+  }
+
   const verifyBatchResponse = await fetch(`${packagedServer.url}/verify-batch`, {
     method: "POST",
     headers: { "content-type": "application/json" },
