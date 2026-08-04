@@ -1,5 +1,9 @@
 # Quorum
 
+The installed `npm run openapi -- ...` wrapper is now smoke-tested with its
+server URL and output-path arguments, keeping published OpenAPI exports aligned
+with the direct CLI contract.
+
 The packaged CLI smoke gate now verifies direct reStructuredText `.rest`
 answers and approved sources, keeping the documented alias release-gated for
 installed integrations.
