@@ -640,7 +640,7 @@ try {
 
 const cliMarkupPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-markup-"));
 try {
-  for (const extension of ["adoc", "asciidoc", "org"]) {
+  for (const extension of ["adoc", "asciidoc", "org", "org-mode"]) {
     const answerPath = join(cliMarkupPackageDir, `answer.${extension}`);
     const sourcePath = join(cliMarkupPackageDir, `policy.${extension}`);
     writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
