@@ -195,6 +195,19 @@ test("normalizes tab-separated policy exports", async () => {
   assert.equal(source.content, "policy: Employees receive medical coverage; owner: People Ops");
 });
 
+test("preserves quoted line breaks in delimited policy exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/benefits.csv",
+    'policy,owner\n"Employees receive medical coverage.\nCoverage begins after 30 days.",People Ops\n',
+    0,
+  );
+
+  assert.equal(
+    source.content,
+    "policy: Employees receive medical coverage.\nCoverage begins after 30 days.; owner: People Ops",
+  );
+});
+
 test("strips AsciiDoc extensions from fallback source titles", async () => {
   const adocSource = await sourceDocumentFromFile(
     "docs/policies/leave-policy.adoc",
