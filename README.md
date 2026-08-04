@@ -1,5 +1,8 @@
 # Quorum
 
+RFC 822 source imports now preserve folded subject and date headers, keeping
+multi-line email exports readable in reviewer-facing evidence reports.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 
