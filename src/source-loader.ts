@@ -111,6 +111,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return { metadata: {}, body: normalizeLatexSource(normalizedContent) };
   }
 
+  if (isRtfSource(sourcePath)) {
+    return { metadata: {}, body: normalizeRtfSource(normalizedContent) };
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -242,6 +246,10 @@ function isLatexSource(sourcePath: string): boolean {
   return /\.tex$/i.test(sourcePath);
 }
 
+function isRtfSource(sourcePath: string): boolean {
+  return /\.rtf$/i.test(sourcePath);
+}
+
 function normalizeLatexSource(content: string): string {
   return content
     .replace(/(^|\n)\s*%[^\n]*/g, "$1")
@@ -254,8 +262,26 @@ function normalizeLatexSource(content: string): string {
     .trim();
 }
 
+function normalizeRtfSource(content: string): string {
+  return content
+    .replace(/\{\\(?:fonttbl|colortbl|stylesheet)\b[\s\S]*?\}/gi, "")
+    .replace(/\\(?:par|line)\b\s?/gi, "\n")
+    .replace(/\\'[0-9a-f]{2}/gi, (match) => String.fromCharCode(Number.parseInt(match.slice(2), 16)))
+    .replace(/\\u(-?\d+)\??/g, (_, value: string) => {
+      const codePoint = Number.parseInt(value, 10);
+      return Number.isNaN(codePoint) ? "" : String.fromCharCode(codePoint < 0 ? codePoint + 65536 : codePoint);
+    })
+    .replace(/\\[a-z]+-?\d*\s?/gi, "")
+    .replace(/\\([^a-z])/gi, "$1")
+    .replace(/[{}]/g, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n[ \t]+/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|rtf|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
 }
 
 function parseEmailSource(content: string): ParsedSource {

@@ -173,7 +173,7 @@ export interface ReviewerDecisionFileImportResultOptions
   failOn?: ClaimVerdict[];
 }
 
-export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml"]);
+export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".rtf", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml"]);
 export const ANSWER_EXTENSIONS = new Set([
   ".md",
   ".markdown",
@@ -192,6 +192,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".rest",
   ".tex",
   ".textile",
+  ".rtf",
   ".txt",
   ".text",
   ".log",
