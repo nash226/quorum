@@ -1,5 +1,7 @@
 # Quorum
 
+Approved source discovery also reads iCalendar (`.ics`) exports, rendering event summaries, dates, locations, and descriptions as evidence text.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 

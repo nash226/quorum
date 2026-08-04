@@ -52,6 +52,19 @@ test("extracts subject and body from RFC 822 email source exports", async () => 
   assert.equal(source.content, "Customers can request refunds within 30 days.");
 });
 
+test("extracts readable events from iCalendar source exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/support/holiday-closures.ics",
+    "BEGIN:VCALENDAR\nX-WR-CALNAME:Support Closures\nBEGIN:VEVENT\nDTSTART;VALUE=DATE:20261224\nDTEND;VALUE=DATE:20261226\nSUMMARY:Holiday closure\nDESCRIPTION:Support is closed\\nand reopens on Monday\\, December 28.\nEND:VEVENT\nEND:VCALENDAR\n",
+    0,
+  );
+
+  assert.equal(source.title, "Support Closures");
+  assert.match(source.content, /Summary: Holiday closure/);
+  assert.match(source.content, /Starts: 20261224/);
+  assert.match(source.content, /Support is closed\nand reopens on Monday, December 28\./);
+});
+
 test("extracts readable text from DOCX source content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0);
