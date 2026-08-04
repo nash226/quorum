@@ -88,7 +88,7 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
   }
 
   if (isJsonSource(sourcePath)) {
-    return parseJsonSource(normalizedContent);
+    return parseJsonSource(normalizedContent, /(?:json5|jsonc)$/i.test(sourcePath));
   }
 
   if (isXmlSource(sourcePath)) {
@@ -322,9 +322,10 @@ function parseHtmlSource(content: string): ParsedSource {
   };
 }
 
-function parseJsonSource(content: string): ParsedSource {
-  if (/\n/.test(content.trim())) {
-    const lines = content.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+function parseJsonSource(content: string, allowsComments = false): ParsedSource {
+  const jsonContent = allowsComments ? stripJsonComments(content) : content;
+  if (/\n/.test(jsonContent.trim())) {
+    const lines = jsonContent.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
     if (lines.length > 1) {
       try {
         const records = lines.map((line) => JSON.parse(line));
@@ -336,11 +337,64 @@ function parseJsonSource(content: string): ParsedSource {
   }
 
   try {
-    const value: unknown = JSON.parse(content);
+    const value: unknown = JSON.parse(jsonContent);
     return { metadata: structuredMetadata(value), body: formatStructuredValue(value) };
   } catch {
     return { metadata: {}, body: content };
   }
+}
+
+function stripJsonComments(content: string): string {
+  let result = "";
+  let inString = false;
+  let escaped = false;
+  let inLineComment = false;
+  let inBlockComment = false;
+
+  for (let index = 0; index < content.length; index += 1) {
+    const character = content[index] ?? "";
+    const next = content[index + 1] ?? "";
+
+    if (inLineComment) {
+      if (character === "\n") {
+        inLineComment = false;
+        result += character;
+      }
+      continue;
+    }
+
+    if (inBlockComment) {
+      if (character === "*" && next === "/") {
+        inBlockComment = false;
+        index += 1;
+      } else if (character === "\n") {
+        result += character;
+      }
+      continue;
+    }
+
+    if (!inString && character === "/" && next === "/") {
+      inLineComment = true;
+      index += 1;
+      continue;
+    }
+
+    if (!inString && character === "/" && next === "*") {
+      inBlockComment = true;
+      index += 1;
+      continue;
+    }
+
+    result += character;
+    if (character === "\\" && inString && !escaped) {
+      escaped = true;
+    } else {
+      if (character === '"' && !escaped) inString = !inString;
+      escaped = false;
+    }
+  }
+
+  return result;
 }
 
 function formatStructuredValue(value: unknown, prefix = ""): string {

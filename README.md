@@ -1,5 +1,9 @@
 # Quorum
 
+JSONC and JSON5 approved-source exports accept `//` and `/* ... */` comments
+during ingestion while preserving comment-like text inside quoted policy
+values.
+
 The packaged `npm run review-queue -- ...` wrapper now smoke-tests both the
 queue overview and `--queue-status pending` filtering, keeping installed
 reviewer handoffs aligned with the direct CLI contract.
