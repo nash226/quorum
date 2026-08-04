@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1db21c53` on 2026-08-04, test: cover packaged email verification
+- Latest shipped change: `af4d7da3` on 2026-08-04, test: cover recursive org-mode discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-04 | Direct push | test: cover recursive org-mode discovery | `af4d7da3` |
 | 2026-08-04 | Direct push | test: cover packaged email verification | `1db21c53` |
 | 2026-08-04 | Direct push | test: cover direct email answer verification | `668924a4` |
 | 2026-08-04 | Direct push | test: cover direct email source verification | `6acd550d` |
@@ -56,5 +57,4 @@
 | 2026-08-03 | [#1870](https://github.com/nash226/quorum/pull/1870) | test: cover nested XHTML batch discovery | `e8b5a8a7` |
 | 2026-08-03 | Direct push | feat: ingest email source exports | `f854aa00` |
 | 2026-08-03 | Direct push | docs: document stable source IDs | `bee15f18` |
-| 2026-08-03 | [#1863](https://github.com/nash226/quorum/pull/1863) | docs: record localized claim extraction coverage | `4c8c904b` |
 
