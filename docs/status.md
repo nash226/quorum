@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `bee15f18` on 2026-08-03, docs: document stable source IDs
+- Latest shipped change: `f854aa00` on 2026-08-03, feat: ingest email source exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-03 | Direct push | feat: ingest email source exports | `f854aa00` |
 | 2026-08-03 | Direct push | docs: document stable source IDs | `bee15f18` |
 | 2026-08-03 | [#1863](https://github.com/nash226/quorum/pull/1863) | docs: record localized claim extraction coverage | `4c8c904b` |
 | 2026-08-03 | Direct push | test: expand support security evaluation coverage | `0c797ae8` |
@@ -56,5 +57,4 @@
 | 2026-08-03 | Direct push | fix: split claims after Unicode ellipses | `7f015443` |
 | 2026-08-03 | Direct push | test: validate snake_case source freshness | `4b60414b` |
 | 2026-08-03 | Direct push | docs: align roadmap with shipped batch verification | `5eedfa80` |
-| 2026-08-03 | Direct push | docs: explain recursive input discovery | `c991bcfe` |
 

@@ -264,10 +264,19 @@ function parseEmailSource(content: string): ParsedSource {
   const headerText = separator === -1 ? normalized : normalized.slice(0, separator);
   const body = separator === -1 ? "" : normalized.slice(separator + 2).trim();
   const headers = new Map<string, string>();
+  let currentHeader: string | undefined;
 
   for (const line of headerText.split("\n")) {
     const match = line.match(/^([A-Za-z0-9-]+):\s*(.*)$/);
-    if (match) headers.set(match[1].toLowerCase(), match[2].trim());
+    if (match) {
+      currentHeader = match[1].toLowerCase();
+      headers.set(currentHeader, match[2].trim());
+    } else if (currentHeader && /^[ \t]+/.test(line)) {
+      const continuation = line.trim();
+      if (continuation) {
+        headers.set(currentHeader, `${headers.get(currentHeader)} ${continuation}`.trim());
+      }
+    }
   }
 
   return { metadata: { title: headers.get("subject"), updatedAt: headers.get("date") }, body };
