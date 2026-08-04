@@ -1242,6 +1242,11 @@ answers, run the dedicated format-contract command:
 npm run formats
 ```
 
+To discover commands and options without running a verification, use
+`quorum --help` (or `quorum -h`). Command-specific help is also available, for
+example `quorum help verify` or `quorum verify --help`; `quorum --version`
+reports the installed CLI version.
+
 Integrations can consume the same contract as sorted JSON arrays with:
 
 ```bash
