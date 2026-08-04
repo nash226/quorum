@@ -512,11 +512,8 @@ function parseTomlSource(content: string): ParsedSource {
 
 function parseDelimitedSource(content: string, tabSeparated: boolean): ParsedSource {
   const delimiter = tabSeparated ? "\t" : ",";
-  const rows = content
-    .replace(/\r\n/g, "\n")
-    .split("\n")
-    .filter((line) => line.trim().length > 0)
-    .map((line) => parseDelimitedRow(line, delimiter));
+  const rows = parseDelimitedRows(content.replace(/\r\n/g, "\n"), delimiter)
+    .filter((row) => row.some((cell) => cell.trim().length > 0));
 
   if (rows.length < 2 || rows[0]?.length === 0) {
     return { metadata: {}, body: content };
@@ -544,28 +541,41 @@ function parseDelimitedSource(content: string, tabSeparated: boolean): ParsedSou
   return { metadata, body: lines.join("\n") || content };
 }
 
-function parseDelimitedRow(line: string, delimiter: string): string[] {
-  const cells: string[] = [];
+function parseDelimitedRows(content: string, delimiter: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
   let cell = "";
   let quoted = false;
 
-  for (let index = 0; index < line.length; index += 1) {
-    const character = line[index];
-    if (character === '"' && line[index + 1] === '"' && quoted) {
-      cell += '"';
-      index += 1;
-    } else if (character === '"') {
-      quoted = !quoted;
+  for (let index = 0; index < content.length; index += 1) {
+    const character = content[index] ?? "";
+
+    if (character === '"') {
+      if (quoted && content[index + 1] === '"') {
+        cell += '"';
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
     } else if (character === delimiter && !quoted) {
-      cells.push(cell);
+      row.push(cell);
+      cell = "";
+    } else if (character === "\n" && !quoted) {
+      row.push(cell);
+      rows.push(row);
+      row = [];
       cell = "";
     } else {
       cell += character;
     }
   }
 
-  cells.push(cell);
-  return cells;
+  if (cell.length > 0 || row.length > 0) {
+    row.push(cell);
+    rows.push(row);
+  }
+
+  return rows;
 }
 
 function structuredMetadata(value: unknown): SourceMetadata {

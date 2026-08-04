@@ -4,6 +4,9 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+Delimited CSV and TSV sources now preserve quoted fields that span multiple
+lines, so exported policy tables keep multiline evidence in the correct row.
+
 Claim extraction now recognizes Armenian, Ethiopic, and Mongolian sentence
 terminators, keeping localized policy statements separately reviewable.
 
