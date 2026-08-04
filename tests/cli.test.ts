@@ -2541,7 +2541,7 @@ test("evaluate filters shipped example fixtures by domain", async () => {
   assert.match(stdout, /Evaluation Fixture: HR onboarding policy example/);
   assert.match(stdout, /Evaluation Fixture: HR PDF policy example/);
   assert.doesNotMatch(stdout, /Evaluation Fixture: Support policy example/);
-  assert.match(stdout, /Fixtures: 32/);
+  assert.match(stdout, /Fixtures: 33/);
 });
 
 test("evaluate writes a one-row-per-fixture summary csv", async () => {
@@ -2870,7 +2870,7 @@ test("evaluate writes the gate-aware result JSON to disk", async () => {
     assert.equal(payload.shouldFail, false);
     assert.deepEqual(payload.failureReasons, []);
     assert.equal(payload.mismatchCount, 0);
-    assert.equal(payload.summary.fixtureCount, 92);
+    assert.equal(payload.summary.fixtureCount, 93);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -6801,7 +6801,7 @@ test("review-queue combines reviewer workload and benchmark drift", async () => 
     assert.equal(overview.review.totalAnswers, 44);
     assert.equal(overview.review.pendingAnswers, 43);
     assert.equal(overview.queueStatus, null);
-    assert.equal(overview.evaluation.fixtureCount, 92);
+    assert.equal(overview.evaluation.fixtureCount, 93);
     assert.equal(overview.evaluation.mismatchCount, 0);
     assert.match(await readFile(csvOutPath, "utf8"), /total_answers.*pending_answers/);
 
@@ -6952,8 +6952,8 @@ test("review-queue scopes benchmark drift to selected domains", async () => {
     };
 
     assert.deepEqual(overview.domains, ["hr"]);
-    assert.equal(overview.evaluation.fixtureCount, 32);
-    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 32, mismatchCount: 0 }]);
+    assert.equal(overview.evaluation.fixtureCount, 33);
+    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 33, mismatchCount: 0 }]);
     const csvOutPath = join(tempDir, "queue.csv");
     const csv = await runCli([
       "review-queue",

@@ -55,8 +55,8 @@ test("evaluates the shipped HR travel expense fixture across timing claims", asy
   assert.equal(scorecard.fixtureName, "HR travel expense policy example");
   assert.equal(scorecard.domain, "hr");
   assert.deepEqual(scorecard.actualSummary, {
-    verified: 1,
-    contradicted: 1,
+    verified: 2,
+    contradicted: 0,
     unsupported: 1,
     needs_review: 0,
   });
@@ -489,6 +489,23 @@ test("evaluates a shipped HR wellness benefit fixture across reimbursement claim
   assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-wellness-benefit@2026-07-29");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
+});
+
+test("evaluates a shipped HR commuter benefits fixture across reimbursement claims", async () => {
+  const fixturePath = resolve("examples/evaluations/hr/commuter-benefits-policy.json");
+  const scorecard = await evaluateFixtureFile({
+    fixturePath,
+    generatedAt: "2026-08-04T12:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR commuter benefits policy example");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 2,
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.equal(scorecard.summaryMatches, true);
 });
 
 test("evaluates a shipped HR workplace safety fixture across compliance claims", async () => {
@@ -2887,7 +2904,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 92);
+  assert.equal(scorecards.length, 93);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2896,6 +2913,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "HR benefits enrollment policy example",
       "HR bereavement leave policy example",
       "HR bonus eligibility policy example",
+      "HR commuter benefits policy example",
       "HR compensation review policy example",
       "HR dependent benefits policy example",
       "HR employee referral policy example",
@@ -3007,7 +3025,7 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 32);
+  assert.equal(scorecards.length, 33);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -3068,7 +3086,7 @@ test("matches evaluation domains case-insensitively", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 32);
+  assert.equal(scorecards.length, 33);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "hr"));
 });
 
