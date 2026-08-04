@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged `npm run review-queue -- ...` wrapper now smoke-tests both the
+queue overview and `--queue-status pending` filtering, keeping installed
+reviewer handoffs aligned with the direct CLI contract.
+
 The installed `npm run openapi -- ...` wrapper is now smoke-tested with its
 server URL and output-path arguments, keeping published OpenAPI exports aligned
 with the direct CLI contract.

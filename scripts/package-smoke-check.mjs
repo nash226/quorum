@@ -194,6 +194,7 @@ try {
     [
       "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
       `${join(reviewQueuePackageDir, "answer.md")},claim-1,Employees receive 12 weeks of paid leave.,verified,Matches approved policy,HR Policy,Employees receive 12 weeks of paid leave.,,`,
+      `${join(reviewQueuePackageDir, "reviewed-answer.md")},claim-1,Employees receive 12 weeks of paid leave.,verified,Matches approved policy,HR Policy,Employees receive 12 weeks of paid leave.,verified,Confirmed by reviewer`,
     ].join("\n") + "\n",
   );
 
@@ -204,12 +205,28 @@ try {
   );
   const reviewQueuePayload = JSON.parse(reviewQueueOutput);
   if (
-    reviewQueuePayload.review?.totalAnswers !== 1 ||
+    reviewQueuePayload.review?.totalAnswers !== 2 ||
     reviewQueuePayload.review?.pendingAnswers !== 1 ||
-    reviewQueuePayload.review?.totalClaims !== 1 ||
+    reviewQueuePayload.review?.reviewedAnswers !== 1 ||
+    reviewQueuePayload.review?.totalClaims !== 2 ||
     reviewQueuePayload.review?.pendingClaims !== 1
   ) {
     throw new Error("The npm review-queue wrapper did not preserve the queue overview JSON contract.");
+  }
+
+  const pendingQueueOutput = execFileSync(
+    "npm",
+    ["run", "--silent", "review-queue", "--", "--review-csv", reviewCsvPath, "--queue-status", "pending", "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const pendingQueuePayload = JSON.parse(pendingQueueOutput);
+  if (
+    pendingQueuePayload.review?.totalAnswers !== 1 ||
+    pendingQueuePayload.review?.pendingAnswers !== 1 ||
+    pendingQueuePayload.review?.reviewedAnswers !== 0 ||
+    pendingQueuePayload.review?.totalClaims !== 1
+  ) {
+    throw new Error("The npm review-queue wrapper did not preserve queue-status filtering.");
   }
 } finally {
   rmSync(reviewQueuePackageDir, { recursive: true, force: true });
