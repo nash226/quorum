@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now recognizes Arabic full stops (`۔`) even when exported
+answers place the next sentence immediately after the punctuation, preserving
+separate policy claims for multilingual reviewer workflows.
+
 JSONC and JSON5 approved-source exports accept `//` and `/* ... */` comments
 during ingestion while preserving comment-like text inside quoted policy
 values.
