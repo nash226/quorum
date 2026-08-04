@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b4c8bdf3` on 2026-08-04, test: guard packaged batch library exports
+- Latest shipped change: `848d977f` on 2026-08-04, fix: ingest commented json policy exports
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-04 | Direct push | fix: ingest commented json policy exports | `848d977f` |
 | 2026-08-04 | Direct push | test: guard packaged batch library exports | `b4c8bdf3` |
 | 2026-08-04 | Direct push | test: cover packaged review queue filtering | `63b9f9ca` |
 | 2026-08-04 | Direct push | test: cover packaged openapi wrapper | `4e760d2c` |
@@ -56,5 +57,4 @@
 | 2026-08-04 | [#1891](https://github.com/nash226/quorum/pull/1891) | test: cover packaged org-mode alias | `75ed9be0` |
 | 2026-08-04 | Direct push | test: cover recursive org-mode discovery | `af4d7da3` |
 | 2026-08-04 | Direct push | test: cover packaged email verification | `1db21c53` |
-| 2026-08-04 | Direct push | test: cover direct email answer verification | `668924a4` |
 
