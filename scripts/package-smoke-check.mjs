@@ -271,10 +271,12 @@ try {
 if (
   typeof libraryEntry.verifyAnswer !== "function" ||
   typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
+  typeof libraryEntry.verifyAnswerBatch !== "function" ||
+  typeof libraryEntry.importReviewerDecisions !== "function" ||
   typeof libraryEntry.createApiServer !== "function" ||
   libraryEntry.API_VERSION !== packageJson.version
 ) {
-  throw new Error("Package artifact root entry point is missing required library exports or version contract.");
+  throw new Error("Package artifact root entry point is missing required single-answer, batch, reviewer, or version exports.");
 }
 
 const emptySourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-empty-sources-"));
