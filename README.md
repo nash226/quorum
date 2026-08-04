@@ -1,8 +1,8 @@
 # Quorum
 
-Recursive source discovery now verifies RFC 822 `.eml` policy exports, using
-the message subject as the source title, the email body as evidence, and the
-same stable source IDs and default trust metadata as other discovered sources.
+The CLI now verifies directly supplied or recursively discovered RFC 822 `.eml`
+policy exports, using the message subject and date as source metadata, the
+email body as evidence, and the same trust behavior as other approved sources.
 
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
