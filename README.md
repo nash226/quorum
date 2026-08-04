@@ -2565,3 +2565,5 @@ See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
 [docs/api-deployment.md](docs/api-deployment.md) for deployment boundaries.
 Human sign-off
 items use the [decision queue](docs/decision-queue.md).
+HTML source ingestion now excludes `<template>` blocks from approved-source
+evidence, preventing dormant draft markup from becoming searchable policy text.
