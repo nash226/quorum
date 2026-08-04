@@ -413,6 +413,23 @@ The roadmap now treats batch verification and reviewer-queue exports as shipped
 foundations; the next roadmap step is a durable API service boundary, which
 remains decision-gated while local CLI and HTTP reliability work continues.
 
+Integrations that need stable evidence references can assign durable IDs to
+explicit sources with `--source-id`. IDs must be unique within a verification
+request and are preserved in the report alongside each source's title,
+freshness, and trust metadata:
+
+```bash
+npm run dev -- verify \
+  --answer examples/answers/hr-answer.md \
+  --source examples/sources/hr-policy.md \
+  --source-id people-ops/hr-policy@2026-07-14 \
+  --json
+```
+
+Directory-discovered sources continue to receive deterministic fallback IDs;
+use explicit `--source` and `--source-id` pairs when an agent or audit system
+needs to refer to a specific approved document across runs.
+
 The evaluation suite now locks the support data-retention scenario, including a
 verified deletion-request claim, a contradicted deletion deadline, and an
 unsupported recoverability promise.
