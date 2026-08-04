@@ -59,11 +59,18 @@ export async function sourceDocumentFromFile(
     return pdfSourceDocumentFromFile(sourcePath, content, index, options);
   }
 
+<<<<<<< ours
   if (isDocxSource(sourcePath)) {
     return docxSourceDocumentFromFile(sourcePath, content, index, options);
   }
 
   const textContent = typeof content === "string" ? content : new TextDecoder().decode(content);
+=======
+  const textContent = typeof content === "string" ? content : content.toString("utf8");
+  if (isJsonSource(sourcePath)) {
+    return jsonSourceDocumentFromFile(sourcePath, textContent, index, options);
+  }
+>>>>>>> theirs
   const parsed = parseSource(sourcePath, textContent);
 
   return {
@@ -214,6 +221,7 @@ function isPdfSource(sourcePath: string): boolean {
   return /\.pdf$/i.test(sourcePath);
 }
 
+<<<<<<< ours
 function isDocxSource(sourcePath: string): boolean {
   return /\.docx$/i.test(sourcePath);
 }
@@ -256,6 +264,50 @@ function normalizeLatexSource(content: string): string {
 
 function sourceTitleFromPath(sourcePath: string): string {
   return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
+=======
+function isJsonSource(sourcePath: string): boolean {
+  return /\.json$/i.test(sourcePath);
+}
+
+function sourceTitleFromPath(sourcePath: string): string {
+  return basename(sourcePath).replace(/\.(?:md|markdown|txt|html?|pdf|json)$/i, "");
+}
+
+async function jsonSourceDocumentFromFile(
+  sourcePath: string,
+  content: string,
+  index: number,
+  options: SourceDocumentOptions,
+): Promise<SourceDocument> {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(content);
+  } catch (error) {
+    throw new Error(`Invalid JSON source ${sourcePath}: ${error instanceof Error ? error.message : String(error)}`);
+  }
+
+  const record = parsed && typeof parsed === "object" && !Array.isArray(parsed)
+    ? parsed as Record<string, unknown>
+    : {};
+  const title = typeof record.title === "string" ? record.title.trim() : "";
+  const updatedAt = typeof record.updatedAt === "string" ? record.updatedAt.trim() : undefined;
+  const trustLevel = typeof record.trustLevel === "string"
+    ? tryParseTrustLevel(record.trustLevel)
+    : undefined;
+  const body = JSON.stringify(
+    Array.isArray(parsed) ? parsed : Object.fromEntries(Object.entries(record).filter(([key]) => !["title", "updatedAt", "trustLevel"].includes(key))),
+    null,
+    2,
+  );
+
+  return {
+    id: `source_${index + 1}`,
+    title: title || sourceTitleFromPath(sourcePath),
+    updatedAt,
+    trustLevel: trustLevel ?? options.defaultTrustLevel ?? "medium",
+    content: body,
+  };
+>>>>>>> theirs
 }
 
 function parseEmailSource(content: string): ParsedSource {

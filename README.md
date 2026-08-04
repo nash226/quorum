@@ -418,9 +418,31 @@ CLI artifacts.
 Claim extraction now strips reference-mark bullets such as `※` and `⁕` from
 exported checklists, keeping localized policy statements atomic for review.
 
+<<<<<<< ours
 The packaged batch smoke gate now verifies nested `.mdx` answer discovery, so
 directory-based review workflows keep the documented Markdown-family aliases
 release-gated alongside direct verification.
+=======
+- read an AI-generated answer from a Markdown or text file
+- batch verify multiple AI-generated answers from a directory
+- read one or more approved Markdown, text, or exported HTML source documents
+- read one or more approved Markdown, text, exported HTML, PDF, or structured JSON source documents
+- load source metadata such as `title`, `updatedAt`, and `trustLevel`
+- override the default trust level for sources that do not include metadata
+- split the answer into atomic claims
+- compare each claim against approved source snippets
+- label each claim as `verified`, `contradicted`, `unsupported`, or
+  `needs_review`
+- print a human-readable report
+- write a JSON report for workflow automation
+- write a Markdown reviewer report for approvals and handoff
+- write a polished HTML reviewer report for demos and human review
+- write a reviewer decision CSV that teams can fill in claim by claim
+  while preserving the original answer path for reviewer handoff
+- write a one-row-per-answer batch summary CSV for queueing and workflow automation
+- import filled reviewer decision CSVs into a machine-readable summary
+- fail a CI job when selected risky verdicts appear
+>>>>>>> theirs
 
 The packaged batch smoke gate now verifies nested NDJSON answer and approved-source
 discovery, keeping newline-delimited JSON coverage release-gated alongside direct
@@ -1801,10 +1823,63 @@ npm run dev -- version --json
 # {"service":"quorum","version":"0.1.0"}
 ```
 
+<<<<<<< ours
 The CLI and HTTP API read this version from `package.json`, keeping published
 package metadata and integration discovery responses aligned.
 Use `quorum help version` when onboarding a script that needs the exact version
 probe syntax.
+=======
+Options:
+
+- `--answer <path>`: AI-generated answer to verify
+- `--source <path>`: approved source document; may be repeated
+- `--source-dir <path>`: directory of approved source documents
+- `--answer <path>`: answer file to include in a batch run; may be repeated
+- `--answer-dir <path>`: directory of AI-generated answers for batch verification
+- `--default-trust-level <level>`: use `high`, `medium`, or `low` for sources
+  that do not define `trustLevel` metadata
+- `--json`: print the full JSON report
+- `--out <path>`: write the JSON report to disk
+- `--markdown-out <path>`: write a reviewer-friendly Markdown report to disk
+- `--html-out <path>`: write a styled HTML reviewer report to disk
+- `verify-batch --markdown-out <path>`: write a batch summary in Markdown for review queues
+- `verify-batch --html-out <path>`: write a styled batch summary in HTML for demos and reviewers
+- `verify-batch --review-csv-out <path>`: write one combined reviewer decision CSV across all answers, including an `answer_label` column for faster spreadsheet triage alongside the original `answer_path`
+- `verify-batch --summary-csv-out <path>`: write one CSV row per answer with an `answer_label`, `answer_preview`, the highest-priority claim finding, primary evidence title plus trust/freshness metadata, verdict totals, fail-policy status, the verdicts that triggered it, and the approved source metadata used for that batch run
+- teams can use `--summary-csv-out` for queue-level routing while keeping `--review-csv-out` for claim-by-claim reviewer decisions on the same batch run
+- `--review-csv-out <path>`: write a CSV template for reviewer verdicts and notes, including the original `answer_preview`, answer-level fail-policy status and fail verdicts, and evidence titles, trust levels, scores, and quotes
+- reviewer CSV exports also include `evidence_updated_at` so spreadsheet reviewers can see source freshness beside each claim
+- single-answer and batch reviewer CSV exports include both `answer_path` and `answer_preview` so review imports keep answer provenance and quick reviewer context
+- `--fail-on <verdict>`: exit with code `2` when that verdict appears; may be
+  repeated
+- `import-review --review-csv <path>`: import a filled reviewer decision CSV and
+  summarize final verdicts plus reviewer overrides; batch review CSV imports
+  also preserve both `answer_label` and `answer_path` context
+- `import-review --out <path>`: write the imported reviewer decision summary as
+  JSON
+- `import-review --markdown-out <path>`: write the imported reviewer decision
+  summary as a reviewer-friendly Markdown handoff
+- `import-review --html-out <path>`: write the imported reviewer decision
+  summary as a polished HTML handoff for review meetings and approvals
+- `import-review --summary-csv-out <path>`: write one CSV row per imported
+  answer group with the primary final finding, reviewer/model rationale,
+  primary evidence title plus trust/freshness/score/quote context,
+  reviewed/pending status, reviewer overrides, and final verdict totals
+- `import-review --fail-on <verdict>`: exit with code `2` when that final
+  reviewer-aware verdict appears after any overrides; may be repeated
+
+Supported source extensions today:
+
+- `.md`
+- `.markdown`
+- `.txt`
+- `.html`
+- `.htm`
+- `.pdf`
+- `.json` (object exports may include `title`, `updatedAt`, and `trustLevel` metadata)
+
+## Project Structure
+>>>>>>> theirs
 
 Client tooling can export the same machine-readable HTTP contract without
 starting the server:

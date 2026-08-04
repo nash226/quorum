@@ -1530,6 +1530,25 @@ test("extracts readable text from pdf sources", async () => {
   assert.match(source.content, /Employees receive 12 weeks of paid parental leave\./);
 });
 
+test("loads structured json sources and keeps source metadata out of evidence text", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/refunds.json",
+    JSON.stringify({
+      title: "Refund Policy",
+      updatedAt: "2026-06-15",
+      trustLevel: "high",
+      policy: { windowDays: 30, approval: "support" },
+    }),
+    0,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.equal(source.updatedAt, "2026-06-15");
+  assert.equal(source.trustLevel, "high");
+  assert.match(source.content, /windowDays/);
+  assert.doesNotMatch(source.content, /Refund Policy|2026-06-15/);
+});
+
 test("extracts embedded pdf title and modification metadata when present", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.pdf",

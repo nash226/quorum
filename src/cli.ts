@@ -154,6 +154,7 @@ interface OpenApiArgs {
   serverUrl?: string;
 }
 
+<<<<<<< ours
 const HELP_FLAGS = new Set(["--help", "-h"]);
 type CommandName =
   | "formats"
@@ -166,6 +167,10 @@ type CommandName =
   | "serve"
   | "openapi"
   | "version";
+=======
+const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf", ".json"]);
+const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
+>>>>>>> theirs
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
