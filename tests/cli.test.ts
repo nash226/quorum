@@ -33,6 +33,16 @@ test("version JSON and help aliases preserve the public CLI contract", async () 
   assert.equal(shortHelp, commandHelp);
 });
 
+test("version flag aliases accept the machine-readable JSON probe", async () => {
+  const [longAlias, shortAlias] = await Promise.all([
+    runCli(["--version", "--json"]),
+    runCli(["-v", "--json"]),
+  ]);
+
+  assert.deepEqual(JSON.parse(longAlias), { service: "quorum", version: "0.1.0" });
+  assert.equal(shortAlias, longAlias);
+});
+
 test("verify-batch discovers the .text plain-text alias for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-text-alias-"));
 
