@@ -848,6 +848,34 @@ try {
   rmSync(cliHtmlPackageDir, { recursive: true, force: true });
 }
 
+const cliHtmPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-htm-"));
+try {
+  const answerPath = join(cliHtmPackageDir, "answer.htm");
+  const sourcePath = join(cliHtmPackageDir, "policy.htm");
+  writeFileSync(answerPath, "<html><body><p>Customers can request refunds within 30 days.</p></body></html>");
+  writeFileSync(
+    sourcePath,
+    "<html><head><title>Refund Policy</title></head><body><p>Customers can request refunds within 30 days.</p></body></html>",
+  );
+
+  const htmOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const htmPayload = JSON.parse(htmOutput);
+  if (
+    htmPayload.summary?.verified !== 1 ||
+    htmPayload.answerPath !== answerPath ||
+    htmPayload.sources?.[0]?.title !== "Refund Policy" ||
+    htmPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected .htm answer/source contract.");
+  }
+} finally {
+  rmSync(cliHtmPackageDir, { recursive: true, force: true });
+}
+
 const cliMediaWikiPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-mediawiki-"));
 try {
   const answerPath = join(cliMediaWikiPackageDir, "answer.wiki");

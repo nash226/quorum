@@ -12,6 +12,9 @@ The packaged smoke gate now verifies commented JSON5 and JSONC answer/source
 exports, including comment-like text inside quoted policy values, keeping the
 installed JSON export contract aligned with direct verification.
 
+The packaged CLI smoke gate now verifies `.htm` answers and approved sources,
+keeping this supported HTML alias release-gated for installed integrations.
+
 JSONC and JSON5 approved-source exports accept `//` and `/* ... */` comments
 during ingestion while preserving comment-like text inside quoted policy
 values.
