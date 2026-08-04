@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4ffb423f` on 2026-08-04, test: cover packaged rest alias
+- Latest shipped change: `4e760d2c` on 2026-08-04, test: cover packaged openapi wrapper
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-04 | Direct push | test: cover packaged openapi wrapper | `4e760d2c` |
 | 2026-08-04 | Direct push | test: cover packaged rest alias | `4ffb423f` |
 | 2026-08-04 | [#1891](https://github.com/nash226/quorum/pull/1891) | test: cover packaged org-mode alias | `75ed9be0` |
 | 2026-08-04 | Direct push | test: cover recursive org-mode discovery | `af4d7da3` |
@@ -56,5 +57,4 @@
 | 2026-08-04 | Direct push | test: cover direct email answer verification | `668924a4` |
 | 2026-08-04 | Direct push | test: cover direct email source verification | `6acd550d` |
 | 2026-08-04 | Direct push | test: assert discovered email source metadata | `e1f7ec88` |
-| 2026-08-03 | [#1870](https://github.com/nash226/quorum/pull/1870) | test: cover nested XHTML batch discovery | `e8b5a8a7` |
 
