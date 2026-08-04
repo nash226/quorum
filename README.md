@@ -1172,6 +1172,11 @@ common editor temporary files are skipped, so teams can organize policy
 libraries by domain without flattening them first. The same format contract is
 available to integrations with `npm run dev -- formats --json`.
 
+The discovery contract includes structured and office exports such as JSON,
+JSONL, YAML, XML, TOML, CSV, TSV, DOCX, and RFC 822 email (`.eml`) alongside
+the text, HTML, and PDF formats. Use the JSON format command as the
+authoritative extension list when configuring an integration.
+
 ## Other CLI Commands
 
 The CLI also exposes focused commands for discovery, evaluation, review
