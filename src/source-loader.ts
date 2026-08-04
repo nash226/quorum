@@ -270,7 +270,33 @@ function parseEmailSource(content: string): ParsedSource {
     if (match) headers.set(match[1].toLowerCase(), match[2].trim());
   }
 
-  return { metadata: { title: headers.get("subject"), updatedAt: headers.get("date") }, body };
+  return {
+    metadata: { title: headers.get("subject"), updatedAt: headers.get("date") },
+    body: parseEmailBody(body, headers.get("content-type")),
+  };
+}
+
+function parseEmailBody(body: string, contentType?: string): string {
+  const boundary = contentType?.match(/boundary\s*=\s*(?:"([^"]+)"|'([^']+)'|([^;\s]+))/i)?.[1] ??
+    contentType?.match(/boundary\s*=\s*(?:"([^"]+)"|'([^']+)'|([^;\s]+))/i)?.[2] ??
+    contentType?.match(/boundary\s*=\s*(?:"([^"]+)"|'([^']+)'|([^;\s]+))/i)?.[3];
+
+  if (!boundary) return body;
+
+  const parts = body.split(`--${boundary}`).filter((part) => !/^--\s*$/.test(part.trim()));
+  const parsedParts = parts.map((part) => {
+    const partSeparator = part.search(/\n\n/);
+    if (partSeparator === -1) return { type: "", body: part.trim() };
+    const partHeaders = part.slice(0, partSeparator);
+    const partBody = part.slice(partSeparator + 2).trim();
+    return {
+      type: partHeaders.match(/^content-type:\s*([^;\s]+)/im)?.[1]?.toLowerCase() ?? "",
+      body: partBody,
+    };
+  });
+
+  return parsedParts.find((part) => part.type === "text/plain")?.body ??
+    parsedParts.find((part) => part.type === "text/html")?.body ?? body;
 }
 
 function parseHtmlSource(content: string): ParsedSource {
