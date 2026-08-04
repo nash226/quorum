@@ -55,6 +55,10 @@ try {
   rmSync(packedPackageDir, { recursive: true, force: true });
 }
 
+if (packageJson.scripts?.serve !== "npm run dev -- serve") {
+  throw new Error("Package manifest did not preserve the npm run serve wrapper contract.");
+}
+
 const npmVersionJson = JSON.parse(execFileSync("npm", ["run", "--silent", "version", "--", "--json"], {
   cwd: repoRoot,
   encoding: "utf8",
