@@ -42,7 +42,9 @@ to produce the same queue overview CSV as the `review-queue` CLI command.
 
 The packaged smoke gate now installs the generated tarball in a temporary
 consumer project and verifies the root library export, `quorum/server`
-subpath, and installed CLI binary together, catching publish-boundary drift.
+subpath, and installed CLI binary together. It also checks that the package
+manifest preserves the documented `npm run serve` wrapper, catching
+publish-boundary drift in both direct and npm-script integrations.
 
 Installed packages now expose `npm run version -- --json` for the same stable
 CLI/API contract-version probe used by integration health checks.
