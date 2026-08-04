@@ -115,8 +115,12 @@ Supported answer and source files include Markdown-family aliases
 MediaWiki, text/configuration aliases, exported HTML/XHTML, JSON, YAML/YML,
 XML, TOML, CSV, PDF, and DOCX.
 Structured JSON, YAML, XML, and TOML exports are normalized into claim-readable
-evidence text. Recursive answer and source directories discover the same
-supported formats, skip hidden paths, and sort the complete flattened path set.
+evidence text. PDF and DOCX exports are also read directly, while HTML/XHTML,
+email (`.eml`), CSV/TSV, and the Markdown-family, AsciiDoc, Org-mode,
+MediaWiki, reStructuredText, LaTeX, Textile, text, and configuration aliases
+are accepted by the same contract. Recursive answer and source directories
+discover the same supported formats, skip hidden paths, and sort the complete
+flattened path set.
 Use `--source-dir` for a directory of approved sources and
 `--default-trust-level high` when sources do not carry trust metadata.
 

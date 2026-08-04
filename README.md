@@ -4,6 +4,10 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+The CLI guide now describes the complete shipped input-format boundary,
+including direct PDF/DOCX ingestion and the document-export aliases exposed by
+`quorum formats --json`.
+
 Claim extraction now recognizes Armenian, Ethiopic, and Mongolian sentence
 terminators, keeping localized policy statements separately reviewable.
 
