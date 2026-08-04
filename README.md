@@ -576,6 +576,10 @@ supported by the installed package with `npm run formats -- --json` (or
 `quorum formats --json` after installation). The JSON response is the
 machine-readable contract used by the CLI and programmatic API.
 
+The current roadmap prioritizes additional mailbox and calendar export coverage
+so enterprise policy libraries can reuse the same evidence workflow after
+exporting content from shared systems.
+
 The packaged CLI smoke gate now verifies direct `.text` answers and approved
 sources, keeping the plain-text alias release-gated with the other supported
 input formats.
