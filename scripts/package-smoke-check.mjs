@@ -560,6 +560,33 @@ try {
   rmSync(cliLogPackageDir, { recursive: true, force: true });
 }
 
+const cliEmailPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-email-"));
+try {
+  const answerPath = join(cliEmailPackageDir, "answer.eml");
+  const sourcePath = join(cliEmailPackageDir, "policy.eml");
+  const email = (subject, body) =>
+    `From: policy@example.com\nTo: employee@example.com\nDate: Tue, 04 Aug 2026 09:00:00 -0400\nSubject: ${subject}\nContent-Type: text/plain; charset=utf-8\n\n${body}\n`;
+  writeFileSync(answerPath, email("Benefits answer", "Employees receive 12 weeks of paid parental leave."));
+  writeFileSync(sourcePath, email("Parental leave policy", "Employees receive 12 weeks of paid parental leave."));
+
+  const emailOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const emailPayload = JSON.parse(emailOutput);
+  if (
+    emailPayload.summary?.verified !== 1 ||
+    emailPayload.answerPath !== answerPath ||
+    emailPayload.sources?.[0]?.title !== "Parental leave policy" ||
+    emailPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected RFC 822 email answer/source contract.");
+  }
+} finally {
+  rmSync(cliEmailPackageDir, { recursive: true, force: true });
+}
+
 const cliTextilePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-textile-"));
 try {
   const answerPath = join(cliTextilePackageDir, "answer.textile");
