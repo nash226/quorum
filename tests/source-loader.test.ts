@@ -52,6 +52,17 @@ test("extracts subject and body from RFC 822 email source exports", async () => 
   assert.equal(source.content, "Customers can request refunds within 30 days.");
 });
 
+test("normalizes RTF source exports into readable text", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr/leave-policy.rtf",
+    "{\\rtf1\\ansi{\\fonttbl{\\f0 Arial;}}\\f0 Employees receive 12 weeks of paid parental leave.\\par The policy is reviewed in 2026.}",
+    0,
+  );
+
+  assert.equal(source.title, "leave-policy");
+  assert.equal(source.content, "Employees receive 12 weeks of paid parental leave.\nThe policy is reviewed in 2026.");
+});
+
 test("extracts readable text from DOCX source content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0);

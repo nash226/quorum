@@ -1,5 +1,9 @@
 # Quorum
 
+RTF policy and answer exports are now discovered and normalized into readable
+evidence, so common rich-text exports can enter the same verification flow as
+Markdown, DOCX, and other supported source formats.
+
 JSONC and JSON5 approved-source exports accept `//` and `/* ... */` comments
 during ingestion while preserving comment-like text inside quoted policy
 values.
