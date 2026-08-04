@@ -1,5 +1,9 @@
 # Quorum
 
+The current roadmap treats batch verification and reviewer handoff as shipped
+foundations; the next safe focus is broader approved-source coverage while
+durable queue storage remains decision-gated.
+
 The packaged smoke gate now exercises the root-library `renderReviewerQueueCsv`
 export with a representative pending queue, keeping Node integrations aligned
 with the documented reviewer-queue CSV contract.
