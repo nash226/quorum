@@ -416,9 +416,9 @@ function formatStructuredValue(value: unknown, prefix = ""): string {
 function parseXmlSource(content: string): ParsedSource {
   const metadata: SourceMetadata = {};
   for (const match of content.matchAll(
-    /<(title|updatedAt|updated_at|modifiedAt|lastModified|lastUpdated|trustLevel|trust_level)\b[^>]*>([\s\S]*?)<\/\1\s*>/gi,
+    /<((?:[A-Za-z][A-Za-z0-9_.-]*:)?(?:title|updatedAt|updated_at|modified|modifiedAt|lastModified|lastUpdated|trustLevel|trust_level))\b[^>]*>([\s\S]*?)<\/\1\s*>/gi,
   )) {
-    const key = match[1] ?? "";
+    const key = (match[1] ?? "").split(/[:.]/).at(-1) ?? "";
     const value = decodeHtmlEntities((match[2] ?? "").replace(/<[^>]+>/g, " ").trim());
     if (value) applyStructuredMetadata(metadata, key, value);
   }
@@ -588,6 +588,7 @@ function applyStructuredMetadata(metadata: SourceMetadata, key: string, value: s
   if (normalizedKey === "title" && value) metadata.title = stripQuotes(value);
   else if (
     (normalizedKey === "updatedat" ||
+      normalizedKey === "modified" ||
       normalizedKey === "modifiedat" ||
       normalizedKey === "lastmodified" ||
       normalizedKey === "lastupdated") &&
