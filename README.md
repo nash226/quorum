@@ -7,6 +7,10 @@ durable queue storage remains decision-gated.
 Claim extraction now recognizes Armenian, Ethiopic, and Mongolian sentence
 terminators, keeping localized policy statements separately reviewable.
 
+Claim extraction also normalizes low-asterisk (`⁎`) bullets from rich-text
+exports, keeping those policy statements separately reviewable like other
+Unicode list markers.
+
 The packaged smoke gate now exercises the root-library `renderReviewerQueueCsv`
 export with a representative pending queue, keeping Node integrations aligned
 with the documented reviewer-queue CSV contract.
