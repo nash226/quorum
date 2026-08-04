@@ -1,5 +1,8 @@
 # Quorum
 
+The shipped evaluation command runs checked-in HR and support fixtures with
+expected verdicts and can fail CI when the score or verdicts drift.
+
 The packaged CLI smoke gate now verifies RFC 822 `.eml` answers against `.eml`
 approved sources, keeping the published email-export contract release-gated.
 
