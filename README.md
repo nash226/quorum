@@ -1,5 +1,9 @@
 # Quorum
 
+Java-style `.properties`, `.conf`, and `.cfg` policy exports are now normalized
+into readable key/value evidence, with comments ignored and title, freshness,
+and trust metadata preserved for reviewer reports.
+
 The packaged `npm run review-queue -- ...` wrapper now smoke-tests both the
 queue overview and `--queue-status pending` filtering, keeping installed
 reviewer handoffs aligned with the direct CLI contract.
