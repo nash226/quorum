@@ -1,5 +1,9 @@
 # Quorum
 
+RFC 822 `.eml` exports now work on both sides of direct verification: Quorum
+can compare an email answer with an approved email policy while preserving the
+answer path for reviewer handoff.
+
 The CLI now verifies directly supplied or recursively discovered RFC 822 `.eml`
 policy exports, using the message subject and date as source metadata, the
 email body as evidence, and the same trust behavior as other approved sources.
