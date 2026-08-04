@@ -362,6 +362,18 @@ test("ingests JSONC and JSON5 exports with comments while preserving comment-lik
   assert.equal(json5Source.content, "policy: Employees get 12 weeks.");
 });
 
+test("preserves hash characters inside quoted YAML values while stripping comments", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.yaml",
+    'policy: "Employees use code #benefits for questions" # exported note\nplain: Employees receive 12 weeks.\n',
+    0,
+  );
+
+  assert.match(source.content, /policy: Employees use code #benefits for questions/);
+  assert.match(source.content, /plain: Employees receive 12 weeks\./);
+  assert.doesNotMatch(source.content, /exported note/);
+});
+
 test("loads metadata from structured JSON and YAML source exports", async () => {
   const jsonSource = await sourceDocumentFromFile(
     "docs/policy.json",

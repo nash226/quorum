@@ -451,7 +451,7 @@ function parseYamlSource(content: string): ParsedSource {
   const listIndexes = new Map<string, number>();
 
   for (const rawLine of content.replace(/\r\n/g, "\n").split("\n")) {
-    const line = rawLine.replace(/\s+#.*$/, "").trimEnd();
+    const line = stripYamlInlineComment(rawLine).trimEnd();
     if (!line.trim() || line.trimStart().startsWith("#") || line.trim() === "---") continue;
     const indent = line.length - line.trimStart().length;
     const value = line.trim();
@@ -480,6 +480,32 @@ function parseYamlSource(content: string): ParsedSource {
   }
 
   return { metadata, body: lines.join("\n") || content };
+}
+
+function stripYamlInlineComment(line: string): string {
+  let quote: "'" | '"' | undefined;
+  let escaped = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index] ?? "";
+
+    if (quote === '"' && character === "\\" && !escaped) {
+      escaped = true;
+      continue;
+    }
+
+    if (character === quote && !escaped) {
+      quote = undefined;
+    } else if (!quote && (character === "'" || character === '"')) {
+      quote = character;
+    } else if (!quote && character === "#" && (index === 0 || /\s/.test(line[index - 1] ?? ""))) {
+      return line.slice(0, index);
+    }
+
+    escaped = false;
+  }
+
+  return line;
 }
 
 function parseTomlSource(content: string): ParsedSource {

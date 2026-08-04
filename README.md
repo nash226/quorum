@@ -4,6 +4,10 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+YAML policy exports now preserve `#` characters inside quoted values while still
+removing trailing comments, so hashtags and identifiers remain available for
+claim matching.
+
 Claim extraction now recognizes Armenian, Ethiopic, and Mongolian sentence
 terminators, keeping localized policy statements separately reviewable.
 
