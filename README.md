@@ -1242,6 +1242,33 @@ npm run formats -- --json
 
 Run `npm run help` for the complete installed CLI command reference.
 
+The published package also exposes the verification workflow for Node.js
+integrations. Use the in-memory API when an agent already has answer text and
+approved source content:
+
+```ts
+import { verifyAnswerContents } from "quorum";
+
+const result = await verifyAnswerContents({
+  answer: "Employees receive 12 weeks of paid parental leave.",
+  answerPath: "agent-response.txt",
+  sources: [
+    {
+      sourcePath: "hr-policy.md",
+      content: "Employees receive 12 weeks of paid parental leave.",
+      title: "HR Benefits Policy",
+      trustLevel: "high",
+    },
+  ],
+});
+
+console.log(result.report.summary);
+```
+
+The result includes claim-level verdicts and evidence, so an agent can make a
+publication decision without scraping CLI output. The package smoke check
+release-gates this import path alongside the installed CLI and HTTP server.
+
 Every shipped command also accepts `--help` or `-h`, so integrations and
 operators can inspect a command's usage before preparing answer, source, or
 reviewer inputs.
