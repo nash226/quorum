@@ -83,6 +83,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseHtmlSource(normalizedContent);
   }
 
+  if (isEmailSource(sourcePath)) {
+    return parseEmailSource(normalizedContent);
+  }
+
   if (isJsonSource(sourcePath)) {
     return parseJsonSource(normalizedContent);
   }
@@ -202,6 +206,10 @@ function isHtmlSource(sourcePath: string): boolean {
   return /\.(?:html?|xhtml)$/i.test(sourcePath);
 }
 
+function isEmailSource(sourcePath: string): boolean {
+  return /\.eml$/i.test(sourcePath);
+}
+
 function isPdfSource(sourcePath: string): boolean {
   return /\.pdf$/i.test(sourcePath);
 }
@@ -247,7 +255,22 @@ function normalizeLatexSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
+}
+
+function parseEmailSource(content: string): ParsedSource {
+  const normalized = content.replace(/\r\n/g, "\n");
+  const separator = normalized.search(/\n\n/);
+  const headerText = separator === -1 ? normalized : normalized.slice(0, separator);
+  const body = separator === -1 ? "" : normalized.slice(separator + 2).trim();
+  const headers = new Map<string, string>();
+
+  for (const line of headerText.split("\n")) {
+    const match = line.match(/^([A-Za-z0-9-]+):\s*(.*)$/);
+    if (match) headers.set(match[1].toLowerCase(), match[2].trim());
+  }
+
+  return { metadata: { title: headers.get("subject"), updatedAt: headers.get("date") }, body };
 }
 
 function parseHtmlSource(content: string): ParsedSource {

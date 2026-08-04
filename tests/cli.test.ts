@@ -258,8 +258,8 @@ test("verify-batch ignores unsupported files while discovering nested inputs", a
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
-  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
-  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.htm, \.html/);
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
@@ -284,6 +284,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.jsonc/);
   assert.match(stdout, /Source files: .*\.log/);
   assert.match(stdout, /Answer files: .*\.log/);
+  assert.match(stdout, /Source files: .*\.eml/);
+  assert.match(stdout, /Answer files: .*\.eml/);
 });
 
 test("formats --json exposes the same contract as the library constants", async () => {

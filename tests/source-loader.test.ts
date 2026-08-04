@@ -40,6 +40,18 @@ test("extracts metadata from XML source exports", async () => {
   assert.match(source.content, /Employees get 12 weeks\./);
 });
 
+test("extracts subject and body from RFC 822 email source exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/support/refund-policy.eml",
+    "From: support@example.com\r\nDate: 2026-08-03\r\nSubject: Refund policy update\r\n\r\nCustomers can request refunds within 30 days.\r\n",
+    0,
+  );
+
+  assert.equal(source.title, "Refund policy update");
+  assert.equal(source.updatedAt, "2026-08-03");
+  assert.equal(source.content, "Customers can request refunds within 30 days.");
+});
+
 test("extracts readable text from DOCX source content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0);
