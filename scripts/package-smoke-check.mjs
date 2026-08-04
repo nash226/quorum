@@ -2604,6 +2604,34 @@ try {
   rmSync(ndjsonSourceTempDir, { recursive: true, force: true });
 }
 
+const jsonSourceTempDir = mkdtempSync(join(tmpdir(), "quorum-package-json-source-"));
+try {
+  const jsonAnswerPath = join(jsonSourceTempDir, "answer.md");
+  const jsonSourcePath = join(jsonSourceTempDir, "policy.json");
+  writeFileSync(jsonAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(jsonSourcePath, JSON.stringify({
+    title: "Parental Leave Policy",
+    updatedAt: "2026-08-04",
+    trustLevel: "high",
+    policy: "Employees receive 12 weeks of paid parental leave.",
+  }));
+  const jsonSourceResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", jsonAnswerPath, "--source", jsonSourcePath, "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  const jsonSource = jsonSourceResult.sources?.[0];
+  if (
+    jsonSourceResult.summary?.verified !== 1 ||
+    jsonSource?.sourcePath !== jsonSourcePath ||
+    jsonSource?.title !== "Parental Leave Policy" ||
+    jsonSource?.updatedAt !== "2026-08-04" ||
+    jsonSource?.trustLevel !== "high"
+  ) {
+    throw new Error("Package artifact did not preserve the direct JSON source metadata contract.");
+  }
+} finally {
+  rmSync(jsonSourceTempDir, { recursive: true, force: true });
+}
+
 const ndjsonBatchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-ndjson-batch-"));
 try {
   const answerDir = join(ndjsonBatchTempDir, "answers", "nested");
