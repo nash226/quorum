@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies direct reStructuredText `.rest`
+answers and approved sources, keeping the documented alias release-gated for
+installed integrations.
+
 The packaged CLI smoke gate now verifies RFC 822 `.eml` answers against `.eml`
 approved sources, keeping the published email-export contract release-gated.
 

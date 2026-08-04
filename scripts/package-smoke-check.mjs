@@ -689,6 +689,31 @@ try {
   rmSync(cliQuartoPackageDir, { recursive: true, force: true });
 }
 
+const cliRestPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-rest-"));
+try {
+  const answerPath = join(cliRestPackageDir, "answer.rest");
+  const sourcePath = join(cliRestPackageDir, "policy.rest");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const restOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const restPayload = JSON.parse(restOutput);
+  if (
+    restPayload.summary?.verified !== 1 ||
+    restPayload.answerPath !== answerPath ||
+    restPayload.sources?.[0]?.title !== "policy" ||
+    restPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected .rest answer/source contract.");
+  }
+} finally {
+  rmSync(cliRestPackageDir, { recursive: true, force: true });
+}
+
 const cliXhtmlPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-xhtml-"));
 try {
   const answerPath = join(cliXhtmlPackageDir, "answer.xhtml");
