@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e1f7ec88` on 2026-08-04, test: assert discovered email source metadata
+- Latest shipped change: `6acd550d` on 2026-08-04, test: cover direct email source verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-04 | Direct push | test: cover direct email source verification | `6acd550d` |
 | 2026-08-04 | Direct push | test: assert discovered email source metadata | `e1f7ec88` |
 | 2026-08-03 | [#1870](https://github.com/nash226/quorum/pull/1870) | test: cover nested XHTML batch discovery | `e8b5a8a7` |
 | 2026-08-03 | Direct push | feat: ingest email source exports | `f854aa00` |
@@ -56,5 +57,4 @@
 | 2026-08-03 | [#1863](https://github.com/nash226/quorum/pull/1863) | docs: record localized claim extraction coverage | `4c8c904b` |
 | 2026-08-03 | Direct push | test: expand support security evaluation coverage | `0c797ae8` |
 | 2026-08-03 | [#1856](https://github.com/nash226/quorum/pull/1856) | fix: keep localized short claims | `d51dafa4` |
-| 2026-08-03 | Direct push | fix: split claims after Unicode ellipses | `7f015443` |
 
