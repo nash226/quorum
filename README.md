@@ -1612,9 +1612,9 @@ The packaged CLI command map is:
 | `version` | Probe the CLI and API contract version. |
 
 The version probe is also available as `quorum --version` and `quorum -v`,
-which is useful for installation checks that do not use a subcommand. Use
-`quorum version --json` when a script needs the stable `{ service, version }`
-shape instead of parsing human-readable output.
+which is useful for installation checks that do not use a subcommand. Those
+aliases accept `--json` too, so scripts can use the stable
+`{ service, version }` shape instead of parsing human-readable output.
 The CLI regression suite pins all three version entry points to the package
 contract string, so alias behavior stays visible during normal test runs.
 The packaged smoke gate executes both aliases after build, so published
