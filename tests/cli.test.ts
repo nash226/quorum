@@ -5321,10 +5321,15 @@ test("verify discovers RFC 822 email sources in nested directories", async () =>
 
   const report = JSON.parse(
     await runCli(["verify", "--answer", answerPath, "--source-dir", join(tempDir, "sources"), "--json"]),
-  ) as { summary: { verified: number }; sources: Array<{ sourcePath: string; title: string }> };
+  ) as {
+    summary: { verified: number };
+    sources: Array<{ id: string; sourcePath: string; title: string; trustLevel: string }>;
+  };
 
   assert.equal(report.summary.verified, 1);
-  assert.deepEqual(report.sources, [{ sourcePath, title: "Refund policy" }]);
+  assert.deepEqual(report.sources, [
+    { id: "source_1", sourcePath, title: "Refund policy", trustLevel: "medium" },
+  ]);
 });
 
 test("verify-batch disambiguates duplicate answer labels across directories", async () => {
