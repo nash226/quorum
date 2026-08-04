@@ -121,6 +121,9 @@ The packaged batch smoke gate now verifies nested XML answers and approved
 sources, keeping recursive XML policy workflows release-gated alongside direct
 verification.
 
+Recursive batch verification also now has an end-to-end `.org-mode` answer and
+approved-source check, keeping this common Org export alias release-gated.
+
 Top-level CLI help now shows the optional `--json` flag for `quorum formats`,
 making the machine-readable format-discovery path visible during onboarding.
 
