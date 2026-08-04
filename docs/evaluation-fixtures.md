@@ -15,7 +15,7 @@ set covers:
 - explicit source IDs and inline source metadata
 - HR bonus eligibility, bereavement leave, dependent benefits, medical leave, relocation, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
-  employee referrals, jury duty,
+  employee assistance, employee referrals, jury duty,
   remote work, workplace accommodations, expense reimbursement, tuition reimbursement, and travel reimbursement
 - support account closure, account recovery, account contact changes, account security, account suspension, authorized contacts, billing address changes, billing-suspension appeals, cancellation, guest access, invoice correction, data retention, escalation, incident communication, live chat, order tracking, password
   reset, refunds, charge disputes, delivery delays, data export, payment method
@@ -27,7 +27,7 @@ set covers:
 - price-adjustment eligibility, retailer restrictions, and refund routing
 - support identity-verification claims, including mismatched identity documents and unsafe disclosure shortcuts
 
-The benchmark currently contains 91 fixtures: 31 HR workflows, 57 support
+The benchmark currently contains 93 fixtures: 33 HR workflows, 60 support
 workflows, and 3 shared edge-case fixtures used to exercise empty or generic
 inputs.
 The generated
