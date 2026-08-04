@@ -27,9 +27,9 @@ set covers:
 - price-adjustment eligibility, retailer restrictions, and refund routing
 - support identity-verification claims, including mismatched identity documents and unsafe disclosure shortcuts
 
-The benchmark currently contains 91 fixtures: 31 HR workflows, 57 support
-workflows, and 3 shared edge-case fixtures used to exercise empty or generic
-inputs.
+The benchmark currently contains 93 fixtures: 32 HR workflows and 61 support
+workflows, including the empty-answer edge case used to exercise queue
+routing.
 The generated
 [status page](status.md) records the current inventory and recently shipped
 changes; this guide records why the fixtures exist and how to extend them.
@@ -222,6 +222,8 @@ specific product question:
 - Support subscription-renewal coverage verifies the self-service renewal
   window, catches a conflicting post-expiration claim, and flags an unsupported
   automatic-renewal promise.
+- Support refund-escalation coverage verifies a standard refund window, catches
+  an overbroad enterprise window, and flags approval without review.
 - Support account-merge coverage verifies ownership of both accounts, catches
   a conflicting merge claim, and flags an unsupported password-manager promise.
 - Support shipping-protection coverage verifies the pre-shipment control, routes

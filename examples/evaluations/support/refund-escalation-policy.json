@@ -1,0 +1,24 @@
+{
+  "name": "Support refund escalation policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-refund-escalation-answer.md",
+  "answer": "Customers can request a refund within 30 days of purchase.\nEnterprise customers can request a refund within 90 days of purchase.\nSupport can approve refunds for any reason without review.\n",
+  "answerLabel": "Support refund escalation reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "inline/support-refund-escalation-policy.md",
+      "id": "support/refund-escalation@2026-08-02",
+      "title": "Support Refund Escalation Policy",
+      "updatedAt": "2026-08-02",
+      "trustLevel": "high",
+      "content": "Customers can request a refund within 30 days of purchase.\nEnterprise refund requests require review by the account team.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
