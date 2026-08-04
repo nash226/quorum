@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation scorecard now includes an HR commuter-benefits packet covering
+enrollment timing, receipt-backed reimbursement, and an unsupported cash-stipend
+claim across verified and unsupported outcomes.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 
@@ -14,7 +18,7 @@ The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
 
-The evaluation fixture guide now matches the shipped benchmark inventory: 92
+The evaluation fixture guide now matches the shipped benchmark inventory: 93
 checked-in fixtures across HR, support, and shared edge-case workflows.
 
 The evaluation scorecard now includes the file-backed support security packet,
@@ -2032,12 +2036,12 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 92-fixture benchmark spans 32 HR and 60 support workflows. It also
+The checked-in 93-fixture benchmark spans 33 HR and 60 support workflows. It also
 includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
 
-The HR travel-expense fixture is included in the 32-fixture HR inventory, with
+The HR travel-expense fixture is included in the 33-fixture HR inventory, with
 aggregate expectations covering 97 claims across verified, contradicted, and
 unsupported policy outcomes.
 
@@ -2484,7 +2488,7 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
-The checked-in HR and support benchmark currently contains 92 fixtures and 274
+The checked-in HR and support benchmark currently contains 93 fixtures and 277
 expected claims, including support plan-upgrade and plan-downgrade scenarios
 with verified, needs-review, contradicted, and unsupported claims.
 The HR employee-assistance policy is also covered as a file-backed reviewer

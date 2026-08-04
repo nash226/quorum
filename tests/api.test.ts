@@ -2694,7 +2694,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
 
   assert.equal(batchResult.shouldFail, false);
   assert.equal(batchResult.mismatchCount, 0);
-  assert.equal(batchResult.summary.fixtureCount, 92);
+  assert.equal(batchResult.summary.fixtureCount, 93);
   assert.equal(batchResult.summary.mismatchCount, 0);
   assert.equal(batchResult.summary.matchedClaims, 274);
   assert.equal(batchResult.summary.totalExpectedClaims, 274);
@@ -2703,7 +2703,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
   assert.deepEqual(batchResult.summary.domains, [
     {
       domain: "hr",
-      fixtureCount: 32,
+      fixtureCount: 33,
       mismatchCount: 0,
       mismatchRate: 0,
       answersWithClaims: 32,
@@ -2730,7 +2730,7 @@ test("programmatic API returns mismatch metadata for fixture file evaluation hel
       actualSummary: { verified: 66, contradicted: 39, unsupported: 51, needs_review: 21 },
     },
   ]);
-  assert.equal(batchResult.scorecards.length, 92);
+  assert.equal(batchResult.scorecards.length, 93);
   assert.equal(singleResult.hasMismatch, false);
   assert.equal(singleResult.scorecard.fixtureName, "HR policy example");
   assert.equal(contentResult.hasMismatch, false);
@@ -6392,9 +6392,9 @@ test("programmatic API exports batch evaluation helpers", async () => {
 
   const rendered = renderEvaluationTextReport(scorecards);
 
-  assert.equal(scorecards.length, 92);
+  assert.equal(scorecards.length, 93);
   assert.equal(scorecards.some(hasEvaluationMismatch), false);
-  assert.match(rendered, /Fixtures: 92/);
+  assert.match(rendered, /Fixtures: 93/);
   assert.match(renderEvaluationHtmlReport(scorecards), /<!doctype html>/i);
   assert.match(renderEvaluationSummaryCsv(scorecards), /generated_at,fixture_name,domain,fixture_path,answer_path/);
 });
