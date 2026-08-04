@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `8a695088` on 2026-08-04, test: cover packaged reviewer queue export
+- Latest shipped change: `698015e4` on 2026-08-04, docs: clarify current roadmap focus
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-04 | Direct push | docs: clarify current roadmap focus | `698015e4` |
 | 2026-08-04 | [#1901](https://github.com/nash226/quorum/pull/1901) | test: cover packaged reviewer queue export | `8a695088` |
 | 2026-08-04 | Direct push | fix: ingest commented json policy exports | `848d977f` |
 | 2026-08-04 | Direct push | test: guard packaged batch library exports | `b4c8bdf3` |
@@ -56,5 +57,4 @@
 | 2026-08-04 | Direct push | test: cover packaged openapi wrapper | `4e760d2c` |
 | 2026-08-04 | Direct push | test: cover packaged rest alias | `4ffb423f` |
 | 2026-08-04 | [#1891](https://github.com/nash226/quorum/pull/1891) | test: cover packaged org-mode alias | `75ed9be0` |
-| 2026-08-04 | Direct push | test: cover recursive org-mode discovery | `af4d7da3` |
 
