@@ -2074,6 +2074,20 @@ try {
   if (deployedOpenApi.servers?.[0]?.url !== "https://quorum.example.internal" || !deployedOpenApi.paths?.["/verify"]) {
     throw new Error("Package artifact CLI did not preserve the OpenAPI server URL contract.");
   }
+
+  const npmOpenApiPath = join(openApiTempDir, "reports", "npm-openapi.json");
+  const npmOpenApiOutput = execFileSync("npm", [
+    "run", "--silent", "openapi", "--", "--server-url", "https://quorum.example.npm", "--out", npmOpenApiPath,
+  ], { cwd: repoRoot, encoding: "utf8" });
+  const npmOpenApiDocument = JSON.parse(readFileSync(npmOpenApiPath, "utf8"));
+  if (
+    !npmOpenApiOutput.includes("OpenAPI document written to") ||
+    npmOpenApiDocument.openapi !== "3.1.0" ||
+    npmOpenApiDocument.servers?.[0]?.url !== "https://quorum.example.npm" ||
+    !npmOpenApiDocument.paths?.["/verify"]
+  ) {
+    throw new Error("The npm openapi wrapper did not preserve the packaged OpenAPI export contract.");
+  }
 } finally {
   rmSync(openApiTempDir, { recursive: true, force: true });
 }

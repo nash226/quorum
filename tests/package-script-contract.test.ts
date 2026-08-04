@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { promisify } from "node:util";
 import test from "node:test";
 import { API_VERSION } from "../src/api-server.js";
@@ -68,4 +70,22 @@ test("import-review package script forwards command-specific help flags", async 
   });
   assert.match(stdout, /Usage:\s+quorum import-review/);
   assert.match(stdout, /--review-csv <path\|->/);
+});
+
+test("openapi package script forwards export arguments", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-openapi-wrapper-"));
+  try {
+    const outputPath = join(tempDir, "openapi.json");
+    const { stdout } = await execFileAsync("npm", ["run", "--silent", "openapi", "--", "--server-url", "https://quorum.example.test", "--out", outputPath], {
+      cwd: new URL("..", import.meta.url),
+      maxBuffer: 1024 * 1024,
+    });
+    const openApi = JSON.parse(await readFile(outputPath, "utf8")) as { openapi: string; servers?: Array<{ url: string }> };
+
+    assert.match(stdout, /OpenAPI document written to/);
+    assert.equal(openApi.openapi, "3.1.0");
+    assert.deepEqual(openApi.servers, [{ url: "https://quorum.example.test" }]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
