@@ -100,6 +100,18 @@ function isThematicBreak(text: string): boolean {
 }
 
 function isShortPunctuatedClaim(text: string): boolean {
+  const hasNonLatinLetters = /\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hiragana}|\p{Script=Katakana}/u.test(text);
+
+  if (
+    hasNonLatinLetters &&
+    text.length >= 4 &&
+    text.length < 8 &&
+    /[.!?…\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
+    /\p{L}{2,}/u.test(text)
+  ) {
+    return true;
+  }
+
   return (
     text.length >= 8 &&
     text.length < 12 &&

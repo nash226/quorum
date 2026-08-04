@@ -65,6 +65,12 @@ test("preserves short punctuated claims with non-Latin letters", () => {
   assert.deepEqual(claims.map((claim) => claim.text), ["休暇申請は承認制。", "지원 신청은 필수."]);
 });
 
+test("preserves compact CJK policy claims", () => {
+  const claims = extractClaims("需审批。\n要予約。\n승인필수.");
+
+  assert.deepEqual(claims.map((claim) => claim.text), ["需审批。", "要予約。", "승인필수."]);
+});
+
 test("extracts clean claims from markdown list answers", () => {
   const claims = extractClaims(`# HR Policy Summary
 
