@@ -4,6 +4,9 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+Claim extraction now recognizes Armenian, Ethiopic, and Mongolian sentence
+terminators, keeping localized policy statements separately reviewable.
+
 The packaged smoke gate now exercises the root-library `renderReviewerQueueCsv`
 export with a representative pending queue, keeping Node integrations aligned
 with the documented reviewer-queue CSV contract.
