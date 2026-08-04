@@ -488,7 +488,7 @@ function parseTomlSource(content: string): ParsedSource {
   let section = "";
 
   for (const rawLine of content.replace(/\r\n/g, "\n").split("\n")) {
-    const line = rawLine.replace(/\s+#.*$/, "").trim();
+    const line = stripTomlComment(rawLine).trim();
     if (!line) continue;
     const sectionMatch = line.match(/^\[([^\]]+)\]$/);
     if (sectionMatch) {
@@ -508,6 +508,21 @@ function parseTomlSource(content: string): ParsedSource {
   }
 
   return { metadata, body: lines.join("\n") || content };
+}
+
+function stripTomlComment(line: string): string {
+  let quote: '"' | "'" | undefined;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if ((character === '"' || character === "'") && line[index - 1] !== "\\") {
+      quote = quote === character ? undefined : quote ?? character;
+    } else if (character === "#" && !quote && (index === 0 || /\s/.test(line[index - 1] ?? ""))) {
+      return line.slice(0, index);
+    }
+  }
+
+  return line;
 }
 
 function parseDelimitedSource(content: string, tabSeparated: boolean): ParsedSource {
