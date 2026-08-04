@@ -1,5 +1,8 @@
 # Quorum
 
+Mailbox (`.mbox`) exports are now supported for answers and approved sources;
+each archived RFC 822 message contributes its readable body to verification.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 

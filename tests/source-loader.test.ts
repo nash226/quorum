@@ -52,6 +52,19 @@ test("extracts subject and body from RFC 822 email source exports", async () => 
   assert.equal(source.content, "Customers can request refunds within 30 days.");
 });
 
+test("extracts metadata and bodies from mbox mailbox exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/support/mailbox.mbox",
+    "From sender@example.com Mon Aug  3 09:00:00 2026\nDate: 2026-08-03\nSubject: First policy\n\nCustomers can request refunds within 30 days.\nFrom other@example.com Mon Aug  3 10:00:00 2026\nDate: 2026-08-03\nSubject: Second policy\n\nEscalations receive a response within one hour.\n",
+    0,
+  );
+
+  assert.equal(source.title, "First policy");
+  assert.equal(source.updatedAt, "2026-08-03");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.match(source.content, /Escalations receive a response within one hour\./);
+});
+
 test("extracts readable text from DOCX source content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0);
