@@ -8,6 +8,10 @@ The packaged smoke gate now exercises the root-library `renderReviewerQueueCsv`
 export with a representative pending queue, keeping Node integrations aligned
 with the documented reviewer-queue CSV contract.
 
+The packaged smoke gate now verifies commented JSON5 and JSONC answer/source
+exports, including comment-like text inside quoted policy values, keeping the
+installed JSON export contract aligned with direct verification.
+
 JSONC and JSON5 approved-source exports accept `//` and `/* ... */` comments
 during ingestion while preserving comment-like text inside quoted policy
 values.

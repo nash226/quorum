@@ -413,8 +413,12 @@ try {
   for (const extension of ["json5", "jsonc"]) {
     const answerPath = join(cliJsonExtensionsPackageDir, `answer.${extension}`);
     const sourcePath = join(cliJsonExtensionsPackageDir, `policy.${extension}`);
-    const answer = '{"claim":"Employees receive 12 weeks of paid parental leave."}\n';
-    const source = '{"title":"Parental Leave Policy","claim":"Employees receive 12 weeks of paid parental leave."}\n';
+    const answer = extension === "json5"
+      ? '{ /* exported answer */ "claim": "Employees receive 12 weeks of paid parental leave." }\n'
+      : '{\n  // exported answer\n  "claim": "Employees receive 12 weeks of paid parental leave."\n}\n';
+    const source = extension === "json5"
+      ? '{"title": "Parental Leave Policy", /* metadata */ "claim": "Employees receive 12 weeks of paid parental leave.", "note": "https://intranet.example/policy // current"}\n'
+      : '{\n  /* approved policy */\n  "title": "Parental Leave Policy",\n  "claim": "Employees receive 12 weeks of paid parental leave.",\n  "note": "https://intranet.example/policy // current"\n}\n';
     writeFileSync(answerPath, answer);
     writeFileSync(sourcePath, source);
 
