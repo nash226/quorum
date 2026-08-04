@@ -430,6 +430,9 @@ The packaged batch smoke gate now verifies nested NDJSON answer and approved-sou
 discovery, keeping newline-delimited JSON coverage release-gated alongside direct
 verification.
 
+The packaged CLI smoke gate now verifies structured JSON source metadata and
+claim matching, keeping the documented JSON policy-export path release-gated.
+
 The packaged CLI smoke gate now verifies direct XML answer and approved-source
 exports, keeping the published structured-format contract release-gated.
 
