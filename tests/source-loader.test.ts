@@ -338,6 +338,30 @@ test("normalizes structured JSON source exports into claim-readable lines", asyn
   assert.equal(source.content, "policy.leave: Employees get 12 weeks.\nregions[1]: US\nregions[2]: CA");
 });
 
+test("ingests JSONC and JSON5 exports with comments while preserving comment-like strings", async () => {
+  const jsoncSource = await sourceDocumentFromFile(
+    "docs/policies/benefits.jsonc",
+    `{
+      // Approved policy metadata
+      "title": "Benefits Policy",
+      "policy": "Use https://intranet.example/policy // current"
+    }`,
+    0,
+  );
+  const json5Source = await sourceDocumentFromFile(
+    "docs/policies/benefits.json5",
+    `{
+      /* Exported from the policy system */
+      "policy": "Employees get 12 weeks."
+    }`,
+    1,
+  );
+
+  assert.equal(jsoncSource.title, "Benefits Policy");
+  assert.match(jsoncSource.content, /https:\/\/intranet\.example\/policy \/\/ current/);
+  assert.equal(json5Source.content, "policy: Employees get 12 weeks.");
+});
+
 test("loads metadata from structured JSON and YAML source exports", async () => {
   const jsonSource = await sourceDocumentFromFile(
     "docs/policy.json",
