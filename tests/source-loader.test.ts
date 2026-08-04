@@ -428,6 +428,16 @@ test("maps common structured modification keys to source freshness", async () =>
   assert.equal(tomlSource.updatedAt, "2026-07-24");
 });
 
+test("preserves hash characters inside quoted TOML policy values", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policy.toml",
+    'policy = "Use the #help channel for support." # export note\n',
+    0,
+  );
+
+  assert.equal(source.content, 'policy: "Use the #help channel for support."');
+});
+
 test("normalizes XML source exports into claim-readable text", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.xml",
