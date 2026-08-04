@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f854aa00` on 2026-08-03, feat: ingest email source exports
+- Latest shipped change: `e8b5a8a7` on 2026-08-03, test: cover nested XHTML batch discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-03 | [#1870](https://github.com/nash226/quorum/pull/1870) | test: cover nested XHTML batch discovery | `e8b5a8a7` |
 | 2026-08-03 | Direct push | feat: ingest email source exports | `f854aa00` |
 | 2026-08-03 | Direct push | docs: document stable source IDs | `bee15f18` |
 | 2026-08-03 | [#1863](https://github.com/nash226/quorum/pull/1863) | docs: record localized claim extraction coverage | `4c8c904b` |
@@ -56,5 +57,4 @@
 | 2026-08-03 | [#1856](https://github.com/nash226/quorum/pull/1856) | fix: keep localized short claims | `d51dafa4` |
 | 2026-08-03 | Direct push | fix: split claims after Unicode ellipses | `7f015443` |
 | 2026-08-03 | Direct push | test: validate snake_case source freshness | `4b60414b` |
-| 2026-08-03 | Direct push | docs: align roadmap with shipped batch verification | `5eedfa80` |
 
