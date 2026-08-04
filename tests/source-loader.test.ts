@@ -153,15 +153,28 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(iniSource.title, "leave-policy");
   assert.equal(iniSource.content, "[leave]\nweeks=12\n");
   assert.equal(propertiesSource.title, "leave-policy");
-  assert.equal(propertiesSource.content, "leave.weeks=12\nleave.paid=true\n");
+  assert.equal(propertiesSource.content, "leave.weeks: 12\nleave.paid: true");
   assert.equal(confSource.title, "leave-policy");
-  assert.equal(confSource.content, "leave.weeks=12\n");
+  assert.equal(confSource.content, "leave.weeks: 12");
   assert.equal(cfgSource.title, "leave-policy");
-  assert.equal(cfgSource.content, "leave.weeks=12\n");
+  assert.equal(cfgSource.content, "leave.weeks: 12");
   assert.equal(textileSource.title, "leave-policy");
   assert.equal(ndjsonSource.title, "leave-policy");
   assert.match(ndjsonSource.content, /Employees receive 12 weeks/);
   assert.equal(yamlSource.title, "leave-policy");
+});
+
+test("normalizes properties metadata and ignores config comments", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.properties",
+    "# generated export\ntitle = Benefits Policy\nupdated_at: 2026-07-20\ntrust_level=high\nleave.weeks=12\n",
+    0,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.updatedAt, "2026-07-20");
+  assert.equal(source.trustLevel, "high");
+  assert.equal(source.content, "title: Benefits Policy\nupdated_at: 2026-07-20\ntrust_level: high\nleave.weeks: 12");
 });
 
 test("strips the Org-mode alias from fallback source titles", async () => {

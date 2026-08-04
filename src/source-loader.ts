@@ -103,6 +103,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseTomlSource(normalizedContent);
   }
 
+  if (isPropertiesSource(sourcePath)) {
+    return parsePropertiesSource(normalizedContent);
+  }
+
   if (isDelimitedSource(sourcePath)) {
     return parseDelimitedSource(normalizedContent, /\.tsv$/i.test(sourcePath));
   }
@@ -232,6 +236,10 @@ function isYamlSource(sourcePath: string): boolean {
 
 function isTomlSource(sourcePath: string): boolean {
   return /\.toml$/i.test(sourcePath);
+}
+
+function isPropertiesSource(sourcePath: string): boolean {
+  return /\.(?:properties|conf|cfg)$/i.test(sourcePath);
 }
 
 function isDelimitedSource(sourcePath: string): boolean {
@@ -451,6 +459,28 @@ function parseTomlSource(content: string): ParsedSource {
     const path = section ? `${section}.${key}` : key;
     lines.push(`${path}: ${scalar}`);
     if (!section) applyStructuredMetadata(metadata, key, scalar);
+  }
+
+  return { metadata, body: lines.join("\n") || content };
+}
+
+function parsePropertiesSource(content: string): ParsedSource {
+  const lines: string[] = [];
+  const metadata: SourceMetadata = {};
+
+  for (const rawLine of content.replace(/\r\n/g, "\n").split("\n")) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#") || line.startsWith("!")) continue;
+    const separator = line.search(/[=:]/);
+    if (separator === -1) {
+      lines.push(line);
+      continue;
+    }
+    const key = line.slice(0, separator).trim();
+    const value = line.slice(separator + 1).trim();
+    const normalizedValue = value.replace(/\\([\\=:])/, "$1");
+    lines.push(`${key}: ${normalizedValue}`);
+    if (key && !key.includes(".")) applyStructuredMetadata(metadata, key, normalizedValue);
   }
 
   return { metadata, body: lines.join("\n") || content };
