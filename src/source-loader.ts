@@ -87,6 +87,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseEmailSource(normalizedContent);
   }
 
+  if (isCalendarSource(sourcePath)) {
+    return parseCalendarSource(normalizedContent);
+  }
+
   if (isJsonSource(sourcePath)) {
     return parseJsonSource(normalizedContent);
   }
@@ -210,6 +214,10 @@ function isEmailSource(sourcePath: string): boolean {
   return /\.eml$/i.test(sourcePath);
 }
 
+function isCalendarSource(sourcePath: string): boolean {
+  return /\.ics$/i.test(sourcePath);
+}
+
 function isPdfSource(sourcePath: string): boolean {
   return /\.pdf$/i.test(sourcePath);
 }
@@ -271,6 +279,55 @@ function parseEmailSource(content: string): ParsedSource {
   }
 
   return { metadata: { title: headers.get("subject"), updatedAt: headers.get("date") }, body };
+}
+
+function parseCalendarSource(content: string): ParsedSource {
+  const lines = unfoldCalendarLines(content.replace(/\r\n?/g, "\n"));
+  const metadata: SourceMetadata = {};
+  const events: string[] = [];
+  let event: Record<string, string> | undefined;
+
+  for (const line of lines) {
+    const separator = line.indexOf(":");
+    if (separator === -1) continue;
+    const property = line.slice(0, separator).split(";", 1)[0]?.toUpperCase() ?? "";
+    const value = unescapeCalendarText(line.slice(separator + 1));
+
+    if (property === "BEGIN" && value.toUpperCase() === "VEVENT") event = {};
+    else if (property === "END" && value.toUpperCase() === "VEVENT") {
+      if (event) events.push(formatCalendarEvent(event));
+      event = undefined;
+    } else if (event) event[property] = value;
+    else if (property === "X-WR-CALNAME" && value) metadata.title = value;
+    else if (property === "LAST-MODIFIED" && value) metadata.updatedAt = value;
+  }
+
+  return { metadata, body: events.join("\n") || content };
+}
+
+function unfoldCalendarLines(content: string): string[] {
+  const lines: string[] = [];
+  for (const line of content.split("\n")) {
+    if (/^[ \t]/.test(line) && lines.length > 0) lines[lines.length - 1] += line.slice(1);
+    else lines.push(line);
+  }
+  return lines;
+}
+
+function unescapeCalendarText(value: string): string {
+  return value.replace(/\\([\\;,nN])/g, (_match, escaped: string) =>
+    escaped.toLowerCase() === "n" ? "\n" : escaped,
+  );
+}
+
+function formatCalendarEvent(event: Record<string, string>): string {
+  return [
+    event.SUMMARY ? `Summary: ${event.SUMMARY}` : "",
+    event.DTSTART ? `Starts: ${event.DTSTART}` : "",
+    event.DTEND ? `Ends: ${event.DTEND}` : "",
+    event.LOCATION ? `Location: ${event.LOCATION}` : "",
+    event.DESCRIPTION ? `Description: ${event.DESCRIPTION}` : "",
+  ].filter(Boolean).join("; ");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
