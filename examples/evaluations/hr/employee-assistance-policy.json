@@ -1,0 +1,24 @@
+{
+  "name": "HR employee assistance policy example",
+  "domain": "hr",
+  "answerPath": "../../fixtures/hr/employee-assistance-answer.md",
+  "answerLabel": "HR employee assistance reviewer packet",
+  "answer": "Employees receive 8 confidential counseling sessions per calendar year.\nEmployees receive an unlimited number of counseling sessions.\nThe program can connect employees with community resources.\n",
+  "sources": [
+    {
+      "sourcePath": "../../fixtures/hr/employee-assistance-policy.md",
+      "id": "people-ops/hr-employee-assistance@2026-08-03",
+      "title": "HR Employee Assistance Policy",
+      "updatedAt": "2026-08-03",
+      "trustLevel": "high",
+      "content": "Employees receive 8 confidential counseling sessions per calendar year.\nThe employee assistance program can also connect employees with community resources.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "verified"]
+}
