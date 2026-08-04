@@ -46,6 +46,9 @@ The CLI now verifies directly supplied or recursively discovered RFC 822 `.eml`
 policy exports, using the message subject and date as source metadata, the
 email body as evidence, and the same trust behavior as other approved sources.
 
+Wrapped RFC 822 headers are unfolded during email ingestion, preserving long
+`Subject` and `Date` metadata from standard line-wrapped exports.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 

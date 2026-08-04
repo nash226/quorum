@@ -52,6 +52,18 @@ test("extracts subject and body from RFC 822 email source exports", async () => 
   assert.equal(source.content, "Customers can request refunds within 30 days.");
 });
 
+test("unfolds wrapped RFC 822 metadata headers", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/support/refund-policy.eml",
+    "Subject: Refund policy for enterprise customers\n\tand annual plans\nDate: Mon, 15 Jun 2026\n\t09:30:00 -0400\n\nCustomers can request refunds within 30 days.",
+    0,
+  );
+
+  assert.equal(source.title, "Refund policy for enterprise customers and annual plans");
+  assert.equal(source.updatedAt, "Mon, 15 Jun 2026 09:30:00 -0400");
+  assert.equal(source.content, "Customers can request refunds within 30 days.");
+});
+
 test("extracts readable text from DOCX source content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0);
