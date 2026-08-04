@@ -6,6 +6,10 @@ evidence review after localized sentence splitting.
 Claim extraction now treats Unicode ellipses (`…`) as sentence boundaries, so
 policy answers using typographic pauses remain separately reviewable.
 
+The shipped extractor also recognizes sentence-ending punctuation used in
+Arabic, Devanagari, and other localized policy text, keeping short claims
+available for evidence matching instead of dropping them during normalization.
+
 The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
