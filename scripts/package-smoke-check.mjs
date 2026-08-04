@@ -297,7 +297,7 @@ const queueCsv = libraryEntry.renderReviewerQueueCsv({
   evaluation: null,
 });
 if (
-  !queueCsv.startsWith("generated_at,queue_status,domains,") ||
+  !queueCsv.startsWith('"generated_at","queue_status","domains",') ||
   !queueCsv.includes('"2026-08-04T00:00:00.000Z","pending","hr","1"')
 ) {
   throw new Error("Package artifact root entry point did not preserve the reviewer queue CSV contract.");
