@@ -273,10 +273,34 @@ if (
   typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
   typeof libraryEntry.verifyAnswerBatch !== "function" ||
   typeof libraryEntry.importReviewerDecisions !== "function" ||
+  typeof libraryEntry.renderReviewerQueueCsv !== "function" ||
   typeof libraryEntry.createApiServer !== "function" ||
   libraryEntry.API_VERSION !== packageJson.version
 ) {
   throw new Error("Package artifact root entry point is missing required single-answer, batch, reviewer, or version exports.");
+}
+
+const queueCsv = libraryEntry.renderReviewerQueueCsv({
+  generatedAt: "2026-08-04T00:00:00.000Z",
+  queueStatus: "pending",
+  domains: ["hr"],
+  review: {
+    totalAnswers: 1,
+    pendingAnswers: 1,
+    reviewedAnswers: 0,
+    noClaimsAnswers: 0,
+    totalClaims: 1,
+    pendingClaims: 1,
+    reviewedClaims: 0,
+    verdicts: { verified: 0, contradicted: 0, unsupported: 1, needs_review: 0 },
+  },
+  evaluation: null,
+});
+if (
+  !queueCsv.startsWith('"generated_at","queue_status","domains",') ||
+  !queueCsv.includes('"2026-08-04T00:00:00.000Z","pending","hr","1"')
+) {
+  throw new Error("Package artifact root entry point did not preserve the reviewer queue CSV contract.");
 }
 
 const emptySourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-empty-sources-"));
