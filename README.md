@@ -159,8 +159,12 @@ cd quorum
 npm install
 npm test
 npm run build
+npm run smoke
 npm run dev -- verify --answer examples/answers/hr-answer.md --source-dir examples/sources --out reports/hr-report.json --markdown-out reports/hr-report.md --html-out reports/hr-report.html --review-csv-out reports/hr-review.csv
 ```
+
+`npm run smoke` runs the example verification end to end and confirms that
+JSON, Markdown, HTML, and reviewer CSV reports are generated successfully.
 
 ## Source Metadata
 
