@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies RFC 822 `.eml` answers against `.eml`
+approved sources, keeping the published email-export contract release-gated.
+
 RFC 822 `.eml` exports now work on both sides of direct verification: Quorum
 can compare an email answer with an approved email policy while preserving the
 answer path for reviewer handoff.
