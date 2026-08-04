@@ -165,6 +165,19 @@ test("splits Unicode ellipsis sentence terminators", () => {
   );
 });
 
+test("splits Armenian, Ethiopic, and Mongolian sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("Կանոնը գործում է։ Նոր կանոնը սկսվում է։ ሕጉ ይሠራል። ᠳᠦᠷᠢᠮ ᠬᠦᠴᠦᠨ ᠲᠡᠢ᠃ Next policy applies."),
+    [
+      "Կանոնը գործում է։",
+      "Նոր կանոնը սկսվում է։",
+      "ሕጉ ይሠራል።",
+      "ᠳᠦᠷᠢᠮ ᠬᠦᠴᠦᠨ ᠲᠡᠢ᠃",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
