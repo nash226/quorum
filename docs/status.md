@@ -35,7 +35,7 @@
 ### Now
 
 - Keep the CLI and local HTTP API reliable and easy to run.
-- Improve claim extraction without hiding uncertainty.
+- Improve claim extraction without hiding uncertainty, including localized sentence boundaries and short claims.
 - Make reviewer handoff artifacts easier to route, audit, and approve.
 - Expand evaluation fixtures and scorecards across HR and support policy domains.
 
