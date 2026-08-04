@@ -792,6 +792,29 @@ test("ignores html navigation and control chrome in exported html sources", asyn
   assert.doesNotMatch(source.content, /Knowledge base home|Refund policy overview|Copy answer/);
 });
 
+test("ignores template content in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.html",
+    `<!doctype html>
+<html>
+  <head><title>Refund Policy</title></head>
+  <body>
+    <template>
+      <p>Draft refund language for internal review.</p>
+    </template>
+    <main>
+      <p>Customers can request refunds within 30 days.</p>
+    </main>
+  </body>
+</html>`,
+    2,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+  assert.doesNotMatch(source.content, /Draft refund language for internal review/);
+});
+
 test("ignores html header, footer, and aside chrome in exported html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",
