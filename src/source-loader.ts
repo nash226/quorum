@@ -87,6 +87,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseEmailSource(normalizedContent);
   }
 
+  if (isMboxSource(sourcePath)) {
+    return parseMboxSource(normalizedContent);
+  }
+
   if (isJsonSource(sourcePath)) {
     return parseJsonSource(normalizedContent);
   }
@@ -210,6 +214,10 @@ function isEmailSource(sourcePath: string): boolean {
   return /\.eml$/i.test(sourcePath);
 }
 
+function isMboxSource(sourcePath: string): boolean {
+  return /\.mbox$/i.test(sourcePath);
+}
+
 function isPdfSource(sourcePath: string): boolean {
   return /\.pdf$/i.test(sourcePath);
 }
@@ -255,7 +263,20 @@ function normalizeLatexSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml|mbox)$/i, "");
+}
+
+function parseMboxSource(content: string): ParsedSource {
+  const messages = content.replace(/\r\n/g, "\n").split(/(?=^From \S+ .+$)/m);
+  const parsedMessages = messages
+    .map((message) => message.replace(/^From \S+ .+\n/, ""))
+    .filter((message) => message.trim().length > 0)
+    .map(parseEmailSource);
+
+  return {
+    metadata: parsedMessages[0]?.metadata ?? {},
+    body: parsedMessages.map((message) => message.body).filter(Boolean).join("\n\n"),
+  };
 }
 
 function parseEmailSource(content: string): ParsedSource {
