@@ -713,6 +713,16 @@ test("extracts readable text and title from exported html sources", async () => 
   assert.doesNotMatch(source.content, /analytics|display: none/);
 });
 
+test("decodes common legal and trademark entities in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/terms.html",
+    "<html><body><p>Acme&copy; and Quorum&reg; are protected marks&trade;.</p></body></html>",
+    0,
+  );
+
+  assert.equal(source.content, "Acme© and Quorum® are protected marks™.");
+});
+
 test("extracts metadata and readable text from buffered html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",

@@ -1010,6 +1010,9 @@ function decodeHtmlEntities(content: string): string {
     ["hellip", "…"],
     ["middot", "·"],
     ["bull", "•"],
+    ["copy", "©"],
+    ["reg", "®"],
+    ["trade", "™"],
   ]);
 
   return content
