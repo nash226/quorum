@@ -1,5 +1,8 @@
 # Quorum
 
+The CLI regression suite verifies recursive `.json` approved-source discovery,
+including claim matching and title, freshness, and trust metadata in reports.
+
 The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
