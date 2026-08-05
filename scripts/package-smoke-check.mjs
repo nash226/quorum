@@ -1324,6 +1324,31 @@ try {
   rmSync(cliYamlPackageDir, { recursive: true, force: true });
 }
 
+const cliMediaWikiAliasPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-mediawiki-alias-"));
+try {
+  const answerPath = join(cliMediaWikiAliasPackageDir, "answer.mediawiki");
+  const sourcePath = join(cliMediaWikiAliasPackageDir, "policy.wiki");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const mediaWikiOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const mediaWikiPayload = JSON.parse(mediaWikiOutput);
+  if (
+    mediaWikiPayload.summary?.verified !== 1 ||
+    mediaWikiPayload.answerPath !== answerPath ||
+    mediaWikiPayload.sources?.[0]?.title !== "policy" ||
+    mediaWikiPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected MediaWiki answer/source contract.");
+  }
+} finally {
+  rmSync(cliMediaWikiAliasPackageDir, { recursive: true, force: true });
+}
+
 const cliFrontmatterPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-frontmatter-"));
 try {
   const answerPath = join(cliFrontmatterPackageDir, "answer.md");
