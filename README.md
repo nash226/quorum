@@ -4,6 +4,11 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+Use `npm run dev -- formats` to print the exact answer and approved-source
+extensions supported by the current CLI. Directory-based verification discovers
+those extensions recursively, while `--answer` and `--source` also accept a
+direct path when a workflow needs to select one file explicitly.
+
 The evaluation fixture guide now reports the shipped 92-fixture inventory
 (32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
