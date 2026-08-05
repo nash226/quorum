@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies recursive nested TSV answer and
+approved-source discovery, keeping spreadsheet-style policy exports covered by
+the same batch format contract as direct verification.
+
 The packaged CLI smoke gate now verifies recursive nested `.eml` answer and
 approved-source discovery, keeping published email-policy batch workflows
 aligned with direct verification and the supported format contract.
