@@ -134,8 +134,13 @@ npm run dev -- verify-batch \
   --fail-on contradicted
 ```
 
-`verify-batch` also accepts repeated `--answer` paths, so teams can review a
-curated set of files without moving them into a single directory first:
+`verify-batch` searches `--answer-dir` and `--source-dir` recursively, so teams
+can keep answers and approved documents organized in nested domain or region
+folders. It also accepts repeated `--answer` paths, so teams can review a
+curated set of files without moving them into a single directory first. When
+nested answers share a filename, the reviewer-facing `answer_label` expands to
+include enough parent directories to stay unique while `answer_path` remains
+the original traceable file path:
 
 ```bash
 npm run dev -- verify-batch \

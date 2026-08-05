@@ -464,6 +464,18 @@ test("verify-batch accepts repeated answer files alongside answer directories", 
       nestedAnswerPath,
     ]);
     assert.equal(report.summary.verified, 2);
+
+    const reviewCsvPath = join(tempDir, "batch-review.csv");
+    await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--review-csv-out",
+      reviewCsvPath,
+    ]);
+    assert.match(await readFile(reviewCsvPath, "utf8"), /nested\/support/);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
