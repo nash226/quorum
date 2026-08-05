@@ -1,5 +1,9 @@
 # Quorum
 
+Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
+against approved sources, keeping the documented alias covered alongside
+nested batch discovery.
+
 The public package entrypoint now exports `SourceDocumentOptions` alongside
 `sourceDocumentFromFile`, so typed Node integrations can preserve source IDs,
 titles, freshness, and trust metadata when loading approved evidence.
