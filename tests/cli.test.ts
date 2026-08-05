@@ -82,6 +82,44 @@ test("verify-batch discovers the .text plain-text alias for answers and sources"
   }
 });
 
+test("verify discovers structured JSON sources from nested source directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-source-discovery-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources", "hr");
+    const sourcePath = join(sourceDir, "leave-policy.json");
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        JSON.stringify({
+          title: "Parental Leave Policy",
+          updatedAt: "2026-08-04",
+          trustLevel: "high",
+          policy: "Employees receive 12 weeks of paid parental leave.",
+        }),
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source-dir", join(tempDir, "sources"), "--json"]),
+    ) as {
+      summary: { verified: number };
+      sources: Array<{ id: string; sourcePath: string; title: string; updatedAt?: string; trustLevel: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.deepEqual(report.sources, [
+      { id: "source_1", sourcePath, title: "Parental Leave Policy", updatedAt: "2026-08-04", trustLevel: "high" },
+    ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .json5 exports for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json5-alias-"));
 
