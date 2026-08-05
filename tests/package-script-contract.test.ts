@@ -18,6 +18,8 @@ test("package scripts keep the documented repository check gate intact", async (
 
   assert.equal(scripts.check, "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci");
   assert.equal(scripts["extract-claims"], "npm run dev -- extract-claims");
+  assert.equal(scripts.verify, "npm run dev -- verify");
+  assert.equal(scripts["verify-batch"], "npm run dev -- verify-batch");
   assert.equal(scripts.formats, "npm run dev -- formats");
   assert.equal(scripts.evaluate, "npm run dev -- evaluate");
   assert.equal(scripts["import-review"], "npm run dev -- import-review");
@@ -72,6 +74,20 @@ test("extract-claims package script forwards command-specific help flags", async
   assert.match(stdout, /Usage:\s+quorum extract-claims/);
   assert.match(stdout, /--answer <path\|->/);
   assert.match(stdout, /--result-json/);
+});
+
+test("verify package scripts forward command-specific help flags", async () => {
+  const { stdout: verifyHelp } = await execFileAsync("npm", ["run", "--silent", "verify", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+  const { stdout: batchHelp } = await execFileAsync("npm", ["run", "--silent", "verify-batch", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(verifyHelp, /Usage:\s+quorum verify/);
+  assert.match(batchHelp, /Usage:\s+quorum verify-batch/);
 });
 
 test("import-review package script forwards command-specific help flags", async () => {
