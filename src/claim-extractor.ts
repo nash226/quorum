@@ -130,7 +130,7 @@ function splitCompoundClaim(sentence: string): string[] {
 }
 
 function splitSubstantialSemicolonClaims(sentence: string): string[] {
-  const parts = sentence.split(/;\s+/u).map((part) => part.trim()).filter(Boolean);
+  const parts = sentence.split(/[;؛]\s+/u).map((part) => part.trim()).filter(Boolean);
 
   const isContinuation = parts.slice(1).some((part) =>
     /^(?:and|but|or|for|with|which|that|including|unless|while|because|as|after|before|during|subject)\b/i.test(
