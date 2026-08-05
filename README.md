@@ -1,5 +1,9 @@
 # Quorum
 
+The package-script contract now regression-tests `npm run serve -- --help`,
+keeping the documented local HTTP API wrapper aligned with the CLI serve
+command and its port option.
+
 The packaged CLI smoke gate now verifies Textile answers against Textile
 approved sources, keeping installed rich-text policy workflows aligned with
 the direct normalization contract.

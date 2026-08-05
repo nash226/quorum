@@ -89,3 +89,13 @@ test("openapi package script forwards export arguments", async () => {
     await rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("serve package script forwards command-specific help flags", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "serve", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /Usage:\s+quorum serve/);
+  assert.match(stdout, /--port <port>/);
+});
