@@ -1758,6 +1758,8 @@ in reports. CSV exports are discovered recursively as approved sources and are
 kept as readable row text for claim matching. Files with other extensions are
 still accepted as plain-text inputs, so teams can preserve source-system
 filenames while supplying readable policy content.
+Source frontmatter also normalizes Windows CRLF and legacy Mac CR line endings,
+so metadata remains readable from older policy exports.
 The packaged CLI smoke gate also verifies direct CSV answer and source exports,
 so published artifacts keep this common tabular handoff path working end to end.
 JSONL sources are normalized one record at a time, so newline-delimited policy

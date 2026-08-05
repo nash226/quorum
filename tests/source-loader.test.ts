@@ -40,6 +40,19 @@ test("extracts metadata from XML source exports", async () => {
   assert.match(source.content, /Employees get 12 weeks\./);
 });
 
+test("extracts frontmatter from legacy Mac line endings", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.md",
+    "---\rtitle: HR Benefits Policy\rupdatedAt: 2026-08-05\rtrustLevel: high\r---\rEmployees get 12 weeks.\r",
+    0,
+  );
+
+  assert.equal(source.title, "HR Benefits Policy");
+  assert.equal(source.updatedAt, "2026-08-05");
+  assert.equal(source.trustLevel, "high");
+  assert.equal(source.content, "Employees get 12 weeks.\n");
+});
+
 test("extracts subject and body from RFC 822 email source exports", async () => {
   const source = await sourceDocumentFromFile(
     "docs/support/refund-policy.eml",
