@@ -81,6 +81,16 @@ package scripts. Pass command arguments after `--` so npm forwards them to the
 CLI:
 
 ```bash
+npm run verify -- \
+  --answer examples/answers/hr-answer.md \
+  --source-dir examples/sources \
+  --result-json-out reports/hr-result.json
+
+npm run verify-batch -- \
+  --answer-dir examples/answers \
+  --source-dir examples/sources \
+  --summary-csv-out reports/reviewer-queue-summary.csv
+
 npm run import-review -- \
   --review-csv reports/hr-review.csv \
   --summary-csv-out reports/hr-review-summary.csv
@@ -91,7 +101,8 @@ npm run review-queue -- \
   --json --out reports/hr-queue.json
 ```
 
-These wrappers are equivalent to `npm run dev -- import-review -- ...` and
+These wrappers are equivalent to `npm run dev -- verify -- ...`,
+`npm run dev -- verify-batch -- ...`, `npm run dev -- import-review -- ...`, and
 `npm run dev -- review-queue -- ...`, while keeping the commands usable from a
 published package installation.
 

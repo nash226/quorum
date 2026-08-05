@@ -4,6 +4,11 @@ The public package entrypoint now exports `SourceDocumentOptions` alongside
 `sourceDocumentFromFile`, so typed Node integrations can preserve source IDs,
 titles, freshness, and trust metadata when loading approved evidence.
 
+Published packages now expose `npm run verify -- ...` and
+`npm run verify-batch -- ...` wrappers for the two primary verification flows,
+so installed integrations can forward CLI arguments without the `npm run dev`
+prefix.
+
 HTML and XML policy sources now decode common comparison entities such as
 `&ge;`, `&le;`, and `&ne;`, keeping eligibility thresholds readable during claim
 extraction and reviewer handoff.

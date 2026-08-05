@@ -124,6 +124,32 @@ if (versionJson.service !== "quorum" || versionJson.version !== packageJson.vers
   throw new Error("Package artifact did not preserve the machine-readable version contract.");
 }
 
+const verificationWrapperDir = mkdtempSync(join(tmpdir(), "quorum-package-verification-wrappers-"));
+try {
+  const answerPath = join(verificationWrapperDir, "answer.md");
+  const sourcePath = join(verificationWrapperDir, "policy.md");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const verifyWrapper = JSON.parse(execFileSync("npm", [
+    "run", "--silent", "verify", "--", "--answer", answerPath, "--source", sourcePath, "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  const verifyBatchWrapper = JSON.parse(execFileSync("npm", [
+    "run", "--silent", "verify-batch", "--", "--answer", answerPath, "--source", sourcePath, "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    verifyWrapper.summary?.verified !== 1 ||
+    verifyWrapper.answerPath !== answerPath ||
+    verifyBatchWrapper.summary?.answersWithClaims !== 1 ||
+    verifyBatchWrapper.answers?.[0]?.answerPath !== answerPath ||
+    verifyBatchWrapper.answers?.[0]?.report?.summary?.verified !== 1
+  ) {
+    throw new Error("Package verification wrappers did not preserve the direct and batch CLI contracts.");
+  }
+} finally {
+  rmSync(verificationWrapperDir, { recursive: true, force: true });
+}
+
 const claimPreviewPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-claim-preview-"));
 try {
   const answerPath = join(claimPreviewPackageDir, "answer.md");
