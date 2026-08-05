@@ -1,5 +1,9 @@
 # Quorum
 
+The public package entrypoint now exports `SourceDocumentOptions` alongside
+`sourceDocumentFromFile`, so typed Node integrations can preserve source IDs,
+titles, freshness, and trust metadata when loading approved evidence.
+
 The package-script contract now regression-tests `npm run extract-claims -- --help`,
 keeping the installed claim-preview wrapper aligned with the CLI's answer and
 machine-readable output options.
