@@ -419,6 +419,10 @@ The packaged reviewer-queue smoke gate now exercises
 benchmark, keeping domain-filtered queue validation aligned with the
 checked-in evaluation inventory.
 
+The CLI queue contract now has regression coverage for combining a reviewer
+status slice with a benchmark domain filter, preserving both the selected
+workload state and the scoped evaluation totals in one handoff.
+
 The packaged batch smoke gate now verifies nested `.ini` and `.properties`
 answers against matching approved sources, keeping configuration-policy exports
 release-gated in directory workflows.
