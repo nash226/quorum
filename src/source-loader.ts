@@ -77,7 +77,7 @@ export async function sourceDocumentFromFile(
 }
 
 export function parseSource(sourcePath: string, content: string): ParsedSource {
-  const normalizedContent = stripByteOrderMark(content);
+  const normalizedContent = stripByteOrderMark(content).replace(/\r\n/g, "\n");
 
   if (isHtmlSource(sourcePath)) {
     return parseHtmlSource(normalizedContent);
@@ -115,7 +115,7 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return { metadata: {}, body: normalizeTextileSource(normalizedContent) };
   }
 
-  const normalized = normalizedContent.replace(/\r\n/g, "\n");
+  const normalized = normalizedContent;
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
   if (!frontmatterDelimiter) {
