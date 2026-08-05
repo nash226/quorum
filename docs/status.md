@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a4beb3fe` on 2026-08-05, fix: normalize legacy source line endings
+- Latest shipped change: `aa120d2c` on 2026-08-05, docs: resolve README merge conflict
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-05 | Direct push | docs: resolve README merge conflict | `aa120d2c` |
 | 2026-08-05 | Direct push | fix: normalize legacy source line endings | `a4beb3fe` |
 | 2026-08-05 | [#1952](https://github.com/nash226/quorum/pull/1952) | docs: align cli help with input formats | `2516bc0f` |
 | 2026-08-05 | [#1953](https://github.com/nash226/quorum/pull/1953) | fix: parse CRLF source frontmatter | `bb453719` |
@@ -56,5 +57,4 @@
 | 2026-08-05 | [#1944](https://github.com/nash226/quorum/pull/1944) | test: make package smoke command standalone | `549e069d` |
 | 2026-08-05 | [#1943](https://github.com/nash226/quorum/pull/1943) | test: cover packaged Textile verification | `f3f6bdc4` |
 | 2026-08-05 | Direct push | feat: normalize Textile source exports | `d1e06235` |
-| 2026-08-05 | Direct push | test: cover recursive AsciiDoc discovery | `e2fea5cb` |
 
