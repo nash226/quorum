@@ -111,6 +111,9 @@ drift before submitting files.
 The packaged CLI smoke gate now verifies direct TOML answers against an approved
 source, keeping both sides of the documented TOML input contract release-gated.
 
+The packaged CLI smoke gate now verifies both `.org` and `.org-mode` exports,
+keeping the advertised Org-mode aliases covered at the installed-package boundary.
+
 The packaged CLI smoke gate now verifies direct reStructuredText (`.rst`)
 answers and approved sources, keeping the documented format contract covered
 for installed integrations.
