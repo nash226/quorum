@@ -3609,6 +3609,53 @@ test("verify-batch discovers INI and properties answers and sources", async () =
   }
 });
 
+test("verify-batch discovers nested EML answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-eml-batch-"));
+  const answerDir = join(tempDir, "answers");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await Promise.all([
+      mkdir(join(answerDir, "regional"), { recursive: true }),
+      mkdir(join(sourceDir, "regional"), { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(
+        join(answerDir, "regional", "leave.eml"),
+        "Subject: Leave policy\nDate: Mon, 01 Jun 2026 09:00:00 +0000\n\nEmployees receive 12 weeks of paid parental leave.\n",
+      ),
+      writeFile(
+        join(sourceDir, "regional", "hr-policy.eml"),
+        "Subject: Leave policy\nDate: Mon, 01 Jun 2026 09:00:00 +0000\n\nEmployees receive 12 weeks of paid parental leave.\n",
+      ),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ])) as {
+      summary: { answersWithClaims: number; verified: number };
+      answers: Array<{
+        answerPath: string;
+        report: { summary: { verified: number } };
+      }>;
+      sources: Array<{ sourcePath: string }>;
+    };
+
+    assert.equal(report.summary.answersWithClaims, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "regional", "leave.eml"));
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
+    assert.equal(report.sources[0]?.sourcePath, join(sourceDir, "regional", "hr-policy.eml"));
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct AsciiDoc answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-asciidoc-"));
 

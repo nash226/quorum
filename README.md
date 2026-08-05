@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification is now regression-tested for nested `.eml`
+answers and approved sources, keeping email policy exports aligned with the
+documented direct RFC 822 verification contract.
+
 Recursive batch verification is now regression-tested for both `.yaml` and
 `.yml` answers and approved sources, keeping nested structured policy exports
 on the same contract as direct YAML verification.
