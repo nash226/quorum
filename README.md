@@ -179,6 +179,10 @@ The packaged batch smoke gate now verifies nested XML answers and approved
 sources, keeping recursive XML policy workflows release-gated alongside direct
 verification.
 
+The packaged batch smoke gate also verifies nested AsciiDoc (`.adoc`) answers
+and approved sources, keeping documentation-tool exports on the same recursive
+verification path as other supported formats.
+
 Recursive batch verification also now has an end-to-end `.org-mode` answer and
 approved-source check, keeping this common Org export alias release-gated.
 
