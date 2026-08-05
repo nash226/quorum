@@ -1,5 +1,9 @@
 # Quorum
 
+CRLF-delimited Markdown frontmatter now preserves source titles, freshness, and
+trust metadata, keeping Windows-exported policy files on the same metadata path
+as LF-delimited sources.
+
 The package-script contract now regression-tests `npm run serve -- --help`,
 keeping the documented local HTTP API wrapper aligned with the CLI serve
 command and its port option.
