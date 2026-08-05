@@ -1,5 +1,9 @@
 # Quorum
 
+Batch answer and source directories are searched recursively. Reviewer exports
+keep the original `answer_path` and expand duplicate nested filenames into
+unique `answer_label` values, preserving traceability during handoff.
+
 Recursive batch verification is now regression-tested for both `.yaml` and
 `.yml` answers and approved sources, keeping nested structured policy exports
 on the same contract as direct YAML verification.
