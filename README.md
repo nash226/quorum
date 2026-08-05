@@ -3,14 +3,9 @@
 Top-level CLI help now names the full shipped structured, tabular, and email
 input families, matching the extensions returned by `quorum formats`.
 
-<<<<<<< HEAD
 CRLF-delimited Markdown frontmatter now preserves source titles, freshness, and
 trust metadata, keeping Windows-exported policy files on the same metadata path
 as LF-delimited sources.
-=======
-Top-level CLI help now names the full shipped structured, tabular, and email
-input families, matching the extensions returned by `quorum formats`.
->>>>>>> 490bfdfe (docs: align cli help with input formats)
 
 The package-script contract now regression-tests `npm run serve -- --help`,
 keeping the documented local HTTP API wrapper aligned with the CLI serve
