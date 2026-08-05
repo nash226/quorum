@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b77833cf` on 2026-08-05, feat: export source document option types
+- Latest shipped change: `e89c2d7e` on 2026-08-05, fix: decode comparison html entities
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-05 | Direct push | fix: decode comparison html entities | `e89c2d7e` |
 | 2026-08-05 | [#1971](https://github.com/nash226/quorum/pull/1971) | feat: export source document option types | `b77833cf` |
 | 2026-08-05 | Direct push | test: cover extract-claims package wrapper | `e783a930` |
 | 2026-08-05 | Direct push | fix: preserve MediaWiki line breaks | `dea46f39` |
@@ -56,5 +57,4 @@
 | 2026-08-05 | Direct push | feat: normalize MediaWiki policy markup | `9750215e` |
 | 2026-08-05 | [#1960](https://github.com/nash226/quorum/pull/1960) | fix: split Arabic semicolon claims | `d77ddcd7` |
 | 2026-08-05 | Direct push | docs: resolve README merge conflict | `aa120d2c` |
-| 2026-08-05 | Direct push | fix: normalize legacy source line endings | `a4beb3fe` |
 
