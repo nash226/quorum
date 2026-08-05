@@ -2808,6 +2808,32 @@ try {
   rmSync(csvFormatTempDir, { recursive: true, force: true });
 }
 
+const csvBatchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-csv-batch-"));
+try {
+  const answerDir = join(csvBatchTempDir, "answers", "nested");
+  const sourceDir = join(csvBatchTempDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "answer.tsv");
+  const sourcePath = join(sourceDir, "policy.tsv");
+  writeFileSync(answerPath, "field\tresponse\npolicy\tEmployees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "policy\tdetails\nleave\tEmployees receive 12 weeks of paid parental leave.\n");
+  const csvBatchResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch", "--answer-dir", join(csvBatchTempDir, "answers"),
+    "--source-dir", join(csvBatchTempDir, "sources"), "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    csvBatchResult.summary?.answersWithClaims !== 1 ||
+    csvBatchResult.answers?.[0]?.answerPath !== answerPath ||
+    csvBatchResult.answers?.[0]?.report?.summary?.verified !== 1 ||
+    csvBatchResult.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not preserve recursive TSV answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(csvBatchTempDir, { recursive: true, force: true });
+}
+
 const yamlAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-yaml-answer-"));
 try {
   const yamlAnswerPath = join(yamlAnswerTempDir, "answer.yaml");
