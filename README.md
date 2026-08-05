@@ -326,7 +326,9 @@ discovery headers, keeping installed API clients aligned with the runtime
 identity contract.
 
 Run `npm run dev -- formats --json` to discover the versioned answer and source
-format contract used by direct and recursive verification.
+format contract used by direct and recursive verification. The JSON response
+also reports `stdinAnswerPath` as `<stdin>` for integrations that stream an
+answer with `--answer -`.
 
 The packaged CLI smoke gate now verifies `extract-claims --result-json`, keeping
 claim previews and answer provenance release-gated for installed integrations.
