@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `549e069d` on 2026-08-05, test: make package smoke command standalone
+- Latest shipped change: `90106e83` on 2026-08-05, test: cover npm serve wrapper contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-05 | Direct push | test: cover npm serve wrapper contract | `90106e83` |
 | 2026-08-05 | [#1944](https://github.com/nash226/quorum/pull/1944) | test: make package smoke command standalone | `549e069d` |
 | 2026-08-05 | [#1943](https://github.com/nash226/quorum/pull/1943) | test: cover packaged Textile verification | `f3f6bdc4` |
 | 2026-08-05 | Direct push | feat: normalize Textile source exports | `d1e06235` |
@@ -56,5 +57,4 @@
 | 2026-08-05 | Direct push | test: cover packaged recursive email discovery | `affa8136` |
 | 2026-08-05 | Direct push | test: cover recursive LaTeX source discovery | `9af2f703` |
 | 2026-08-05 | Direct push | test: cover recursive YAML source discovery | `66230aa6` |
-| 2026-08-04 | Direct push | test: cover recursive docx source discovery | `d3767b27` |
 
