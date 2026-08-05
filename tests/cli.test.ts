@@ -252,6 +252,42 @@ test("verify-batch discovers nested AsciiDoc answers and sources", async () => {
   }
 });
 
+test("verify-batch discovers nested Textile answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-textile-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    const sourceDir = join(tempDir, "sources", "nested");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "answer.textile"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.textile"), "h1. Parental Leave Policy\n\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      join(tempDir, "answers"),
+      "--source-dir",
+      join(tempDir, "sources"),
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answers.length, 1);
+    assert.match(report.answers[0]?.answerPath ?? "", /answers\/nested\/answer\.textile$/);
+    assert.deepEqual(report.sources.map((source) => source.title), ["policy"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers nested YAML answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-yaml-discovery-"));
 

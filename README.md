@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification now regression-tests nested Textile (`.textile`)
+answers and approved sources, keeping rich-text policy exports aligned with the
+direct and packaged Textile verification contracts.
+
 The packaged CLI smoke gate now verifies Textile answers against Textile
 approved sources, keeping installed rich-text policy workflows aligned with
 the direct normalization contract.
