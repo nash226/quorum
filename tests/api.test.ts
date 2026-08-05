@@ -5082,6 +5082,37 @@ test("programmatic API accepts vendor JSON content types", async () => {
   }
 });
 
+test("HTTP API accepts vendor JSON content types for verification", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/vnd.quorum.verification+json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        sources: [{
+          sourcePath: "sources/hr-policy.md",
+          content: "Employees receive 12 weeks of paid parental leave.",
+        }],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const result = await response.json() as { report: { summary: Record<string, number> } };
+    assert.deepEqual(result.report.summary, {
+      verified: 1,
+      contradicted: 0,
+      unsupported: 0,
+      needs_review: 0,
+    });
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API serves reviewer CSV import over HTTP", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

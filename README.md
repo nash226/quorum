@@ -1,5 +1,9 @@
 # Quorum
 
+The local HTTP API accepts standard vendor JSON media types such as
+`application/vnd.quorum.verification+json`, so typed integrations can send
+versioned JSON requests without changing the verification contract.
+
 The public package entrypoint now exports `SourceDocumentOptions` alongside
 `sourceDocumentFromFile`, so typed Node integrations can preserve source IDs,
 titles, freshness, and trust metadata when loading approved evidence.
