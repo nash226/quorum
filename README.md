@@ -2621,9 +2621,10 @@ the TypeScript build, local HTTP smoke checks, packaged-entrypoint smoke checks,
 and the evaluation score gate. Run the individual commands when narrowing down
 a failure.
 
-The package smoke check also imports the packed `quorum` root entry point and
-verifies its public single-answer, batch-verification, and reviewer-import
-functions before treating the artifact as installable.
+The package smoke check builds the distribution when needed, then imports the
+packed `quorum` root entry point and verifies its public single-answer,
+batch-verification, and reviewer-import functions before treating the artifact
+as installable.
 
 ```text
 src/          verifier, CLI, reports, workflow, and HTTP API
