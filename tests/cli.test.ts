@@ -5,7 +5,7 @@ import { dirname, join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
-import { ANSWER_EXTENSIONS, SOURCE_EXTENSIONS } from "../src/workflow.js";
+import { ANSWER_EXTENSIONS, SOURCE_EXTENSIONS, STDIN_ANSWER_PATH } from "../src/workflow.js";
 
 test("version aliases report the package contract version", async () => {
   const [longAlias, shortAlias, command] = await Promise.all([
@@ -372,10 +372,11 @@ test("formats lists the extensions accepted by source and answer discovery", asy
 
 test("formats --json exposes the same contract as the library constants", async () => {
   const stdout = await runCli(["formats", "--json"]);
-  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };
+  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[]; stdinAnswerPath: string };
 
   assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
+  assert.equal(formats.stdinAnswerPath, STDIN_ANSWER_PATH);
 });
 
 test("formats accepts both help flag aliases", async () => {
@@ -460,7 +461,7 @@ test("verify accepts direct YAML answer and source exports", async () => {
 
 test("formats --json exposes a versioned machine-readable input contract", async () => {
   const stdout = await runCli(["formats", "--json"]);
-  const formats = JSON.parse(stdout) as { version: string; sources: string[]; answers: string[] };
+  const formats = JSON.parse(stdout) as { version: string; sources: string[]; answers: string[]; stdinAnswerPath: string };
 
   assert.equal(formats.version, "0.1.0");
   assert.deepEqual(formats.sources, [...formats.sources].sort());
@@ -470,6 +471,7 @@ test("formats --json exposes a versioned machine-readable input contract", async
   assert.deepEqual(formats.sources, formats.answers);
   assert.ok(formats.sources.includes(".md"));
   assert.ok(formats.sources.includes(".json"));
+  assert.equal(formats.stdinAnswerPath, STDIN_ANSWER_PATH);
 });
 
 test("formats --json exposes normalized unique extension entries", async () => {

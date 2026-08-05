@@ -57,6 +57,7 @@ import {
   loadSourceDocuments,
   loadSourceDocumentsFromContent,
   SOURCE_EXTENSIONS,
+  STDIN_ANSWER_PATH,
   verifyAnswerFile,
   verifyBatchAnswers,
 } from "./workflow.js";
@@ -1911,6 +1912,7 @@ function printFormats(asJson = false): void {
       version: API_VERSION,
       sources: [...SOURCE_EXTENSIONS].sort(),
       answers: [...ANSWER_EXTENSIONS].sort(),
+      stdinAnswerPath: STDIN_ANSWER_PATH,
     }));
     return;
   }
