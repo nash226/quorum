@@ -1,5 +1,9 @@
 # Quorum
 
+The package-script contract now regression-tests `npm run extract-claims -- --help`,
+keeping the installed claim-preview wrapper aligned with the CLI's answer and
+machine-readable output options.
+
 MediaWiki (`.mediawiki` and `.wiki`) answers and approved sources now normalize
 common headings, links, emphasis, list markers, and reference tags before claim
 extraction, keeping wiki-exported policy evidence readable for reviewers.

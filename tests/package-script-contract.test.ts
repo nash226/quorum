@@ -63,6 +63,17 @@ test("formats package script forwards command-specific help flags", async () => 
   assert.match(stdout, /Print the extensions discovered/);
 });
 
+test("extract-claims package script forwards command-specific help flags", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "extract-claims", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /Usage:\s+quorum extract-claims/);
+  assert.match(stdout, /--answer <path\|->/);
+  assert.match(stdout, /--result-json/);
+});
+
 test("import-review package script forwards command-specific help flags", async () => {
   const { stdout } = await execFileAsync("npm", ["run", "--silent", "import-review", "--", "--help"], {
     cwd: new URL("..", import.meta.url),
