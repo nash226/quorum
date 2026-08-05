@@ -655,6 +655,9 @@ with uppercase extensions, keeping case-insensitive format discovery release-gat
 
 Batch verification also recursively discovers XML answers and approved sources,
 so nested `.xml` exports can be checked without flattening an input directory.
+Single-answer verification also recursively discovers TOML approved sources,
+so nested `.toml` policy exports can be checked without flattening an input
+directory.
 
 The local HTTP API now exercises every advertised CORS preflight at runtime,
 keeping browser integrations aligned with the route-specific `GET`/`POST`
