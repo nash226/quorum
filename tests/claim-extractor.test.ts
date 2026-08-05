@@ -1310,6 +1310,19 @@ test("skips markdown list intro lines that only label the bullets", () => {
   );
 });
 
+test("normalizes markdown table rows into readable claims", () => {
+  const claims = extractClaims(`| Policy | Rule |
+| --- | --- |
+| Leave | Employees receive 12 weeks of paid leave. |
+| Refunds | Customers may request a refund within 30 days. |`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Policy: Rule",
+    "Leave: Employees receive 12 weeks of paid leave.",
+    "Refunds: Customers may request a refund within 30 days.",
+  ]);
+});
+
 test("skips plain-text intro lines that only label the following claims", () => {
   const claims = extractClaims(`Policy summary:
 
