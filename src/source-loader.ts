@@ -285,6 +285,7 @@ function normalizeTextileSource(content: string): string {
 
 function normalizeMediaWikiSource(content: string): string {
   return content
+    .replace(/<br\s*\/?>/gi, "\n")
     .replace(/(^|\n)={1,6}\s*(.*?)\s*={1,6}(?=\n|$)/g, "$1$2")
     .replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_match, target: string, label?: string) => label ?? target)
     .replace(/\[([^\s\]]+)\s+([^\]]+)\]/g, "$2")

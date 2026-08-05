@@ -316,6 +316,16 @@ test("normalizes common MediaWiki markup into claim-readable source text", async
   assert.equal(source.content, "Leave policy\nEmployees receive twelve weeks of paid leave.\nSubmit a request.");
 });
 
+test("converts MediaWiki line-break tags into evidence line breaks", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.wiki",
+    "== Leave policy ==\nEmployees receive 12 weeks.<br />Submit the request.<BR>Keep the receipt.",
+    0,
+  );
+
+  assert.equal(source.content, "Leave policy\nEmployees receive 12 weeks.\nSubmit the request.\nKeep the receipt.");
+});
+
 test("strips wiki extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile("docs/policies/leave-policy.wiki", "Employees receive 12 weeks of paid parental leave.\n", 0);
 

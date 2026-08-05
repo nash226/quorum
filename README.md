@@ -7,6 +7,9 @@ extraction, keeping wiki-exported policy evidence readable for reviewers.
 Top-level CLI help now names the full shipped structured, tabular, and email
 input families, matching the extensions returned by `quorum formats`.
 
+MediaWiki policy exports now convert HTML-style line-break tags into evidence
+line breaks, keeping wrapped wiki policy text readable for claim extraction.
+
 CRLF-delimited Markdown frontmatter now preserves source titles, freshness, and
 trust metadata, keeping Windows-exported policy files on the same metadata path
 as LF-delimited sources.
