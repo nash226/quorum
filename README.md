@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies recursive nested `.eml` answer and
+approved-source discovery, keeping published email-policy batch workflows
+aligned with direct verification and the supported format contract.
+
 Recursive batch verification is now regression-tested for both `.yaml` and
 `.yml` answers and approved sources, keeping nested structured policy exports
 on the same contract as direct YAML verification.
