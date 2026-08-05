@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged smoke gate now verifies recursive `.json5`/`.jsonc` batch
+discovery, including comments in installed answer and approved-source exports.
+
 The packaged CLI smoke gate now verifies recursive nested `.eml` answer and
 approved-source discovery, keeping published email-policy batch workflows
 aligned with direct verification and the supported format contract.
