@@ -2743,6 +2743,34 @@ try {
   rmSync(xmlBatchTempDir, { recursive: true, force: true });
 }
 
+const rstBatchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-rst-batch-"));
+try {
+  const answerDir = join(rstBatchTempDir, "answers", "nested");
+  const sourceDir = join(rstBatchTempDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "answer.rest");
+  const sourcePath = join(sourceDir, "policy.rst");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Parental Leave Policy\n=====================\n\nEmployees receive 12 weeks of paid parental leave.\n");
+  const rstBatchResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch", "--answer-dir", join(rstBatchTempDir, "answers"),
+    "--source-dir", join(rstBatchTempDir, "sources"), "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    rstBatchResult.summary?.answersWithClaims !== 1 ||
+    rstBatchResult.summary?.answersWithoutClaims !== 0 ||
+    rstBatchResult.answers?.[0]?.answerPath !== answerPath ||
+    rstBatchResult.answers?.[0]?.report?.summary?.verified !== 1 ||
+    rstBatchResult.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath ||
+    rstBatchResult.answers?.[0]?.report?.sources?.[0]?.title !== "policy"
+  ) {
+    throw new Error("Package artifact did not preserve reStructuredText answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(rstBatchTempDir, { recursive: true, force: true });
+}
+
 const uppercaseFormatTempDir = mkdtempSync(join(tmpdir(), "quorum-package-uppercase-format-"));
 try {
   const answerPath = join(uppercaseFormatTempDir, "ANSWER.JSON");
