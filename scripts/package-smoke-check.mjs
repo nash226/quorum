@@ -2687,6 +2687,34 @@ try {
   rmSync(ndjsonBatchTempDir, { recursive: true, force: true });
 }
 
+const jsonCommentBatchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-json-comment-batch-"));
+try {
+  const answerDir = join(jsonCommentBatchTempDir, "answers", "nested");
+  const sourceDir = join(jsonCommentBatchTempDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "answer.jsonc");
+  const sourcePath = join(sourceDir, "policy.json5");
+  writeFileSync(answerPath, '{\n  // exported answer\n  "claim": "Employees receive 12 weeks of paid parental leave."\n}\n');
+  writeFileSync(sourcePath, '{ "title": "Parental Leave Policy", /* approved rule */ "claim": "Employees receive 12 weeks of paid parental leave." }\n');
+  const jsonCommentBatchResult = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify-batch", "--answer-dir", join(jsonCommentBatchTempDir, "answers"),
+    "--source-dir", join(jsonCommentBatchTempDir, "sources"), "--json",
+  ], { cwd: repoRoot, encoding: "utf8" }));
+  if (
+    jsonCommentBatchResult.summary?.answersWithClaims !== 1 ||
+    jsonCommentBatchResult.summary?.answersWithoutClaims !== 0 ||
+    jsonCommentBatchResult.answers?.[0]?.answerPath !== answerPath ||
+    jsonCommentBatchResult.answers?.[0]?.report?.summary?.verified !== 1 ||
+    jsonCommentBatchResult.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath ||
+    jsonCommentBatchResult.answers?.[0]?.report?.sources?.[0]?.title !== "Parental Leave Policy"
+  ) {
+    throw new Error("Package artifact did not preserve recursive JSON5/JSONC answer/source discovery.");
+  }
+} finally {
+  rmSync(jsonCommentBatchTempDir, { recursive: true, force: true });
+}
+
 const tomlBatchTempDir = mkdtempSync(join(tmpdir(), "quorum-package-toml-batch-"));
 try {
   const answerDir = join(tomlBatchTempDir, "answers", "nested");
