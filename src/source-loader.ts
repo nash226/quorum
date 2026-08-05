@@ -259,7 +259,7 @@ function sourceTitleFromPath(sourcePath: string): string {
 }
 
 function parseEmailSource(content: string): ParsedSource {
-  const normalized = content.replace(/\r\n/g, "\n");
+  const normalized = content.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
   const separator = normalized.search(/\n\n/);
   const headerText = separator === -1 ? normalized : normalized.slice(0, separator);
   const body = separator === -1 ? "" : normalized.slice(separator + 2).trim();

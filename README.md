@@ -174,7 +174,8 @@ Top-level CLI help now shows the optional `--json` flag for `quorum formats`,
 making the machine-readable format-discovery path visible during onboarding.
 
 Source frontmatter parsing now preserves titles, freshness, and trust metadata
-from Windows-style CRLF policy exports as well as Unix-style files.
+from Windows-style CRLF and UTF-8 BOM policy exports as well as Unix-style
+files.
 
 Source freshness validation also applies to snake_case `updated_at` metadata,
 so malformed timestamps fail before they reach verification reports.
