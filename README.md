@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation suite now includes a support escalation-hours packet covering
+verified, contradicted, and unsupported timing claims for customer-support
+review workflows.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.
@@ -60,8 +64,8 @@ Recursive batch verification is now regression-tested for nested LaTeX (`.tex`)
 answers and approved sources, keeping the documented rich-text export contract
 covered end to end.
 
-The evaluation fixture guide now reports the shipped 92-fixture inventory
-(32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
+The evaluation fixture guide now reports the shipped 93-fixture inventory
+(32 HR and 61 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
 
 Claim extraction now keeps compact CJK policy statements such as `需审批。`
@@ -124,7 +128,7 @@ The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
 
-The evaluation fixture guide now matches the shipped benchmark inventory: 92
+The evaluation fixture guide now matches the shipped benchmark inventory: 93
 checked-in fixtures across HR, support, and shared edge-case workflows.
 
 The evaluation scorecard now includes the file-backed support security packet,
@@ -2159,7 +2163,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 92-fixture benchmark spans 32 HR and 60 support workflows. It also
+The checked-in 93-fixture benchmark spans 32 HR and 61 support workflows. It also
 includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
@@ -2184,7 +2188,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 92-fixture total explicit, so new benchmark packets cannot drift
+the published 93-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.
