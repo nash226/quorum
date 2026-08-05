@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies `npm run formats -- --json`, keeping
+the documented npm wrapper aligned with the installed machine-readable input
+format contract.
+
 Top-level CLI help now names the full shipped structured, tabular, and email
 input families, matching the extensions returned by `quorum formats`.
 
