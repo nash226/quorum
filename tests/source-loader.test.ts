@@ -1486,6 +1486,25 @@ test("falls back to the html file name when the page has no title", async () => 
   assert.equal(source.content, "Escalate priority incidents immediately.");
 });
 
+test("reads namespaced XML metadata fields", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.xml",
+    `<?xml version="1.0"?>
+<policy xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <dc:title>HR Benefits Policy</dc:title>
+  <dcterms:modified>2026-06-15</dcterms:modified>
+  <quorum:trustLevel>high</quorum:trustLevel>
+  <rule>Employees receive 12 weeks of paid parental leave.</rule>
+</policy>`,
+    0,
+  );
+
+  assert.equal(source.title, "HR Benefits Policy");
+  assert.equal(source.updatedAt, "2026-06-15");
+  assert.equal(source.trustLevel, "high");
+  assert.match(source.content, /Employees receive 12 weeks of paid parental leave\./);
+});
+
 test("extracts readable text and metadata from exported xml sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.xml",

@@ -1,5 +1,9 @@
 # Quorum
 
+The XML source path now normalizes namespaced metadata tags such as `dc:title`
+and `dcterms:modified`, preserving title, updated-at, and trust-level evidence
+metadata from common policy exports.
+
 The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
