@@ -634,6 +634,39 @@ try {
   rmSync(cliEmailPackageDir, { recursive: true, force: true });
 }
 
+const cliEmailBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-email-batch-"));
+try {
+  const answerDir = join(cliEmailBatchPackageDir, "answers", "nested");
+  const sourceDir = join(cliEmailBatchPackageDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "answer.eml");
+  const sourcePath = join(sourceDir, "policy.eml");
+  const email = (subject, body) =>
+    `From: policy@example.com\nTo: employee@example.com\nDate: Tue, 04 Aug 2026 09:00:00 -0400\nSubject: ${subject}\nContent-Type: text/plain; charset=utf-8\n\n${body}\n`;
+  writeFileSync(answerPath, email("Benefits answer", "Employees receive 12 weeks of paid parental leave."));
+  writeFileSync(sourcePath, email("Parental leave policy", "Employees receive 12 weeks of paid parental leave."));
+
+  const emailBatchOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify-batch", "--answer-dir", join(cliEmailBatchPackageDir, "answers"), "--source-dir", join(cliEmailBatchPackageDir, "sources"), "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const emailBatchPayload = JSON.parse(emailBatchOutput);
+  if (
+    emailBatchPayload.summary?.answersWithClaims !== 1 ||
+    emailBatchPayload.summary?.answersWithoutClaims !== 0 ||
+    emailBatchPayload.answers?.[0]?.answerPath !== answerPath ||
+    emailBatchPayload.answers?.[0]?.report?.summary?.verified !== 1 ||
+    emailBatchPayload.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath ||
+    emailBatchPayload.answers?.[0]?.report?.sources?.[0]?.title !== "Parental leave policy"
+  ) {
+    throw new Error("Package artifact did not preserve recursive RFC 822 email discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(cliEmailBatchPackageDir, { recursive: true, force: true });
+}
+
 const cliTextilePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-textile-"));
 try {
   const answerPath = join(cliTextilePackageDir, "answer.textile");
