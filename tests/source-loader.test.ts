@@ -1485,6 +1485,16 @@ test("decodes common named html entities from exported html sources", async () =
   );
 });
 
+test("decodes common currency entities in exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/pricing.html",
+    "<html><body><p>Refunds under &euro;100 and &pound;50 follow the same policy.</p></body></html>",
+    0,
+  );
+
+  assert.equal(source.content, "Refunds under €100 and £50 follow the same policy.");
+});
+
 test("falls back to the html file name when the page has no title", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.htm",
