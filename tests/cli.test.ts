@@ -3151,6 +3151,51 @@ test("verify discovers ini policy exports from a source directory", async () => 
   }
 });
 
+test("verify discovers xml policy exports from a nested source directory", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xml-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "policies");
+    const sourcePath = join(sourceDir, "nested", "benefits.xml");
+
+    await mkdir(dirname(sourcePath), { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        "<policy><title>Benefits policy</title><updated_at>2026-08-01</updated_at><trust_level>high</trust_level><rule>Employees receive 12 weeks of paid parental leave.</rule></policy>",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ title: string; updatedAt?: string; trustLevel: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(report.sources, [
+      {
+        title: "Benefits policy",
+        updatedAt: "2026-08-01",
+        trustLevel: "high",
+      },
+    ]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims against html sources with named entities", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-entities-"));
 
