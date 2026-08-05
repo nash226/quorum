@@ -1010,6 +1010,10 @@ function decodeHtmlEntities(content: string): string {
     ["hellip", "…"],
     ["middot", "·"],
     ["bull", "•"],
+    ["cent", "¢"],
+    ["pound", "£"],
+    ["yen", "¥"],
+    ["euro", "€"],
   ]);
 
   return content

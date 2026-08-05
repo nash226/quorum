@@ -256,6 +256,9 @@ The CLI and local HTTP API share a machine-readable contract version. Run
 `npm run dev -- version --json` to verify the installed CLI version before
 connecting an integration; the API exposes the same value at `GET /version`.
 
+Exported HTML policy text also decodes common currency entities such as
+`&euro;` and `&pound;`, preserving readable numeric evidence during verification.
+
 The CLI regression suite now verifies that `verify --source-dir` finds supported
 approved sources in nested folders while ignoring unrelated files, documenting
 the recursive source-library behavior used by local policy workflows.
