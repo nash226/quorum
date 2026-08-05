@@ -292,6 +292,7 @@ function normalizeMediaWikiSource(content: string): string {
     .replace(/''([^']+)''/g, "$1")
     .replace(/(^|\n)[#*;:]+\s+/g, "$1")
     .replace(/<ref\b[^>]*>[\s\S]*?<\/ref>|<ref\b[^>]*/gi, "")
+    .replace(/<br\s*\/?>/gi, "\n")
     .replace(/[ \t]+/g, " ")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
