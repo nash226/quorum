@@ -15,7 +15,7 @@ interface ParsedSource {
   body: string;
 }
 
-interface SourceDocumentOptions {
+export interface SourceDocumentOptions {
   id?: string;
   defaultTrustLevel?: SourceTrustLevel;
   title?: string;

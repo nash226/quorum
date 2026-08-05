@@ -7,8 +7,25 @@ import {
   extractClaims,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
+  type SourceDocumentOptions,
   type ApiErrorResponse,
 } from "../src/index.js";
+
+const sourceDocumentOptions: SourceDocumentOptions = {
+  id: "hr/leave@2026-08-05",
+  title: "Leave Policy",
+  updatedAt: "2026-08-05",
+  trustLevel: "high",
+};
+
+test("public package entrypoint exports typed source document options", () => {
+  assert.deepEqual(sourceDocumentOptions, {
+    id: "hr/leave@2026-08-05",
+    title: "Leave Policy",
+    updatedAt: "2026-08-05",
+    trustLevel: "high",
+  });
+});
 
 test("public package entrypoint exports the claim extractor", () => {
   assert.deepEqual(
