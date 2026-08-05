@@ -115,6 +115,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return { metadata: {}, body: normalizeTextileSource(normalizedContent) };
   }
 
+  if (isMediaWikiSource(sourcePath)) {
+    return { metadata: {}, body: normalizeMediaWikiSource(normalizedContent) };
+  }
+
   const normalized = normalizedContent;
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -250,6 +254,10 @@ function isTextileSource(sourcePath: string): boolean {
   return /\.textile$/i.test(sourcePath);
 }
 
+function isMediaWikiSource(sourcePath: string): boolean {
+  return /\.(?:mediawiki|wiki)$/i.test(sourcePath);
+}
+
 function normalizeLatexSource(content: string): string {
   return content
     .replace(/(^|\n)\s*%[^\n]*/g, "$1")
@@ -270,6 +278,20 @@ function normalizeTextileSource(content: string): string {
     .replace(/__([^_]+)__/g, "$1")
     .replace(/(^|\s)[*_]([^*_\n]+)[*_](?=\s|$)/g, "$1$2")
     .replace(/(^|\n)\*\s+/g, "$1")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function normalizeMediaWikiSource(content: string): string {
+  return content
+    .replace(/(^|\n)={1,6}\s*(.*?)\s*={1,6}(?=\n|$)/g, "$1$2")
+    .replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_match, target: string, label?: string) => label ?? target)
+    .replace(/\[([^\s\]]+)\s+([^\]]+)\]/g, "$2")
+    .replace(/'''([^']+)'''/g, "$1")
+    .replace(/''([^']+)''/g, "$1")
+    .replace(/(^|\n)[#*;:]+\s+/g, "$1")
+    .replace(/<ref\b[^>]*>[\s\S]*?<\/ref>|<ref\b[^>]*/gi, "")
     .replace(/[ \t]+/g, " ")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
