@@ -342,6 +342,10 @@ The packaged CLI smoke gate now verifies direct LaTeX answer and approved-source
 verification, keeping normalized `.tex` policy evidence release-gated for
 installed integrations.
 
+The packaged batch smoke gate now verifies nested LaTeX (`.tex`) answers and
+approved sources, keeping recursive document-policy exports release-gated
+alongside direct verification.
+
 The packaged CLI smoke gate now verifies direct YAML approved-source exports,
 keeping structured source discovery release-gated symmetrically with YAML
 answers.

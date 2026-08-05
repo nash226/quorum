@@ -1097,6 +1097,43 @@ try {
   rmSync(cliLatexPackageDir, { recursive: true, force: true });
 }
 
+const cliLatexBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-latex-batch-"));
+try {
+  const answerDir = join(cliLatexBatchPackageDir, "answers", "nested");
+  const sourceDir = join(cliLatexBatchPackageDir, "sources", "nested");
+  mkdirSync(answerDir, { recursive: true });
+  mkdirSync(sourceDir, { recursive: true });
+  const answerPath = join(answerDir, "leave.tex");
+  const sourcePath = join(sourceDir, "policy.tex");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "\\section{Parental Leave Policy}\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const latexBatchOutput = execFileSync(
+    "node",
+    [
+      fileURLToPath(cliPath),
+      "verify-batch",
+      "--answer-dir",
+      join(cliLatexBatchPackageDir, "answers"),
+      "--source-dir",
+      join(cliLatexBatchPackageDir, "sources"),
+      "--json",
+    ],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const latexBatchPayload = JSON.parse(latexBatchOutput);
+  if (
+    latexBatchPayload.summary?.answersWithClaims !== 1 ||
+    latexBatchPayload.answers?.[0]?.answerPath !== answerPath ||
+    latexBatchPayload.answers?.[0]?.report?.summary?.verified !== 1 ||
+    latexBatchPayload.answers?.[0]?.report?.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not preserve nested LaTeX answer/source discovery in the batch CLI contract.");
+  }
+} finally {
+  rmSync(cliLatexBatchPackageDir, { recursive: true, force: true });
+}
+
 const cliRstPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-rst-"));
 try {
   const answerPath = join(cliRstPackageDir, "answer.rst");
