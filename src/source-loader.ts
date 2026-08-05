@@ -265,7 +265,9 @@ function parseEmailSource(content: string): ParsedSource {
   const body = separator === -1 ? "" : normalized.slice(separator + 2).trim();
   const headers = new Map<string, string>();
 
-  for (const line of headerText.split("\n")) {
+  const unfoldedHeaders = headerText.replace(/\n[ \t]+/g, " ");
+
+  for (const line of unfoldedHeaders.split("\n")) {
     const match = line.match(/^([A-Za-z0-9-]+):\s*(.*)$/);
     if (match) headers.set(match[1].toLowerCase(), match[2].trim());
   }
