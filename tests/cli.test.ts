@@ -2971,6 +2971,37 @@ test("verify accepts a docx source", async () => {
   }
 });
 
+test("verify discovers a docx source in nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-docx-source-directory-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources", "hr");
+    const sourcePath = join(sourceDir, "hr-policy.docx");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Walking on imported air\n", "utf8"),
+      readFile(docxFixturePath).then((content) => writeFile(sourcePath, content)),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source-dir", join(tempDir, "sources"), "--json"]),
+    ) as {
+      sources: Array<{ id: string; sourcePath: string; title: string; trustLevel: string }>;
+      summary: { verified: number };
+    };
+
+    assert.deepEqual(report.sources, [
+      { id: "source_1", sourcePath, title: "hr-policy", trustLevel: "medium" },
+    ]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct DOCX answer export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-docx-answer-"));
 
