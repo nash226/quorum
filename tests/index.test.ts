@@ -5,6 +5,10 @@ import {
   API_CAPABILITIES,
   API_REQUEST_CONTENT_TYPES,
   extractClaims,
+  loadSourceDocuments,
+  loadSourceDocumentsFromContent,
+  loadSources,
+  loadSourcesFromContent,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
   type SourceDocumentOptions,
@@ -25,6 +29,11 @@ test("public package entrypoint exports typed source document options", () => {
     updatedAt: "2026-08-05",
     trustLevel: "high",
   });
+});
+
+test("public package entrypoint keeps canonical and shorthand source loaders", () => {
+  assert.equal(loadSources, loadSourceDocuments);
+  assert.equal(loadSourcesFromContent, loadSourceDocumentsFromContent);
 });
 
 test("public package entrypoint exports the claim extractor", () => {
