@@ -548,10 +548,18 @@ export async function verifyBatchAnswers(
           normalizedAnswerPath,
           options.answerLabelsByPath,
         ) ?? answerLabels[index] ?? normalizedAnswerPath;
-      const report =
-        answerPath === "-" && stdinAnswer !== undefined
-          ? verifyAnswer(stdinAnswer, options.sources, generatedAt, STDIN_ANSWER_PATH)
-          : await verifyAnswerFile(answerPath, options.sources, generatedAt);
+      let report: VerificationReport;
+      try {
+        report =
+          answerPath === "-" && stdinAnswer !== undefined
+            ? verifyAnswer(stdinAnswer, options.sources, generatedAt, STDIN_ANSWER_PATH)
+            : await verifyAnswerFile(answerPath, options.sources, generatedAt);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(`Failed to verify answer ${JSON.stringify(normalizedAnswerPath)}: ${message}`, {
+          cause: error,
+        });
+      }
       report.answerLabel = answerLabel;
       const failVerdicts = matchingFailVerdicts(report, options.failOn ?? []);
 

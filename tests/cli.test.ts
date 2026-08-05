@@ -5393,6 +5393,34 @@ test("verify-batch rejects empty resolved source sets", async () => {
   }
 });
 
+test("verify-batch identifies an answer when parsing fails", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-answer-error-"));
+
+  try {
+    const answerPath = join(tempDir, "malformed.docx");
+    const sourcePath = join(tempDir, "source.md");
+    await Promise.all([
+      writeFile(answerPath, "not a valid docx", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const result = await runCliAllowFailure([
+      "verify-batch",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+
+    assert.equal(result.code, 1);
+    assert.equal(result.stdout, "");
+    assert.match(result.stderr, new RegExp(`Failed to verify answer ${escapeRegExp(answerPath)}:`));
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch ignores hidden answer files and hidden answer subdirectories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-hidden-answers-"));
 

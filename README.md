@@ -1,5 +1,7 @@
 # Quorum
 
+Batch verification errors now identify the answer path that failed to load or parse, making malformed files in directory-based runs easier to fix.
+
 The public package entrypoint now exports `SourceDocumentOptions` alongside
 `sourceDocumentFromFile`, so typed Node integrations can preserve source IDs,
 titles, freshness, and trust metadata when loading approved evidence.
