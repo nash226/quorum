@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `d3767b27` on 2026-08-04, test: cover recursive docx source discovery
+- Latest shipped change: `66230aa6` on 2026-08-05, test: cover recursive YAML source discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-05 | Direct push | test: cover recursive YAML source discovery | `66230aa6` |
 | 2026-08-04 | Direct push | test: cover recursive docx source discovery | `d3767b27` |
 | 2026-08-04 | Direct push | docs: reconcile evaluation fixture inventory | `e213544e` |
 | 2026-08-04 | [#1918](https://github.com/nash226/quorum/pull/1918) | docs: reconcile supported input formats | `bb92a30c` |
@@ -56,5 +57,4 @@
 | 2026-08-04 | Direct push | fix: preserve compact CJK claims | `e7bdd508` |
 | 2026-08-04 | Direct push | feat: support more localized sentence stops | `e47766c8` |
 | 2026-08-04 | [#1908](https://github.com/nash226/quorum/pull/1908) | test: cover packaged HTTP YAML sources | `e88d32d9` |
-| 2026-08-04 | Direct push | test: cover packaged commented JSON exports | `e2a4831d` |
 
