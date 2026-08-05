@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9750215e` on 2026-08-05, feat: normalize MediaWiki policy markup
+- Latest shipped change: `48d4a2c9` on 2026-08-05, test: cover packaged nested LaTeX batch flow
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-05 | Direct push | test: cover packaged nested LaTeX batch flow | `48d4a2c9` |
 | 2026-08-05 | Direct push | feat: normalize MediaWiki policy markup | `9750215e` |
 | 2026-08-05 | [#1960](https://github.com/nash226/quorum/pull/1960) | fix: split Arabic semicolon claims | `d77ddcd7` |
 | 2026-08-05 | Direct push | docs: resolve README merge conflict | `aa120d2c` |
@@ -56,5 +57,4 @@
 | 2026-08-05 | [#1952](https://github.com/nash226/quorum/pull/1952) | docs: align cli help with input formats | `2516bc0f` |
 | 2026-08-05 | [#1953](https://github.com/nash226/quorum/pull/1953) | fix: parse CRLF source frontmatter | `bb453719` |
 | 2026-08-05 | Direct push | test: cover npm serve wrapper contract | `90106e83` |
-| 2026-08-05 | [#1944](https://github.com/nash226/quorum/pull/1944) | test: make package smoke command standalone | `549e069d` |
 
