@@ -77,7 +77,7 @@ export async function sourceDocumentFromFile(
 }
 
 export function parseSource(sourcePath: string, content: string): ParsedSource {
-  const normalizedContent = stripByteOrderMark(content).replace(/\r\n/g, "\n");
+  const normalizedContent = normalizeLineEndings(stripByteOrderMark(content));
 
   if (isHtmlSource(sourcePath)) {
     return parseHtmlSource(normalizedContent);
@@ -280,7 +280,7 @@ function sourceTitleFromPath(sourcePath: string): string {
 }
 
 function parseEmailSource(content: string): ParsedSource {
-  const normalized = content.replace(/\r\n/g, "\n");
+  const normalized = normalizeLineEndings(content);
   const separator = normalized.search(/\n\n/);
   const headerText = separator === -1 ? normalized : normalized.slice(0, separator);
   const body = separator === -1 ? "" : normalized.slice(separator + 2).trim();
@@ -292,6 +292,10 @@ function parseEmailSource(content: string): ParsedSource {
   }
 
   return { metadata: { title: headers.get("subject"), updatedAt: headers.get("date") }, body };
+}
+
+function normalizeLineEndings(content: string): string {
+  return content.replace(/\r\n?/g, "\n");
 }
 
 function parseHtmlSource(content: string): ParsedSource {
