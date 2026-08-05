@@ -1536,6 +1536,9 @@ Direct reStructuredText approved-source verification is also covered end to end,
 preserving the explicit `.rst` source path in the evidence report.
 Direct TOML approved-source verification is covered end to end as well, preserving
 the explicit `.toml` source path and fallback title in the evidence report.
+HTML table normalization preserves meaningful row-header cells as evidence,
+including accessible tables that use `<th scope="row">` entries.
+
 Direct HTML approved-source verification is also covered end to end, preserving
 the source path and document title after HTML markup is normalized.
 When a workflow has an explicit source set, repeat `--source` instead of
