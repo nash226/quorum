@@ -1,5 +1,10 @@
 # Quorum
 
+The public package entrypoint now exposes the canonical `loadSourceDocuments`
+and `loadSourceDocumentsFromContent` names alongside the existing shorthand
+aliases, making source-loading integrations easier to discover without a
+breaking API change.
+
 The public package entrypoint now exports `SourceDocumentOptions` alongside
 `sourceDocumentFromFile`, so typed Node integrations can preserve source IDs,
 titles, freshness, and trust metadata when loading approved evidence.
