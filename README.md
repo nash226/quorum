@@ -1338,6 +1338,11 @@ reviewer inputs.
 This command is the source of truth for directory discovery: it prints the
 separate source and answer extension sets used by `verify-batch`, so scripts
 can confirm the packaged input contract before submitting a batch.
+
+The JSON contract is also useful for upload validation: source integrations can
+allow the richer policy-export formats listed by `sources`, while answer
+integrations can enforce the separate `answers` list without duplicating
+Quorum's extension rules.
 Use `npm run formats -- --json` when an integration needs the same contract as
 sorted machine-readable `sources` and `answers` arrays. The JSON response also
 includes a `version` field (currently `0.1.0`) so integrations can reject an unexpected
