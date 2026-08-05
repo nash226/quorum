@@ -3076,6 +3076,48 @@ test("verify discovers ini policy exports from a source directory", async () => 
   }
 });
 
+test("verify discovers csv policy exports from a source directory", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-csv-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "policies", "regional");
+    const sourcePath = join(sourceDir, "benefits.csv");
+
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        "policy,details\nparental leave,Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source-dir",
+      join(tempDir, "policies"),
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(
+      report.sources.map(({ sourcePath: discoveredPath, title }) => ({ sourcePath: discoveredPath, title })),
+      [{ sourcePath, title: "benefits" }],
+    );
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims against html sources with named entities", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-entities-"));
 
