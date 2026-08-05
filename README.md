@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies XHTML answers against nested XHTML
+approved sources, keeping installed XML-compatible policy exports covered at
+the release boundary.
+
 The package-script contract now regression-tests `npm run serve -- --help`,
 keeping the documented local HTTP API wrapper aligned with the CLI serve
 command and its port option.
