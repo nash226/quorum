@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification is now regression-tested for both `.yaml` and
+`.yml` answers and approved sources, keeping nested structured policy exports
+on the same contract as direct YAML verification.
+
 The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
