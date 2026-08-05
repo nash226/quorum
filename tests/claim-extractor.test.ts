@@ -1048,6 +1048,15 @@ test("splits semicolon clauses beginning with non-Latin uppercase letters", () =
   ]);
 });
 
+test("splits Arabic semicolon-delimited policy claims", () => {
+  const claims = extractClaims("تُمنح الإجازة السنوية لمدة 20 يومًا؛ يجب تقديم الطلب قبل خمسة أيام.");
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "تُمنح الإجازة السنوية لمدة 20 يومًا",
+    "يجب تقديم الطلب قبل خمسة أيام.",
+  ]);
+});
+
 test("keeps lowercase semicolon continuations in the same claim", () => {
   const claims = extractClaims(
     "Employees receive 12 weeks of paid parental leave; for full-time staff only.",
