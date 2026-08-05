@@ -74,6 +74,22 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("verify reads a single answer from stdin when answer is a dash", async () => {
+  const result = await runCliAllowFailure(
+    ["verify", "--answer", "-", "--source", "examples/sources/hr-policy.md", "--json"],
+    "Employees receive 12 weeks of paid parental leave.\n",
+  );
+
+  assert.equal(result.code, 0);
+  const report = JSON.parse(result.stdout) as {
+    answerPath: string;
+    summary: Record<string, number>;
+  };
+
+  assert.equal(report.answerPath, "-");
+  assert.equal(report.summary.verified, 1);
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 
@@ -1297,12 +1313,15 @@ function escapeRegExp(value: string): string {
 
 async function runCliAllowFailure(
   args: string[],
+  input?: string,
 ): Promise<{ code: number; stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", ...args], {
       cwd: process.cwd(),
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: ["pipe", "pipe", "pipe"],
     });
+
+    child.stdin.end(input);
 
     let stdout = "";
     let stderr = "";

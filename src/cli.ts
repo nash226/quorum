@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { dirname, extname, join, resolve } from "node:path";
 import { verifyAnswer } from "./claim-verifier.js";
 import type {
@@ -558,7 +559,7 @@ async function verifySingleAnswer(
   answerPath: string,
   sources: SourceDocument[],
 ): Promise<VerificationReport> {
-  const answer = await readFile(answerPath, "utf8");
+  const answer = answerPath === "-" ? readFileSync(0, "utf8") : await readFile(answerPath, "utf8");
   return verifyAnswer(answer, sources, undefined, answerPath);
 }
 

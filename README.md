@@ -151,6 +151,14 @@ found through `--answer-dir`. Batch Markdown and HTML reports also include each
 answer's claim-level verdicts and top evidence so reviewers can inspect risky
 answers without jumping straight to JSON.
 
+For a single answer supplied by an agent pipeline, use `--answer -` to read
+the answer from standard input while keeping the approved sources on disk:
+
+```bash
+printf '%s\n' 'Employees receive 12 weeks of paid parental leave.' | \
+  npm run dev -- verify --answer - --source examples/sources/hr-policy.md --json
+```
+
 ## Quick Start
 
 ```bash
@@ -209,7 +217,7 @@ quorum import-review --review-csv <path> [--json] [--out <path>] [--markdown-out
 
 Options:
 
-- `--answer <path>`: AI-generated answer to verify
+- `--answer <path>`: AI-generated answer to verify; use `-` for standard input
 - `--source <path>`: approved source document; may be repeated
 - `--source-dir <path>`: directory of approved source documents
 - `--answer <path>`: answer file to include in a batch run; may be repeated
