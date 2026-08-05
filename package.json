@@ -44,7 +44,7 @@
     "serve": "npm run dev -- serve",
     "version": "npm run dev -- version",
     "smoke": "node scripts/smoke-check.mjs",
-    "package:smoke": "node scripts/package-smoke-check.mjs",
+    "package:smoke": "npm run build && node scripts/package-smoke-check.mjs",
     "evaluate:ci": "npm run dev -- evaluate --fixture-dir examples/evaluations --min-score 0.95 --fail-on-mismatch",
     "status:refresh": "node scripts/update-status.mjs",
     "test": "node --import tsx --test tests/**/*.test.ts"
