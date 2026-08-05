@@ -111,6 +111,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return { metadata: {}, body: normalizeLatexSource(normalizedContent) };
   }
 
+  if (isTextileSource(sourcePath)) {
+    return { metadata: {}, body: normalizeTextileSource(normalizedContent) };
+  }
+
   const normalized = normalizedContent.replace(/\r\n/g, "\n");
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -242,6 +246,10 @@ function isLatexSource(sourcePath: string): boolean {
   return /\.tex$/i.test(sourcePath);
 }
 
+function isTextileSource(sourcePath: string): boolean {
+  return /\.textile$/i.test(sourcePath);
+}
+
 function normalizeLatexSource(content: string): string {
   return content
     .replace(/(^|\n)\s*%[^\n]*/g, "$1")
@@ -249,6 +257,19 @@ function normalizeLatexSource(content: string): string {
     .replace(/\\[A-Za-z@]+(?:\s*\[[^\]]*\])?(?:\s*\{([^}]*)\})?/g, "$1")
     .replace(/[{}]/g, "")
     .replace(/\\([%&$#_{}])/g, "$1")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function normalizeTextileSource(content: string): string {
+  return content
+    .replace(/(^|\n)h[1-6]\.\s+/g, "$1")
+    .replace(/\[\"([^\"]+)\":([^\s\]]+)\]/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/__([^_]+)__/g, "$1")
+    .replace(/(^|\s)[*_]([^*_\n]+)[*_](?=\s|$)/g, "$1$2")
+    .replace(/(^|\n)\*\s+/g, "$1")
     .replace(/[ \t]+/g, " ")
     .replace(/\n{3,}/g, "\n\n")
     .trim();

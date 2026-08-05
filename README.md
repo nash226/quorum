@@ -1,5 +1,9 @@
 # Quorum
 
+Textile (`.textile`) answer and approved-source exports now normalize common
+headings, emphasis, links, and list markers before claim extraction, keeping
+rich-text policy evidence readable in direct verification.
+
 The packaged CLI smoke gate now verifies recursive nested `.eml` answer and
 approved-source discovery, keeping published email-policy batch workflows
 aligned with direct verification and the supported format contract.
