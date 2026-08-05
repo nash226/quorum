@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged smoke gate now verifies `npm run help`, keeping the installed
+top-level command index aligned with the CLI workflows available to users.
+
 The package-script contract now regression-tests `npm run serve -- --help`,
 keeping the documented local HTTP API wrapper aligned with the CLI serve
 command and its port option.

@@ -41,6 +41,17 @@ test("version package script forwards JSON contract probes", async () => {
   assert.deepEqual(version, { service: "quorum", version: API_VERSION });
 });
 
+test("help package script forwards the top-level CLI help contract", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /Usage:\s+quorum help/);
+  assert.match(stdout, /verify-batch/);
+  assert.match(stdout, /review-queue/);
+});
+
 test("formats package script exposes the machine-readable input contract", async () => {
   const { stdout } = await execFileAsync("npm", ["run", "--silent", "formats", "--", "--json"], {
     cwd: new URL("..", import.meta.url),
