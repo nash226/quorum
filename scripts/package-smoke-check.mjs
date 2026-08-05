@@ -469,6 +469,31 @@ try {
   rmSync(cliDelimitedPackageDir, { recursive: true, force: true });
 }
 
+const cliTextileSmokeDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-textile-"));
+try {
+  const answerPath = join(cliTextileSmokeDir, "answer.textile");
+  const sourcePath = join(cliTextileSmokeDir, "policy.textile");
+  writeFileSync(answerPath, "h1. Leave policy\n\nEmployees receive *12 weeks* of paid parental leave.\n");
+  writeFileSync(sourcePath, "h1. Leave policy\n\nEmployees receive *12 weeks* of paid parental leave.\n");
+
+  const textileOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const textilePayload = JSON.parse(textileOutput);
+  if (
+    textilePayload.summary?.verified !== 2 ||
+    textilePayload.answerPath !== answerPath ||
+    textilePayload.sources?.[0]?.sourcePath !== sourcePath ||
+    textilePayload.sources?.[0]?.title !== "policy"
+  ) {
+    throw new Error("Package artifact did not verify the expected Textile answer/source contract.");
+  }
+} finally {
+  rmSync(cliTextileSmokeDir, { recursive: true, force: true });
+}
+
 const cliYamlBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-yaml-batch-"));
 try {
   const answerDir = join(cliYamlBatchPackageDir, "answers");

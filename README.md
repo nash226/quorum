@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies Textile answers against Textile
+approved sources, keeping installed rich-text policy workflows aligned with
+the direct normalization contract.
+
 Textile (`.textile`) answer and approved-source exports now normalize common
 headings, emphasis, links, and list markers before claim extraction, keeping
 rich-text policy evidence readable in direct verification.
