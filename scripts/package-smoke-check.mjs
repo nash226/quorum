@@ -124,6 +124,14 @@ if (versionJson.service !== "quorum" || versionJson.version !== packageJson.vers
   throw new Error("Package artifact did not preserve the machine-readable version contract.");
 }
 
+const helpOutput = execFileSync("npm", ["run", "--silent", "help"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+});
+if (!/^Usage:\s+quorum help/m.test(helpOutput) || !/verify-batch/.test(helpOutput) || !/review-queue/.test(helpOutput)) {
+  throw new Error("Package artifact did not preserve the top-level npm help wrapper contract.");
+}
+
 const claimPreviewPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-claim-preview-"));
 try {
   const answerPath = join(claimPreviewPackageDir, "answer.md");
