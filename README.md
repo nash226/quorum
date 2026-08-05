@@ -3,6 +3,10 @@
 Top-level CLI help now names the full shipped structured, tabular, and email
 input families, matching the extensions returned by `quorum formats`.
 
+MediaWiki and `.wiki` policy exports now have regression coverage for clean
+metadata-free source titles, keeping reviewer-facing evidence labels free of
+format suffixes.
+
 CRLF-delimited Markdown frontmatter now preserves source titles, freshness, and
 trust metadata, keeping Windows-exported policy files on the same metadata path
 as LF-delimited sources.

@@ -182,6 +182,14 @@ test("strips the Org-mode alias from fallback source titles", async () => {
   assert.equal(source.title, "benefits");
 });
 
+test("strips MediaWiki aliases from fallback source titles", async () => {
+  const mediaWikiSource = await sourceDocumentFromFile("policies/benefits.mediawiki", "Policy text", 0);
+  const wikiSource = await sourceDocumentFromFile("policies/leave-policy.wiki", "Policy text", 1);
+
+  assert.equal(mediaWikiSource.title, "benefits");
+  assert.equal(wikiSource.title, "leave-policy");
+});
+
 test("normalizes quoted csv policy exports and reads metadata columns", async () => {
   const source = await sourceDocumentFromFile(
     "exports/benefits.CSV",
