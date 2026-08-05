@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `dea46f39` on 2026-08-05, fix: preserve MediaWiki line breaks
+- Latest shipped change: `e783a930` on 2026-08-05, test: cover extract-claims package wrapper
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-05 | Direct push | test: cover extract-claims package wrapper | `e783a930` |
 | 2026-08-05 | Direct push | fix: preserve MediaWiki line breaks | `dea46f39` |
 | 2026-08-05 | Direct push | test: cover packaged nested LaTeX batch flow | `48d4a2c9` |
 | 2026-08-05 | Direct push | feat: normalize MediaWiki policy markup | `9750215e` |
@@ -56,5 +57,4 @@
 | 2026-08-05 | Direct push | docs: resolve README merge conflict | `aa120d2c` |
 | 2026-08-05 | Direct push | fix: normalize legacy source line endings | `a4beb3fe` |
 | 2026-08-05 | [#1952](https://github.com/nash226/quorum/pull/1952) | docs: align cli help with input formats | `2516bc0f` |
-| 2026-08-05 | [#1953](https://github.com/nash226/quorum/pull/1953) | fix: parse CRLF source frontmatter | `bb453719` |
 
