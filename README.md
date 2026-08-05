@@ -1,5 +1,8 @@
 # Quorum
 
+The evaluation suite now includes support account-cancellation coverage for
+active-through-period behavior and unsupported automatic-refund claims.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.
@@ -60,8 +63,8 @@ Recursive batch verification is now regression-tested for nested LaTeX (`.tex`)
 answers and approved sources, keeping the documented rich-text export contract
 covered end to end.
 
-The evaluation fixture guide now reports the shipped 92-fixture inventory
-(32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
+The evaluation fixture guide now reports the shipped 93-fixture inventory
+(32 HR and 61 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
 
 Claim extraction now keeps compact CJK policy statements such as `需审批。`

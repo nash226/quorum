@@ -167,6 +167,19 @@ test("evaluates the shipped support plan-upgrade fixture across billing claims",
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped support account-cancellation fixture across refund claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/account-cancellation-policy.json"),
+    generatedAt: "2026-08-05T02:00:00.000Z",
+  });
+  assert.equal(scorecard.fixtureName, "Support account cancellation policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.deepEqual(scorecard.actualSummary, { verified: 2, contradicted: 0, unsupported: 1, needs_review: 0 });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), ["verified", "verified", "unsupported"]);
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluation directory discovery ignores hidden fixture directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-evaluation-hidden-directory-"));
   try {
@@ -2725,6 +2738,7 @@ test("resolves fixture paths from nested directories in stable order", async () 
     resolve("examples/evaluations/hr/workplace-safety-policy.json"),
     resolve("examples/evaluations/support-policy.json"),
     resolve("examples/evaluations/support/accessibility-policy.json"),
+    resolve("examples/evaluations/support/account-cancellation-policy.json"),
     resolve("examples/evaluations/support/account-closure-policy.json"),
     resolve("examples/evaluations/support/account-merge-policy.json"),
     resolve("examples/evaluations/support/account-recovery-policy.json"),
@@ -2887,7 +2901,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 92);
+  assert.equal(scorecards.length, 93);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2926,6 +2940,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "HR workplace safety policy example",
       "Support policy example",
       "Support accessibility policy example",
+      "Support account cancellation policy example",
       "Support account closure policy example",
       "Support account merge policy example",
       "Support account recovery policy example",
@@ -3056,7 +3071,7 @@ test("filters the support evaluation fixture set by domain", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 60);
+  assert.equal(scorecards.length, 61);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "support"));
 });
 
