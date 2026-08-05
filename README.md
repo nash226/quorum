@@ -1452,10 +1452,12 @@ persistence is the next product step, while the dashboard remains downstream
 of that boundary and the decision tracked in [issue #683](https://github.com/nash226/quorum/issues/683).
 
 Verification accepts Markdown-family (`.md`, `.markdown`, `.mdx`, `.qmd`),
-AsciiDoc/Org-mode/MediaWiki (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
-`.wiki`), reStructuredText/LaTeX (`.rst`, `.tex`), text (`.txt`, `.text`,
-`.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
-JSON/JSONL/YAML/XML/TOML, CSV/TSV, PDF, and DOCX answers and approved sources.
+AsciiDoc/Org-mode/MediaWiki/reStructuredText/LaTeX/Textile (`.adoc`, `.org`,
+`.mediawiki`, `.rst`, `.rest`, `.tex`, `.textile`), text/configuration
+(`.txt`, `.text`, `.log`, `.ini`, `.properties`, `.conf`, `.cfg`), exported
+HTML/XHTML (`.html`, `.htm`, `.xhtml`), email (`.eml`), JSON/JSONL/NDJSON
+(including JSON5/JSONC), YAML, XML, TOML, CSV/TSV, PDF, and DOCX answers and
+approved sources.
 Run `npm run formats -- --json` for the authoritative machine-readable list.
 The direct CLI form, `quorum formats --json`, is covered against the same
 library constants so integrations can rely on the published discovery contract.
