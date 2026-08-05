@@ -29,6 +29,7 @@ test("package scripts keep the documented repository check gate intact", async (
   assert.equal(scripts.serve, "npm run dev -- serve");
   assert.equal(scripts.version, "npm run dev -- version");
   assert.equal(scripts["status:refresh"], "node scripts/update-status.mjs");
+  assert.equal(scripts.prepublishOnly, "npm run check");
 });
 
 test("version package script forwards JSON contract probes", async () => {
