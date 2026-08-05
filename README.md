@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged batch smoke gate now verifies nested `.rest` answers and `.rst`
+approved sources, keeping both reStructuredText aliases release-gated through
+recursive installed-package workflows.
+
 The packaged CLI smoke gate now verifies recursive nested `.eml` answer and
 approved-source discovery, keeping published email-policy batch workflows
 aligned with direct verification and the supported format contract.
