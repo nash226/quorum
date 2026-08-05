@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `affa8136` on 2026-08-05, test: cover packaged recursive email discovery
+- Latest shipped change: `e2fea5cb` on 2026-08-05, test: cover recursive AsciiDoc discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-05 | Direct push | test: cover recursive AsciiDoc discovery | `e2fea5cb` |
 | 2026-08-05 | Direct push | test: cover packaged recursive email discovery | `affa8136` |
 | 2026-08-05 | Direct push | test: cover recursive LaTeX source discovery | `9af2f703` |
 | 2026-08-05 | Direct push | test: cover recursive YAML source discovery | `66230aa6` |
@@ -56,5 +57,4 @@
 | 2026-08-04 | Direct push | docs: reconcile evaluation fixture inventory | `e213544e` |
 | 2026-08-04 | [#1918](https://github.com/nash226/quorum/pull/1918) | docs: reconcile supported input formats | `bb92a30c` |
 | 2026-08-04 | [#1917](https://github.com/nash226/quorum/pull/1917) | test: cover version flag JSON aliases | `c3ccb761` |
-| 2026-08-04 | Direct push | fix: preserve compact CJK claims | `e7bdd508` |
 
