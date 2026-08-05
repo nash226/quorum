@@ -4,6 +4,9 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+Recursive approved-source discovery now has an end-to-end CSV regression, so
+tabular policy exports remain covered when nested under a source directory.
+
 The evaluation fixture guide now reports the shipped 92-fixture inventory
 (32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
