@@ -232,6 +232,17 @@ test("normalizes common LaTeX markup into readable source evidence", async () =>
   assert.equal(source.content, "Leave Policy\nEmployees receive 12 weeks of paid parental leave.");
 });
 
+test("normalizes common Textile markup into readable source evidence", async () => {
+  const source = await sourceDocumentFromFile(
+    "support-policy.textile",
+    "h1. Support Policy\n\n*Customers* may [\"request help\":https://example.test/help].\n* Response time is four hours.",
+    0,
+  );
+
+  assert.equal(source.title, "support-policy");
+  assert.equal(source.content, "Support Policy\n\nCustomers may request help.\nResponse time is four hours.");
+});
+
 test("strips MDX extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/leave-policy.mdx",
