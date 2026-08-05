@@ -1037,6 +1037,9 @@ function decodeHtmlEntities(content: string): string {
     ["hellip", "…"],
     ["middot", "·"],
     ["bull", "•"],
+    ["le", "≤"],
+    ["ge", "≥"],
+    ["ne", "≠"],
   ]);
 
   return content

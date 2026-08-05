@@ -1532,6 +1532,27 @@ test("decodes common named html entities from exported html sources", async () =
   );
 });
 
+test("decodes comparison html entities from exported html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/eligibility.html",
+    `<!doctype html>
+<html>
+  <body>
+    <main>
+      <p>Employees need &ge; 12 months of service.</p>
+      <p>Requests with &le; 5 days notice are not eligible.</p>
+      <p>A contractor is &ne; a benefits-eligible employee.</p>
+    </main>
+  </body>
+</html>`,
+    14,
+  );
+
+  assert.equal(source.content,
+    "Employees need ≥ 12 months of service.\n\nRequests with ≤ 5 days notice are not eligible.\n\nA contractor is ≠ a benefits-eligible employee.",
+  );
+});
+
 test("falls back to the html file name when the page has no title", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.htm",

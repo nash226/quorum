@@ -4,6 +4,10 @@ The public package entrypoint now exports `SourceDocumentOptions` alongside
 `sourceDocumentFromFile`, so typed Node integrations can preserve source IDs,
 titles, freshness, and trust metadata when loading approved evidence.
 
+HTML and XML policy sources now decode common comparison entities such as
+`&ge;`, `&le;`, and `&ne;`, keeping eligibility thresholds readable during claim
+extraction and reviewer handoff.
+
 The package-script contract now regression-tests `npm run extract-claims -- --help`,
 keeping the installed claim-preview wrapper aligned with the CLI's answer and
 machine-readable output options.
