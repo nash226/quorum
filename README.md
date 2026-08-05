@@ -3,6 +3,8 @@
 MediaWiki (`.mediawiki` and `.wiki`) answers and approved sources now normalize
 common headings, links, emphasis, list markers, and reference tags before claim
 extraction, keeping wiki-exported policy evidence readable for reviewers.
+Common `<br>` line breaks are preserved too, so adjacent exported policy rules
+remain separate claims.
 
 Top-level CLI help now names the full shipped structured, tabular, and email
 input families, matching the extensions returned by `quorum formats`.
