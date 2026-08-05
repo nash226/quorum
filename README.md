@@ -19,6 +19,10 @@ Claim extraction now keeps compact CJK policy statements such as `需审批。`
 and `要予約。` as reviewable claims, preserving short localized rules instead
 of routing them as empty answers.
 
+Claim extraction now splits semicolon-delimited compound policy sentences into
+separate reviewable claims while preserving lowercase continuation clauses as
+one claim, so each rule can receive its own evidence verdict.
+
 Claim extraction now recognizes Armenian, Ethiopic, and Mongolian sentence
 terminators, keeping localized policy statements separately reviewable.
 
