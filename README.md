@@ -511,7 +511,7 @@ unsupported recoverability promise.
 
 ## Start the Local API and Evaluation Workflow
 
-Start the shipped local HTTP API with `npm run dev -- serve`, then inspect its
+Start the shipped local HTTP API with `npm run serve`, then inspect its
 health and contract surfaces on the default port `3000`:
 
 ```bash
@@ -524,6 +524,10 @@ Run the checked-in HR or support scorecards with
 with `npm run openapi -- --out reports/quorum-openapi.json`. The [API integration guide](docs/api-integration.md),
 [CLI guide](docs/cli-guide.md), and [evaluation fixture guide](docs/evaluation-fixtures.md)
 describe the request, report, and scorecard workflows in detail.
+
+The repository also exposes `npm run serve`, `npm run evaluate`, and
+`npm run openapi` wrappers so local API, scorecard, and contract workflows use
+the same commands documented for packaged installations.
 
 Before opening a change, run `npm run check` to execute the full repository
 gate: unit tests, the TypeScript build, CLI and packaged-CLI smoke checks, and
