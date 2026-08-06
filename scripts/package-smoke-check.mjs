@@ -89,6 +89,18 @@ if (
   throw new Error("Package artifact CLI JSON formats output drifted from the library input contract.");
 }
 
+const npmFormatsJson = JSON.parse(execFileSync("npm", ["run", "--silent", "formats", "--", "--json"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+}));
+if (
+  npmFormatsJson.version !== packageJson.version ||
+  JSON.stringify(npmFormatsJson.sources) !== JSON.stringify([...expectedSourceExtensions].sort()) ||
+  JSON.stringify(npmFormatsJson.answers) !== JSON.stringify([...expectedAnswerExtensions].sort())
+) {
+  throw new Error("The npm formats wrapper did not preserve the machine-readable input contract.");
+}
+
 const openApiPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-openapi-"));
 try {
   const openApiPath = join(openApiPackageDir, "openapi.json");
