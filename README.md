@@ -1,5 +1,9 @@
 # Quorum
 
+Programmatic in-memory source loading rejects duplicate stable source IDs before
+verification, preventing ambiguous evidence references when integrations merge
+multiple policy feeds.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.
