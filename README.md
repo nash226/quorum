@@ -1,5 +1,9 @@
 # Quorum
 
+The package-script contract now regression-tests `npm run review-queue -- --help`,
+keeping installed reviewer handoff onboarding aligned with queue filters and
+benchmark options.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.
