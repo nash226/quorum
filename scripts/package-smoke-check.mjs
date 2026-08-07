@@ -2280,6 +2280,14 @@ try {
   rmSync(openApiTempDir, { recursive: true, force: true });
 }
 
+const npmServeHelp = execFileSync("npm", ["run", "--silent", "serve", "--", "--help"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+});
+if (!npmServeHelp.startsWith("Quorum serve\n\nUsage:") || !npmServeHelp.includes("quorum serve")) {
+  throw new Error("The npm serve wrapper did not preserve the packaged server help contract.");
+}
+
 const reviewerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-review-"));
 try {
   const reviewCsvPath = join(reviewerTempDir, "review.csv");
