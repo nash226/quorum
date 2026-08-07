@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `720167cb` on 2026-08-07, test: cover npm help package wrapper
+- Latest shipped change: `fecac30f` on 2026-08-07, feat: add npm verification wrappers
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-07 | Direct push | feat: add npm verification wrappers | `fecac30f` |
 | 2026-08-07 | Direct push | test: cover npm help package wrapper | `720167cb` |
 | 2026-08-07 | Direct push | test: cover npm help package wrapper | `a42b6751` |
 | 2026-08-07 | [#1998](https://github.com/nash226/quorum/pull/1998) | test: smoke-test source loader package export | `63ad74a5` |
@@ -56,5 +57,4 @@
 | 2026-08-07 | Direct push | test: pin subscription pause evaluation routing | `08fee6a6` |
 | 2026-08-05 | Direct push | test: cover direct Org-mode verification | `6c8ce215` |
 | 2026-08-05 | Direct push | fix: decode comparison html entities | `e89c2d7e` |
-| 2026-08-05 | [#1971](https://github.com/nash226/quorum/pull/1971) | feat: export source document option types | `b77833cf` |
 
