@@ -189,6 +189,17 @@ test("splits Tibetan shad sentence terminators", () => {
   );
 });
 
+test("splits Thai sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("นโยบายนี้มีผลใช้บังคับ๚ ผู้จัดการอนุมัติข้อยกเว้น๛ Next policy applies."),
+    [
+      "นโยบายนี้มีผลใช้บังคับ๚",
+      "ผู้จัดการอนุมัติข้อยกเว้น๛",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
