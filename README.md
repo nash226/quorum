@@ -4,6 +4,10 @@ The packaged smoke gate now checks `npm run formats -- --json`, keeping the
 installed input-format wrapper aligned with the versioned source and answer
 extension contract used by integrations.
 
+The example-fixture suite now regression-tests the support account-merge
+workflow, preserving its verified identity control, contradicted merge claim,
+and review-routed escalation outcome as representative support coverage.
+
 The packaged smoke gate now checks `npm run verify-batch -- --help`, keeping
 the installed batch-verification wrapper aligned with its command usage
 contract as well as its machine-readable report flow.
