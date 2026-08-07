@@ -1,0 +1,19 @@
+{
+  "name": "Support account cancellation policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-account-cancellation-answer.md",
+  "answer": "Customers can cancel subscriptions from the billing page at any time.\nCanceled subscriptions remain active until the end of the current billing period.\nCanceled subscriptions are automatically refunded for unused time.\n",
+  "answerLabel": "Support account cancellation reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-account-cancellation-policy.md",
+      "id": "support/account-cancellation@2026-08-05",
+      "title": "Support Account Cancellation Policy",
+      "updatedAt": "2026-08-05",
+      "trustLevel": "high",
+      "content": "Customers can cancel subscriptions from the billing page at any time.\nCanceled subscriptions remain active until the end of the current billing period. Refunds are not automatic; customers must request an eligible refund through support.\n"
+    }
+  ],
+  "expectedSummary": { "verified": 2, "contradicted": 0, "unsupported": 1, "needs_review": 0 },
+  "expectedClaimVerdicts": ["verified", "verified", "unsupported"]
+}
