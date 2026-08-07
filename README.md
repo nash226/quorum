@@ -69,6 +69,9 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+The evaluation suite also verifies a support return-policy packet across
+approved eligibility, conflicting timing, and review-required automation claims.
+
 Recursive approved-source discovery is now release-gated for nested DOCX policy
 exports, matching the existing direct DOCX verification path.
 
