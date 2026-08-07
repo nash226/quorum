@@ -510,6 +510,14 @@ test("formats accepts both help flag aliases", async () => {
   assert.equal(shortHelp, longHelp);
 });
 
+test("formats rejects unsupported flags instead of silently changing the contract", async () => {
+  const result = await runCliAllowFailure(["formats", "--source"]);
+
+  assert.equal(result.code, 1);
+  assert.equal(result.stdout, "");
+  assert.match(result.stderr, /Usage: quorum formats \[--json\]/);
+});
+
 test("verify accepts direct TSV answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-"));
   try {
