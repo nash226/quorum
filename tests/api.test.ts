@@ -2263,6 +2263,21 @@ test("programmatic API rejects empty in-memory source batches", async () => {
   );
 });
 
+test("programmatic API rejects duplicate in-memory source IDs", async () => {
+  await assert.rejects(
+    () =>
+      loadSourcesFromContent({
+        sources: [
+          { sourcePath: "policies/hr.md", id: "hr/leave", content: "Employees receive leave." },
+          { sourcePath: "policies/backup.md", id: "hr/leave", content: "Employees receive leave." },
+        ],
+      }),
+    {
+      message: "Duplicate source ID: hr/leave",
+    },
+  );
+});
+
 test("programmatic API evaluates in-memory fixture arrays for workflow callers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-evaluation-batch-"));
 
