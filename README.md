@@ -283,6 +283,10 @@ Recursive directory discovery is also path-stable: matching answer and source
 files are returned in deterministic order, keeping repeated batch reports and
 reviewer queue rows reproducible.
 
+Recursive batch verification now has an end-to-end RFC 822 email export check,
+including subject and date metadata on the approved source, so `.eml` policy
+workflows remain covered through the public CLI path.
+
 The evaluation suite now covers a support refund-escalation packet with a
 verified refund window and unsupported approval promises, keeping reviewer
 risk coverage grounded in a concrete customer-support workflow.

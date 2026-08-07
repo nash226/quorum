@@ -172,6 +172,43 @@ test("verify-batch discovers nested .log answers and sources", async () => {
   }
 });
 
+test("verify-batch discovers nested email answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-email-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    const sourceDir = join(tempDir, "sources", "nested");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "leave.eml"), "From: agent@example.com\r\nSubject: Leave answer\r\n\r\nEmployees receive 12 weeks of paid parental leave.\r\n", "utf8"),
+      writeFile(join(sourceDir, "hr-policy.eml"), "From: people-ops@example.com\r\nDate: 2026-08-01\r\nSubject: HR Benefits Policy\r\n\r\nEmployees receive 12 weeks of paid parental leave.\r\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      join(tempDir, "answers"),
+      "--source-dir",
+      join(tempDir, "sources"),
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ sourcePath: string; title: string; updatedAt?: string }>;
+      summary: { verified: number };
+    };
+
+    assert.match(report.answers[0]?.answerPath ?? "", /answers\/nested\/leave\.eml$/);
+    assert.equal(report.sources[0]?.sourcePath.endsWith("sources/nested/hr-policy.eml"), true);
+    assert.equal(report.sources[0]?.title, "HR Benefits Policy");
+    assert.equal(report.sources[0]?.updatedAt, "2026-08-01");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers nested XML answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xml-discovery-"));
 
