@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now recognizes the Burmese sentence boundary (`။`),
+keeping Myanmar-language policy statements independently reviewable.
+
 The packaged smoke gate now checks `npm run formats -- --json`, keeping the
 installed input-format wrapper aligned with the versioned source and answer
 extension contract used by integrations.
