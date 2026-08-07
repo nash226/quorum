@@ -5,6 +5,7 @@ import {
   API_CAPABILITIES,
   API_REQUEST_CONTENT_TYPES,
   extractClaims,
+  renderEvaluationAggregateSummaryCsv,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
   type SourceDocumentOptions,
@@ -69,6 +70,38 @@ test("public package entrypoint exports the in-memory batch gate result", async 
   assert.equal(result.report.answers.length, 1);
   assert.equal(result.shouldFail, true);
   assert.deepEqual(result.failVerdicts, ["unsupported"]);
+});
+
+test("public package entrypoint exports evaluation aggregate rendering", () => {
+  const csv = renderEvaluationAggregateSummaryCsv([{
+    fixtureName: "Support refunds policy example",
+    fixturePath: "examples/evaluations/support/refunds-policy.json",
+    domain: "support",
+    answerPath: "examples/answers/support-refunds-answer.md",
+    answerLabel: "Support refunds reviewer packet",
+    answerPreview: "",
+    sourcePaths: ["examples/sources/support-refunds-policy.md"],
+    sourceDirs: [],
+    expectedSummary: { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 },
+    actualSummary: { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 },
+    summaryMatches: true,
+    claims: [],
+    matchedClaims: 3,
+    totalExpectedClaims: 3,
+    score: 1,
+    report: {
+      generatedAt: "2026-08-07T00:00:00.000Z",
+      answer: "",
+      answerPreview: "",
+      sources: [],
+      assessments: [],
+      summary: { verified: 1, contradicted: 1, unsupported: 1, needs_review: 0 },
+    },
+  }]);
+
+  assert.match(csv, /^generated_at,fixture_count,/);
+  assert.match(csv, /\n2026-08-07T00:00:00\.000Z,1,/);
+  assert.match(csv, /,support,1,0,0\.000,0,1,1\.000,100%,/);
 });
 
 test("public package entrypoint exports the canonical HTTP method contract", () => {

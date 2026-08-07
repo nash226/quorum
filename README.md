@@ -84,6 +84,10 @@ The evaluation suite directly pins support subscription-pause routing: the
 approved pause window verifies, a conflicting window is contradicted, and an
 unsupported automatic-refund promise remains unsupported.
 
+The installed package API now has a regression guard for evaluation aggregate
+CSV rendering, so Node integrations can consume domain rollups without using
+the CLI.
+
 Claim extraction now keeps compact CJK policy statements such as `需审批。`
 and `要予約。` as reviewable claims, preserving short localized rules instead
 of routing them as empty answers.
