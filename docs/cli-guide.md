@@ -380,7 +380,7 @@ status and domain scope so downstream workers can audit the handoff.
 | `evaluate` | Run checked-in evaluation fixtures and scorecards. |
 | `serve` | Start the local HTTP API. |
 | `openapi` | Export the generated OpenAPI contract. |
-| `version` | Print the CLI and API contract version. |
+| `formats` | Print the supported source and answer extensions. |\n| `version` | Print the CLI and API contract version. |
 
 For HTTP usage, use [docs/api-integration.md](api-integration.md) rather than
 duplicating API payloads in this guide.
