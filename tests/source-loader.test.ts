@@ -14,6 +14,12 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("normalizes CRLF in plain sources without frontmatter", () => {
+  const parsed = parseSource("docs/hr-policy.txt", "Employees get 12 weeks.\r\nManagers approve leave.\r\n");
+
+  assert.equal(parsed.body, "Employees get 12 weeks.\nManagers approve leave.\n");
+});
+
 test("extracts HTML metadata after a UTF-8 BOM", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.html",

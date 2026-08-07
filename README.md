@@ -234,8 +234,9 @@ approved-source check, keeping this common Org export alias release-gated.
 Top-level CLI help now shows the optional `--json` flag for `quorum formats`,
 making the machine-readable format-discovery path visible during onboarding.
 
-Source frontmatter parsing now preserves titles, freshness, and trust metadata
-from Windows-style CRLF policy exports as well as Unix-style files.
+Source parsing now normalizes Windows-style CRLF policy exports consistently,
+including plain-text files without frontmatter, so verification sees the same
+content across Windows and Unix-created policy files.
 
 Source freshness validation also applies to snake_case `updated_at` metadata,
 so malformed timestamps fail before they reach verification reports.
