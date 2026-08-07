@@ -158,6 +158,13 @@ test("splits Arabic and Indic sentence terminators", () => {
   );
 });
 
+test("splits Syriac full stop sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("ܗܢܐ ܢܡܘܣܐ ܦܠܚ܂ ܡܕܒܪܢܐ ܡܫܪܪ܂ Next policy applies."),
+    ["ܗܢܐ ܢܡܘܣܐ ܦܠܚ܂", "ܡܕܒܪܢܐ ܡܫܪܪ܂", "Next policy applies."],
+  );
+});
+
 test("splits Unicode ellipsis sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("The review is pending… Managers approve exceptions."),
