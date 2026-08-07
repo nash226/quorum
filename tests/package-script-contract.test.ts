@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
@@ -94,6 +94,51 @@ test("import-review package script forwards command-specific help flags", async 
   });
   assert.match(stdout, /Usage:\s+quorum import-review/);
   assert.match(stdout, /--review-csv <path\|->/);
+});
+
+test("review-queue package script preserves the JSON queue overview contract", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-wrapper-"));
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    await writeFile(
+      reviewCsvPath,
+      [
+        "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+        `${join(tempDir, "pending.md")},claim-1,Employees receive 12 weeks of paid leave.,verified,Matches approved policy,HR Policy,Employees receive 12 weeks of paid leave.,,`,
+        `${join(tempDir, "reviewed.md")},claim-1,Employees receive 12 weeks of paid leave.,verified,Matches approved policy,HR Policy,Employees receive 12 weeks of paid leave.,verified,Confirmed by reviewer`,
+      ].join("\n") + "\n",
+      "utf8",
+    );
+
+    const { stdout } = await execFileAsync(
+      "npm",
+      ["run", "--silent", "review-queue", "--", "--review-csv", reviewCsvPath, "--json"],
+      { cwd: new URL("..", import.meta.url), maxBuffer: 1024 * 1024 },
+    );
+    const overview = JSON.parse(stdout) as {
+      review?: {
+        totalAnswers: number;
+        pendingAnswers: number;
+        reviewedAnswers: number;
+        totalClaims: number;
+        pendingClaims: number;
+        reviewedClaims: number;
+      };
+    };
+
+    assert.deepEqual(overview.review, {
+      totalAnswers: 2,
+      pendingAnswers: 1,
+      reviewedAnswers: 1,
+      noClaimsAnswers: 0,
+      totalClaims: 2,
+      pendingClaims: 1,
+      reviewedClaims: 1,
+      verdicts: { verified: 2, contradicted: 0, unsupported: 0, needs_review: 0 },
+    });
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("openapi package script forwards export arguments", async () => {
