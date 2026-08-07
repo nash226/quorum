@@ -297,6 +297,9 @@ The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
 extensions before wiring an integration.
 
+The package smoke gate also exercises `npm run help`, keeping the documented
+top-level npm onboarding command connected to the packaged CLI.
+
 The CLI and local HTTP API share a machine-readable contract version. Run
 `npm run dev -- version --json` to verify the installed CLI version before
 connecting an integration; the API exposes the same value at `GET /version`.

@@ -63,6 +63,14 @@ if (npmVersionJson.service !== "quorum" || npmVersionJson.version !== packageJso
   throw new Error("The npm version wrapper did not preserve the machine-readable version contract.");
 }
 
+const npmHelpOutput = execFileSync("npm", ["run", "--silent", "help"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+});
+if (!npmHelpOutput.startsWith("Quorum\n\nUsage:")) {
+  throw new Error("The npm help wrapper did not preserve the top-level CLI usage contract.");
+}
+
 const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS].sort();
 const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS].sort();
 const formatExtensions = (extensions) => [...extensions].sort().join(", ");
