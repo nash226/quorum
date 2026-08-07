@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation suite now directly pins the support account-closure workflow:
+ownership confirmation verifies, while closure timing and reactivation claims
+remain routed to review against the approved policy.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.

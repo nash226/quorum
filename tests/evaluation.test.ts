@@ -123,6 +123,31 @@ test("evaluates a shipped support subscription pause fixture across billing clai
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped support account closure fixture across lifecycle claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/account-closure-policy.json"),
+    generatedAt: "2026-08-07T13:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support account closure policy example");
+  assert.equal(scorecard.domain, "support");
+  assert.equal(scorecard.answerLabel, "Support account closure reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 0,
+    unsupported: 0,
+    needs_review: 2,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "needs_review",
+    "needs_review",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/account-closure@2026-07-15");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates the shipped support enterprise response-time fixture", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/enterprise-response-time-policy.json"),
