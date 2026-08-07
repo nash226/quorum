@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged smoke gate now checks `npm run formats -- --json`, keeping the
+installed input-format wrapper aligned with the versioned source and answer
+extension contract used by integrations.
+
 The packaged smoke gate now checks `npm run verify-batch -- --help`, keeping
 the installed batch-verification wrapper aligned with its command usage
 contract as well as its machine-readable report flow.
