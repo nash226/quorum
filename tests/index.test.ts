@@ -82,8 +82,12 @@ test("public package entrypoint renders evaluation artifacts for Node workflows"
     content: JSON.stringify({
       name: "Refund policy",
       domain: "support",
+      answerPath: "answers/refunds.md",
       answer: "Customers can request refunds within 30 days.",
-      sources: [{ content: "Customers can request refunds within 30 days." }],
+      sources: [{
+        sourcePath: "policies/refunds.md",
+        content: "Customers can request refunds within 30 days.",
+      }],
       expectedClaimVerdicts: ["verified"],
       expectedSummary: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
     }),
