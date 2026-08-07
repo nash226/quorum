@@ -70,6 +70,23 @@ test("support example produces one verified, contradicted, and unsupported claim
   });
 });
 
+test("support account-merge example preserves identity and escalation verdicts", async () => {
+  const report = await verifyExample(
+    "examples/answers/support-account-merge-answer.md",
+    "examples/sources/support-account-merge-policy.md",
+  );
+
+  assert.deepEqual(report.summary, {
+    verified: 1,
+    unsupported: 1,
+    contradicted: 1,
+    needs_review: 0,
+  });
+  assert.equal(report.assessments[0]?.verdict, "verified");
+  assert.equal(report.assessments[1]?.verdict, "contradicted");
+  assert.equal(report.assessments[2]?.verdict, "unsupported");
+});
+
 test("support HTML example produces one verified, contradicted, and unsupported claim", async () => {
   const report = await verifyExample(
     "examples/answers/support-billing-answer.html",
