@@ -53,6 +53,10 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+The `quorum formats` discovery command now has a pinned CLI contract: it emits
+the supported input formats, accepts `--json` and help flags, and rejects
+unknown options instead of silently changing discovery behavior.
+
 Recursive approved-source discovery is now release-gated for nested DOCX policy
 exports, matching the existing direct DOCX verification path.
 
