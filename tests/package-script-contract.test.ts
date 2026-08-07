@@ -53,6 +53,16 @@ test("formats package script exposes the machine-readable input contract", async
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
 });
 
+test("README keeps the shipped Textile format in its supported-format inventory", async () => {
+  const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
+
+  assert.match(
+    readme,
+    /The supported local answer formats are[\s\S]*?\.textile/,
+  );
+  assert.match(readme, /quorum formats --json/);
+});
+
 test("formats package script forwards command-specific help flags", async () => {
   const { stdout } = await execFileAsync("npm", ["run", "--silent", "formats", "--", "--help"], {
     cwd: new URL("..", import.meta.url),
