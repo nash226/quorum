@@ -2704,6 +2704,12 @@ agent integrations. Start it with `npm run dev -- serve --port 3000`, then use
 request and response contract. See the [HTTP API integration guide](docs/api-integration.md)
 for verification, reviewer-queue, and operational probe examples.
 
+Installed npm packages expose the primary verification workflows directly:
+`npm run verify -- ...` runs single-answer verification and
+`npm run verify-batch -- ...` runs directory or explicitly selected batch
+verification. Both wrappers forward the same arguments as the `quorum verify`
+and `quorum verify-batch` commands.
+
 Batch verification is now shipped: `verify-batch` can discover nested answer
 directories, preserve explicit answer ordering, and emit reviewer CSV plus
 one-row-per-answer summary exports for queue routing.

@@ -21,6 +21,8 @@ test("package scripts keep the documented repository check gate intact", async (
   assert.equal(scripts.formats, "npm run dev -- formats");
   assert.equal(scripts.evaluate, "npm run dev -- evaluate");
   assert.equal(scripts["import-review"], "npm run dev -- import-review");
+  assert.equal(scripts.verify, "npm run dev -- verify");
+  assert.equal(scripts["verify-batch"], "npm run dev -- verify-batch");
   assert.equal(scripts.smoke, "node scripts/smoke-check.mjs");
   assert.equal(scripts.openapi, "npm run dev -- openapi");
   assert.equal(scripts["review-queue"], "npm run dev -- review-queue");
@@ -120,4 +122,26 @@ test("serve package script forwards command-specific help flags", async () => {
 
   assert.match(stdout, /Usage:\s+quorum serve/);
   assert.match(stdout, /--port <port>/);
+});
+
+test("verify package script forwards command-specific help flags", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "verify", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /Usage:\s+quorum verify/);
+  assert.match(stdout, /--answer <path\|->/);
+  assert.match(stdout, /--source <path>/);
+});
+
+test("verify-batch package script forwards command-specific help flags", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "verify-batch", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /Usage:\s+quorum verify-batch/);
+  assert.match(stdout, /--answer-dir <path>/);
+  assert.match(stdout, /--source-dir <path>/);
 });
