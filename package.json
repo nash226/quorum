@@ -36,6 +36,8 @@
     "extract-claims": "npm run dev -- extract-claims",
     "evaluate": "npm run dev -- evaluate",
     "import-review": "npm run dev -- import-review",
+    "verify": "npm run dev -- verify",
+    "verify-batch": "npm run dev -- verify-batch",
     "help": "npm run dev -- --help",
     "openapi": "npm run dev -- openapi",
     "review-queue": "npm run dev -- review-queue",
