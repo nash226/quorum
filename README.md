@@ -1,5 +1,9 @@
 # Quorum
 
+The source-loader contract now regression-tests explicit ID, title, freshness,
+and trust overrides, keeping integrations that attach live metadata aligned
+with file-based policy loading.
+
 The packaged smoke gate now checks `npm run verify-batch -- --help`, keeping
 the installed batch-verification wrapper aligned with its command usage
 contract as well as its machine-readable report flow.

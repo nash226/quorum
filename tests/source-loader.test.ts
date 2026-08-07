@@ -532,6 +532,43 @@ test("applies the default trust override when metadata is absent", async () => {
   assert.equal(source.trustLevel, "high");
 });
 
+test("applies explicit source metadata overrides for integration callers", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.md",
+    `---
+title: File Metadata
+updatedAt: 2026-05-31
+trustLevel: low
+---
+Employees get 12 weeks.
+`,
+    0,
+    {
+      id: "hr-policy-live",
+      title: "Live HR Policy",
+      updatedAt: "2026-08-07",
+      trustLevel: "high",
+    },
+  );
+
+  assert.deepEqual(
+    {
+      id: source.id,
+      sourcePath: source.sourcePath,
+      title: source.title,
+      updatedAt: source.updatedAt,
+      trustLevel: source.trustLevel,
+    },
+    {
+      id: "hr-policy-live",
+      sourcePath: "docs/hr-policy.md",
+      title: "Live HR Policy",
+      updatedAt: "2026-08-07",
+      trustLevel: "high",
+    },
+  );
+});
+
 test("preserves a caller-supplied source identifier", async () => {
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
     id: "people-ops/hr-policy@2026-05-31",
