@@ -4,6 +4,9 @@ The packaged smoke gate now validates the root-library `sourceDocumentFromFile`
 export with stable source identity, title, trust, and content metadata, keeping
 typed Node integrations aligned with the published source-loader contract.
 
+The public Node package entrypoint now smoke-tests evaluation scorecard, summary
+CSV, domain-summary CSV, and aggregate-summary CSV renderers for integrations.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.
