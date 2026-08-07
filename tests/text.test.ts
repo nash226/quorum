@@ -211,6 +211,17 @@ test("splits Khmer sentence terminators", () => {
   );
 });
 
+test("splits Georgian paragraph separators", () => {
+  assert.deepEqual(
+    splitIntoSentences("ეს პოლიტიკა მოქმედებს჻ მენეჯერმა გამონაკლისი უნდა დაამტკიცოს჻ Next policy applies."),
+    [
+      "ეს პოლიტიკა მოქმედებს჻",
+      "მენეჯერმა გამონაკლისი უნდა დაამტკიცოს჻",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>

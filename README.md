@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now recognizes the Georgian paragraph separator (`჻`),
+keeping localized Georgian policy statements separately reviewable for
+evidence matching.
+
 Claim extraction now recognizes the Khmer full stop (`។`), keeping localized
 Khmer policy statements separately reviewable for evidence matching.
 
