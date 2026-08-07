@@ -79,6 +79,19 @@ if (!npmVerifyBatchHelpOutput.startsWith("Quorum verify-batch\n\nUsage:")) {
   throw new Error("The npm verify-batch wrapper did not preserve the command help contract.");
 }
 
+const npmFormatsJsonOutput = execFileSync("npm", ["run", "--silent", "formats", "--", "--json"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+});
+const npmFormatsJson = JSON.parse(npmFormatsJsonOutput);
+if (
+  npmFormatsJson.version !== packageJson.version ||
+  !Array.isArray(npmFormatsJson.sources) ||
+  !Array.isArray(npmFormatsJson.answers)
+) {
+  throw new Error("The npm formats wrapper did not preserve the machine-readable input contract.");
+}
+
 const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS].sort();
 const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS].sort();
 const formatExtensions = (extensions) => [...extensions].sort().join(", ");
