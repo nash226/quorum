@@ -1,5 +1,7 @@
 # Quorum
 
+The package-script contract now regression-tests `npm run evaluate -- ... --result-json`, keeping installed evaluation integrations aligned with the machine-readable score and gate result.
+
 The packaged smoke gate now validates the root-library `sourceDocumentFromFile`
 export with stable source identity, title, trust, and content metadata, keeping
 typed Node integrations aligned with the published source-loader contract.
