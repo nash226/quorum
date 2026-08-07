@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6ae65f4f` on 2026-08-07, test: cover hidden batch discovery
+- Latest shipped change: `60322255` on 2026-08-07, fix: split Khmer sentence boundaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-07 | Direct push | fix: split Khmer sentence boundaries | `60322255` |
 | 2026-08-07 | [#2027](https://github.com/nash226/quorum/pull/2027) | test: cover hidden batch discovery | `6ae65f4f` |
 | 2026-08-07 | Direct push | fix: split Thai sentence boundaries | `c9e3c148` |
 | 2026-08-07 | Direct push | fix: split Tibetan shad sentence boundaries | `efaff637` |
@@ -56,5 +57,4 @@
 | 2026-08-07 | Direct push | test: cover public evaluation aggregate export | `cf99dd81` |
 | 2026-08-07 | Direct push | test: smoke-test verify-batch npm help | `92cbfc26` |
 | 2026-08-07 | Direct push | test: smoke-test npm verification wrappers | `749417dd` |
-| 2026-08-07 | Direct push | feat: add npm verification wrappers | `fecac30f` |
 
