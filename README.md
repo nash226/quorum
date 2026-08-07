@@ -1,5 +1,8 @@
 # Quorum
 
+The package-script contract now guards `prepublishOnly`, keeping published
+artifacts behind the same full `npm run check` release gate as local changes.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.
