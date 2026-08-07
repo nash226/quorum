@@ -379,6 +379,10 @@ The packaged CLI smoke gate now verifies direct Org-mode answer and approved-sou
 exports, keeping `.org` policy handoffs release-gated alongside other document
 formats.
 
+Installed packages now expose `npm run verify -- ...` and
+`npm run verify-batch -- ...` wrappers, so integrations can invoke the two core
+verification workflows without reaching through the lower-level `dev` script.
+
 The packaged CLI smoke gate now verifies that reviewer-queue JSON and CSV
 artifacts create missing nested output directories, keeping the documented
 `reports/...` handoff paths safe for clean integrations.
