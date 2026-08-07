@@ -13,7 +13,7 @@ set covers:
 - Markdown, HTML, PDF, and source-directory ingestion
 - empty-answer queue routing
 - explicit source IDs and inline source metadata
-- HR bonus eligibility, bereavement leave, dependent benefits, medical leave, relocation, leave, leave carryover, onboarding, offboarding, parental leave, professional
+- HR bonus eligibility, bereavement leave, commuter benefits, dependent benefits, medical leave, relocation, leave, leave carryover, onboarding, offboarding, parental leave, professional
   development, compensation review, benefits enrollment, performance review,
   employee referrals, jury duty,
   remote work, workplace accommodations, expense reimbursement, tuition reimbursement, and travel reimbursement
@@ -27,7 +27,7 @@ set covers:
 - price-adjustment eligibility, retailer restrictions, and refund routing
 - support identity-verification claims, including mismatched identity documents and unsafe disclosure shortcuts
 
-The benchmark currently contains 92 fixtures: 32 HR workflows and 60 support
+The benchmark currently contains 93 fixtures: 33 HR workflows and 60 support
 workflows. Shared edge-case inputs are represented within those domain totals
 so the inventory matches the CLI, API, and packaged smoke gates.
 The generated
@@ -159,6 +159,8 @@ specific product question:
   bonus amount, and an unsupported automatic-payment promise.
 - HR jury-duty coverage tests a verified paid-leave entitlement, a conflicting
   leave duration, and an unsupported meal-stipend promise.
+- HR commuter-benefit coverage tests a claim submission window, a conflicting
+  deadline, and an unsupported unlimited rideshare allowance.
 
 - Support service-credit coverage tests an outage request-window contradiction,
   a matched credit-limit claim, and an unrelated unsupported claim.
