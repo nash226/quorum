@@ -48,7 +48,7 @@ test("version package script forwards command-specific help flags", async () => 
   });
 
   assert.match(stdout, /Usage:\s+quorum version \[--json\]/);
-  assert.match(stdout, /Print the CLI and API contract version/);
+  assert.match(stdout, /Print the service and API contract version as JSON/);
 });
 
 test("help package script forwards the top-level command reference", async () => {
