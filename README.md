@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged `npm run version -- --help` wrapper is now regression-tested, keeping
+installed integrations aligned with the version command's usage and contract
+description.
+
 The packaged smoke gate now validates the root-library `sourceDocumentFromFile`
 export with stable source identity, title, trust, and content metadata, keeping
 typed Node integrations aligned with the published source-loader contract.
