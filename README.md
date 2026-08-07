@@ -300,6 +300,10 @@ extensions before wiring an integration.
 The package smoke gate also exercises `npm run help`, keeping the documented
 top-level npm onboarding command connected to the packaged CLI.
 
+The package-script contract now directly regression-tests `npm run help`,
+keeping the installed top-level command reference available to integrations
+before they select a workflow-specific wrapper.
+
 The CLI and local HTTP API share a machine-readable contract version. Run
 `npm run dev -- version --json` to verify the installed CLI version before
 connecting an integration; the API exposes the same value at `GET /version`.
