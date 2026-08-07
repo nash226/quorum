@@ -16,6 +16,10 @@ The package-script contract now regression-tests `npm run extract-claims -- --he
 keeping the installed claim-preview wrapper aligned with the CLI's answer and
 machine-readable output options.
 
+The packaged smoke gate now executes `npm run import-review -- ... --json`,
+keeping installed reviewer-decision imports aligned with the documented npm
+wrapper and its machine-readable queue handoff.
+
 MediaWiki (`.mediawiki` and `.wiki`) answers and approved sources now normalize
 common headings, links, emphasis, list markers, and reference tags before claim
 extraction, keeping wiki-exported policy evidence readable for reviewers.

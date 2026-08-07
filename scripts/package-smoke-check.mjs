@@ -169,8 +169,8 @@ try {
   );
 
   const importReviewOutput = execFileSync(
-    "node",
-    [fileURLToPath(cliPath), "import-review", "--review-csv", reviewCsvPath, "--json"],
+    "npm",
+    ["run", "--silent", "import-review", "--", "--review-csv", reviewCsvPath, "--json"],
     { cwd: repoRoot, encoding: "utf8" },
   );
   const importReviewPayload = JSON.parse(importReviewOutput);
