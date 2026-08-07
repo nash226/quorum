@@ -60,6 +60,9 @@ Recursive batch verification is now regression-tested for nested LaTeX (`.tex`)
 answers and approved sources, keeping the documented rich-text export contract
 covered end to end.
 
+Loaded approved sources preserve their original `sourcePath` in verification
+reports, giving reviewers a direct trace from evidence back to the source file.
+
 The evaluation fixture guide now reports the shipped 92-fixture inventory
 (32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.

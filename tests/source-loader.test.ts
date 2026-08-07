@@ -8,6 +8,7 @@ test("builds source documents from file names when metadata is absent", async ()
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0);
 
   assert.equal(source.id, "source_1");
+  assert.equal(source.sourcePath, "docs/hr-policy.md");
   assert.equal(source.title, "hr-policy");
   assert.equal(source.updatedAt, undefined);
   assert.equal(source.trustLevel, "medium");
