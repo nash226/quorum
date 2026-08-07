@@ -1,5 +1,9 @@
 # Quorum
 
+The direct CLI now treats an empty invocation and `quorum help` as successful
+top-level help requests, which keeps shell discovery and automation probes from
+mistaking normal onboarding output for a command failure.
+
 The packaged smoke gate now validates the root-library `sourceDocumentFromFile`
 export with stable source identity, title, trust, and content metadata, keeping
 typed Node integrations aligned with the published source-loader contract.
