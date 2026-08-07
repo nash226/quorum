@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
@@ -72,6 +72,33 @@ test("formats package script forwards command-specific help flags", async () => 
 
   assert.match(stdout, /Usage:\s+quorum formats \[--json\]/);
   assert.match(stdout, /Print the extensions discovered/);
+});
+
+test("evaluate package script forwards machine-readable fixture results", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-evaluate-wrapper-"));
+  try {
+    const fixturePath = join(tempDir, "fixture.json");
+    await writeFile(join(tempDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n");
+    await writeFile(join(tempDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n");
+    await writeFile(fixturePath, JSON.stringify({
+      name: "npm evaluate wrapper fixture",
+      domain: "hr",
+      answerPath: "answer.md",
+      sourcePaths: ["policy.md"],
+      expectedSummary: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
+      expectedClaimVerdicts: ["verified"],
+    }));
+
+    const { stdout } = await execFileAsync("npm", ["run", "--silent", "evaluate", "--", "--fixture", fixturePath, "--result-json"], {
+      cwd: new URL("..", import.meta.url),
+      maxBuffer: 1024 * 1024,
+    });
+    const result = JSON.parse(stdout) as { scorecards?: Array<{ fixtureName: string }>; shouldFail?: boolean };
+    assert.equal(result.scorecards?.[0]?.fixtureName, "npm evaluate wrapper fixture");
+    assert.equal(result.shouldFail, false);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("extract-claims package script forwards command-specific help flags", async () => {
