@@ -1,5 +1,8 @@
 # Quorum
 
+Status refresh regression coverage now keeps the generated roadmap snapshot
+aligned with batch verification shipped across the CLI, API, and evaluations.
+
 The packaged smoke gate now checks `npm run verify-batch -- --help`, keeping
 the installed batch-verification wrapper aligned with its command usage
 contract as well as its machine-readable report flow.
