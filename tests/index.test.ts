@@ -5,6 +5,11 @@ import {
   API_CAPABILITIES,
   API_REQUEST_CONTENT_TYPES,
   extractClaims,
+  evaluateFixtureContent,
+  renderEvaluationAggregateSummaryCsv,
+  renderEvaluationDomainSummaryCsv,
+  renderEvaluationScorecard,
+  renderEvaluationSummaryCsv,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
   type SourceDocumentOptions,
@@ -69,6 +74,26 @@ test("public package entrypoint exports the in-memory batch gate result", async 
   assert.equal(result.report.answers.length, 1);
   assert.equal(result.shouldFail, true);
   assert.deepEqual(result.failVerdicts, ["unsupported"]);
+});
+
+test("public package entrypoint renders evaluation artifacts for Node workflows", async () => {
+  const scorecard = await evaluateFixtureContent({
+    fixturePath: "fixtures/refunds.json",
+    content: JSON.stringify({
+      name: "Refund policy",
+      domain: "support",
+      answer: "Customers can request refunds within 30 days.",
+      sources: [{ content: "Customers can request refunds within 30 days." }],
+      expectedClaimVerdicts: ["verified"],
+      expectedSummary: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
+    }),
+    generatedAt: "2026-08-07T00:00:00.000Z",
+  });
+
+  assert.match(renderEvaluationScorecard(scorecard), /Refund policy/);
+  assert.match(renderEvaluationSummaryCsv([scorecard]), /fixture_name/);
+  assert.match(renderEvaluationDomainSummaryCsv([scorecard]), /domain,fixture_count/);
+  assert.match(renderEvaluationAggregateSummaryCsv([scorecard]), /fixture_count/);
 });
 
 test("public package entrypoint exports the canonical HTTP method contract", () => {
