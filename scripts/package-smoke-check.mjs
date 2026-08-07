@@ -71,6 +71,14 @@ if (!npmHelpOutput.startsWith("Quorum\n\nUsage:")) {
   throw new Error("The npm help wrapper did not preserve the top-level CLI usage contract.");
 }
 
+const npmVerifyBatchHelpOutput = execFileSync("npm", ["run", "--silent", "verify-batch", "--", "--help"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+});
+if (!npmVerifyBatchHelpOutput.startsWith("Quorum verify-batch\n\nUsage:")) {
+  throw new Error("The npm verify-batch wrapper did not preserve the command help contract.");
+}
+
 const expectedSourceExtensions = [...libraryEntry.SOURCE_EXTENSIONS].sort();
 const expectedAnswerExtensions = [...libraryEntry.ANSWER_EXTENSIONS].sort();
 const formatExtensions = (extensions) => [...extensions].sort().join(", ");
