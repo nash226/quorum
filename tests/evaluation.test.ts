@@ -169,6 +169,30 @@ test("evaluates the shipped support price-adjustment fixture across eligibility 
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped support plan-downgrade fixture across policy claims", async () => {
+  const scorecard = await evaluateFixtureFile({
+    fixturePath: resolve("examples/evaluations/support/plan-downgrade-policy.json"),
+    generatedAt: "2026-08-07T16:00:00.000Z",
+  });
+
+  assert.equal(scorecard.fixtureName, "Support plan downgrade policy example");
+  assert.equal(scorecard.answerLabel, "Support plan downgrade reviewer packet");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "contradicted",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "support/plan-downgrade@2026-07-31");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates the shipped support plan-upgrade fixture across billing claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/plan-upgrade-policy.json"),
