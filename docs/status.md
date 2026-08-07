@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `92cbfc26` on 2026-08-07, test: smoke-test verify-batch npm help
+- Latest shipped change: `cf99dd81` on 2026-08-07, test: cover public evaluation aggregate export
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-07 | Direct push | test: cover public evaluation aggregate export | `cf99dd81` |
 | 2026-08-07 | Direct push | test: smoke-test verify-batch npm help | `92cbfc26` |
 | 2026-08-07 | Direct push | test: smoke-test npm verification wrappers | `749417dd` |
 | 2026-08-07 | Direct push | feat: add npm verification wrappers | `fecac30f` |
@@ -56,5 +57,4 @@
 | 2026-08-07 | Direct push | test: cover npm help package wrapper | `a42b6751` |
 | 2026-08-07 | [#1998](https://github.com/nash226/quorum/pull/1998) | test: smoke-test source loader package export | `63ad74a5` |
 | 2026-08-07 | Direct push | test: smoke-test import-review npm wrapper | `bd01dc17` |
-| 2026-08-07 | Direct push | test: pin subscription pause evaluation routing | `08fee6a6` |
 
