@@ -43,7 +43,8 @@ they are not a request-validation schema for the HTTP API. Machine-readable
 integrations should use the HTTP `/capabilities` response, which exposes the
 same format contract alongside the API limits and queue statuses.
 For a CLI-only integration, append `-- --json` to receive sorted
-machine-readable `sources` and `answers` arrays. After installing the package,
+machine-readable `sources` and `answers` arrays plus their `sourceCount` and
+`answerCount` totals. After installing the package,
 the equivalent command is `quorum formats --json`.
 
 For example:
