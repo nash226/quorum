@@ -112,6 +112,17 @@ test("openapi package script forwards export arguments", async () => {
   }
 });
 
+test("openapi package script forwards command-specific help flags", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "openapi", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /Usage:\s+quorum openapi/);
+  assert.match(stdout, /--server-url <url>/);
+  assert.match(stdout, /--out <path>/);
+});
+
 test("serve package script forwards command-specific help flags", async () => {
   const { stdout } = await execFileAsync("npm", ["run", "--silent", "serve", "--", "--help"], {
     cwd: new URL("..", import.meta.url),
