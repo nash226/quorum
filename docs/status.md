@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6c8ce215` on 2026-08-05, test: cover direct Org-mode verification
+- Latest shipped change: `08fee6a6` on 2026-08-07, test: pin subscription pause evaluation routing
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-07 | Direct push | test: pin subscription pause evaluation routing | `08fee6a6` |
 | 2026-08-05 | Direct push | test: cover direct Org-mode verification | `6c8ce215` |
 | 2026-08-05 | Direct push | fix: decode comparison html entities | `e89c2d7e` |
 | 2026-08-05 | [#1971](https://github.com/nash226/quorum/pull/1971) | feat: export source document option types | `b77833cf` |
@@ -56,5 +57,4 @@
 | 2026-08-05 | Direct push | fix: preserve MediaWiki line breaks | `dea46f39` |
 | 2026-08-05 | Direct push | test: cover packaged nested LaTeX batch flow | `48d4a2c9` |
 | 2026-08-05 | Direct push | feat: normalize MediaWiki policy markup | `9750215e` |
-| 2026-08-05 | [#1960](https://github.com/nash226/quorum/pull/1960) | fix: split Arabic semicolon claims | `d77ddcd7` |
 
