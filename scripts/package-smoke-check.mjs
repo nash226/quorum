@@ -270,7 +270,7 @@ try {
   const verifyBatchPayload = JSON.parse(verifyBatchOutput);
   if (
     verifyBatchPayload.answers?.length !== 2 ||
-    verifyBatchPayload.answers?.every(({ summary }) => summary?.verified === 1) !== true
+    verifyBatchPayload.answers?.every(({ report }) => report?.summary?.verified === 1) !== true
   ) {
     throw new Error("The npm verify-batch wrapper did not preserve the batch JSON contract.");
   }
