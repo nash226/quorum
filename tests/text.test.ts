@@ -211,6 +211,17 @@ test("splits Khmer sentence terminators", () => {
   );
 });
 
+test("splits Sinhala sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("මෙම ප්‍රතිපත්තිය ක්‍රියාත්මක වේ෴ කළමනාකරු ව්‍යතිරේක අනුමත කරයි෴ Next policy applies."),
+    [
+      "මෙම ප්‍රතිපත්තිය ක්‍රියාත්මක වේ෴",
+      "කළමනාකරු ව්‍යතිරේක අනුමත කරයි෴",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
