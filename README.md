@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged smoke gate now verifies `npm run formats -- --json`, keeping the
+documented machine-readable format-discovery wrapper aligned with the shipped
+CLI and library extension contract.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.
