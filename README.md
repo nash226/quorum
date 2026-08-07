@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged smoke gate now checks `npm run verify-batch -- --help`, keeping
+the installed batch-verification wrapper aligned with its command usage
+contract as well as its machine-readable report flow.
+
 The packaged smoke gate now executes both `npm run verify` and
 `npm run verify-batch` against temporary approved-policy files, keeping the
 published verification wrappers aligned with their machine-readable reports.
