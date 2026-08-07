@@ -1,5 +1,9 @@
 # Quorum
 
+The repository test suite now directly checks that the published `npm run
+verify` and `npm run verify-batch` wrappers preserve their machine-readable
+JSON reports, complementing the packaged smoke gate.
+
 The packaged smoke gate now checks `npm run formats -- --json`, keeping the
 installed input-format wrapper aligned with the versioned source and answer
 extension contract used by integrations.
