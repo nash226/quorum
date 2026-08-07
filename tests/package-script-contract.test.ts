@@ -83,6 +83,17 @@ test("import-review package script forwards command-specific help flags", async 
   assert.match(stdout, /--review-csv <path\|->/);
 });
 
+test("review-queue package script forwards command-specific help flags", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "review-queue", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /Usage:\s+quorum review-queue/);
+  assert.match(stdout, /--queue-status <status>/);
+  assert.match(stdout, /--fixture-dir <path>/);
+});
+
 test("openapi package script forwards export arguments", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-openapi-wrapper-"));
   try {
