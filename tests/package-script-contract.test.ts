@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
@@ -145,6 +145,34 @@ test("verify package script forwards command-specific help flags", async () => {
   assert.match(stdout, /Usage:\s+quorum verify/);
   assert.match(stdout, /--answer <path\|->/);
   assert.match(stdout, /--source <path>/);
+});
+
+test("verification package scripts preserve machine-readable reports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-verification-wrapper-"));
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const secondAnswerPath = join(tempDir, "second-answer.md");
+    const sourcePath = join(tempDir, "policy.md");
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+    await writeFile(secondAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+    await writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+    const verify = await execFileAsync("npm", [
+      "run", "--silent", "verify", "--", "--answer", answerPath, "--source", sourcePath, "--json",
+    ], { cwd: new URL("..", import.meta.url), maxBuffer: 1024 * 1024 });
+    const verifyReport = JSON.parse(verify.stdout) as { answerPath: string; summary?: { verified: number } };
+    assert.equal(verifyReport.answerPath, answerPath);
+    assert.equal(verifyReport.summary?.verified, 1);
+
+    const verifyBatch = await execFileAsync("npm", [
+      "run", "--silent", "verify-batch", "--", "--answer", answerPath, "--answer", secondAnswerPath,
+      "--source", sourcePath, "--json",
+    ], { cwd: new URL("..", import.meta.url), maxBuffer: 1024 * 1024 });
+    const batchReport = JSON.parse(verifyBatch.stdout) as { answers?: Array<{ answerPath: string }> };
+    assert.deepEqual(batchReport.answers?.map(({ answerPath: path }) => path), [answerPath, secondAnswerPath]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("verify-batch package script forwards command-specific help flags", async () => {
