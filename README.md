@@ -303,6 +303,10 @@ and `sourceExtensions` alongside the supported verdicts, trust levels, and
 request limits. Use those fields to validate uploaded files before sending
 them to `/verify` or `/verify-batch`.
 
+The evaluation suite directly covers plan-downgrade routing: the renewal
+timing rule verifies, an incorrect notice period is contradicted, and an
+unrelated benefit promise remains unsupported.
+
 Batch verification is shipped as a foundation: the CLI and local HTTP API can
 review multiple answers, preserve reviewer decisions, and produce queue-ready
 summaries. The next product boundary is a durable API service, which remains
