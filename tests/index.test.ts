@@ -5,6 +5,11 @@ import {
   API_CAPABILITIES,
   API_REQUEST_CONTENT_TYPES,
   extractClaims,
+  renderHtmlReport,
+  renderMarkdownReport,
+  renderReviewerDecisionCsv,
+  renderSummaryCsv,
+  renderTextReport,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
   type SourceDocumentOptions,
@@ -57,6 +62,26 @@ test("public package entrypoint exports in-memory verification for Node workflow
   });
   assert.equal(result.shouldFail, false);
   assert.deepEqual(result.failVerdicts, []);
+});
+
+test("public package entrypoint renders verification artifacts for Node workflows", async () => {
+  const result = await verifyAnswerContentsResult({
+    answer: "Refunds are available for 30 days from the purchase date.",
+    answerPath: "answers/refunds.md",
+    sources: [{
+      sourcePath: "policies/refunds.md",
+      content: "Refunds are available for 30 days from the purchase date.",
+      title: "Refund Policy",
+      trustLevel: "high",
+    }],
+    generatedAt: "2026-08-07T00:00:00.000Z",
+  });
+
+  assert.match(renderTextReport(result.report), /Quorum Verification Report/);
+  assert.match(renderMarkdownReport(result.report), /# Quorum Verification Report/);
+  assert.match(renderHtmlReport(result.report), /<!doctype html>/i);
+  assert.match(renderReviewerDecisionCsv(result.report), /claim_id,claim_text/);
+  assert.match(renderSummaryCsv(result.report), /primary_verdict/);
 });
 
 test("public package entrypoint exports the in-memory batch gate result", async () => {

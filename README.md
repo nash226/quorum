@@ -61,6 +61,9 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+The public Node package entrypoint now smoke-tests verification report rendering
+for text, Markdown, HTML, reviewer CSV, and summary CSV integrations.
+
 Recursive approved-source discovery is now release-gated for nested DOCX policy
 exports, matching the existing direct DOCX verification path.
 
