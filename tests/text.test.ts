@@ -211,6 +211,17 @@ test("splits Khmer sentence terminators", () => {
   );
 });
 
+test("splits Lao sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("ນະໂຍບາຍນີ້ມີຜົນໃຊ້ບັງຄັບຯ ຜູ້ຈັດການອະນຸມັດຂໍ້ຍົກເວັ້ນຯ Next policy applies."),
+    [
+      "ນະໂຍບາຍນີ້ມີຜົນໃຊ້ບັງຄັບຯ",
+      "ຜູ້ຈັດການອະນຸມັດຂໍ້ຍົກເວັ້ນຯ",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
