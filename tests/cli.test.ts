@@ -82,6 +82,45 @@ test("verify-batch discovers the .text plain-text alias for answers and sources"
   }
 });
 
+test("verify-batch skips hidden and temporary exports during recursive discovery", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-hidden-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([
+      mkdir(join(answerDir, ".drafts"), { recursive: true }),
+      mkdir(join(sourceDir, "archive.tmp"), { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(join(answerDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(answerDir, ".drafts", "hidden.md"), "Employees receive 99 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(answerDir, "backup.md~"), "Employees receive 98 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "archive.tmp", "hidden.md"), "Employees receive 99 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ])) as {
+      answerCount: number;
+      sourceCount: number;
+      answers: Array<{ answerPath: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.answers[0]?.answerPath, join(answerDir, "answer.md"));
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .json5 exports for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json5-alias-"));
 

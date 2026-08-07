@@ -283,6 +283,9 @@ Recursive directory discovery is also path-stable: matching answer and source
 files are returned in deterministic order, keeping repeated batch reports and
 reviewer queue rows reproducible.
 
+Recursive discovery skips hidden entries and temporary exports, including
+dot-prefixed files or folders, `~` backups, and `.tmp` folders.
+
 The evaluation suite now covers a support refund-escalation packet with a
 verified refund window and unsupported approval promises, keeping reviewer
 risk coverage grounded in a concrete customer-support workflow.
