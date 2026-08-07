@@ -74,6 +74,16 @@ test("extracts readable text from DOCX source content", async () => {
   assert.equal(source.content, "Walking on imported air");
 });
 
+test("keeps row-header cells from html tables as evidence", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/benefits.html",
+    `<table><tr><th>Plan</th><th>Coverage</th></tr><tr><th scope="row">Premium</th><td>Dental and vision</td></tr></table>`,
+    1,
+  );
+
+  assert.match(source.content, /Premium: Dental and vision/);
+});
+
 test("preserves a caller-supplied source identifier for DOCX content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0, {

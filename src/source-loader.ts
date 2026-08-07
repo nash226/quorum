@@ -824,7 +824,7 @@ function normalizeHtmlDetailsMarkup(attributes: string, content: string): string
 function normalizeHtmlTableMarkup(tableMarkup: string): string {
   const captionMatch = tableMarkup.match(/<caption\b[^>]*>([\s\S]*?)<\/caption>/i);
   const rows = Array.from(tableMarkup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi))
-    .map((match) => normalizeHtmlTableRow(match[1] ?? ""))
+    .map((match, index) => normalizeHtmlTableRow(match[1] ?? "", index === 0))
     .filter((row): row is string => Boolean(row));
 
   const lines = [
@@ -867,7 +867,7 @@ function normalizeHtmlDescriptionListMarkup(descriptionListMarkup: string): stri
   return lines.join("\n");
 }
 
-function normalizeHtmlTableRow(rowMarkup: string): string | undefined {
+function normalizeHtmlTableRow(rowMarkup: string, isFirstRow: boolean): string | undefined {
   const cells = Array.from(rowMarkup.matchAll(/<(th|td)\b[^>]*>([\s\S]*?)<\/\1>/gi)).map(
     (match) => ({
       kind: (match[1] ?? "").toLowerCase(),
@@ -880,7 +880,7 @@ function normalizeHtmlTableRow(rowMarkup: string): string | undefined {
     return undefined;
   }
 
-  if (populatedCells.every((cell) => cell.kind === "th")) {
+  if (isFirstRow && populatedCells.every((cell) => cell.kind === "th")) {
     return undefined;
   }
 
