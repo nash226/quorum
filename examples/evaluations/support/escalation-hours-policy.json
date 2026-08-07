@@ -1,0 +1,24 @@
+{
+  "name": "Support escalation hours policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-escalation-hours-answer.md",
+  "answer": "Urgent account-security escalations are reviewed within 4 hours.\nUrgent account-security escalations are reviewed within 48 hours.\nCustomers can request a weekend escalation for any billing question.\n",
+  "answerLabel": "Support escalation-hours reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-escalation-hours-policy.md",
+      "id": "support/escalation-hours@2026-08-05",
+      "title": "Support Escalation Hours Policy",
+      "updatedAt": "2026-08-05",
+      "trustLevel": "high",
+      "content": "Urgent account-security escalations are reviewed within 4 hours. Billing escalations are reviewed during weekday support hours.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 1,
+    "unsupported": 1,
+    "needs_review": 0
+  },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
