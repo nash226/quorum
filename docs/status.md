@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `efaff637` on 2026-08-07, fix: split Tibetan shad sentence boundaries
+- Latest shipped change: `c9e3c148` on 2026-08-07, fix: split Thai sentence boundaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-07 | Direct push | fix: split Thai sentence boundaries | `c9e3c148` |
 | 2026-08-07 | Direct push | fix: split Tibetan shad sentence boundaries | `efaff637` |
 | 2026-08-07 | Direct push | test: guard npm formats wrapper contract | `b41d5634` |
 | 2026-08-07 | Direct push | test: cover public evaluation aggregate export | `cf99dd81` |
@@ -56,5 +57,4 @@
 | 2026-08-07 | Direct push | test: smoke-test npm verification wrappers | `749417dd` |
 | 2026-08-07 | Direct push | feat: add npm verification wrappers | `fecac30f` |
 | 2026-08-07 | Direct push | test: cover npm help package wrapper | `720167cb` |
-| 2026-08-07 | Direct push | test: cover npm help package wrapper | `a42b6751` |
 
