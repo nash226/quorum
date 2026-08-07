@@ -101,7 +101,7 @@ test("public package entrypoint exports evaluation aggregate rendering", () => {
 
   assert.match(csv, /^generated_at,fixture_count,/);
   assert.match(csv, /\n2026-08-07T00:00:00\.000Z,1,/);
-  assert.match(csv, /,support,1,1,1\.000,/);
+  assert.match(csv, /,support,1,0,0\.000,0,1,1\.000,100%,/);
 });
 
 test("public package entrypoint exports the canonical HTTP method contract", () => {
