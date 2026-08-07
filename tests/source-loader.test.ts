@@ -24,9 +24,15 @@ test("strips supported text extensions from fallback source titles", async () =>
     "Escalate incidents within one hour.",
     1,
   );
+  const textExtensionSource = await sourceDocumentFromFile(
+    "docs/policies/holiday-closure.text",
+    "The office closes on federal holidays.",
+    2,
+  );
 
   assert.equal(markdownSource.title, "leave-policy");
   assert.equal(textSource.title, "escalation-guide");
+  assert.equal(textExtensionSource.title, "holiday-closure");
 });
 
 test("applies the default trust override when metadata is absent", async () => {

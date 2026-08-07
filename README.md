@@ -251,6 +251,7 @@ Supported source extensions today:
 - `.md`
 - `.markdown`
 - `.txt`
+- `.text`
 - `.html`
 - `.htm`
 - `.pdf`

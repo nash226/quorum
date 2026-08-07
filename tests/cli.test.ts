@@ -409,6 +409,43 @@ test("verify-batch returns an aggregate report for each answer file", async () =
   }
 });
 
+test("verify-batch discovers .text answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-text-extension-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+      writeFile(join(answerDir, "holiday.text"), "The office closes on federal holidays.\n", "utf8"),
+      writeFile(join(sourceDir, "holiday-policy.text"), "The office closes on federal holidays.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      sourceCount: number;
+      answers: Array<{ answerLabel: string }>;
+      sources: Array<{ title: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.deepEqual(report.answers.map((answer) => answer.answerLabel), ["holiday"]);
+    assert.deepEqual(report.sources.map((source) => source.title), ["holiday-policy"]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch accepts repeated answer files alongside answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-mixed-inputs-"));
 

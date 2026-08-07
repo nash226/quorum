@@ -73,8 +73,8 @@ interface ImportReviewArgs {
   summaryCsvOutPath?: string;
 }
 
-const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
-const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
+const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".text", ".html", ".htm", ".pdf"]);
+const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".text"]);
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
