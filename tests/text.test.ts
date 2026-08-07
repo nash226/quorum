@@ -200,6 +200,17 @@ test("splits Thai sentence terminators", () => {
   );
 });
 
+test("splits Khmer sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("គោលការណ៍នេះមានប្រសិទ្ធភាព។ អ្នកគ្រប់គ្រងត្រូវអនុម័ត។ Next policy applies."),
+    [
+      "គោលការណ៍នេះមានប្រសិទ្ធភាព។",
+      "អ្នកគ្រប់គ្រងត្រូវអនុម័ត។",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
