@@ -18,6 +18,8 @@ test("package scripts keep the documented repository check gate intact", async (
 
   assert.equal(scripts.check, "npm test && npm run build && npm run smoke && npm run package:smoke && npm run evaluate:ci");
   assert.equal(scripts["extract-claims"], "npm run dev -- extract-claims");
+  assert.equal(scripts.verify, "npm run dev -- verify");
+  assert.equal(scripts["verify-batch"], "npm run dev -- verify-batch");
   assert.equal(scripts.formats, "npm run dev -- formats");
   assert.equal(scripts.evaluate, "npm run dev -- evaluate");
   assert.equal(scripts["import-review"], "npm run dev -- import-review");
