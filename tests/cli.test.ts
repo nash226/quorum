@@ -496,10 +496,17 @@ test("formats lists the extensions accepted by source and answer discovery", asy
 
 test("formats --json exposes the same contract as the library constants", async () => {
   const stdout = await runCli(["formats", "--json"]);
-  const formats = JSON.parse(stdout) as { sources: string[]; answers: string[] };
+  const formats = JSON.parse(stdout) as {
+    sources: string[];
+    answers: string[];
+    sourceCount: number;
+    answerCount: number;
+  };
 
   assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
+  assert.equal(formats.sourceCount, SOURCE_EXTENSIONS.size);
+  assert.equal(formats.answerCount, ANSWER_EXTENSIONS.size);
 });
 
 test("formats accepts both help flag aliases", async () => {

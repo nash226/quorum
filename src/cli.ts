@@ -1911,6 +1911,8 @@ function printFormats(asJson = false): void {
       version: API_VERSION,
       sources: [...SOURCE_EXTENSIONS].sort(),
       answers: [...ANSWER_EXTENSIONS].sort(),
+      sourceCount: SOURCE_EXTENSIONS.size,
+      answerCount: ANSWER_EXTENSIONS.size,
     }));
     return;
   }
