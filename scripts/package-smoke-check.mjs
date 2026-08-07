@@ -274,6 +274,7 @@ if (
   typeof libraryEntry.verifyAnswerBatch !== "function" ||
   typeof libraryEntry.importReviewerDecisions !== "function" ||
   typeof libraryEntry.renderReviewerQueueCsv !== "function" ||
+  typeof libraryEntry.sourceDocumentFromFile !== "function" ||
   typeof libraryEntry.createApiServer !== "function" ||
   libraryEntry.API_VERSION !== packageJson.version
 ) {
@@ -301,6 +302,21 @@ if (
   !queueCsv.includes('"2026-08-04T00:00:00.000Z","pending","hr","1"')
 ) {
   throw new Error("Package artifact root entry point did not preserve the reviewer queue CSV contract.");
+}
+
+const loadedSource = await libraryEntry.sourceDocumentFromFile(
+  "policy.md",
+  "# Leave policy\nEmployees receive 12 weeks of paid parental leave.\n",
+  0,
+  { id: "people-ops/leave-policy@smoke", title: "Leave policy", trustLevel: "high" },
+);
+if (
+  loadedSource.id !== "people-ops/leave-policy@smoke" ||
+  loadedSource.title !== "Leave policy" ||
+  loadedSource.trustLevel !== "high" ||
+  !loadedSource.content.includes("12 weeks of paid parental leave")
+) {
+  throw new Error("Package artifact root entry point did not preserve source document loading metadata.");
 }
 
 const emptySourcePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-empty-sources-"));
