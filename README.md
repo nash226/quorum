@@ -1,5 +1,9 @@
 # Quorum
 
+Source loading now regression-tests caller-supplied IDs, titles, freshness, and
+trust levels overriding exported frontmatter, keeping canonical integration
+metadata authoritative during verification.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.
