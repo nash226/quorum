@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies AsciiDoc aliases in both answer/source
+directions, keeping `.adoc` and `.asciidoc` exports interchangeable for policy
+verification integrations.
+
 The packaged smoke gate now checks `npm run formats -- --json`, keeping the
 installed input-format wrapper aligned with the versioned source and answer
 extension contract used by integrations.

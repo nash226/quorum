@@ -1051,6 +1051,24 @@ try {
   ) {
     throw new Error("Package artifact did not verify the expected AsciiDoc answer/source contract.");
   }
+
+  const reverseAnswerPath = join(cliAsciiDocPackageDir, "answer.adoc");
+  const reverseSourcePath = join(cliAsciiDocPackageDir, "policy.asciidoc");
+  writeFileSync(reverseAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(reverseSourcePath, "= Parental Leave Policy\n\nEmployees receive 12 weeks of paid parental leave.\n");
+  const reverseAsciidocPayload = JSON.parse(execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", reverseAnswerPath, "--source", reverseSourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  ));
+  if (
+    reverseAsciidocPayload.summary?.verified !== 1 ||
+    reverseAsciidocPayload.answerPath !== reverseAnswerPath ||
+    reverseAsciidocPayload.sources?.[0]?.title !== "policy" ||
+    reverseAsciidocPayload.sources?.[0]?.sourcePath !== reverseSourcePath
+  ) {
+    throw new Error("Package artifact did not verify AsciiDoc aliases in both answer/source roles.");
+  }
 } finally {
   rmSync(cliAsciiDocPackageDir, { recursive: true, force: true });
 }
