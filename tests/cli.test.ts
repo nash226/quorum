@@ -2037,6 +2037,19 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /quorum version \[--json\]/);
 });
 
+test("top-level help aliases exit cleanly without command arguments", async () => {
+  const [emptyArgs, helpCommand] = await Promise.all([
+    runCliAllowFailure([]),
+    runCliAllowFailure(["help"]),
+  ]);
+
+  for (const result of [emptyArgs, helpCommand]) {
+    assert.equal(result.code, 0);
+    assert.equal(result.stderr, "");
+    assert.match(result.stdout, /^Quorum\n\nUsage:/);
+  }
+});
+
 test("unknown commands explain the failure without printing misleading help", async () => {
   const result = await runCliAllowFailure(["not-a-quorum-command"]);
 
