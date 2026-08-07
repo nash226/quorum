@@ -178,6 +178,17 @@ test("splits Armenian, Ethiopic, and Mongolian sentence terminators", () => {
   );
 });
 
+test("splits Tibetan shad sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("གཏན་འབེབས་འདི་ལག་ལེན་བྱེད། སྲིད་བྱུས་གསར་པ་འགོ་འཛུགས། Next policy applies."),
+    [
+      "གཏན་འབེབས་འདི་ལག་ལེན་བྱེད།",
+      "སྲིད་བྱུས་གསར་པ་འགོ་འཛུགས།",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
