@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged smoke gate now executes both `npm run verify` and
+`npm run verify-batch` against temporary approved-policy files, keeping the
+published verification wrappers aligned with their machine-readable reports.
+
 The packaged smoke gate now validates the root-library `sourceDocumentFromFile`
 export with stable source identity, title, trust, and content metadata, keeping
 typed Node integrations aligned with the published source-loader contract.

@@ -240,6 +240,44 @@ try {
   rmSync(reviewQueuePackageDir, { recursive: true, force: true });
 }
 
+const verificationWrapperPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-verification-wrappers-"));
+try {
+  const answerPath = join(verificationWrapperPackageDir, "answer.md");
+  const secondAnswerPath = join(verificationWrapperPackageDir, "second-answer.md");
+  const sourcePath = join(verificationWrapperPackageDir, "policy.md");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(secondAnswerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "# Parental Leave Policy\n\nEmployees receive 12 weeks of paid parental leave.\n");
+
+  const verifyOutput = execFileSync(
+    "npm",
+    ["run", "--silent", "verify", "--", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const verifyPayload = JSON.parse(verifyOutput);
+  if (verifyPayload.summary?.verified !== 1 || verifyPayload.answerPath !== answerPath) {
+    throw new Error("The npm verify wrapper did not preserve the single-answer JSON contract.");
+  }
+
+  const verifyBatchOutput = execFileSync(
+    "npm",
+    [
+      "run", "--silent", "verify-batch", "--", "--answer", answerPath, "--answer", secondAnswerPath,
+      "--source", sourcePath, "--json",
+    ],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const verifyBatchPayload = JSON.parse(verifyBatchOutput);
+  if (
+    verifyBatchPayload.answers?.length !== 2 ||
+    verifyBatchPayload.answers?.every(({ summary }) => summary?.verified === 1) !== true
+  ) {
+    throw new Error("The npm verify-batch wrapper did not preserve the batch JSON contract.");
+  }
+} finally {
+  rmSync(verificationWrapperPackageDir, { recursive: true, force: true });
+}
+
 const evaluatePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-evaluate-"));
 try {
   const fixturePath = join(evaluatePackageDir, "fixture.json");
