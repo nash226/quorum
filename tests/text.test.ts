@@ -200,6 +200,17 @@ test("splits Thai sentence terminators", () => {
   );
 });
 
+test("splits Burmese sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("ဤမူဝါဒသည် အကျုံးဝင်သည်။ မန်နေဂျာများက ခြွင်းချက်များကို အတည်ပြုသည်။ Next policy applies."),
+    [
+      "ဤမူဝါဒသည် အကျုံးဝင်သည်။",
+      "မန်နေဂျာများက ခြွင်းချက်များကို အတည်ပြုသည်။",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
