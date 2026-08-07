@@ -1,5 +1,9 @@
 # Quorum
 
+The installed `npm run evaluate -- --help` wrapper now regression-tests the
+fixture-directory and minimum-score options used by the release evaluation
+gate, keeping packaged evaluation entry points discoverable for operators.
+
 Direct CLI verification now regression-tests Org-mode (`.org-mode`) answers
 against approved sources, keeping the documented alias covered alongside
 nested batch discovery.
