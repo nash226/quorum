@@ -2687,7 +2687,9 @@ for verification, reviewer-queue, and operational probe examples.
 
 Batch verification is now shipped: `verify-batch` can discover nested answer
 directories, preserve explicit answer ordering, and emit reviewer CSV plus
-one-row-per-answer summary exports for queue routing.\n\nThe CLI command index now lists `formats`, making the supported input-discovery command easier to find for installed integrations.
+one-row-per-answer summary exports for queue routing.
+
+The CLI command index now lists `formats`, making the supported input-discovery command easier to find for installed integrations.
 
 See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
 [docs/api-deployment.md](docs/api-deployment.md) for deployment boundaries.
