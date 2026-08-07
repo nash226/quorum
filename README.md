@@ -64,6 +64,10 @@ The evaluation fixture guide now reports the shipped 92-fixture inventory
 (32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
 
+The evaluation suite directly pins support subscription-pause routing: the
+approved pause window verifies, a conflicting window is contradicted, and an
+unsupported automatic-refund promise remains unsupported.
+
 Claim extraction now keeps compact CJK policy statements such as `需审批。`
 and `要予約。` as reviewable claims, preserving short localized rules instead
 of routing them as empty answers.
