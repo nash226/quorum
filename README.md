@@ -4,6 +4,10 @@ The packaged smoke gate now starts the installed `quorum/server` entry point
 and probes `/health` plus `/extract-claims`, catching runtime publish-boundary
 drift in the local HTTP integration surface.
 
+The packaged smoke gate now checks the installed `npm run verify -- --help`
+wrapper, keeping the primary single-answer verification entry point aligned
+with its published CLI contract.
+
 Claim extraction now recognizes the Arabic-script full stop (`۔`), keeping
 Urdu-style localized policy statements separately reviewable for evidence
 matching.
