@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `256fd95a` on 2026-08-08, docs: document shared format discovery contract
+- Latest shipped change: `39657c08` on 2026-08-08, test: cover direct Quarto verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | test: cover direct Quarto verification | `39657c08` |
 | 2026-08-08 | Direct push | docs: document shared format discovery contract | `256fd95a` |
 | 2026-08-08 | [#2090](https://github.com/nash226/quorum/pull/2090) | fix: preserve multiline delimited fields | `2ec2fecc` |
 | 2026-08-08 | Direct push | fix: recognize Sinhala sentence boundaries | `77b04407` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | test: smoke reStructuredText verification | `f21faa03` |
 | 2026-08-08 | Direct push | test: smoke direct AsciiDoc verification | `edde359c` |
 | 2026-08-08 | Direct push | docs: align README input format contract | `fdfb1657` |
-| 2026-08-08 | Direct push | fix: recognize Syriac sentence boundaries | `53e9f743` |
 
