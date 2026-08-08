@@ -51,6 +51,37 @@ try {
   ) {
     throw new Error("Installed package artifact did not preserve root, server, and CLI entry points.");
   }
+
+  const installedServerInstance = await installedServer.startApiServer({ host: "127.0.0.1", port: 0 });
+  try {
+    const installedHealthResponse = await fetch(`${installedServerInstance.url}/health`);
+    const installedHealth = await installedHealthResponse.json();
+    if (
+      installedHealthResponse.status !== 200 ||
+      installedHealth.ok !== true ||
+      installedHealth.service !== "quorum" ||
+      installedHealth.version !== packageJson.version
+    ) {
+      throw new Error("Installed package server did not preserve the health response contract.");
+    }
+
+    const installedExtractResponse = await fetch(`${installedServerInstance.url}/extract-claims`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ answer: "Employees receive 12 weeks of paid parental leave." }),
+    });
+    const installedExtract = await installedExtractResponse.json();
+    if (
+      installedExtractResponse.status !== 200 ||
+      installedExtract.answerHasClaims !== true ||
+      installedExtract.claims?.length !== 1 ||
+      installedExtract.claims?.[0]?.text !== "Employees receive 12 weeks of paid parental leave."
+    ) {
+      throw new Error("Installed package server did not preserve the claim extraction contract.");
+    }
+  } finally {
+    await installedServerInstance.close();
+  }
 } finally {
   rmSync(packedPackageDir, { recursive: true, force: true });
 }
