@@ -1,5 +1,8 @@
 # Quorum
 
+Direct CLI verification now has regression coverage for RFC 822 `.eml` answer
+and approved-source exports, preserving the email subject as the evidence title.
+
 The packaged CLI smoke gate now verifies reStructuredText (`.rst`) answers
 against approved sources, keeping the documented rich-text input contract
 covered at the release boundary.

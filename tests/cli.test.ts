@@ -684,6 +684,50 @@ test("verify accepts a direct .text answer export", async () => {
   }
 });
 
+test("verify accepts direct .eml answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-eml-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.eml");
+    const sourcePath = join(tempDir, "policy.eml");
+    const answer = [
+      "From: agent@example.com",
+      "Subject: Benefits answer",
+      "Content-Type: text/plain; charset=utf-8",
+      "",
+      "Employees receive 12 weeks of paid parental leave.",
+      "",
+    ].join("\n");
+    const source = [
+      "From: hr@example.com",
+      "Subject: Benefits policy",
+      "Content-Type: text/plain; charset=utf-8",
+      "",
+      "Employees receive 12 weeks of paid parental leave.",
+      "",
+    ].join("\n");
+    await Promise.all([
+      writeFile(answerPath, answer, "utf8"),
+      writeFile(sourcePath, source, "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.assessments.length, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "Employees receive 12 weeks of paid parental leave.");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "Benefits policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct .org-mode answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-org-mode-direct-"));
 
