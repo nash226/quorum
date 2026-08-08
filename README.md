@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests `.conf` answers against `.cfg`
+approved-source exports, keeping common configuration-policy inputs covered by
+the published format contract.
+
 The packaged CLI smoke gate now verifies reStructuredText (`.rst`) answers
 against approved sources, keeping the documented rich-text input contract
 covered at the release boundary.

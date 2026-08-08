@@ -3740,6 +3740,41 @@ test("verify evaluates claims from direct .properties answers and sources", asyn
   }
 });
 
+test("verify evaluates claims from direct .conf answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-conf-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.conf");
+    const sourcePath = join(tempDir, "policy.cfg");
+    await Promise.all([
+      writeFile(answerPath, "leave=Employees receive 12 weeks of paid parental leave.\n"),
+      writeFile(sourcePath, "leave=Employees receive 12 weeks of paid parental leave.\n"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      answerPath: string;
+      summary: { verified: number };
+      assessments: Array<{ verdict: string }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers INI and properties answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-config-batch-"));
   const answerDir = join(tempDir, "answers");
