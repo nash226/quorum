@@ -74,6 +74,13 @@ test("splits sentences across Unicode line and paragraph separators", () => {
   );
 });
 
+test("splits sentences across vertical-tab line breaks", () => {
+  assert.deepEqual(
+    splitIntoSentences("Employees receive leave.\u000BManagers approve exceptions."),
+    ["Employees receive leave.", "Managers approve exceptions."],
+  );
+});
+
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
     renderAnswerLabels([

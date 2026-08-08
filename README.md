@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction also treats vertical-tab line breaks (U+000B) as line
+separators, keeping legacy policy exports split into independent claims.
+
 The packaged smoke gate now starts the installed `quorum/server` entry point
 and probes `/health` plus `/extract-claims`, catching runtime publish-boundary
 drift in the local HTTP integration surface.
