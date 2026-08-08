@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now preserves sentence boundaries when exported answer text
+places the next localized claim immediately after ASCII punctuation.
+
 Wrapped plain-text claims now preserve continuations that begin in non-Latin
 scripts, keeping multilingual policy exports together during claim extraction.
 

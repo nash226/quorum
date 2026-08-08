@@ -151,6 +151,18 @@ test("splits inline CJK and fullwidth sentences", () => {
   );
 });
 
+test("splits ASCII sentences when exported text omits the following space", () => {
+  assert.deepEqual(
+    splitIntoSentences("Employees receive leave.Менеджеры approve exceptions!מנהל reviews requests?Next policy applies."),
+    [
+      "Employees receive leave.",
+      "Менеджеры approve exceptions!",
+      "מנהל reviews requests?",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("splits Arabic and Indic sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("هل تمت الموافقة؟ نعم تمت الموافقة। The policy applies॥"),
