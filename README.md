@@ -216,6 +216,9 @@ verification, reviewer-queue imports and summaries, and HR/support evaluation
 scorecards. See the [CLI guide](docs/cli-guide.md) for the current command and
 API surface; durable hosting and queue storage remain roadmap decisions.
 
+The current roadmap keeps durable hosting and queue storage decision-gated while
+prioritizing safe fixture coverage and local CLI/API reliability.
+
 The package also exports `renderReviewerQueueCsv`, allowing Node integrations
 to produce the same queue overview CSV as the `review-queue` CLI command.
 
