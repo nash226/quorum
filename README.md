@@ -1,5 +1,8 @@
 # Quorum
 
+Short N'Ko policy claims ending with the N'Ko exclamation terminator now stay
+reviewable instead of being filtered out during claim extraction.
+
 Claim extraction now keeps localized sentence-terminated lines separate during
 normalization, so line-wrapped policy exports do not merge adjacent claims.
 

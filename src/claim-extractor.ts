@@ -101,13 +101,13 @@ function isThematicBreak(text: string): boolean {
 
 function isShortPunctuatedClaim(text: string): boolean {
   const hasNonLatinLetters =
-    /\p{Script=Arabic}|\p{Script=Armenian}|\p{Script=Bengali}|\p{Script=Devanagari}|\p{Script=Ethiopic}|\p{Script=Georgian}|\p{Script=Gujarati}|\p{Script=Gurmukhi}|\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hebrew}|\p{Script=Hiragana}|\p{Script=Kannada}|\p{Script=Khmer}|\p{Script=Lao}|\p{Script=Malayalam}|\p{Script=Myanmar}|\p{Script=Oriya}|\p{Script=Sinhala}|\p{Script=Syriac}|\p{Script=Tamil}|\p{Script=Telugu}|\p{Script=Thai}|\p{Script=Tibetan}|\p{Script=Yi}/u.test(text);
+    /\p{Script=Arabic}|\p{Script=Armenian}|\p{Script=Bengali}|\p{Script=Devanagari}|\p{Script=Ethiopic}|\p{Script=Georgian}|\p{Script=Gujarati}|\p{Script=Gurmukhi}|\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hebrew}|\p{Script=Hiragana}|\p{Script=Kannada}|\p{Script=Khmer}|\p{Script=Lao}|\p{Script=Malayalam}|\p{Script=Myanmar}|\p{Script=Nko}|\p{Script=Oriya}|\p{Script=Sinhala}|\p{Script=Syriac}|\p{Script=Tamil}|\p{Script=Telugu}|\p{Script=Thai}|\p{Script=Tibetan}|\p{Script=Yi}/u.test(text);
 
   if (
     hasNonLatinLetters &&
     text.length >= 4 &&
     text.length < 8 &&
-    /[.!?…\u0589\u0F0D\u0F0E\u0E5A\u0E5B\u17D4\u1803\u1804\u06D4\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
+    /[.!?…\u0589\u0F0D\u0F0E\u0E5A\u0E5B\u17D4\u1803\u1804\u06D4\u07F9\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
     /\p{L}{2,}/u.test(text)
   ) {
     return true;
@@ -116,7 +116,7 @@ function isShortPunctuatedClaim(text: string): boolean {
   return (
     text.length >= 8 &&
     text.length < 12 &&
-    /[.!?…\u0589\u0F0D\u0F0E\u0E5A\u0E5B\u17D4\u1803\u1804\u06D4\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
+    /[.!?…\u0589\u0F0D\u0F0E\u0E5A\u0E5B\u17D4\u1803\u1804\u06D4\u07F9\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
     /\p{L}{2,}/u.test(text)
   );
 }
