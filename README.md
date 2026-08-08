@@ -510,6 +510,11 @@ Directory verification supports the same published answer and source format
 aliases as the local API, including `.text`, structured exports, web exports,
 PDF, and DOCX; run `npm run dev -- formats` for the authoritative lists.
 
+For installed integrations, `npm run formats -- --json` (or `quorum formats
+--json`) returns the version and the exact answer/source extension lists. Use
+that machine-readable contract when presenting upload choices or validating a
+batch before sending it to Quorum.
+
 The packaged CLI smoke gate now verifies direct NDJSON answer and approved-source
 exports, keeping newline-delimited JSON coverage release-gated for single-file use.
 
