@@ -1,5 +1,7 @@
 # Quorum
 
+Direct verification now regression-tests `.mdwn` Markdown answers against approved sources, keeping this published alias covered alongside recursive discovery.
+
 Direct verification now regression-tests Quarto (`.qmd`) answers against approved sources, keeping the advertised Quarto input contract covered end to end.
 
 The `quorum formats` command and HTTP `/capabilities` endpoint now expose the
