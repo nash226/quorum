@@ -202,6 +202,17 @@ test("splits Armenian and Ethiopic question and paragraph terminators", () => {
   );
 });
 
+test("splits Georgian paragraph separators", () => {
+  assert.deepEqual(
+    splitIntoSentences("წესი მოქმედებს჻ ახალი წესი იწყება჻ Next policy applies."),
+    [
+      "წესი მოქმედებს჻",
+      "ახალი წესი იწყება჻",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("splits Tibetan shad sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("གཏན་འབེབས་འདི་ལག་ལེན་བྱེད། སྲིད་བྱུས་གསར་པ་འགོ་འཛུགས། Next policy applies."),
