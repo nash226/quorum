@@ -1,5 +1,8 @@
 # Quorum
 
+Wrapped plain-text claims now preserve continuations that begin in non-Latin
+scripts, keeping multilingual policy exports together during claim extraction.
+
 Short N'Ko policy claims ending with the N'Ko exclamation terminator now stay
 reviewable instead of being filtered out during claim extraction.
 

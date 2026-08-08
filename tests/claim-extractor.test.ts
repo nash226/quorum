@@ -1396,6 +1396,15 @@ Healthcare coverage begins after 30 days of employment.
   );
 });
 
+test("keeps non-Latin wrapped plain-text lines as one claim", () => {
+  const claims = extractClaims(`Employees receive paid leave for
+முழுநேர ஊழியர்கள் மட்டும்.`);
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive paid leave for முழுநேர ஊழியர்கள் மட்டும்.",
+  ]);
+});
+
 test("does not merge separate plain-text claims that start on a new uppercase line", () => {
   const claims = extractClaims(`Employees receive 12 weeks of paid parental leave
 Healthcare coverage begins after 30 days of employment
