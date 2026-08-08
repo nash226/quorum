@@ -158,6 +158,17 @@ test("splits Arabic and Indic sentence terminators", () => {
   );
 });
 
+test("splits Arabic-script full stop sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("یہ پالیسی لاگو ہے۔ مینیجر استثنا منظور کرتا ہے۔ Next policy applies."),
+    [
+      "یہ پالیسی لاگو ہے۔",
+      "مینیجر استثنا منظور کرتا ہے۔",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("splits Unicode ellipsis sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("The review is pending… Managers approve exceptions."),

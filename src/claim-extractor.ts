@@ -107,7 +107,7 @@ function isShortPunctuatedClaim(text: string): boolean {
     hasNonLatinLetters &&
     text.length >= 4 &&
     text.length < 8 &&
-    /[.!?…\u0589\u0F0D\u0F0E\u0E5A\u0E5B\u17D4\u1803\u1804\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
+    /[.!?…\u0589\u0F0D\u0F0E\u0E5A\u0E5B\u17D4\u1803\u1804\u06D4\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
     /\p{L}{2,}/u.test(text)
   ) {
     return true;
@@ -116,7 +116,7 @@ function isShortPunctuatedClaim(text: string): boolean {
   return (
     text.length >= 8 &&
     text.length < 12 &&
-    /[.!?…\u0589\u0F0D\u0F0E\u0E5A\u0E5B\u17D4\u1803\u1804\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
+    /[.!?…\u0589\u0F0D\u0F0E\u0E5A\u0E5B\u17D4\u1803\u1804\u06D4\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/.test(text) &&
     /\p{L}{2,}/u.test(text)
   );
 }
