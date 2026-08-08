@@ -178,6 +178,17 @@ test("splits Armenian, Ethiopic, and Mongolian sentence terminators", () => {
   );
 });
 
+test("splits Hebrew sof pasuq sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("המדיניות חלה על עובדים׃ המנהלים מאשרים חריגים׃ Next policy applies."),
+    [
+      "המדיניות חלה על עובדים׃",
+      "המנהלים מאשרים חריגים׃",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("splits Tibetan shad sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("གཏན་འབེབས་འདི་ལག་ལེན་བྱེད། སྲིད་བྱུས་གསར་པ་འགོ་འཛུགས། Next policy applies."),
