@@ -1829,9 +1829,10 @@ Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
 (`.xml`), and CSV/TSV (`.csv`, `.tsv`) policy exports. JSON, YAML, XML, and TOML exports
 are normalized into claim-readable text while preserving their source metadata
 in reports. CSV exports are discovered recursively as approved sources and are
-kept as readable row text for claim matching. Files with other extensions are
-still accepted as plain-text inputs, so teams can preserve source-system
-filenames while supplying readable policy content.
+kept as readable row text for claim matching. Explicit approved-source paths
+with other extensions are rejected before verification, while recursive
+discovery skips them; use a supported extension or rename the export before it
+becomes evidence.
 Source frontmatter also normalizes Windows CRLF and legacy Mac CR line endings,
 so metadata remains readable from older policy exports.
 The packaged CLI smoke gate also verifies direct CSV answer and source exports,
