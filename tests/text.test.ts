@@ -202,6 +202,17 @@ test("splits Armenian and Ethiopic question and paragraph terminators", () => {
   );
 });
 
+test("splits Mongolian four-dot sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("ᠳᠦᠷᠢᠮ ᠬᠦᠴᠦᠨ ᠲᠡᠢ᠅ ᠰᠢᠨ᠎ᠡ ᠳᠦᠷᠢᠮ ᠡᠬᠢᠯᠡᠨ᠎ᠡ᠅ Next policy applies."),
+    [
+      "ᠳᠦᠷᠢᠮ ᠬᠦᠴᠦᠨ ᠲᠡᠢ᠅",
+      "ᠰᠢᠨ᠎ᠡ ᠳᠦᠷᠢᠮ ᠡᠬᠢᠯᠡᠨ᠎ᠡ᠅",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("splits Tibetan shad sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("གཏན་འབེབས་འདི་ལག་ལེན་བྱེད། སྲིད་བྱུས་གསར་པ་འགོ་འཛུགས། Next policy applies."),

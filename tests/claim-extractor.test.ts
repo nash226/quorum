@@ -71,6 +71,12 @@ test("preserves compact CJK policy claims", () => {
   assert.deepEqual(claims.map((claim) => claim.text), ["需审批。", "要予約。", "승인필수."]);
 });
 
+test("preserves compact Mongolian policy claims", () => {
+  const claims = extractClaims("ᠳᠦᠷᠢᠮ ᠬᠦᠴᠦᠨ ᠲᠡᠢ᠅");
+
+  assert.deepEqual(claims.map((claim) => claim.text), ["ᠳᠦᠷᠢᠮ ᠬᠦᠴᠦᠨ ᠲᠡᠢ᠅"]);
+});
+
 test("extracts clean claims from markdown list answers", () => {
   const claims = extractClaims(`# HR Policy Summary
 

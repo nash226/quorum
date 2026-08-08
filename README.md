@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now recognizes the Mongolian four-dot terminator (`᠅`),
+keeping Mongolian policy statements separately reviewable for evidence matching.
+
 Wrapped plain-text claims now preserve continuations that begin in non-Latin
 scripts, keeping multilingual policy exports together during claim extraction.
 
