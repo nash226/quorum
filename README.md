@@ -1492,8 +1492,10 @@ Use `npm run formats -- --json` when an integration needs the same contract as
 sorted machine-readable `sources` and `answers` arrays. The JSON response also
 includes a `version` field (currently `0.1.0`) so integrations can reject an unexpected
 contract before submitting an export. The packaged smoke check compares both
-the human-readable and JSON arrays with the library export,
-so published CLI and API format capabilities cannot silently drift apart.
+the human-readable and JSON arrays with the library export, so published CLI
+and API format capabilities cannot silently drift apart. API clients can use
+the matching `answerExtensions` and `sourceExtensions` fields from
+`GET /capabilities` without starting a verification request.
 
 The response shape is intentionally small and stable:
 
