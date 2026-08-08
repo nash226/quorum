@@ -1,5 +1,8 @@
 # Quorum
 
+Unicode evidence tokenization now preserves combining marks, keeping scripts
+such as Devanagari intact for claim/source overlap scoring.
+
 Claim extraction now keeps localized sentence-terminated lines separate during
 normalization, so line-wrapped policy exports do not merge adjacent claims.
 
