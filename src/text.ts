@@ -84,7 +84,7 @@ export function splitIntoSentences(text: string): string[] {
     });
 
   return protectedText
-    .replace(/[\r\u2028\u2029]/g, "\n")
+    .replace(/[\r\u0085\u2028\u2029]/g, "\n")
     .replace(/(\d)\.(?=\d)/g, `$1${decimalMarker}`)
     .split(/\n+|(?<=[.!?…\u055C\u055E\u0589\u0F0D\u0F0E\u104B\u1362\u1367\u1368\u17D4\u1803\u1804\u0E5A\u0E5B\u06D4\u0700\u0701\u0702\u0703])\s+|(?<=[\u3002\uFF01\uFF1F\u061F\u0964\u0965])(?:\s+|(?=\p{L}|\p{N}))/gu)
     .map((part) =>
