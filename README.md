@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests `.wiki` answers and approved sources,
+keeping the MediaWiki alias covered symmetrically with the published format
+contract.
+
 Direct approved-source loading now regression-tests `.htm` exports for HTML
 titles and readable evidence, keeping the short HTML alias aligned with the
 published source-format contract.
