@@ -576,7 +576,7 @@ try {
   assert.equal(
     evaluationSummaryCsv.trim().split("\n").length,
     93,
-    "evaluation summary CSV should contain one header plus one row for each of the 92 benchmark scorecards",
+    "evaluation summary CSV should contain one header plus one row for each of the 93 benchmark scorecards",
   );
   assert.match(
     evaluationSummaryCsv,
