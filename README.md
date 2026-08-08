@@ -1,5 +1,8 @@
 # Quorum
 
+Direct `.xhtml` answer and approved-source verification is covered by the CLI
+regression suite, preserving the documented HTML/XHTML integration path.
+
 Direct verification now regression-tests `.yml` answers and approved sources,
 keeping the YAML alias covered symmetrically with the published format contract.
 
