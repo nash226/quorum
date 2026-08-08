@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests JSON5 answers and approved sources,
+including comment-tolerant, unquoted-key policy exports covered by the
+published format contract.
+
 Direct verification now regression-tests `.yaml` answers and approved sources,
 keeping YAML policy exports covered symmetrically with the published format
 contract.
