@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now recognizes Syriac sentence terminators, keeping adjacent
+Syriac policy rules separately reviewable for evidence matching.
+
 The primary CLI reference now documents reviewer-facing `--answer-label`
 values, reproducible `--generated-at` timestamps, gate-aware `--result-json`
 outputs, batch `--aggregate-summary-csv-out` queue summaries, and stdin input

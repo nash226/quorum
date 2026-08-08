@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { extractClaims, extractClaimsResult } from "../src/claim-extractor.js";
+import { splitIntoSentences } from "../src/text.js";
 
 test("returns a queue-routing signal alongside normalized claims", () => {
   assert.deepEqual(extractClaimsResult("Employees receive 12 weeks of leave."), {
@@ -69,6 +70,16 @@ test("preserves compact CJK policy claims", () => {
   const claims = extractClaims("需审批。\n要予約。\n승인필수.");
 
   assert.deepEqual(claims.map((claim) => claim.text), ["需审批。", "要予約。", "승인필수."]);
+});
+
+test("splits Syriac sentence terminators into separate claims", () => {
+  const claims = splitIntoSentences("ܡܠܦܢܐ ܡܩܒܠ ܐܫܬܐ ܫܒܥܐ ܝܘܡܝܢ܀ ܚܘܪܙܐ ܡܫܬܘܬܐ ܗܘ܀ ܐܣܟܡܐ ܡܬܚܙܐ ܗܘ܂");
+
+  assert.deepEqual(claims, [
+    "ܡܠܦܢܐ ܡܩܒܠ ܐܫܬܐ ܫܒܥܐ ܝܘܡܝܢ܀",
+    "ܚܘܪܙܐ ܡܫܬܘܬܐ ܗܘ܀",
+    "ܐܣܟܡܐ ܡܬܚܙܐ ܗܘ܂",
+  ]);
 });
 
 test("extracts clean claims from markdown list answers", () => {
