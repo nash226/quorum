@@ -9,6 +9,9 @@ folded `Subject` and `Date` headers retain their metadata during verification.
 Claim extraction now recognizes the Khmer full stop (`។`), keeping localized
 Khmer policy statements separately reviewable for evidence matching.
 
+Claim extraction now recognizes the Sinhala kunddaliya (`෴`), keeping localized
+Sinhala policy statements separately reviewable for evidence matching.
+
 The packaged smoke gate now checks `npm run formats -- --json`, keeping the
 installed input-format wrapper aligned with the versioned source and answer
 extension contract used by integrations.
