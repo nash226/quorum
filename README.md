@@ -1,5 +1,8 @@
 # Quorum
 
+Direct verification now regression-tests `.rest` reStructuredText approved
+sources, keeping the published alias covered symmetrically with answer input.
+
 Direct CSV verification now preserves quoted fields with embedded line breaks,
 keeping multi-line tabular policy evidence readable during claim review.
 
