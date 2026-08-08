@@ -1357,6 +1357,15 @@ test("keeps short claims with localized sentence terminators", () => {
   ]);
 });
 
+test("does not merge localized sentence lines during normalization", () => {
+  const claims = extractClaims(`Employees receive paid leave。\nManagers approve exceptions。`);
+
+  assert.deepEqual(
+    claims.map((claim) => claim.text),
+    ["Employees receive paid leave。", "Managers approve exceptions。"],
+  );
+});
+
 test("keeps short claims across non-Latin policy scripts", () => {
   assert.deepEqual(
     extractClaims("تمت الموافقة؟ ไทยได้เลย๚ ຕົກລົງ๛ العربية موافق؟ Next policy applies.").map((claim) => claim.text),

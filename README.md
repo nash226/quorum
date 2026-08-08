@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now keeps localized sentence-terminated lines separate during
+normalization, so line-wrapped policy exports do not merge adjacent claims.
+
 The packaged smoke gate now starts the installed `quorum/server` entry point
 and probes `/health` plus `/extract-claims`, catching runtime publish-boundary
 drift in the local HTTP integration surface.

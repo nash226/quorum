@@ -682,7 +682,7 @@ function canContinuePlainLine(
   currentIndex: number,
   belongsToMarkdownClaim: boolean,
 ): boolean {
-  if (/[.!?]$/.test(line)) {
+  if (endsWithSentenceTerminal(line)) {
     return false;
   }
 
@@ -709,6 +709,10 @@ function canContinuePlainLine(
   }
 
   return false;
+}
+
+function endsWithSentenceTerminal(line: string): boolean {
+  return /[.!?…\u055C\u055E\u0589\u0F0D\u0F0E\u104B\u1362\u1367\u1368\u17D4\u1803\u1804\u0E5A\u0E5B\u06D4\u07F9\u3002\uFF01\uFF1F\u061F\u0964\u0965]$/u.test(line);
 }
 
 function shouldMergeWithPreviousLine(
