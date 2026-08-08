@@ -201,6 +201,17 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(yamlSource.title, "leave-policy");
 });
 
+test("preserves embedded newlines inside quoted delimited source fields", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.csv",
+    'policy,title\n"Employees receive 12 weeks of paid parental leave.\nRequests require manager approval.",Leave policy\n',
+    0,
+  );
+
+  assert.match(source.content, /Employees receive 12 weeks of paid parental leave\.\nRequests require manager approval\./);
+  assert.match(source.content, /title: Leave policy/);
+});
+
 test("strips the Org-mode alias from fallback source titles", async () => {
   const source = await sourceDocumentFromFile("policies/benefits.org-mode", "Policy text", 0);
   assert.equal(source.title, "benefits");

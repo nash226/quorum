@@ -1,5 +1,8 @@
 # Quorum
 
+CSV and TSV source ingestion now preserves line breaks inside quoted fields, so
+multi-line policy cells remain intact for claim extraction and evidence review.
+
 Claim extraction now recognizes the Sinhala punctuation mark `෴`, keeping
 localized Sinhala policy statements separately reviewable for evidence matching.
 
