@@ -77,6 +77,17 @@ test("extracts subject and body from RFC 822 email source exports", async () => 
   assert.equal(source.content, "Customers can request refunds within 30 days.");
 });
 
+test("normalizes RTF source exports into claim-readable text", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.rtf",
+    "{\\rtf1\\ansi\\deff0 Employees receive 12 weeks of paid parental leave.\\par The policy is reviewed every year.}",
+    0,
+  );
+
+  assert.equal(source.title, "leave-policy");
+  assert.equal(source.content, "Employees receive 12 weeks of paid parental leave.\nThe policy is reviewed every year.");
+});
+
 test("unfolds continued RFC 822 headers before extracting email metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/support/refund-policy.eml",

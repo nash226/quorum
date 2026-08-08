@@ -1874,7 +1874,8 @@ The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
 (`.md`, `.markdown`, `.mdown`, `.mkdn`, `.mdwn`, `.mdx`, `.qmd`, `.rst`,
 `.rest`), AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`,
 `.org-mode`, `.mediawiki`, `.wiki`, `.tex`), plain text and configuration
-exports (`.txt`, `.text`, `.log`, `.ini`, `.properties`, `.conf`, `.cfg`),
+exports (`.txt`, `.text`, `.log`, `.ini`, `.properties`, `.conf`, `.cfg`), Rich
+Text Format (`.rtf`),
 exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL/NDJSON (`.json`, `.jsonl`,
 `.ndjson`, `.json5`, `.jsonc`), TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and
@@ -1886,7 +1887,8 @@ in reports. CSV exports are discovered recursively as approved sources and are
 kept as readable row text for claim matching. Explicit approved-source paths
 with other extensions are rejected before verification, while recursive
 discovery skips them; use a supported extension or rename the export before it
-becomes evidence.
+becomes evidence. RTF exports are normalized to readable text, including
+paragraph breaks and hex-encoded characters, before claim extraction.
 Source frontmatter also normalizes Windows CRLF and legacy Mac CR line endings,
 so metadata remains readable from older policy exports.
 The packaged CLI smoke gate also verifies direct CSV answer and source exports,
