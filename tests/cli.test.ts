@@ -960,6 +960,31 @@ test("verify accepts direct Textile answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct RTF answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-rtf-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.rtf");
+    const sourcePath = join(tempDir, "policy.rtf");
+    const content = "{\\rtf1\\ansi Employees receive 12 weeks of paid parental leave.}";
+    await Promise.all([
+      writeFile(answerPath, content, "utf8"),
+      writeFile(sourcePath, content, "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      assessments: Array<{ verdict: string }>;
+    };
+
+    assert.equal(report.assessments.length, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct .mdx answer and preserves its path", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdx-answer-"));
 

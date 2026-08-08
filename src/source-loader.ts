@@ -119,6 +119,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return { metadata: {}, body: normalizeMediaWikiSource(normalizedContent) };
   }
 
+  if (isRtfSource(sourcePath)) {
+    return { metadata: {}, body: normalizeRtfSource(normalizedContent) };
+  }
+
   const normalized = normalizedContent;
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -258,6 +262,10 @@ function isMediaWikiSource(sourcePath: string): boolean {
   return /\.(?:mediawiki|wiki)$/i.test(sourcePath);
 }
 
+function isRtfSource(sourcePath: string): boolean {
+  return /\.rtf$/i.test(sourcePath);
+}
+
 function normalizeLatexSource(content: string): string {
   return content
     .replace(/(^|\n)\s*%[^\n]*/g, "$1")
@@ -298,8 +306,21 @@ function normalizeMediaWikiSource(content: string): string {
     .trim();
 }
 
+function normalizeRtfSource(content: string): string {
+  return content
+    .replace(/\\'[0-9a-f]{2}/gi, (match) => String.fromCharCode(Number.parseInt(match.slice(2), 16)))
+    .replace(/\\par\b/g, "\n")
+    .replace(/\\line\b/g, "\n")
+    .replace(/\\[a-z]+\d* ?/gi, "")
+    .replace(/[{}]/g, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n[ \t]+/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|rtf|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
 }
 
 function parseEmailSource(content: string): ParsedSource {
