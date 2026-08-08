@@ -1,5 +1,9 @@
 # Quorum
 
+Direct approved-source loading now regression-tests `.htm` exports for HTML
+titles and readable evidence, keeping the short HTML alias aligned with the
+published source-format contract.
+
 Direct CSV verification now preserves quoted fields with embedded line breaks,
 keeping multi-line tabular policy evidence readable during claim review.
 
