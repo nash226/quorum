@@ -561,11 +561,9 @@ function parseTomlSource(content: string): ParsedSource {
 
 function parseDelimitedSource(content: string, tabSeparated: boolean): ParsedSource {
   const delimiter = tabSeparated ? "\t" : ",";
-  const rows = content
-    .replace(/\r\n/g, "\n")
-    .split("\n")
-    .filter((line) => line.trim().length > 0)
-    .map((line) => parseDelimitedRow(line, delimiter));
+  const rows = parseDelimitedRows(content.replace(/\r\n/g, "\n"))
+    .filter((row) => row.trim().length > 0)
+    .map((row) => parseDelimitedRow(row, delimiter));
 
   if (rows.length < 2 || rows[0]?.length === 0) {
     return { metadata: {}, body: content };
@@ -591,6 +589,33 @@ function parseDelimitedSource(content: string, tabSeparated: boolean): ParsedSou
   }
 
   return { metadata, body: lines.join("\n") || content };
+}
+
+function parseDelimitedRows(content: string): string[] {
+  const rows: string[] = [];
+  let row = "";
+  let quoted = false;
+
+  for (let index = 0; index < content.length; index += 1) {
+    const character = content[index] ?? "";
+    if (character === '"') {
+      if (quoted && content[index + 1] === '"') {
+        row += '""';
+        index += 1;
+      } else {
+        quoted = !quoted;
+        row += character;
+      }
+    } else if (character === "\n" && !quoted) {
+      rows.push(row);
+      row = "";
+    } else {
+      row += character;
+    }
+  }
+
+  if (row.length > 0) rows.push(row);
+  return rows;
 }
 
 function parseDelimitedRow(line: string, delimiter: string): string[] {
