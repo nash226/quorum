@@ -1412,6 +1412,19 @@ npm run formats -- --json
 
 Run `npm run help` for the complete installed CLI command reference.
 
+For agent runners that need JSON instead of shelling out, start Quorum's local
+HTTP service:
+
+```bash
+npm run dev -- serve --port 3000
+curl -fsS http://127.0.0.1:3000/capabilities
+```
+
+The service advertises its routes and runtime limits through `/capabilities`
+and its full request schema through `/openapi.json`. See the [HTTP integration
+guide](docs/api-integration.md) for request examples and the [programmatic API
+guide](docs/programmatic-api.md) for in-process Node.js usage.
+
 Every shipped command also accepts `--help` or `-h`, so integrations and
 operators can inspect a command's usage before preparing answer, source, or
 reviewer inputs.
