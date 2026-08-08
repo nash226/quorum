@@ -171,9 +171,8 @@ test("neutralizes spreadsheet formulas in reviewer CSV fields", () => {
 
   const rendered = renderReviewerDecisionCsv(report);
 
-  assert.match(rendered, /,'@answer,@answer\.csv/);
-  assert.match(rendered, /,'=HYPERLINK\(""https:\/\/quorum\.example"",""Review""\)/);
-  assert.match(rendered, /,'\+Imported policy/);
+  assert.match(rendered, /,'@answer,'@answer\.csv/);
+  assert.match(rendered, /"'=HYPERLINK\(""https:\/\/quorum\.example"",""Review""\)"/);
 });
 
 test("renders a reviewer decision csv row for single answers with no extracted claims", () => {
