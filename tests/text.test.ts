@@ -176,6 +176,13 @@ test("splits Unicode ellipsis sentence terminators", () => {
   );
 });
 
+test("splits Unicode sentence-terminal punctuation", () => {
+  assert.deepEqual(
+    splitIntoSentences("The policy applies⸮ Next policy applies."),
+    ["The policy applies⸮", "Next policy applies."],
+  );
+});
+
 test("splits Armenian, Ethiopic, and Mongolian sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("Կանոնը գործում է։ Նոր կանոնը սկսվում է։ ሕጉ ይሠራል። ᠳᠦᠷᠢᠮ ᠬᠦᠴᠦᠨ ᠲᠡᠢ᠃ Next policy applies."),

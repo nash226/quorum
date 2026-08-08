@@ -44,6 +44,10 @@ titles, freshness, and trust metadata when loading approved evidence.
 Claim extraction now recognizes Tibetan shad sentence terminators, keeping
 localized policy statements separate for evidence matching.
 
+It also honors Unicode sentence-terminal punctuation such as the reversed
+question mark, so less common exported policy text is split into separate
+claims when the punctuation is followed immediately by the next sentence.
+
 Claim extraction now recognizes Armenian question/exclamation and Ethiopic
 question/paragraph terminators, keeping more localized policy statements
 separate for evidence matching.
