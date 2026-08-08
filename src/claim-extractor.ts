@@ -40,7 +40,7 @@ const INTRO_LABEL_PATTERN = /^(?:(?:draft|final|the|our)?\s*(?:answer|response|s
 const OPEN_HTML_DETAILS_ATTRIBUTE =
   /(^|\s)open(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?(?=\s|$)/i;
 const HTML_ANSWER_MARKUP_PATTERN =
-  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|hr|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code|script|style|iframe)\b/i;
+  /<!doctype|<\/?(?:html|body|main|section|article|header|footer|aside|details|summary|blockquote|ul|ol|li|p|div|span|br|time|hr|h[1-6]|table|caption|thead|tbody|tfoot|tr|td|th|figure|figcaption|dl|dt|dd|a|strong|em|b|i|code|script|style|iframe)\b/i;
 const HTML_PAGE_CHROME_PATTERN =
   /<(nav|form|button|select|textarea|template|noscript|svg|dialog|header|footer|aside|iframe)\b[^>]*>[\s\S]*?<\/\1>/gi;
 const HTML_HIDDEN_SECTION_PATTERNS = [

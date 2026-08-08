@@ -22,6 +22,13 @@ test("tokenizes non-Latin letters for localized evidence matching", () => {
   );
 });
 
+test("renders visible text from HTML time metadata in answer previews", () => {
+  assert.equal(
+    renderAnswerPreview('<time datetime="2026-08-08">Policy updated today.</time>'),
+    "Policy updated today.",
+  );
+});
+
 test("does not split common abbreviations into separate claims", () => {
   assert.deepEqual(
     splitIntoSentences("Dr. Rivera approved the policy. E.g. the leave rule applies to contractors."),

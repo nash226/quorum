@@ -1,5 +1,8 @@
 # Quorum
 
+HTML answer previews and claim extraction now preserve visible text wrapped in
+`<time>` metadata elements without exposing the surrounding markup.
+
 Wrapped plain-text claims now preserve continuations that begin in non-Latin
 scripts, keeping multilingual policy exports together during claim extraction.
 
