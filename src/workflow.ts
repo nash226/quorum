@@ -224,7 +224,14 @@ export async function resolveSourcePaths(
   sourceDirs: string[],
   excludedPaths: string[] = [],
 ): Promise<string[]> {
-  await Promise.all(sourcePaths.map((sourcePath) => ensureFilePath(sourcePath, "Approved source")));
+  await Promise.all(
+    sourcePaths.map(async (sourcePath) => {
+      await ensureFilePath(sourcePath, "Approved source");
+      if (sourcePath !== "-" && !SOURCE_EXTENSIONS.has(extname(sourcePath).toLowerCase())) {
+        throw new Error(`Unsupported approved source extension: ${sourcePath}`);
+      }
+    }),
+  );
   const directoryFiles = (
     await Promise.all(sourceDirs.map((sourceDir) => listSourceFiles(sourceDir)))
   ).flat();
