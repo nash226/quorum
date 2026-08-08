@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `953763cb` on 2026-08-08, fix: preserve multilingual wrapped claims
+- Latest shipped change: `bd6d8e3a` on 2026-08-08, fix: neutralize spreadsheet formulas in reviewer csv
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | fix: neutralize spreadsheet formulas in reviewer csv | `bd6d8e3a` |
 | 2026-08-08 | Direct push | fix: preserve multilingual wrapped claims | `953763cb` |
 | 2026-08-08 | Direct push | fix: preserve short N'Ko claims | `2f4ab560` |
 | 2026-08-08 | Direct push | fix: preserve localized line boundaries | `1d7fa7d8` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | fix: split additional localized sentence boundaries | `1f5ffa70` |
 | 2026-08-08 | [#2044](https://github.com/nash226/quorum/pull/2044) | fix: split Myanmar sentence boundaries | `1acef131` |
 | 2026-08-08 | Direct push | fix: split Arabic-script full stop claims | `a804e6b7` |
-| 2026-08-08 | Direct push | fix: retain short non-Latin policy claims | `cf19ba28` |
 
