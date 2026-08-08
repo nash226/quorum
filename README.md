@@ -1,5 +1,8 @@
 # Quorum
 
+The supported local answer-format summary now includes Textile exports, keeping
+the README aligned with the `quorum formats` contract.
+
 The packaged CLI smoke gate now verifies reStructuredText (`.rst`) answers
 against approved sources, keeping the documented rich-text input contract
 covered at the release boundary.
@@ -1872,8 +1875,8 @@ the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
 The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
 (`.md`, `.markdown`, `.mdown`, `.mkdn`, `.mdwn`, `.mdx`, `.qmd`, `.rst`,
-`.rest`), AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`,
-`.org-mode`, `.mediawiki`, `.wiki`, `.tex`), plain text and configuration
+`.rest`), AsciiDoc/Org/MediaWiki/LaTeX/Textile (`.adoc`, `.asciidoc`, `.org`,
+`.org-mode`, `.mediawiki`, `.wiki`, `.tex`, `.textile`), plain text and configuration
 exports (`.txt`, `.text`, `.log`, `.ini`, `.properties`, `.conf`, `.cfg`),
 exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL/NDJSON (`.json`, `.jsonl`,
