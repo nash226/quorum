@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `53e9f743` on 2026-08-08, fix: recognize Syriac sentence boundaries
+- Latest shipped change: `fdfb1657` on 2026-08-08, docs: align README input format contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | docs: align README input format contract | `fdfb1657` |
 | 2026-08-08 | Direct push | fix: recognize Syriac sentence boundaries | `53e9f743` |
 | 2026-08-08 | Direct push | docs: clarify integration handoff options | `40aa80e7` |
 | 2026-08-08 | Direct push | fix: neutralize spreadsheet formulas in reviewer csv | `bd6d8e3a` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | fix: preserve short N'Ko claims | `2f4ab560` |
 | 2026-08-08 | Direct push | fix: preserve localized line boundaries | `1d7fa7d8` |
 | 2026-08-08 | [#2050](https://github.com/nash226/quorum/pull/2050) | test: smoke installed HTTP server runtime | `c396503f` |
-| 2026-08-08 | Direct push | fix: split additional localized sentence boundaries | `1f5ffa70` |
 
