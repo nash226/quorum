@@ -1,5 +1,7 @@
 # Quorum
 
+Direct verification now regression-tests `.conf` answers against `.cfg` approved sources, keeping both advertised configuration aliases covered end to end.
+
 Direct verification now regression-tests Quarto (`.qmd`) answers against approved sources, keeping the advertised Quarto input contract covered end to end.
 
 The `quorum formats` command and HTTP `/capabilities` endpoint now expose the
