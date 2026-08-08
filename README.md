@@ -255,6 +255,10 @@ Supported source extensions today:
 - `.htm`
 - `.pdf`
 
+Verification now stops with a clear error when a source path or source
+directory resolves to no supported files, avoiding evidence reports that could
+look valid while containing no approved sources.
+
 ## Project Structure
 
 ```text
