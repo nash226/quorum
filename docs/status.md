@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `f8e1ab46` on 2026-08-07, fix: preserve namespaced XML metadata
+- Latest shipped change: `5d70e0d3` on 2026-08-07, fix: validate explicit source formats
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-07 | Direct push | fix: validate explicit source formats | `5d70e0d3` |
 | 2026-08-07 | Direct push | fix: preserve namespaced XML metadata | `f8e1ab46` |
 | 2026-08-07 | Direct push | fix: preserve folded email metadata | `f121346b` |
 | 2026-08-07 | Direct push | fix: split Khmer sentence boundaries | `60322255` |
@@ -56,5 +57,4 @@
 | 2026-08-07 | Direct push | fix: split Thai sentence boundaries | `c9e3c148` |
 | 2026-08-07 | Direct push | fix: split Tibetan shad sentence boundaries | `efaff637` |
 | 2026-08-07 | Direct push | test: guard npm formats wrapper contract | `b41d5634` |
-| 2026-08-07 | Direct push | test: cover public evaluation aggregate export | `cf99dd81` |
 
