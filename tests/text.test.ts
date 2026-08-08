@@ -189,6 +189,19 @@ test("splits Armenian, Ethiopic, and Mongolian sentence terminators", () => {
   );
 });
 
+test("splits Armenian and Ethiopic question and paragraph terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("Կանոնը գործում է՞ Նոր կանոնը սկսվում է։ ሕጉ ይሠራል፧ ተጨማሪ መረጃ እዚህ አለ፨ Next policy applies."),
+    [
+      "Կանոնը գործում է՞",
+      "Նոր կանոնը սկսվում է։",
+      "ሕጉ ይሠራል፧",
+      "ተጨማሪ መረጃ እዚህ አለ፨",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("splits Tibetan shad sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("གཏན་འབེབས་འདི་ལག་ལེན་བྱེད། སྲིད་བྱུས་གསར་པ་འགོ་འཛུགས། Next policy applies."),
