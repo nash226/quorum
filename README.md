@@ -683,6 +683,9 @@ gate: unit tests, the TypeScript build, CLI and packaged-CLI smoke checks, and
 the evaluation scorecard threshold. This is the same command used by the
 repository's release-oriented CI workflow.
 
+The full gate was also verified against the current default branch during the
+latest build-loop run.
+
 CSV and TSV approved-policy exports are normalized into readable evidence
 lines, including title, freshness, and trust metadata columns.
 
