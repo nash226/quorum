@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now treats the Unicode NEXT LINE separator as a line break,
+keeping policy claims from legacy text exports separately reviewable.
+
 Wrapped plain-text claims now preserve continuations that begin in non-Latin
 scripts, keeping multilingual policy exports together during claim extraction.
 

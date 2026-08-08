@@ -74,6 +74,17 @@ test("splits sentences across Unicode line and paragraph separators", () => {
   );
 });
 
+test("splits sentences across the Unicode next-line separator", () => {
+  assert.deepEqual(
+    splitIntoSentences("Employees receive leave.\u0085Managers approve exceptions.\u0085Support responds within four hours."),
+    [
+      "Employees receive leave.",
+      "Managers approve exceptions.",
+      "Support responds within four hours.",
+    ],
+  );
+});
+
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
     renderAnswerLabels([
