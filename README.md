@@ -1931,6 +1931,10 @@ Verification also stops with `No approved source files found` when the supplied
 source paths and directories contain no supported files, instead of producing a
 report where every claim is unsupported.
 
+Explicit `--source` paths are checked against the same supported-extension
+contract as recursive source discovery, so an accidental image or export
+artifact fails before it can become misleading evidence.
+
 Integrations can check the installed CLI and API contract version without
 starting the server:
 

@@ -1855,6 +1855,21 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("verify rejects explicit approved sources outside the supported format contract", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-unsupported-source-"));
+
+  try {
+    const sourcePath = join(tempDir, "policy.png");
+    await writeFile(sourcePath, "not an approved source format", "utf8");
+    await assert.rejects(
+      runCli(["verify", "--answer", "examples/answers/hr-answer.md", "--source", sourcePath]),
+      /Unsupported approved source extension:/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("CLI rejects options that are missing their values", async () => {
   const cases = [
     ["verify", "--answer", "--source", "examples/sources/hr-policy.md"],
