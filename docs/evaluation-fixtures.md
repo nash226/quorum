@@ -27,7 +27,7 @@ set covers:
 - price-adjustment eligibility, retailer restrictions, and refund routing
 - support identity-verification claims, including mismatched identity documents and unsafe disclosure shortcuts
 
-The benchmark currently contains 92 fixtures: 32 HR workflows and 60 support
+The benchmark currently contains 93 fixtures: 32 HR workflows and 61 support
 workflows. Shared edge-case inputs are represented within those domain totals
 so the inventory matches the CLI, API, and packaged smoke gates.
 The generated

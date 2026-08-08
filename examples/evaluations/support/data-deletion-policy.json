@@ -1,0 +1,24 @@
+{
+  "name": "Support data deletion policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-data-deletion-answer.md",
+  "answer": "Customers can request account deletion from privacy settings.\nSupport completes deletion within 30 days.\nDeleted accounts can be restored automatically within 90 days.\n",
+  "answerLabel": "Support data deletion reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/support-data-deletion-policy.md",
+      "id": "support/data-deletion@2026-08-08",
+      "title": "Support Data Deletion Policy",
+      "updatedAt": "2026-08-08",
+      "trustLevel": "high",
+      "content": "Customers can request account deletion from account settings.\nSupport completes deletion within 30 days.\nDeleted accounts cannot be restored after deletion is confirmed.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 2,
+    "contradicted": 0,
+    "unsupported": 0,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "verified", "needs_review"]
+}

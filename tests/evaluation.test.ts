@@ -2912,7 +2912,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 92);
+  assert.equal(scorecards.length, 93);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [

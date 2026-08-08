@@ -1,5 +1,9 @@
 # Quorum
 
+The support benchmark now covers account-deletion requests, including a
+verified completion window and a conflicting restoration promise, so privacy
+policy answers remain part of the gated reviewer workflow.
+
 Claim extraction now recognizes Syriac sentence terminators, keeping adjacent
 Syriac policy rules separately reviewable for evidence matching.
 
@@ -132,8 +136,8 @@ Recursive batch verification is now regression-tested for nested LaTeX (`.tex`)
 answers and approved sources, keeping the documented rich-text export contract
 covered end to end.
 
-The evaluation fixture guide now reports the shipped 92-fixture inventory
-(32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
+The evaluation fixture guide now reports the shipped 93-fixture inventory
+(32 HR and 61 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
 
 The evaluation suite directly pins support subscription-pause routing: the
