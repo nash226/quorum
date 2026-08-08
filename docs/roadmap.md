@@ -10,6 +10,8 @@ front of enterprise agent workflows.
   sentence boundaries and short claims.
 - Make reviewer handoff artifacts easier to route, audit, and approve.
 - Expand evaluation fixtures and scorecards across HR and support policy domains.
+- Keep the published input-format discovery contract aligned across the CLI,
+  local HTTP API, and package smoke checks.
 
 The initial evidence-gate workflow is usable end to end: teams can verify
 single or batched answers, route reviewer decisions, and inspect evaluation
