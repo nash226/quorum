@@ -5,6 +5,7 @@ const UPPERCASE_ROMAN_NUMERAL_PREFIX = /^([IVXLCDM]{2,})[.)]\s+/;
 const LOWERCASE_ROMAN_NUMERAL_DOT_PREFIX = /^([ivxlcdm]{2,})\.\s+/;
 const PARENTHESIZED_ROMAN_NUMERAL_PREFIX = /^\(([IVXLCDMivxlcdm]{2,})\)\s+/;
 const LOWERCASE_ROMAN_NUMERAL_PREFIX = /^([ivxlcdm]{2,})\)\s+/;
+const CONTINUATION_START = /^(?:[a-z0-9]|(?![A-Z])[\p{L}\p{N}]|['"\[](?=[a-z0-9]|(?![A-Z])[\p{L}\p{N}]))/u;
 const VALID_ROMAN_NUMERAL = /^(?=[IVXLCDM]+$)M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 const FULLWIDTH_LETTER_PREFIX = /^[Ａ-Ｚａ-ｚ][.)．）]\s+/;
 const UNICODE_BULLET_PREFIX = /^(?:[\u00B7\u2022\u2023\u25AA\u25AB\u25CB\u25CF\u25E6\u2043\u2219\u25B8\u25B9\u276F\u2771])\s+/;
@@ -703,7 +704,7 @@ function canContinuePlainLine(
     }
 
     return (
-      /^[a-z0-9("'[]/.test(nextLine) ||
+      CONTINUATION_START.test(nextLine) ||
       (belongsToMarkdownClaim && isIndentedContinuation(nextRawLine))
     );
   }
@@ -727,7 +728,7 @@ function shouldMergeWithPreviousLine(
   }
 
   return (
-    /^[a-z0-9("'[]/.test(line) ||
+    CONTINUATION_START.test(line) ||
     (previousLineBelongsToMarkdownClaim && isIndentedContinuation(rawLine))
   );
 }
@@ -741,7 +742,7 @@ function isQuotedContinuationLine(normalizedLine: string, rawLine: string): bool
     return false;
   }
 
-  return /^[a-z0-9("'[]/.test(normalizedLine);
+  return CONTINUATION_START.test(normalizedLine);
 }
 
 function isIndentedContinuation(line: string): boolean {
