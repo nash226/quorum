@@ -27,6 +27,19 @@ test("extracts HTML metadata after a UTF-8 BOM", async () => {
   assert.match(source.content, /Employees get 12 weeks\./);
 });
 
+test("extracts metadata and evidence from htm source exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.htm",
+    "<html><head><title>HR Benefits Policy</title></head><body><p>Employees get 12 weeks.</p></body></html>",
+    0,
+  );
+
+  assert.equal(source.title, "HR Benefits Policy");
+  assert.equal(source.updatedAt, undefined);
+  assert.equal(source.trustLevel, "medium");
+  assert.match(source.content, /Employees get 12 weeks\./);
+});
+
 test("extracts metadata from XML source exports", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.xml",
