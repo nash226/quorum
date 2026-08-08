@@ -22,6 +22,11 @@ test("tokenizes non-Latin letters for localized evidence matching", () => {
   );
 });
 
+test("keeps combining marks inside Unicode evidence tokens", () => {
+  assert.deepEqual(tokenize("कर्मचारी नीति"), ["कर्मचारी", "नीति"]);
+  assert.equal(overlapScore("कर्मचारी नीति लागू है", "कर्मचारी नीति लागू है"), 1);
+});
+
 test("does not split common abbreviations into separate claims", () => {
   assert.deepEqual(
     splitIntoSentences("Dr. Rivera approved the policy. E.g. the leave rule applies to contractors."),
