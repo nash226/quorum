@@ -110,6 +110,14 @@ if (!npmVerifyBatchHelpOutput.startsWith("Quorum verify-batch\n\nUsage:")) {
   throw new Error("The npm verify-batch wrapper did not preserve the command help contract.");
 }
 
+const npmVerifyHelpOutput = execFileSync("npm", ["run", "--silent", "verify", "--", "--help"], {
+  cwd: repoRoot,
+  encoding: "utf8",
+});
+if (!npmVerifyHelpOutput.startsWith("Quorum verify\n\nUsage:")) {
+  throw new Error("The npm verify wrapper did not preserve the command help contract.");
+}
+
 const npmFormatsJsonOutput = execFileSync("npm", ["run", "--silent", "formats", "--", "--json"], {
   cwd: repoRoot,
   encoding: "utf8",
