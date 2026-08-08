@@ -169,6 +169,17 @@ test("splits Arabic-script full stop sentence terminators", () => {
   );
 });
 
+test("splits Greek ano teleia sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("Η άδεια εγκρίνεται· Ο διευθυντής ελέγχει τις εξαιρέσεις· Next policy applies."),
+    [
+      "Η άδεια εγκρίνεται·",
+      "Ο διευθυντής ελέγχει τις εξαιρέσεις·",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("splits Unicode ellipsis sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("The review is pending… Managers approve exceptions."),

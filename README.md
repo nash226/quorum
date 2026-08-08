@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now recognizes the Greek ano teleia (`·`), keeping adjacent
+Greek policy statements separately reviewable for evidence matching.
+
 Claim extraction now recognizes the Arabic-script full stop (`۔`), keeping
 Urdu-style localized policy statements separately reviewable for evidence
 matching.
