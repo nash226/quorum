@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `edde359c` on 2026-08-08, test: smoke direct AsciiDoc verification
+- Latest shipped change: `f21faa03` on 2026-08-08, test: smoke reStructuredText verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | test: smoke reStructuredText verification | `f21faa03` |
 | 2026-08-08 | Direct push | test: smoke direct AsciiDoc verification | `edde359c` |
 | 2026-08-08 | Direct push | docs: align README input format contract | `fdfb1657` |
 | 2026-08-08 | Direct push | fix: recognize Syriac sentence boundaries | `53e9f743` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | fix: neutralize spreadsheet formulas in reviewer csv | `bd6d8e3a` |
 | 2026-08-08 | Direct push | fix: preserve multilingual wrapped claims | `953763cb` |
 | 2026-08-08 | Direct push | fix: preserve short N'Ko claims | `2f4ab560` |
-| 2026-08-08 | Direct push | fix: preserve localized line boundaries | `1d7fa7d8` |
 
