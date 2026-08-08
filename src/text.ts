@@ -133,12 +133,13 @@ export function normalizeForContainment(text: string): string {
 
 export function renderAnswerPreview(answer: string): string {
   const normalized = normalizeAnswerPreviewText(answer).replace(/\s+/g, " ").trim();
+  const codePoints = Array.from(normalized);
 
-  if (normalized.length <= 120) {
+  if (codePoints.length <= 120) {
     return normalized;
   }
 
-  return `${normalized.slice(0, 117).trimEnd()}...`;
+  return `${codePoints.slice(0, 117).join("").trimEnd()}...`;
 }
 
 export function renderAnswerLabel(answerPath: string): string {

@@ -74,6 +74,13 @@ test("splits sentences across Unicode line and paragraph separators", () => {
   );
 });
 
+test("does not split supplementary Unicode characters in answer previews", () => {
+  const preview = renderAnswerPreview(`${"a".repeat(116)}🙂 remainder`);
+
+  assert.equal(preview, `${"a".repeat(116)}🙂...`);
+  assert.ok(!preview.includes("\uFFFD"));
+});
+
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
     renderAnswerLabels([

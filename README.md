@@ -1,5 +1,8 @@
 # Quorum
 
+Reviewer answer previews now truncate without splitting supplementary Unicode
+characters, keeping multilingual text and emoji readable in queue exports.
+
 Wrapped plain-text claims now preserve continuations that begin in non-Latin
 scripts, keeping multilingual policy exports together during claim extraction.
 
