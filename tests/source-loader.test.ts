@@ -396,6 +396,24 @@ test("strips log extensions from fallback source titles", async () => {
   assert.equal(source.title, "support-escalation");
 });
 
+test("strips remaining text, config, and email aliases from fallback source titles", async () => {
+  const paths = [
+    "docs/policies/incident-response.textile",
+    "docs/policies/incident-response.ini",
+    "docs/policies/incident-response.properties",
+    "docs/policies/incident-response.conf",
+    "docs/policies/incident-response.cfg",
+    "docs/policies/incident-response.eml",
+    "docs/policies/incident-response.ndjson",
+  ];
+
+  for (const [index, path] of paths.entries()) {
+    const source = await sourceDocumentFromFile(path, "Incident response policy.", index);
+
+    assert.equal(source.title, "incident-response", path);
+  }
+});
+
 test("normalizes structured JSON source exports into claim-readable lines", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.json",
