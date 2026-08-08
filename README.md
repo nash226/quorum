@@ -1274,11 +1274,12 @@ the unblocked local CLI/API and evaluation surfaces without assuming hosting
 or storage choices.
 
 The packaged CLI and programmatic API now expose one aligned answer/source
-format contract for Markdown-family, text, HTML/XHTML, PDF/DOCX,
-Java-style `.properties`, and structured JSON/JSONL/YAML/XML/TOML/CSV/TSV
-exports; run `npm run formats` to inspect the exact extensions available
+format contract for Markdown-family, AsciiDoc, Org-mode, MediaWiki,
+reStructuredText, LaTeX, Textile, text/configuration, HTML/XHTML, PDF/DOCX,
+RFC 822 email, and structured JSON/JSONL/NDJSON/JSON5/JSONC/YAML/XML/TOML/
+CSV/TSV exports; run `npm run formats` to inspect the exact extensions available
 to integrations. The README format summary now matches that published
-contract, including CSV/TSV and structured answer discovery.
+contract, including document, email, tabular, and structured answer discovery.
 Newline-delimited JSON (`.jsonl` and `.ndjson`) is normalized record by record,
 and Textile (`.textile`) exports retain a clean filename fallback title in
 evidence reports.
