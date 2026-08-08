@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `a804e6b7` on 2026-08-08, fix: split Arabic-script full stop claims
+- Latest shipped change: `1acef131` on 2026-08-08, fix: split Myanmar sentence boundaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | [#2044](https://github.com/nash226/quorum/pull/2044) | fix: split Myanmar sentence boundaries | `1acef131` |
 | 2026-08-08 | Direct push | fix: split Arabic-script full stop claims | `a804e6b7` |
 | 2026-08-08 | Direct push | fix: retain short non-Latin policy claims | `cf19ba28` |
 | 2026-08-07 | Direct push | docs: align source format behavior | `ce353b74` |
@@ -56,5 +57,4 @@
 | 2026-08-07 | Direct push | fix: preserve namespaced XML metadata | `f8e1ab46` |
 | 2026-08-07 | Direct push | fix: preserve folded email metadata | `f121346b` |
 | 2026-08-07 | Direct push | fix: split Khmer sentence boundaries | `60322255` |
-| 2026-08-07 | [#2027](https://github.com/nash226/quorum/pull/2027) | test: cover hidden batch discovery | `6ae65f4f` |
 
