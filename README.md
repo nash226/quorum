@@ -1,5 +1,8 @@
 # Quorum
 
+Direct CSV verification now preserves quoted fields with embedded line breaks,
+keeping multi-line tabular policy evidence readable during claim review.
+
 Direct verification now regression-tests `.yml` answers and approved sources,
 keeping the YAML alias covered symmetrically with the published format contract.
 
