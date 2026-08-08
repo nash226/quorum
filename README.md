@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies both `.rst` and `.rest` reStructuredText
+aliases, keeping installed rich-text integrations aligned with the format contract.
+
 The packaged CLI smoke gate now verifies reStructuredText (`.rst`) answers
 against approved sources, keeping the documented rich-text input contract
 covered at the release boundary.
