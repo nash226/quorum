@@ -1598,11 +1598,14 @@ of that boundary and the decision tracked in [issue #683](https://github.com/nas
 Verification accepts Markdown-family (`.md`, `.markdown`, `.mdx`, `.qmd`),
 AsciiDoc/Org-mode/MediaWiki (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
 `.wiki`), reStructuredText/LaTeX (`.rst`, `.tex`), text (`.txt`, `.text`,
-`.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
+`.textile`, `.log`), config/email aliases (`.ini`, `.properties`, `.conf`,
+`.cfg`, `.eml`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 JSON/JSONL/YAML/XML/TOML, CSV/TSV, PDF, and DOCX answers and approved sources.
 Run `npm run formats -- --json` for the authoritative machine-readable list.
 The direct CLI form, `quorum formats --json`, is covered against the same
 library constants so integrations can rely on the published discovery contract.
+Supported aliases also receive stable fallback source titles with their
+extensions removed, including `.ndjson` and the text/config/email formats.
 Recursive answer and source directories discover those same extensions
 case-insensitively, keeping structured and binary batches aligned with explicit
 file verification; unsupported files in those directories are ignored. JSON,
