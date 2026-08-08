@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests JSONL (`.jsonl`) approved sources,
+preserving source titles and verified evidence when policy exports use one JSON
+record per line.
+
 Direct CSV verification now preserves quoted fields with embedded line breaks,
 keeping multi-line tabular policy evidence readable during claim review.
 
