@@ -217,6 +217,23 @@ test("strips the Org-mode alias from fallback source titles", async () => {
   assert.equal(source.title, "benefits");
 });
 
+test("strips less-common documented aliases from fallback source titles", async () => {
+  const sources = await Promise.all(
+    ["policy.mediawiki", "policy.wiki", "policy.text", "policy.log", "policy.ndjson", "policy.tsv"].map(
+      (sourcePath, index) => sourceDocumentFromFile(`policies/${sourcePath}`, "Policy text", index),
+    ),
+  );
+
+  assert.deepEqual(sources.map((source) => source.title), [
+    "policy",
+    "policy",
+    "policy",
+    "policy",
+    "policy",
+    "policy",
+  ]);
+});
+
 test("normalizes quoted csv policy exports and reads metadata columns", async () => {
   const source = await sourceDocumentFromFile(
     "exports/benefits.CSV",

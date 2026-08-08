@@ -1,5 +1,9 @@
 # Quorum
 
+Fallback reviewer titles now drop the documented MediaWiki, plain-text, log,
+NDJSON, and TSV aliases, keeping evidence labels stable when source metadata
+does not provide an explicit title.
+
 Direct verification now regression-tests `.yml` answers and approved sources,
 keeping the YAML alias covered symmetrically with the published format contract.
 
