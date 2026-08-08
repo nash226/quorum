@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c396503f` on 2026-08-08, test: smoke installed HTTP server runtime
+- Latest shipped change: `1d7fa7d8` on 2026-08-08, fix: preserve localized line boundaries
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | fix: preserve localized line boundaries | `1d7fa7d8` |
 | 2026-08-08 | [#2050](https://github.com/nash226/quorum/pull/2050) | test: smoke installed HTTP server runtime | `c396503f` |
 | 2026-08-08 | Direct push | fix: split additional localized sentence boundaries | `1f5ffa70` |
 | 2026-08-08 | [#2044](https://github.com/nash226/quorum/pull/2044) | fix: split Myanmar sentence boundaries | `1acef131` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | fix: retain short non-Latin policy claims | `cf19ba28` |
 | 2026-08-07 | Direct push | docs: align source format behavior | `ce353b74` |
 | 2026-08-07 | Direct push | fix: validate explicit source formats | `5d70e0d3` |
-| 2026-08-07 | Direct push | fix: preserve namespaced XML metadata | `f8e1ab46` |
 
