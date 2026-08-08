@@ -33,7 +33,7 @@ const STOPWORDS = new Set([
 export function splitIntoSentences(text: string): string[] {
   return text
     .replace(/\r/g, "")
-    .split(/\n+|(?<=[.!?])\s+/g)
+    .split(/\n+|(?<=[.!?।॥])\s+/g)
     .map((part) => part.replace(/^[-*]\s+/, "").trim())
     .filter(Boolean);
 }

@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { renderAnswerLabels } from "../src/text.js";
+import { renderAnswerLabels, splitIntoSentences } from "../src/text.js";
+
+test("splits Indic danda punctuation between claims", () => {
+  assert.deepEqual(
+    splitIntoSentences("कर्मचारी 12 सप्ताह की छुट्टी पाते हैं। बीमा 30 दिनों में शुरू होता है॥"),
+    ["कर्मचारी 12 सप्ताह की छुट्टी पाते हैं।", "बीमा 30 दिनों में शुरू होता है॥"],
+  );
+});
 
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
