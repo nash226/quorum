@@ -2984,6 +2984,27 @@ try {
   rmSync(csvFormatTempDir, { recursive: true, force: true });
 }
 
+const orgModeFormatTempDir = mkdtempSync(join(tmpdir(), "quorum-package-org-mode-format-"));
+try {
+  const answerPath = join(orgModeFormatTempDir, "answer.org-mode");
+  const sourcePath = join(orgModeFormatTempDir, "policy.org-mode");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "* Parental Leave Policy\n\nEmployees receive 12 weeks of paid parental leave.\n");
+  const result = JSON.parse(execFileSync(process.execPath, [
+    fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+  ], { encoding: "utf8" }));
+  if (
+    result.summary?.verified !== 1 ||
+    result.answerPath !== answerPath ||
+    result.sources?.[0]?.sourcePath !== sourcePath ||
+    result.sources?.[0]?.title !== "policy"
+  ) {
+    throw new Error("Package artifact CLI did not preserve direct Org mode answer/source verification.");
+  }
+} finally {
+  rmSync(orgModeFormatTempDir, { recursive: true, force: true });
+}
+
 const yamlAnswerTempDir = mkdtempSync(join(tmpdir(), "quorum-package-yaml-answer-"));
 try {
   const yamlAnswerPath = join(yamlAnswerTempDir, "answer.yaml");
