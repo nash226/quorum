@@ -2,6 +2,13 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { extractClaims, extractClaimsResult } from "../src/claim-extractor.js";
 
+test("extracts visible claims from HTML time metadata", () => {
+  assert.deepEqual(
+    extractClaims('<time datetime="2026-08-08">Employees receive 12 weeks of leave.</time>'),
+    [{ id: "claim_1", text: "Employees receive 12 weeks of leave." }],
+  );
+});
+
 test("returns a queue-routing signal alongside normalized claims", () => {
   assert.deepEqual(extractClaimsResult("Employees receive 12 weeks of leave."), {
     answerHasClaims: true,
