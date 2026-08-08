@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `6c6ac386` on 2026-08-08, docs: document piped answer verification
+- Latest shipped change: `90123733` on 2026-08-08, test: preserve multiline CSV verification fields
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | test: preserve multiline CSV verification fields | `90123733` |
 | 2026-08-08 | Direct push | docs: document piped answer verification | `6c6ac386` |
 | 2026-08-08 | Direct push | fix: align direct yml regression with report contract | `5fb81db1` |
 | 2026-08-08 | Direct push | test: cover direct YAML verification | `64a4712e` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | test: cover direct mdwn verification | `36a2b9d1` |
 | 2026-08-08 | Direct push | docs: clarify API capability bootstrap | `9cc7185b` |
 | 2026-08-08 | Direct push | test: cover direct Quarto verification | `39657c08` |
-| 2026-08-08 | Direct push | docs: document shared format discovery contract | `256fd95a` |
 
