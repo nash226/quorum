@@ -1620,6 +1620,17 @@ test("extracts readable text and metadata from exported xml sources", async () =
   assert.doesNotMatch(source.content, /<section>|<paragraph>/);
 });
 
+test("unwraps CDATA policy text from exported xml sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.xml",
+    `<policy><section><![CDATA[Employees receive 12 weeks of paid leave.]]></section></policy>`,
+    0,
+  );
+
+  assert.equal(source.content, "Employees receive 12 weeks of paid leave.");
+  assert.doesNotMatch(source.content, /CDATA/);
+});
+
 test("parses XHTML sources and preserves the file-name title fallback", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/escalations.xhtml",

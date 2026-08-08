@@ -484,6 +484,8 @@ function parseXmlSource(content: string): ParsedSource {
       content
         .replace(/<\?xml[\s\S]*?\?>/gi, " ")
         .replace(/<!--[\s\S]*?-->/g, " ")
+        .replace(/<!\[CDATA\[/gi, "")
+        .replace(/\]\]>/g, "")
         .replace(/<[^>]+>/g, "\n")
         .split("\n")
         .map((line) => line.trim())
