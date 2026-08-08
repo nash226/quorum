@@ -572,8 +572,8 @@ test("verify accepts direct CSV answer and source exports", async () => {
     const answerPath = join(tempDir, "answer.csv");
     const sourcePath = join(tempDir, "policy.csv");
     await Promise.all([
-      writeFile(answerPath, "claim\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
-      writeFile(sourcePath, "policy\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(answerPath, "claim,notes\n\"Employees receive 12 weeks of paid parental leave.\",\"Approved\nby People Ops.\"\n", "utf8"),
+      writeFile(sourcePath, "policy,notes\n\"Employees receive 12 weeks of paid parental leave.\",\"Approved\nby People Ops.\"\n", "utf8"),
     ]);
 
     const report = JSON.parse(await runCli([
