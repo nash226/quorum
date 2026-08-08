@@ -1,0 +1,17 @@
+{
+  "name": "Support knowledge-base access policy example",
+  "domain": "support",
+  "answerPath": "../../answers/support-knowledge-base-access-answer.md",
+  "answer": "Workspace admins can grant agents access to the internal knowledge base.\nKnowledge-base access is removed within 24 hours after an agent leaves the workspace.\nSupport automatically grants a premium discount to every guest collaborator.\n",
+  "answerLabel": "Support knowledge-base access reviewer packet",
+  "sources": [{
+    "sourcePath": "../../sources/support-knowledge-base-access-policy.md",
+    "id": "support/knowledge-base-access@2026-08-08",
+    "title": "Support Knowledge-Base Access Policy",
+    "updatedAt": "2026-08-08",
+    "trustLevel": "high",
+    "content": "Workspace admins can grant agents access to the internal knowledge base.\nKnowledge-base access is removed within 7 days after an agent leaves the workspace.\nGuest collaborators do not receive knowledge-base access unless an administrator approves it.\n"
+  }],
+  "expectedSummary": { "verified": 1, "contradicted": 1, "unsupported": 1, "needs_review": 0 },
+  "expectedClaimVerdicts": ["verified", "contradicted", "unsupported"]
+}
