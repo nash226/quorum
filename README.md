@@ -2737,6 +2737,10 @@ decision-gated. Batch verification, reviewer-queue exports, and local HTTP
 integration contracts are shipped foundation capabilities,
 not pending roadmap work.
 
+Claim extraction now keeps short, punctuated policy statements across Arabic,
+Thai, Lao, and other supported non-Latin scripts instead of dropping them
+before verification.
+
 The same verification workflows are available as a local HTTP service for
 agent integrations. Start it with `npm run dev -- serve --port 3000`, then use
 `GET /capabilities` for runtime discovery and `GET /openapi.json` for the full

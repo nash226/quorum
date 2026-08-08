@@ -1357,6 +1357,13 @@ test("keeps short claims with localized sentence terminators", () => {
   ]);
 });
 
+test("keeps short claims across non-Latin policy scripts", () => {
+  assert.deepEqual(
+    extractClaims("تمت الموافقة؟ ไทยได้เลย๚ ຕົກລົງ๛ العربية موافق؟ Next policy applies.").map((claim) => claim.text),
+    ["تمت الموافقة؟", "ไทยได้เลย๚", "ຕົກລົງ๛", "العربية موافق؟", "Next policy applies."],
+  );
+});
+
 test("keeps wrapped plain-text lines as one claim when the next line is a continuation", () => {
   const claims = extractClaims(`Employees receive 12 weeks of paid parental leave
 for full-time staff only.
