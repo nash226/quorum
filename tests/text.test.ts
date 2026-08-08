@@ -222,6 +222,17 @@ test("splits Khmer sentence terminators", () => {
   );
 });
 
+test("splits Myanmar sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("ဤမူဝါဒသည် အကျုံးဝင်သည်။ မန်နေဂျာသည် ခြွင်းချက်ကို အတည်ပြုသည်။ Next policy applies."),
+    [
+      "ဤမူဝါဒသည် အကျုံးဝင်သည်။",
+      "မန်နေဂျာသည် ခြွင်းချက်ကို အတည်ပြုသည်။",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
