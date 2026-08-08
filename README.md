@@ -40,6 +40,10 @@ titles, freshness, and trust metadata when loading approved evidence.
 Claim extraction now recognizes Tibetan shad sentence terminators, keeping
 localized policy statements separate for evidence matching.
 
+Claim extraction now recognizes Armenian question/exclamation and Ethiopic
+question/paragraph terminators, keeping more localized policy statements
+separate for evidence matching.
+
 Claim extraction now recognizes Thai sentence terminators, keeping localized
 policy statements separate for evidence matching.
 
