@@ -281,6 +281,36 @@ try {
   assert.equal(latexReport.summary.verified, 1);
   assert.equal(latexReport.sources[0].title, "latex-policy");
 
+  const rstAnswerPath = join(tempDir, "rst-answer.rst");
+  const rstSourcePath = join(tempDir, "rst-policy.rst");
+  const rstReportPath = join(tempDir, "rst-report.json");
+
+  writeFileSync(
+    rstAnswerPath,
+    "Employees receive 12 weeks of paid parental leave.\n",
+    "utf8",
+  );
+  writeFileSync(
+    rstSourcePath,
+    "HR Policy\n========\n\nEmployees receive 12 weeks of paid parental leave.\n",
+    "utf8",
+  );
+
+  const rstStdout = runCli([
+    "verify",
+    "--answer",
+    rstAnswerPath,
+    "--source",
+    rstSourcePath,
+    "--out",
+    rstReportPath,
+  ]);
+
+  const rstReport = readJson(rstReportPath);
+  assert.match(rstStdout, /Quorum Verification Report/);
+  assert.equal(rstReport.summary.verified, 1);
+  assert.equal(rstReport.sources[0].title, "rst-policy");
+
   const batchReportPath = join(tempDir, "batch-report.json");
   const batchReviewCsvPath = join(tempDir, "batch-review.csv");
   const batchSummaryCsvPath = join(tempDir, "batch-summary.csv");
