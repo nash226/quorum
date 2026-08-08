@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now recognizes the Hebrew sof pasuq (`׃`) sentence terminator,
+keeping Hebrew policy statements separately reviewable for evidence matching.
+
 Namespaced XML policy exports now preserve common title and modified-date metadata,
 keeping enterprise feed sources on the same identity and freshness path as plain XML.
 
