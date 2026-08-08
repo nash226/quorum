@@ -1061,6 +1061,9 @@ trust levels survive common authoring-tool variations.
 The source-loader regression suite also verifies that YAML/YML fallback titles
 drop their extension, keeping reviewer evidence consistent with other formats.
 
+It also verifies that TSV policy exports use clean fallback titles when they do
+not provide explicit metadata.
+
 The packaged CLI smoke gate also verifies Textile answer and approved-source
 files, keeping this documented format covered after publishing.
 
