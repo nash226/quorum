@@ -1,5 +1,9 @@
 # Quorum
 
+The `quorum formats` command and HTTP `/capabilities` endpoint now expose the
+same supported answer/source extension contract, giving CLI and API integrators
+one reliable discovery surface.
+
 CSV and TSV source ingestion now preserves line breaks inside quoted fields, so
 multi-line policy cells remain intact for claim extraction and evidence review.
 
