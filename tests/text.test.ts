@@ -158,6 +158,16 @@ test("splits Arabic and Indic sentence terminators", () => {
   );
 });
 
+test("splits N'Ko exclamation sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("ߒߞߏ ߛߓߍ ߦߋ߫ ߞߊ߬ߙߊ߲߬ߠߊ߲߬߸ ߊ߬ ߦߋ߫ ߞߊ߬ߙߊ߲߬ߠߊ߲߬ߣߍ߲߬߹ Next policy applies."),
+    [
+      "ߒߞߏ ߛߓߍ ߦߋ߫ ߞߊ߬ߙߊ߲߬ߠߊ߲߬߸ ߊ߬ ߦߋ߫ ߞߊ߬ߙߊ߲߬ߠߊ߲߬ߣߍ߲߬߹",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("splits Arabic-script full stop sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("یہ پالیسی لاگو ہے۔ مینیجر استثنا منظور کرتا ہے۔ Next policy applies."),
