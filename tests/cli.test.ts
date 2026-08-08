@@ -29,6 +29,7 @@ test("version JSON and help aliases preserve the public CLI contract", async () 
 
   assert.deepEqual(JSON.parse(versionJson), { service: "quorum", version: "0.1.0" });
   assert.match(commandHelp, /^Quorum version\n\nUsage:\n  quorum version \[--json\]/);
+  assert.equal(commandHelp.match(/Quorum version/g)?.length, 1);
   assert.equal(topicHelp, commandHelp);
   assert.equal(shortHelp, commandHelp);
 });

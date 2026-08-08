@@ -1,5 +1,8 @@
 # Quorum
 
+The CLI version probe (`quorum version`, `--version`, or `-v`) reports one
+stable contract version; add `--json` for deployment checks and automation.
+
 Wrapped plain-text claims now preserve continuations that begin in non-Latin
 scripts, keeping multilingual policy exports together during claim extraction.
 
