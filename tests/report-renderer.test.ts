@@ -161,6 +161,20 @@ test("renders a reviewer decision csv with answer fail-policy context and blank 
   assert.match(lines[2] ?? "", /,,$/);
 });
 
+test("neutralizes spreadsheet formulas in reviewer CSV fields", () => {
+  const report = verifyAnswer(
+    "=HYPERLINK(\"https://quorum.example\",\"Review\")",
+    [{ ...hrPolicy, title: "+Imported policy" }],
+    "2026-06-28T00:00:00.000Z",
+    "@answer.csv",
+  );
+
+  const rendered = renderReviewerDecisionCsv(report);
+
+  assert.match(rendered, /,'@answer,'@answer\.csv/);
+  assert.match(rendered, /"'=HYPERLINK\(""https:\/\/quorum\.example"",""Review""\)"/);
+});
+
 test("renders a reviewer decision csv row for single answers with no extracted claims", () => {
   const report = verifyAnswer("Short.\n", [hrPolicy], "2026-06-28T00:00:00.000Z", "examples/answers/empty.md");
 

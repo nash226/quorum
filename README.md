@@ -1,5 +1,9 @@
 # Quorum
 
+Reviewer CSV exports now prefix formula-like values with an apostrophe, keeping
+claim text, labels, paths, and source metadata inert when opened in spreadsheet
+tools.
+
 Wrapped plain-text claims now preserve continuations that begin in non-Latin
 scripts, keeping multilingual policy exports together during claim extraction.
 
