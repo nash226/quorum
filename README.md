@@ -1,5 +1,9 @@
 # Quorum
 
+Batch verification now discovers JSON Lines (`.jsonl`) and newline-delimited
+JSON (`.ndjson`) answers and approved sources recursively, matching the direct
+verification format contract.
+
 Direct approved-source loading now regression-tests `.htm` exports for HTML
 titles and readable evidence, keeping the short HTML alias aligned with the
 published source-format contract.
