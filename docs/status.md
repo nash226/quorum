@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `90123733` on 2026-08-08, test: preserve multiline CSV verification fields
+- Latest shipped change: `7d26bc52` on 2026-08-08, fix: unwrap cdata in xml sources
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | fix: unwrap cdata in xml sources | `7d26bc52` |
 | 2026-08-08 | Direct push | test: preserve multiline CSV verification fields | `90123733` |
 | 2026-08-08 | Direct push | docs: document piped answer verification | `6c6ac386` |
 | 2026-08-08 | Direct push | fix: align direct yml regression with report contract | `5fb81db1` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | test: cover direct JSONC verification | `5dc53036` |
 | 2026-08-08 | Direct push | test: cover direct mdwn verification | `36a2b9d1` |
 | 2026-08-08 | Direct push | docs: clarify API capability bootstrap | `9cc7185b` |
-| 2026-08-08 | Direct push | test: cover direct Quarto verification | `39657c08` |
 
