@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `9cc7185b` on 2026-08-08, docs: clarify API capability bootstrap
+- Latest shipped change: `36a2b9d1` on 2026-08-08, test: cover direct mdwn verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | test: cover direct mdwn verification | `36a2b9d1` |
 | 2026-08-08 | Direct push | docs: clarify API capability bootstrap | `9cc7185b` |
 | 2026-08-08 | Direct push | test: cover direct Quarto verification | `39657c08` |
 | 2026-08-08 | Direct push | docs: document shared format discovery contract | `256fd95a` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | fix: recognize Sinhala sentence boundaries | `77b04407` |
 | 2026-08-08 | Direct push | test: smoke Org mode package inputs | `a539fdda` |
 | 2026-08-08 | Direct push | test: smoke reStructuredText verification | `f21faa03` |
-| 2026-08-08 | Direct push | test: smoke direct AsciiDoc verification | `edde359c` |
 
