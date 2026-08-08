@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `1d7fa7d8` on 2026-08-08, fix: preserve localized line boundaries
+- Latest shipped change: `2f4ab560` on 2026-08-08, fix: preserve short N'Ko claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | fix: preserve short N'Ko claims | `2f4ab560` |
 | 2026-08-08 | Direct push | fix: preserve localized line boundaries | `1d7fa7d8` |
 | 2026-08-08 | [#2050](https://github.com/nash226/quorum/pull/2050) | test: smoke installed HTTP server runtime | `c396503f` |
 | 2026-08-08 | Direct push | fix: split additional localized sentence boundaries | `1f5ffa70` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | fix: split Arabic-script full stop claims | `a804e6b7` |
 | 2026-08-08 | Direct push | fix: retain short non-Latin policy claims | `cf19ba28` |
 | 2026-08-07 | Direct push | docs: align source format behavior | `ce353b74` |
-| 2026-08-07 | Direct push | fix: validate explicit source formats | `5d70e0d3` |
 
