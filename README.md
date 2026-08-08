@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction also recognizes the Unicode next-line separator (U+0085),
+which keeps policy exports from legacy systems split into independent claims.
+
 The packaged smoke gate now starts the installed `quorum/server` entry point
 and probes `/health` plus `/extract-claims`, catching runtime publish-boundary
 drift in the local HTTP integration surface.
