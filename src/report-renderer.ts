@@ -2094,11 +2094,13 @@ function trimTrailingBlankLines(lines: string[]): string[] {
 }
 
 function escapeCsvValue(value: string): string {
-  if (/[",\n]/.test(value)) {
-    return `"${value.replace(/"/g, "\"\"")}"`;
+  const safeValue = /^[=+\-@]/.test(value) ? `'${value}` : value;
+
+  if (/[",\n]/.test(safeValue)) {
+    return `"${safeValue.replace(/"/g, "\"\"")}"`;
   }
 
-  return value;
+  return safeValue;
 }
 
 function formatVerdictLabel(verdict: string): string {
