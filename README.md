@@ -43,6 +43,9 @@ localized policy statements separate for evidence matching.
 Claim extraction now recognizes Thai sentence terminators, keeping localized
 policy statements separate for evidence matching.
 
+Claim extraction now recognizes Myanmar full-stop sentence terminators, keeping
+Myanmar policy statements separate for evidence matching.
+
 HTML and XML policy sources now decode common comparison entities such as
 `&ge;`, `&le;`, and `&ne;`, keeping eligibility thresholds readable during claim
 extraction and reviewer handoff.
