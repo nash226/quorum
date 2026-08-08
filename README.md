@@ -1,5 +1,8 @@
 # Quorum
 
+The current reliability focus includes keeping `quorum formats` and the local
+HTTP API aligned with the package's supported answer and source extensions.
+
 Claim extraction now recognizes the Sinhala punctuation mark `෴`, keeping
 localized Sinhala policy statements separately reviewable for evidence matching.
 
