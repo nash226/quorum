@@ -403,6 +403,16 @@ The installed package exposes `npm run formats` (and
 `npm run formats -- --json`) for discovering the supported answer and source
 extensions before wiring an integration.
 
+For a machine-readable allowlist, consume the JSON form and validate the file
+extension before uploading an answer or approved source:
+
+```bash
+npm run formats -- --json | jq '.answers, .sources'
+```
+
+The `answers` and `sources` arrays are sorted, unique extensions from the same
+contract used by recursive CLI discovery and the HTTP `/capabilities` response.
+
 The package smoke gate also exercises `npm run help`, keeping the documented
 top-level npm onboarding command connected to the packaged CLI.
 
