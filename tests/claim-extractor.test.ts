@@ -1373,6 +1373,13 @@ test("keeps short claims across non-Latin policy scripts", () => {
   );
 });
 
+test("keeps short N'Ko claims with the N'Ko exclamation terminator", () => {
+  assert.deepEqual(extractClaims("ߒߞߏ߹\nNext policy applies.").map((claim) => claim.text), [
+    "ߒߞߏ߹",
+    "Next policy applies.",
+  ]);
+});
+
 test("keeps wrapped plain-text lines as one claim when the next line is a continuation", () => {
   const claims = extractClaims(`Employees receive 12 weeks of paid parental leave
 for full-time staff only.
