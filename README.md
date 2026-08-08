@@ -678,8 +678,13 @@ health and contract surfaces on the default port `3000`:
 
 ```bash
 curl http://127.0.0.1:3000/health
+curl http://127.0.0.1:3000/capabilities
 curl http://127.0.0.1:3000/openapi.json
 ```
+
+Use `/capabilities` as the integration bootstrap: it publishes the supported
+answer/source extensions, verdicts, request limits, and reviewer-queue statuses
+before a client sends work to `/verify`, `/verify-batch`, or `/import-review`.
 
 Run the checked-in HR or support scorecards with
 `npm run evaluate -- --fixture-dir examples/evaluations --domain support`. Export the machine-readable API contract
