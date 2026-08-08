@@ -1,5 +1,8 @@
 # Quorum
 
+Direct verification now regression-tests `.ndjson` approved sources, keeping
+the advertised newline-delimited JSON source alias covered alongside `.jsonl`.
+
 Direct CSV verification now preserves quoted fields with embedded line breaks,
 keeping multi-line tabular policy evidence readable during claim review.
 
