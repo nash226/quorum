@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now recognizes the N’Ko exclamation mark (`߹`), keeping
+localized policy statements separately reviewable for evidence matching.
+
 The packaged smoke gate now starts the installed `quorum/server` entry point
 and probes `/health` plus `/extract-claims`, catching runtime publish-boundary
 drift in the local HTTP integration surface.
