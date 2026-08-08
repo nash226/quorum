@@ -1,5 +1,8 @@
 # Quorum
 
+Namespaced XML policy exports now preserve common title and modified-date metadata,
+keeping enterprise feed sources on the same identity and freshness path as plain XML.
+
 RFC 822 email imports now unfold whitespace-prefixed continuation lines, so
 folded `Subject` and `Date` headers retain their metadata during verification.
 
