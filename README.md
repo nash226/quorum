@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged smoke gate now starts the installed `quorum/server` entry point
+and probes `/health` plus `/extract-claims`, catching runtime publish-boundary
+drift in the local HTTP integration surface.
+
 Claim extraction now recognizes the Arabic-script full stop (`۔`), keeping
 Urdu-style localized policy statements separately reviewable for evidence
 matching.
