@@ -44,12 +44,17 @@ try {
   const installedVersion = execFileSync(join(packedPackageDir, "node_modules/.bin/quorum"), ["--version"], {
     encoding: "utf8",
   }).trim();
+  const installedHelp = execFileSync(join(packedPackageDir, "node_modules/.bin/quorum"), ["--help"], {
+    encoding: "utf8",
+  });
   if (
     typeof installedPackage.verifyAnswer !== "function" ||
     typeof installedServer.createApiServer !== "function" ||
-    installedVersion !== `quorum ${packageJson.version}`
+    installedVersion !== `quorum ${packageJson.version}` ||
+    !installedHelp.startsWith("Quorum\n\nUsage:") ||
+    !installedHelp.includes("quorum verify-batch")
   ) {
-    throw new Error("Installed package artifact did not preserve root, server, and CLI entry points.");
+    throw new Error("Installed package artifact did not preserve root, server, CLI, and help entry points.");
   }
 } finally {
   rmSync(packedPackageDir, { recursive: true, force: true });
