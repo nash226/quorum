@@ -67,6 +67,8 @@ matching.
 
 Namespaced XML policy exports now preserve common title and modified-date metadata,
 keeping enterprise feed sources on the same identity and freshness path as plain XML.
+XML policy exports also unwrap CDATA sections before claim matching, so feed-style
+policy text reaches reports without transport markup.
 
 RFC 822 email imports now unfold whitespace-prefixed continuation lines, so
 folded `Subject` and `Date` headers retain their metadata during verification.
