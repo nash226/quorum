@@ -82,6 +82,15 @@ test("splits Syriac sentence terminators into separate claims", () => {
   ]);
 });
 
+test("splits Sinhala sentence terminators into separate claims", () => {
+  const claims = extractClaims("නිවාඩු අනුමත කළ යුතුය෴ සේවකයාට දින තිහක් ලැබේ෴");
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "නිවාඩු අනුමත කළ යුතුය෴",
+    "සේවකයාට දින තිහක් ලැබේ෴",
+  ]);
+});
+
 test("extracts clean claims from markdown list answers", () => {
   const claims = extractClaims(`# HR Policy Summary
 
