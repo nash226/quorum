@@ -1019,6 +1019,33 @@ test("verify accepts direct AsciiDoc answers and approved sources", async () => 
   }
 });
 
+test("verify accepts direct Quarto answers and approved sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-quarto-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.qmd");
+    const sourcePath = join(tempDir, "policy.qmd");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      answerPath: string;
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments.length, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "Employees receive 12 weeks of paid parental leave.");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct .mdx source and preserves its path", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdx-source-"));
 

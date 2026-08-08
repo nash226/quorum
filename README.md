@@ -1,5 +1,7 @@
 # Quorum
 
+Direct verification now regression-tests Quarto (`.qmd`) answers against approved sources, keeping the advertised Quarto input contract covered end to end.
+
 The `quorum formats` command and HTTP `/capabilities` endpoint now expose the
 same supported answer/source extension contract, giving CLI and API integrators
 one reliable discovery surface.
