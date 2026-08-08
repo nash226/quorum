@@ -2718,6 +2718,28 @@ test("evaluate reports invalid fixture fields with a clear error", async () => {
   }
 });
 
+test("verify rejects incomplete or unsupported fail-on arguments", async () => {
+  const baseArgs = [
+    "verify",
+    "--answer",
+    "examples/answers/hr-answer.md",
+    "--source",
+    "examples/sources/hr-policy.md",
+  ];
+
+  const missingValue = await runCliAllowFailure([...baseArgs, "--fail-on"]);
+  assert.equal(missingValue.code, 1);
+  assert.match(missingValue.stderr, /Unknown or incomplete argument: --fail-on/);
+
+  const unsupportedValue = await runCliAllowFailure([
+    ...baseArgs,
+    "--fail-on",
+    "maybe",
+  ]);
+  assert.equal(unsupportedValue.code, 1);
+  assert.match(unsupportedValue.stderr, /Unsupported verdict "maybe"/);
+});
+
 test("verify accepts pdf sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-"));
 
