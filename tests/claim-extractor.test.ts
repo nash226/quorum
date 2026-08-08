@@ -82,6 +82,17 @@ test("splits Syriac sentence terminators into separate claims", () => {
   ]);
 });
 
+test("splits claims across Unicode NEXT LINE separators", () => {
+  const claims = splitIntoSentences(
+    "Employees receive 12 weeks of paid parental leave.\u0085Healthcare coverage begins after 30 days of employment.",
+  );
+
+  assert.deepEqual(claims, [
+    "Employees receive 12 weeks of paid parental leave.",
+    "Healthcare coverage begins after 30 days of employment.",
+  ]);
+});
+
 test("extracts clean claims from markdown list answers", () => {
   const claims = extractClaims(`# HR Policy Summary
 
