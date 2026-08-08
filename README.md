@@ -1,5 +1,8 @@
 # Quorum
 
+RFC 822 email imports now unfold whitespace-prefixed continuation lines, so
+folded `Subject` and `Date` headers retain their metadata during verification.
+
 Claim extraction now recognizes the Khmer full stop (`។`), keeping localized
 Khmer policy statements separately reviewable for evidence matching.
 
