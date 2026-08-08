@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2f4ab560` on 2026-08-08, fix: preserve short N'Ko claims
+- Latest shipped change: `953763cb` on 2026-08-08, fix: preserve multilingual wrapped claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | fix: preserve multilingual wrapped claims | `953763cb` |
 | 2026-08-08 | Direct push | fix: preserve short N'Ko claims | `2f4ab560` |
 | 2026-08-08 | Direct push | fix: preserve localized line boundaries | `1d7fa7d8` |
 | 2026-08-08 | [#2050](https://github.com/nash226/quorum/pull/2050) | test: smoke installed HTTP server runtime | `c396503f` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | [#2044](https://github.com/nash226/quorum/pull/2044) | fix: split Myanmar sentence boundaries | `1acef131` |
 | 2026-08-08 | Direct push | fix: split Arabic-script full stop claims | `a804e6b7` |
 | 2026-08-08 | Direct push | fix: retain short non-Latin policy claims | `cf19ba28` |
-| 2026-08-07 | Direct push | docs: align source format behavior | `ce353b74` |
 
