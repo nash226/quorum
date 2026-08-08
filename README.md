@@ -1483,6 +1483,16 @@ answers, run the dedicated format-contract command:
 npm run formats
 ```
 
+Pipe a generated answer directly into verification with `--answer -` when an
+upstream agent or workflow does not write an intermediate file:
+
+```bash
+cat generated-answer.md | npm run dev -- verify --answer - --source-dir examples/sources --json
+```
+
+Stdin is consumed once per command, so `--answer -` and `--source -` cannot be
+used together.
+
 Integrations can consume the same contract as sorted JSON arrays with:
 
 ```bash
