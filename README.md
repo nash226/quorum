@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification is now regression-tested for `.adoc` and `.asciidoc` answer
+and approved-source exports, keeping the advertised AsciiDoc format contract
+covered end to end.
+
 Claim extraction now recognizes Syriac sentence terminators, keeping adjacent
 Syriac policy rules separately reviewable for evidence matching.
 
