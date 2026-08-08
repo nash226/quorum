@@ -1,5 +1,11 @@
 # Quorum
 
+The primary CLI reference now documents reviewer-facing `--answer-label`
+values, reproducible `--generated-at` timestamps, gate-aware `--result-json`
+outputs, batch `--aggregate-summary-csv-out` queue summaries, and stdin input
+with `--answer -` or `--review-csv -`. These options let integrations preserve
+human routing context while consuming stable machine-readable artifacts.
+
 Reviewer CSV exports now prefix formula-like values with an apostrophe, keeping
 claim text, labels, paths, and source metadata inert when opened in spreadsheet
 tools.
@@ -1389,6 +1395,14 @@ operations, and integrations:
 - `serve`: start the local HTTP API for agent integrations.
 - `openapi`: export the API contract without starting the server.
 - `version`: print the CLI/API version, with `--json` for health checks.
+
+For reviewer-facing and integration handoffs, `verify` and `verify-batch` also
+accept `--answer-label <label>`, `--generated-at <timestamp>`, and
+`--result-json` (or `--result-json-out <path>`). Batch runs can add
+`--aggregate-summary-csv-out <path>` for one queue-level row, while
+`import-review` accepts `--review-csv -` and verification accepts `--answer -`
+for text streamed through stdin. These options preserve human routing context
+alongside deterministic, gate-aware artifacts.
 
 Each command has focused help available without input files:
 
