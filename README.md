@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests `.ini` answers against `.ini`
+approved sources, keeping the advertised configuration-export contract covered
+alongside the neighboring `.properties`, `.conf`, and `.cfg` aliases.
+
 Direct verification now regression-tests `.yml` answers and approved sources,
 keeping the YAML alias covered symmetrically with the published format contract.
 
