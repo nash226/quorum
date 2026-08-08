@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies reStructuredText (`.rst`) answers
+against approved sources, keeping the documented rich-text input contract
+covered at the release boundary.
+
 Direct verification is now regression-tested for `.adoc` and `.asciidoc` answer
 and approved-source exports, keeping the advertised AsciiDoc format contract
 covered end to end.
