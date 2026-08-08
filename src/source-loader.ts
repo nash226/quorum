@@ -465,7 +465,7 @@ function formatStructuredValue(value: unknown, prefix = ""): string {
 function parseXmlSource(content: string): ParsedSource {
   const metadata: SourceMetadata = {};
   for (const match of content.matchAll(
-    /<(title|updatedAt|updated_at|modifiedAt|lastModified|lastUpdated|trustLevel|trust_level)\b[^>]*>([\s\S]*?)<\/\1\s*>/gi,
+    /<(?:(?:[A-Za-z_][\w.-]*):)?(title|updatedAt|updated_at|modifiedAt|lastModified|lastUpdated|trustLevel|trust_level)\b[^>]*>([\s\S]*?)<\/(?:(?:[A-Za-z_][\w.-]*):)?\1\s*>/gi,
   )) {
     const key = match[1] ?? "";
     const value = decodeHtmlEntities((match[2] ?? "").replace(/<[^>]+>/g, " ").trim());

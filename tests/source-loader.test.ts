@@ -40,6 +40,18 @@ test("extracts metadata from XML source exports", async () => {
   assert.match(source.content, /Employees get 12 weeks\./);
 });
 
+test("extracts metadata from namespaced XML source exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.xml",
+    `<policy xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"><dc:title>HR parental leave policy</dc:title><dcterms:modified>2026-07-01</dcterms:modified><rule>Employees get 12 weeks.</rule></policy>`,
+    0,
+  );
+
+  assert.equal(source.title, "HR parental leave policy");
+  assert.equal(source.updatedAt, "2026-07-01");
+  assert.match(source.content, /Employees get 12 weeks\./);
+});
+
 test("extracts frontmatter from legacy Mac line endings", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",
