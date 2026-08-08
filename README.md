@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests `.yaml` answers and approved sources,
+keeping YAML policy exports covered symmetrically with the published format
+contract.
+
 Direct verification now regression-tests JSONC (`.jsonc`) answers and approved
 sources, including comment-tolerant structured exports and source titles.
 
