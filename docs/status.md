@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `cf19ba28` on 2026-08-08, fix: retain short non-Latin policy claims
+- Latest shipped change: `a804e6b7` on 2026-08-08, fix: split Arabic-script full stop claims
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | fix: split Arabic-script full stop claims | `a804e6b7` |
 | 2026-08-08 | Direct push | fix: retain short non-Latin policy claims | `cf19ba28` |
 | 2026-08-07 | Direct push | docs: align source format behavior | `ce353b74` |
 | 2026-08-07 | Direct push | fix: validate explicit source formats | `5d70e0d3` |
@@ -56,5 +57,4 @@
 | 2026-08-07 | Direct push | fix: preserve folded email metadata | `f121346b` |
 | 2026-08-07 | Direct push | fix: split Khmer sentence boundaries | `60322255` |
 | 2026-08-07 | [#2027](https://github.com/nash226/quorum/pull/2027) | test: cover hidden batch discovery | `6ae65f4f` |
-| 2026-08-07 | Direct push | fix: split Thai sentence boundaries | `c9e3c148` |
 
