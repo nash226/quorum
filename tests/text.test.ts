@@ -158,6 +158,17 @@ test("splits Arabic and Indic sentence terminators", () => {
   );
 });
 
+test("splits Indic sentences when exported text omits the following space", () => {
+  assert.deepEqual(
+    splitIntoSentences("कर्मचारी छुट्टी पाते हैं।बीमा तुरंत शुरू होता है॥अगला नियम लागू है।"),
+    [
+      "कर्मचारी छुट्टी पाते हैं।",
+      "बीमा तुरंत शुरू होता है॥",
+      "अगला नियम लागू है।",
+    ],
+  );
+});
+
 test("splits Arabic-script full stop sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("یہ پالیسی لاگو ہے۔ مینیجر استثنا منظور کرتا ہے۔ Next policy applies."),

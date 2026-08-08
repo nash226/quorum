@@ -40,6 +40,9 @@ titles, freshness, and trust metadata when loading approved evidence.
 Claim extraction now recognizes Tibetan shad sentence terminators, keeping
 localized policy statements separate for evidence matching.
 
+Indic sentence splitting also handles exported text that omits whitespace
+after danda punctuation, preserving each policy statement as its own claim.
+
 Claim extraction now recognizes Thai sentence terminators, keeping localized
 policy statements separate for evidence matching.
 
