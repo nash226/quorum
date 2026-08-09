@@ -2802,6 +2802,9 @@ timing, approval evidence, and an unsupported home-office benefit claim.
 
 ## Documentation Map
 
+Batch verification is shipped; current roadmap work focuses on local API,
+reviewer handoff, and evaluation reliability.
+
 - [CLI guide](docs/cli-guide.md): local verification, reports, imports, and evaluation.
 - [HTTP API integration](docs/api-integration.md): server startup, discovery, requests, and artifacts.
 - [Programmatic API](docs/programmatic-api.md): embed verification in Node.js workflows.
