@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests `.rest` reStructuredText approved
+sources as well as answers, keeping the published alias symmetric for
+integrations that load either side of the evidence check.
+
 The packaged CLI smoke gate now verifies case-insensitive recursive discovery,
 so uppercase exports such as `leave.MD` and `policy.TXT` remain on the same
 verification path as lowercase files.
