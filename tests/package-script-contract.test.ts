@@ -157,3 +157,14 @@ test("verify-batch package script forwards command-specific help flags", async (
   assert.match(stdout, /--answer-dir <path>/);
   assert.match(stdout, /--source-dir <path>/);
 });
+
+test("evaluate package script forwards command-specific help flags", async () => {
+  const { stdout } = await execFileAsync("npm", ["run", "--silent", "evaluate", "--", "--help"], {
+    cwd: new URL("..", import.meta.url),
+    maxBuffer: 1024 * 1024,
+  });
+
+  assert.match(stdout, /Usage:\s+quorum evaluate/);
+  assert.match(stdout, /--fixture-dir <path>/);
+  assert.match(stdout, /--min-score <score>/);
+});
