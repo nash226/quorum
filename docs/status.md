@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `56a32d7f` on 2026-08-09, docs: note shipped EMLX verification
+- Latest shipped change: `7e1e9531` on 2026-08-09, test: cover recursive EMLX source discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-09 | Direct push | test: cover recursive EMLX source discovery | `7e1e9531` |
 | 2026-08-09 | Direct push | docs: note shipped EMLX verification | `56a32d7f` |
 | 2026-08-09 | Direct push | test: cover direct INI verification | `2411d9bd` |
 | 2026-08-09 | [#2165](https://github.com/nash226/quorum/pull/2165) | feat: support Apple Mail EMLX exports | `c9505979` |
@@ -56,5 +57,4 @@
 | 2026-08-09 | Direct push | test: cover direct uppercase email paths | `2ec2757f` |
 | 2026-08-09 | Direct push | test: cover direct txt verification | `62c8f9cf` |
 | 2026-08-09 | Direct push | test: cover direct JSON5 verification | `49b8cda1` |
-| 2026-08-09 | Direct push | test: smoke installed evaluation command | `ee2012b9` |
 
