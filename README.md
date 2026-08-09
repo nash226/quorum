@@ -1,5 +1,8 @@
 # Quorum
 
+Direct verification now regression-tests XHTML approved sources, including XML
+declarations, namespace markup, HTML titles, and reviewer-readable evidence.
+
 The packed-package smoke gate now executes `quorum evaluate` through the
 installed CLI binary, verifying that published evaluation result JSON and
 `--fail-on-mismatch` behavior survive the package boundary.
