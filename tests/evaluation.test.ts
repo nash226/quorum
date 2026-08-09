@@ -46,6 +46,46 @@ test("evaluates the shipped HR recognition fixture across award claims", async (
   assert.equal(scorecard.score, 1);
 });
 
+test("evaluates the shipped HR payroll advance fixture across approval claims", async () => {
+  const scorecard = await evaluateFixtureContent({
+    content: JSON.stringify({
+      name: "HR payroll advance policy example",
+      domain: "hr",
+      answer: "Employees may request a payroll advance through People Operations.\nPayroll advances are repaid over three pay periods.\nThe company guarantees approval of every payroll advance request.\n",
+      answerLabel: "HR payroll advance reviewer packet",
+      sources: [{
+        sourcePath: "people-ops/payroll-advance-policy.md",
+        id: "people-ops/hr-payroll-advance@2026-08-09",
+        title: "Payroll Advance Policy",
+        updatedAt: "2026-08-09",
+        trustLevel: "high",
+        content: "Employees may request a payroll advance through People Operations.\nApproved payroll advances are repaid over three pay periods.\nPeople Operations reviews each payroll advance request before approval.\n",
+      }],
+      expectedSummary: { verified: 2, contradicted: 0, unsupported: 1, needs_review: 0 },
+      expectedClaimVerdicts: ["verified", "verified", "unsupported"],
+    }),
+    generatedAt: "2026-08-09T12:00:00.000Z",
+    fixturePath: "examples/evaluations/hr/payroll-advance-policy.json",
+  });
+
+  assert.equal(scorecard.fixtureName, "HR payroll advance policy example");
+  assert.equal(scorecard.domain, "hr");
+  assert.deepEqual(scorecard.actualSummary, {
+    verified: 2,
+    contradicted: 0,
+    unsupported: 1,
+    needs_review: 0,
+  });
+  assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
+    "verified",
+    "verified",
+    "unsupported",
+  ]);
+  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-payroll-advance@2026-08-09");
+  assert.equal(scorecard.summaryMatches, true);
+  assert.equal(scorecard.score, 1);
+});
+
 test("evaluates the shipped HR travel expense fixture across timing claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/travel-expense-policy.json"),
