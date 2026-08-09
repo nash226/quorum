@@ -1,5 +1,9 @@
 # Quorum
 
+The current roadmap treats durable hosting and reviewer-queue storage as
+decision-gated; the shipped local CLI/API workflow remains the safe extension
+boundary for new verification and evaluation work.
+
 Direct verification now regression-tests `.conf` and `.cfg` configuration
 answers against approved sources, keeping both advertised configuration
 aliases covered by the CLI contract.

@@ -43,6 +43,10 @@ continue on fixture coverage and local CLI/API reliability without choosing a
 hosting provider, adding credentials, or committing to a durable storage
 backend.
 
+Decision-gated work should stay in the [human decision queue](decision-queue.md)
+until the deployment and storage boundaries are approved; new local workflows
+should extend the shipped CLI/API contract without implying durable hosting.
+
 Batch verification is shipped and should be treated as a foundation for these
 next steps, not as a separate roadmap item: its directory and explicit-path
 workflows already produce reviewer decisions and queue-routing summaries.
