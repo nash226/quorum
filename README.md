@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification now regression-tests nested DOCX answer exports,
+keeping Word-based customer and policy handoffs on the same path as direct
+DOCX verification.
+
 Direct verification now regression-tests paired `.tex` LaTeX answers and
 approved sources, keeping the published LaTeX format contract covered on both
 sides of the evidence workflow.
