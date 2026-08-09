@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive approved-source discovery now regression-tests Apple Mail EMLX
+exports, keeping nested mailbox policy evidence on the same verification path
+as direct EMLX sources.
+
 The current verification baseline includes direct and recursive Apple Mail
 EMLX exports, with email subject/date metadata preserved for reviewer evidence.
 
