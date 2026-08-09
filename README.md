@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired JSONL answer and approved-source
+exports, including source titles and verified policy evidence on the same
+newline-delimited JSON contract.
+
 The evaluation suite now directly regression-tests support accessibility
 claims, including a verified help-center path, an unsupported response-time
 promise, and a needs-review automatic-approval claim.
