@@ -52,6 +52,42 @@ try {
     throw new Error("Installed package artifact did not preserve root, server, and CLI entry points.");
   }
 
+  const installedEvaluationDir = mkdtempSync(join(tmpdir(), "quorum-installed-evaluation-"));
+  try {
+    const fixturePath = join(installedEvaluationDir, "fixture.json");
+    writeFileSync(
+      fixturePath,
+      JSON.stringify({
+        name: "installed evaluation smoke",
+        domain: "hr",
+        answerPath: "answer.md",
+        sourcePaths: ["policy.md"],
+        expectedSummary: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
+        expectedClaimVerdicts: ["verified"],
+      }),
+    );
+    writeFileSync(join(installedEvaluationDir, "answer.md"), "Employees receive 12 weeks of paid parental leave.\n");
+    writeFileSync(join(installedEvaluationDir, "policy.md"), "Employees receive 12 weeks of paid parental leave.\n");
+
+    const installedEvaluationOutput = execFileSync(
+      join(packedPackageDir, "node_modules/.bin/quorum"),
+      ["evaluate", "--fixture", fixturePath, "--result-json", "--fail-on-mismatch"],
+      { cwd: installedEvaluationDir, encoding: "utf8" },
+    );
+    const installedEvaluation = JSON.parse(installedEvaluationOutput);
+    if (
+      installedEvaluation.scorecards?.length !== 1 ||
+      installedEvaluation.scorecards?.[0]?.fixtureName !== "installed evaluation smoke" ||
+      installedEvaluation.scorecards?.[0]?.actualSummary?.verified !== 1 ||
+      installedEvaluation.shouldFail !== false ||
+      installedEvaluation.mismatchCount !== 0
+    ) {
+      throw new Error("Installed package artifact did not preserve the evaluation result JSON contract.");
+    }
+  } finally {
+    rmSync(installedEvaluationDir, { recursive: true, force: true });
+  }
+
   const installedServerInstance = await installedServer.startApiServer({ host: "127.0.0.1", port: 0 });
   try {
     const installedHealthResponse = await fetch(`${installedServerInstance.url}/health`);
