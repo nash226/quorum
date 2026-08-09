@@ -133,6 +133,10 @@ The packaged smoke gate now checks `npm run formats -- --json`, keeping the
 installed input-format wrapper aligned with the versioned source and answer
 extension contract used by integrations.
 
+`quorum formats --json` also reports the supported stdin capabilities for
+answers, approved sources, and reviewer CSV imports, so integrations can
+discover stream-based inputs without parsing CLI help text.
+
 The packaged smoke gate now checks `npm run verify-batch -- --help`, keeping
 the installed batch-verification wrapper aligned with its command usage
 contract as well as its machine-readable report flow.
