@@ -820,6 +820,43 @@ test("verify accepts direct .properties answer and source exports", async () => 
   }
 });
 
+for (const extension of [".conf", ".cfg"]) {
+  test(`verify accepts direct ${extension} answer and source exports`, async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), `quorum-config-${extension.slice(1)}-direct-`));
+
+    try {
+      const answerPath = join(tempDir, `answer${extension}`);
+      const sourcePath = join(tempDir, `policy${extension}`);
+      await Promise.all([
+        writeFile(answerPath, "leave=Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+        writeFile(sourcePath, "leave=Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      ]);
+
+      const report = JSON.parse(await runCli([
+        "verify",
+        "--answer",
+        answerPath,
+        "--source",
+        sourcePath,
+        "--json",
+      ])) as {
+        answerPath: string;
+        summary: { verified: number };
+        assessments: Array<{ verdict: string }>;
+        sources: Array<{ sourcePath: string; title: string }>;
+      };
+
+      assert.equal(report.answerPath, answerPath);
+      assert.equal(report.summary.verified, 1);
+      assert.equal(report.assessments[0]?.verdict, "verified");
+      assert.equal(report.sources[0]?.sourcePath, sourcePath);
+      assert.equal(report.sources[0]?.title, "policy");
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+}
+
 test("verify accepts direct .yaml answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-yaml-direct-"));
 
