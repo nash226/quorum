@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive answer/source discovery is covered for the published rich-text
+aliases `.rst` and `.wiki`; use `npm run dev -- formats --json` to inspect the
+full versioned extension contract before configuring an import workflow.
+
 The packed-package smoke gate now executes `quorum evaluate` through the
 installed CLI binary, verifying that published evaluation result JSON and
 `--fail-on-mismatch` behavior survive the package boundary.
