@@ -1662,7 +1662,8 @@ Verification accepts Markdown-family (`.md`, `.markdown`, `.mdx`, `.qmd`),
 AsciiDoc/Org-mode/MediaWiki (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
 `.wiki`), reStructuredText/LaTeX (`.rst`, `.tex`), text (`.txt`, `.text`,
 `.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
-JSON/JSONL/YAML/XML/TOML, CSV/TSV, PDF, and DOCX answers and approved sources.
+JSON/JSONL/YAML/XML/TOML, CSV/TSV, RFC 822 email (`.eml`), PDF, and DOCX
+answers and approved sources.
 Run `npm run formats -- --json` for the authoritative machine-readable list.
 The direct CLI form, `quorum formats --json`, is covered against the same
 library constants so integrations can rely on the published discovery contract.
@@ -1671,7 +1672,9 @@ case-insensitively, keeping structured and binary batches aligned with explicit
 file verification; unsupported files in those directories are ignored. JSON,
 YAML, XML, and TOML source exports are normalized into
 claim-readable evidence text, so exported knowledge-base payloads can be
-reviewed without a separate conversion step. Use `--source-dir` for a mixed
+reviewed without a separate conversion step. RFC 822 email sources use the
+message subject as the source title, the message date as freshness metadata
+when present, and the email body as evidence. Use `--source-dir` for a mixed
 directory of policy files;
 
 Structured answer exports can be verified directly; Quorum normalizes their
