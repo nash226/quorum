@@ -445,6 +445,34 @@ test("verify-batch discovers nested LaTeX answers and sources", async () => {
   }
 });
 
+test("verify-batch discovers mixed-case LaTeX answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-latex-case-insensitive-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([mkdir(answerDir), mkdir(sourceDir)]);
+    await Promise.all([
+      writeFile(join(answerDir, "leave.TEX"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "hr-policy.TeX"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ])) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [join(answerDir, "leave.TEX")]);
+    assert.deepEqual(report.sources.map((source) => [source.sourcePath, source.title]), [[join(sourceDir, "hr-policy.TeX"), "hr-policy"]]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers nested XHTML answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xhtml-discovery-"));
 
