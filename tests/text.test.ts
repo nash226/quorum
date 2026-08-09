@@ -235,6 +235,13 @@ test("splits Khmer sentence terminators", () => {
   );
 });
 
+test("splits alternate Khmer sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("គោលការណ៍នេះមានប្រសិទ្ធភាព៕ អ្នកគ្រប់គ្រងត្រូវអនុម័ត៚ Next policy applies."),
+    ["គោលការណ៍នេះមានប្រសិទ្ធភាព៕", "អ្នកគ្រប់គ្រងត្រូវអនុម័ត៚", "Next policy applies."],
+  );
+});
+
 test("splits Myanmar sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("ဤမူဝါဒသည် အကျုံးဝင်သည်။ မန်နေဂျာသည် ခြွင်းချက်ကို အတည်ပြုသည်။ Next policy applies."),
