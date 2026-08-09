@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests matching `.rest` answer and
+approved-source exports together, keeping the reStructuredText alias covered
+symmetrically at the CLI boundary.
+
 Direct verification now regression-tests `.txt` answer and approved-source
 exports, keeping the common plain-text alias covered alongside `.text` and
 `.log` inputs.
