@@ -1,5 +1,8 @@
 # Quorum
 
+Direct verification now regression-tests `.org` answer and approved-source
+exports, keeping the primary Org input alias covered alongside `.org-mode`.
+
 The current verification baseline includes direct and recursive Apple Mail
 EMLX exports, with email subject/date metadata preserved for reviewer evidence.
 
