@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification now regression-tests uppercase `.CSV` answers and
+approved sources, keeping case-insensitive tabular export discovery aligned
+with the direct CSV contract.
+
 The evaluation suite now directly regression-tests support accessibility
 claims, including a verified help-center path, an unsupported response-time
 promise, and a needs-review automatic-approval claim.

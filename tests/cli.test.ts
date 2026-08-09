@@ -153,6 +153,36 @@ test("verify-batch discovers .json5 exports for answers and sources", async () =
   }
 });
 
+test("verify-batch discovers uppercase CSV exports for answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-uppercase-csv-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    const sourceDir = join(tempDir, "sources", "nested");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "leave.CSV"), "claim,notes\n\"Employees receive 12 weeks of paid parental leave.\",approved\n", "utf8"),
+      writeFile(join(sourceDir, "hr-policy.CSV"), "claim,notes\n\"Employees receive 12 weeks of paid parental leave.\",approved\n", "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      join(tempDir, "answers"),
+      "--source-dir",
+      join(tempDir, "sources"),
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as { answerCount: number; sourceCount: number };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .jsonc exports for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-jsonc-alias-"));
 
