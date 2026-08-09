@@ -820,7 +820,7 @@ test("verify accepts direct .properties answer and source exports", async () => 
   }
 });
 
-for (const extension of [".conf", ".cfg"]) {
+for (const extension of [".conf", ".cfg", ".text"]) {
   test(`verify accepts direct ${extension} answer and source exports`, async () => {
     const tempDir = await mkdtemp(join(tmpdir(), `quorum-config-${extension.slice(1)}-direct-`));
 
