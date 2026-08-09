@@ -892,6 +892,8 @@ with uppercase extensions, keeping case-insensitive format discovery release-gat
 
 Batch verification also recursively discovers XML answers and approved sources,
 so nested `.xml` exports can be checked without flattening an input directory.
+That discovery is case-insensitive, so uppercase `.XML` exports receive the
+same structured parsing and metadata handling.
 
 The local HTTP API now exercises every advertised CORS preflight at runtime,
 keeping browser integrations aligned with the route-specific `GET`/`POST`
