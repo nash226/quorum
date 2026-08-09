@@ -1,5 +1,8 @@
 # Quorum
 
+Explicit answer files now use the same published format contract as recursive
+answer discovery, so unsupported extensions fail early with a clear CLI error.
+
 The packaged CLI smoke gate now verifies case-insensitive recursive discovery,
 so uppercase exports such as `leave.MD` and `policy.TXT` remain on the same
 verification path as lowercase files.

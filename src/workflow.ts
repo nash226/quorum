@@ -250,7 +250,12 @@ export async function resolveAnswerPaths(
   await Promise.all(
     answerPaths
       .filter((answerPath) => answerPath !== "-")
-      .map((answerPath) => ensureFilePath(answerPath, "Answer")),
+      .map(async (answerPath) => {
+        await ensureFilePath(answerPath, "Answer");
+        if (!ANSWER_EXTENSIONS.has(extname(answerPath).toLowerCase())) {
+          throw new Error(`Unsupported answer extension: ${answerPath}`);
+        }
+      }),
   );
   const directoryFiles = (
     await Promise.all(
@@ -374,6 +379,9 @@ export async function verifyAnswerFile(
 
   if (answerPath !== "-") {
     await ensureFilePath(answerPath, "Answer");
+    if (!ANSWER_EXTENSIONS.has(extname(answerPath).toLowerCase())) {
+      throw new Error(`Unsupported answer extension: ${answerPath}`);
+    }
   }
 
   const answer = await readAnswerInput(answerPath);

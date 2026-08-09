@@ -1231,6 +1231,18 @@ test("programmatic API reports missing explicit batch answer paths during resolu
   );
 });
 
+test("programmatic API rejects explicit answers outside the format contract", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-unsupported-answer-"));
+  const answerPath = join(tempDir, "answer.png");
+
+  try {
+    await writeFile(answerPath, "not an answer format", "utf8");
+    await assert.rejects(resolveAnswerPaths([answerPath], []), /Unsupported answer extension:/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("programmatic API excludes explicitly supplied answer paths", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-api-excluded-answer-"));
   const answerPath = join(tempDir, "answer.md");
