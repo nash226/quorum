@@ -1,5 +1,18 @@
 # Quorum
 
+## Discover the Integration Contract
+
+Integrations can discover the exact answer and approved-source extensions that
+Quorum accepts instead of hard-coding a format list:
+
+```bash
+npm run formats -- --json
+```
+
+The local HTTP API exposes the same versioned contract at `GET /capabilities`,
+including supported formats, API limits, and discovery metadata. Use that
+response to bootstrap a client before sending verification requests.
+
 The evaluation suite now directly regression-tests support accessibility
 claims, including a verified help-center path, an unsupported response-time
 promise, and a needs-review automatic-approval claim.
