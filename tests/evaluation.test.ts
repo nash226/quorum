@@ -2912,7 +2912,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
     generatedAt: "2026-07-05T10:07:00.000Z",
   });
 
-  assert.equal(scorecards.length, 92);
+    assert.equal(scorecards.length, 93);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -2923,6 +2923,7 @@ test("evaluates fixture files from explicit paths and fixture directories", asyn
       "HR bonus eligibility policy example",
       "HR compensation review policy example",
       "HR dependent benefits policy example",
+      "HR employee assistance policy example",
       "HR employee referral policy example",
       "HR expense reimbursement policy example",
       "HR jury duty policy example",
@@ -3032,7 +3033,7 @@ test("filters evaluation fixture files by domain", async () => {
     generatedAt: "2026-07-09T20:20:00.000Z",
   });
 
-  assert.equal(scorecards.length, 32);
+    assert.equal(scorecards.length, 33);
   assert.deepEqual(
     scorecards.map((scorecard) => scorecard.fixtureName),
     [
@@ -3042,6 +3043,7 @@ test("filters evaluation fixture files by domain", async () => {
       "HR bonus eligibility policy example",
       "HR compensation review policy example",
       "HR dependent benefits policy example",
+      "HR employee assistance policy example",
       "HR employee referral policy example",
       "HR expense reimbursement policy example",
       "HR jury duty policy example",
@@ -3081,7 +3083,7 @@ test("filters the support evaluation fixture set by domain", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 60);
+    assert.equal(scorecards.length, 60);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "support"));
 });
 
@@ -3093,7 +3095,7 @@ test("matches evaluation domains case-insensitively", async () => {
     generatedAt: "2026-07-17T06:00:00.000Z",
   });
 
-  assert.equal(scorecards.length, 32);
+    assert.equal(scorecards.length, 33);
   assert.ok(scorecards.every((scorecard) => scorecard.domain === "hr"));
 });
 
