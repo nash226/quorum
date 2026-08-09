@@ -1371,6 +1371,33 @@ test("verify accepts a direct TOML approved source export", async () => {
   }
 });
 
+test("verify evaluates paired direct TOML answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-toml-paired-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.toml");
+    const sourcePath = join(tempDir, "policy.toml");
+    await Promise.all([
+      writeFile(answerPath, '[response]\nleave = "Employees receive 12 weeks of paid parental leave."\n', "utf8"),
+      writeFile(sourcePath, '[policy]\nleave = "Employees receive 12 weeks of paid parental leave."\n', "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      answerPath: string;
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct Org-mode answer export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-org-answer-"));
 
