@@ -90,6 +90,17 @@ test("extracts subject and body from RFC 822 email source exports", async () => 
   assert.equal(source.content, "Customers can request refunds within 30 days.");
 });
 
+test("decodes quoted-printable RFC 822 email bodies", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/support/refund-policy.eml",
+    "Subject: Refund policy\nContent-Transfer-Encoding: quoted-printable\n\nCustomers can request refunds within 30 days=2E\n",
+    0,
+  );
+
+  assert.equal(source.title, "Refund policy");
+  assert.equal(source.content, "Customers can request refunds within 30 days.");
+});
+
 test("unfolds continued RFC 822 headers before extracting email metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/support/refund-policy.eml",

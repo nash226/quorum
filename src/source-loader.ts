@@ -306,7 +306,7 @@ function parseEmailSource(content: string): ParsedSource {
   const normalized = normalizeLineEndings(content).replace(/^\d+\n/, "");
   const separator = normalized.search(/\n\n/);
   const headerText = separator === -1 ? normalized : normalized.slice(0, separator);
-  const body = separator === -1 ? "" : normalized.slice(separator + 2).trim();
+  const rawBody = separator === -1 ? "" : normalized.slice(separator + 2).trim();
   const headers = new Map<string, string>();
   const unfoldedHeaders = headerText.replace(/\n[ \t]+/g, " ");
 
@@ -315,7 +315,21 @@ function parseEmailSource(content: string): ParsedSource {
     if (match) headers.set(match[1].toLowerCase(), match[2].trim());
   }
 
-  return { metadata: { title: headers.get("subject"), updatedAt: headers.get("date") }, body };
+  return {
+    metadata: { title: headers.get("subject"), updatedAt: headers.get("date") },
+    body: decodeEmailBody(rawBody, headers.get("content-transfer-encoding")),
+  };
+}
+
+function decodeEmailBody(body: string, transferEncoding: string | undefined): string {
+  if (transferEncoding?.toLowerCase() !== "quoted-printable") {
+    return body;
+  }
+
+  return body
+    .replace(/=\n/g, "")
+    .replace(/=([0-9a-f]{2})/gi, (_match, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)))
+    .trim();
 }
 
 function normalizeLineEndings(content: string): string {

@@ -119,6 +119,9 @@ policy text reaches reports without transport markup.
 RFC 822 email imports now unfold whitespace-prefixed continuation lines, so
 folded `Subject` and `Date` headers retain their metadata during verification.
 
+RFC 822 imports now decode quoted-printable bodies before claim extraction, so
+common email exports preserve readable policy text during verification.
+
 Claim extraction now recognizes the Khmer full stop (`។`), keeping localized
 Khmer policy statements separately reviewable for evidence matching.
 
