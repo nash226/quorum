@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification now regression-tests nested Textile answers and
+approved sources, keeping `.textile` exports covered in the shared discovery
+contract.
+
 Recursive batch verification now regression-tests nested INI answers and
 approved sources, keeping configuration-based policy exports on the shipped
 batch workflow.
