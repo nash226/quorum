@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive source discovery now has a focused regression for uppercase YAML
+exports such as `POLICY.YML`, keeping case-insensitive structured policy imports
+aligned with the published `.yaml` and `.yml` contract.
+
 Direct verification now regression-tests `.txt` answer and approved-source
 exports, keeping the common plain-text alias covered alongside `.text` and
 `.log` inputs.

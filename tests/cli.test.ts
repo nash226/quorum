@@ -6171,6 +6171,31 @@ test("verify discovers files with uppercase supported extensions", async () => {
   }
 });
 
+test("verify discovers uppercase YAML sources recursively", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-uppercase-yaml-source-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(tempDir, "answer.md");
+    await mkdir(join(sourceDir, "regional"), { recursive: true });
+    await writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(
+      join(sourceDir, "regional", "POLICY.YML"),
+      "policy:\n  benefit: Employees receive 12 weeks of paid parental leave.\n",
+      "utf8",
+    );
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir, "--json"]),
+    ) as { sources: Array<{ title: string }>; summary: { verified: number } };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["POLICY"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct answer and source paths with uppercase extensions", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-uppercase-"));
 
