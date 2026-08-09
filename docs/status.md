@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `49b8cda1` on 2026-08-09, test: cover direct JSON5 verification
+- Latest shipped change: `62c8f9cf` on 2026-08-09, test: cover direct txt verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-09 | Direct push | test: cover direct txt verification | `62c8f9cf` |
 | 2026-08-09 | Direct push | test: cover direct JSON5 verification | `49b8cda1` |
 | 2026-08-09 | Direct push | test: smoke installed evaluation command | `ee2012b9` |
 | 2026-08-09 | [#2133](https://github.com/nash226/quorum/pull/2133) | fix: recognize alternate Khmer sentence terminators | `ccbe1090` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | test: smoke case-insensitive package discovery | `bb7da2fa` |
 | 2026-08-08 | Direct push | test: cover direct config aliases | `e00dda0d` |
 | 2026-08-08 | Direct push | test: cover direct wiki verification | `1053e795` |
-| 2026-08-08 | [#2114](https://github.com/nash226/quorum/pull/2114) | test: cover direct htm source metadata | `4efae293` |
 
