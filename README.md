@@ -1977,6 +1977,8 @@ PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL/NDJSON (`.json`, `.jsonl`,
 CSV/TSV (`.csv`, `.tsv`), plus RFC 822 email exports (`.eml`, `.emlx`).
 Apple Mail `.emlx` exports are unwrapped from their leading byte-count line
 before Quorum reads the message subject, date, and claim-bearing body.
+Plain-text `.log` exports are also accepted directly as answers and approved
+sources, preserving the filename stem as the fallback source title.
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
 (`.xml`), and CSV/TSV (`.csv`, `.tsv`) policy exports. JSON, YAML, XML, and TOML exports
 are normalized into claim-readable text while preserving their source metadata
