@@ -246,6 +246,22 @@ test("normalizes quoted csv policy exports and reads metadata columns", async ()
   );
 });
 
+test("normalizes semicolon-delimited csv policy exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.csv",
+    "title;updatedAt;trustLevel;details\nLeave Policy;2026-06-15;high;Employees get 12 weeks.",
+    0,
+  );
+
+  assert.equal(source.title, "Leave Policy");
+  assert.equal(source.updatedAt, "2026-06-15");
+  assert.equal(source.trustLevel, "high");
+  assert.equal(
+    source.content,
+    "title: Leave Policy; updatedAt: 2026-06-15; trustLevel: high; details: Employees get 12 weeks.",
+  );
+});
+
 test("normalizes tab-separated policy exports", async () => {
   const source = await sourceDocumentFromFile(
     "exports/benefits.TSV",

@@ -562,8 +562,9 @@ function parseTomlSource(content: string): ParsedSource {
 }
 
 function parseDelimitedSource(content: string, tabSeparated: boolean): ParsedSource {
-  const delimiter = tabSeparated ? "\t" : ",";
-  const rows = parseDelimitedRows(content.replace(/\r\n/g, "\n"))
+  const normalizedContent = content.replace(/\r\n/g, "\n");
+  const delimiter = tabSeparated ? "\t" : detectCsvDelimiter(normalizedContent);
+  const rows = parseDelimitedRows(normalizedContent)
     .filter((row) => row.trim().length > 0)
     .map((row) => parseDelimitedRow(row, delimiter));
 
@@ -591,6 +592,30 @@ function parseDelimitedSource(content: string, tabSeparated: boolean): ParsedSou
   }
 
   return { metadata, body: lines.join("\n") || content };
+}
+
+function detectCsvDelimiter(content: string): string {
+  const header = parseDelimitedRows(content)[0] ?? "";
+  const commaCount = countUnquotedOccurrences(header, ",");
+  const semicolonCount = countUnquotedOccurrences(header, ";");
+  return semicolonCount > commaCount ? ";" : ",";
+}
+
+function countUnquotedOccurrences(line: string, target: string): number {
+  let quoted = false;
+  let count = 0;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index] ?? "";
+    if (character === '"') {
+      if (quoted && line[index + 1] === '"') index += 1;
+      else quoted = !quoted;
+    } else if (character === target && !quoted) {
+      count += 1;
+    }
+  }
+
+  return count;
 }
 
 function parseDelimitedRows(content: string): string[] {

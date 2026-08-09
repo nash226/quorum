@@ -1960,7 +1960,8 @@ Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
 (`.xml`), and CSV/TSV (`.csv`, `.tsv`) policy exports. JSON, YAML, XML, and TOML exports
 are normalized into claim-readable text while preserving their source metadata
 in reports. CSV exports are discovered recursively as approved sources and are
-kept as readable row text for claim matching. Explicit approved-source paths
+kept as readable row text for claim matching; comma- and semicolon-delimited
+exports are detected automatically. Explicit approved-source paths
 with other extensions are rejected before verification, while recursive
 discovery skips them; use a supported extension or rename the export before it
 becomes evidence.
