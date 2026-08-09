@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2ec2757f` on 2026-08-09, test: cover direct uppercase email paths
+- Latest shipped change: `2180a5e8` on 2026-08-09, test: cover recursive ini batch discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-09 | Direct push | test: cover recursive ini batch discovery | `2180a5e8` |
 | 2026-08-09 | Direct push | test: cover direct uppercase email paths | `2ec2757f` |
 | 2026-08-09 | Direct push | test: cover direct txt verification | `62c8f9cf` |
 | 2026-08-09 | Direct push | test: cover direct JSON5 verification | `49b8cda1` |
@@ -56,5 +57,4 @@
 | 2026-08-09 | [#2133](https://github.com/nash226/quorum/pull/2133) | fix: recognize alternate Khmer sentence terminators | `ccbe1090` |
 | 2026-08-08 | Direct push | test: preserve claims across Unicode separators | `cfcb4d95` |
 | 2026-08-08 | Direct push | test: smoke case-insensitive package discovery | `bb7da2fa` |
-| 2026-08-08 | Direct push | test: cover direct config aliases | `e00dda0d` |
 
