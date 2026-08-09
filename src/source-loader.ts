@@ -87,6 +87,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseEmailSource(normalizedContent);
   }
 
+  if (isRtfSource(sourcePath)) {
+    return { metadata: {}, body: normalizeRtfSource(normalizedContent) };
+  }
+
   if (isJsonSource(sourcePath)) {
     return parseJsonSource(normalizedContent, /(?:json5|jsonc)$/i.test(sourcePath));
   }
@@ -218,6 +222,10 @@ function isEmailSource(sourcePath: string): boolean {
   return /\.eml$/i.test(sourcePath);
 }
 
+function isRtfSource(sourcePath: string): boolean {
+  return /\.rtf$/i.test(sourcePath);
+}
+
 function isPdfSource(sourcePath: string): boolean {
   return /\.pdf$/i.test(sourcePath);
 }
@@ -320,6 +328,18 @@ function parseEmailSource(content: string): ParsedSource {
 
 function normalizeLineEndings(content: string): string {
   return content.replace(/\r\n?/g, "\n");
+}
+
+function normalizeRtfSource(content: string): string {
+  return content
+    .replace(/\\'[0-9a-fA-F]{2}/g, (match) => String.fromCharCode(Number.parseInt(match.slice(2), 16)))
+    .replace(/\\par\b/g, "\n")
+    .replace(/\\tab\b/g, "\t")
+    .replace(/\\[a-zA-Z]+-?\d*\s?/g, "")
+    .replace(/[{}]/g, "")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 function parseHtmlSource(content: string): ParsedSource {
