@@ -407,6 +407,7 @@ if (
   typeof libraryEntry.verifyAnswerFileInputs !== "function" ||
   typeof libraryEntry.verifyAnswerBatch !== "function" ||
   typeof libraryEntry.importReviewerDecisions !== "function" ||
+  typeof libraryEntry.renderReviewerDecisionCsv !== "function" ||
   typeof libraryEntry.renderReviewerQueueCsv !== "function" ||
   typeof libraryEntry.sourceDocumentFromFile !== "function" ||
   typeof libraryEntry.createApiServer !== "function" ||
@@ -436,6 +437,39 @@ if (
   !queueCsv.includes('"2026-08-04T00:00:00.000Z","pending","hr","1"')
 ) {
   throw new Error("Package artifact root entry point did not preserve the reviewer queue CSV contract.");
+}
+
+const reviewerDecisionCsv = libraryEntry.renderReviewerDecisionCsv({
+  generatedAt: "2026-08-04T00:00:00.000Z",
+  answerPath: "answers/leave.md",
+  answerLabel: "Leave policy review",
+  answerPreview: "Employees receive 12 weeks of paid parental leave.",
+  answer: "Employees receive 12 weeks of paid parental leave.",
+  sources: [{
+    id: "people-ops/leave-policy@smoke",
+    title: "Leave policy",
+    sourcePath: "policies/leave.md",
+    trustLevel: "high",
+    updatedAt: "2026-08-04",
+  }],
+  assessments: [{
+    claim: { id: "claim_1", text: "Employees receive 12 weeks of paid parental leave." },
+    verdict: "verified",
+    reason: "Matches the current policy.",
+    evidence: [{
+      documentId: "people-ops/leave-policy@smoke",
+      documentTitle: "Leave policy",
+      documentPath: "policies/leave.md",
+      documentTrustLevel: "high",
+      documentUpdatedAt: "2026-08-04",
+      score: 1,
+      quote: "Employees receive 12 weeks of paid parental leave.",
+    }],
+  }],
+  summary: { verified: 1, contradicted: 0, unsupported: 0, needs_review: 0 },
+});
+if (!reviewerDecisionCsv.startsWith("generated_at,answer_label,answer_path,")) {
+  throw new Error("Package artifact root entry point did not preserve the reviewer decision CSV contract.");
 }
 
 const loadedSource = await libraryEntry.sourceDocumentFromFile(

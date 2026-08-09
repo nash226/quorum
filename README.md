@@ -1,5 +1,9 @@
 # Quorum
 
+The packed-package smoke gate now verifies the root-library reviewer decision
+CSV export, keeping installed integrations aligned with the row-level handoff
+artifact used for human approval.
+
 Direct verification now regression-tests `.txt` answer and approved-source
 exports, keeping the common plain-text alias covered alongside `.text` and
 `.log` inputs.
