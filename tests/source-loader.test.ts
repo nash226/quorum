@@ -295,6 +295,22 @@ test("strips AsciiDoc extensions from fallback source titles", async () => {
   assert.equal(asciidocSource.title, "escalation-guide");
 });
 
+test("strips configuration and log extensions from fallback source titles", async () => {
+  const configSource = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.properties",
+    "leave_days=12",
+    0,
+  );
+  const logSource = await sourceDocumentFromFile(
+    "docs/policies/escalation-guide.log",
+    "Escalate incidents within one hour.",
+    1,
+  );
+
+  assert.equal(configSource.title, "leave-policy");
+  assert.equal(logSource.title, "escalation-guide");
+});
+
 test("strips LaTeX extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/leave-policy.tex",
