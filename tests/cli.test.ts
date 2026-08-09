@@ -451,6 +451,53 @@ test("verify-batch discovers nested XHTML answers and sources", async () => {
   }
 });
 
+test("verify-batch discovers uppercase EML answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-uppercase-eml-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([
+      mkdir(join(answerDir, "nested"), { recursive: true }),
+      mkdir(join(sourceDir, "nested"), { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(
+        join(answerDir, "nested", "leave.EML"),
+        "From: agent@example.com\nSubject: Leave\n\nEmployees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "nested", "hr-policy.EML"),
+        "From: hr@example.com\nSubject: HR Policy\nDate: Tue, 09 Jun 2026 09:00:00 +0000\n\nEmployees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch",
+      "--answer-dir", answerDir,
+      "--source-dir", sourceDir,
+      "--json",
+    ])) as {
+      answerCount: number;
+      sourceCount: number;
+      answers: Array<{ answerPath: string; report: { summary: { verified: number } } }>;
+      sources: Array<{ sourcePath: string; title: string; updatedAt?: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.match(report.answers[0]?.answerPath ?? "", /answers\/nested\/leave\.EML$/);
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
+    assert.match(report.sources[0]?.sourcePath ?? "", /sources\/nested\/hr-policy\.EML$/);
+    assert.equal(report.sources[0]?.title, "HR Policy");
+    assert.equal(report.sources[0]?.updatedAt, "Tue, 09 Jun 2026 09:00:00 +0000");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch ignores unsupported files while discovering nested inputs", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-unsupported-files-"));
 
