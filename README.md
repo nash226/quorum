@@ -1,5 +1,8 @@
 # Quorum
 
+The roadmap now treats batch verification as shipped and prioritizes an
+evaluation harness with labeled HR and customer-support verdict examples.
+
 Recursive batch verification now regression-tests uppercase `.CSV` answers and
 approved sources, keeping case-insensitive tabular export discovery aligned
 with the direct CSV contract.
