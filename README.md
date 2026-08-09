@@ -1,5 +1,8 @@
 # Quorum
 
+Direct verification now regression-tests `.rest` approved-source exports,
+keeping the reStructuredText source alias covered alongside `.rst`.
+
 The current verification baseline includes direct and recursive Apple Mail
 EMLX exports, with email subject/date metadata preserved for reviewer evidence.
 
