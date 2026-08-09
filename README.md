@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged smoke gate now checks `npm run evaluate -- --help`, keeping the
+published evaluation wrapper aligned with its command-specific usage contract.
+
 Claim extraction now keeps policy statements separate when exported text uses
 Unicode line or paragraph separators (`U+2028`/`U+2029`), preserving reviewer-ready
 boundaries beyond ordinary newline-delimited files.
