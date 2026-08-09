@@ -241,6 +241,9 @@ Recursive batch verification is now regression-tested for nested LaTeX (`.tex`)
 answers and approved sources, keeping the documented rich-text export contract
 covered end to end.
 
+LaTeX directory discovery is also regression-tested case-insensitively, so
+`.TEX` and mixed-case `.tex` exports follow the same batch contract.
+
 The evaluation fixture guide now reports the shipped 92-fixture inventory
 (32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
