@@ -179,8 +179,8 @@ Recursive batch verification is now regression-tested for both `.yaml` and
 on the same contract as direct YAML verification.
 
 The current roadmap treats batch verification and reviewer handoff as shipped
-foundations; the next safe focus is broader approved-source coverage while
-durable queue storage remains decision-gated.
+foundations; the next safe focus is broader approved-source format coverage
+while durable API and queue storage remain decision-gated.
 
 Recursive approved-source discovery is now release-gated for nested DOCX policy
 exports, matching the existing direct DOCX verification path.
