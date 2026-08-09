@@ -226,6 +226,12 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(yamlSource.title, "leave-policy");
 });
 
+test("strips the Apple Mail EMLX extension from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile("exports/support-playbook.emlx", "Policy text", 0);
+
+  assert.equal(source.title, "support-playbook");
+});
+
 test("preserves embedded newlines inside quoted delimited source fields", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/leave-policy.csv",
