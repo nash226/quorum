@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation suite now covers HR payroll-advance claims, verifying the
+request path and repayment window while flagging guaranteed approval as
+unsupported before reviewer handoff.
+
 The evaluation suite now directly regression-tests support accessibility
 claims, including a verified help-center path, an unsupported response-time
 promise, and a needs-review automatic-approval claim.
