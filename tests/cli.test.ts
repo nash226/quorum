@@ -1706,6 +1706,38 @@ test("verify accepts a direct XHTML answer export", async () => {
   }
 });
 
+test("verify accepts a direct XHTML approved source export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-xhtml-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.xhtml");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        "<?xml version=\"1.0\"?><html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>Parental Leave Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>\n",
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]));
+
+    assert.equal(report.sources.length, 1);
+    assert.equal(report.sources[0]?.title, "Parental Leave Policy");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct AsciiDoc answer export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-asciidoc-answer-"));
 
