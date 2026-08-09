@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now recovers sentence boundaries when compact exports omit the
+space after Latin punctuation, keeping adjacent policy statements separately
+reviewable.
+
 Direct verification now regression-tests paired `.rest` reStructuredText
 answer and approved-source exports, keeping the documented alias covered on
 both sides of the verification contract.
