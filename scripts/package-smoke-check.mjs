@@ -314,7 +314,7 @@ try {
   const verifyBatchOutput = execFileSync(
     "npm",
     [
-      "run", "--silent", "verify-batch", "--", "--answer", answerPath, "--answer", secondAnswerPath,
+      "run", "--silent", "verify-batch", "--", "--answer", answerPath, "--answer-label", "Primary HR packet", "--answer", secondAnswerPath, "--answer-label", "Follow-up HR packet",
       "--source", sourcePath, "--json",
     ],
     { cwd: repoRoot, encoding: "utf8" },
@@ -322,7 +322,9 @@ try {
   const verifyBatchPayload = JSON.parse(verifyBatchOutput);
   if (
     verifyBatchPayload.answers?.length !== 2 ||
-    verifyBatchPayload.answers?.every(({ report }) => report?.summary?.verified === 1) !== true
+    verifyBatchPayload.answers?.every(({ report }) => report?.summary?.verified === 1) !== true ||
+    verifyBatchPayload.answers?.[0]?.answerLabel !== "Primary HR packet" ||
+    verifyBatchPayload.answers?.[1]?.answerLabel !== "Follow-up HR packet"
   ) {
     throw new Error("The npm verify-batch wrapper did not preserve the batch JSON contract.");
   }

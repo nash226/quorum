@@ -1757,6 +1757,8 @@ temporary files while retaining their supplied paths and source IDs.
 The packaged `verify-batch` smoke gate also assigns and checks an explicit
 `--source-id`, keeping durable source identity covered for batch CLI consumers
 and aggregate CSV exports.
+It also checks explicit `--answer-label` values in the packaged batch JSON, so
+reviewer-facing packet names remain available after installation.
 The package smoke gate derives its supported-extension contract from the built
 library exports, so adding a format cannot leave the published capability check
 with a stale hard-coded list.
