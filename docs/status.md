@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `e00dda0d` on 2026-08-08, test: cover direct config aliases
+- Latest shipped change: `bb7da2fa` on 2026-08-08, test: smoke case-insensitive package discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-08 | Direct push | test: smoke case-insensitive package discovery | `bb7da2fa` |
 | 2026-08-08 | Direct push | test: cover direct config aliases | `e00dda0d` |
 | 2026-08-08 | Direct push | test: cover direct wiki verification | `1053e795` |
 | 2026-08-08 | [#2114](https://github.com/nash226/quorum/pull/2114) | test: cover direct htm source metadata | `4efae293` |
@@ -56,5 +57,4 @@
 | 2026-08-08 | Direct push | test: preserve multiline CSV verification fields | `90123733` |
 | 2026-08-08 | Direct push | docs: document piped answer verification | `6c6ac386` |
 | 2026-08-08 | Direct push | fix: align direct yml regression with report contract | `5fb81db1` |
-| 2026-08-08 | Direct push | test: cover direct YAML verification | `64a4712e` |
 
