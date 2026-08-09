@@ -6036,6 +6036,41 @@ test("verify accepts directly supplied uppercase RFC 822 email paths", async () 
   }
 });
 
+test("verify accepts Apple Mail EMLX answers against an EMLX source", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-emlx-answer-"));
+  const answerPath = join(tempDir, "refund-answer.emlx");
+  const sourcePath = join(tempDir, "refund-policy.emlx");
+
+  try {
+    await Promise.all([
+      writeFile(
+        answerPath,
+        "121\nFrom: agent@example.com\nSubject: Refund answer\n\nCustomers can request refunds within 30 days.\n",
+      ),
+      writeFile(
+        sourcePath,
+        "128\nFrom: support@example.com\nDate: 2026-08-05\nSubject: Refund policy\n\nCustomers can request refunds within 30 days.\n",
+      ),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      summary: { verified: number };
+      answerPath: string;
+      sources: Array<{ sourcePath: string; title: string; updatedAt?: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answerPath, answerPath);
+    assert.deepEqual(report.sources, [
+      { id: "source_1", sourcePath, title: "Refund policy", updatedAt: "2026-08-05", trustLevel: "medium" },
+    ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch disambiguates duplicate answer labels across directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-duplicate-labels-"));
 

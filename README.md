@@ -250,6 +250,10 @@ installed integrations.
 The packaged CLI smoke gate now verifies RFC 822 `.eml` answers against `.eml`
 approved sources, keeping the published email-export contract release-gated.
 
+Apple Mail `.emlx` answers and approved sources are now covered end to end by
+the direct CLI verification contract, including byte-count unwrapping and
+subject/date metadata for reviewer handoff.
+
 The packaged CLI smoke gate now verifies the `.org-mode` alias for Org-mode
 answers and approved sources, keeping installed format aliases release-gated
 alongside recursive batch discovery.
