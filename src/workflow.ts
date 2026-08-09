@@ -173,7 +173,7 @@ export interface ReviewerDecisionFileImportResultOptions
   failOn?: ClaimVerdict[];
 }
 
-export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml"]);
+export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".docm", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml"]);
 export const ANSWER_EXTENSIONS = new Set([
   ".md",
   ".markdown",
@@ -204,6 +204,7 @@ export const ANSWER_EXTENSIONS = new Set([
   ".xhtml",
   ".pdf",
   ".docx",
+  ".docm",
   ".json",
   ".jsonl",
   ".ndjson",
@@ -703,7 +704,7 @@ async function answerContentToText(
     return content;
   }
 
-  if (!answerPath || !/\.(?:pdf|docx)$/i.test(answerPath)) {
+  if (!answerPath || !/\.(?:pdf|docx|docm)$/i.test(answerPath)) {
     return new TextDecoder().decode(content);
   }
 
@@ -886,7 +887,7 @@ async function readAnswerInput(inputPath: string): Promise<string> {
   if (inputPath !== "-") {
     const content = await readFile(inputPath);
 
-    if (/\.(?:pdf|docx|jsonl?|ndjson|ya?ml|xml|toml)$/i.test(inputPath)) {
+    if (/\.(?:pdf|docx|docm|jsonl?|ndjson|ya?ml|xml|toml)$/i.test(inputPath)) {
       const answerDocument = await sourceDocumentFromFile(inputPath, content, 0);
       return answerDocument.content;
     }

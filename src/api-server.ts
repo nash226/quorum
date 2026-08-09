@@ -1808,7 +1808,7 @@ async function extractClaimsAnswerText(
     return answer;
   }
 
-  if (answerPath && /\.(?:pdf|docx)$/i.test(answerPath)) {
+  if (answerPath && /\.(?:pdf|docx|docm)$/i.test(answerPath)) {
     const document = await sourceDocumentFromFile(answerPath, answer, 0);
     return document.content;
   }

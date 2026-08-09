@@ -142,8 +142,8 @@ import {
 import { createSimplePdf } from "./pdf-test-helpers.js";
 
 test("programmatic API exposes supported source and answer extensions", () => {
-  assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml"]);
-  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml"]);
+  assert.deepEqual([...SOURCE_EXTENSIONS], [".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".docm", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml"]);
+  assert.deepEqual([...ANSWER_EXTENSIONS], [".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".html", ".htm", ".xhtml", ".pdf", ".docx", ".docm", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml"]);
 });
 
 test("API discovery exposes transport limits and supported methods", () => {

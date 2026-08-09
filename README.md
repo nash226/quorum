@@ -41,6 +41,9 @@ contract.
 Direct verification now regression-tests JSONC (`.jsonc`) answers and approved
 sources, including comment-tolerant structured exports and source titles.
 
+Word answer and source ingestion accepts both `.docx` and macro-enabled `.docm`
+exports through the same evidence path.
+
 Direct verification now regression-tests JSON5 (`.json5`) answers and approved
 sources, including unquoted keys, string values, and stable filename titles.
 
