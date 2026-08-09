@@ -72,6 +72,9 @@ contract.
 Direct verification now normalizes legacy RTF (`.rtf`) answers and approved
 sources, keeping older policy exports usable in the same evidence workflow.
 
+Recursive answer and source directory discovery includes RTF exports too, so
+mixed-format policy folders do not silently omit `.rtf` files.
+
 Direct verification now regression-tests JSONC (`.jsonc`) answers and approved
 sources, including comment-tolerant structured exports and source titles.
 
