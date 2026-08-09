@@ -1,5 +1,8 @@
 # Quorum
 
+Batch verification now normalizes JSON5 and JSONC answer files before claim
+extraction, so comments and structured keys do not leak into reviewer claims.
+
 The packed-package smoke gate now executes `quorum evaluate` through the
 installed CLI binary, verifying that published evaluation result JSON and
 `--fail-on-mismatch` behavior survive the package boundary.

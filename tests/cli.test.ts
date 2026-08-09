@@ -144,10 +144,15 @@ test("verify-batch discovers .json5 exports for answers and sources", async () =
       sourceDir,
       "--json",
     ]);
-    const report = JSON.parse(stdout) as { answerCount: number; sourceCount: number };
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      sourceCount: number;
+      answers: Array<{ report: { summary: { verified: number } } }>;
+    };
 
     assert.equal(report.answerCount, 1);
     assert.equal(report.sourceCount, 1);
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
@@ -166,10 +171,15 @@ test("verify-batch discovers .jsonc exports for answers and sources", async () =
     ]);
 
     const stdout = await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]);
-    const report = JSON.parse(stdout) as { answerCount: number; sourceCount: number };
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      sourceCount: number;
+      answers: Array<{ report: { summary: { verified: number } } }>;
+    };
 
     assert.equal(report.answerCount, 1);
     assert.equal(report.sourceCount, 1);
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
