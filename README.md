@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation benchmark now covers employee-assistance policy claims, including
+verified counseling access, a contradicted session limit, and an unsupported
+promise, bringing the checked-in inventory to 93 fixtures.
+
 The packaged CLI smoke gate now verifies case-insensitive recursive discovery,
 so uppercase exports such as `leave.MD` and `policy.TXT` remain on the same
 verification path as lowercase files.
