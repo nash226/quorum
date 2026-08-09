@@ -1405,6 +1405,13 @@ test("keeps short claims across non-Latin policy scripts", () => {
   );
 });
 
+test("keeps Lao claims with the Lao ellipsis terminator", () => {
+  assert.deepEqual(
+    extractClaims("ຕົກລົງຯ ກົດລະບຽບນີ້ໃຊ້ບັງຄັບຯ Next policy applies.").map((claim) => claim.text),
+    ["ຕົກລົງຯ", "ກົດລະບຽບນີ້ໃຊ້ບັງຄັບຯ", "Next policy applies."],
+  );
+});
+
 test("keeps short N'Ko claims with the N'Ko exclamation terminator", () => {
   assert.deepEqual(extractClaims("ߒߞߏ߹\nNext policy applies.").map((claim) => claim.text), [
     "ߒߞߏ߹",

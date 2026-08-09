@@ -224,6 +224,13 @@ test("splits Thai sentence terminators", () => {
   );
 });
 
+test("splits Lao ellipsis sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("ນະໂຍບາຍນີ້ມີຜົນໃຊ້ບັງຄັບຯ ຜູ້ຈັດການອະນຸມັດຂໍ້ຍົກເວັ້ນຯ Next policy applies."),
+    ["ນະໂຍບາຍນີ້ມີຜົນໃຊ້ບັງຄັບຯ", "ຜູ້ຈັດການອະນຸມັດຂໍ້ຍົກເວັ້ນຯ", "Next policy applies."],
+  );
+});
+
 test("splits Khmer sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("គោលការណ៍នេះមានប្រសិទ្ធភាព។ អ្នកគ្រប់គ្រងត្រូវអនុម័ត។ Next policy applies."),
