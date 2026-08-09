@@ -254,6 +254,9 @@ The CLI now verifies directly supplied or recursively discovered RFC 822 `.eml`
 policy exports, using the message subject and date as source metadata, the
 email body as evidence, and the same trust behavior as other approved sources.
 
+Configuration and log source aliases now have regression coverage for fallback
+evidence titles, so reviewer reports omit `.properties` and `.log` suffixes.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 
