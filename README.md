@@ -1,5 +1,9 @@
 # Quorum
 
+Direct file paths and recursive directory discovery match supported extensions
+case-insensitively, so exports such as `POLICY.MD` and `answer.Txt` follow the
+same verification path as their lowercase equivalents.
+
 Direct verification now regression-tests `.conf` and `.cfg` configuration
 answers against approved sources, keeping both advertised configuration
 aliases covered by the CLI contract.
