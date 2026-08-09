@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification now regression-tests nested uppercase `.TOML`
+answers and approved sources, keeping case-insensitive structured discovery
+covered on the shipped batch workflow.
+
 The current verification baseline includes direct and recursive Apple Mail
 EMLX exports, with email subject/date metadata preserved for reviewer evidence.
 
