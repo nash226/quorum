@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now preserves policy boundaries from legacy Unicode line
+separators found in some exported documents.
+
 Direct verification now regression-tests paired `.rest` reStructuredText
 answer and approved-source exports, keeping the documented alias covered on
 both sides of the verification contract.

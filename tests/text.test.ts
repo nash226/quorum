@@ -74,6 +74,13 @@ test("splits sentences across Unicode line and paragraph separators", () => {
   );
 });
 
+test("splits claims across legacy Unicode line separators", () => {
+  assert.deepEqual(
+    splitIntoSentences("Leave is approved.\u000bExceptions require review.\u0085Payroll records the decision."),
+    ["Leave is approved.", "Exceptions require review.", "Payroll records the decision."],
+  );
+});
+
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
     renderAnswerLabels([
