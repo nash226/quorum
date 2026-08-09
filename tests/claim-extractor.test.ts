@@ -1386,6 +1386,18 @@ test("does not merge localized sentence lines during normalization", () => {
   );
 });
 
+test("keeps claims separate across Unicode line and paragraph separators", () => {
+  const claims = extractClaims(
+    "Employees receive paid leave.\u2028Managers approve exceptions.\u2029Requests require documentation.",
+  );
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Employees receive paid leave.",
+    "Managers approve exceptions.",
+    "Requests require documentation.",
+  ]);
+});
+
 test("keeps short claims across non-Latin policy scripts", () => {
   assert.deepEqual(
     extractClaims("تمت الموافقة؟ ไทยได้เลย๚ ຕົກລົງ๛ العربية موافق؟ Next policy applies.").map((claim) => claim.text),
