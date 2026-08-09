@@ -2270,6 +2270,13 @@ test("top-level help exits cleanly", async () => {
   assert.match(result.stdout, /quorum version \[--json\]/);
 });
 
+test("evaluate command help documents the score gate option", async () => {
+  const stdout = await runCli(["evaluate", "--help"]);
+
+  assert.match(stdout, /Usage:\s+quorum evaluate .*--min-score <0\.\.1>/);
+  assert.match(stdout, /--min-score <0\.\.1>\s+Fail the evaluation gate below this score threshold/);
+});
+
 test("unknown commands explain the failure without printing misleading help", async () => {
   const result = await runCliAllowFailure(["not-a-quorum-command"]);
 

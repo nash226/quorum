@@ -1774,13 +1774,14 @@ Example:
     evaluate: `Quorum evaluate
 
 Usage:
-  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
+  quorum evaluate (--fixture <path> | --fixture-dir <path>)... [--domain <name>]... [--generated-at <timestamp>] [--min-score <0..1>] [--json|--result-json] [--out <path>] [--result-json-out <path>] [--markdown-out <path>] [--html-out <path>] [--summary-csv-out <path>] [--domain-summary-csv-out <path>] [--aggregate-summary-csv-out <path>] [--fail-on-mismatch]
 
 Options:
   --fixture <path>          Evaluation fixture JSON file; may be repeated
   --fixture-dir <path>      Directory of evaluation fixture JSON files; may be repeated
   --domain <name>           Only evaluate fixtures whose domain matches this value
   --generated-at <timestamp> Use this ISO timestamp in generated reports
+  --min-score <0..1>        Fail the evaluation gate below this score threshold
   --json                    Print the evaluation scorecard JSON
   --result-json             Print the evaluation result with score, mismatch, and threshold metadata
   --out <path>              Write the JSON scorecard output to disk

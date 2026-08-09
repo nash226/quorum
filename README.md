@@ -1,5 +1,8 @@
 # Quorum
 
+The evaluation command help now documents `--min-score`, keeping the score-gate
+option visible to CLI users and packaged smoke checks.
+
 Claim extraction now keeps policy statements separate when exported text uses
 Unicode line or paragraph separators (`U+2028`/`U+2029`), preserving reviewer-ready
 boundaries beyond ordinary newline-delimited files.
