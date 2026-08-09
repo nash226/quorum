@@ -6333,6 +6333,30 @@ test("verify accepts direct answer and source paths with uppercase extensions", 
   }
 });
 
+test("verify accepts a direct uppercase JSONL approved source export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-uppercase-jsonl-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "POLICY.JSONL");
+    await Promise.all([
+      writeFile(answerPath, "Customers can request refunds within 30 days.\n", "utf8"),
+      writeFile(sourcePath, '{"policy":"Customers can request refunds within 30 days."}\n', "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]);
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ sourcePath: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify dedupes repeated source files that use different path spellings", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-source-dedupe-"));
 

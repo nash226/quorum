@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests uppercase `.JSONL` approved-source
+paths, keeping explicitly supplied structured exports on the same
+case-insensitive extension contract as recursive discovery.
+
 The evaluation suite now directly regression-tests support accessibility
 claims, including a verified help-center path, an unsupported response-time
 promise, and a needs-review automatic-approval claim.
