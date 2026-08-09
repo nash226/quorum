@@ -175,6 +175,42 @@ test("verify-batch discovers .jsonc exports for answers and sources", async () =
   }
 });
 
+test("verify-batch discovers uppercase JSONC answers and sources recursively", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-uppercase-jsonc-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    const sourceDir = join(tempDir, "sources", "nested");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "leave.JSONC"), '{\n  // generated answer export\n  "leaveWeeks": 12\n}\n', "utf8"),
+      writeFile(join(sourceDir, "hr-policy.JSONC"), '{\n  "leaveWeeks": 12\n}\n', "utf8"),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      join(tempDir, "answers"),
+      "--source-dir",
+      join(tempDir, "sources"),
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ sourcePath: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answers.length, 1);
+    assert.match(report.answers[0]?.answerPath ?? "", /answers[\\/]nested[\\/]leave\.JSONC$/);
+    assert.match(report.sources[0]?.sourcePath ?? "", /sources[\\/]nested[\\/]hr-policy\.JSONC$/);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers nested .log answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-log-discovery-"));
 

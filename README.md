@@ -41,6 +41,9 @@ contract.
 Direct verification now regression-tests JSONC (`.jsonc`) answers and approved
 sources, including comment-tolerant structured exports and source titles.
 
+Recursive batch discovery also keeps uppercase JSONC exports (`.JSONC`) on the
+same answer and approved-source verification path as lowercase files.
+
 Direct verification now regression-tests JSON5 (`.json5`) answers and approved
 sources, including unquoted keys, string values, and stable filename titles.
 
