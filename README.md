@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now recognizes the Lao ellipsis (`ຯ`) as a sentence boundary,
+keeping Lao policy statements separately reviewable for evidence matching.
+
 Claim extraction now keeps policy statements separate when exported text uses
 Unicode line or paragraph separators (`U+2028`/`U+2029`), preserving reviewer-ready
 boundaries beyond ordinary newline-delimited files.
