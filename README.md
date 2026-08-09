@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation suite now directly regression-tests support accessibility
+claims, including a verified help-center path, an unsupported response-time
+promise, and a needs-review automatic-approval claim.
+
 Direct verification now regression-tests paired `.rest` reStructuredText
 answer and approved-source exports, keeping the documented alias covered on
 both sides of the verification contract.
