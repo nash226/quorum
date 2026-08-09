@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired `.tex` LaTeX answers and
+approved sources, keeping the published LaTeX format contract covered on both
+sides of the evidence workflow.
+
 Direct verification now regression-tests `.ndjson` approved-source exports,
 keeping newline-delimited policy evidence covered alongside direct `.jsonl`
 sources and recursive discovery.
