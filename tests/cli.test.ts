@@ -534,6 +534,7 @@ test("verify preserves explicit source order ahead of directory-discovered files
     const firstSourcePath = join(tempDir, "first.md");
     const secondSourcePath = join(tempDir, "second.md");
     const directorySourcePath = join(sourceDir, "directory.md");
+    const asciidocSourcePath = join(sourceDir, "asciidoc-source.adoc");
 
     await mkdir(sourceDir, { recursive: true });
 
@@ -566,6 +567,11 @@ Employees receive 12 weeks of paid parental leave.
 `,
         "utf8",
       ),
+      writeFile(
+        asciidocSourcePath,
+        "= AsciiDoc Source\n\nEmployees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
     ]);
 
     const stdout = await runCli([
@@ -591,7 +597,8 @@ Employees receive 12 weeks of paid parental leave.
     assert.deepEqual(report.sources, [
       { id: "source_1", title: "Second Source", trustLevel: "medium" },
       { id: "source_2", title: "First Source", trustLevel: "medium" },
-      { id: "source_3", title: "Directory Source", trustLevel: "medium" },
+      { id: "source_3", title: "asciidoc-source", trustLevel: "medium" },
+      { id: "source_4", title: "Directory Source", trustLevel: "medium" },
     ]);
     assert.equal(report.assessments[0]?.evidence[0]?.documentId, "source_1");
     assert.equal(report.assessments[0]?.evidence[0]?.documentTitle, "Second Source");

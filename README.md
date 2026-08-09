@@ -254,6 +254,8 @@ Supported source extensions today:
 - `.html`
 - `.htm`
 - `.pdf`
+- `.adoc`
+- `.asciidoc`
 
 ## Project Structure
 

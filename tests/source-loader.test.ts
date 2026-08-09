@@ -29,6 +29,22 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(textSource.title, "escalation-guide");
 });
 
+test("strips AsciiDoc extensions from fallback source titles", async () => {
+  const adocSource = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.adoc",
+    "Employees get 12 weeks.",
+    0,
+  );
+  const asciidocSource = await sourceDocumentFromFile(
+    "docs/policies/escalation-guide.asciidoc",
+    "Escalate incidents within one hour.",
+    1,
+  );
+
+  assert.equal(adocSource.title, "leave-policy");
+  assert.equal(asciidocSource.title, "escalation-guide");
+});
+
 test("applies the default trust override when metadata is absent", async () => {
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
     defaultTrustLevel: "high",
