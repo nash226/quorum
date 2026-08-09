@@ -6136,6 +6136,49 @@ test("verify discovers files with uppercase supported extensions", async () => {
   }
 });
 
+test("verify-batch discovers XHTML sources recursively", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xhtml-source-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    const answerPath = join(answerDir, "leave.md");
+    const sourcePath = join(sourceDir, "policies", "leave.xhtml");
+
+    await mkdir(join(sourceDir, "policies"), { recursive: true });
+    await mkdir(answerDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        "<?xml version=\"1.0\"?><html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>Parental Leave Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>\n",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      sourceCount: number;
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "Parental Leave Policy");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct answer and source paths with uppercase extensions", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-uppercase-"));
 
