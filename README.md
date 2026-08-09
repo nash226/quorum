@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification now regression-tests uppercase `.PROPERTIES`
+answer and approved-source exports, keeping case-insensitive configuration
+discovery aligned with the shipped format contract.
+
 Recursive batch verification now regression-tests nested INI answers and
 approved sources, keeping configuration-based policy exports on the shipped
 batch workflow.
