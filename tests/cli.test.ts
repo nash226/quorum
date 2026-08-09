@@ -5961,6 +5961,41 @@ test("verify accepts an RFC 822 email answer against an email source", async () 
   }
 });
 
+test("verify accepts directly supplied uppercase RFC 822 email paths", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-email-uppercase-direct-"));
+  const answerPath = join(tempDir, "refund-answer.EML");
+  const sourcePath = join(tempDir, "refund-policy.EML");
+
+  try {
+    await Promise.all([
+      writeFile(
+        answerPath,
+        "From: agent@example.com\r\nSubject: Refund answer\r\n\r\nCustomers can request refunds within 30 days.\r\n",
+      ),
+      writeFile(
+        sourcePath,
+        "From: support@example.com\r\nSubject: Refund policy\r\nDate: 2026-08-04\r\n\r\nCustomers can request refunds within 30 days.\r\n",
+      ),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      summary: { verified: number };
+      answerPath: string;
+      sources: Array<{ sourcePath: string; title: string; updatedAt?: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answerPath, answerPath);
+    assert.deepEqual(report.sources, [
+      { id: "source_1", sourcePath, title: "Refund policy", updatedAt: "2026-08-04", trustLevel: "medium" },
+    ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch disambiguates duplicate answer labels across directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-duplicate-labels-"));
 
