@@ -134,6 +134,17 @@ test("extracts readable text from DOCX source content", async () => {
   assert.equal(source.content, "Walking on imported air");
 });
 
+test("strips the RTF extension from metadata-free fallback source titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.rtf",
+    "{\\rtf1 Employees get 12 weeks.}",
+    0,
+  );
+
+  assert.equal(source.title, "hr-policy");
+  assert.equal(source.content, "Employees get 12 weeks.");
+});
+
 test("preserves a caller-supplied source identifier for DOCX content", async () => {
   const content = await readFile("node_modules/mammoth/test/test-data/single-paragraph.docx");
   const source = await sourceDocumentFromFile("docs/hr-policy.docx", content, 0, {
