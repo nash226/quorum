@@ -1,5 +1,10 @@
 # Quorum
 
+The format-discovery contract is documented as the source of truth for
+case-insensitive answer and approved-source directory ingestion: use
+`npm run formats` for human-readable lists or `npm run formats -- --json` for
+sorted arrays shared by the CLI and HTTP capabilities response.
+
 Recursive batch verification now regression-tests nested INI answers and
 approved sources, keeping configuration-based policy exports on the shipped
 batch workflow.
