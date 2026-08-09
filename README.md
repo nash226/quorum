@@ -1,5 +1,8 @@
 # Quorum
 
+Direct CLI verification now regression-tests RFC 822 (`.eml`) answers and
+approved sources, preserving email subjects and dates as reviewer evidence.
+
 Claim extraction now keeps policy statements separate when exported text uses
 Unicode line or paragraph separators (`U+2028`/`U+2029`), preserving reviewer-ready
 boundaries beyond ordinary newline-delimited files.
