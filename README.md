@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies case-insensitive recursive discovery,
+so uppercase exports such as `leave.MD` and `policy.TXT` remain on the same
+verification path as lowercase files.
+
 Direct verification now regression-tests `.conf` and `.cfg` configuration
 answers against approved sources, keeping both advertised configuration
 aliases covered by the CLI contract.
