@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation suite now directly regression-tests support guest-access claims,
+covering verified invitation behavior, a contradicted retention period, and an
+unsupported automatic member-conversion promise.
+
 Recursive batch verification now regression-tests uppercase `.CSV` answers and
 approved sources, keeping case-insensitive tabular export discovery aligned
 with the direct CSV contract.
