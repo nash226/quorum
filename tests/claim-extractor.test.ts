@@ -1405,6 +1405,16 @@ test("keeps short claims across non-Latin policy scripts", () => {
   );
 });
 
+test("keeps short Greek and Cyrillic claims", () => {
+  assert.deepEqual(
+    extractClaims("Άδεια.  Отпуск."),
+    [
+      { id: "claim_1", text: "Άδεια." },
+      { id: "claim_2", text: "Отпуск." },
+    ],
+  );
+});
+
 test("keeps short N'Ko claims with the N'Ko exclamation terminator", () => {
   assert.deepEqual(extractClaims("ߒߞߏ߹\nNext policy applies.").map((claim) => claim.text), [
     "ߒߞߏ߹",

@@ -1,5 +1,9 @@
 # Quorum
 
+Short Greek and Cyrillic policy claims now remain reviewable during claim
+extraction, extending localized short-claim coverage beyond the existing
+non-Latin scripts.
+
 Recursive approved-source discovery now regression-tests Apple Mail EMLX
 exports, keeping nested mailbox policy evidence on the same verification path
 as direct EMLX sources.
