@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification now regression-tests uppercase `.NDJSON` answers
+and approved sources, keeping case-insensitive newline-delimited JSON discovery
+aligned with the documented structured-input contract.
+
 Recursive batch verification now regression-tests uppercase `.CSV` answers and
 approved sources, keeping case-insensitive tabular export discovery aligned
 with the direct CSV contract.
