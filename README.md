@@ -3,6 +3,9 @@
 The current verification baseline includes direct and recursive Apple Mail
 EMLX exports, with email subject/date metadata preserved for reviewer evidence.
 
+Direct CLI verification now regression-tests Apple Mail EMLX approved sources,
+keeping the email-source path covered alongside parser-level support.
+
 Direct verification now regression-tests `.ini` answer and approved-source
 exports, keeping configuration-based policy evidence covered alongside the
 other plain-text aliases.

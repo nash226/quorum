@@ -6008,6 +6008,36 @@ test("verify accepts a directly supplied RFC 822 email source", async () => {
   }
 });
 
+test("verify accepts a directly supplied Apple Mail EMLX source", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-emlx-source-direct-"));
+  const answerPath = join(tempDir, "refund-answer.md");
+  const sourcePath = join(tempDir, "refund-policy.emlx");
+
+  try {
+    await Promise.all([
+      writeFile(answerPath, "Customers can request refunds within 30 days.\n"),
+      writeFile(
+        sourcePath,
+        "142\nFrom: support@example.com\nDate: 2026-08-03\nSubject: Refund policy update\n\nCustomers can request refunds within 30 days.\n",
+      ),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      summary: { verified: number };
+      sources: Array<{ id: string; sourcePath: string; title: string; updatedAt?: string; trustLevel: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.deepEqual(report.sources, [
+      { id: "source_1", sourcePath, title: "Refund policy update", updatedAt: "2026-08-03", trustLevel: "medium" },
+    ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts an RFC 822 email answer against an email source", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-email-answer-"));
   const answerPath = join(tempDir, "answer.eml");
