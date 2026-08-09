@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests `.conf` and `.cfg` configuration
+answers against approved sources, keeping both advertised configuration
+aliases covered by the CLI contract.
+
 Direct verification now regression-tests `.wiki` answers and approved sources,
 keeping the MediaWiki alias covered symmetrically with the published format
 contract.
