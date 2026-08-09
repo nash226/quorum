@@ -1,5 +1,8 @@
 # Quorum
 
+Metadata-free RFC 822 (`.eml`) sources use clean fallback evidence titles, so
+reviewer reports show the export name without its file extension.
+
 The packed-package smoke gate now executes `quorum evaluate` through the
 installed CLI binary, verifying that published evaluation result JSON and
 `--fail-on-mismatch` behavior survive the package boundary.
