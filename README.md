@@ -1,5 +1,9 @@
 # Quorum
 
+The packed-package smoke gate now verifies the root-library reviewer queue CSV
+export, keeping installed Node integrations aligned with the published queue
+handoff contract.
+
 Direct verification now regression-tests `.txt` answer and approved-source
 exports, keeping the common plain-text alias covered alongside `.text` and
 `.log` inputs.
