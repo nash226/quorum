@@ -2888,6 +2888,10 @@ Batch verification is now shipped: `verify-batch` can discover nested answer
 directories, preserve explicit answer ordering, and emit reviewer CSV plus
 one-row-per-answer summary exports for queue routing.
 
+The roadmap treats batch verification as shipped foundation work; the next
+unblocked focus is expanding file-backed HR and customer-support evaluation
+coverage.
+
 See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
 [docs/api-deployment.md](docs/api-deployment.md) for deployment boundaries.
 Human sign-off
