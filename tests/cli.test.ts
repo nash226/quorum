@@ -684,6 +684,42 @@ test("verify accepts a direct .text answer export", async () => {
   }
 });
 
+for (const [answerExtension, sourceExtension] of [[".mdown", ".mkdn"], [".mkdn", ".mdown"]]) {
+test(`verify accepts direct ${answerExtension} answer and ${sourceExtension} source exports`, async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-markdown-alias-direct-"));
+
+  try {
+    const answerPath = join(tempDir, `answer${answerExtension}`);
+    const sourcePath = join(tempDir, `policy${sourceExtension}`);
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      answerPath: string;
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "Employees receive 12 weeks of paid parental leave.");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+}
+
 test("verify accepts direct .org-mode answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-org-mode-direct-"));
 
