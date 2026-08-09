@@ -2049,6 +2049,21 @@ test("verify rejects explicit approved sources outside the supported format cont
   }
 });
 
+test("verify rejects explicit answers outside the supported format contract", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-unsupported-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.png");
+    await writeFile(answerPath, "not an answer format", "utf8");
+    await assert.rejects(
+      runCli(["verify", "--answer", answerPath, "--source", "examples/sources/hr-policy.md"]),
+      /Unsupported answer extension:/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("CLI rejects options that are missing their values", async () => {
   const cases = [
     ["verify", "--answer", "--source", "examples/sources/hr-policy.md"],
