@@ -3,6 +3,9 @@
 The current verification baseline includes direct and recursive Apple Mail
 EMLX exports, with email subject/date metadata preserved for reviewer evidence.
 
+Email answers now use the same RFC 822/Apple Mail body extraction as approved
+email sources, so headers do not become reviewer-facing claims.
+
 Direct verification now regression-tests `.ini` answer and approved-source
 exports, keeping configuration-based policy evidence covered alongside the
 other plain-text aliases.
