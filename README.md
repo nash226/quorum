@@ -1149,6 +1149,9 @@ Markdown and TOML-style frontmatter now recognize metadata keys regardless of
 case or hyphen/underscore spelling, so exported policy titles, timestamps, and
 trust levels survive common authoring-tool variations.
 
+Frontmatter also accepts `lastModified` and `last_modified` as freshness aliases,
+mapping them to the report's `updatedAt` source metadata.
+
 The source-loader regression suite also verifies that YAML/YML fallback titles
 drop their extension, keeping reviewer evidence consistent with other formats.
 

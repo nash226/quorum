@@ -652,6 +652,28 @@ Employees receive paid leave.
   assert.equal(source.body, "Employees receive paid leave.\n");
 });
 
+test("maps last-modified frontmatter aliases to source freshness", () => {
+  const camelCase = parseSource(
+    "docs/hr-policy.md",
+    `---
+lastModified: 2026-06-30
+---
+Employees receive paid leave.
+`,
+  );
+  const snakeCase = parseSource(
+    "docs/support-policy.md",
+    `---
+last_modified: 2026-07-01
+---
+Refunds are available within 30 days.
+`,
+  );
+
+  assert.equal(camelCase.metadata.updatedAt, "2026-06-30");
+  assert.equal(snakeCase.metadata.updatedAt, "2026-07-01");
+});
+
 test("parses frontmatter metadata with CRLF line endings", () => {
   const parsed = parseSource(
     "docs/hr-policy.md",
