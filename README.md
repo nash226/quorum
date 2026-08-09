@@ -1,5 +1,8 @@
 # Quorum
 
+Metadata-free Apple Mail EMLX sources now use clean fallback evidence titles,
+so reviewer reports show the mailbox export name without its file extension.
+
 Recursive approved-source discovery now regression-tests Apple Mail EMLX
 exports, keeping nested mailbox policy evidence on the same verification path
 as direct EMLX sources.
