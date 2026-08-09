@@ -1374,6 +1374,8 @@ Source-directory discovery is recursive, so teams can organize approved policy
 documents in nested folders without flattening their evidence library.
 Direct `verify` paths use the same case-insensitive extension contract, so
 uppercase answer and source exports are accepted without renaming.
+HTML metadata extraction is covered for explicitly supplied uppercase `.HTML`
+exports as well as recursive directory discovery.
 Batch discovery also covers `.ini` and `.properties` policy exports, so
 configuration-backed answer and source directories can use the same workflow.
 The CLI regression suite locks this behavior for mixed-case Markdown filenames.

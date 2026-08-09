@@ -808,6 +808,25 @@ test("extracts readable text and title from exported html sources", async () => 
   assert.doesNotMatch(source.content, /analytics|display: none/);
 });
 
+test("extracts metadata from explicitly supplied uppercase html sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/refunds.HTML",
+    `<!doctype html>
+<html>
+  <head>
+    <title>Refund Policy</title>
+    <meta name="last-modified" content="2026-06-21" />
+  </head>
+  <body><p>Customers can request refunds within 30 days.</p></body>
+</html>`,
+    2,
+  );
+
+  assert.equal(source.title, "Refund Policy");
+  assert.equal(source.updatedAt, "2026-06-21");
+  assert.equal(source.content, "Refund Policy\n\nCustomers can request refunds within 30 days.");
+});
+
 test("extracts metadata and readable text from buffered html sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/refunds.html",
