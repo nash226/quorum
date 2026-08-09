@@ -1,5 +1,9 @@
 # Quorum
 
+Metadata-free RTF (`.rtf`) approved sources now use the filename without its
+extension as the reviewer-facing evidence title, matching other supported
+source exports.
+
 Direct verification now regression-tests paired `.tex` LaTeX answers and
 approved sources, keeping the published LaTeX format contract covered on both
 sides of the evidence workflow.
