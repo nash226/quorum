@@ -572,6 +572,12 @@ test("keeps malformed structured exports readable instead of failing ingestion",
   assert.equal(malformedXml.content, "Employees get 12 weeks.");
 });
 
+test("strips the text alias from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile("docs/policies/leave-policy.text", "Employees get 12 weeks.", 0);
+
+  assert.equal(source.title, "leave-policy");
+});
+
 test("applies the default trust override when metadata is absent", async () => {
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0, {
     defaultTrustLevel: "high",
