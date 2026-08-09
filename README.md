@@ -1,5 +1,7 @@
 # Quorum
 
+The packaged batch smoke gate now verifies uppercase `.EML` answer and approved-source discovery, keeping case-insensitive email export handling aligned with the published input-format contract.
+
 The packed-package smoke gate now executes `quorum evaluate` through the
 installed CLI binary, verifying that published evaluation result JSON and
 `--fail-on-mismatch` behavior survive the package boundary.
