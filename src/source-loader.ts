@@ -215,7 +215,7 @@ function isHtmlSource(sourcePath: string): boolean {
 }
 
 function isEmailSource(sourcePath: string): boolean {
-  return /\.eml$/i.test(sourcePath);
+  return /\.(?:eml|emlx)$/i.test(sourcePath);
 }
 
 function isPdfSource(sourcePath: string): boolean {
@@ -299,11 +299,11 @@ function normalizeMediaWikiSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|emlx?)$/i, "");
 }
 
 function parseEmailSource(content: string): ParsedSource {
-  const normalized = normalizeLineEndings(content);
+  const normalized = normalizeLineEndings(content).replace(/^\d+\n/, "");
   const separator = normalized.search(/\n\n/);
   const headerText = separator === -1 ? normalized : normalized.slice(0, separator);
   const body = separator === -1 ? "" : normalized.slice(separator + 2).trim();
