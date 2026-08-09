@@ -432,8 +432,8 @@ const queueCsv = libraryEntry.renderReviewerQueueCsv({
   evaluation: null,
 });
 if (
-  !queueCsv.startsWith('"generated_at","queue_status","domains",') ||
-  !queueCsv.includes('"2026-08-04T00:00:00.000Z","pending","hr","1"')
+  !queueCsv.startsWith('"schema_version","generated_at","queue_status","domains",') ||
+  !queueCsv.includes('"1","2026-08-04T00:00:00.000Z","pending","hr","1"')
 ) {
   throw new Error("Package artifact root entry point did not preserve the reviewer queue CSV contract.");
 }
@@ -3360,8 +3360,8 @@ try {
     JSON.stringify(supportQueueJson.domains) !== JSON.stringify(["support"]) ||
     supportQueueJson.evaluation?.fixtureCount !== 60 ||
     supportQueueJson.evaluation?.mismatchCount !== 0 ||
-    !queueCsv.startsWith('"generated_at","queue_status","domains","total_answers",') ||
-    !queueCsv.includes('"1","1","0","0","1","1","0","1","0","0","0"')
+    !queueCsv.startsWith('"schema_version","generated_at","queue_status","domains","total_answers",') ||
+    !queueCsv.includes('"1","2026-07-24T00:00:00.000Z","","","1"')
   ) {
     throw new Error("Package artifact CLI did not preserve the reviewer queue overview contract.");
   }

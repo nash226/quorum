@@ -1,5 +1,8 @@
 # Quorum
 
+The reviewer-queue CSV export now includes a `schema_version` marker, giving
+queue consumers an explicit compatibility signal as the audit handoff grows.
+
 Direct verification now regression-tests paired `.rest` reStructuredText
 answer and approved-source exports, keeping the documented alias covered on
 both sides of the verification contract.

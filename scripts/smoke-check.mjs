@@ -363,7 +363,7 @@ try {
   assert.equal(timestampedQueueOverview.generatedAt, "2026-07-15T04:00:00.000Z");
   assert.match(
     readFileSync(queueOverviewCsvPath, "utf8"),
-    /^"generated_at","queue_status","domains","total_answers"[\s\S]*\n"2026-07-15T04:00:00\.000Z","","","44",/m,
+    /^"schema_version","generated_at","queue_status","domains","total_answers"[\s\S]*\n"1","2026-07-15T04:00:00\.000Z","","","44",/m,
   );
 
   const pendingQueueOverview = JSON.parse(

@@ -18,7 +18,7 @@ test("renders a reviewer queue overview for programmatic integrations", () => {
     },
   };
 
-  assert.match(renderReviewerQueueCsv(overview), /^"generated_at","queue_status","domains"/);
-  assert.match(renderReviewerQueueCsv(overview), /"pending","hr;support","3","1"/);
+  assert.match(renderReviewerQueueCsv(overview), /^"schema_version","generated_at","queue_status","domains"/);
+  assert.match(renderReviewerQueueCsv(overview), /"1","2026-08-03T12:00:00\.000Z","pending","hr;support","3","1"/);
   assert.match(renderReviewerQueueCsv(overview), /"4","1","0\.25","0\.75","75%","false"/);
 });
