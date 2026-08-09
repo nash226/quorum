@@ -3655,6 +3655,35 @@ test("verify normalizes direct JSONC answers and approved sources", async () => 
   }
 });
 
+test("verify normalizes direct JSON5 answers and approved sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json5-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.json5");
+    const sourcePath = join(tempDir, "policy.json5");
+
+    await Promise.all([
+      writeFile(answerPath, "{ response: 'Customers can request refunds within 30 days.' }\n", "utf8"),
+      writeFile(sourcePath, "{ title: 'Refund Policy', response: 'Customers can request refunds within 30 days.' }\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      summary: { verified: number };
+      answerPath: string;
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify normalizes a direct JSON approved source export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-source-"));
 

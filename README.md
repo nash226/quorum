@@ -37,6 +37,9 @@ contract.
 Direct verification now regression-tests JSONC (`.jsonc`) answers and approved
 sources, including comment-tolerant structured exports and source titles.
 
+Direct verification now regression-tests JSON5 (`.json5`) answers and approved
+sources, including unquoted keys, string values, and stable filename titles.
+
 Direct verification now regression-tests `.mdwn` Markdown answers against approved sources, keeping this published alias covered alongside recursive discovery.
 
 Direct verification now regression-tests Quarto (`.qmd`) answers against approved sources, keeping the advertised Quarto input contract covered end to end.
