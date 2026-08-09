@@ -1700,6 +1700,33 @@ test("verify accepts a direct reStructuredText approved source export", async ()
   }
 });
 
+test("verify accepts the direct reStructuredText .rest approved source alias", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-rest-source-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.rest");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]));
+
+    assert.equal(report.sources[0].sourcePath, sourcePath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct reStructuredText answer export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-rst-answer-"));
 
