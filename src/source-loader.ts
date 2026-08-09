@@ -223,7 +223,7 @@ function isPdfSource(sourcePath: string): boolean {
 }
 
 function isDocxSource(sourcePath: string): boolean {
-  return /\.docx$/i.test(sourcePath);
+  return /\.(?:docx|docm)$/i.test(sourcePath);
 }
 
 function isJsonSource(sourcePath: string): boolean {
@@ -299,7 +299,7 @@ function normalizeMediaWikiSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xhtml|pdf|docx|docm|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml)$/i, "");
 }
 
 function parseEmailSource(content: string): ParsedSource {

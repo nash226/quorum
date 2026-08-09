@@ -503,8 +503,8 @@ test("verify-batch ignores unsupported files while discovering nested inputs", a
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
-  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.htm, \.html/);
-  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.htm, \.html/);
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docm, \.docx, \.eml, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docm, \.docx, \.eml, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
@@ -3421,6 +3421,31 @@ test("verify accepts a direct DOCX answer export", async () => {
 
   try {
     const answerPath = join(tempDir, "answer.docx");
+    const sourcePath = join(tempDir, "policy.md");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+
+    await Promise.all([
+      readFile(docxFixturePath).then((content) => writeFile(answerPath, content)),
+      writeFile(sourcePath, "Walking on imported air\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { answerPath: string; summary: { verified: number }; assessments: Array<{ claim: { text: string } }> };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.assessments[0]?.claim.text, "Walking on imported air");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify accepts a direct DOCM answer export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-docm-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.docm");
     const sourcePath = join(tempDir, "policy.md");
     const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
 
