@@ -46,10 +46,31 @@ try {
   }).trim();
   if (
     typeof installedPackage.verifyAnswer !== "function" ||
+    typeof installedPackage.renderReviewerQueueCsv !== "function" ||
     typeof installedServer.createApiServer !== "function" ||
     installedVersion !== `quorum ${packageJson.version}`
   ) {
     throw new Error("Installed package artifact did not preserve root, server, and CLI entry points.");
+  }
+
+  const installedQueueCsv = installedPackage.renderReviewerQueueCsv({
+    generatedAt: "2026-08-09T12:00:00.000Z",
+    queueStatus: "pending",
+    domains: ["hr"],
+    review: {
+      totalAnswers: 1,
+      pendingAnswers: 1,
+      reviewedAnswers: 0,
+      noClaimsAnswers: 0,
+      totalClaims: 1,
+      pendingClaims: 1,
+      reviewedClaims: 0,
+      verdicts: { verified: 0, contradicted: 0, unsupported: 0, needs_review: 0 },
+    },
+    evaluation: null,
+  });
+  if (!installedQueueCsv.includes("generated_at,queue_status,domains,total_answers")) {
+    throw new Error("Installed package artifact did not preserve the reviewer queue CSV export.");
   }
 
   const installedEvaluationDir = mkdtempSync(join(tmpdir(), "quorum-installed-evaluation-"));
