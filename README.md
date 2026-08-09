@@ -1094,7 +1094,8 @@ including a time-bound claim routed to `needs_review` instead of being treated
 as a confirmed contradiction.
 
 The machine-readable `quorum formats --json` contract now also guards that
-published source and answer extensions remain normalized and unique.
+published source and answer extensions remain normalized and unique, with the
+programmatic API regression test checking both exported sets directly.
 
 The CLI format-discovery command now accepts both `quorum formats --help` and
 `quorum formats -h`, keeping command-specific help consistent with the other
