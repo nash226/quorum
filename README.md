@@ -257,6 +257,9 @@ The shipped extractor also recognizes sentence-ending punctuation used in
 Arabic, Devanagari, and other localized policy text, keeping short claims
 available for evidence matching instead of dropping them during normalization.
 
+Khmer policy answers also split on the alternate sentence terminators `៕` and
+`៚`, keeping those localized claims separately reviewable.
+
 The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
