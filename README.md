@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests the `.mdown` and `.mkdn` Markdown
+aliases for both answers and approved sources, keeping vendor exports aligned
+with the published format contract.
+
 Recursive batch verification now regression-tests nested INI answers and
 approved sources, keeping configuration-based policy exports on the shipped
 batch workflow.
