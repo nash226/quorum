@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `19e16d45` on 2026-08-09, test: cover support accessibility evaluation
+- Latest shipped change: `9d40ec8e` on 2026-08-09, test: cover uppercase CSV discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-09 | Direct push | test: cover uppercase CSV discovery | `9d40ec8e` |
 | 2026-08-09 | Direct push | test: cover support accessibility evaluation | `19e16d45` |
 | 2026-08-09 | [#2181](https://github.com/nash226/quorum/pull/2181) | test: cover paired reStructuredText aliases | `621907d6` |
 | 2026-08-09 | Direct push | fix: decode quoted-printable email bodies | `fecbdc3e` |
@@ -56,5 +57,4 @@
 | 2026-08-09 | Direct push | docs: note shipped EMLX verification | `56a32d7f` |
 | 2026-08-09 | Direct push | test: cover direct INI verification | `2411d9bd` |
 | 2026-08-09 | [#2165](https://github.com/nash226/quorum/pull/2165) | feat: support Apple Mail EMLX exports | `c9505979` |
-| 2026-08-09 | Direct push | test: cover recursive ini batch discovery | `2180a5e8` |
 
