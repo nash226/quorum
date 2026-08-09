@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7e1e9531` on 2026-08-09, test: cover recursive EMLX source discovery
+- Latest shipped change: `fecbdc3e` on 2026-08-09, fix: decode quoted-printable email bodies
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-09 | Direct push | fix: decode quoted-printable email bodies | `fecbdc3e` |
 | 2026-08-09 | Direct push | test: cover recursive EMLX source discovery | `7e1e9531` |
 | 2026-08-09 | Direct push | docs: note shipped EMLX verification | `56a32d7f` |
 | 2026-08-09 | Direct push | test: cover direct INI verification | `2411d9bd` |
@@ -56,5 +57,4 @@
 | 2026-08-09 | Direct push | test: cover recursive ini batch discovery | `2180a5e8` |
 | 2026-08-09 | Direct push | test: cover direct uppercase email paths | `2ec2757f` |
 | 2026-08-09 | Direct push | test: cover direct txt verification | `62c8f9cf` |
-| 2026-08-09 | Direct push | test: cover direct JSON5 verification | `49b8cda1` |
 
