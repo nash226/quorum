@@ -270,6 +270,9 @@ The CLI now verifies directly supplied or recursively discovered RFC 822 `.eml`
 policy exports, using the message subject and date as source metadata, the
 email body as evidence, and the same trust behavior as other approved sources.
 
+Direct MediaWiki (`.mediawiki`) answer and approved-source verification is now
+covered end to end, keeping the documented wiki export format contract tested.
+
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
 
