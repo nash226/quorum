@@ -1186,6 +1186,36 @@ try {
   rmSync(cliTxtPackageDir, { recursive: true, force: true });
 }
 
+const cliCaseInsensitivePackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-case-insensitive-"));
+try {
+  const answerDir = join(cliCaseInsensitivePackageDir, "answers");
+  const sourceDir = join(cliCaseInsensitivePackageDir, "sources");
+  mkdirSync(answerDir);
+  mkdirSync(sourceDir);
+  const answerPath = join(answerDir, "answer.MD");
+  const sourcePath = join(sourceDir, "policy.TXT");
+  writeFileSync(answerPath, "Employees receive 12 weeks of paid parental leave.\n");
+  writeFileSync(sourcePath, "Employees receive 12 weeks of paid parental leave.\n");
+
+  const caseInsensitiveOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const caseInsensitivePayload = JSON.parse(caseInsensitiveOutput);
+  if (
+    caseInsensitivePayload.answerCount !== 1 ||
+    caseInsensitivePayload.sourceCount !== 1 ||
+    caseInsensitivePayload.answers?.[0]?.answerPath !== answerPath ||
+    caseInsensitivePayload.answers?.[0]?.report?.summary?.verified !== 1 ||
+    caseInsensitivePayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not preserve case-insensitive batch discovery.");
+  }
+} finally {
+  rmSync(cliCaseInsensitivePackageDir, { recursive: true, force: true });
+}
+
 const cliLatexPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-latex-"));
 try {
   const answerPath = join(cliLatexPackageDir, "answer.tex");
