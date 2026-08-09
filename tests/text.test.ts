@@ -63,6 +63,17 @@ test("keeps dotted URLs inside one claim while splitting the surrounding sentenc
   );
 });
 
+test("splits concatenated Latin sentences from compact exports", () => {
+  assert.deepEqual(
+    splitIntoSentences("The policy applies.Employees need manager approval!Support responds within four hours."),
+    [
+      "The policy applies.",
+      "Employees need manager approval!",
+      "Support responds within four hours.",
+    ],
+  );
+});
+
 test("splits sentences across Unicode line and paragraph separators", () => {
   assert.deepEqual(
     splitIntoSentences("Employees receive leave.\u2028Managers approve exceptions.\u2029Support responds within four hours."),
