@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `56a7e1ab` on 2026-08-09, test: cover paired LaTeX verification
+- Latest shipped change: `760e1d7b` on 2026-08-09, test: cover mixed-case LaTeX discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-09 | Direct push | test: cover mixed-case LaTeX discovery | `760e1d7b` |
 | 2026-08-09 | Direct push | test: cover paired LaTeX verification | `56a7e1ab` |
 | 2026-08-09 | Direct push | feat: support RTF answer and source exports | `bf40cc29` |
 | 2026-08-09 | Direct push | test: cover direct NDJSON sources | `403170f5` |
@@ -56,5 +57,4 @@
 | 2026-08-09 | Direct push | test: cover support accessibility evaluation | `19e16d45` |
 | 2026-08-09 | [#2181](https://github.com/nash226/quorum/pull/2181) | test: cover paired reStructuredText aliases | `621907d6` |
 | 2026-08-09 | Direct push | fix: decode quoted-printable email bodies | `fecbdc3e` |
-| 2026-08-09 | Direct push | test: cover recursive EMLX source discovery | `7e1e9531` |
 
