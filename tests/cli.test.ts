@@ -3509,6 +3509,38 @@ test("verify matches claims against html sources with named entities", async () 
   }
 });
 
+test("verify matches claims against html sources with comparison entities", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-comparison-entities-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "eligibility.html");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees need ≥ 12 months of service.\n", "utf8"),
+      writeFile(
+        sourcePath,
+        "<html><body><p>Employees need &ge; 12 months of service.</p></body></html>",
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ]);
+    const report = JSON.parse(stdout) as { summary: Record<string, number> };
+
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers html answers from answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-answer-dir-"));
 
