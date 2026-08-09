@@ -100,7 +100,9 @@ npm run dev -- review-queue \
   --csv-out reports/reviewer-queue-overview.csv
 ```
 
-The overview includes pending, reviewed, and no-claims answer totals, claim
+The overview includes a `schema_version` column (currently `1`) so downstream
+consumers can reject or route future CSV shape changes explicitly. It also
+includes pending, reviewed, and no-claims answer totals, claim
 workload totals, and optional evaluation fixture, mismatch, and score metrics.
 It also includes `queueStatus` in JSON and CSV (`null` or an empty CSV value
 when unfiltered) so downstream consumers can audit which workload slice the

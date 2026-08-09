@@ -28,6 +28,7 @@ export interface ReviewerQueueOverview {
 /** Render the queue overview used by CLI and workflow integrations. */
 export function renderReviewerQueueCsv(overview: ReviewerQueueOverview): string {
   const values = [
+    "1",
     overview.generatedAt,
     overview.queueStatus ?? "",
     overview.domains.join(";"),
@@ -51,7 +52,7 @@ export function renderReviewerQueueCsv(overview: ReviewerQueueOverview): string 
   ];
   const escape = (value: string | number | boolean) => `"${String(value).replaceAll('"', '""')}"`;
   return `${[
-    ["generated_at", "queue_status", "domains", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "verified", "contradicted", "unsupported", "needs_review", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
+    ["schema_version", "generated_at", "queue_status", "domains", "total_answers", "pending_answers", "reviewed_answers", "no_claims_answers", "total_claims", "pending_claims", "reviewed_claims", "verified", "contradicted", "unsupported", "needs_review", "fixture_count", "mismatch_count", "mismatch_rate", "score", "score_label", "score_threshold_passed"],
     values,
   ].map((row) => row.map(escape).join(",")).join("\n")}\n`;
 }
