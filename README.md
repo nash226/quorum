@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests `.txt` answer and approved-source
+exports, keeping the common plain-text alias covered alongside `.text` and
+`.log` inputs.
+
 The packed-package smoke gate now executes `quorum evaluate` through the
 installed CLI binary, verifying that published evaluation result JSON and
 `--fail-on-mismatch` behavior survive the package boundary.

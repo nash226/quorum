@@ -785,6 +785,32 @@ test("verify accepts direct .log answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct .txt answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-txt-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.txt");
+    const sourcePath = join(tempDir, "policy.txt");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      assessments: Array<{ verdict: string }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct .properties answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-properties-direct-"));
 
