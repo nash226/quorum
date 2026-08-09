@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests `.ndjson` approved-source exports,
+keeping newline-delimited policy evidence covered alongside direct `.jsonl`
+sources and recursive discovery.
+
 Recursive batch verification now regression-tests uppercase `.CSV` answers and
 approved sources, keeping case-insensitive tabular export discovery aligned
 with the direct CSV contract.
