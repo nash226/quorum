@@ -946,6 +946,36 @@ test("verify accepts a direct .markdown answer and source export", async () => {
   }
 });
 
+test("verify accepts direct .mdown and .mkdn Markdown aliases", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-markdown-direct-aliases-"));
+
+  try {
+    for (const extension of [".mdown", ".mkdn"]) {
+      const answerPath = join(tempDir, `answer${extension}`);
+      const sourcePath = join(tempDir, `policy${extension}`);
+      await Promise.all([
+        writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+        writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      ]);
+
+      const report = JSON.parse(await runCli([
+        "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+      ])) as {
+        answerPath: string;
+        summary: { verified: number };
+        sources: Array<{ sourcePath: string; title: string }>;
+      };
+
+      assert.equal(report.answerPath, answerPath);
+      assert.equal(report.summary.verified, 1);
+      assert.equal(report.sources[0]?.sourcePath, sourcePath);
+      assert.equal(report.sources[0]?.title, "policy");
+    }
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .markdown answers and sources from directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-markdown-directory-"));
   const answerDir = join(tempDir, "answers");
