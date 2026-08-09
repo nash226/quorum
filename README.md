@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification now regression-tests nested INI answers and
+approved sources, keeping configuration-based policy exports on the shipped
+batch workflow.
+
 Direct verification now regression-tests `.txt` answer and approved-source
 exports, keeping the common plain-text alias covered alongside `.text` and
 `.log` inputs.
