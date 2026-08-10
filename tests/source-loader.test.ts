@@ -248,6 +248,15 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(yamlSource.title, "leave-policy");
 });
 
+test("normalizes commented and continued Java properties exports", () => {
+  const source = parseSource(
+    "policies/leave-policy.properties",
+    "# approved policy\nleave.weeks=12\\\n  weeks paid\n! legacy value\nleave.paid=true\n",
+  );
+
+  assert.equal(source.body, "leave.weeks=12weeks paid\nleave.paid=true\n");
+});
+
 test("preserves embedded newlines inside quoted delimited source fields", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/leave-policy.csv",
