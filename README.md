@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired JSONL answers and approved
+sources, preserving structured source titles and verified evidence through the
+same explicit-path workflow used by integrations.
+
 Direct verification now regression-tests paired `.rst` reStructuredText answer
 and approved-source exports, including the source title extracted from its
 document heading.
