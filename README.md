@@ -1,5 +1,8 @@
 # Quorum
 
+Direct XHTML verification now covers approved-source exports as well as
+answers, including readable evidence text and HTML title metadata.
+
 Saved web-page exports with `.mht` and `.mhtml` extensions are now accepted as
 HTML approved sources, including recursive discovery and stable fallback titles.
 
