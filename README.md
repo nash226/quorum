@@ -1587,6 +1587,17 @@ answers, run the dedicated format-contract command:
 npm run formats
 ```
 
+Integrations can probe both the installed contract version and formats as
+machine-readable JSON before submitting an export:
+
+```bash
+npm run version -- --json
+npm run formats -- --json
+```
+
+The version probe returns `{ service, version }`; the formats probe returns
+sorted `sources` and `answers` extension arrays.
+
 Pipe a generated answer directly into verification with `--answer -` when an
 upstream agent or workflow does not write an intermediate file:
 
