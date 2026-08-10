@@ -1506,7 +1506,7 @@ try {
   const answerPath = join(cliTsvPackageDir, "answer.tsv");
   const sourcePath = join(cliTsvPackageDir, "policy.tsv");
   writeFileSync(answerPath, "claim\tcontext\nEmployees receive 12 weeks of paid parental leave.\tHR\n");
-  writeFileSync(sourcePath, "policy\towner\nEmployees receive 12 weeks of paid parental leave.\tPeople Ops\n");
+  writeFileSync(sourcePath, "claim\tcontext\nEmployees receive 12 weeks of paid parental leave.\tHR\n");
 
   const tsvOutput = execFileSync(
     "node",

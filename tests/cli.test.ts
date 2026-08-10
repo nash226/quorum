@@ -242,6 +242,36 @@ test("verify-batch discovers uppercase CSV exports for answers and sources", asy
   }
 });
 
+test("verify normalizes direct CSV answers before claim extraction", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-csv-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.csv");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "claim,notes\n\"Employees receive 12 weeks of paid parental leave.\",approved\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as { assessments: Array<{ claim: { text: string } }>; summary: { verified: number } };
+
+    assert.equal(report.summary.verified, 1);
+    assert.deepEqual(report.assessments.map(({ claim }) => claim.text), [
+      "claim: Employees receive 12 weeks of paid parental leave.",
+      "notes: approved",
+    ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .jsonc exports for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-jsonc-alias-"));
 
