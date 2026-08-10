@@ -8,6 +8,10 @@ The programmatic batch API accepts uppercase CSV input paths such as
 `leave-answer.CSV` and `leave-policy.CSV`, preserving those paths in the
 verification report while matching the CLI's case-insensitive format contract.
 
+Direct CLI verification now regression-tests uppercase `.RTF` answer and
+approved-source paths, preserving the explicit paths and normalized source
+title while keeping legacy rich-text exports on the case-insensitive contract.
+
 The published input contract is case-insensitive and recursive: `--answer-dir`
 and `--source-dir` discover supported files in nested directories regardless of
 extension case, while repeated explicit `--answer` and `--source` paths support
