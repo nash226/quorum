@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests uppercase `.NDJSON` answer and
+approved-source paths, keeping newline-delimited JSON exports on the
+case-insensitive input contract.
+
 The smoke gate now validates answer and approved-source format contracts
 independently, allowing source-only exports such as `.shtml` without masking
 drift in either machine-readable list.
