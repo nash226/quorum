@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c1786fd6` on 2026-08-09, docs: align evaluation fixture coverage guide
+- Latest shipped change: `ce718666` on 2026-08-10, docs: document formats discovery contract
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-10 | Direct push | docs: document formats discovery contract | `ce718666` |
 | 2026-08-09 | Direct push | docs: align evaluation fixture coverage guide | `c1786fd6` |
 | 2026-08-09 | Direct push | test: cover uppercase CSV inputs in programmatic API | `f4c0aa81` |
 | 2026-08-09 | Direct push | docs: clarify input discovery contract | `01924003` |
@@ -56,5 +57,4 @@
 | 2026-08-09 | Direct push | test: cover mixed-case LaTeX discovery | `760e1d7b` |
 | 2026-08-09 | Direct push | test: cover paired LaTeX verification | `56a7e1ab` |
 | 2026-08-09 | Direct push | feat: support RTF answer and source exports | `bf40cc29` |
-| 2026-08-09 | Direct push | test: cover direct NDJSON sources | `403170f5` |
 
