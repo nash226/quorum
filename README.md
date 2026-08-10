@@ -261,6 +261,9 @@ The evaluation fixture guide now reports the shipped 92-fixture inventory
 (32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
 
+The support benchmark now includes charge-dispute coverage for reporting
+windows, evidence requests, and non-automatic refund outcomes.
+
 The evaluation suite directly pins support subscription-pause routing: the
 approved pause window verifies, a conflicting window is contradicted, and an
 unsupported automatic-refund promise remains unsupported.
