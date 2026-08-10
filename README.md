@@ -945,6 +945,10 @@ The packaged CLI smoke gate now verifies direct `.text` answers and approved
 sources, keeping the plain-text alias release-gated with the other supported
 input formats.
 
+The CLI regression suite now verifies direct DOCX answers and approved sources
+with uppercase extensions, keeping case-insensitive Word export paths aligned
+with the input discovery contract.
+
 The packaged HTTP smoke gate now verifies that health, readiness, and liveness
 probes remain explicitly non-cacheable, keeping monitoring clients from using
 stale operational state.

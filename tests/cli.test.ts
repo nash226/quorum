@@ -3629,6 +3629,30 @@ test("verify accepts a direct DOCX answer export", async () => {
   }
 });
 
+test("verify accepts direct DOCX answer and source paths with uppercase extensions", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-docx-uppercase-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.DOCX");
+    const sourcePath = join(tempDir, "policy.DOCX");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+
+    await Promise.all([
+      readFile(docxFixturePath).then((content) => writeFile(answerPath, content)),
+      readFile(docxFixturePath).then((content) => writeFile(sourcePath, content)),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { answerPath: string; summary: { verified: number } };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers mixed-case answer and source extensions", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-case-insensitive-"));
 
