@@ -688,7 +688,8 @@ test("formats --json exposes a versioned machine-readable input contract", async
   assert.deepEqual(formats.answers, [...formats.answers].sort());
   assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
-  assert.deepEqual(formats.sources, formats.answers);
+  assert.ok(formats.sources.includes(".shtml"));
+  assert.ok(!formats.answers.includes(".shtml"));
   assert.ok(formats.sources.includes(".md"));
   assert.ok(formats.sources.includes(".json"));
 });
