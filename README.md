@@ -3,6 +3,8 @@
 Textile approved sources now promote `h1.`–`h6.` headings to reviewer-facing
 evidence titles while preserving the normalized policy body.
 
+Direct verification now regression-tests paired `.text` plain-text answer and approved-source exports, keeping the documented alias covered symmetrically with the verification contract.
+
 Direct verification now regression-tests paired `.xht` HTML answer and approved-source exports, including source title extraction and verified evidence.
 
 Direct verification now regression-tests paired `.rst` reStructuredText answer
