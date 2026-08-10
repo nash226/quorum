@@ -69,6 +69,9 @@ Direct verification now regression-tests `.ini` answer and approved-source
 exports, keeping configuration-based policy evidence covered alongside the
 other plain-text aliases.
 
+Direct verification also covers paired `.conf` answer and approved-source
+exports, preserving common configuration-file policy evidence as plain text.
+
 Recursive batch verification now regression-tests nested INI answers and
 approved sources, keeping configuration-based policy exports on the shipped
 batch workflow.

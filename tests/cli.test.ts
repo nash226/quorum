@@ -843,6 +843,33 @@ test("verify accepts direct .log answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct .conf answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-conf-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.conf");
+    const sourcePath = join(tempDir, "support-policy.conf");
+    await Promise.all([
+      writeFile(answerPath, "Password resets are completed within one business day.\n", "utf8"),
+      writeFile(sourcePath, "Password resets are completed within one business day.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "Password resets are completed within one business day.");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "support-policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct .txt answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-txt-direct-"));
 
