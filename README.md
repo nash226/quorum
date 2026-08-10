@@ -1,5 +1,10 @@
 # Quorum
 
+Explicit `--answer` paths are now validated against the same supported,
+case-insensitive answer-format contract used by directory discovery. Unsupported
+paths fail before verification starts, with the expected extensions shown in the
+error, so integrations cannot silently process an unrecognized export.
+
 Direct verification now regression-tests paired MediaWiki answer and approved-source exports with heading, emphasis, and reference markup normalized before evidence matching.
 
 The direct CLI verification path now regression-tests paired `.mht` and
