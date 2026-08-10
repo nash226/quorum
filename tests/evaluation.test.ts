@@ -2276,7 +2276,7 @@ test("evaluates a shipped inline support data retention fixture across deletion 
 test("evaluates a shipped inline support charge dispute fixture across payment claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/support/charge-dispute-policy.json"),
-    generatedAt: "2026-07-15T23:30:00.000Z",
+    generatedAt: "2026-08-10T06:00:00.000Z",
   });
 
   assert.equal(scorecard.fixtureName, "Support charge dispute policy example");
@@ -2285,15 +2285,15 @@ test("evaluates a shipped inline support charge dispute fixture across payment c
   assert.deepEqual(scorecard.actualSummary, {
     verified: 1,
     contradicted: 1,
-    unsupported: 0,
-    needs_review: 1,
+    unsupported: 1,
+    needs_review: 0,
   });
   assert.deepEqual(scorecard.claims.map((claim) => claim.actualVerdict), [
-    "verified",
     "contradicted",
-    "needs_review",
+    "verified",
+    "unsupported",
   ]);
-  assert.equal(scorecard.report.sources[0]?.id, "support/charge-dispute@2026-07-15");
+  assert.equal(scorecard.report.sources[0]?.id, "support/charge-dispute@2026-08-10");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
 });
