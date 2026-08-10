@@ -159,6 +159,45 @@ test("verify-batch skips hidden and temporary exports during recursive discovery
   }
 });
 
+test("verify-batch keeps recursive answer and source discovery sorted", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-sorted-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([mkdir(answerDir, { recursive: true }), mkdir(sourceDir, { recursive: true })]);
+    await Promise.all([
+      writeFile(join(answerDir, "z-answer.md"), "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(join(answerDir, "a-answer.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "z-policy.md"), "Refunds are available within 30 days of purchase.\n", "utf8"),
+      writeFile(join(sourceDir, "a-policy.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ])) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ id: string; title: string }>;
+    };
+
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [
+      join(answerDir, "a-answer.md"),
+      join(answerDir, "z-answer.md"),
+    ]);
+    assert.deepEqual(report.sources.map((source) => ({ id: source.id, title: source.title })), [
+      { id: "source_1", title: "a-policy" },
+      { id: "source_2", title: "z-policy" },
+    ]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .json5 exports for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json5-alias-"));
 
