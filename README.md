@@ -1,5 +1,9 @@
 # Quorum
 
+The checked-in evaluation guide now calls out the newer support-policy
+scenarios covered by the 92-fixture scorecard, including account, billing,
+subscription, and workspace-access workflows.
+
 The programmatic batch API accepts uppercase CSV input paths such as
 `leave-answer.CSV` and `leave-policy.CSV`, preserving those paths in the
 verification report while matching the CLI's case-insensitive format contract.
