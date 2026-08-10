@@ -1,5 +1,9 @@
 # Quorum
 
+The shipped product surface includes a local HTTP API alongside the CLI;
+integrations can use `quorum formats` or the API discovery endpoint to inspect
+the supported answer and source extensions before submitting verification work.
+
 Metadata-free RTF (`.rtf`) approved sources now use the filename without its
 extension as the reviewer-facing evidence title, matching other supported
 source exports.
