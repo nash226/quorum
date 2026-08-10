@@ -17,7 +17,7 @@ test("builds source documents from file names when metadata is absent", async ()
 test("strips the RFC 822 .eml extension from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "exports/support-policy.eml",
-    "Customers can request refunds within 30 days.",
+    "\n\nCustomers can request refunds within 30 days.",
     0,
   );
 
