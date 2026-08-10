@@ -68,6 +68,10 @@ The packaged CLI smoke gate now verifies case-insensitive recursive discovery,
 so uppercase exports such as `leave.MD` and `policy.TXT` remain on the same
 verification path as lowercase files.
 
+The checked-in examples also cover an employee expense policy: Quorum verifies
+an approved reimbursement limit, flags a changed submission deadline as
+contradicted, and leaves an unapproved fitness benefit unsupported.
+
 Direct verification now regression-tests `.conf` and `.cfg` configuration
 answers against approved sources, keeping both advertised configuration
 aliases covered by the CLI contract.
