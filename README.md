@@ -267,6 +267,10 @@ The packaged CLI smoke gate now verifies Textile answers against Textile
 approved sources, keeping installed rich-text policy workflows aligned with
 the direct normalization contract.
 
+Directory-based batch verification now has regression coverage for paired
+LaTeX (`.tex`) answers and approved sources, including extension-free source
+titles in the JSON report.
+
 Textile (`.textile`) answer and approved-source exports now normalize common
 headings, emphasis, links, and list markers before claim extraction, keeping
 rich-text policy evidence readable in direct verification.
