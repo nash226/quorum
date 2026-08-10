@@ -258,6 +258,9 @@ The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
 
+The primary CLI help now advertises the same extended input contract as
+`quorum formats`, including log/config files, saved web pages, EMLX, and RTF.
+
 Recursive approved-source discovery is now release-gated for nested DOCX policy
 exports, matching the existing direct DOCX verification path.
 

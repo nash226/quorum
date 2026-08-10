@@ -1885,8 +1885,8 @@ Usage:
   quorum version [--json]
 
 Supported files:
-  Answers: Markdown/MDX/Quarto, AsciiDoc/Org, MediaWiki, reStructuredText, LaTeX/Textile, text, HTML/XHTML, JSON/JSONL/NDJSON/JSON5/JSONC, YAML, XML, TOML, CSV/TSV, EML, PDF, and DOCX
-  Sources: Markdown/MDX/Quarto, AsciiDoc/Org, MediaWiki, reStructuredText, LaTeX/Textile, text, HTML/XHTML, JSON/JSONL/NDJSON/JSON5/JSONC, YAML, XML, TOML, CSV/TSV, EML, PDF, and DOCX
+  Answers: Markdown/MDX/Quarto, AsciiDoc/Org, MediaWiki, reStructuredText, LaTeX/Textile, text/log/config, HTML/XHTML/MHT, JSON/JSONL/NDJSON/JSON5/JSONC, YAML, XML, TOML, CSV/TSV, EML/EMLX, RTF, PDF, and DOCX
+  Sources: Markdown/MDX/Quarto, AsciiDoc/Org, MediaWiki, reStructuredText, LaTeX/Textile, text/log/config, HTML/XHTML/MHT, JSON/JSONL/NDJSON/JSON5/JSONC, YAML, XML, TOML, CSV/TSV, EML/EMLX, RTF, PDF, and DOCX
   Directory discovery is recursive and skips hidden files, hidden directories, and common editor temporary files.
 
 Example:
