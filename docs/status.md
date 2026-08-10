@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `4539f374` on 2026-08-10, test: cover uppercase XML verification
+- Latest shipped change: `babd4089` on 2026-08-10, test: cover RFC 822 fallback source titles
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-10 | Direct push | test: cover RFC 822 fallback source titles | `babd4089` |
 | 2026-08-10 | Direct push | test: cover uppercase XML verification | `4539f374` |
 | 2026-08-10 | Direct push | feat: support saved web-page exports | `25918a4e` |
 | 2026-08-10 | Direct push | docs: document formats discovery contract | `ce718666` |
@@ -56,5 +57,4 @@
 | 2026-08-09 | Direct push | test: cover uppercase CSV inputs in programmatic API | `f4c0aa81` |
 | 2026-08-09 | Direct push | docs: clarify input discovery contract | `01924003` |
 | 2026-08-09 | Direct push | fix: normalize RTF source titles | `f4a1b76c` |
-| 2026-08-09 | Direct push | test: cover mixed-case LaTeX discovery | `760e1d7b` |
 
