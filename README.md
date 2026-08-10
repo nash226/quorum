@@ -1,7 +1,8 @@
 # Quorum
 
-Integrations can run `quorum formats --json` to discover the versioned,
-sorted answer and approved-source extension contract without scraping CLI help.
+Integrations can run `quorum formats --json` (or `npm run formats -- --json`)
+to discover the versioned, sorted answer and approved-source extension contract
+without scraping CLI help.
 The response is self-contained and requires no input files.
 
 The checked-in evaluation guide now calls out the newer support-policy
