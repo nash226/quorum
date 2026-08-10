@@ -88,6 +88,37 @@ try {
     rmSync(installedEvaluationDir, { recursive: true, force: true });
   }
 
+  const installedReviewQueueDir = mkdtempSync(join(tmpdir(), "quorum-installed-review-queue-"));
+  try {
+    const reviewCsvPath = join(installedReviewQueueDir, "review.csv");
+    writeFileSync(
+      reviewCsvPath,
+      [
+        "answer_path,claim_id,claim_text,model_verdict,model_reason,evidence_titles,evidence_quotes,reviewer_verdict,reviewer_notes",
+        `${join(installedReviewQueueDir, "pending.md")},claim-1,Employees receive 12 weeks of paid leave.,verified,Matches approved policy,HR Policy,Employees receive 12 weeks of paid leave.,,`,
+        `${join(installedReviewQueueDir, "reviewed.md")},claim-1,Employees receive 12 weeks of paid leave.,verified,Matches approved policy,HR Policy,Employees receive 12 weeks of paid leave.,verified,Confirmed by reviewer`,
+      ].join("\n") + "\n",
+    );
+
+    const installedReviewQueueOutput = execFileSync(
+      join(packedPackageDir, "node_modules/.bin/quorum"),
+      ["review-queue", "--review-csv", reviewCsvPath, "--json"],
+      { cwd: installedReviewQueueDir, encoding: "utf8" },
+    );
+    const installedReviewQueue = JSON.parse(installedReviewQueueOutput);
+    if (
+      installedReviewQueue.review?.totalAnswers !== 2 ||
+      installedReviewQueue.review?.pendingAnswers !== 1 ||
+      installedReviewQueue.review?.reviewedAnswers !== 1 ||
+      installedReviewQueue.review?.totalClaims !== 2 ||
+      installedReviewQueue.review?.pendingClaims !== 1
+    ) {
+      throw new Error("Installed package artifact did not preserve the reviewer queue JSON contract.");
+    }
+  } finally {
+    rmSync(installedReviewQueueDir, { recursive: true, force: true });
+  }
+
   const installedServerInstance = await installedServer.startApiServer({ host: "127.0.0.1", port: 0 });
   try {
     const installedHealthResponse = await fetch(`${installedServerInstance.url}/health`);

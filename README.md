@@ -1,5 +1,9 @@
 # Quorum
 
+The packed-package smoke gate now runs `quorum review-queue` through the
+installed CLI binary, keeping reviewer queue JSON and pending/reviewed counts
+aligned across the published package boundary.
+
 The smoke gate now validates answer and approved-source format contracts
 independently, allowing source-only exports such as `.shtml` without masking
 drift in either machine-readable list.
