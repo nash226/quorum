@@ -1,5 +1,7 @@
 # Quorum
 
+Direct verification now regression-tests paired `.xht` HTML answer and approved-source exports, including source title extraction and verified evidence.
+
 Direct verification now regression-tests paired `.rst` reStructuredText answer
 and approved-source exports, including the source title extracted from its
 document heading.
