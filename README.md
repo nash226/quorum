@@ -1,5 +1,10 @@
 # Quorum
 
+The shipped CLI accepts Markdown-family, text/configuration, HTML/XHTML,
+email, structured-data, PDF, DOCX, and RTF answers and approved sources.
+Integrations should run `quorum formats --json` for the authoritative,
+versioned extension lists used by direct paths and recursive discovery.
+
 Integrations can run `quorum formats --json` to discover the versioned,
 sorted answer and approved-source extension contract without scraping CLI help.
 The response is self-contained and requires no input files.
