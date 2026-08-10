@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now preserves short Hebrew policy claims ending with sof pasuq
+(`׃`), keeping localized rules available for evidence matching and review.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
