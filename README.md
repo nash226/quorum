@@ -48,6 +48,9 @@ Direct verification now regression-tests paired `.rest` reStructuredText
 answer and approved-source exports, keeping the documented alias covered on
 both sides of the verification contract.
 
+Recursive batch verification also regression-tests nested `.rst` answers and
+approved sources, preserving their original paths for reviewer handoff.
+
 Recursive approved-source discovery now regression-tests Apple Mail EMLX
 exports, keeping nested mailbox policy evidence on the same verification path
 as direct EMLX sources.
