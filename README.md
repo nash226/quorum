@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired Quarto (`.qmd`) answer and
+approved-source exports, keeping this published Markdown-family alias covered
+on both sides of the evidence workflow.
+
 Direct verification now regression-tests paired uppercase XML answer and
 approved-source exports, keeping explicit XML paths aligned with the
 case-insensitive format contract.
