@@ -651,6 +651,10 @@ identity contract.
 Run `npm run dev -- formats --json` to discover the versioned answer and source
 format contract used by direct and recursive verification.
 
+Batch verification is a shipped foundation for the next API-service work: use
+`verify-batch` for directory or explicitly selected answers before integrating
+Quorum through the local HTTP API.
+
 The packaged CLI smoke gate now verifies `extract-claims --result-json`, keeping
 claim previews and answer provenance release-gated for installed integrations.
 
