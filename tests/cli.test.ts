@@ -409,6 +409,53 @@ test("verify-batch returns an aggregate report for each answer file", async () =
   }
 });
 
+test("verify-batch discovers JSON answers and sources recursively", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+      writeFile(
+        join(answerDir, "hr.json"),
+        JSON.stringify({ answer: "Employees receive 12 weeks of paid parental leave." }),
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.json"),
+        JSON.stringify({ policy: "Employees receive 12 weeks of paid parental leave." }),
+        "utf8",
+      ),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      sourceDir,
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      answerCount: number;
+      sourceCount: number;
+      answers: Array<{ answerLabel: string; report: { summary: { verified: number } } }>;
+      sources: Array<{ title: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.answers[0]?.answerLabel, "hr");
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
+    assert.equal(report.sources[0]?.title, "hr-policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch accepts repeated answer files alongside answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-mixed-inputs-"));
 

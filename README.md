@@ -254,6 +254,7 @@ Supported source extensions today:
 - `.html`
 - `.htm`
 - `.pdf`
+- `.json` (directory discovery treats JSON exports as UTF-8 text)
 
 ## Project Structure
 
