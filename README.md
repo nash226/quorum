@@ -108,6 +108,10 @@ Direct verification now regression-tests `.wiki` answers and approved sources,
 keeping the MediaWiki alias covered symmetrically with the published format
 contract.
 
+Direct verification now regression-tests `.mediawiki` answers and approved
+sources, keeping both published MediaWiki aliases covered on the same evidence
+path.
+
 Direct approved-source loading now regression-tests `.htm` exports for HTML
 titles and readable evidence, keeping the short HTML alias aligned with the
 published source-format contract.
