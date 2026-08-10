@@ -1559,6 +1559,11 @@ sentence terminators.
 
 ## Directory Discovery
 
+Use `quorum formats --json` (or `npm run formats -- --json`) when an
+integration needs the authoritative answer/source extension contract. The
+machine-readable response avoids duplicating the CLI allowlist, and directory
+discovery applies the same case-insensitive contract recursively.
+
 Batch verification recursively discovers supported answer files and approved
 sources inside nested directories. Hidden files, hidden directories, and
 common editor temporary files are skipped, so teams can organize policy
