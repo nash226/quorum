@@ -6216,10 +6216,11 @@ test("verify accepts an RFC 822 email answer against an email source", async () 
 
     const report = JSON.parse(
       await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
-    ) as { summary: { verified: number }; answerPath: string };
+    ) as { summary: { verified: number }; answerPath: string; answer: string };
 
     assert.equal(report.summary.verified, 1);
     assert.equal(report.answerPath, answerPath);
+    assert.equal(report.answer, "Customers can request refunds within 30 days.");
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

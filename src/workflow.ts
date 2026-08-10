@@ -888,7 +888,7 @@ async function readAnswerInput(inputPath: string): Promise<string> {
   if (inputPath !== "-") {
     const content = await readFile(inputPath);
 
-    if (/\.(?:pdf|docx|jsonl?|ndjson|ya?ml|xml|toml)$/i.test(inputPath)) {
+    if (/\.(?:pdf|docx|jsonl?|ndjson|ya?ml|xml|toml|eml|emlx)$/i.test(inputPath)) {
       const answerDocument = await sourceDocumentFromFile(inputPath, content, 0);
       return answerDocument.content;
     }
