@@ -6167,6 +6167,30 @@ test("verify discovers Apple Mail EMLX sources in nested directories", async () 
   }
 });
 
+test("verify accepts a directly supplied Apple Mail EMLX answer", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-emlx-answer-direct-"));
+  const answerPath = join(tempDir, "refund-answer.emlx");
+  const sourcePath = join(tempDir, "refund-policy.md");
+
+  try {
+    await Promise.all([
+      writeFile(
+        answerPath,
+        "142\nFrom: agent@example.com\nSubject: Refund answer\n\nCustomers can request refunds within 30 days.\n",
+      ),
+      writeFile(sourcePath, "Customers can request refunds within 30 days.\n"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { summary: { verified: number } };
+
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a directly supplied RFC 822 email source", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-email-source-direct-"));
   const answerPath = join(tempDir, "answer.md");
