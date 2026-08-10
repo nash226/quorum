@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `ae465178` on 2026-08-10, fix: allow source-only format contracts
+- Latest shipped change: `ce24ae95` on 2026-08-10, test: cover direct .conf verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-10 | Direct push | test: cover direct .conf verification | `ce24ae95` |
 | 2026-08-10 | Direct push | fix: allow source-only format contracts | `ae465178` |
 | 2026-08-10 | Direct push | fix: reject unsupported explicit answers | `cfdb534a` |
 | 2026-08-10 | Direct push | test: cover paired MediaWiki verification | `a166a515` |
@@ -56,5 +57,4 @@
 | 2026-08-10 | Direct push | test: cover RFC 822 fallback source titles | `babd4089` |
 | 2026-08-10 | Direct push | test: cover uppercase XML verification | `4539f374` |
 | 2026-08-10 | Direct push | feat: support saved web-page exports | `25918a4e` |
-| 2026-08-10 | Direct push | docs: document formats discovery contract | `ce718666` |
 
