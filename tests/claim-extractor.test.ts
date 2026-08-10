@@ -1386,6 +1386,15 @@ test("does not merge localized sentence lines during normalization", () => {
   );
 });
 
+test("splits sentences when terminal punctuation is followed by a closing quote", () => {
+  const claims = extractClaims('"Employees receive paid leave." Managers approve exceptions.');
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    '"Employees receive paid leave."',
+    "Managers approve exceptions.",
+  ]);
+});
+
 test("keeps claims separate across Unicode line and paragraph separators", () => {
   const claims = extractClaims(
     "Employees receive paid leave.\u2028Managers approve exceptions.\u2029Requests require documentation.",
