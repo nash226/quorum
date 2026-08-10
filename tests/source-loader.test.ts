@@ -65,6 +65,17 @@ test("extracts metadata from namespaced XML source exports", async () => {
   assert.match(source.content, /Employees get 12 weeks\./);
 });
 
+test("extracts evidence from MIME HTML source exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.mhtml",
+    "<html><head><title>HR Benefits Policy</title></head><body><p>Employees get 12 weeks.</p></body></html>",
+    0,
+  );
+
+  assert.equal(source.title, "HR Benefits Policy");
+  assert.match(source.content, /Employees get 12 weeks\./);
+});
+
 test("extracts frontmatter from legacy Mac line endings", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",

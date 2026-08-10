@@ -215,7 +215,7 @@ function tryParseTrustLevel(value: string): SourceTrustLevel | undefined {
 }
 
 function isHtmlSource(sourcePath: string): boolean {
-  return /\.(?:html?|xhtml)$/i.test(sourcePath);
+  return /\.(?:html?|xhtml|mht|mhtml)$/i.test(sourcePath);
 }
 
 function isEmailSource(sourcePath: string): boolean {
