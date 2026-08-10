@@ -1951,6 +1951,39 @@ test("verify accepts paired reStructuredText .rest answer and source aliases", a
   }
 });
 
+test("verify accepts paired reStructuredText .rst answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-rst-paired-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.rst");
+    const sourcePath = join(tempDir, "policy.rst");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Leave policy\n===========\n\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      answerPath: string;
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct LaTeX answer export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-latex-answer-"));
 

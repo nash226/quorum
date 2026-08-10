@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired `.rst` reStructuredText answer
+and approved-source exports, including the source title extracted from its
+document heading.
+
 The packed-package smoke gate now runs `quorum review-queue` through the
 installed CLI binary, keeping reviewer queue JSON and pending/reviewed counts
 aligned across the published package boundary.
