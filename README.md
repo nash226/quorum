@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests `.org-mode` answer and approved-source
+exports, keeping the Emacs Org-mode alias covered on both sides of the evidence
+workflow.
+
 Integrations can run `quorum formats --json` to discover the versioned,
 sorted answer and approved-source extension contract without scraping CLI help.
 The response is self-contained and requires no input files.

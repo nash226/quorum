@@ -82,6 +82,38 @@ test("verify-batch discovers the .text plain-text alias for answers and sources"
   }
 });
 
+test("verify accepts direct .org-mode answer and approved source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-org-mode-"));
+
+  try {
+    const answerPath = join(tempDir, "leave-answer.org-mode");
+    const sourcePath = join(tempDir, "leave-policy.org-mode");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      answerPath: string;
+      assessments: Array<{ verdict: string }>;
+      sources: Array<{ title: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.sources[0]?.title, "leave-policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch skips hidden and temporary exports during recursive discovery", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-hidden-discovery-"));
 
