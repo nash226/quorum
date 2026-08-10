@@ -48,6 +48,9 @@ as direct EMLX sources.
 The current verification baseline includes direct and recursive Apple Mail
 EMLX exports, with email subject/date metadata preserved for reviewer evidence.
 
+Direct verification now regression-tests paired `.tsv` answer and approved-source
+exports, keeping tabular policy evidence covered alongside CSV inputs.
+
 Direct verification now regression-tests `.ini` answer and approved-source
 exports, keeping configuration-based policy evidence covered alongside the
 other plain-text aliases.

@@ -869,6 +869,35 @@ test("verify accepts direct .txt answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct .tsv answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.tsv");
+    const sourcePath = join(tempDir, "policy.tsv");
+    const tsv = "policy\tstatement\nleave\tEmployees receive 12 weeks of paid parental leave.\n";
+    await Promise.all([
+      writeFile(answerPath, tsv, "utf8"),
+      writeFile(sourcePath, tsv, "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      answerPath: string;
+      assessments: Array<{ verdict: string }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct .properties answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-properties-direct-"));
 
