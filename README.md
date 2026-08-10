@@ -1,5 +1,8 @@
 # Quorum
 
+The shipped local HTTP API exposes `GET /capabilities` for runtime discovery
+and `GET /openapi.json` for its machine-readable integration contract.
+
 Direct verification now regression-tests paired `.rst` reStructuredText answer
 and approved-source exports, including the source title extracted from its
 document heading.
