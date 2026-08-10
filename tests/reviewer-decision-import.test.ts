@@ -348,6 +348,7 @@ support-answer,examples/answers/support-answer.md,<Flag this answer for legal re
 
   assert.match(rendered, /<!doctype html>/i);
   assert.match(rendered, /<title>Quorum Reviewer Decision Import<\/title>/);
+  assert.match(rendered, /<meta name="description" content="Quorum reviewer decision import report with final evidence verdicts\." \/>/);
   assert.match(rendered, /Imported reviewer decisions, final verdicts/);
   assert.match(rendered, /<span>Total claims<\/span><strong>2<\/strong>/);
   assert.match(rendered, /<span>Queue answers<\/span><strong>2<\/strong>/);

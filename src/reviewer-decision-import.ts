@@ -621,6 +621,7 @@ export function renderReviewerDecisionImportHtmlReport(
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Quorum reviewer decision import report with final evidence verdicts." />
     <title>Quorum Reviewer Decision Import</title>
     <style>
       :root {
