@@ -1373,6 +1373,36 @@ test("verify accepts a direct HTML approved source export", async () => {
   }
 });
 
+test("verify accepts mixed-case HTML answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-html-mixed-case-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.HTML");
+    const sourcePath = join(tempDir, "policy.XhTmL");
+    await Promise.all([
+      writeFile(answerPath, "<p>Employees receive 12 weeks of paid parental leave.</p>\n", "utf8"),
+      writeFile(
+        sourcePath,
+        "<html><head><title>Benefits</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>",
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "Benefits");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct TOML approved source export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-toml-source-"));
 
