@@ -1,5 +1,8 @@
 # Quorum
 
+Direct verification now regression-tests uppercase Apple Mail `.EMLX` answer and
+approved-source paths, preserving the case-insensitive email-export contract.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
