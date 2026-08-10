@@ -1313,6 +1313,34 @@ test("verify accepts a direct .mdx answer and preserves its path", async () => {
   }
 });
 
+test("verify accepts paired .mdx answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdx-paired-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.mdx");
+    const sourcePath = join(tempDir, "policy.mdx");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      answerPath: string;
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct AsciiDoc answers and approved sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-asciidoc-"));
 
