@@ -4312,7 +4312,7 @@ test("verify accepts direct AsciiDoc answers", async () => {
 
   try {
     const answerPath = join(tempDir, "answer.asciidoc");
-    const sourcePath = join(tempDir, "policy.adoc");
+    const sourcePath = join(tempDir, "policy.asciidoc");
     await Promise.all([
       writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n"),
       writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n"),

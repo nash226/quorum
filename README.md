@@ -28,6 +28,9 @@ and `--source-dir` discover supported files in nested directories regardless of
 extension case, while repeated explicit `--answer` and `--source` paths support
 curated verification sets.
 
+Direct verification now regression-tests paired `.asciidoc` answer and approved
+source exports, including the verified evidence path for policy documents.
+
 Metadata-free RTF (`.rtf`) approved sources now use the filename without its
 extension as the reviewer-facing evidence title, matching other supported
 source exports.
