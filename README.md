@@ -367,6 +367,9 @@ evidence review after localized sentence splitting.
 Claim extraction now treats Unicode ellipses (`…`) as sentence boundaries, so
 policy answers using typographic pauses remain separately reviewable.
 
+Claim extraction also preserves boundaries when terminal punctuation is followed
+by a closing quote or bracket, keeping conversational exports claim-separable.
+
 The shipped extractor also recognizes sentence-ending punctuation used in
 Arabic, Devanagari, and other localized policy text, keeping short claims
 available for evidence matching instead of dropping them during normalization.
