@@ -1151,6 +1151,39 @@ test("verify accepts direct Textile answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct saved web-page answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-mhtml-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.mhtml");
+    const sourcePath = join(tempDir, "policy.mht");
+    const answer = "<html><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>";
+    const source = "<html><head><title>HR Benefits Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>";
+    await Promise.all([
+      writeFile(answerPath, answer, "utf8"),
+      writeFile(sourcePath, source, "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      answerPath: string;
+      sources: Array<{ title: string }>;
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.sources[0]?.title, "HR Benefits Policy");
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(
+      report.assessments[0]?.claim.text,
+      "Employees receive 12 weeks of paid parental leave.",
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct .mdx answer and preserves its path", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdx-answer-"));
 

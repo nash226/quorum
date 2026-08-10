@@ -1,5 +1,9 @@
 # Quorum
 
+The direct CLI verification path now regression-tests paired `.mht` and
+`.mhtml` saved web-page answer and approved-source exports, including title
+extraction and verified claim evidence.
+
 Direct verification now regression-tests paired uppercase XML answer and
 approved-source exports, keeping explicit XML paths aligned with the
 case-insensitive format contract.
