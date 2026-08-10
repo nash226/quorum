@@ -116,7 +116,7 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
   }
 
   if (isTextileSource(sourcePath)) {
-    return { metadata: {}, body: normalizeTextileSource(normalizedContent) };
+    return parseTextileSource(normalizedContent);
   }
 
   if (isMediaWikiSource(sourcePath)) {
@@ -289,6 +289,16 @@ function normalizeTextileSource(content: string): string {
     .replace(/[ \t]+/g, " ")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
+}
+
+function parseTextileSource(content: string): ParsedSource {
+  const headingMatch = content.match(/^h[1-6]\.\s+(.+)$/m);
+  const title = headingMatch?.[1] ? normalizeTextileSource(headingMatch[1]) : undefined;
+
+  return {
+    metadata: title ? { title } : {},
+    body: normalizeTextileSource(content),
+  };
 }
 
 function normalizeMediaWikiSource(content: string): string {
