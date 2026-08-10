@@ -1,5 +1,7 @@
 # Quorum
 
+Direct verification now regression-tests uppercase `.PDF` answer and approved-source paths, keeping binary PDF inputs aligned with the case-insensitive format contract.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
