@@ -3837,6 +3837,32 @@ test("verify normalizes RTF answers and sources", async () => {
   }
 });
 
+test("verify accepts direct RTF paths with uppercase extensions", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-rtf-case-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.RTF");
+    const sourcePath = join(tempDir, "policy.RTF");
+    const rtf = String.raw`{\rtf1\ansi Employees receive 12 weeks of paid parental leave.\par}`;
+
+    await Promise.all([writeFile(answerPath, rtf, "utf8"), writeFile(sourcePath, rtf, "utf8")]);
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      answerPath: string;
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify normalizes structured JSON answers before claim extraction", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json-answer-"));
 
