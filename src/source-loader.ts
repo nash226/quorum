@@ -179,7 +179,7 @@ function parseFrontmatter(frontmatter: string): SourceMetadata {
 
     if (key === "title" && value) {
       metadata.title = value;
-    } else if (key === "updatedat" && value) {
+    } else if ((key === "updatedat" || key === "lastmodified") && value) {
       metadata.updatedAt = value;
     } else if (key === "trustlevel" && value) {
       metadata.trustLevel = tryParseTrustLevel(value);
