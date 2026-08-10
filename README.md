@@ -1,5 +1,8 @@
 # Quorum
 
+The programmatic loader normalizes the supported `.htm` alias when deriving a
+fallback source title, so `refunds.htm` is reported as `refunds`.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
