@@ -65,7 +65,14 @@ test("evaluates the shipped HR travel expense fixture across timing claims", asy
     "contradicted",
     "unsupported",
   ]);
-  assert.equal(scorecard.report.sources[0]?.id, "people-ops/hr-travel-expense@2026-08-03");
+  assert.deepEqual(scorecard.report.sources[0], {
+    id: "people-ops/hr-travel-expense@2026-08-03",
+    title: "HR Travel Expense Policy",
+    trustLevel: "high",
+    updatedAt: "2026-08-03",
+    path: "../../sources/hr-travel-expense-policy.md",
+  });
+  assert.equal(scorecard.report.generatedAt, "2026-08-03T12:00:00.000Z");
   assert.equal(scorecard.summaryMatches, true);
   assert.equal(scorecard.score, 1);
 });
