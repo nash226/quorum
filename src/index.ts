@@ -223,3 +223,5 @@ export type { SourceDocumentOptions } from "./source-loader.js";
 export { renderAnswerLabel, renderAnswerLabels, renderAnswerPreview } from "./text.js";
 export { renderReviewerQueueCsv } from "./reviewer-queue.js";
 export type { ReviewerQueueOverview } from "./reviewer-queue.js";
+export { getInputFormatContract } from "./input-formats.js";
+export type { InputFormatContract } from "./input-formats.js";
