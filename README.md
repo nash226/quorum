@@ -2157,6 +2157,9 @@ Explicit `--source` paths are checked against the same supported-extension
 contract as recursive source discovery, so an accidental image or export
 artifact fails before it can become misleading evidence.
 
+Explicit `--answer` paths receive the same early validation, so unsupported
+answer artifacts fail before Quorum attempts claim extraction.
+
 Integrations can check the installed CLI and API contract version without
 starting the server:
 
