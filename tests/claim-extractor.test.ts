@@ -82,6 +82,15 @@ test("splits Syriac sentence terminators into separate claims", () => {
   ]);
 });
 
+test("splits Arabic poetic verse signs into separate claims", () => {
+  const claims = extractClaims("تُقبل الإجازةُ بعدَ الموافقةِ؞ يُراجعُ المديرُ الطلبَ؞");
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "تُقبل الإجازةُ بعدَ الموافقةِ؞",
+    "يُراجعُ المديرُ الطلبَ؞",
+  ]);
+});
+
 test("splits Sinhala sentence terminators into separate claims", () => {
   const claims = extractClaims("නිවාඩු අනුමත කළ යුතුය෴ සේවකයාට දින තිහක් ලැබේ෴");
 
