@@ -4495,6 +4495,31 @@ test("verify accepts a direct PDF answer export", async () => {
   }
 });
 
+test("verify accepts direct PDF answer and source paths with uppercase extensions", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-uppercase-pdf-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.PDF");
+    const sourcePath = join(tempDir, "policy.PDF");
+    const pdfContent = createSimplePdf("Employees receive 12 weeks of paid leave.");
+
+    await Promise.all([
+      writeFile(answerPath, pdfContent),
+      writeFile(sourcePath, pdfContent),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { answerPath: string; sources: Array<{ sourcePath: string }>; summary: { verified: number } };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.deepEqual(report.sources.map((source) => source.sourcePath), [sourcePath]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify ignores collapsed html details body content in answers", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-collapsed-details-answer-"));
 
