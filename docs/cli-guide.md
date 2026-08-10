@@ -52,12 +52,17 @@ For example:
 npm run formats -- --json
 ```
 
-Each array contains the lowercase extensions accepted for that role, such as
-`.md`, `.mdwn`, `.conf`, `.cfg`, `.pdf`, and `.jsonl`, plus a `version` field
-matching the API contract. Markdown-family aliases (`.mdown`, `.mkdn`,
-`.mdwn`, `.mdx`, and `.qmd`) and common configuration aliases (`.ini`,
-`.properties`, `.conf`, and `.cfg`) are supported for both direct files and
-recursive directory discovery.
+Each array contains the lowercase extensions accepted for that role, plus a
+`version` field matching the API contract. The current families are Markdown
+and documentation exports (`.md`, `.markdown`, `.mdown`, `.mkdn`, `.mdwn`,
+`.mdx`, `.qmd`, `.rst`, `.rest`, `.adoc`, `.asciidoc`, `.org`, `.org-mode`,
+`.mediawiki`, `.wiki`, `.tex`, `.textile`), plain text and configuration
+exports (`.txt`, `.text`, `.log`, `.ini`, `.properties`, `.conf`, `.cfg`),
+HTML/XHTML (`.html`, `.htm`, `.xhtml`), PDF and Word (`.pdf`, `.docx`),
+structured data (`.json`, `.jsonl`, `.ndjson`, `.json5`, `.jsonc`, `.toml`,
+`.yaml`, `.yml`, `.xml`), tabular data (`.csv`, `.tsv`), and RFC 822 email
+exports (`.eml`, `.emlx`). The exact arrays remain authoritative because they
+can change as a format is added or retired.
 Use these arrays to make an allow-list decision before submitting a file to
 `verify` or `verify-batch`; they are the same format contract exported by the
 programmatic API.
