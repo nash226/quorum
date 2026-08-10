@@ -667,7 +667,7 @@ try {
     textilePayload.summary?.verified !== 2 ||
     textilePayload.answerPath !== answerPath ||
     textilePayload.sources?.[0]?.sourcePath !== sourcePath ||
-    textilePayload.sources?.[0]?.title !== "policy"
+    textilePayload.sources?.[0]?.title !== "Leave policy"
   ) {
     throw new Error("Package artifact did not verify the expected Textile answer/source contract.");
   }
