@@ -2440,6 +2440,9 @@ used before publishing the package.
 The benchmark also covers phone-support availability boundaries and callback
 timing, so universal access and urgent-response promises are checked against
 approved support policy before they reach a customer.
+Support holiday-hours coverage is now also exercised directly, preserving a
+verified public-hours claim and an unsupported universal-coverage claim in the
+reviewer-facing evaluation gate.
 Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
