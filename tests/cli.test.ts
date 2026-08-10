@@ -5424,6 +5424,34 @@ test("verify-batch discovers uppercase JSONL answers recursively", async () => {
   }
 });
 
+test("verify accepts direct uppercase NDJSON answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-uppercase-ndjson-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.NDJSON");
+    const sourcePath = join(tempDir, "policy.NDJSON");
+    await Promise.all([
+      writeFile(answerPath, '{"response":"Employees receive 12 weeks of paid parental leave."}\n', "utf8"),
+      writeFile(sourcePath, '{"policy":"Employees receive 12 weeks of paid parental leave."}\n', "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      answerPath: string;
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.deepEqual(report.sources.map((source) => source.sourcePath), [sourcePath]);
+    assert.equal(report.sources[0]?.title, "policy");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts JSON and YAML sources passed explicitly", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-structured-source-"));
 
