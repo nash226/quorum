@@ -721,13 +721,23 @@ try {
   mkdirSync(answerDir, { recursive: true });
   mkdirSync(sourceDir, { recursive: true });
 
-  const answerPaths = [join(answerDir, "answer.ini"), join(answerDir, "answer.properties")];
-  const sourcePaths = [join(sourceDir, "policy.ini"), join(sourceDir, "policy.properties")];
+  const answerPaths = [
+    join(answerDir, "answer.ini"),
+    join(answerDir, "answer.properties"),
+    join(answerDir, "answer.conf"),
+    join(answerDir, "answer.cfg"),
+  ].sort();
+  const sourcePaths = [
+    join(sourceDir, "policy.ini"),
+    join(sourceDir, "policy.properties"),
+    join(sourceDir, "policy.conf"),
+    join(sourceDir, "policy.cfg"),
+  ].sort();
   for (const answerPath of answerPaths) {
     writeFileSync(answerPath, "claim=Employees receive 12 weeks of paid parental leave.\n");
   }
   for (const sourcePath of sourcePaths) {
-    writeFileSync(sourcePath, "title=Parental Leave Policy\npolicy=Employees receive 12 weeks of paid parental leave.\n");
+    writeFileSync(sourcePath, "claim=Employees receive 12 weeks of paid parental leave.\n");
   }
 
   const configBatchOutput = execFileSync(
@@ -745,13 +755,13 @@ try {
   );
   const configBatchPayload = JSON.parse(configBatchOutput);
   if (
-    configBatchPayload.summary?.answersWithClaims !== 2 ||
+    configBatchPayload.summary?.answersWithClaims !== answerPaths.length ||
     configBatchPayload.summary?.answersWithoutClaims !== 0 ||
     configBatchPayload.answers?.map(({ answerPath }) => answerPath).join("|") !== answerPaths.join("|") ||
     configBatchPayload.answers?.some(({ report }) => report?.summary?.verified !== 1) ||
     configBatchPayload.answers?.some(({ report }) => !sourcePaths.includes(report?.sources?.[0]?.sourcePath))
   ) {
-    throw new Error("Package artifact did not preserve INI/properties answer/source discovery in the batch CLI contract.");
+    throw new Error("Package artifact did not preserve INI/properties/CONF/CFG answer/source discovery in the batch CLI contract.");
   }
 } finally {
   rmSync(cliConfigBatchPackageDir, { recursive: true, force: true });
