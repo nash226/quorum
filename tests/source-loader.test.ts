@@ -14,6 +14,17 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("strips the .text extension from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/hr-policy.text",
+    "Employees get 12 weeks.",
+    0,
+  );
+
+  assert.equal(source.title, "hr-policy");
+  assert.equal(source.content, "Employees get 12 weeks.");
+});
+
 test("extracts HTML metadata after a UTF-8 BOM", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.html",
