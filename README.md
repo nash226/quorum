@@ -1,5 +1,9 @@
 # Quorum
 
+The packaged smoke gate now exercises the `npm run extract-claims` wrapper with
+reviewer labels and machine-readable output, keeping the documented claim
+preview entry point aligned with the published CLI.
+
 Direct verification now regression-tests paired `.rst` reStructuredText answer
 and approved-source exports, including the source title extracted from its
 document heading.
