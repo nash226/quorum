@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests uppercase `.PROPERTIES` answer and
+approved-source exports, keeping configuration policy evidence aligned with
+the case-insensitive format contract.
+
 The smoke gate now validates answer and approved-source format contracts
 independently, allowing source-only exports such as `.shtml` without masking
 drift in either machine-readable list.
