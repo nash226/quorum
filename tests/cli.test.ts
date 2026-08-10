@@ -3674,6 +3674,42 @@ test("verify-batch discovers mixed-case answer and source extensions", async () 
   }
 });
 
+test("verify-batch discovers mixed-case saved web-page exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-mhtml-case-insensitive-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(answerDir);
+    await mkdir(sourceDir);
+
+    await Promise.all([
+      writeFile(join(answerDir, "benefits.MHTML"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(
+        join(sourceDir, "hr-policy.MHT"),
+        "<html><head><title>HR Benefits Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>",
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]),
+    ) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [
+      join(answerDir, "benefits.MHTML"),
+    ]);
+    assert.deepEqual(report.sources.map((source) => source.title), ["HR Benefits Policy"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify discovers ini policy exports from a source directory", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-ini-source-"));
 

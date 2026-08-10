@@ -2,6 +2,8 @@
 
 Saved web-page exports with `.mht` and `.mhtml` extensions are now accepted as
 HTML approved sources, including recursive discovery and stable fallback titles.
+Discovery is case-insensitive, so uppercase `.MHT` and `.MHTML` exports work in
+batch verification as well.
 
 Integrations can run `quorum formats --json` to discover the versioned,
 sorted answer and approved-source extension contract without scraping CLI help.
