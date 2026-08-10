@@ -1,5 +1,9 @@
 # Quorum
 
+Integrations can discover the shipped input contract with `quorum formats
+--json` or the API `/capabilities` endpoint, including the supported answer
+and approved-source extensions.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
