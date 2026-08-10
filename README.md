@@ -1,5 +1,7 @@
 # Quorum
 
+Direct CLI verification now regression-tests paired JSON5 answer and approved-source exports, keeping comment-friendly structured policy files on the same evidence path as JSON and JSONC.
+
 The smoke gate now validates answer and approved-source format contracts
 independently, allowing source-only exports such as `.shtml` without masking
 drift in either machine-readable list.

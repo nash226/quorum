@@ -19,6 +19,32 @@ test("version aliases report the package contract version", async () => {
   assert.equal(command, longAlias);
 });
 
+test("verify accepts paired JSON5 answers and approved sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-json5-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.json5");
+    const sourcePath = join(tempDir, "policy.json5");
+    await Promise.all([
+      writeFile(answerPath, "{ policy: 'Employees receive 12 weeks of paid leave.' }", "utf8"),
+      writeFile(sourcePath, "{ policy: 'Employees receive 12 weeks of paid leave.' }", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as { assessments: Array<{ verdict: string }> };
+
+    assert.equal(report.assessments[0]?.verdict, "verified");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("version JSON and help aliases preserve the public CLI contract", async () => {
   const [versionJson, commandHelp, topicHelp, shortHelp] = await Promise.all([
     runCli(["version", "--json"]),
