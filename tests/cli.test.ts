@@ -1151,6 +1151,34 @@ test("verify accepts direct Textile answer and source exports", async () => {
   }
 });
 
+test("verify accepts uppercase .PROPERTIES answer and approved source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-properties-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.PROPERTIES");
+    const sourcePath = join(tempDir, "policy.PROPERTIES");
+    await Promise.all([
+      writeFile(answerPath, "leave.policy=Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "leave.policy=Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      assessments: Array<{ verdict: string; claim: { text: string } }>;
+    };
+
+    assert.equal(report.assessments.length, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(
+      report.assessments[0]?.claim.text,
+      "leave.policy=Employees receive 12 weeks of paid parental leave.",
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct .mdx answer and preserves its path", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdx-answer-"));
 

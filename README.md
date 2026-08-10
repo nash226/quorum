@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests uppercase `.PROPERTIES` answer and
+approved-source exports, keeping case-insensitive Java-style configuration
+discovery covered by the published format contract.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
