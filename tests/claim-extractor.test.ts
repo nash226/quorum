@@ -72,6 +72,12 @@ test("preserves compact CJK policy claims", () => {
   assert.deepEqual(claims.map((claim) => claim.text), ["需审批。", "要予約。", "승인필수."]);
 });
 
+test("preserves short Hebrew claims ending with sof pasuq", () => {
+  const claims = extractClaims("חובה לאשר׃\nאין החזר׃");
+
+  assert.deepEqual(claims.map((claim) => claim.text), ["חובה לאשר׃", "אין החזר׃"]);
+});
+
 test("splits Syriac sentence terminators into separate claims", () => {
   const claims = splitIntoSentences("ܡܠܦܢܐ ܡܩܒܠ ܐܫܬܐ ܫܒܥܐ ܝܘܡܝܢ܀ ܚܘܪܙܐ ܡܫܬܘܬܐ ܗܘ܀ ܐܣܟܡܐ ܡܬܚܙܐ ܗܘ܂");
 
