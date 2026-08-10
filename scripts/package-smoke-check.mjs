@@ -840,6 +840,33 @@ try {
   rmSync(cliEmailPackageDir, { recursive: true, force: true });
 }
 
+const cliEmlxPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-emlx-"));
+try {
+  const answerPath = join(cliEmlxPackageDir, "answer.emlx");
+  const sourcePath = join(cliEmlxPackageDir, "policy.emlx");
+  const emlx = (subject, body) =>
+    `142\nFrom: policy@example.com\nTo: employee@example.com\nDate: Tue, 04 Aug 2026 09:00:00 -0400\nSubject: ${subject}\nContent-Type: text/plain; charset=utf-8\n\n${body}\n`;
+  writeFileSync(answerPath, emlx("Benefits answer", "Employees receive 12 weeks of paid parental leave."));
+  writeFileSync(sourcePath, emlx("Parental leave policy", "Employees receive 12 weeks of paid parental leave."));
+
+  const emlxOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const emlxPayload = JSON.parse(emlxOutput);
+  if (
+    emlxPayload.summary?.verified !== 1 ||
+    emlxPayload.answerPath !== answerPath ||
+    emlxPayload.sources?.[0]?.title !== "Parental leave policy" ||
+    emlxPayload.sources?.[0]?.sourcePath !== sourcePath
+  ) {
+    throw new Error("Package artifact did not verify the expected paired EMLX answer/source contract.");
+  }
+} finally {
+  rmSync(cliEmlxPackageDir, { recursive: true, force: true });
+}
+
 const cliEmailBatchPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-email-batch-"));
 try {
   const answerDir = join(cliEmailBatchPackageDir, "answers", "nested");

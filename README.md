@@ -3007,3 +3007,6 @@ items use the [decision queue](docs/decision-queue.md).
 Direct CLI verification now regression-tests paired Markdown text (`.mkdn`)
 answer and approved-source exports, keeping this published Markdown-family
 alias on the same evidence path as the other supported document formats.
+
+The packaged CLI now smoke-tests paired Apple Mail `.emlx` answer and approved-
+source exports, including the message wrapper and report metadata.
