@@ -13,6 +13,9 @@ and `--source-dir` discover supported files in nested directories regardless of
 extension case, while repeated explicit `--answer` and `--source` paths support
 curated verification sets.
 
+Claim extraction recognizes the Arabic poetic verse sign (`؞`) as a sentence
+boundary, preserving adjacent Arabic policy statements as separate evidence claims.
+
 Metadata-free RTF (`.rtf`) approved sources now use the filename without its
 extension as the reviewer-facing evidence title, matching other supported
 source exports.
