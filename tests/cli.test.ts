@@ -742,6 +742,36 @@ test("verify accepts a direct .text answer export", async () => {
   }
 });
 
+test("verify accepts direct .mkdn answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdwn-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.mkdn");
+    const sourcePath = join(tempDir, "policy.mkdn");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      assessments: Array<{ verdict: string }>;
+      answerPath: string;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct .org-mode answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-org-mode-direct-"));
 
