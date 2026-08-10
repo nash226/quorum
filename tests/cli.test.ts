@@ -561,8 +561,8 @@ test("verify-batch ignores unsupported files while discovering nested inputs", a
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
-  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.htm, \.html/);
-  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.htm, \.html/);
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.env, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.env, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
@@ -939,7 +939,7 @@ test("verify accepts direct .ini answer and source exports", async () => {
   }
 });
 
-for (const extension of [".conf", ".cfg"]) {
+for (const extension of [".conf", ".cfg", ".env"]) {
   test(`verify accepts direct ${extension} answer and source exports`, async () => {
     const tempDir = await mkdtemp(join(tmpdir(), `quorum-config-${extension.slice(1)}-direct-`));
 
