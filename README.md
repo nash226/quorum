@@ -37,6 +37,10 @@ The programmatic batch API accepts uppercase CSV input paths such as
 `leave-answer.CSV` and `leave-policy.CSV`, preserving those paths in the
 verification report while matching the CLI's case-insensitive format contract.
 
+CSV and TSV answer files are normalized through the same structured loader as
+source exports, so header/value rows become claim-ready answer text before
+verification.
+
 The published input contract is case-insensitive and recursive: `--answer-dir`
 and `--source-dir` discover supported files in nested directories regardless of
 extension case, while repeated explicit `--answer` and `--source` paths support
