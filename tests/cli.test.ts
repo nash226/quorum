@@ -1736,6 +1736,33 @@ test("verify accepts a direct MediaWiki approved source export", async () => {
   }
 });
 
+test("verify matches claims across paired MediaWiki answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-mediawiki-paired-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.mediawiki");
+    const sourcePath = join(tempDir, "policy.mediawiki");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive '''12 weeks''' of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "== Leave ==\nEmployees receive 12 weeks of paid parental leave.<ref>HR</ref>\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as { summary: { verified: number }; assessments: Array<{ verdict: string }> };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct .wiki answer and approved source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-wiki-direct-"));
 

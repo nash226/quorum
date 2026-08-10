@@ -1,5 +1,7 @@
 # Quorum
 
+Direct verification now regression-tests paired MediaWiki answer and approved-source exports with heading, emphasis, and reference markup normalized before evidence matching.
+
 The direct CLI verification path now regression-tests paired `.mht` and
 `.mhtml` saved web-page answer and approved-source exports, including title
 extraction and verified claim evidence.
