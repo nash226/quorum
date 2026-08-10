@@ -4089,9 +4089,12 @@ test("verify normalizes RTF answers and sources", async () => {
     await Promise.all([writeFile(answerPath, rtf, "utf8"), writeFile(sourcePath, rtf, "utf8")]);
     const report = JSON.parse(await runCli([
       "verify", "--answer", answerPath, "--source", sourcePath, "--json",
-    ])) as { summary: { verified: number } };
+    ])) as { summary: { verified: number }; assessments: Array<{ claim: { text: string } }> };
 
     assert.equal(report.summary.verified, 1);
+    assert.deepEqual(report.assessments.map((assessment) => assessment.claim.text), [
+      "Employees receive 12 weeks of paid parental leave.",
+    ]);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

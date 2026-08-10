@@ -1,5 +1,8 @@
 # Quorum
 
+Direct RTF answers now use the same normalization as approved RTF sources, so
+review reports contain readable claims instead of RTF control words.
+
 Direct verification now regression-tests paired `.rst` reStructuredText answer
 and approved-source exports, including the source title extracted from its
 document heading.
