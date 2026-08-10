@@ -2233,6 +2233,36 @@ test("verify accepts a direct XML answer export", async () => {
   }
 });
 
+test("verify accepts paired uppercase XML answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-xml-uppercase-paired-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.XML");
+    const sourcePath = join(tempDir, "policy.Xml");
+    await Promise.all([
+      writeFile(answerPath, "<answer>Refunds are available within 30 days of purchase.</answer>\n", "utf8"),
+      writeFile(sourcePath, "<policy><title>Refund Policy</title><rule>Refunds are available within 30 days of purchase.</rule></policy>\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      answerPath: string;
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.deepEqual(report.sources.map(({ sourcePath: path, title }) => ({ path, title })), [{
+      path: sourcePath,
+      title: "Refund Policy",
+    }]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([

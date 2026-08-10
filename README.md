@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired uppercase XML answer and
+approved-source exports, keeping explicit XML paths aligned with the
+case-insensitive format contract.
+
 Saved web-page exports with `.mht` and `.mhtml` extensions are now accepted as
 HTML approved sources, including recursive discovery and stable fallback titles.
 
