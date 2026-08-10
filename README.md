@@ -1,5 +1,8 @@
 # Quorum
 
+Verification fails clearly when no approved source files are found, so an empty
+source directory cannot produce an evidence report without evidence.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
