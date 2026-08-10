@@ -975,6 +975,34 @@ try {
   rmSync(cliQuartoPackageDir, { recursive: true, force: true });
 }
 
+const cliEmlxPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-emlx-"));
+try {
+  const answerPath = join(cliEmlxPackageDir, "answer.md");
+  const sourcePath = join(cliEmlxPackageDir, "policy.emlx");
+  writeFileSync(answerPath, "Customers can request refunds within 30 days.\n");
+  writeFileSync(
+    sourcePath,
+    "142\nFrom: support@example.com\nDate: 2026-08-03\nSubject: Refund policy update\n\nCustomers can request refunds within 30 days.\n",
+  );
+
+  const emlxOutput = execFileSync(
+    "node",
+    [fileURLToPath(cliPath), "verify", "--answer", answerPath, "--source", sourcePath, "--json"],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+  const emlxPayload = JSON.parse(emlxOutput);
+  if (
+    emlxPayload.summary?.verified !== 1 ||
+    emlxPayload.sources?.[0]?.sourcePath !== sourcePath ||
+    emlxPayload.sources?.[0]?.title !== "Refund policy update" ||
+    emlxPayload.sources?.[0]?.updatedAt !== "2026-08-03"
+  ) {
+    throw new Error("Package artifact did not preserve the Apple Mail EMLX source contract.");
+  }
+} finally {
+  rmSync(cliEmlxPackageDir, { recursive: true, force: true });
+}
+
 const cliRestPackageDir = mkdtempSync(join(tmpdir(), "quorum-package-cli-rest-"));
 try {
   const answerPath = join(cliRestPackageDir, "answer.rest");
