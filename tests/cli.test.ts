@@ -1070,6 +1070,36 @@ test("verify-batch discovers .markdown answers and sources from directories", as
   }
 });
 
+test("verify-batch discovers mixed-case Markdown aliases from nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-markdown-case-insensitive-"));
+  const answerDir = join(tempDir, "answers");
+  const sourceDir = join(tempDir, "sources");
+
+  try {
+    await Promise.all([
+      mkdir(join(answerDir, "nested"), { recursive: true }),
+      mkdir(join(sourceDir, "nested"), { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(join(answerDir, "nested", "answer.MARKDOWN"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "nested", "policy.MARKDOWN"), "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ])) as {
+      answers: Array<{ answerPath: string; report: { summary: { verified: number } } }>;
+      sources: Array<{ sourcePath: string }>;
+    };
+
+    assert.equal(report.answers[0]?.report.summary.verified, 1);
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [join(answerDir, "nested", "answer.MARKDOWN")]);
+    assert.deepEqual(report.sources.map((source) => source.sourcePath), [join(sourceDir, "nested", "policy.MARKDOWN")]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .mdown and .mkdn Markdown aliases from directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-markdown-aliases-"));
   const answerDir = join(tempDir, "answers");
