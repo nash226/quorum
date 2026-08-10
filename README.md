@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired `.mdown` and `.mkdn` Markdown
+answer and approved-source exports, keeping both documented aliases covered
+alongside recursive discovery.
+
 Direct verification now regression-tests paired uppercase XML answer and
 approved-source exports, keeping explicit XML paths aligned with the
 case-insensitive format contract.
