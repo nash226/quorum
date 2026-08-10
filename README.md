@@ -2,6 +2,8 @@
 
 Saved web-page exports with `.mht` and `.mhtml` extensions are now accepted as
 HTML approved sources, including recursive discovery and stable fallback titles.
+Direct verification also covers MIME HTML answers paired with titled approved
+sources, keeping both sides of the format contract release-gated.
 
 Integrations can run `quorum formats --json` to discover the versioned,
 sorted answer and approved-source extension contract without scraping CLI help.
