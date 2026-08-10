@@ -681,7 +681,12 @@ test("verify accepts direct YAML answer and source exports", async () => {
 
 test("formats --json exposes a versioned machine-readable input contract", async () => {
   const stdout = await runCli(["formats", "--json"]);
-  const formats = JSON.parse(stdout) as { version: string; sources: string[]; answers: string[] };
+  const formats = JSON.parse(stdout) as {
+    version: string;
+    sources: string[];
+    answers: string[];
+    stdin: string[];
+  };
 
   assert.equal(formats.version, "0.1.0");
   assert.deepEqual(formats.sources, [...formats.sources].sort());
@@ -689,8 +694,15 @@ test("formats --json exposes a versioned machine-readable input contract", async
   assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
   assert.deepEqual(formats.sources, formats.answers);
+  assert.deepEqual(formats.stdin, ["answer", "source", "review-csv"]);
   assert.ok(formats.sources.includes(".md"));
   assert.ok(formats.sources.includes(".json"));
+});
+
+test("formats documents stdin support in the human-readable contract", async () => {
+  const stdout = await runCli(["formats"]);
+
+  assert.match(stdout, /Stdin inputs: answer, source, review-csv/);
 });
 
 test("formats --json exposes normalized unique extension entries", async () => {

@@ -1911,6 +1911,7 @@ function printFormats(asJson = false): void {
       version: API_VERSION,
       sources: [...SOURCE_EXTENSIONS].sort(),
       answers: [...ANSWER_EXTENSIONS].sort(),
+      stdin: ["answer", "source", "review-csv"],
     }));
     return;
   }
@@ -1919,6 +1920,7 @@ function printFormats(asJson = false): void {
 
 Source files: ${formatExtensions(SOURCE_EXTENSIONS)}
 Answer files: ${formatExtensions(ANSWER_EXTENSIONS)}
+Stdin inputs: answer, source, review-csv
 `);
 }
 
