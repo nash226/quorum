@@ -1,5 +1,12 @@
 # Quorum
 
+Direct CLI verification now regression-tests paired LaTeX (`.tex`) answer and
+approved-source exports, including normalized evidence text and source-path
+metadata.
+
+Explicit LaTeX paths are also regression-tested case-insensitively, so exported
+`.TEX` answers and approved sources follow the same verification contract.
+
 Direct verification now regression-tests paired `.rst` reStructuredText answer
 and approved-source exports, including the source title extracted from its
 document heading.
