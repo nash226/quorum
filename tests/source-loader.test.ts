@@ -14,6 +14,24 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("normalizes WebVTT and SRT transcript exports", async () => {
+  const vtt = await sourceDocumentFromFile(
+    "exports/support-call.vtt",
+    `WEBVTT\n\n00:00:01.000 --> 00:00:03.000\n<v Agent>Refunds are available within 30 days.\n\n`,
+    0,
+  );
+  const srt = await sourceDocumentFromFile(
+    "exports/escalation.srt",
+    `1\n00:00:01,000 --> 00:00:03,000\nEscalate priority incidents immediately.\n\n`,
+    1,
+  );
+
+  assert.equal(vtt.title, "support-call");
+  assert.equal(vtt.content, "Refunds are available within 30 days.");
+  assert.equal(srt.title, "escalation");
+  assert.equal(srt.content, "Escalate priority incidents immediately.");
+});
+
 test("strips the RFC 822 .eml extension from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "exports/support-policy.eml",
