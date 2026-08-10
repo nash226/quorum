@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged CLI smoke gate now verifies Apple Mail EMLX (`.emlx`) approved
+sources, preserving email subject and date metadata at the published boundary.
+
 Direct verification now regression-tests paired `.rst` reStructuredText answer
 and approved-source exports, including the source title extracted from its
 document heading.
