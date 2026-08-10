@@ -14,6 +14,17 @@ test("builds source documents from file names when metadata is absent", async ()
   assert.equal(source.content, "Employees get 12 weeks.");
 });
 
+test("strips the RFC 822 .eml extension from fallback source titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/support-policy.eml",
+    "\n\nCustomers can request refunds within 30 days.",
+    0,
+  );
+
+  assert.equal(source.title, "support-policy");
+  assert.match(source.content, /Customers can request refunds within 30 days\./);
+});
+
 test("extracts HTML metadata after a UTF-8 BOM", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.html",

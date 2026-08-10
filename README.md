@@ -333,6 +333,8 @@ handling as lowercase `.eml` files.
 The CLI now verifies directly supplied or recursively discovered RFC 822 `.eml`
 policy exports, using the message subject and date as source metadata, the
 email body as evidence, and the same trust behavior as other approved sources.
+Metadata-free `.eml` sources also use a clean filename fallback title without
+the email extension, matching the `.emlx` reviewer experience.
 
 Short Arabic, Indic, and Unicode-ellipsis claims now remain eligible for
 evidence review after localized sentence splitting.
