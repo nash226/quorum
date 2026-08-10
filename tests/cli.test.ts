@@ -82,6 +82,27 @@ test("verify-batch discovers the .text plain-text alias for answers and sources"
   }
 });
 
+test("verify-batch discovers .xht answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-xht-discovery-"));
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([mkdir(answerDir, { recursive: true }), mkdir(sourceDir, { recursive: true })]);
+    await Promise.all([
+      writeFile(join(answerDir, "leave.xht"), "<p>Employees receive 12 weeks of paid parental leave.</p>\n", "utf8"),
+      writeFile(join(sourceDir, "hr-policy.xht"), "<html><head><title>HR Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli(["verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json"]));
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.match(report.answers[0]?.answerPath ?? "", /answers\/leave\.xht$/);
+    assert.equal(report.sources[0]?.title, "HR Policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers LaTeX answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-tex-discovery-"));
 

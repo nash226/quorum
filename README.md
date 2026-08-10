@@ -1782,8 +1782,10 @@ of that boundary and the decision tracked in [issue #683](https://github.com/nas
 Verification accepts Markdown-family (`.md`, `.markdown`, `.mdx`, `.qmd`),
 AsciiDoc/Org-mode/MediaWiki (`.adoc`, `.asciidoc`, `.org`, `.mediawiki`,
 `.wiki`), reStructuredText/LaTeX (`.rst`, `.tex`), text (`.txt`, `.text`,
-`.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
+`.ini`, `.properties`), exported HTML/XHTML (`.html`, `.htm`, `.xht`, `.xhtml`),
 JSON/JSONL/YAML/XML/TOML, CSV/TSV, PDF, and DOCX answers and approved sources.
+The `.xht` XHTML alias is also discovered for both directory-based answers and
+approved sources.
 Run `npm run formats -- --json` for the authoritative machine-readable list.
 The direct CLI form, `quorum formats --json`, is covered against the same
 library constants so integrations can rely on the published discovery contract.
