@@ -1,7 +1,7 @@
 # Quorum
 
 The checked-in evaluation guide now calls out the newer support-policy
-scenarios covered by the 92-fixture scorecard, including account, billing,
+scenarios covered by the 93-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
 
 The programmatic batch API accepts uppercase CSV input paths such as
@@ -261,8 +261,8 @@ covered end to end.
 LaTeX directory discovery is also regression-tested case-insensitively, so
 `.TEX` and mixed-case `.tex` exports follow the same batch contract.
 
-The evaluation fixture guide now reports the shipped 92-fixture inventory
-(32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
+The evaluation fixture guide now reports the shipped 93-fixture inventory
+(33 HR and 60 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
 
 The evaluation suite directly pins support subscription-pause routing: the
@@ -340,7 +340,7 @@ The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
 
-The evaluation fixture guide now matches the shipped benchmark inventory: 92
+The evaluation fixture guide now matches the shipped benchmark inventory: 93
 checked-in fixtures across HR, support, and shared edge-case workflows.
 
 The evaluation scorecard now includes the file-backed support security packet,
@@ -2419,13 +2419,13 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 92-fixture benchmark spans 32 HR and 60 support workflows. It also
+The checked-in 93-fixture benchmark spans 33 HR and 60 support workflows. It also
 includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
 
-The HR travel-expense fixture is included in the 32-fixture HR inventory, with
-aggregate expectations covering 97 claims across verified, contradicted, and
+The HR travel-expense fixture is included in the 33-fixture HR inventory, with
+aggregate expectations covering 100 claims across verified, contradicted, and
 unsupported policy outcomes.
 
 The benchmark spans leave, onboarding, payroll, accommodations, refunds, refund status, account
@@ -2871,7 +2871,7 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
-The checked-in HR and support benchmark currently contains 92 fixtures and 274
+The checked-in HR and support benchmark currently contains 93 fixtures and 277
 expected claims, including support plan-upgrade and plan-downgrade scenarios
 with verified, needs-review, contradicted, and unsupported claims.
 The HR employee-assistance policy is also covered as a file-backed reviewer
@@ -2938,6 +2938,10 @@ support policy coverage; durable API hosting and queue storage remain
 decision-gated. Batch verification, reviewer-queue exports, and local HTTP
 integration contracts are shipped foundation capabilities,
 not pending roadmap work.
+
+The evaluation benchmark now includes an HR employee-assistance scenario that
+checks session limits, routes provider eligibility language to review, and
+flags unsupported unlimited-benefit claims.
 
 Claim extraction now keeps short, punctuated policy statements across Arabic,
 Thai, Lao, and other supported non-Latin scripts instead of dropping them

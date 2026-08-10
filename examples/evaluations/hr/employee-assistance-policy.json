@@ -1,0 +1,24 @@
+{
+  "name": "HR employee assistance policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-employee-assistance-answer.md",
+  "answer": "Employees may request up to six confidential counseling sessions each year.\nEmployees may use the program for any personal or work-related concern without an eligibility review.\nThe company pays for unlimited family therapy sessions.\n",
+  "answerLabel": "HR employee assistance reviewer packet",
+  "sources": [
+    {
+      "sourcePath": "../../sources/hr-employee-assistance-policy.md",
+      "id": "people-ops/hr-employee-assistance@2026-08-10",
+      "title": "HR Employee Assistance Policy",
+      "updatedAt": "2026-08-10",
+      "trustLevel": "high",
+      "content": "Employees may request up to six confidential counseling sessions each year through the employee assistance program.\nThe program supports personal and work-related concerns, subject to the provider's eligibility and confidentiality rules.\nAdditional sessions may be approved when clinically appropriate.\n"
+    }
+  ],
+  "expectedSummary": {
+    "verified": 1,
+    "contradicted": 0,
+    "unsupported": 1,
+    "needs_review": 1
+  },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
