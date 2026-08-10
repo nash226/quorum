@@ -4224,6 +4224,32 @@ test("verify normalizes direct JSONL answers before claim extraction", async () 
   }
 });
 
+test("verify normalizes paired JSONL answer and approved-source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-jsonl-paired-"));
+  const answerPath = join(tempDir, "answer.jsonl");
+  const sourcePath = join(tempDir, "policy.jsonl");
+
+  try {
+    await Promise.all([
+      writeFile(answerPath, '{"response":"Customers can request refunds within 30 days."}\n', "utf8"),
+      writeFile(sourcePath, '{"title":"Refund Policy","response":"Customers can request refunds within 30 days."}\n', "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "Refund Policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify normalizes direct NDJSON answers before claim extraction", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-ndjson-answer-"));
   const answerPath = join(tempDir, "answer.ndjson");
