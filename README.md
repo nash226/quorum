@@ -1,5 +1,8 @@
 # Quorum
 
+Saved web-page exports with `.mht` and `.mhtml` extensions are now accepted as
+HTML approved sources, including recursive discovery and stable fallback titles.
+
 Integrations can run `quorum formats --json` to discover the versioned,
 sorted answer and approved-source extension contract without scraping CLI help.
 The response is self-contained and requires no input files.
