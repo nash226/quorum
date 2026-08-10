@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `01924003` on 2026-08-09, docs: clarify input discovery contract
+- Latest shipped change: `f4c0aa81` on 2026-08-09, test: cover uppercase CSV inputs in programmatic API
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-09 | Direct push | test: cover uppercase CSV inputs in programmatic API | `f4c0aa81` |
 | 2026-08-09 | Direct push | docs: clarify input discovery contract | `01924003` |
 | 2026-08-09 | Direct push | fix: normalize RTF source titles | `f4a1b76c` |
 | 2026-08-09 | Direct push | test: cover mixed-case LaTeX discovery | `760e1d7b` |
@@ -56,5 +57,4 @@
 | 2026-08-09 | Direct push | feat: support RTF answer and source exports | `bf40cc29` |
 | 2026-08-09 | Direct push | test: cover direct NDJSON sources | `403170f5` |
 | 2026-08-09 | Direct push | test: cover uppercase CSV discovery | `9d40ec8e` |
-| 2026-08-09 | Direct push | test: cover support accessibility evaluation | `19e16d45` |
 
