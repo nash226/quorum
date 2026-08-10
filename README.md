@@ -267,6 +267,10 @@ The packaged CLI smoke gate now verifies Textile answers against Textile
 approved sources, keeping installed rich-text policy workflows aligned with
 the direct normalization contract.
 
+Org-mode (`.org` and `.org-mode`) answers and approved-source exports now
+normalize headings, lists, links, and emphasis before claim extraction, keeping
+Org-mode policy evidence readable for reviewers.
+
 Directory-based batch verification now has regression coverage for paired
 LaTeX (`.tex`) answers and approved sources, including extension-free source
 titles in the JSON report.

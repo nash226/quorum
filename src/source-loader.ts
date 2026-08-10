@@ -123,6 +123,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return { metadata: {}, body: normalizeMediaWikiSource(normalizedContent) };
   }
 
+  if (isOrgSource(sourcePath)) {
+    return { metadata: {}, body: normalizeOrgSource(normalizedContent) };
+  }
+
   const normalized = normalizedContent;
   const frontmatterDelimiter = getFrontmatterDelimiter(normalized);
 
@@ -266,6 +270,10 @@ function isMediaWikiSource(sourcePath: string): boolean {
   return /\.(?:mediawiki|wiki)$/i.test(sourcePath);
 }
 
+function isOrgSource(sourcePath: string): boolean {
+  return /\.(?:org|org-mode)$/i.test(sourcePath);
+}
+
 function normalizeLatexSource(content: string): string {
   return content
     .replace(/(^|\n)\s*%[^\n]*/g, "$1")
@@ -301,6 +309,26 @@ function normalizeMediaWikiSource(content: string): string {
     .replace(/(^|\n)[#*;:]+\s+/g, "$1")
     .replace(/<ref\b[^>]*>[\s\S]*?<\/ref>|<ref\b[^>]*/gi, "")
     .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function normalizeOrgSource(content: string): string {
+  if (!/(?:^|\n)\s*(?:\*+\s+|[-+]\s+|#\+[A-Za-z_]+:)|\[\[[^\]]+\]\]|[\/_~*][^\n]+[\/_~*]/.test(content)) {
+    return content;
+  }
+
+  return content
+    .replace(/(^|\n)\*+\s+/g, "$1")
+    .replace(/(^|\n)\s*[-+]\s+/g, "$1")
+    .replace(/\[\[([^\]]+)\]\[([^\]]+)\]\]/g, "$2")
+    .replace(/\[\[([^\]]+)\]\]/g, "$1")
+    .replace(/~([^~\n]+)~/g, "$1")
+    .replace(/\/([^/\n]+)\//g, "$1")
+    .replace(/\*([^*\n]+)\*/g, "$1")
+    .replace(/(^|\s)_([^_\n]+)_(?=\s|$)/g, "$1$2")
+    .replace(/^[ \t]*#\+[A-Za-z_]+:.*\n?/gm, "")
     .replace(/[ \t]+/g, " ")
     .replace(/\n{3,}/g, "\n\n")
     .trim();

@@ -371,6 +371,16 @@ test("normalizes common Textile markup into readable source evidence", async () 
   assert.equal(source.content, "Support Policy\n\nCustomers may request help.\nResponse time is four hours.");
 });
 
+test("normalizes common Org-mode markup into readable source evidence", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.org",
+    "#+TITLE: Leave Policy\n* Leave\n- Employees receive /12 weeks/ of paid leave.\n- [[https://example.test][Requests]] must be submitted.",
+    0,
+  );
+
+  assert.equal(source.content, "Leave\nEmployees receive 12 weeks of paid leave.\nRequests must be submitted.");
+});
+
 test("strips MDX extensions from fallback source titles", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/leave-policy.mdx",
