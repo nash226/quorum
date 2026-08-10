@@ -1,5 +1,9 @@
 # Quorum
 
+Java `.properties` policy exports now ignore comment-only lines and join
+backslash-continued values before claim extraction, keeping common configuration
+exports focused on the policy text reviewers need to verify.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.

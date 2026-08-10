@@ -107,6 +107,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseTomlSource(normalizedContent);
   }
 
+  if (isPropertiesSource(sourcePath)) {
+    return { metadata: {}, body: normalizePropertiesSource(normalizedContent) };
+  }
+
   if (isDelimitedSource(sourcePath)) {
     return parseDelimitedSource(normalizedContent, /\.tsv$/i.test(sourcePath));
   }
@@ -250,6 +254,10 @@ function isTomlSource(sourcePath: string): boolean {
   return /\.toml$/i.test(sourcePath);
 }
 
+function isPropertiesSource(sourcePath: string): boolean {
+  return /\.properties$/i.test(sourcePath);
+}
+
 function isDelimitedSource(sourcePath: string): boolean {
   return /\.(?:csv|tsv)$/i.test(sourcePath);
 }
@@ -276,6 +284,34 @@ function normalizeLatexSource(content: string): string {
     .replace(/[ \t]+/g, " ")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
+}
+
+function normalizePropertiesSource(content: string): string {
+  const logicalLines: string[] = [];
+  let continued = "";
+
+  for (const line of content.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#") || trimmed.startsWith("!")) {
+      continue;
+    }
+
+    const value = continued ? `${continued}${trimmed}` : trimmed;
+    if (value.endsWith("\\") && !value.endsWith("\\\\")) {
+      continued = value.slice(0, -1);
+      continue;
+    }
+
+    logicalLines.push(value);
+    continued = "";
+  }
+
+  if (continued) {
+    logicalLines.push(continued);
+  }
+
+  const normalized = logicalLines.join("\n");
+  return content.endsWith("\n") && normalized ? `${normalized}\n` : normalized;
 }
 
 function normalizeTextileSource(content: string): string {
