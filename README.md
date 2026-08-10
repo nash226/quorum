@@ -1,5 +1,9 @@
 # Quorum
 
+Direct and recursive verification now accepts `.env` configuration exports for
+answers and approved sources, alongside `.ini`, `.properties`, `.conf`, and
+`.cfg` text formats.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
