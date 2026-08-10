@@ -1,5 +1,8 @@
 # Quorum
 
+Textile approved sources now promote `h1.`–`h6.` headings to reviewer-facing
+evidence titles while preserving the normalized policy body.
+
 Direct verification now regression-tests paired `.xht` HTML answer and approved-source exports, including source title extraction and verified evidence.
 
 Direct verification now regression-tests paired `.rst` reStructuredText answer

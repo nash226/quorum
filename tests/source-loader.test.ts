@@ -245,7 +245,7 @@ test("strips supported text extensions from fallback source titles", async () =>
   );
   const textileSource = await sourceDocumentFromFile(
     "docs/policies/leave-policy.textile",
-    "Employees receive 12 weeks of paid parental leave.",
+    "h1. Leave policy\n\nEmployees receive 12 weeks of paid parental leave.",
     7,
   );
   const ndjsonSource = await sourceDocumentFromFile(
@@ -275,7 +275,7 @@ test("strips supported text extensions from fallback source titles", async () =>
   assert.equal(confSource.content, "leave.weeks=12\n");
   assert.equal(cfgSource.title, "leave-policy");
   assert.equal(cfgSource.content, "leave.weeks=12\n");
-  assert.equal(textileSource.title, "leave-policy");
+  assert.equal(textileSource.title, "Leave policy");
   assert.equal(ndjsonSource.title, "leave-policy");
   assert.match(ndjsonSource.content, /Employees receive 12 weeks/);
   assert.equal(yamlSource.title, "leave-policy");
@@ -367,7 +367,7 @@ test("normalizes common Textile markup into readable source evidence", async () 
     0,
   );
 
-  assert.equal(source.title, "support-policy");
+  assert.equal(source.title, "Support Policy");
   assert.equal(source.content, "Support Policy\n\nCustomers may request help.\nResponse time is four hours.");
 });
 
