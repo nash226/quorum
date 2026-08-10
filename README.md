@@ -3000,6 +3000,9 @@ Batch verification is now shipped: `verify-batch` can discover nested answer
 directories, preserve explicit answer ordering, and emit reviewer CSV plus
 one-row-per-answer summary exports for queue routing.
 
+Recursive directory discovery is regression-tested for stable sorted answer and
+source ordering, keeping batch report paths and source IDs reproducible.
+
 See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
 [docs/api-deployment.md](docs/api-deployment.md) for deployment boundaries.
 Human sign-off
