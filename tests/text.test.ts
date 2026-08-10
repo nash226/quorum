@@ -74,6 +74,13 @@ test("splits sentences across Unicode line and paragraph separators", () => {
   );
 });
 
+test("splits sentences at the Georgian paragraph separator", () => {
+  assert.deepEqual(
+    splitIntoSentences("შვებულება გრძელდება ხუთი დღე჻ თანამშრომლები იღებენ ანაზღაურებას."),
+    ["შვებულება გრძელდება ხუთი დღე჻", "თანამშრომლები იღებენ ანაზღაურებას."],
+  );
+});
+
 test("keeps simple basenames when answer filenames are already unique", () => {
   assert.deepEqual(
     renderAnswerLabels([

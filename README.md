@@ -113,6 +113,9 @@ multi-line policy cells remain intact for claim extraction and evidence review.
 Claim extraction now recognizes the Sinhala punctuation mark `෴`, keeping
 localized Sinhala policy statements separately reviewable for evidence matching.
 
+Claim extraction now recognizes the Georgian paragraph separator `჻`, keeping
+adjacent Georgian policy statements separately reviewable for evidence matching.
+
 The packaged CLI smoke gate now verifies reStructuredText (`.rst`) answers
 against approved sources, keeping the documented rich-text input contract
 covered at the release boundary.
