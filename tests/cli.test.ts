@@ -3709,6 +3709,35 @@ test("verify discovers ini policy exports from a source directory", async () => 
   }
 });
 
+test("verify discovers mixed-case pdf sources in nested directories", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-discovery-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "approved", "policies");
+    const sourcePath = join(sourceDir, "parental-leave.PDF");
+
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, createSimplePdf("Employees receive 12 weeks of paid parental leave.")),
+    ]);
+
+    const stdout = await runCli([
+      "verify", "--answer", answerPath, "--source-dir", join(tempDir, "approved"), "--json",
+    ]);
+    const report = JSON.parse(stdout) as {
+      sources: Array<{ title: string }>;
+      summary: Record<string, number>;
+    };
+
+    assert.deepEqual(report.sources.map((source) => source.title), ["parental-leave"]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims against html sources with named entities", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-entities-"));
 
