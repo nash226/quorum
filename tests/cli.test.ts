@@ -183,6 +183,25 @@ test("verify-batch discovers uppercase CSV exports for answers and sources", asy
   }
 });
 
+test("verify accepts direct JSON answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-json-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "leave-answer.json");
+    const sourcePath = join(tempDir, "leave-policy.json");
+    await Promise.all([
+      writeFile(answerPath, '{"claim":"Employees receive 12 weeks of paid parental leave."}\n', "utf8"),
+      writeFile(sourcePath, '{"policy":"Employees receive 12 weeks of paid parental leave."}\n', "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify", "--answer", answerPath, "--source", sourcePath]);
+
+    assert.match(stdout, /VERIFIED/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .jsonc exports for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-jsonc-alias-"));
 

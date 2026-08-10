@@ -8,6 +8,10 @@ The programmatic batch API accepts uppercase CSV input paths such as
 `leave-answer.CSV` and `leave-policy.CSV`, preserving those paths in the
 verification report while matching the CLI's case-insensitive format contract.
 
+Direct JSON answer and approved-source exports are covered by the CLI smoke
+contract, so structured `.json` policy files can be verified without renaming
+them to a text extension.
+
 The published input contract is case-insensitive and recursive: `--answer-dir`
 and `--source-dir` discover supported files in nested directories regardless of
 extension case, while repeated explicit `--answer` and `--source` paths support
