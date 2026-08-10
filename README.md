@@ -808,6 +808,8 @@ curl http://127.0.0.1:3000/openapi.json
 Use `/capabilities` as the integration bootstrap: it publishes the supported
 answer/source extensions, verdicts, request limits, and reviewer-queue statuses
 before a client sends work to `/verify`, `/verify-batch`, or `/import-review`.
+The plain-text `.text` alias is included in that contract and keeps its source
+filename cleanly separated from the reviewer-facing title.
 
 Run the checked-in HR or support scorecards with
 `npm run evaluate -- --fixture-dir examples/evaluations --domain support`. Export the machine-readable API contract
