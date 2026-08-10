@@ -1,5 +1,8 @@
 # Quorum
 
+Direct verification now regression-tests Apple Mail `.emlx` answers, keeping
+mail-export answers covered alongside the existing `.emlx` source workflow.
+
 Saved web-page exports with `.mht` and `.mhtml` extensions are now accepted as
 HTML approved sources, including recursive discovery and stable fallback titles.
 
