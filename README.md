@@ -13,6 +13,9 @@ and `--source-dir` discover supported files in nested directories regardless of
 extension case, while repeated explicit `--answer` and `--source` paths support
 curated verification sets.
 
+The CLI regression suite now covers nested `.MARKDOWN` answer and approved-source
+exports, keeping the case-insensitive Markdown alias contract release-gated.
+
 Metadata-free RTF (`.rtf`) approved sources now use the filename without its
 extension as the reviewer-facing evidence title, matching other supported
 source exports.
