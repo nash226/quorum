@@ -2955,6 +2955,10 @@ Installed npm packages expose the primary verification workflows directly:
 verification. Both wrappers forward the same arguments as the `quorum verify`
 and `quorum verify-batch` commands.
 
+Programmatic integrations can call `getInputFormatContract()` from the package
+to receive the same versioned, JSON-friendly `version`, `sources`, and `answers`
+contract without importing extension sets.
+
 Batch verification is now shipped: `verify-batch` can discover nested answer
 directories, preserve explicit answer ordering, and emit reviewer CSV plus
 one-row-per-answer summary exports for queue routing.

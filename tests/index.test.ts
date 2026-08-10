@@ -4,13 +4,25 @@ import {
   API_ALLOWED_METHODS,
   API_CAPABILITIES,
   API_REQUEST_CONTENT_TYPES,
+  ANSWER_EXTENSIONS,
   extractClaims,
+  getInputFormatContract,
   renderEvaluationAggregateSummaryCsv,
   verifyAnswerBatchContentsResult,
   verifyAnswerContentsResult,
+  SOURCE_EXTENSIONS,
   type SourceDocumentOptions,
   type ApiErrorResponse,
 } from "../src/index.js";
+
+test("public package entrypoint exposes a versioned input format contract", () => {
+  const contract = getInputFormatContract();
+
+  assert.equal(contract.version, "0.1.0");
+  assert.deepEqual(contract.sources, [...SOURCE_EXTENSIONS].sort());
+  assert.deepEqual(contract.answers, [...ANSWER_EXTENSIONS].sort());
+  assert.notEqual(contract.sources, [...SOURCE_EXTENSIONS]);
+});
 
 const sourceDocumentOptions: SourceDocumentOptions = {
   id: "hr/leave@2026-08-05",
