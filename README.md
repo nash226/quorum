@@ -1,5 +1,8 @@
 # Quorum
 
+The direct CLI verification path is regression-tested for XHTML (`.xhtml`)
+answers and approved-source exports, including page-title extraction.
+
 Saved web-page exports with `.mht` and `.mhtml` extensions are now accepted as
 HTML approved sources, including recursive discovery and stable fallback titles.
 
