@@ -750,6 +750,7 @@ function renderReviewConsoleHtmlReport(
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Quorum evidence review report for an AI-generated answer." />
     <title>Quorum Review Console</title>
     <style>
       :root {
@@ -1520,6 +1521,7 @@ export function renderBatchHtmlReport(report: BatchVerificationReport, failOn: C
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Quorum batch evidence review report for AI-generated answers." />
     <title>Quorum Batch Verification Report</title>
     <style>
       :root {

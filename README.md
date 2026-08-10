@@ -1,5 +1,9 @@
 # Quorum
 
+Generated single-answer, batch, and reviewer-import HTML reports now include
+descriptive metadata so saved or shared review artifacts remain identifiable
+in browser previews and document catalogs.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.

@@ -261,6 +261,7 @@ test("renders a professional HTML reviewer report with escaped content", () => {
 
   assert.match(rendered, /<!doctype html>/i);
   assert.match(rendered, /<title>Quorum Review Console<\/title>/);
+  assert.match(rendered, /<meta name="description" content="Quorum evidence review report for an AI-generated answer\." \/>/);
   assert.match(rendered, /Claim review queue/);
   assert.match(rendered, /Evidence detail/);
   assert.match(rendered, /Reviewer decision/);
@@ -461,6 +462,7 @@ test("renders an HTML batch report with escaped answer paths and fail status", (
 
   assert.match(rendered, /<!doctype html>/i);
   assert.match(rendered, /<title>Quorum Batch Verification Report<\/title>/);
+  assert.match(rendered, /<meta name="description" content="Quorum batch evidence review report for AI-generated answers\." \/>/);
   assert.match(rendered, /Batch verification report for review queues/);
   assert.match(rendered, /HR Policy<\/strong><span>high trust - updated 2026-05-31 - path examples\/sources\/hr-policy\.md<\/span>/);
   assert.match(rendered, /No extracted claims<\/span>\s*<strong>0 answers<\/strong>/);
