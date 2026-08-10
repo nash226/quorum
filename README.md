@@ -1,5 +1,9 @@
 # Quorum
 
+Integrations can run `quorum formats --json` to discover the versioned,
+sorted answer and approved-source extension contract without scraping CLI help.
+The response is self-contained and requires no input files.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
