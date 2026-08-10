@@ -1669,6 +1669,17 @@ test("falls back to the html file name when the page has no title", async () => 
   assert.equal(source.content, "Escalate priority incidents immediately.");
 });
 
+test("parses saved SHTML pages and strips the extension from fallback titles", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/benefits.shtml",
+    "<html><head><title>Benefits</title></head><body><p>Coverage begins after 30 days.</p></body></html>",
+    0,
+  );
+
+  assert.equal(source.title, "Benefits");
+  assert.match(source.content, /Coverage begins after 30 days\./);
+});
+
 test("extracts readable text and metadata from exported xml sources", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.xml",
