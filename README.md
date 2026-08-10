@@ -2996,3 +2996,6 @@ See [docs/roadmap.md](docs/roadmap.md) for the working roadmap and
 [docs/api-deployment.md](docs/api-deployment.md) for deployment boundaries.
 Human sign-off
 items use the [decision queue](docs/decision-queue.md).
+Direct CLI verification now regression-tests paired Markdown text (`.mkdn`)
+answer and approved-source exports, keeping this published Markdown-family
+alias on the same evidence path as the other supported document formats.
