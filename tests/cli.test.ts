@@ -773,6 +773,47 @@ test("verify accepts direct .org-mode answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct .xhtml answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-xhtml-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.xhtml");
+    const sourcePath = join(tempDir, "policy.xhtml");
+    const html = `<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head><title>Leave Policy</title></head>
+  <body><p>Employees receive 12 weeks of paid parental leave.</p></body>
+</html>`;
+
+    await Promise.all([
+      writeFile(answerPath, html, "utf8"),
+      writeFile(sourcePath, html, "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      answerPath: string;
+      summary: { verified: number };
+      assessments: Array<{ verdict: string }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "Leave Policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct .text source export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-text-source-"));
 
