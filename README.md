@@ -1,5 +1,8 @@
 # Quorum
 
+Evaluation reports now regression-test source provenance alongside verdicts,
+including stable IDs, titles, trust, freshness, paths, and generated timestamps.
+
 The checked-in evaluation guide now calls out the newer support-policy
 scenarios covered by the 92-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
