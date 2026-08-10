@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `40d931c6` on 2026-08-10, test: smoke packaged reviewer queue
+- Latest shipped change: `d3580d3f` on 2026-08-10, test: cover direct mkdn verification
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-10 | Direct push | test: cover direct mkdn verification | `d3580d3f` |
 | 2026-08-10 | Direct push | test: smoke packaged reviewer queue | `40d931c6` |
 | 2026-08-10 | Direct push | test: cover direct .conf verification | `ce24ae95` |
 | 2026-08-10 | Direct push | fix: allow source-only format contracts | `ae465178` |
@@ -56,5 +57,4 @@
 | 2026-08-10 | Direct push | test: cover paired MediaWiki verification | `a166a515` |
 | 2026-08-10 | Direct push | test: cover direct saved web-page verification | `b432dbf3` |
 | 2026-08-10 | Direct push | test: cover RFC 822 fallback source titles | `babd4089` |
-| 2026-08-10 | Direct push | test: cover uppercase XML verification | `4539f374` |
 
