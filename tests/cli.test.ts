@@ -2248,6 +2248,27 @@ test("verify rejects unsupported default trust overrides", async () => {
   );
 });
 
+test("verify rejects an empty approved source set", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-sources-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourceDir = join(tempDir, "sources");
+
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      mkdir(sourceDir),
+    ]);
+
+    await assert.rejects(
+      runCli(["verify", "--answer", answerPath, "--source-dir", sourceDir]),
+      /No approved source files found in .*sources/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects explicit approved sources outside the supported format contract", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-unsupported-source-"));
 
