@@ -165,7 +165,6 @@ const formatsJson = JSON.parse(runCli(["formats", "--json"]));
 assert.equal(formatsJson.version, api.API_VERSION);
 assert.deepEqual(formatsJson.sources, [...api.SOURCE_EXTENSIONS].sort());
 assert.deepEqual(formatsJson.answers, [...api.ANSWER_EXTENSIONS].sort());
-assert.deepEqual(formatsJson.sources, formatsJson.answers);
 
 const tempDir = mkdtempSync(join(tmpdir(), "quorum-smoke-"));
 let packedPackageFilename;

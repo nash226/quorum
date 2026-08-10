@@ -1,5 +1,9 @@
 # Quorum
 
+The smoke gate now validates answer and approved-source format contracts
+independently, allowing source-only exports such as `.shtml` without masking
+drift in either machine-readable list.
+
 Direct verification now regression-tests paired MediaWiki answer and approved-source exports with heading, emphasis, and reference markup normalized before evidence matching.
 
 The direct CLI verification path now regression-tests paired `.mht` and
