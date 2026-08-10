@@ -5286,6 +5286,46 @@ test("verify-batch discovers uppercase JSONL answers recursively", async () => {
   }
 });
 
+test("verify-batch discovers mixed-case nested JSONL answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-mixed-case-jsonl-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers", "nested");
+    const sourceDir = join(tempDir, "sources", "nested");
+    const answerPath = join(answerDir, "answer.JsOnL");
+    const sourcePath = join(sourceDir, "policy.NdJsOn");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await writeFile(answerPath, '{"response":"Customers can request refunds within 30 days."}\n', "utf8");
+    await writeFile(sourcePath, '{"policy":"Customers can request refunds within 30 days."}\n', "utf8");
+
+    const report = JSON.parse(
+      await runCli([
+        "verify-batch",
+        "--answer-dir",
+        join(tempDir, "answers"),
+        "--source-dir",
+        join(tempDir, "sources"),
+        "--json",
+      ]),
+    ) as {
+      answerCount: number;
+      sourceCount: number;
+      summary: { verified: number };
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ sourcePath: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answers[0]?.answerPath, answerPath);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts JSON and YAML sources passed explicitly", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-structured-source-"));
 

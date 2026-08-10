@@ -1,5 +1,7 @@
 # Quorum
 
+Batch verification now regression-tests nested JSONL and NDJSON answers and approved sources with mixed-case extensions, preserving the case-insensitive discovery contract for structured exports.
+
 Integrations can run `quorum formats --json` to discover the versioned,
 sorted answer and approved-source extension contract without scraping CLI help.
 The response is self-contained and requires no input files.
