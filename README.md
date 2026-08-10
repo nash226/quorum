@@ -730,6 +730,10 @@ Directory verification supports the same published answer and source format
 aliases as the local API, including `.text`, structured exports, web exports,
 PDF, and DOCX; run `npm run dev -- formats` for the authoritative lists.
 
+Transcript exports in `.vtt` and `.srt` are also discoverable. Quorum removes
+cue timing and markup before claim extraction, allowing support-call evidence
+to be verified alongside policy documents.
+
 The packaged CLI smoke gate now verifies direct NDJSON answer and approved-source
 exports, keeping newline-delimited JSON coverage release-gated for single-file use.
 

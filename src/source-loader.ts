@@ -111,6 +111,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseDelimitedSource(normalizedContent, /\.tsv$/i.test(sourcePath));
   }
 
+  if (isTranscriptSource(sourcePath)) {
+    return { metadata: {}, body: normalizeTranscriptSource(normalizedContent) };
+  }
+
   if (isLatexSource(sourcePath)) {
     return { metadata: {}, body: normalizeLatexSource(normalizedContent) };
   }
@@ -254,6 +258,10 @@ function isDelimitedSource(sourcePath: string): boolean {
   return /\.(?:csv|tsv)$/i.test(sourcePath);
 }
 
+function isTranscriptSource(sourcePath: string): boolean {
+  return /\.(?:srt|vtt)$/i.test(sourcePath);
+}
+
 function isLatexSource(sourcePath: string): boolean {
   return /\.tex$/i.test(sourcePath);
 }
@@ -307,7 +315,21 @@ function normalizeMediaWikiSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xht|xhtml|mht|mhtml|pdf|docx|rtf|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml|emlx)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|html?|xht|xhtml|mht|mhtml|pdf|docx|rtf|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml|emlx|srt|vtt)$/i, "");
+}
+
+function normalizeTranscriptSource(content: string): string {
+  return content
+    .replace(/^WEBVTT(?:[^\n]*)\n+/i, "")
+    .replace(/^\uFEFF?\d+\s*\n/gm, "")
+    .replace(/^\d{2}:\d{2}:\d{2}[,.]\d{3}\s+-->\s+[^\n]+\n/gm, "")
+    .replace(/^NOTE(?:\s[^\n]*)?\n(?:[^\n]*\n)*\n?/gim, "")
+    .replace(/^STYLE\n(?:[^\n]*\n)*\n?/gim, "")
+    .replace(/^REGION\n(?:[^\n]*\n)*\n?/gim, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 function parseEmailSource(content: string): ParsedSource {
