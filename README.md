@@ -4,6 +4,11 @@ The programmatic batch API accepts uppercase CSV input paths such as
 `leave-answer.CSV` and `leave-policy.CSV`, preserving those paths in the
 verification report while matching the CLI's case-insensitive format contract.
 
+The published input contract is case-insensitive and recursive: `--answer-dir`
+and `--source-dir` discover supported files in nested directories regardless of
+extension case, while repeated explicit `--answer` and `--source` paths support
+curated verification sets.
+
 Metadata-free RTF (`.rtf`) approved sources now use the filename without its
 extension as the reviewer-facing evidence title, matching other supported
 source exports.
