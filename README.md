@@ -212,6 +212,9 @@ folded `Subject` and `Date` headers retain their metadata during verification.
 RFC 822 imports now decode quoted-printable bodies before claim extraction, so
 common email exports preserve readable policy text during verification.
 
+RFC 822 email imports also decode base64 bodies before claim extraction, so policy
+exports using either common transfer encoding remain readable evidence.
+
 Claim extraction now recognizes the Khmer full stop (`។`), keeping localized
 Khmer policy statements separately reviewable for evidence matching.
 

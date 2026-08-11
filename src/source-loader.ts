@@ -340,14 +340,17 @@ function parseEmailSource(content: string): ParsedSource {
 }
 
 function decodeEmailBody(body: string, transferEncoding: string | undefined): string {
-  if (transferEncoding?.toLowerCase() !== "quoted-printable") {
-    return body;
+  switch (transferEncoding?.toLowerCase()) {
+    case "quoted-printable":
+      return body
+        .replace(/=\n/g, "")
+        .replace(/=([0-9a-f]{2})/gi, (_match, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)))
+        .trim();
+    case "base64":
+      return Buffer.from(body.replace(/\s+/g, ""), "base64").toString("utf8").trim();
+    default:
+      return body;
   }
-
-  return body
-    .replace(/=\n/g, "")
-    .replace(/=([0-9a-f]{2})/gi, (_match, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)))
-    .trim();
 }
 
 function normalizeLineEndings(content: string): string {
