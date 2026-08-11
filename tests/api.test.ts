@@ -275,6 +275,25 @@ test("formats endpoint exposes the supported input contract", async () => {
   }
 });
 
+test("formats endpoint revalidates conditional GET requests without a body", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  try {
+    const initialResponse = await fetch(`${api.url}${SERVER_FORMATS_PATH}`);
+    assert.equal(initialResponse.status, 200);
+    const etag = initialResponse.headers.get("etag");
+    assert.ok(etag);
+
+    const revalidatedResponse = await fetch(`${api.url}${SERVER_FORMATS_PATH}`, {
+      headers: { "If-None-Match": etag },
+    });
+    assert.equal(revalidatedResponse.status, 304);
+    assert.equal(await revalidatedResponse.text(), "");
+    assert.equal(revalidatedResponse.headers.get("etag"), etag);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API can build the OpenAPI document without starting the server", () => {
   const openApi = createOpenApiDocument({
     serverUrl: "http://127.0.0.1:3000/",
