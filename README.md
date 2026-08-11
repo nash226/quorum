@@ -1,5 +1,11 @@
 # Quorum
 
+The shipped foundation includes batch verification, reviewer queue summaries,
+and a local HTTP API with capability discovery and health probes. Durable
+reviewer-queue persistence is intentionally the next product decision; see
+[#683](https://github.com/nash226/quorum/issues/683) for the approved options
+and current boundary.
+
 Recursive batch verification now regression-tests uppercase `.MHT` and
 `.MHTML` saved web-page exports, keeping case-insensitive discovery aligned
 with direct verification and the published format contract.
