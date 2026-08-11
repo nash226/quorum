@@ -1,5 +1,8 @@
 # Quorum
 
+HTTP health, readiness, and liveness aliases now have regression coverage for
+bodyless `HEAD` probes, including their no-store cache policy and request IDs.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
