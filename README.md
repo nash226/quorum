@@ -1956,6 +1956,10 @@ exported review artifacts.
 The packaged CLI smoke gate verifies that `verify-batch --fail-on` exits with
 status code `2` when any answer contains a selected risky verdict.
 
+The local HTTP API accepts query parameters on stable discovery endpoints such
+as `/capabilities`, so agents can add client or probe metadata without changing
+the endpoint contract.
+
 The same batch fail policy is available over HTTP: with `failOn` and
 `failOnStatus`, a risky batch returns HTTP `409` plus `shouldFail` and
 `failVerdicts` metadata for workflow gating.
