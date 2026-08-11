@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2a2567b3` on 2026-08-11, test: cover query-bearing formats requests
+- Latest shipped change: `770956c1` on 2026-08-11, test: expand HR commuter benefit coverage
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-11 | Direct push | test: expand HR commuter benefit coverage | `770956c1` |
 | 2026-08-11 | Direct push | test: cover query-bearing formats requests | `2a2567b3` |
 | 2026-08-11 | Direct push | fix: honor explicit wildcard CORS origins | `5e1ccb1d` |
 | 2026-08-11 | [#2337](https://github.com/nash226/quorum/pull/2337) | test: cover discovery conditional GET contract | `ffbde8e3` |
@@ -56,5 +57,4 @@
 | 2026-08-11 | Direct push | test: cover labeled in-memory batch results | `981fb451` |
 | 2026-08-11 | Direct push | docs: clarify shipped product boundary | `621af7c3` |
 | 2026-08-11 | [#2326](https://github.com/nash226/quorum/pull/2326) | test: cover formats cache revalidation | `2a77e910` |
-| 2026-08-11 | Direct push | feat: expose supported formats over HTTP | `7b143821` |
 
