@@ -134,6 +134,16 @@ test("decodes quoted-printable RFC 822 email bodies", async () => {
   assert.equal(source.content, "Customers can request refunds within 30 days.");
 });
 
+test("decodes UTF-8 quoted-printable RFC 822 email bodies", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr/leave-policy.eml",
+    "Subject: Leave policy\nContent-Transfer-Encoding: quoted-printable\n\nEmployees may take caf=C3=A9 leave during the holiday period.\n",
+    0,
+  );
+
+  assert.equal(source.content, "Employees may take café leave during the holiday period.");
+});
+
 test("decodes base64 RFC 822 email bodies", async () => {
   const source = await sourceDocumentFromFile(
     "docs/support/refund-policy.eml",
