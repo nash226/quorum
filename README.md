@@ -1,5 +1,9 @@
 # Quorum
 
+Jupyter Notebook (`.ipynb`) answers and approved sources now expose their
+Markdown and code cells to claim extraction, keeping notebook-based policy
+evidence discoverable in batch verification.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
