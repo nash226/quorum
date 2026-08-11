@@ -253,6 +253,13 @@ test("splits Myanmar sentence terminators", () => {
   );
 });
 
+test("splits N'Ko sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("ߒߞߏ߹ ߒߞߏ ߞߊ߲ߓߊ߬߹ Next policy applies."),
+    ["ߒߞߏ߹", "ߒߞߏ ߞߊ߲ߓߊ߬߹", "Next policy applies."],
+  );
+});
+
 test("renders readable previews from exported html answers", () => {
   assert.equal(
     renderAnswerPreview(`<!doctype html>
