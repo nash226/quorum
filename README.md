@@ -2086,6 +2086,11 @@ kept as readable row text for claim matching. Explicit approved-source paths
 with other extensions are rejected before verification, while recursive
 discovery skips them; use a supported extension or rename the export before it
 becomes evidence.
+
+For integrations that need the authoritative, versioned contract instead of a
+copied documentation list, run `npm run formats -- --json`. It returns the
+case-insensitive source and answer extensions used by direct verification and
+recursive directory discovery.
 Source frontmatter also normalizes Windows CRLF and legacy Mac CR line endings,
 so metadata remains readable from older policy exports.
 The packaged CLI smoke gate also verifies direct CSV answer and source exports,
