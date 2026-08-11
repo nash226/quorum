@@ -1420,6 +1420,7 @@ async function handleApiRequest(
       return;
     }
 
+    response.setHeader("Allow", routeMethods.join(", "));
     writeNoContent(response);
     return;
   }
