@@ -294,6 +294,21 @@ test("formats endpoint revalidates conditional GET requests without a body", asy
   }
 });
 
+test("formats endpoint serves bodyless HEAD responses with cache headers", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  try {
+    const response = await fetch(`${api.url}${SERVER_FORMATS_PATH}`, { method: "HEAD" });
+
+    assert.equal(response.status, 200);
+    assert.equal(await response.text(), "");
+    assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8");
+    assert.ok(response.headers.get("etag"));
+    assert.ok(response.headers.get("cache-control"));
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API can build the OpenAPI document without starting the server", () => {
   const openApi = createOpenApiDocument({
     serverUrl: "http://127.0.0.1:3000/",
