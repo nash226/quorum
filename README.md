@@ -1,5 +1,8 @@
 # Quorum
 
+The packaged HTTP smoke gate now verifies `/formats`, keeping published API
+artifacts aligned with the versioned answer and source extension contract.
+
 The HTTP API version-contract tests now revalidate `/formats` with conditional
 `HEAD` requests, keeping machine-readable format discovery aligned with the
 cache-aware discovery, capabilities, and OpenAPI endpoints.

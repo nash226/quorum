@@ -1773,6 +1773,18 @@ try {
     throw new Error("Package artifact server did not serve the expected capabilities contract.");
   }
 
+  const formatsResponse = await fetch(`${packagedServer.url}/formats`);
+  const formatsPayload = await formatsResponse.json();
+  if (
+    formatsResponse.status !== 200 ||
+    formatsPayload.service !== "quorum" ||
+    formatsPayload.version !== packageJson.version ||
+    JSON.stringify(formatsPayload.sourceExtensions) !== JSON.stringify(expectedSourceExtensions) ||
+    JSON.stringify(formatsPayload.answerExtensions) !== JSON.stringify(expectedAnswerExtensions)
+  ) {
+    throw new Error("Package artifact server did not preserve the HTTP formats contract.");
+  }
+
   for (const path of ["/", "/capabilities", "/health", "/readyz", "/livez", "/version", "/openapi.json"]) {
     const preflightResponse = await fetch(`${packagedServer.url}${path}`, {
       method: "OPTIONS",
