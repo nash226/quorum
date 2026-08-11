@@ -563,6 +563,22 @@ test("HTTP API serves bodyless HEAD responses for operational probes", async () 
   }
 });
 
+test("HTTP API routes query-bearing HEAD operational probes by pathname", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const path of ["/health?probe=ready", "/healthz?probe=ready", "/readyz?probe=ready", "/livez?probe=live"]) {
+      const response = await fetch(`${api.url}${path}`, { method: "HEAD" });
+
+      assert.equal(response.status, 200, path);
+      assert.equal(response.headers.get("cache-control"), "no-store", path);
+      assert.equal(await response.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API serves bodyless HEAD responses for contract discovery", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

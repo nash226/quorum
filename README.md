@@ -2360,6 +2360,9 @@ for queue consumers.
 
 HTTP integrations can also use `HEAD /version` for a bodyless version probe;
 it returns the same discovery headers and a cache validator as the JSON route.
+The operational `HEAD` probes (`/health`, `/healthz`, `/readyz`, and `/livez`)
+also ignore query strings when routing, so monitors can attach probe metadata
+without changing the health contract.
 The core API regression suite also pins conditional `GET /version` revalidation,
 so cache-aware clients can receive `304 Not Modified` without a body.
 The root discovery, capabilities, and OpenAPI probes also support conditional
