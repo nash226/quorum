@@ -1,5 +1,9 @@
 # Quorum
 
+The new [verification artifact guide](docs/verification-artifacts.md) shows
+how to produce JSON, Markdown/HTML, reviewer CSV, and imported-review outputs
+for machine integrations and human queue handoff.
+
 The CLI help now advertises the complete accepted input contract, including
 Apple Mail `.emlx` and rich-text `.rtf` files.
 
