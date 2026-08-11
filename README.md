@@ -1416,6 +1416,9 @@ workflows. Durable API hosting and queue persistence remain roadmap decisions,
 so integrations can adopt the verified local contracts without implying a
 hosting or storage commitment.
 
+See [the architecture guide](docs/architecture.md) for the verification data
+flow, report roles, and current deployment boundary.
+
 The checked-in examples also include a support-security scenario covering
 password-reset expiry, account-change verification, escalation requirements,
 and an unsupported premium-service claim.
