@@ -231,8 +231,8 @@ metadata is current without downloading the JSON body. Send that validator in
 changed.
 
 For a cache-aware bodyless probe, send the previously returned validator. The
-same pattern works for `/capabilities` and `/openapi.json`; use the endpoint's
-ETag from the initial `GET` or `HEAD` response:
+same pattern works for `/capabilities`, `/formats`, and `/openapi.json`; use
+the endpoint's ETag from the initial `GET` or `HEAD` response:
 
 ```bash
 curl -sSI http://127.0.0.1:3000/version \
@@ -249,8 +249,21 @@ curl -sSI http://127.0.0.1:3000/capabilities \
   -H 'If-None-Match: "<cached-capabilities-etag>"'
 ```
 
+The same bodyless check works for the supported input-format contract. This is
+useful for workers that cache the `answerExtensions` and `sourceExtensions`
+allow-list before scanning files:
+
+```bash
+curl -sSI http://127.0.0.1:3000/formats \
+  -H 'If-None-Match: "<cached-formats-etag>"'
+```
+
+Use `GET /formats` after a `200 OK` response to retrieve changed extension
+arrays. Its `ETag` changes with the versioned format contract, so a worker can
+refresh its allow-list without downloading it on every run.
+
 Use `GET` instead of `HEAD` when a changed representation is needed in the
-same request. All three cacheable contract endpoints preserve the validator
+same request. All four cacheable contract endpoints preserve the validator
 on `304` responses.
 
 ## Verify an answer
