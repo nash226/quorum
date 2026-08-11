@@ -4,6 +4,10 @@ The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
 
+The HTTP verification contract now also regression-tests Java-style
+`.properties` answer and approved-source content, keeping configuration-backed
+policy integrations aligned with direct CLI verification.
+
 Batch verification, reviewer-queue exports, and the local HTTP integration
 surface are shipped foundations; the [roadmap](docs/roadmap.md) separates that
 product boundary from decision-gated durable hosting and queue storage.
