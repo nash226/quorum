@@ -993,6 +993,19 @@ test("HTTP API routes valid requests with query strings by pathname", async () =
       version: "0.1.0",
     });
 
+    for (const path of ["/health", "/readyz", "/livez"]) {
+      const probeResponse = await fetch(`${api.url}${path}?probe=operational`);
+      assert.equal(probeResponse.status, 200, path);
+      const probePayload = await probeResponse.json() as ApiHealthResponse;
+      assert.equal(probePayload.requestId, probeResponse.headers.get("x-quorum-request-id"), path);
+      assert.deepEqual({ ...probePayload, requestId: "" }, {
+        ok: true,
+        requestId: "",
+        service: "quorum",
+        version: "0.1.0",
+      }, path);
+    }
+
     const extractClaimsResponse = await fetch(`${api.url}/extract-claims?format=json`, {
       method: "POST",
       headers: { "content-type": "application/json" },
