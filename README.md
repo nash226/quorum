@@ -1,5 +1,8 @@
 # Quorum
 
+HTTP discovery and health routes accept an optional trailing slash, keeping
+clients that normalize endpoint URLs on the same contract as canonical paths.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
