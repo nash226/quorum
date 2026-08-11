@@ -1,5 +1,9 @@
 # Quorum
 
+Reviewer queue domain filters now deduplicate repeated names case-insensitively,
+so integrations can safely combine user-entered `--domain HR` and `--domain hr`
+without duplicate benchmark scopes.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.

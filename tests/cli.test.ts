@@ -8281,6 +8281,46 @@ test("review-queue scopes benchmark drift to selected domains", async () => {
   }
 });
 
+test("review-queue deduplicates domain filters case-insensitively", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-domain-dedupe-"));
+
+  try {
+    const reviewCsvPath = join(tempDir, "review.csv");
+    await runCli([
+      "verify-batch",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source",
+      "examples/sources/hr-policy.md",
+      "--review-csv-out",
+      reviewCsvPath,
+    ]);
+
+    const stdout = await runCli([
+      "review-queue",
+      "--review-csv",
+      reviewCsvPath,
+      "--fixture-dir",
+      "examples/evaluations",
+      "--domain",
+      "HR",
+      "--domain",
+      " hr ",
+      "--json",
+    ]);
+    const overview = JSON.parse(stdout) as {
+      domains: string[];
+      evaluation: { fixtureCount: number; domains: Array<{ domain: string; fixtureCount: number }> };
+    };
+
+    assert.deepEqual(overview.domains, ["HR"]);
+    assert.equal(overview.evaluation.fixtureCount, 32);
+    assert.deepEqual(overview.evaluation.domains, [{ domain: "hr", fixtureCount: 32, mismatchCount: 0 }]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("review-queue fails closed when a domain filter matches no fixtures", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-review-queue-domain-empty-"));
 

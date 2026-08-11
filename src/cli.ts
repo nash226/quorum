@@ -726,7 +726,12 @@ function parseReviewQueueArgs(args: string[]): ReviewQueueArgs {
     if (arg === "--review-csv" && hasOptionValue(next)) { reviewCsvPath = next; index += 1; }
     else if (arg === "--fixture" && hasOptionValue(next)) { fixturePaths.push(next); index += 1; }
     else if (arg === "--fixture-dir" && hasOptionValue(next)) { fixtureDirPaths.push(next); index += 1; }
-    else if (arg === "--domain" && hasOptionValue(next)) { domains.push(next); index += 1; }
+    else if (arg === "--domain" && hasOptionValue(next)) {
+      if (!domains.some((domain) => domain.trim().toLowerCase() === next.trim().toLowerCase())) {
+        domains.push(next);
+      }
+      index += 1;
+    }
     else if (arg === "--queue-status" && hasOptionValue(next)) { queueStatus = parseReviewerQueueStatus(next); index += 1; }
     else if (arg === "--generated-at" && hasOptionValue(next)) { generatedAt = parseGeneratedAt(next); index += 1; }
     else if (arg === "--out" && hasOptionValue(next)) { outPath = next; index += 1; }
