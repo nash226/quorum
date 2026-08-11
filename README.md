@@ -54,6 +54,9 @@ The current CLI can:
 - import filled reviewer decision CSVs into a machine-readable summary
 - fail a CI job when selected risky verdicts appear
 
+For pipeline integrations, `verify --answer -` reads the generated answer from
+standard input while preserving `answerPath: "-"` in JSON and reviewer outputs.
+
 ## Example
 
 ```bash

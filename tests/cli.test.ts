@@ -59,6 +59,29 @@ Employees receive 12 weeks of paid parental leave.
   }
 });
 
+test("verify reads an answer from stdin when passed --answer -", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-stdin-"));
+
+  try {
+    const sourcePath = join(tempDir, "hr-policy.md");
+    await writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+
+    const stdout = await runCliWithInput(
+      ["verify", "--answer", "-", "--source", sourcePath, "--json"],
+      "Employees receive 12 weeks of paid parental leave.\n",
+    );
+    const report = JSON.parse(stdout) as {
+      answerPath: string;
+      summary: Record<string, number>;
+    };
+
+    assert.equal(report.answerPath, "-");
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([
@@ -1291,29 +1314,44 @@ async function runCli(args: string[]): Promise<string> {
   throw new Error(result.stderr.trim() || `CLI exited with code ${result.code}`);
 }
 
+async function runCliWithInput(args: string[], input: string): Promise<string> {
+  const result = await runCliAllowFailure(args, input);
+
+  if (result.code === 0) {
+    return result.stdout;
+  }
+
+  throw new Error(result.stderr.trim() || `CLI exited with code ${result.code}`);
+}
+
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 async function runCliAllowFailure(
   args: string[],
+  input?: string,
 ): Promise<{ code: number; stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", ...args], {
       cwd: process.cwd(),
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: [input === undefined ? "ignore" : "pipe", "pipe", "pipe"],
     });
 
     let stdout = "";
     let stderr = "";
 
-    child.stdout.on("data", (chunk: Buffer | string) => {
+    child.stdout?.on("data", (chunk: Buffer | string) => {
       stdout += chunk.toString();
     });
 
-    child.stderr.on("data", (chunk: Buffer | string) => {
+    child.stderr?.on("data", (chunk: Buffer | string) => {
       stderr += chunk.toString();
     });
+
+    if (input !== undefined) {
+      child.stdin?.end(input);
+    }
 
     child.on("error", reject);
     child.on("close", (code) => {

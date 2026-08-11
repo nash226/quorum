@@ -558,8 +558,18 @@ async function verifySingleAnswer(
   answerPath: string,
   sources: SourceDocument[],
 ): Promise<VerificationReport> {
-  const answer = await readFile(answerPath, "utf8");
+  const answer = answerPath === "-" ? await readStdin() : await readFile(answerPath, "utf8");
   return verifyAnswer(answer, sources, undefined, answerPath);
+}
+
+async function readStdin(): Promise<string> {
+  const chunks: Buffer[] = [];
+
+  for await (const chunk of process.stdin) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  }
+
+  return Buffer.concat(chunks).toString("utf8");
 }
 
 async function listSourceFiles(sourceDir: string): Promise<string[]> {
