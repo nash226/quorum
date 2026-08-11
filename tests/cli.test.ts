@@ -2349,6 +2349,16 @@ test("top-level help lists every shipped command", async () => {
   assert.match(stdout, /Directory discovery is recursive and skips hidden files, hidden directories, and common editor temporary files/);
 });
 
+test("workflow commands expose help without loading their inputs", async () => {
+  for (const command of ["verify-batch", "extract-claims", "review-queue"] as const) {
+    const result = await runCliAllowFailure([command, "--help"]);
+
+    assert.equal(result.code, 0);
+    assert.equal(result.stderr, "");
+    assert.match(result.stdout, new RegExp(`^Quorum ${command}\\n`));
+  }
+});
+
 test("verify applies the default trust override only to sources without metadata", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-"));
 
