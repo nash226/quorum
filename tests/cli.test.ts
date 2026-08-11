@@ -4621,6 +4621,33 @@ test("verify accepts direct AsciiDoc answers", async () => {
   }
 });
 
+test("verify accepts direct AsciiDoc answers and sources with uppercase extensions", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-uppercase-asciidoc-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.ASCIIDOC");
+    const sourcePath = join(tempDir, "policy.ADOC");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as { assessments: Array<{ verdict: string; claim: { text: string } }> };
+
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "Employees receive 12 weeks of paid parental leave.");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers TOML answers in answer directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-toml-answer-dir-"));
 
