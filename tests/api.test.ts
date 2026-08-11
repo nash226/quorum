@@ -975,6 +975,13 @@ test("HTTP API routes valid requests with query strings by pathname", async () =
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
   try {
+    const formatsResponse = await fetch(`${api.url}/formats?client=bootstrap`);
+    assert.equal(formatsResponse.status, 200);
+    const formatsPayload = await formatsResponse.json() as { requestId: string; sourceExtensions: string[]; answerExtensions: string[] };
+    assert.equal(formatsPayload.requestId, formatsResponse.headers.get("x-quorum-request-id"));
+    assert.deepEqual(formatsPayload.sourceExtensions, [...SOURCE_EXTENSIONS].sort());
+    assert.deepEqual(formatsPayload.answerExtensions, [...ANSWER_EXTENSIONS].sort());
+
     const healthResponse = await fetch(`${api.url}/healthz?probe=readiness`);
     assert.equal(healthResponse.status, 200);
     const healthPayload = await healthResponse.json() as ApiHealthResponse;

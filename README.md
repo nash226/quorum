@@ -16,6 +16,9 @@ The HTTP API format-discovery tests now also revalidate conditional `GET`
 requests, confirming that unchanged `/formats` responses return `304` without
 repeating the JSON body for cache-aware integrations.
 
+The HTTP API now regression-tests query-bearing `/formats` requests, keeping
+bootstrap clients on the same pathname-based routing contract as other routes.
+
 HTTP discovery contract tests now also verify conditional `GET` revalidation
 for the root, capabilities, and OpenAPI responses, keeping stable
 service metadata cache-aware without repeating unchanged response bodies.
