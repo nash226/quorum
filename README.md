@@ -2079,13 +2079,14 @@ the supplied `--answer-dir`, preserving document-based handoffs without
 requiring every path to be listed explicitly.
 The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
 (`.md`, `.markdown`, `.mdown`, `.mkdn`, `.mdwn`, `.mdx`, `.qmd`, `.rst`,
-`.rest`), AsciiDoc/Org/MediaWiki/LaTeX (`.adoc`, `.asciidoc`, `.org`,
-`.org-mode`, `.mediawiki`, `.wiki`, `.tex`), plain text and configuration
-exports (`.txt`, `.text`, `.log`, `.ini`, `.properties`, `.conf`, `.cfg`),
-exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
-PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL/NDJSON (`.json`, `.jsonl`,
-`.ndjson`, `.json5`, `.jsonc`), TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and
-CSV/TSV (`.csv`, `.tsv`), plus RFC 822 email exports (`.eml`, `.emlx`).
+`.rest`), AsciiDoc/Org/MediaWiki/LaTeX/Textile (`.adoc`, `.asciidoc`, `.org`,
+`.org-mode`, `.mediawiki`, `.wiki`, `.tex`, `.textile`), plain text and
+configuration exports (`.txt`, `.text`, `.log`, `.ini`, `.properties`, `.conf`,
+`.cfg`, `.env`), exported HTML/MHTML/XHTML (`.html`, `.htm`, `.xht`, `.xhtml`,
+`.mht`, `.mhtml`), PDF (`.pdf`), Word documents (`.docx`), RTF (`.rtf`),
+JSON/JSONL/NDJSON (`.json`, `.jsonl`, `.ndjson`, `.json5`, `.jsonc`), TOML
+(`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and CSV/TSV (`.csv`,
+`.tsv`), plus RFC 822 email exports (`.eml`, `.emlx`).
 Apple Mail `.emlx` exports are unwrapped from their leading byte-count line
 before Quorum reads the message subject, date, and claim-bearing body.
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
