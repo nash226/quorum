@@ -43,6 +43,28 @@ test("version flag aliases accept the machine-readable JSON probe", async () => 
   assert.equal(shortAlias, longAlias);
 });
 
+test("verify strips a UTF-8 BOM from answer files before extracting claims", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-answer-bom-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "\uFEFFEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { assessments: Array<{ claim: { text: string }; verdict: string }> };
+
+    assert.equal(report.assessments[0]?.claim.text, "Employees receive 12 weeks of paid parental leave.");
+    assert.equal(report.assessments[0]?.verdict, "verified");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers the .text plain-text alias for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-text-alias-"));
 
