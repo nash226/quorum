@@ -267,7 +267,7 @@ test("formats endpoint exposes the supported input contract", async () => {
     assert.equal(response.status, 200);
     assert.equal(response.headers.get(SERVER_API_REQUEST_ID_HEADER), "formats-contract");
     const payload = await response.json() as { sourceExtensions: string[]; answerExtensions: string[] };
-    assert.deepEqual(payload.sourceExtensions, [...ANSWER_EXTENSIONS].sort());
+    assert.deepEqual(payload.sourceExtensions, [...SOURCE_EXTENSIONS].sort());
     assert.deepEqual(payload.answerExtensions, [...ANSWER_EXTENSIONS].sort());
     assert.ok(createOpenApiDocument().paths[SERVER_FORMATS_PATH]);
   } finally {
