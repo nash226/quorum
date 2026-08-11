@@ -3058,7 +3058,9 @@ The same verification workflows are available as a local HTTP service for
 agent integrations. Start it with `npm run dev -- serve --port 3000`, then use
 `GET /capabilities` for runtime discovery and `GET /openapi.json` for the full
 request and response contract. See the [HTTP API integration guide](docs/api-integration.md)
-for verification, reviewer-queue, and operational probe examples.
+for verification, reviewer-queue, and operational probe examples. CORS
+preflight responses also include the route's `Allow` header so integrations can
+discover the accepted methods without parsing the CORS method list.
 
 Installed npm packages expose the primary verification workflows directly:
 `npm run verify -- ...` runs single-answer verification and

@@ -474,6 +474,7 @@ test("HTTP API exposes claim extraction CORS preflight metadata", async () => {
     assert.equal(response.status, 204);
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
     assert.equal(response.headers.get("access-control-allow-methods"), "POST, OPTIONS");
+    assert.equal(response.headers.get("allow"), "POST");
     assert.equal(response.headers.get("access-control-allow-headers"), "Content-Type, X-Quorum-Request-Id, If-None-Match");
     assert.equal(response.headers.get("access-control-max-age"), "600");
   } finally {
@@ -4739,6 +4740,7 @@ test("programmatic API serves a successful CORS preflight for every advertised r
 
       assert.equal(response.status, 204, endpoint.path);
       assert.equal(response.headers.get("access-control-allow-methods"), `${allowedMethods.join(", ")}, OPTIONS`, endpoint.path);
+      assert.equal(response.headers.get("allow"), allowedMethods.join(", "), endpoint.path);
       assert.equal(response.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS, endpoint.path);
       assert.equal(response.headers.get("access-control-allow-origin"), "*", endpoint.path);
       assert.equal(response.headers.get("x-quorum-request-id"), `preflight-route-check-${index}`, endpoint.path);
