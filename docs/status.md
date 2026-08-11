@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `c0959243` on 2026-08-11, test: cover uppercase AsciiDoc verification
+- Latest shipped change: `3f707e9f` on 2026-08-11, fix: decode base64 email bodies
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-11 | Direct push | fix: decode base64 email bodies | `3f707e9f` |
 | 2026-08-11 | Direct push | test: cover uppercase AsciiDoc verification | `c0959243` |
 | 2026-08-11 | Direct push | fix: split adjacent NKo claims | `a14f5883` |
 | 2026-08-10 | Direct push | docs: document machine-readable format contract | `c7e37b79` |
@@ -56,5 +57,4 @@
 | 2026-08-10 | Direct push | test: cover paired plain-text verification | `3003a059` |
 | 2026-08-10 | Direct push | feat: preserve Textile heading titles | `b50c0ff2` |
 | 2026-08-10 | Direct push | test: cover direct XHT verification | `7ede41e0` |
-| 2026-08-10 | Direct push | feat: support xht policy and answer exports | `c6fb0220` |
 
