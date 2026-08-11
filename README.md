@@ -1,5 +1,8 @@
 # Quorum
 
+WebVTT (`.vtt`) transcript answers and approved sources are now accepted, with
+cue timestamps, markup, and non-content blocks normalized before claim review.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.

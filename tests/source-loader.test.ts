@@ -123,6 +123,17 @@ test("extracts subject and body from RFC 822 email source exports", async () => 
   assert.equal(source.content, "Customers can request refunds within 30 days.");
 });
 
+test("normalizes WebVTT transcript cues into reviewable policy text", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/support/refund-policy.vtt",
+    "WEBVTT - support policy\n\nNOTE\nrecorded meeting\n\n00:00:01.000 --> 00:00:04.000\n<v Agent>Customers can request refunds within 30 days.\n\n00:00:05.000 --> 00:00:08.000\nContact support for exceptions.\n",
+    0,
+  );
+
+  assert.equal(source.title, "refund-policy");
+  assert.equal(source.content, "Customers can request refunds within 30 days.\n\nContact support for exceptions.");
+});
+
 test("decodes quoted-printable RFC 822 email bodies", async () => {
   const source = await sourceDocumentFromFile(
     "docs/support/refund-policy.eml",
