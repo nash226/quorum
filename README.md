@@ -1,5 +1,9 @@
 # Quorum
 
+Recursive batch verification now regression-tests uppercase `.MHT` and
+`.MHTML` saved web-page exports, keeping case-insensitive discovery aligned
+with direct verification and the published format contract.
+
 Direct verification now regression-tests uppercase `.ASCIIDOC` answers and
 `.ADOC` approved sources, keeping case-insensitive AsciiDoc integrations on
 the same evidence path as lowercase exports.
