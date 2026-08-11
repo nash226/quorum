@@ -90,7 +90,7 @@ sorted answer and approved-source extension contract without scraping CLI help.
 The response is self-contained and requires no input files.
 
 The checked-in evaluation guide now calls out the newer support-policy
-scenarios covered by the 92-fixture scorecard, including account, billing,
+scenarios covered by the 93-fixture scorecard, including account, billing,
 subscription, and workspace-access workflows.
 
 The programmatic batch API accepts uppercase CSV input paths such as
@@ -360,8 +360,8 @@ covered end to end.
 LaTeX directory discovery is also regression-tested case-insensitively, so
 `.TEX` and mixed-case `.tex` exports follow the same batch contract.
 
-The evaluation fixture guide now reports the shipped 92-fixture inventory
-(32 HR and 60 support workflows), matching the CLI, API, and packaged smoke
+The evaluation fixture guide now reports the shipped 93-fixture inventory
+(33 HR and 60 support workflows), matching the CLI, API, and packaged smoke
 gates used to protect the benchmark.
 
 The evaluation suite directly pins support subscription-pause routing: the
@@ -441,7 +441,7 @@ The CLI guide now documents the installed-package `npm run import-review --`
 and `npm run review-queue --` wrappers, including npm argument forwarding for
 reviewer handoffs.
 
-The evaluation fixture guide now matches the shipped benchmark inventory: 92
+The evaluation fixture guide now matches the shipped benchmark inventory: 93
 checked-in fixtures across HR, support, and shared edge-case workflows.
 
 The evaluation scorecard now includes the file-backed support security packet,
@@ -601,7 +601,7 @@ verified, contradicted, and unsupported first-response claims against the
 approved support playbook.
 
 The benchmark inventory checks now include the new support packet across CLI,
-API, queue, and packaged smoke expectations, keeping the 92-fixture scorecard
+API, queue, and packaged smoke expectations, keeping the 93-fixture scorecard
 green when benchmark coverage expands.
 
 The installed package exposes `npm run formats` (and
@@ -2542,7 +2542,7 @@ includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
 
-The HR travel-expense fixture is included in the 32-fixture HR inventory, with
+The HR travel-expense fixture is included in the 33-fixture HR inventory, with
 aggregate expectations covering 97 claims across verified, contradicted, and
 unsupported policy outcomes.
 
@@ -2562,7 +2562,7 @@ Regression tests verify the total and HR/support split so adding a fixture keeps
 this product snapshot and the [fixture guide](docs/evaluation-fixtures.md)
 accurate.
 The inventory contract also rejects fixtures with an unknown domain and keeps
-the published 92-fixture total explicit, so new benchmark packets cannot drift
+the published 93-fixture total explicit, so new benchmark packets cannot drift
 the README silently.
 Fixture summary contracts also reject unknown verdict fields, so a typo cannot
 silently weaken a CI evaluation gate.

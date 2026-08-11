@@ -132,4 +132,5 @@ test("benchmark inventory keeps HR and support domain counts visible", () => {
   assert.deepEqual({ hr: counts.hr, support: counts.support }, { hr: 33, support: 60 });
   assert.match(readme, /33 HR and 60 support workflows/);
   assert.doesNotMatch(readme, /\b83 checked-in benchmark fixtures\b|\binventory is currently reconciled at 83 fixtures\b/);
+  assert.doesNotMatch(readme, /\b92-fixture\b|\b92 checked-in fixtures\b|\b32-fixture HR inventory\b/);
 });
