@@ -242,6 +242,39 @@ test("verify-batch discovers uppercase CSV exports for answers and sources", asy
   }
 });
 
+test("verify-batch uses discovered delimited sources as evidence", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-delimited-source-evidence-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await writeFile(join(answerDir, "leave.md"), "Employees receive 12 weeks of paid parental leave.\n", "utf8");
+    await writeFile(
+      join(sourceDir, "hr-policy.tsv"),
+      "policy\nEmployees receive 12 weeks of paid parental leave.\n",
+      "utf8",
+    );
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ])) as {
+      sources: Array<{ title: string; trustLevel: string; updatedAt?: string }>;
+      summary: { verified: number };
+    };
+
+    assert.deepEqual(report.sources.map((source) => ({
+      title: source.title,
+      trustLevel: source.trustLevel,
+      updatedAt: source.updatedAt,
+    })), [{ title: "hr-policy", trustLevel: "medium", updatedAt: undefined }]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers .jsonc exports for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-jsonc-alias-"));
 
