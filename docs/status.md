@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5e629183` on 2026-08-11, test: preserve in-memory source IDs in evidence
+- Latest shipped change: `0f9a133a` on 2026-08-11, docs: refresh verified API contract note
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-11 | Direct push | docs: refresh verified API contract note | `0f9a133a` |
 | 2026-08-11 | Direct push | test: preserve in-memory source IDs in evidence | `5e629183` |
 | 2026-08-11 | Direct push | test: expand HR commuter benefit coverage | `770956c1` |
 | 2026-08-11 | Direct push | test: cover query-bearing formats requests | `2a2567b3` |
@@ -56,5 +57,4 @@
 | 2026-08-11 | [#2337](https://github.com/nash226/quorum/pull/2337) | test: cover discovery conditional GET contract | `ffbde8e3` |
 | 2026-08-11 | Direct push | test: cover conditional formats GET | `ce7e1219` |
 | 2026-08-11 | Direct push | test: cover labeled in-memory batch results | `981fb451` |
-| 2026-08-11 | Direct push | docs: clarify shipped product boundary | `621af7c3` |
 
