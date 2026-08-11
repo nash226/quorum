@@ -4,6 +4,10 @@ The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
 
+Raw-content API verification also preserves caller-owned source IDs in both
+the report source list and claim evidence, so integrations can join findings
+back to their own policy records.
+
 Batch verification, reviewer-queue exports, and the local HTTP integration
 surface are shipped foundations; the [roadmap](docs/roadmap.md) separates that
 product boundary from decision-gated durable hosting and queue storage.
