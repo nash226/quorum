@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now splits adjacent N’Ko policy statements at the N’Ko
+exclamation sentence terminator, keeping localized evidence boundaries intact.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
