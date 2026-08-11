@@ -1646,6 +1646,10 @@ npm run dev -- evaluate --help
 npm run dev -- serve --help
 ```
 
+Batch verification, claim preview, and reviewer-queue help are covered by the
+same input-free contract, so packaged commands can be discovered before their
+files or payloads are prepared.
+
 ## Quick Start
 
 After installing dependencies, run the complete pre-PR validation gate with:
