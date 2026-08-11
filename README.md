@@ -12,6 +12,10 @@ The HTTP API version-contract tests now revalidate `/formats` with conditional
 `HEAD` requests, keeping machine-readable format discovery aligned with the
 cache-aware discovery, capabilities, and OpenAPI endpoints.
 
+The HTTP API format-discovery tests now also revalidate conditional `GET`
+requests, confirming that unchanged `/formats` responses return `304` without
+repeating the JSON body for cache-aware integrations.
+
 Recursive batch verification now regression-tests uppercase `.MHT` and
 `.MHTML` saved web-page exports, keeping case-insensitive discovery aligned
 with direct verification and the published format contract.
