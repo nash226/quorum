@@ -72,6 +72,55 @@ test("public package entrypoint exports the in-memory batch gate result", async 
   assert.deepEqual(result.failVerdicts, ["unsupported"]);
 });
 
+test("public batch API preserves answer labels and aggregates fail verdicts", async () => {
+  const result = await verifyAnswerBatchContentsResult({
+    answers: [
+      {
+        answer: "Refunds are available for 30 days from the purchase date.",
+        answerPath: "answers/refunds.md",
+        answerLabel: "refunds draft",
+      },
+      {
+        answer: "Refunds are available for 90 days from the purchase date.",
+        answerPath: "answers/expanded-refunds.md",
+        answerLabel: "expanded refunds draft",
+      },
+    ],
+    sources: [{
+      sourcePath: "policies/refunds.md",
+      content: "Refunds are available for 30 days from the purchase date.",
+      id: "support/refunds@2026-08-05",
+      title: "Refund Policy",
+      trustLevel: "high",
+    }],
+    failOn: ["contradicted", "unsupported"],
+  });
+
+  assert.deepEqual(result.report.answers.map((answer) => ({
+    label: answer.answerLabel,
+    path: answer.answerPath,
+    verdicts: answer.report.assessments.map((assessment) => assessment.verdict),
+  })), [
+    { label: "refunds draft", path: "answers/refunds.md", verdicts: ["verified"] },
+    { label: "expanded refunds draft", path: "answers/expanded-refunds.md", verdicts: ["contradicted"] },
+  ]);
+  assert.deepEqual(result.report.answers[1]?.report.sources.map((source) => ({
+    id: source.id,
+    title: source.title,
+  })), [{ id: "support/refunds@2026-08-05", title: "Refund Policy" }]);
+  assert.deepEqual(result.report.summary, {
+    verified: 1,
+    contradicted: 1,
+    unsupported: 0,
+    needs_review: 0,
+    answersWithClaims: 2,
+    answersWithoutClaims: 0,
+    answersWithFailures: 1,
+  });
+  assert.equal(result.shouldFail, true);
+  assert.deepEqual(result.failVerdicts, ["contradicted"]);
+});
+
 test("public package entrypoint exports evaluation aggregate rendering", () => {
   const csv = renderEvaluationAggregateSummaryCsv([{
     fixtureName: "Support refunds policy example",
