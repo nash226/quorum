@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `981fb451` on 2026-08-11, test: cover labeled in-memory batch results
+- Latest shipped change: `ce7e1219` on 2026-08-11, test: cover conditional formats GET
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-11 | Direct push | test: cover conditional formats GET | `ce7e1219` |
 | 2026-08-11 | Direct push | test: cover labeled in-memory batch results | `981fb451` |
 | 2026-08-11 | Direct push | docs: clarify shipped product boundary | `621af7c3` |
 | 2026-08-11 | [#2326](https://github.com/nash226/quorum/pull/2326) | test: cover formats cache revalidation | `2a77e910` |
@@ -56,5 +57,4 @@
 | 2026-08-11 | Direct push | test: cover BOM-prefixed frontmatter | `5934da87` |
 | 2026-08-11 | Direct push | test: cover mixed-case saved web-page discovery | `449827fc` |
 | 2026-08-11 | Direct push | fix: decode base64 email bodies | `3f707e9f` |
-| 2026-08-11 | Direct push | test: cover uppercase AsciiDoc verification | `c0959243` |
 
