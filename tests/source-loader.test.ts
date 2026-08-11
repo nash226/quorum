@@ -1459,6 +1459,23 @@ test("falls back to the first html heading when title metadata is absent", async
   );
 });
 
+test("applies html metadata and heading fallback to xhtml exports", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/help-center/vacation.xhtml",
+    `<?xml version="1.0"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head><meta name="last-modified" content="2026-06-22" /></head>
+  <body><h1>Vacation Policy</h1><p>Employees can take 20 days of vacation.</p></body>
+</html>`,
+    8,
+  );
+
+  assert.equal(source.title, "Vacation Policy");
+  assert.equal(source.updatedAt, "2026-06-22");
+  assert.match(source.content, /Employees can take 20 days of vacation\./);
+});
+
 test("falls back to a time datetime attribute when html update metadata is absent", async () => {
   const source = await sourceDocumentFromFile(
     "docs/help-center/benefits.html",
