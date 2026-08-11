@@ -1735,6 +1735,25 @@ test("extracts readable text from pdf sources", async () => {
   assert.match(source.content, /Employees receive 12 weeks of paid parental leave\./);
 });
 
+test("extracts markdown and code cells from Jupyter notebooks", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/leave-policy.ipynb",
+    JSON.stringify({
+      metadata: { title: "Notebook Leave Policy" },
+      cells: [
+        { cell_type: "markdown", source: ["# Leave policy\n", "Employees receive 12 weeks of leave."] },
+        { cell_type: "code", source: ["print('Employees receive 12 weeks of leave.')"] },
+      ],
+    }),
+    0,
+  );
+
+  assert.equal(source.title, "Notebook Leave Policy");
+  assert.match(source.content, /Markdown\n# Leave policy/);
+  assert.match(source.content, /Employees receive 12 weeks of leave\./);
+  assert.match(source.content, /Code\nprint\('Employees receive 12 weeks of leave\.'\)/);
+});
+
 test("extracts embedded pdf title and modification metadata when present", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.pdf",

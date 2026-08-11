@@ -91,6 +91,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return { metadata: {}, body: normalizeRtfSource(normalizedContent) };
   }
 
+  if (isNotebookSource(sourcePath)) {
+    return parseNotebookSource(normalizedContent);
+  }
+
   if (isJsonSource(sourcePath)) {
     return parseJsonSource(normalizedContent, /(?:json5|jsonc)$/i.test(sourcePath));
   }
@@ -238,6 +242,10 @@ function isJsonSource(sourcePath: string): boolean {
   return /\.(?:jsonl?|ndjson|json5|jsonc)$/i.test(sourcePath);
 }
 
+function isNotebookSource(sourcePath: string): boolean {
+  return /\.ipynb$/i.test(sourcePath);
+}
+
 function isXmlSource(sourcePath: string): boolean {
   return /\.xml$/i.test(sourcePath);
 }
@@ -317,7 +325,7 @@ function normalizeMediaWikiSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|env|html?|xht|xhtml|mht|mhtml|pdf|docx|rtf|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml|emlx)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|env|html?|xht|xhtml|mht|mhtml|pdf|docx|rtf|jsonl?|ndjson|json5|jsonc|ipynb|xml|ya?ml|toml|csv|tsv|eml|emlx)$/i, "");
 }
 
 function parseEmailSource(content: string): ParsedSource {
@@ -432,6 +440,24 @@ function parseJsonSource(content: string, allowsComments = false): ParsedSource 
   try {
     const value: unknown = JSON.parse(jsonContent);
     return { metadata: structuredMetadata(value), body: formatStructuredValue(value) };
+  } catch {
+    return { metadata: {}, body: content };
+  }
+}
+
+function parseNotebookSource(content: string): ParsedSource {
+  try {
+    const notebook = JSON.parse(content) as { metadata?: unknown; cells?: unknown };
+    const cells = Array.isArray(notebook.cells) ? notebook.cells : [];
+    const body = cells
+      .filter((cell): cell is { cell_type?: unknown; source?: unknown } => typeof cell === "object" && cell !== null)
+      .map((cell) => {
+        const source = Array.isArray(cell.source) ? cell.source.join("") : typeof cell.source === "string" ? cell.source : "";
+        return `${cell.cell_type === "code" ? "Code" : "Markdown"}\n${source.trim()}`.trim();
+      })
+      .filter(Boolean)
+      .join("\n\n");
+    return { metadata: structuredMetadata(notebook.metadata), body };
   } catch {
     return { metadata: {}, body: content };
   }
