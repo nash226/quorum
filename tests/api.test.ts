@@ -879,6 +879,46 @@ test("HTTP API verifies claims against YAML source content", async () => {
   }
 });
 
+test("HTTP API verifies claims against properties source content", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/verify`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answer: "Employees receive 12 weeks of paid parental leave.",
+        answerPath: "answers/leave.properties",
+        sources: [{
+          sourcePath: "policies/leave.properties",
+          content: "leave=Employees receive 12 weeks of paid parental leave.\n",
+          title: "Leave Policy",
+          trustLevel: "high",
+        }],
+      }),
+    });
+
+    assert.equal(response.status, 200);
+    const payload = await response.json() as {
+      report: {
+        answerPath: string;
+        summary: { verified: number };
+        sources: Array<{ id: string; sourcePath: string; title: string; trustLevel: string }>;
+      };
+    };
+    assert.equal(payload.report.answerPath, "answers/leave.properties");
+    assert.equal(payload.report.summary.verified, 1);
+    assert.deepEqual(payload.report.sources, [{
+      id: "source_1",
+      sourcePath: "policies/leave.properties",
+      title: "Leave Policy",
+      trustLevel: "high",
+    }]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API marks mutable JSON responses as non-cacheable and contracts as revalidatable", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
