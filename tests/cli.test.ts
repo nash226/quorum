@@ -620,8 +620,8 @@ test("verify-batch ignores unsupported files while discovering nested inputs", a
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
-  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.env, \.htm, \.html/);
-  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.env, \.htm, \.html/);
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.atom, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.env, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.atom, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.env, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
@@ -767,8 +767,8 @@ test("formats --json exposes normalized unique extension entries", async () => {
 test("help advertises the complete discovered input contract", async () => {
   const stdout = await runCli(["--help"]);
 
-  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML, PDF, and DOCX/);
-  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML, PDF, and DOCX/);
+  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML\/RSS\/Atom, TOML, CSV\/TSV, EML, PDF, and DOCX/);
+  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML\/RSS\/Atom, TOML, CSV\/TSV, EML, PDF, and DOCX/);
 });
 
 test("verify accepts a direct .text answer export", async () => {
@@ -2303,8 +2303,8 @@ test("top-level help lists every shipped command", async () => {
 
   assert.match(stdout, /Supported files:/);
   assert.match(stdout, /quorum formats \[--json\]/);
-  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML, PDF, and DOCX/);
-  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML, PDF, and DOCX/);
+  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML\/RSS\/Atom, TOML, CSV\/TSV, EML, PDF, and DOCX/);
+  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML\/RSS\/Atom, TOML, CSV\/TSV, EML, PDF, and DOCX/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files, hidden directories, and common editor temporary files/);
 });
 

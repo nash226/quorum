@@ -1,5 +1,9 @@
 # Quorum
 
+XML policy exports can also use common feed extensions (`.rss` and `.atom`),
+so direct and recursive verification accepts them through the same format
+contract as `.xml`.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
