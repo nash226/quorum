@@ -1010,6 +1010,25 @@ test("HTTP API routes valid requests with query strings by pathname", async () =
   }
 });
 
+test("HTTP API routes reviewer queue requests with query strings by pathname", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}${REVIEW_QUEUE_PATH}?client=queue-worker`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({}),
+    });
+
+    assert.equal(response.status, 400);
+    const payload = await response.json() as { error: string; requestId: string };
+    assert.match(payload.error, /reviewCsvContent must be a non-empty string/);
+    assert.equal(payload.requestId, response.headers.get("x-quorum-request-id"));
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API serves the Kubernetes readiness alias as a JSON probe", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

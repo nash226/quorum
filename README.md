@@ -23,6 +23,10 @@ repeating the JSON body for cache-aware integrations.
 The HTTP API now regression-tests query-bearing `/formats` requests, keeping
 bootstrap clients on the same pathname-based routing contract as other routes.
 
+The reviewer-queue HTTP endpoint now also regression-tests POST requests with
+query parameters, keeping worker metadata from changing pathname-based route
+dispatch or request-ID error responses.
+
 HTTP discovery contract tests now also verify conditional `GET` revalidation
 for the root, capabilities, and OpenAPI responses, keeping stable
 service metadata cache-aware without repeating unchanged response bodies.
