@@ -2111,6 +2111,25 @@ Employees receive 12 weeks of paid parental leave.
   assert.deepEqual(result.failVerdicts, []);
 });
 
+test("programmatic API preserves caller-owned source IDs in raw-content evidence", async () => {
+  const result = await verifyAnswerContentsResult({
+    answer: "Employees receive 12 weeks of paid parental leave.",
+    answerPath: "answers/hr.md",
+    sources: [
+      {
+        id: "hr-policy-approved-2026",
+        sourcePath: "policies/hr-policy.md",
+        content: "Employees receive 12 weeks of paid parental leave.",
+        title: "HR Policy",
+        trustLevel: "high",
+      },
+    ],
+  });
+
+  assert.equal(result.report.sources[0]?.id, "hr-policy-approved-2026");
+  assert.equal(result.report.assessments[0]?.evidence[0]?.documentId, "hr-policy-approved-2026");
+});
+
 test("programmatic API returns top-level fail-policy metadata for in-memory batches", () => {
   const result = verifyAnswersResult({
     answers: [
