@@ -99,6 +99,21 @@ test("HTTP API revalidates stable discovery responses with conditional GET", asy
   }
 });
 
+test("HTTP API keeps query-bearing OpenAPI discovery requests on the pathname route", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/openapi.json?client=bootstrap`);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8");
+    const payload = await response.json() as { openapi?: string; paths?: Record<string, unknown> };
+    assert.equal(payload.openapi, "3.1.0");
+    assert.ok(payload.paths?.["/openapi.json"]);
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API scopes browser preflight methods to every discovered route", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
