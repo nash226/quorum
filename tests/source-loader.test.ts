@@ -134,6 +134,17 @@ test("decodes quoted-printable RFC 822 email bodies", async () => {
   assert.equal(source.content, "Customers can request refunds within 30 days.");
 });
 
+test("decodes base64 RFC 822 email bodies", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/support/refund-policy.eml",
+    "Subject: Refund policy\nContent-Transfer-Encoding: base64\n\nQ3VzdG9tZXJzIGNhbiByZXF1ZXN0IHJlZnVuZHMgd2l0aGluIDMwIGRheXMu\n",
+    0,
+  );
+
+  assert.equal(source.title, "Refund policy");
+  assert.equal(source.content, "Customers can request refunds within 30 days.");
+});
+
 test("unfolds continued RFC 822 headers before extracting email metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/support/refund-policy.eml",
