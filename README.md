@@ -2073,6 +2073,7 @@ The supported local answer formats are Markdown/MDX/Quarto/reStructuredText
 `.org-mode`, `.mediawiki`, `.wiki`, `.tex`), plain text and configuration
 exports (`.txt`, `.text`, `.log`, `.ini`, `.properties`, `.conf`, `.cfg`),
 exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
+SRT/WebVTT transcripts (`.srt`, `.vtt`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL/NDJSON (`.json`, `.jsonl`,
 `.ndjson`, `.json5`, `.jsonc`), TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and
 CSV/TSV (`.csv`, `.tsv`), plus RFC 822 email exports (`.eml`, `.emlx`).
@@ -2088,6 +2089,9 @@ discovery skips them; use a supported extension or rename the export before it
 becomes evidence.
 Source frontmatter also normalizes Windows CRLF and legacy Mac CR line endings,
 so metadata remains readable from older policy exports.
+Transcript inputs remove cue indexes, timestamps, and WebVTT headers before
+claim extraction, so spoken support workflows can use their exported captions
+directly.
 The packaged CLI smoke gate also verifies direct CSV answer and source exports,
 so published artifacts keep this common tabular handoff path working end to end.
 JSONL sources are normalized one record at a time, so newline-delimited policy

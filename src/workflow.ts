@@ -13,7 +13,7 @@ import type {
 } from "./domain.js";
 import { matchingFailVerdicts } from "./report-policy.js";
 import { renderAnswerLabels, stripByteOrderMark } from "./text.js";
-import { sourceDocumentFromFile } from "./source-loader.js";
+import { isTranscriptSource, normalizeTranscriptText, sourceDocumentFromFile } from "./source-loader.js";
 import {
   importReviewerDecisions,
   importReviewerDecisionsResult,
@@ -173,7 +173,7 @@ export interface ReviewerDecisionFileImportResultOptions
   failOn?: ClaimVerdict[];
 }
 
-export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".env", ".html", ".htm", ".xht", ".xhtml", ".mht", ".mhtml", ".pdf", ".docx", ".rtf", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml", ".emlx"]);
+export const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".mdown", ".mkdn", ".mdwn", ".mdx", ".qmd", ".adoc", ".asciidoc", ".org", ".org-mode", ".mediawiki", ".wiki", ".rst", ".rest", ".tex", ".textile", ".txt", ".text", ".log", ".ini", ".properties", ".conf", ".cfg", ".env", ".html", ".htm", ".xht", ".xhtml", ".mht", ".mhtml", ".srt", ".vtt", ".pdf", ".docx", ".rtf", ".json", ".jsonl", ".ndjson", ".json5", ".jsonc", ".yaml", ".yml", ".xml", ".toml", ".csv", ".tsv", ".eml", ".emlx"]);
 export const ANSWER_EXTENSIONS = new Set([
   ".md",
   ".markdown",
@@ -206,6 +206,8 @@ export const ANSWER_EXTENSIONS = new Set([
   ".xhtml",
   ".mht",
   ".mhtml",
+  ".srt",
+  ".vtt",
   ".pdf",
   ".docx",
   ".rtf",
@@ -905,7 +907,8 @@ async function readAnswerInput(inputPath: string): Promise<string> {
       return answerDocument.content;
     }
 
-    return stripByteOrderMark(content.toString("utf8"));
+    const text = stripByteOrderMark(content.toString("utf8"));
+    return isTranscriptSource(inputPath) ? normalizeTranscriptText(text) : text;
   }
 
   return stripByteOrderMark(await readStdin());
