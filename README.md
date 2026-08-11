@@ -1,5 +1,9 @@
 # Quorum
 
+XML approved-source exports now also read title, freshness, and trust metadata
+from root-element attributes, keeping common document-export conventions aligned
+with child-element and `<meta>` metadata.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
