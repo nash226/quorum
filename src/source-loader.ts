@@ -215,7 +215,7 @@ function tryParseTrustLevel(value: string): SourceTrustLevel | undefined {
 }
 
 function isHtmlSource(sourcePath: string): boolean {
-  return /\.(?:html?|xht|xhtml|mht|mhtml)$/i.test(sourcePath);
+  return /\.(?:html?|xht|xhtml|shtml|mht|mhtml)$/i.test(sourcePath);
 }
 
 function isEmailSource(sourcePath: string): boolean {
@@ -317,7 +317,7 @@ function normalizeMediaWikiSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|env|html?|xht|xhtml|mht|mhtml|pdf|docx|rtf|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml|emlx)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|env|html?|xht|xhtml|shtml|mht|mhtml|pdf|docx|rtf|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml|emlx)$/i, "");
 }
 
 function parseEmailSource(content: string): ParsedSource {
