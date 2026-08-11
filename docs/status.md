@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `7ede41e0` on 2026-08-10, test: cover direct XHT verification
+- Latest shipped change: `b50c0ff2` on 2026-08-10, feat: preserve Textile heading titles
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-10 | Direct push | feat: preserve Textile heading titles | `b50c0ff2` |
 | 2026-08-10 | Direct push | test: cover direct XHT verification | `7ede41e0` |
 | 2026-08-10 | Direct push | feat: support xht policy and answer exports | `c6fb0220` |
 | 2026-08-10 | Direct push | test: cover paired packaged EMLX verification | `8d577f20` |
@@ -56,5 +57,4 @@
 | 2026-08-10 | [#2271](https://github.com/nash226/quorum/pull/2271) | test: cover paired reStructuredText verification | `402400c3` |
 | 2026-08-10 | Direct push | test: cover direct mkdn verification | `d3580d3f` |
 | 2026-08-10 | Direct push | test: smoke packaged reviewer queue | `40d931c6` |
-| 2026-08-10 | Direct push | test: cover direct .conf verification | `ce24ae95` |
 
