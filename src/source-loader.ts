@@ -1162,7 +1162,7 @@ async function pdfSourceDocumentFromFile(
     );
 
     return {
-      id: `source_${index + 1}`,
+      id: options.id ?? `source_${index + 1}`,
       sourcePath,
       title: options.title ?? title ?? sourceTitleFromPath(sourcePath),
       updatedAt: validatedUpdatedAt(sourcePath, options.updatedAt ?? updatedAt),

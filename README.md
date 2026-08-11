@@ -19,6 +19,9 @@ repeating the JSON body for cache-aware integrations.
 The HTTP API now regression-tests query-bearing `/formats` requests, keeping
 bootstrap clients on the same pathname-based routing contract as other routes.
 
+Programmatic PDF source loading now preserves caller-provided source IDs,
+keeping evidence identity stable across binary document imports.
+
 HTTP discovery contract tests now also verify conditional `GET` revalidation
 for the root, capabilities, and OpenAPI responses, keeping stable
 service metadata cache-aware without repeating unchanged response bodies.
