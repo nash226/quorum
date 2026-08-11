@@ -1,5 +1,9 @@
 # Quorum
 
+The HTTP format-discovery contract now regression-tests conditional `GET`
+revalidation as well as bodyless `HEAD` probes, so clients can cache the
+machine-readable format document without downloading unchanged payloads.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.

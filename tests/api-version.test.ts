@@ -75,6 +75,30 @@ test("HTTP API revalidates bodyless discovery probes with conditional HEAD", asy
   }
 });
 
+test("HTTP API revalidates the formats document with conditional GET", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}${FORMATS_PATH}`);
+    assert.equal(response.status, 200);
+    const etag = response.headers.get("etag");
+    assert.match(etag ?? "", /^\"[a-f0-9]{64}\"$/);
+    assert.equal(response.headers.get("cache-control"), "public, max-age=0, must-revalidate");
+    const payload = await response.json() as { answerExtensions: string[]; sourceExtensions: string[] };
+    assert.ok(payload.answerExtensions.length > 0);
+    assert.ok(payload.sourceExtensions.length > 0);
+
+    const notModifiedResponse = await fetch(`${api.url}${FORMATS_PATH}`, {
+      headers: { "if-none-match": etag ?? "" },
+    });
+    assert.equal(notModifiedResponse.status, 304);
+    assert.equal(notModifiedResponse.headers.get("etag"), etag);
+    assert.equal(await notModifiedResponse.text(), "");
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API scopes browser preflight methods to every discovered route", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
