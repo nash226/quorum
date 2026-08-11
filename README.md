@@ -3042,3 +3042,7 @@ alias on the same evidence path as the other supported document formats.
 
 The packaged CLI now smoke-tests paired Apple Mail `.emlx` answer and approved-
 source exports, including the message wrapper and report metadata.
+
+UTF-8 BOM-prefixed Markdown and text exports preserve frontmatter metadata,
+keeping titles, freshness, and trust levels intact when policy systems emit a
+Unicode signature before the document header.

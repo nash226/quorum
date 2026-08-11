@@ -111,6 +111,19 @@ test("extracts frontmatter from legacy Mac line endings", async () => {
   assert.equal(source.content, "Employees get 12 weeks.\n");
 });
 
+test("extracts frontmatter after a UTF-8 BOM", async () => {
+  const source = await sourceDocumentFromFile(
+    "exports/hr-policy.md",
+    "\uFEFF---\ntitle: HR Benefits Policy\nupdatedAt: 2026-08-05\ntrustLevel: high\n---\nEmployees get 12 weeks.\n",
+    0,
+  );
+
+  assert.equal(source.title, "HR Benefits Policy");
+  assert.equal(source.updatedAt, "2026-08-05");
+  assert.equal(source.trustLevel, "high");
+  assert.equal(source.content, "Employees get 12 weeks.\n");
+});
+
 test("extracts subject and body from RFC 822 email source exports", async () => {
   const source = await sourceDocumentFromFile(
     "docs/support/refund-policy.eml",
