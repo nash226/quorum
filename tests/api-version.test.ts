@@ -8,6 +8,7 @@ import {
   API_ENDPOINTS,
   API_VERSION,
   API_ROOT_PATH,
+  FORMATS_PATH,
   VERSION_PATH,
   createOpenApiDocument,
   startApiServer,
@@ -54,7 +55,7 @@ test("HTTP API revalidates bodyless discovery probes with conditional HEAD", asy
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
   try {
-    for (const path of [API_ROOT_PATH, "/capabilities", "/openapi.json"]) {
+    for (const path of [API_ROOT_PATH, "/capabilities", FORMATS_PATH, "/openapi.json"]) {
       const headResponse = await fetch(`${api.url}${path}`, { method: "HEAD" });
       assert.equal(headResponse.status, 200, path);
       const etag = headResponse.headers.get("etag");

@@ -1,5 +1,9 @@
 # Quorum
 
+The HTTP API version-contract tests now revalidate `/formats` with conditional
+`HEAD` requests, keeping machine-readable format discovery aligned with the
+cache-aware discovery, capabilities, and OpenAPI endpoints.
+
 Recursive batch verification now regression-tests uppercase `.MHT` and
 `.MHTML` saved web-page exports, keeping case-insensitive discovery aligned
 with direct verification and the published format contract.
