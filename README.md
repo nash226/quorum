@@ -20,6 +20,10 @@ The HTTP API format-discovery tests now also revalidate conditional `GET`
 requests, confirming that unchanged `/formats` responses return `304` without
 repeating the JSON body for cache-aware integrations.
 
+The HTTP API format-discovery contract now accepts `/formats/` as well as
+`/formats`, accommodating clients that construct endpoint URLs with a trailing
+slash.
+
 The HTTP API now regression-tests query-bearing `/formats` requests, keeping
 bootstrap clients on the same pathname-based routing contract as other routes.
 
