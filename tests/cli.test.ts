@@ -767,8 +767,8 @@ test("formats --json exposes normalized unique extension entries", async () => {
 test("help advertises the complete discovered input contract", async () => {
   const stdout = await runCli(["--help"]);
 
-  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML, PDF, and DOCX/);
-  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML, PDF, and DOCX/);
+  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML\/EMLX, RTF, PDF, and DOCX/);
+  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML\/EMLX, RTF, PDF, and DOCX/);
 });
 
 test("verify accepts a direct .text answer export", async () => {
@@ -2344,8 +2344,8 @@ test("top-level help lists every shipped command", async () => {
 
   assert.match(stdout, /Supported files:/);
   assert.match(stdout, /quorum formats \[--json\]/);
-  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML, PDF, and DOCX/);
-  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML, PDF, and DOCX/);
+  assert.match(stdout, /Answers: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML\/EMLX, RTF, PDF, and DOCX/);
+  assert.match(stdout, /Sources: Markdown\/MDX\/Quarto, AsciiDoc\/Org, MediaWiki, reStructuredText, LaTeX\/Textile, text, HTML\/XHTML, JSON\/JSONL\/NDJSON\/JSON5\/JSONC, YAML, XML, TOML, CSV\/TSV, EML\/EMLX, RTF, PDF, and DOCX/);
   assert.match(stdout, /Directory discovery is recursive and skips hidden files, hidden directories, and common editor temporary files/);
 });
 
