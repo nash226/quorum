@@ -12,6 +12,9 @@ The HTTP API version-contract tests now revalidate `/formats` with conditional
 `HEAD` requests, keeping machine-readable format discovery aligned with the
 cache-aware discovery, capabilities, and OpenAPI endpoints.
 
+The HTTP API regression suite now covers explicit wildcard CORS on browser
+preflight requests, including the advertised methods and request headers.
+
 The HTTP API format-discovery tests now also revalidate conditional `GET`
 requests, confirming that unchanged `/formats` responses return `304` without
 repeating the JSON body for cache-aware integrations.
