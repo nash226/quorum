@@ -38,6 +38,9 @@ the same evidence path as lowercase exports.
 Claim extraction now splits adjacent N’Ko policy statements at the N’Ko
 exclamation sentence terminator, keeping localized evidence boundaries intact.
 
+RFC 822 quoted-printable email imports now decode UTF-8 policy text correctly,
+preserving accented and localized evidence during claim extraction.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.

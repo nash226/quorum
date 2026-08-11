@@ -342,9 +342,10 @@ function parseEmailSource(content: string): ParsedSource {
 function decodeEmailBody(body: string, transferEncoding: string | undefined): string {
   switch (transferEncoding?.toLowerCase()) {
     case "quoted-printable":
-      return body
+      return Buffer.from(body
         .replace(/=\n/g, "")
-        .replace(/=([0-9a-f]{2})/gi, (_match, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)))
+        .replace(/=([0-9a-f]{2})/gi, (_match, hex: string) => String.fromCharCode(Number.parseInt(hex, 16))), "latin1")
+        .toString("utf8")
         .trim();
     case "base64":
       return Buffer.from(body.replace(/\s+/g, ""), "base64").toString("utf8").trim();
