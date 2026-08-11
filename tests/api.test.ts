@@ -871,6 +871,22 @@ test("HTTP API treats an explicit wildcard CORS origin as permissive", async () 
     assert.equal(response.status, 200);
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
     assert.equal(response.headers.get("vary"), null);
+
+    const preflightResponse = await fetch(`${api.url}/verify`, {
+      method: "OPTIONS",
+      headers: {
+        origin: "https://any-console.example.com",
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type",
+      },
+    });
+
+    assert.equal(preflightResponse.status, 204);
+    assert.equal(preflightResponse.headers.get("access-control-allow-origin"), "*");
+    assert.equal(preflightResponse.headers.get("access-control-allow-methods"), "POST, OPTIONS");
+    assert.equal(preflightResponse.headers.get("access-control-allow-headers"), API_CORS_ALLOWED_HEADERS);
+    assert.equal(preflightResponse.headers.get("vary"), null);
+    assert.equal(await preflightResponse.text(), "");
   } finally {
     await api.close();
   }
