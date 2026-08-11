@@ -4432,7 +4432,7 @@ function applyCorsHeaders(
   allowedOrigins?: readonly string[],
   allowedMethods: string = ALLOWED_METHODS,
 ): void {
-  if (allowedOrigins === undefined) {
+  if (allowedOrigins === undefined || allowedOrigins.includes("*")) {
     response.setHeader("Access-Control-Allow-Origin", "*");
   } else {
     const requestOrigin = request.headers.origin;
