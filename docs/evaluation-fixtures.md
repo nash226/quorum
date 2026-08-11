@@ -31,7 +31,7 @@ set covers:
   HTML billing, member permissions, payment failures, plan changes, subscription
   renewals, and workspace access
 
-The benchmark currently contains 93 fixtures: 33 HR workflows and 60 support
+The benchmark currently contains 94 fixtures: 34 HR workflows and 60 support
 workflows. Shared edge-case inputs are represented within those domain totals
 so the inventory matches the CLI, API, and packaged smoke gates.
 The generated
