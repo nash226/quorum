@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5934da87` on 2026-08-11, test: cover BOM-prefixed frontmatter
+- Latest shipped change: `7b143821` on 2026-08-11, feat: expose supported formats over HTTP
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-11 | Direct push | feat: expose supported formats over HTTP | `7b143821` |
 | 2026-08-11 | Direct push | test: cover BOM-prefixed frontmatter | `5934da87` |
 | 2026-08-11 | Direct push | test: cover mixed-case saved web-page discovery | `449827fc` |
 | 2026-08-11 | Direct push | fix: decode base64 email bodies | `3f707e9f` |
@@ -56,5 +57,4 @@
 | 2026-08-11 | Direct push | fix: split adjacent NKo claims | `a14f5883` |
 | 2026-08-10 | Direct push | docs: document machine-readable format contract | `c7e37b79` |
 | 2026-08-10 | Direct push | feat: support env policy exports | `0f9dfdb4` |
-| 2026-08-10 | Direct push | test: cover paired plain-text verification | `3003a059` |
 

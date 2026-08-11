@@ -1,5 +1,9 @@
 # Quorum
 
+The local HTTP API now exposes `/formats` alongside `quorum formats --json`,
+so integrations can discover the same versioned answer and approved-source
+extension contract over HTTP or the CLI.
+
 Recursive batch verification now regression-tests uppercase `.MHT` and
 `.MHTML` saved web-page exports, keeping case-insensitive discovery aligned
 with direct verification and the published format contract.
