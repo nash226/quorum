@@ -1,5 +1,9 @@
 # Quorum
 
+The shipped CLI now exposes `quorum formats` (and `--json`) as the canonical
+answer/source extension contract for recursive discovery; integrations should
+use that command instead of maintaining a hard-coded format list.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
