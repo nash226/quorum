@@ -8,6 +8,10 @@ The HTTP API version-contract tests now revalidate `/formats` with conditional
 `HEAD` requests, keeping machine-readable format discovery aligned with the
 cache-aware discovery, capabilities, and OpenAPI endpoints.
 
+Direct verification now regression-tests paired `.properties` answer and
+approved-source exports, keeping Java-style key/value policy files covered by
+the advertised configuration format contract.
+
 Recursive batch verification now regression-tests uppercase `.MHT` and
 `.MHTML` saved web-page exports, keeping case-insensitive discovery aligned
 with direct verification and the published format contract.
