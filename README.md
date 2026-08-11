@@ -268,6 +268,8 @@ nested batch discovery.
 The public package entrypoint now exports `SourceDocumentOptions` alongside
 `sourceDocumentFromFile`, so typed Node integrations can preserve source IDs,
 titles, freshness, and trust metadata when loading approved evidence.
+Caller-supplied source metadata takes precedence over imported frontmatter,
+allowing integrations to apply canonical catalog values before verification.
 
 Claim extraction now recognizes Tibetan shad sentence terminators, keeping
 localized policy statements separate for evidence matching.

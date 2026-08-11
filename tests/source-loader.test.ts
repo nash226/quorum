@@ -679,6 +679,31 @@ test("preserves a caller-supplied source identifier", async () => {
   assert.equal(source.id, "people-ops/hr-policy@2026-05-31");
 });
 
+test("caller-supplied source metadata overrides file metadata", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.md",
+    `---
+title: Imported HR Policy
+updatedAt: 2026-05-31
+trustLevel: low
+---
+Employees get 12 weeks.
+`,
+    0,
+    {
+      id: "people-ops/hr-policy@2026-08-11",
+      title: "Canonical HR Benefits Policy",
+      updatedAt: "2026-08-11",
+      trustLevel: "high",
+    },
+  );
+
+  assert.equal(source.id, "people-ops/hr-policy@2026-08-11");
+  assert.equal(source.title, "Canonical HR Benefits Policy");
+  assert.equal(source.updatedAt, "2026-08-11");
+  assert.equal(source.trustLevel, "high");
+});
+
 test("parses supported frontmatter metadata and strips it from content", () => {
   const parsed = parseSource("docs/hr-policy.md", `---
 title: HR Benefits Policy
