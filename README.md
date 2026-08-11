@@ -1,5 +1,9 @@
 # Quorum
 
+The HTTP `/formats` contract now regression-tests source and answer extension
+sets independently, so API clients can rely on source-only format additions
+being detected.
+
 The HTTP API version-contract tests now revalidate `/formats` with conditional
 `HEAD` requests, keeping machine-readable format discovery aligned with the
 cache-aware discovery, capabilities, and OpenAPI endpoints.
