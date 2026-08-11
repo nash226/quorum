@@ -4,6 +4,10 @@
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
 
+JSON5 ingestion now normalizes unquoted keys, single-quoted values, and
+trailing commas into structured claim text instead of falling back to raw
+export markup.
+
 Textile approved sources now promote `h1.`–`h6.` headings to reviewer-facing
 evidence titles while preserving the normalized policy body.
 
