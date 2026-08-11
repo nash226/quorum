@@ -123,6 +123,9 @@ Direct approved-source loading now regression-tests `.htm` exports for HTML
 titles and readable evidence, keeping the short HTML alias aligned with the
 published source-format contract.
 
+The source-loader regression suite also verifies XHTML exports through the same
+HTML metadata, heading-title fallback, and evidence normalization path.
+
 Direct CSV verification now preserves quoted fields with embedded line breaks,
 keeping multi-line tabular policy evidence readable during claim review.
 
