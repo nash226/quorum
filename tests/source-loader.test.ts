@@ -4,6 +4,13 @@ import test from "node:test";
 import { createSimplePdf } from "./pdf-test-helpers.js";
 import { parseSource, sourceDocumentFromFile } from "../src/source-loader.js";
 
+test("normalizes SRT and WebVTT transcript cues", async () => {
+  const srt = await sourceDocumentFromFile("answers/support.srt", "1\n00:00:01,000 --> 00:00:03,000\nCustomers may request a refund within 30 days.\n", 0);
+  const vtt = await sourceDocumentFromFile("policies/support.vtt", "WEBVTT\n\n00:00:01.000 --> 00:00:03.000\nCustomers may request a refund within 30 days.\n", 0);
+  assert.equal(srt.content, "Customers may request a refund within 30 days.");
+  assert.equal(vtt.content, "Customers may request a refund within 30 days.");
+});
+
 test("builds source documents from file names when metadata is absent", async () => {
   const source = await sourceDocumentFromFile("docs/hr-policy.md", "Employees get 12 weeks.", 0);
 

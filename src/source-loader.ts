@@ -79,6 +79,10 @@ export async function sourceDocumentFromFile(
 export function parseSource(sourcePath: string, content: string): ParsedSource {
   const normalizedContent = normalizeLineEndings(stripByteOrderMark(content));
 
+  if (isTranscriptSource(sourcePath)) {
+    return { metadata: {}, body: normalizeTranscriptText(normalizedContent) };
+  }
+
   if (isHtmlSource(sourcePath)) {
     return parseHtmlSource(normalizedContent);
   }
@@ -228,6 +232,18 @@ function isRtfSource(sourcePath: string): boolean {
 
 function isPdfSource(sourcePath: string): boolean {
   return /\.pdf$/i.test(sourcePath);
+}
+
+export function isTranscriptSource(sourcePath: string): boolean {
+  return /\.(?:srt|vtt)$/i.test(sourcePath);
+}
+
+export function normalizeTranscriptText(content: string): string {
+  return content.split("\n").filter((line) => {
+    const trimmed = line.trim();
+    return trimmed !== "WEBVTT" && !/^NOTE(?:\s|$)/i.test(trimmed) && !/^\d+$/.test(trimmed) &&
+      !/^\d{2}:\d{2}:\d{2}[,.]\d{3}\s+-->\s+\d{2}:\d{2}:\d{2}[,.]\d{3}/.test(trimmed);
+  }).join("\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 function isDocxSource(sourcePath: string): boolean {
