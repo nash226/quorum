@@ -1,5 +1,9 @@
 # Quorum
 
+Direct CLI verification now regression-tests Apple Mail `.emlx` answers against
+RFC 822 approved sources, keeping the email input contract symmetric for
+single-answer workflows.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
