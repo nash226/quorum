@@ -1,5 +1,9 @@
 # Quorum
 
+The local HTTP service keeps its operational probes pathname-routed when
+clients append diagnostic query parameters: `/health`, `/healthz`, `/readyz`,
+and `/livez` continue to return the same JSON health contract.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
