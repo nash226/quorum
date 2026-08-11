@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `b925389b` on 2026-08-11, docs: advertise all supported input formats
+- Latest shipped change: `09adadd9` on 2026-08-11, docs: add verification architecture guide
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-11 | Direct push | docs: add verification architecture guide | `09adadd9` |
 | 2026-08-11 | Direct push | docs: advertise all supported input formats | `b925389b` |
 | 2026-08-11 | Direct push | test: verify source format discovery | `b2923486` |
 | 2026-08-11 | Direct push | fix: expose Allow header on CORS preflight | `5a8ac4eb` |
@@ -56,5 +57,4 @@
 | 2026-08-11 | Direct push | docs: refresh verified API contract note | `0f9a133a` |
 | 2026-08-11 | Direct push | test: preserve in-memory source IDs in evidence | `5e629183` |
 | 2026-08-11 | Direct push | test: expand HR commuter benefit coverage | `770956c1` |
-| 2026-08-11 | Direct push | test: cover query-bearing formats requests | `2a2567b3` |
 
