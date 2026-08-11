@@ -1,5 +1,9 @@
 # Quorum
 
+The HTTP API now regression-tests query-bearing version discovery requests,
+keeping contract probes on the same pathname-based routing behavior as other
+machine-readable endpoints.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
