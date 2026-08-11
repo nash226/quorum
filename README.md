@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests uppercase `.ASCIIDOC` answers and
+`.ADOC` approved sources, keeping case-insensitive AsciiDoc integrations on
+the same evidence path as lowercase exports.
+
 Claim extraction now splits adjacent N’Ko policy statements at the N’Ko
 exclamation sentence terminator, keeping localized evidence boundaries intact.
 
