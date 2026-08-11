@@ -1,5 +1,8 @@
 # Quorum
 
+The deployment guide now calls out that an explicit `--cors-origin '*'` remains
+permissive, so deployed browser clients should use named origins.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
