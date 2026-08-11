@@ -14,6 +14,7 @@ import {
   API_MAX_REQUEST_BYTES as SERVER_API_MAX_REQUEST_BYTES,
   API_REQUEST_TIMEOUT_MS as SERVER_API_REQUEST_TIMEOUT_MS,
   CAPABILITIES_PATH as SERVER_CAPABILITIES_PATH,
+  FORMATS_PATH as SERVER_FORMATS_PATH,
   HEALTH_PATH as SERVER_HEALTH_PATH,
   HEALTHZ_PATH as SERVER_HEALTHZ_PATH,
   API_DISCOVERY_HEADERS as SERVER_API_DISCOVERY_HEADERS,
@@ -43,6 +44,7 @@ import {
   API_MAX_REQUEST_BYTES,
   API_REQUEST_TIMEOUT_MS,
   CAPABILITIES_PATH,
+  FORMATS_PATH,
   HEALTH_PATH,
   HEALTHZ_PATH,
   API_DISCOVERY_HEADERS,
@@ -234,6 +236,7 @@ test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(rootCreateApiServer, createApiServer);
   assert.strictEqual(rootStartApiServer, startApiServer);
   assert.strictEqual(CAPABILITIES_PATH, SERVER_CAPABILITIES_PATH);
+  assert.strictEqual(FORMATS_PATH, SERVER_FORMATS_PATH);
   assert.equal(API_ROOT_PATH, "/");
   assert.strictEqual(HEALTH_PATH, SERVER_HEALTH_PATH);
   assert.strictEqual(HEALTHZ_PATH, SERVER_HEALTHZ_PATH);
@@ -253,6 +256,23 @@ test("programmatic API re-exports embedded server helpers and metadata", () => {
   assert.strictEqual(API_VERSION, SERVER_API_VERSION);
   assert.deepEqual(API_CAPABILITIES, SERVER_API_CAPABILITIES);
   assert.deepEqual(API_ENDPOINTS, SERVER_API_ENDPOINTS);
+});
+
+test("formats endpoint exposes the supported input contract", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  try {
+    const response = await fetch(`${api.url}${SERVER_FORMATS_PATH}`, {
+      headers: { [SERVER_API_REQUEST_ID_HEADER]: "formats-contract" },
+    });
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get(SERVER_API_REQUEST_ID_HEADER), "formats-contract");
+    const payload = await response.json() as { sourceExtensions: string[]; answerExtensions: string[] };
+    assert.deepEqual(payload.sourceExtensions, [...ANSWER_EXTENSIONS].sort());
+    assert.deepEqual(payload.answerExtensions, [...ANSWER_EXTENSIONS].sort());
+    assert.ok(createOpenApiDocument().paths[SERVER_FORMATS_PATH]);
+  } finally {
+    await api.close();
+  }
 });
 
 test("programmatic API can build the OpenAPI document without starting the server", () => {

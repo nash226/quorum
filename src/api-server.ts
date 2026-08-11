@@ -285,6 +285,7 @@ export const HEALTHZ_PATH = "/healthz";
 export const READYZ_PATH = "/readyz";
 export const VERSION_PATH = "/version";
 export const OPENAPI_PATH = "/openapi.json";
+export const FORMATS_PATH = "/formats";
 export const LIVEZ_PATH = "/livez";
 export const VERIFY_PATH = "/verify";
 export const EXTRACT_CLAIMS_PATH = "/extract-claims";
@@ -441,6 +442,9 @@ export const API_ENDPOINTS: readonly ApiDiscoveryEndpoint[] = [
     path: OPENAPI_PATH,
     description: "Return CORS preflight headers for OpenAPI schema clients.",
   },
+  { method: "GET", path: FORMATS_PATH, description: "Return the supported source and answer file extensions." },
+  { method: "HEAD", path: FORMATS_PATH, description: "Return format contract headers without a JSON body." },
+  { method: "OPTIONS", path: FORMATS_PATH, description: "Return CORS preflight headers for format contract clients." },
   { method: "POST", path: VERIFY_PATH, description: "Verify one answer from JSON request content." },
   { method: "OPTIONS", path: VERIFY_PATH, description: "Return CORS preflight headers for verify requests." },
   {
@@ -1517,6 +1521,23 @@ async function handleApiRequest(
       }),
       isHeadRequest,
     );
+    return;
+  }
+
+  if ((request.method === "GET" || isHeadRequest) && url === FORMATS_PATH) {
+    const formatsResponse = {
+      requestId: requestId(response),
+      service: API_SERVICE_NAME,
+      version: API_VERSION,
+      sourceExtensions: [...SOURCE_EXTENSIONS].sort(),
+      answerExtensions: [...ANSWER_EXTENSIONS].sort(),
+    };
+    writeConditionalJson(request, response, 200, formatsResponse, isHeadRequest, {
+      service: API_SERVICE_NAME,
+      version: API_VERSION,
+      sourceExtensions: formatsResponse.sourceExtensions,
+      answerExtensions: formatsResponse.answerExtensions,
+    });
     return;
   }
 
@@ -2781,6 +2802,42 @@ export function createOpenApiDocument(options: OpenApiDocumentOptions = {}) {
           },
         },
         options: corsPreflightOperation("optionsVersion", "Version preflight"),
+      },
+      [FORMATS_PATH]: {
+        get: {
+          operationId: "getFormats",
+          summary: "Supported input formats",
+          responses: {
+            "200": {
+              description: "Supported approved-source and answer file extensions.",
+              headers: capabilitiesResponseHeaders,
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      requestId: { type: "string" },
+                      service: { type: "string", const: API_SERVICE_NAME },
+                      version: { type: "string", const: API_VERSION },
+                      sourceExtensions: { type: "array", items: { type: "string" } },
+                      answerExtensions: { type: "array", items: { type: "string" } },
+                    },
+                    required: ["requestId", "service", "version", "sourceExtensions", "answerExtensions"],
+                  },
+                },
+              },
+            },
+            "304": { description: "The supported-format contract has not changed." },
+            "500": errorResponse("The server failed while handling the request."),
+            ...getErrorResponses,
+          },
+        },
+        head: {
+          operationId: "headFormats",
+          summary: "Supported input format headers",
+          responses: { "200": { description: "Header-only format contract response.", headers: capabilitiesResponseHeaders } },
+        },
+        options: corsPreflightOperation("optionsFormats", "Format contract preflight"),
       },
       [OPENAPI_PATH]: {
         get: {
