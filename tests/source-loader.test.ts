@@ -619,6 +619,20 @@ test("normalizes YAML source exports into claim-readable lines", async () => {
   assert.equal(source.content, "policy.leave: Employees get 12 weeks.\nregions[1]: US\nregions[2]: CA");
 });
 
+test("preserves YAML block scalars as separate claim-readable lines", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.yaml",
+    `policy: |
+  Employees receive 12 weeks of paid leave.
+  Managers must approve the request.
+`,
+    0,
+  );
+
+  assert.match(source.content, /Employees receive 12 weeks of paid leave\./);
+  assert.match(source.content, /Managers must approve the request\./);
+});
+
 test("normalizes TOML source exports and preserves metadata", async () => {
   const source = await sourceDocumentFromFile(
     "docs/policies/benefits.toml",

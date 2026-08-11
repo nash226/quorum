@@ -1,5 +1,8 @@
 # Quorum
 
+YAML block-scalar policy exports now preserve each policy sentence as readable
+evidence, keeping multi-line approved knowledge useful during claim matching.
+
 Direct verification now regression-tests uppercase `.ASCIIDOC` answers and
 `.ADOC` approved sources, keeping case-insensitive AsciiDoc integrations on
 the same evidence path as lowercase exports.
