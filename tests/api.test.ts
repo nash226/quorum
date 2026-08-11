@@ -993,6 +993,16 @@ test("HTTP API routes valid requests with query strings by pathname", async () =
       version: "0.1.0",
     });
 
+    const versionResponse = await fetch(`${api.url}/version?client=bootstrap`);
+    assert.equal(versionResponse.status, 200);
+    const versionPayload = await versionResponse.json() as { requestId: string; service: string; version: string };
+    assert.equal(versionPayload.requestId, versionResponse.headers.get("x-quorum-request-id"));
+    assert.deepEqual({ ...versionPayload, requestId: "" }, {
+      requestId: "",
+      service: "quorum",
+      version: "0.1.0",
+    });
+
     const extractClaimsResponse = await fetch(`${api.url}/extract-claims?format=json`, {
       method: "POST",
       headers: { "content-type": "application/json" },
