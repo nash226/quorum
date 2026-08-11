@@ -84,7 +84,7 @@ test("status refresh reads capabilities from the CLI guide", () => {
   assert.doesNotMatch(status, /Missing section "What It Does"/);
 });
 
-test("README benchmark inventory matches checked-in evaluation fixtures", () => {
+test("evaluation guide benchmark inventory matches checked-in fixtures", () => {
   function countFixtures(directory: string): number {
     return readdirSync(directory, { withFileTypes: true }).reduce(
       (count, entry) =>
@@ -96,11 +96,11 @@ test("README benchmark inventory matches checked-in evaluation fixtures", () => 
   }
 
   const fixtureCount = countFixtures("examples/evaluations");
-  const readme = readFileSync("README.md", "utf8");
+  const evaluationGuide = readFileSync("docs/evaluation-fixtures.md", "utf8");
 
   assert.match(
-    readme,
-    new RegExp(`The checked-in ${fixtureCount}-fixture benchmark`),
+    evaluationGuide,
+    new RegExp(`benchmark currently contains ${fixtureCount} fixtures`),
   );
 });
 
@@ -125,11 +125,11 @@ test("benchmark inventory keeps HR and support domain counts visible", () => {
   }
 
   const counts = countFixtures("examples/evaluations");
-  const readme = readFileSync("README.md", "utf8");
+  const evaluationGuide = readFileSync("docs/evaluation-fixtures.md", "utf8");
 
   assert.deepEqual(Object.keys(counts).sort(), ["hr", "support"]);
   assert.equal(Object.values(counts).reduce((total, count) => total + count, 0), 92);
   assert.deepEqual({ hr: counts.hr, support: counts.support }, { hr: 32, support: 60 });
-  assert.match(readme, /32 HR and 60 support workflows/);
-  assert.doesNotMatch(readme, /\b83 checked-in benchmark fixtures\b|\binventory is currently reconciled at 83 fixtures\b/);
+  assert.match(evaluationGuide, /32 HR workflows and 60 support/);
+  assert.doesNotMatch(evaluationGuide, /\b83 checked-in benchmark fixtures\b|\binventory is currently reconciled at 83 fixtures\b/);
 });
