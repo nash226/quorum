@@ -300,6 +300,10 @@ The packaged CLI smoke gate now verifies recursive nested `.eml` answer and
 approved-source discovery, keeping published email-policy batch workflows
 aligned with direct verification and the supported format contract.
 
+Saved HTML `.shtml` exports are now accepted as approved sources only, matching
+the documented source-only format contract while keeping answer discovery
+unchanged.
+
 Recursive batch verification is now regression-tested for both `.yaml` and
 `.yml` answers and approved sources, keeping nested structured policy exports
 on the same contract as direct YAML verification.

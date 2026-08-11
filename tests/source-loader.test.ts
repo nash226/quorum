@@ -51,6 +51,17 @@ test("extracts metadata and evidence from htm source exports", async () => {
   assert.match(source.content, /Employees get 12 weeks\./);
 });
 
+test("parses shtml sources as HTML without enabling shtml answers", async () => {
+  const source = await sourceDocumentFromFile(
+    "policies/leave.shtml",
+    "<html><head><title>Leave Policy</title></head><body><p>Employees receive paid leave.</p></body></html>",
+    0,
+  );
+
+  assert.equal(source.title, "Leave Policy");
+  assert.match(source.content, /Employees receive paid leave\./);
+});
+
 test("extracts metadata and evidence from xht source exports", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.xht",
