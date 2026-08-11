@@ -75,6 +75,23 @@ test("HTTP API revalidates bodyless discovery probes with conditional HEAD", asy
   }
 });
 
+test("HTTP API keeps health probes bodyless across readiness aliases", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const path of ["/health", "/healthz", "/readyz", "/livez"]) {
+      const response = await fetch(`${api.url}${path}`, { method: "HEAD" });
+      assert.equal(response.status, 200, path);
+      assert.equal(response.headers.get("cache-control"), "no-store", path);
+      assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8", path);
+      assert.equal(response.headers.get("x-quorum-request-id")?.length, 36, path);
+      assert.equal(await response.text(), "", path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API revalidates stable discovery responses with conditional GET", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
