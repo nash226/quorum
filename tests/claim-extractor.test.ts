@@ -1405,6 +1405,13 @@ test("keeps short claims across non-Latin policy scripts", () => {
   );
 });
 
+test("splits Georgian sentence separators and keeps short claims", () => {
+  assert.deepEqual(
+    extractClaims("დასვენება დამტკიცებულია჻ შემდეგი წესი მოქმედებს჻").map((claim) => claim.text),
+    ["დასვენება დამტკიცებულია჻", "შემდეგი წესი მოქმედებს჻"],
+  );
+});
+
 test("keeps short N'Ko claims with the N'Ko exclamation terminator", () => {
   assert.deepEqual(extractClaims("ߒߞߏ߹\nNext policy applies.").map((claim) => claim.text), [
     "ߒߞߏ߹",
