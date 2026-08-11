@@ -1,5 +1,8 @@
 # Quorum
 
+The shipped local HTTP API mirrors the CLI's verification, batch review,
+reviewer-queue, and versioned format-discovery workflows for integrations.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
