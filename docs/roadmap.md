@@ -38,6 +38,13 @@ surfaces rather than add another parallel workflow.
   the dashboard boundary is tracked separately in [decision issue #683](https://github.com/nash226/quorum/issues/683).
 - Expand the HR and support fixture set as policy coverage grows.
 
+The checked-in scorecard currently contains 93 fixtures (33 HR and 60
+support, including the shared top-level examples). The next safe increment is
+one focused policy packet with verified, contradicted, and unsupported claims,
+plus the matching scorecard, aggregate-count, and packaged-smoke assertions.
+This keeps evaluation coverage growing without changing the decision-gated
+service or queue boundaries.
+
 The service and queue items are intentionally decision-gated. Safe work can
 continue on fixture coverage and local CLI/API reliability without choosing a
 hosting provider, adding credentials, or committing to a durable storage
