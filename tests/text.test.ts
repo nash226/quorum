@@ -224,6 +224,17 @@ test("splits Thai sentence terminators", () => {
   );
 });
 
+test("splits adjacent Thai sentence terminators", () => {
+  assert.deepEqual(
+    splitIntoSentences("นโยบายนี้มีผลใช้บังคับ๚ผู้จัดการอนุมัติข้อยกเว้น๛Next policy applies."),
+    [
+      "นโยบายนี้มีผลใช้บังคับ๚",
+      "ผู้จัดการอนุมัติข้อยกเว้น๛",
+      "Next policy applies.",
+    ],
+  );
+});
+
 test("splits Khmer sentence terminators", () => {
   assert.deepEqual(
     splitIntoSentences("គោលការណ៍នេះមានប្រសិទ្ធភាព។ អ្នកគ្រប់គ្រងត្រូវអនុម័ត។ Next policy applies."),
