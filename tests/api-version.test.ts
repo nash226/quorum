@@ -75,6 +75,19 @@ test("HTTP API revalidates bodyless discovery probes with conditional HEAD", asy
   }
 });
 
+test("HTTP discovery and health routes accept an optional trailing slash", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    for (const path of ["/version/", "/openapi.json/", "/health/"]) {
+      const response = await fetch(`${api.url}${path}`);
+      assert.equal(response.status, 200, path);
+    }
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API revalidates stable discovery responses with conditional GET", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 

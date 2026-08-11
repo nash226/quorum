@@ -1407,7 +1407,7 @@ async function handleApiRequest(
   const maxRequestBytes = resolveMaxRequestBytes(options.maxRequestBytes);
   const requestTimeoutMs = resolveRequestTimeoutMs(options.requestTimeoutMs);
   const corsAllowedOrigins = options.corsAllowedOrigins ?? API_CAPABILITIES.cors.allowedOrigins;
-  const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
+  const url = new URL(request.url ?? "/", "http://quorum.local").pathname.replace(/\/+$/, "") || API_ROOT_PATH;
   applyCorsHeaders(request, response, options.corsAllowedOrigins, allowedMethodsForPath(url));
   applyApiDiscoveryHeaders(response, maxRequestBytes, requestTimeoutMs);
   const isHeadRequest = request.method === "HEAD";
