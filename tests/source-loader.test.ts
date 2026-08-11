@@ -545,6 +545,17 @@ test("ingests JSONC and JSON5 exports with comments while preserving comment-lik
   assert.equal(json5Source.content, "policy: Employees get 12 weeks.");
 });
 
+test("normalizes JSON5 unquoted keys, single-quoted values, and trailing commas", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/policies/benefits.json5",
+    "{ title: 'Benefits Policy', policy: 'Employees get 12 weeks.', }",
+    0,
+  );
+
+  assert.equal(source.title, "Benefits Policy");
+  assert.equal(source.content, "title: Benefits Policy\npolicy: Employees get 12 weeks.");
+});
+
 test("loads metadata from structured JSON and YAML source exports", async () => {
   const jsonSource = await sourceDocumentFromFile(
     "docs/policy.json",

@@ -92,7 +92,11 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
   }
 
   if (isJsonSource(sourcePath)) {
-    return parseJsonSource(normalizedContent, /(?:json5|jsonc)$/i.test(sourcePath));
+    return parseJsonSource(
+      normalizedContent,
+      /(?:json5|jsonc)$/i.test(sourcePath),
+      /json5$/i.test(sourcePath),
+    );
   }
 
   if (isXmlSource(sourcePath)) {
@@ -418,10 +422,11 @@ function parseHtmlSource(content: string): ParsedSource {
   };
 }
 
-function parseJsonSource(content: string, allowsComments = false): ParsedSource {
+function parseJsonSource(content: string, allowsComments = false, isJson5 = false): ParsedSource {
   const jsonContent = allowsComments ? stripJsonComments(content) : content;
-  if (/\n/.test(jsonContent.trim())) {
-    const lines = jsonContent.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const parseableContent = isJson5 ? normalizeJson5(jsonContent) : jsonContent;
+  if (/\n/.test(parseableContent.trim())) {
+    const lines = parseableContent.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
     if (lines.length > 1) {
       try {
         const records = lines.map((line) => JSON.parse(line));
@@ -433,11 +438,18 @@ function parseJsonSource(content: string, allowsComments = false): ParsedSource 
   }
 
   try {
-    const value: unknown = JSON.parse(jsonContent);
+    const value: unknown = JSON.parse(parseableContent);
     return { metadata: structuredMetadata(value), body: formatStructuredValue(value) };
   } catch {
     return { metadata: {}, body: content };
   }
+}
+
+function normalizeJson5(content: string): string {
+  return content
+    .replace(/'([^'\\]*(?:\\.[^'\\]*)*)'/g, (_match, value: string) => JSON.stringify(value.replace(/\\'/g, "'")))
+    .replace(/([{,]\s*)([A-Za-z_$][\w$-]*)(\s*:)/g, "$1\"$2\"$3")
+    .replace(/,\s*([}\]])/g, "$1");
 }
 
 function stripJsonComments(content: string): string {
