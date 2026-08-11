@@ -1,5 +1,9 @@
 # Quorum
 
+`.env` configuration exports are now accepted symmetrically as direct or
+recursive answer and approved-source inputs, alongside the existing plain-text
+configuration aliases.
+
 Textile approved sources now promote `h1.`–`h6.` headings to reviewer-facing
 evidence titles while preserving the normalized policy body.
 

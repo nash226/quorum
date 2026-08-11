@@ -620,8 +620,8 @@ test("verify-batch ignores unsupported files while discovering nested inputs", a
 test("formats lists the extensions accepted by source and answer discovery", async () => {
   const stdout = await runCli(["formats"]);
 
-  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.htm, \.html/);
-  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.htm, \.html/);
+  assert.match(stdout, /Source files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.env, \.htm, \.html/);
+  assert.match(stdout, /Answer files: \.adoc, \.asciidoc, \.cfg, \.conf, \.csv, \.docx, \.eml, \.emlx, \.env, \.htm, \.html/);
   assert.match(stdout, /Source files: .*\.text/);
   assert.match(stdout, /Answer files: .*\.text/);
   assert.match(stdout, /Source files: .*\.rst/);
@@ -634,6 +634,8 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.qmd/);
   assert.match(stdout, /Source files: .*\.properties/);
   assert.match(stdout, /Answer files: .*\.properties/);
+  assert.match(stdout, /Source files: .*\.env/);
+  assert.match(stdout, /Answer files: .*\.env/);
   assert.match(stdout, /Source files: .*\.tsv/);
   assert.match(stdout, /Answer files: .*\.tsv/);
   assert.match(stdout, /Source files: .*\.ndjson/);
@@ -1047,6 +1049,28 @@ test("verify accepts direct .properties answer and source exports", async () => 
     assert.equal(report.summary.verified, 1);
     assert.equal(report.assessments[0]?.verdict, "verified");
     assert.equal(report.sources[0]?.sourcePath, sourcePath);
+    assert.equal(report.sources[0]?.title, "policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("verify accepts direct .env answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-env-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.env");
+    const sourcePath = join(tempDir, "policy.env");
+    await Promise.all([
+      writeFile(answerPath, "leave=Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "leave=Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as { summary: { verified: number }; sources: Array<{ title: string }> };
+
+    assert.equal(report.summary.verified, 1);
     assert.equal(report.sources[0]?.title, "policy");
   } finally {
     await rm(tempDir, { recursive: true, force: true });
