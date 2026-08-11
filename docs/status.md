@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `2a77e910` on 2026-08-11, test: cover formats cache revalidation
+- Latest shipped change: `621af7c3` on 2026-08-11, docs: clarify shipped product boundary
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-11 | Direct push | docs: clarify shipped product boundary | `621af7c3` |
 | 2026-08-11 | [#2326](https://github.com/nash226/quorum/pull/2326) | test: cover formats cache revalidation | `2a77e910` |
 | 2026-08-11 | Direct push | feat: expose supported formats over HTTP | `7b143821` |
 | 2026-08-11 | Direct push | test: cover BOM-prefixed frontmatter | `5934da87` |
@@ -56,5 +57,4 @@
 | 2026-08-11 | Direct push | fix: decode base64 email bodies | `3f707e9f` |
 | 2026-08-11 | Direct push | test: cover uppercase AsciiDoc verification | `c0959243` |
 | 2026-08-11 | Direct push | fix: split adjacent NKo claims | `a14f5883` |
-| 2026-08-10 | Direct push | docs: document machine-readable format contract | `c7e37b79` |
 
