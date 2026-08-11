@@ -351,6 +351,8 @@ curl -sS http://127.0.0.1:3000/verify \
 `answer` and `answerBase64` are mutually exclusive, as are `content` and
 `contentBase64` for each source. The default JSON request limit is 1 MiB;
 larger uploads require a matching `--max-request-bytes` server setting.
+Keep each `answerPath` or `sourcePath` extension aligned with its decoded bytes
+so PDF and DOCX content uses the intended extractor.
 
 ## Request reviewer artifacts
 

@@ -1,5 +1,9 @@
 # Quorum
 
+The HTTP integration guide now makes the binary upload contract explicit:
+base64 answers and sources must keep matching `.pdf` or `.docx` path extensions
+so Quorum selects the intended extractor.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
