@@ -2522,7 +2522,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 92-fixture benchmark spans 32 HR and 60 support workflows. It also
+The checked-in 93-fixture benchmark spans 33 HR and 60 support workflows. It also
 includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
@@ -2974,7 +2974,7 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
-The checked-in HR and support benchmark currently contains 92 fixtures and 274
+The checked-in HR and support benchmark currently contains 93 fixtures and 277
 expected claims, including support plan-upgrade and plan-downgrade scenarios
 with verified, needs-review, contradicted, and unsupported claims.
 The HR employee-assistance policy is also covered as a file-backed reviewer
@@ -3069,6 +3069,9 @@ items use the [decision queue](docs/decision-queue.md).
 Direct CLI verification now regression-tests paired Markdown text (`.mkdn`)
 answer and approved-source exports, keeping this published Markdown-family
 alias on the same evidence path as the other supported document formats.
+
+The HR evaluation benchmark now covers commuter-benefit enrollment, receipt
+deadlines routed to review, and unsupported unlimited-reimbursement claims.
 
 The packaged CLI now smoke-tests paired Apple Mail `.emlx` answer and approved-
 source exports, including the message wrapper and report metadata.

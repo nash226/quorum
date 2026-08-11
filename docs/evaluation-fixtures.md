@@ -31,7 +31,7 @@ set covers:
   HTML billing, member permissions, payment failures, plan changes, subscription
   renewals, and workspace access
 
-The benchmark currently contains 92 fixtures: 32 HR workflows and 60 support
+The benchmark currently contains 93 fixtures: 33 HR workflows and 60 support
 workflows. Shared edge-case inputs are represented within those domain totals
 so the inventory matches the CLI, API, and packaged smoke gates.
 The generated
@@ -159,6 +159,8 @@ specific product question:
   contradictory response-time promise, and an unsupported home-office stipend.
 - HR bonus-eligibility coverage tests good-standing eligibility, a payout-timing
   contradiction, and an unsupported guaranteed-bonus claim.
+- HR commuter-benefit coverage tests enrollment timing, a receipt-submission
+  deadline routed to review, and an unsupported unlimited-reimbursement promise.
 - HR employee-referral coverage tests a verified referral bonus, a conflicting
   bonus amount, and an unsupported automatic-payment promise.
 - HR jury-duty coverage tests a verified paid-leave entitlement, a conflicting
