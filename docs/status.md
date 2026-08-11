@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `5a8ac4eb` on 2026-08-11, fix: expose Allow header on CORS preflight
+- Latest shipped change: `b2923486` on 2026-08-11, test: verify source format discovery
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-11 | Direct push | test: verify source format discovery | `b2923486` |
 | 2026-08-11 | Direct push | fix: expose Allow header on CORS preflight | `5a8ac4eb` |
 | 2026-08-11 | Direct push | test: cover query-bearing reviewer queue requests | `85d3cefc` |
 | 2026-08-11 | Direct push | docs: refresh verified API contract note | `0f9a133a` |
@@ -56,5 +57,4 @@
 | 2026-08-11 | Direct push | test: expand HR commuter benefit coverage | `770956c1` |
 | 2026-08-11 | Direct push | test: cover query-bearing formats requests | `2a2567b3` |
 | 2026-08-11 | Direct push | fix: honor explicit wildcard CORS origins | `5e1ccb1d` |
-| 2026-08-11 | [#2337](https://github.com/nash226/quorum/pull/2337) | test: cover discovery conditional GET contract | `ffbde8e3` |
 
