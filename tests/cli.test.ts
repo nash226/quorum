@@ -1357,6 +1357,47 @@ test("verify accepts direct saved web-page answer and source exports", async () 
   }
 });
 
+test("verify-batch discovers mixed-case saved web-page answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-mhtml-case-insensitive-"));
+  const answerDir = join(tempDir, "answers", "nested");
+  const sourceDir = join(tempDir, "sources", "nested");
+
+  try {
+    await Promise.all([mkdir(answerDir, { recursive: true }), mkdir(sourceDir, { recursive: true })]);
+    await Promise.all([
+      writeFile(
+        join(answerDir, "leave.MHTML"),
+        "<html><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>",
+        "utf8",
+      ),
+      writeFile(
+        join(sourceDir, "hr-policy.MHT"),
+        "<html><head><title>HR Benefits Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>",
+        "utf8",
+      ),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch",
+      "--answer-dir",
+      join(tempDir, "answers"),
+      "--source-dir",
+      join(tempDir, "sources"),
+      "--json",
+    ])) as {
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.deepEqual(report.answers.map((answer) => answer.answerPath), [join(answerDir, "leave.MHTML")]);
+    assert.deepEqual(report.sources.map((source) => [source.sourcePath, source.title]), [[join(sourceDir, "hr-policy.MHT"), "HR Benefits Policy"]]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct .mdx answer and preserves its path", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdx-answer-"));
 
