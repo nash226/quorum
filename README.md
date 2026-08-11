@@ -981,7 +981,19 @@ monitoring clients.
 Integrations can inspect the exact answer and approved-source extensions
 supported by the installed package with `npm run formats -- --json` (or
 `quorum formats --json` after installation). The JSON response is the
-machine-readable contract used by the CLI and programmatic API.
+machine-readable contract used by the CLI and programmatic API. It includes a
+version plus separate sorted `answers` and `sources` arrays, for example:
+
+```json
+{
+  "version": "0.1.0",
+  "answers": [".md", ".txt"],
+  "sources": [".md", ".txt"]
+}
+```
+
+Clients should compare extensions case-insensitively and treat an unknown
+version as requiring a compatibility check before accepting new input files.
 
 The packaged CLI smoke gate now verifies direct `.text` answers and approved
 sources, keeping the plain-text alias release-gated with the other supported
