@@ -21,6 +21,28 @@ import {
   resolveEvaluationFixturePaths,
 } from "../src/index.js";
 
+test("evaluates office-closure guidance across review outcomes", async () => {
+  const scorecard = await evaluateFixture({
+    name: "HR office closure policy regression",
+    domain: "hr",
+    answerPath: "hr-office-closure-answer.md",
+    answer: "Employees should work remotely when an office closes because of severe weather.\nManagers may require employees to report to the closed office if coverage is needed.\nThe company provides a $500 emergency commuting stipend for every office closure.",
+    sources: [{
+      sourcePath: "hr-office-closure-policy.md",
+      id: "people-ops/hr-office-closure@2026-08-11",
+      title: "HR Office Closure Policy",
+      updatedAt: "2026-08-11",
+      trustLevel: "high",
+      content: "Employees should work remotely when an office closes because of severe weather.\nPeople Operations will communicate whether employees should work remotely or use paid time off.\nThe company provides a $250 emergency commuting stipend for every office closure.",
+    }],
+    expectedSummary: { verified: 2, contradicted: 0, unsupported: 1, needs_review: 0 },
+    expectedClaimVerdicts: ["verified", "verified", "unsupported"],
+  });
+
+  assert.deepEqual(scorecard.actualSummary, { verified: 2, contradicted: 0, unsupported: 1, needs_review: 0 });
+  assert.equal(scorecard.summaryMatches, true);
+});
+
 test("evaluates the shipped HR recognition fixture across award claims", async () => {
   const scorecard = await evaluateFixtureFile({
     fixturePath: resolve("examples/evaluations/hr/recognition-policy.json"),
