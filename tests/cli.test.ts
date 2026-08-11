@@ -650,6 +650,26 @@ test("formats lists the extensions accepted by source and answer discovery", asy
   assert.match(stdout, /Answer files: .*\.log/);
   assert.match(stdout, /Source files: .*\.eml/);
   assert.match(stdout, /Answer files: .*\.eml/);
+  assert.match(stdout, /Source files: .*\.shtml/);
+  assert.doesNotMatch(stdout, /Answer files: .*\.shtml/);
+});
+
+test("verify accepts a direct .shtml approved source export", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-shtml-source-"));
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "leave-policy.shtml");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "<html><head><title>Leave Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]));
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.sources[0]?.title, "Leave Policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("formats --json exposes the same contract as the library constants", async () => {
@@ -749,7 +769,8 @@ test("formats --json exposes a versioned machine-readable input contract", async
   assert.deepEqual(formats.answers, [...formats.answers].sort());
   assert.deepEqual(formats.sources, [...SOURCE_EXTENSIONS].sort());
   assert.deepEqual(formats.answers, [...ANSWER_EXTENSIONS].sort());
-  assert.deepEqual(formats.sources, formats.answers);
+  assert.ok(formats.sources.includes(".shtml"));
+  assert.ok(!formats.answers.includes(".shtml"));
   assert.ok(formats.sources.includes(".md"));
   assert.ok(formats.sources.includes(".json"));
 });

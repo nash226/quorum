@@ -4,6 +4,10 @@
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
 
+Server-side HTML (`.shtml`) exports are now accepted as approved sources,
+including title extraction and recursive discovery, while remaining source-only
+in the published format contract.
+
 Textile approved sources now promote `h1.`–`h6.` headings to reviewer-facing
 evidence titles while preserving the normalized policy body.
 
