@@ -73,6 +73,18 @@ test("extracts metadata and evidence from saved web-page exports", async () => {
   assert.match(source.content, /Employees get 12 weeks\./);
 });
 
+test("preserves caller-provided identifiers for PDF sources", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.pdf",
+    createSimplePdf("Employees get 12 weeks."),
+    0,
+    { id: "people-ops/hr-policy@2026-08-11" },
+  );
+
+  assert.equal(source.id, "people-ops/hr-policy@2026-08-11");
+  assert.match(source.content, /Employees get 12 weeks\./);
+});
+
 test("extracts metadata from XML source exports", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.xml",
