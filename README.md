@@ -2076,6 +2076,10 @@ exported HTML/XHTML (`.html`, `.htm`, `.xhtml`),
 PDF (`.pdf`), Word documents (`.docx`), JSON/JSONL/NDJSON (`.json`, `.jsonl`,
 `.ndjson`, `.json5`, `.jsonc`), TOML (`.toml`), YAML/YML (`.yaml`, `.yml`), XML (`.xml`), and
 CSV/TSV (`.csv`, `.tsv`), plus RFC 822 email exports (`.eml`, `.emlx`).
+
+CSV and TSV source directories preserve supported `title`, `updatedAt`, and
+`trustLevel` columns in evidence reports while using the remaining columns as
+plain-text policy content.
 Apple Mail `.emlx` exports are unwrapped from their leading byte-count line
 before Quorum reads the message subject, date, and claim-bearing body.
 Approved sources additionally accept YAML/YML (`.yaml`, `.yml`) and XML
