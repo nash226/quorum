@@ -16,6 +16,10 @@ The HTTP API format-discovery tests now also revalidate conditional `GET`
 requests, confirming that unchanged `/formats` responses return `304` without
 repeating the JSON body for cache-aware integrations.
 
+HTTP discovery contract tests now also verify conditional `GET` revalidation
+for the root, capabilities, and OpenAPI responses, keeping stable
+service metadata cache-aware without repeating unchanged response bodies.
+
 Recursive batch verification now regression-tests uppercase `.MHT` and
 `.MHTML` saved web-page exports, keeping case-insensitive discovery aligned
 with direct verification and the published format contract.
