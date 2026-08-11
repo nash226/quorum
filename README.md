@@ -4,6 +4,9 @@
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
 
+The packaged CLI smoke gate now verifies paired `.env` answers and approved
+sources, keeping the configuration-export contract covered after publishing.
+
 Textile approved sources now promote `h1.`–`h6.` headings to reviewer-facing
 evidence titles while preserving the normalized policy body.
 
