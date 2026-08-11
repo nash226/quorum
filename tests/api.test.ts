@@ -856,6 +856,26 @@ test("HTTP API restricts CORS responses to configured origins", async () => {
   }
 });
 
+test("HTTP API treats an explicit wildcard CORS origin as permissive", async () => {
+  const api = await startApiServer({
+    host: "127.0.0.1",
+    port: 0,
+    corsAllowedOrigins: ["*"],
+  });
+
+  try {
+    const response = await fetch(`${api.url}/health`, {
+      headers: { origin: "https://any-console.example.com" },
+    });
+
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("access-control-allow-origin"), "*");
+    assert.equal(response.headers.get("vary"), null);
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API verifies claims against YAML source content", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
