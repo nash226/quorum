@@ -1,5 +1,8 @@
 # Quorum
 
+Claim extraction now preserves adjacent Thai policy claims ending in `๚` or
+`๛`, keeping no-space localized sentence boundaries reviewable.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
