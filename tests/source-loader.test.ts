@@ -98,6 +98,24 @@ test("extracts metadata from namespaced XML source exports", async () => {
   assert.match(source.content, /Employees get 12 weeks\./);
 });
 
+test("normalizes RSS and Atom policy exports through the XML parser", async () => {
+  const rss = await sourceDocumentFromFile(
+    "feeds/benefits.rss",
+    "<rss><channel><title>Benefits Policy</title><item><description>Employees get 12 weeks.</description></item></channel></rss>",
+    0,
+  );
+  const atom = await sourceDocumentFromFile(
+    "feeds/benefits.atom",
+    "<feed xmlns='http://www.w3.org/2005/Atom'><title>Benefits Policy</title><entry><content>Employees get 12 weeks.</content></entry></feed>",
+    1,
+  );
+
+  assert.equal(rss.title, "Benefits Policy");
+  assert.equal(atom.title, "Benefits Policy");
+  assert.match(rss.content, /Employees get 12 weeks\./);
+  assert.match(atom.content, /Employees get 12 weeks\./);
+});
+
 test("extracts frontmatter from legacy Mac line endings", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",

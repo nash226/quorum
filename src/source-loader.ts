@@ -239,7 +239,7 @@ function isJsonSource(sourcePath: string): boolean {
 }
 
 function isXmlSource(sourcePath: string): boolean {
-  return /\.xml$/i.test(sourcePath);
+  return /\.(?:xml|rss|atom)$/i.test(sourcePath);
 }
 
 function isYamlSource(sourcePath: string): boolean {
