@@ -1,5 +1,9 @@
 # Quorum
 
+The current checked-in evaluation scorecard contains 93 HR and support
+fixtures (33 HR and 60 support). Run `npm run evaluate:ci` to verify the full
+benchmark and its minimum-score gate before publishing a change.
+
 The HTTP `/formats` contract is regression-tested against the library's full
 approved-source extension list, so source-only formats such as PDF and DOCX
 remain discoverable without being mistaken for answer formats.
