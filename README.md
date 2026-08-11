@@ -1,5 +1,9 @@
 # Quorum
 
+The local HTTP API exposes the same supported answer and source formats as
+the CLI at `GET /formats`, so integrations can discover accepted inputs before
+submitting verification requests.
+
 The HTTP API version-contract tests now revalidate `/formats` with conditional
 `HEAD` requests, keeping machine-readable format discovery aligned with the
 cache-aware discovery, capabilities, and OpenAPI endpoints.
