@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired `.org` Org-mode answer and
+approved-source exports, keeping the advertised Org-mode format covered on
+both sides of the evidence workflow.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
