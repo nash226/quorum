@@ -1,5 +1,8 @@
 # Quorum
 
+Direct PDF answer exports are verified through the same text-extraction path
+as approved PDF sources, preserving the answer path in single-answer reports.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
