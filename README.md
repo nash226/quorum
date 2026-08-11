@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired RFC 822 `.eml` answer and
+approved-source exports, including folded email subject headers on the
+verified evidence path.
+
 `.env` configuration exports are now accepted symmetrically as direct or
 recursive answer and approved-source inputs, alongside the existing plain-text
 configuration aliases.
