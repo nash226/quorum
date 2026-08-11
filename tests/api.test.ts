@@ -275,6 +275,19 @@ test("formats endpoint exposes the supported input contract", async () => {
   }
 });
 
+test("formats endpoint accepts a trailing slash for integration clients", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  try {
+    const response = await fetch(`${api.url}${SERVER_FORMATS_PATH}/`);
+    assert.equal(response.status, 200);
+    const payload = await response.json() as { sourceExtensions: string[]; answerExtensions: string[] };
+    assert.deepEqual(payload.sourceExtensions, [...ANSWER_EXTENSIONS].sort());
+    assert.deepEqual(payload.answerExtensions, [...ANSWER_EXTENSIONS].sort());
+  } finally {
+    await api.close();
+  }
+});
+
 test("formats endpoint revalidates conditional GET requests without a body", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
   try {

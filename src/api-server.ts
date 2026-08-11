@@ -1408,11 +1408,12 @@ async function handleApiRequest(
   const requestTimeoutMs = resolveRequestTimeoutMs(options.requestTimeoutMs);
   const corsAllowedOrigins = options.corsAllowedOrigins ?? API_CAPABILITIES.cors.allowedOrigins;
   const url = new URL(request.url ?? "/", "http://quorum.local").pathname;
-  applyCorsHeaders(request, response, options.corsAllowedOrigins, allowedMethodsForPath(url));
+  const routePath = url === `${FORMATS_PATH}/` ? FORMATS_PATH : url;
+  applyCorsHeaders(request, response, options.corsAllowedOrigins, allowedMethodsForPath(routePath));
   applyApiDiscoveryHeaders(response, maxRequestBytes, requestTimeoutMs);
   const isHeadRequest = request.method === "HEAD";
 
-  const routeMethods = routeMethodsForPath(url);
+  const routeMethods = routeMethodsForPath(routePath);
 
   if (request.method === "OPTIONS") {
     if (routeMethods === undefined) {
@@ -1429,7 +1430,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && url === API_ROOT_PATH) {
+  if ((request.method === "GET" || isHeadRequest) && routePath === API_ROOT_PATH) {
     const discoveryResponse: ApiDiscoveryResponse = {
       requestId: requestId(response),
       service: API_SERVICE_NAME,
@@ -1455,7 +1456,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && url === CAPABILITIES_PATH) {
+  if ((request.method === "GET" || isHeadRequest) && routePath === CAPABILITIES_PATH) {
     const capabilitiesResponse: ApiCapabilitiesResponse = {
       requestId: requestId(response),
       service: API_SERVICE_NAME,
@@ -1479,7 +1480,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && (url === HEALTH_PATH || url === HEALTHZ_PATH || url === READYZ_PATH || url === LIVEZ_PATH)) {
+  if ((request.method === "GET" || isHeadRequest) && (routePath === HEALTH_PATH || routePath === HEALTHZ_PATH || routePath === READYZ_PATH || routePath === LIVEZ_PATH)) {
     const healthResponse: ApiHealthResponse = {
       ok: true,
       requestId: requestId(response),
@@ -1491,7 +1492,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && url === VERSION_PATH) {
+  if ((request.method === "GET" || isHeadRequest) && routePath === VERSION_PATH) {
     const versionResponse: ApiVersionResponse = {
       requestId: requestId(response),
       service: API_SERVICE_NAME,
@@ -1508,7 +1509,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && url === OPENAPI_PATH) {
+  if ((request.method === "GET" || isHeadRequest) && routePath === OPENAPI_PATH) {
     writeConditionalJson(
       request,
       response,
@@ -1524,7 +1525,7 @@ async function handleApiRequest(
     return;
   }
 
-  if ((request.method === "GET" || isHeadRequest) && url === FORMATS_PATH) {
+  if ((request.method === "GET" || isHeadRequest) && routePath === FORMATS_PATH) {
     const formatsResponse = {
       requestId: requestId(response),
       service: API_SERVICE_NAME,
@@ -1541,7 +1542,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === VERIFY_PATH) {
+  if (routePath === VERIFY_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -1567,7 +1568,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === EXTRACT_CLAIMS_PATH) {
+  if (routePath === EXTRACT_CLAIMS_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -1590,7 +1591,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === VERIFY_BATCH_PATH) {
+  if (routePath === VERIFY_BATCH_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -1614,7 +1615,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === IMPORT_REVIEW_PATH) {
+  if (routePath === IMPORT_REVIEW_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -1645,7 +1646,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === REVIEW_QUEUE_PATH) {
+  if (routePath === REVIEW_QUEUE_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
@@ -1707,7 +1708,7 @@ async function handleApiRequest(
     return;
   }
 
-  if (url === EVALUATE_PATH) {
+  if (routePath === EVALUATE_PATH) {
     if (request.method !== "POST") {
       writeMethodNotAllowed(response, "POST");
       return;
