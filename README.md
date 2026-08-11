@@ -2000,6 +2000,9 @@ The guide also documents the in-memory batch result contract for queue workers,
 including its `shouldFail` and `failVerdicts` gate metadata.
 File-backed programmatic verification also rejects empty source directories,
 so API and CLI workflows share the same fail-closed evidence requirement.
+When a JSON request is rejected, the HTTP API preserves the caller's request ID
+in the structured error body and response header so clients can correlate
+failures with their logs.
 The packaged programmatic API smoke gate exercises that rejection after build,
 so published workers cannot silently run without an approved source set.
 

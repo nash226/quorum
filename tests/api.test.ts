@@ -411,6 +411,30 @@ test("HTTP API extracts normalized claims without loading sources", async () => 
   }
 });
 
+test("HTTP API preserves request IDs on malformed JSON errors", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+
+  try {
+    const response = await fetch(`${api.url}/extract-claims`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "X-Quorum-Request-Id": "malformed-json-contract-test",
+      },
+      body: "{\"answer\":",
+    });
+
+    assert.equal(response.status, 400);
+    assert.equal(response.headers.get("x-quorum-request-id"), "malformed-json-contract-test");
+    assert.deepEqual(await response.json(), {
+      error: "Request body must be valid JSON.",
+      requestId: "malformed-json-contract-test",
+    });
+  } finally {
+    await api.close();
+  }
+});
+
 test("HTTP API keeps semicolon-separated policy clauses atomic", async () => {
   const api = await startApiServer({ host: "127.0.0.1", port: 0 });
 
