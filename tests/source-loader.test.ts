@@ -98,6 +98,19 @@ test("extracts metadata from namespaced XML source exports", async () => {
   assert.match(source.content, /Employees get 12 weeks\./);
 });
 
+test("extracts metadata from XML root attributes", async () => {
+  const source = await sourceDocumentFromFile(
+    "docs/hr-policy.xml",
+    `<policy title="HR parental leave policy" updatedAt="2026-07-01" trust_level="high"><rule>Employees get 12 weeks.</rule></policy>`,
+    0,
+  );
+
+  assert.equal(source.title, "HR parental leave policy");
+  assert.equal(source.updatedAt, "2026-07-01");
+  assert.equal(source.trustLevel, "high");
+  assert.match(source.content, /Employees get 12 weeks\./);
+});
+
 test("extracts frontmatter from legacy Mac line endings", async () => {
   const source = await sourceDocumentFromFile(
     "docs/hr-policy.md",
