@@ -87,6 +87,10 @@ export function parseSource(sourcePath: string, content: string): ParsedSource {
     return parseEmailSource(normalizedContent);
   }
 
+  if (isWebVttSource(sourcePath)) {
+    return { metadata: {}, body: normalizeWebVttSource(normalizedContent) };
+  }
+
   if (isRtfSource(sourcePath)) {
     return { metadata: {}, body: normalizeRtfSource(normalizedContent) };
   }
@@ -222,6 +226,10 @@ function isEmailSource(sourcePath: string): boolean {
   return /\.(?:eml|emlx)$/i.test(sourcePath);
 }
 
+function isWebVttSource(sourcePath: string): boolean {
+  return /\.vtt$/i.test(sourcePath);
+}
+
 function isRtfSource(sourcePath: string): boolean {
   return /\.rtf$/i.test(sourcePath);
 }
@@ -317,7 +325,19 @@ function normalizeMediaWikiSource(content: string): string {
 }
 
 function sourceTitleFromPath(sourcePath: string): string {
-  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|env|html?|xht|xhtml|mht|mhtml|pdf|docx|rtf|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml|emlx)$/i, "");
+  return basename(sourcePath).replace(/\.(?:md|markdown|mdown|mkdn|mdwn|mdx|qmd|adoc|asciidoc|org(?:-mode)?|mediawiki|wiki|rst|rest|tex|textile|txt|text|log|ini|properties|conf|cfg|env|html?|xht|xhtml|mht|mhtml|pdf|docx|rtf|jsonl?|ndjson|json5|jsonc|xml|ya?ml|toml|csv|tsv|eml|emlx|vtt)$/i, "");
+}
+
+function normalizeWebVttSource(content: string): string {
+  return content
+    .replace(/^WEBVTT[^\n]*(?:\n|$)/i, "")
+    .replace(/^NOTE(?:\n|$)[\s\S]*?(?:\n{2,}|$)/gim, "")
+    .replace(/^STYLE(?:\n|$)[\s\S]*?(?:\n{2,}|$)/gim, "")
+    .replace(/^REGION(?:\n|$)[\s\S]*?(?:\n{2,}|$)/gim, "")
+    .replace(/^\s*\d{2}:\d{2}(?::\d{2})?\.\d{3}\s+-->\s+\d{2}:\d{2}(?::\d{2})?\.\d{3}[^\n]*$/gm, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 function parseEmailSource(content: string): ParsedSource {
