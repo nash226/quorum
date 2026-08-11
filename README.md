@@ -1668,6 +1668,20 @@ npm run formats -- --json
 
 Run `npm run help` for the complete installed CLI command reference.
 
+For an agent integration, start the local HTTP API and post the answer and
+approved source content as JSON:
+
+```bash
+npm run dev -- serve --port 3000
+curl -s http://127.0.0.1:3000/verify \
+  -H 'content-type: application/json' \
+  -d '{"answer":"Employees receive 12 weeks of paid parental leave.","answerPath":"hr-answer.md","sources":[{"sourcePath":"hr-policy.md","content":"Employees receive 12 weeks of paid parental leave."}]}'
+```
+
+Use `GET /`, `GET /capabilities`, and `GET /openapi.json` to inspect the
+service contract before connecting an agent workflow. Add `?failOn=unsupported`
+or another verdict to make the response's gate metadata enforce a policy.
+
 Every shipped command also accepts `--help` or `-h`, so integrations and
 operators can inspect a command's usage before preparing answer, source, or
 reviewer inputs.
