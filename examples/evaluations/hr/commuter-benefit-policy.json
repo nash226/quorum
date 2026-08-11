@@ -1,0 +1,17 @@
+{
+  "name": "HR commuter benefit policy example",
+  "domain": "hr",
+  "answerPath": "../../answers/hr-commuter-benefit-answer.md",
+  "answer": "Employees may enroll in the commuter benefit before the first day of the month. Employees may submit parking receipts within 90 days. The company guarantees reimbursement for every commuting expense.",
+  "answerLabel": "HR commuter benefit reviewer packet",
+  "sources": [{
+    "sourcePath": "../../sources/hr-commuter-benefit-policy.md",
+    "id": "people-ops/hr-commuter-benefit@2026-08-11",
+    "title": "HR Commuter Benefit Policy",
+    "updatedAt": "2026-08-11",
+    "trustLevel": "high",
+    "content": "Employees may enroll in the commuter benefit before the first day of the month. Parking receipts must be submitted within 60 days. The benefit covers eligible public-transit and parking expenses up to the monthly limit."
+  }],
+  "expectedSummary": { "verified": 1, "contradicted": 0, "unsupported": 1, "needs_review": 1 },
+  "expectedClaimVerdicts": ["verified", "needs_review", "unsupported"]
+}
