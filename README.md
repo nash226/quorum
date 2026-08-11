@@ -2534,7 +2534,7 @@ The CLI help contract now lists JSON, YAML, and XML answers alongside the
 structured source formats already supported, keeping the documented input
 surface aligned with direct verification behavior.
 
-The checked-in 93-fixture benchmark spans 33 HR and 60 support workflows. It also
+The checked-in 94-fixture benchmark spans 34 HR and 60 support workflows. It also
 includes source-directory evaluation coverage that verifies the same support
 answer through recursive approved-source discovery as well as direct source
 inputs.
@@ -2986,9 +2986,11 @@ This keeps domain-specific review work small while preserving the full
 benchmark check used by CI.
 The same `--min-score 0.95` gate can be included in a multi-fixture evaluation
 command to fail closed when aggregate claim quality falls below the threshold.
-The checked-in HR and support benchmark currently contains 93 fixtures and 277
+The checked-in HR and support benchmark currently contains 94 fixtures and 280
 expected claims, including support plan-upgrade and plan-downgrade scenarios
 with verified, needs-review, contradicted, and unsupported claims.
+It now also includes HR equipment-return coverage for the return deadline,
+contradictory timing claims, and unsupported personal-device reimbursement.
 The HR employee-assistance policy is also covered as a file-backed reviewer
 packet, preserving confidential counseling limits and community-resource
 routing alongside a review-worthy unlimited-counseling claim.
