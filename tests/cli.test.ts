@@ -6588,7 +6588,7 @@ test("verify accepts directly supplied uppercase RFC 822 email paths", async () 
       ),
       writeFile(
         sourcePath,
-        "From: support@example.com\r\nSubject: Refund policy\r\nDate: 2026-08-04\r\n\r\nCustomers can request refunds within 30 days.\r\n",
+        "From: support@example.com\r\nSubject: Refund\r\n policy\r\nDate: 2026-08-04\r\n\r\nCustomers can request refunds within 30 days.\r\n",
       ),
     ]);
 
