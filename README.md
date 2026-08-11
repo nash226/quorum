@@ -1,5 +1,9 @@
 # Quorum
 
+Batch verification, reviewer-queue exports, and the local HTTP integration
+surface are shipped foundations; the [roadmap](docs/roadmap.md) separates that
+product boundary from decision-gated durable hosting and queue storage.
+
 The HTTP API version-contract tests now revalidate `/formats` with conditional
 `HEAD` requests, keeping machine-readable format discovery aligned with the
 cache-aware discovery, capabilities, and OpenAPI endpoints.
