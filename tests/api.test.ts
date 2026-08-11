@@ -294,6 +294,20 @@ test("formats endpoint revalidates conditional GET requests without a body", asy
   }
 });
 
+test("capabilities endpoint ignores query parameters for discovery clients", async () => {
+  const api = await startApiServer({ host: "127.0.0.1", port: 0 });
+  try {
+    const response = await fetch(`${api.url}${CAPABILITIES_PATH}?client=agent&probe=1`);
+    assert.equal(response.status, 200);
+    const payload = await response.json() as ApiCapabilitiesResponse;
+    assert.equal(payload.service, API_SERVICE_NAME);
+    assert.equal(payload.version, API_VERSION);
+    assert.deepEqual(payload.capabilities, API_CAPABILITIES);
+  } finally {
+    await api.close();
+  }
+});
+
 test("programmatic API can build the OpenAPI document without starting the server", () => {
   const openApi = createOpenApiDocument({
     serverUrl: "http://127.0.0.1:3000/",
