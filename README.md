@@ -2989,6 +2989,9 @@ command to fail closed when aggregate claim quality falls below the threshold.
 The checked-in HR and support benchmark currently contains 93 fixtures and 277
 expected claims, including support plan-upgrade and plan-downgrade scenarios
 with verified, needs-review, contradicted, and unsupported claims.
+The evaluation regression suite also covers an office-closure packet, including
+remote-work direction, manager instructions that require review, and an
+unsupported automatic commuting stipend claim.
 The HR employee-assistance policy is also covered as a file-backed reviewer
 packet, preserving confidential counseling limits and community-resource
 routing alongside a review-worthy unlimited-counseling claim.
