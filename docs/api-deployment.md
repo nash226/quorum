@@ -19,8 +19,11 @@ For a private service that is reached by another workload, bind to the
 interface exposed by that private network and enforce authentication and
 authorization at the proxy or platform layer. Do not treat CORS as access
 control: `--cors-origin` limits browser origins, but it does not authenticate
-non-browser callers. Replace the permissive local-development default with an
-explicit origin allowlist when a browser client is deployed:
+non-browser callers. The explicit wildcard value `--cors-origin '*'` is also
+permissive and reflects `Access-Control-Allow-Origin: *`; keep it for local
+development or intentionally public, unauthenticated browser access. Replace
+the permissive default with an explicit origin allowlist when a browser client
+is deployed:
 
 ```bash
 quorum serve \
