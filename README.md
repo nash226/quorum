@@ -1777,6 +1777,9 @@ The packaged CLI smoke gate checks both machine-readable forms, including the
 answer path and reviewer-facing label in the saved result artifact.
 Programmatic batch verification also honors excluded answer paths for explicit
 inputs, keeping generated reports and other output files out of a re-run.
+Single-answer verification applies the same exclusion to every configured
+review artifact, so Markdown, HTML, CSV, and result-JSON handoffs cannot be
+mistaken for approved source documents when they share a source directory.
 The plain-text batch report also repeats source titles, trust, freshness, and
 paths inside each answer section, so copied reviewer findings retain their
 evidence provenance without needing the full report header.
