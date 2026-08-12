@@ -4,6 +4,9 @@ The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.
 
+Batch verification now regression-tests nested DOCX approved-source discovery,
+so Word-based policy handoffs work alongside the existing DOCX answer path.
+
 The CLI help now advertises the complete accepted input contract, including
 Apple Mail `.emlx` and rich-text `.rtf` files.
 
