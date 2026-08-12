@@ -563,7 +563,7 @@ evaluation score gate all run from one release command.
 The batch CLI now documents its input-routing contract: explicit `--answer`
 paths stay ordered ahead of recursive `--answer-dir` discovery, duplicates are
 removed, and an empty answer directory fails clearly instead of producing a
-misleading empty report.
+misleading empty report. This contract is covered by the CLI regression suite.
 
 Recursive directory discovery is also path-stable: matching answer and source
 files are returned in deterministic order, keeping repeated batch reports and

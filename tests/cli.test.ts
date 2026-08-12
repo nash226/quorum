@@ -7456,6 +7456,38 @@ test("verify-batch prints an explicit empty state in the default text output", a
   }
 });
 
+test("verify-batch rejects an empty answer directory with a useful error", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-empty-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+
+    await Promise.all([
+      mkdir(answerDir, { recursive: true }),
+      mkdir(sourceDir, { recursive: true }),
+      writeFile(
+        join(sourceDir, "hr-policy.md"),
+        "Employees receive 12 weeks of paid parental leave.\n",
+        "utf8",
+      ),
+    ]);
+
+    await assert.rejects(
+      runCli([
+        "verify-batch",
+        "--answer-dir",
+        answerDir,
+        "--source-dir",
+        sourceDir,
+      ]),
+      /No answer files found in/,
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch treats no-claim answers as fail-policy matches for needs_review", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-batch-empty-needs-review-"));
 
