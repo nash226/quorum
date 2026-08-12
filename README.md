@@ -1687,6 +1687,9 @@ workflow aligned with the repository's CI checks. The latest verification also
 covers the versioned format-discovery contract, query-bearing HTTP discovery
 requests, and the packaged CLI/API smoke paths described above.
 
+For a quick command overview, run `npm run help` (or `npm run dev -- -h`).
+Both top-level help aliases exit successfully and print the same usage guide.
+
 `npm run status:refresh` keeps the generated status page's shipment table
 stable across repositories by displaying the first seven characters of each
 shipped commit, independent of Git's automatic abbreviation length.

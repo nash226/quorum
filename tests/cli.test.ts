@@ -2860,19 +2860,26 @@ test("generated-at rejects invalid timestamps", async () => {
 });
 
 test("top-level help exits cleanly", async () => {
-  const result = await runCliAllowFailure(["--help"]);
+  const [longHelp, shortHelp] = await Promise.all([
+    runCliAllowFailure(["--help"]),
+    runCliAllowFailure(["-h"]),
+  ]);
 
-  assert.equal(result.code, 0);
-  assert.equal(result.stderr, "");
-  assert.match(result.stdout, /^Quorum\n\nUsage:/);
-  assert.match(result.stdout, /quorum verify .*--source-id <id>.*--generated-at <timestamp>.*--result-json-out <path>/);
-  assert.match(result.stdout, /quorum verify-batch .*--source-id <id>.*--aggregate-summary-csv-out <path>/);
-  assert.match(result.stdout, /quorum extract-claims .*--answer-label <label>.*--result-json/);
-  assert.match(result.stdout, /quorum import-review .*--queue-status <status>.*--queue-summary-csv-out <path>/);
-  assert.match(result.stdout, /quorum review-queue .*--generated-at <timestamp>/);
-  assert.match(result.stdout, /quorum evaluate .*--generated-at <timestamp>.*--min-score <0\.\.1>/);
-  assert.match(result.stdout, /npm run dev -- evaluate .*--min-score 0\.95 --fail-on-mismatch/);
-  assert.match(result.stdout, /quorum version \[--json\]/);
+  for (const result of [longHelp, shortHelp]) {
+    assert.equal(result.code, 0);
+    assert.equal(result.stderr, "");
+    assert.match(result.stdout, /^Quorum\n\nUsage:/);
+    assert.match(result.stdout, /quorum verify .*--source-id <id>.*--generated-at <timestamp>.*--result-json-out <path>/);
+    assert.match(result.stdout, /quorum verify-batch .*--source-id <id>.*--aggregate-summary-csv-out <path>/);
+    assert.match(result.stdout, /quorum extract-claims .*--answer-label <label>.*--result-json/);
+    assert.match(result.stdout, /quorum import-review .*--queue-status <status>.*--queue-summary-csv-out <path>/);
+    assert.match(result.stdout, /quorum review-queue .*--generated-at <timestamp>/);
+    assert.match(result.stdout, /quorum evaluate .*--generated-at <timestamp>.*--min-score <0\.\.1>/);
+    assert.match(result.stdout, /npm run dev -- evaluate .*--min-score 0\.95 --fail-on-mismatch/);
+    assert.match(result.stdout, /quorum version \[--json\]/);
+  }
+
+  assert.equal(shortHelp.stdout, longHelp.stdout);
 });
 
 test("unknown commands explain the failure without printing misleading help", async () => {
