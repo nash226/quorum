@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `70228e4b` on 2026-08-11, test: cover mixed structured batch discovery
+- Latest shipped change: `5c63add8` on 2026-08-12, test: cover support warranty evaluation
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-12 | Direct push | test: cover support warranty evaluation | `5c63add8` |
 | 2026-08-11 | Direct push | test: cover mixed structured batch discovery | `70228e4b` |
 | 2026-08-11 | Direct push | docs: explain streamed claim previews | `3279f18d` |
 | 2026-08-11 | Direct push | test: cover short top-level help alias | `724e9267` |
@@ -56,5 +57,4 @@
 | 2026-08-11 | Direct push | docs: advertise all supported input formats | `b925389b` |
 | 2026-08-11 | Direct push | test: verify source format discovery | `b2923486` |
 | 2026-08-11 | Direct push | fix: expose Allow header on CORS preflight | `5a8ac4eb` |
-| 2026-08-11 | Direct push | test: cover query-bearing reviewer queue requests | `85d3cefc` |
 

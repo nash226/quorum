@@ -3114,3 +3114,7 @@ source exports, including the message wrapper and report metadata.
 UTF-8 BOM-prefixed Markdown and text exports preserve frontmatter metadata,
 keeping titles, freshness, and trust levels intact when policy systems emit a
 Unicode signature before the document header.
+
+The generated status snapshot is refreshed from the default branch history,
+so its latest-shipped entry and recent-change table now include the newest
+merged product change.
