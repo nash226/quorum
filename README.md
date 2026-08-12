@@ -1646,6 +1646,12 @@ common editor temporary files are skipped, so teams can organize policy
 libraries by domain without flattening them first. The same format contract is
 available to integrations with `npm run dev -- formats --json`.
 
+The current contract includes Markdown/text aliases, HTML/XHTML/web-page
+exports, JSON/JSONL/NDJSON/JSON5/JSONC, YAML, XML, TOML, CSV/TSV, email
+(`.eml`/`.emlx`), RTF, PDF, and DOCX. Answer and source lists are exposed
+separately because some formats are approved-source-only; integrations should
+use the JSON contract rather than maintaining a second extension allow-list.
+
 ## Other CLI Commands
 
 The CLI also exposes focused commands for discovery, evaluation, review
