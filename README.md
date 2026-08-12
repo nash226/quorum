@@ -1,5 +1,8 @@
 # Quorum
 
+Direct verification regression-tests uppercase JSON5 exports, preserving
+case-sensitive paths from document systems while normalizing structured claims.
+
 The evaluation suite now regression-tests the shipped support warranty
 workflow, preserving verified, contradicted, and unsupported verdicts for
 replacement-policy claims.
