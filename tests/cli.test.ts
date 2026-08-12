@@ -2662,6 +2662,33 @@ test("verify accepts paired uppercase XML answer and source exports", async () =
   }
 });
 
+test("verify accepts direct uppercase XML answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-uppercase-xml-"));
+
+  try {
+    const answerPath = join(tempDir, "ANSWER.XML");
+    const sourcePath = join(tempDir, "POLICY.XML");
+    await Promise.all([
+      writeFile(answerPath, "<answer><claim>Employees receive 12 weeks of paid parental leave.</claim></answer>", "utf8"),
+      writeFile(sourcePath, "<policy><benefit>Employees receive 12 weeks of paid parental leave.</benefit></policy>", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      answerPath: string;
+      sources: Array<{ sourcePath: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.deepEqual(report.sources.map((source) => source.sourcePath), [sourcePath]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify rejects unsupported default trust overrides", async () => {
   await assert.rejects(
     runCli([

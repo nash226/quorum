@@ -1,5 +1,8 @@
 # Quorum
 
+Direct verification accepts uppercase XML answer and source exports, so
+case-preserving paths from document systems work without renaming files.
+
 The evaluation suite now regression-tests the shipped support warranty
 workflow, preserving verified, contradicted, and unsupported verdicts for
 replacement-policy claims.
