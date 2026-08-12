@@ -4,6 +4,10 @@ The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.
 
+Direct verification now regression-tests newline-delimited JSON (`.ndjson`)
+answers against approved sources, covering the structured export format at the
+CLI boundary alongside JSONL.
+
 The CLI help now advertises the complete accepted input contract, including
 Apple Mail `.emlx` and rich-text `.rtf` files.
 

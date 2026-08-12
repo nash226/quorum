@@ -5746,6 +5746,27 @@ test("verify-batch discovers uppercase JSONL answers recursively", async () => {
   }
 });
 
+test("verify accepts direct NDJSON answers and approved sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-ndjson-pair-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.ndjson");
+    const sourcePath = join(tempDir, "policy.ndjson");
+    await writeFile(answerPath, '{"response":"Customers can request refunds within 30 days."}\n', "utf8");
+    await writeFile(sourcePath, '{"policy":"Customers can request refunds within 30 days."}\n', "utf8");
+
+    const report = JSON.parse(await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"])) as {
+      answerPath: string;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts JSON and YAML sources passed explicitly", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-structured-source-"));
 
