@@ -43,6 +43,20 @@ test("version flag aliases accept the machine-readable JSON probe", async () => 
   assert.equal(shortAlias, longAlias);
 });
 
+test("top-level help accepts both flag aliases and the help command alias", async () => {
+  const [longHelp, shortHelp, commandHelp, shortCommandHelp] = await Promise.all([
+    runCli(["--help"]),
+    runCli(["-h"]),
+    runCli(["help"]),
+    runCli(["help", "-h"]),
+  ]);
+
+  assert.match(longHelp, /^Quorum\n/);
+  assert.equal(shortHelp, longHelp);
+  assert.equal(commandHelp, longHelp);
+  assert.equal(shortCommandHelp, longHelp);
+});
+
 test("verify-batch discovers the .text plain-text alias for answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-text-alias-"));
 

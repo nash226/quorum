@@ -1,5 +1,8 @@
 # Quorum
 
+Top-level CLI help is now regression-tested across `--help`, `-h`, `help`, and
+`help -h`, keeping interactive and scripted discovery on the same contract.
+
 The CLI help now advertises the complete accepted input contract, including
 Apple Mail `.emlx` and rich-text `.rtf` files.
 
