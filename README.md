@@ -7,6 +7,10 @@ route flag without requiring an intermediate file.
 The CLI help now advertises the complete accepted input contract, including
 Apple Mail `.emlx` and rich-text `.rtf` files.
 
+Direct verification now regression-tests Apple Mail `.emlx` answers against
+`.emlx` policy sources, preserving the same email evidence path as recursive
+source discovery.
+
 The HTTP `/formats` contract is regression-tested against the library's full
 approved-source extension list, so source-only formats such as PDF and DOCX
 remain discoverable without being mistaken for answer formats.
