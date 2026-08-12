@@ -720,6 +720,30 @@ test("verify accepts direct TSV answer and source exports", async () => {
   }
 });
 
+test("verify accepts direct uppercase TSV answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-tsv-uppercase-direct-"));
+  try {
+    const answerPath = join(tempDir, "answer.TSV");
+    const sourcePath = join(tempDir, "policy.TSV");
+    await writeFile(answerPath, "claim\nEmployees receive 12 weeks of paid parental leave.\n");
+    await writeFile(sourcePath, "policy\nEmployees receive 12 weeks of paid parental leave.\n");
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      answerPath: string;
+      sources: Array<{ sourcePath: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct CSV answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-csv-direct-"));
   try {

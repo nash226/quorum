@@ -15,6 +15,8 @@ The HTTP `/formats` contract is regression-tested against the library's full
 approved-source extension list, so source-only formats such as PDF and DOCX
 remain discoverable without being mistaken for answer formats.
 
+Direct verification now regression-tests uppercase `.TSV` answer and approved-source exports, keeping case-insensitive tabular inputs aligned across direct and recursive workflows.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
