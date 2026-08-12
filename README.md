@@ -17,6 +17,8 @@ remain discoverable without being mistaken for answer formats.
 
 Direct verification now regression-tests uppercase `.TSV` answer and approved-source exports, keeping case-insensitive tabular inputs aligned across direct and recursive workflows.
 
+Direct verification now also regression-tests uppercase `.JSON` answer and approved-source exports, keeping structured inputs case-insensitive when paths are supplied explicitly.
+
 The public Node.js API supports labeled in-memory batch verification: each
 answer keeps its caller-provided label and path, while the aggregate result
 preserves source identity and fail-policy verdicts across the batch.
