@@ -1685,7 +1685,10 @@ packaged-entrypoint smoke checks, and the evaluation benchmark.
 The current default branch passes this gate, keeping the documented local
 workflow aligned with the repository's CI checks. The latest verification also
 covers the versioned format-discovery contract, query-bearing HTTP discovery
-requests, and the packaged CLI/API smoke paths described above.
+requests, and the packaged CLI/API smoke paths described above. A batch run
+with an empty answer directory now produces an explicit empty report, so queue
+integrations can distinguish "nothing to review" from a missing or invalid
+input directory.
 
 For a quick command overview, run `npm run help` (or `npm run dev -- -h`).
 Both top-level help aliases exit successfully and print the same usage guide.
