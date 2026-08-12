@@ -188,6 +188,10 @@ export const ANSWER_EXTENSIONS = new Set([
   ".org-mode",
   ".mediawiki",
   ".wiki",
+  ".html",
+  ".htm",
+  ".xht",
+  ".xhtml",
   ".rst",
   ".rest",
   ".tex",
@@ -900,7 +904,7 @@ async function readAnswerInput(inputPath: string): Promise<string> {
   if (inputPath !== "-") {
     const content = await readFile(inputPath);
 
-    if (/\.(?:pdf|docx|jsonl?|ndjson|ya?ml|xml|toml)$/i.test(inputPath)) {
+    if (/\.(?:html?|xht(?:ml)?|pdf|docx|jsonl?|ndjson|ya?ml|xml|toml)$/i.test(inputPath)) {
       const answerDocument = await sourceDocumentFromFile(inputPath, content, 0);
       return answerDocument.content;
     }

@@ -1,5 +1,9 @@
 # Quorum
 
+Direct and recursive answer verification now accepts HTML and XHTML exports,
+normalizing their readable body text before claim extraction just like approved
+HTML sources.
+
 The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.

@@ -103,6 +103,24 @@ test("verify-batch discovers .xht answers and sources", async () => {
   }
 });
 
+test("verify accepts direct HTML answers and normalizes their body text", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-answer-"));
+  try {
+    const answerPath = join(tempDir, "leave.html");
+    const sourcePath = join(tempDir, "hr-policy.html");
+    await Promise.all([
+      writeFile(answerPath, "<html><body><h1>Answer</h1><p>Employees receive 12 weeks of paid parental leave.</p></body></html>", "utf8"),
+      writeFile(sourcePath, "<html><head><title>HR Policy</title></head><body><p>Employees receive 12 weeks of paid parental leave.</p></body></html>", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]));
+    assert.equal(report.assessments[0]?.verdict, "verified");
+    assert.equal(report.assessments[0]?.claim.text, "Employees receive 12 weeks of paid parental leave.");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers LaTeX answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-tex-discovery-"));
 
