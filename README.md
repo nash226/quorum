@@ -1,5 +1,8 @@
 # Quorum
 
+The roadmap now puts unblocked HR and support fixture coverage first; durable
+API hosting and queue storage remain explicitly decision-gated.
+
 The CLI help now advertises the complete accepted input contract, including
 Apple Mail `.emlx` and rich-text `.rtf` files.
 
