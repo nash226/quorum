@@ -1,5 +1,9 @@
 # Quorum
 
+The supported product boundary today is the local CLI and HTTP API: both use
+the same verification and reviewer-queue artifacts, while durable queue
+storage, authentication, and hosted deployment remain future decisions.
+
 The CLI help now advertises the complete accepted input contract, including
 Apple Mail `.emlx` and rich-text `.rtf` files.
 
