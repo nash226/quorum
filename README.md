@@ -1,5 +1,9 @@
 # Quorum
 
+The claim-preview workflow can read an answer from stdin with
+`extract-claims --answer - --result-json`, preserving the `answerHasClaims`
+route flag without requiring an intermediate file.
+
 The CLI help now advertises the complete accepted input contract, including
 Apple Mail `.emlx` and rich-text `.rtf` files.
 

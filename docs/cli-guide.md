@@ -175,6 +175,18 @@ The default JSON output remains the claims array. `--result-json` adds the
 drafts without recounting claims. `--answer-label` adds a reviewer-facing
 label to human-readable output.
 
+Claim preview also accepts streamed answers, so an agent can inspect the
+normalized claim boundary before writing an intermediate file:
+
+```bash
+cat generated-answer.md | npm run dev -- extract-claims \
+  --answer - --result-json
+```
+
+The streamed form preserves the same `answerHasClaims` result contract as a
+file-backed answer. Use `--answer-label` when the preview is being routed into
+a reviewer queue and needs a stable human-facing name.
+
 ## Batch verification
 
 Verify every answer in a directory and produce one reviewer handoff:
