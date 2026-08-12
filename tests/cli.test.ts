@@ -744,6 +744,33 @@ test("verify accepts direct uppercase TSV answer and source exports", async () =
   }
 });
 
+test("verify accepts direct uppercase JSON answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-json-uppercase-direct-"));
+  try {
+    const answerPath = join(tempDir, "answer.JSON");
+    const sourcePath = join(tempDir, "policy.JSON");
+    const policy = JSON.stringify({ policy: "Employees receive 12 weeks of paid parental leave." });
+    await Promise.all([
+      writeFile(answerPath, policy, "utf8"),
+      writeFile(sourcePath, policy, "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      answerPath: string;
+      sources: Array<{ sourcePath: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.sources[0]?.sourcePath, sourcePath);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct CSV answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-csv-direct-"));
   try {
