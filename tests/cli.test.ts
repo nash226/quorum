@@ -424,6 +424,41 @@ test("verify-batch discovers nested YAML answers and sources", async () => {
   }
 });
 
+test("verify-batch discovers nested CSV and TOML answers and sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-structured-discovery-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources");
+    await Promise.all([
+      mkdir(join(answerDir, "regional"), { recursive: true }),
+      mkdir(join(sourceDir, "regional"), { recursive: true }),
+    ]);
+    await Promise.all([
+      writeFile(join(answerDir, "regional", "leave.csv"), "claim\nEmployees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(join(sourceDir, "regional", "policy.toml"), 'title = "HR Benefits Policy"\npolicy = "Employees receive 12 weeks of paid parental leave."\n', "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify-batch", "--answer-dir", answerDir, "--source-dir", sourceDir, "--json",
+    ])) as {
+      answerCount: number;
+      sourceCount: number;
+      summary: { verified: number };
+      answers: Array<{ answerPath: string }>;
+      sources: Array<{ sourcePath: string }>;
+    };
+
+    assert.equal(report.answerCount, 1);
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.match(report.answers[0]?.answerPath ?? "", /answers\/regional\/leave\.csv$/);
+    assert.match(report.sources[0]?.sourcePath ?? "", /sources\/regional\/policy\.toml$/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers nested org-mode answers and sources", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-org-mode-discovery-"));
 

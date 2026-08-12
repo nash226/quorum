@@ -350,6 +350,10 @@ Recursive batch verification is now regression-tested for both `.yaml` and
 `.yml` answers and approved sources, keeping nested structured policy exports
 on the same contract as direct YAML verification.
 
+Mixed nested CSV answers and TOML approved sources are covered by the same
+batch contract, so regional or team-specific structured-export folders can be
+verified together without flattening the source tree.
+
 The current roadmap treats batch verification and reviewer handoff as shipped
 foundations; the next safe focus is broader approved-source coverage while
 durable queue storage remains decision-gated.
