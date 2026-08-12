@@ -1243,6 +1243,41 @@ test("verify accepts direct .yaml answer and source exports", async () => {
   }
 });
 
+test("verify accepts paired uppercase YAML answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-yaml-uppercase-direct-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.YAML");
+    const sourcePath = join(tempDir, "policy.YML");
+    await Promise.all([
+      writeFile(answerPath, "response: Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "title: HR Benefits Policy\npolicy: Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify",
+      "--answer",
+      answerPath,
+      "--source",
+      sourcePath,
+      "--json",
+    ])) as {
+      answerPath: string;
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.deepEqual(report.sources.map(({ sourcePath: path, title }) => ({ path, title })), [{
+      path: sourcePath,
+      title: "HR Benefits Policy",
+    }]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct .markdown answer and source export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-markdown-direct-"));
 
