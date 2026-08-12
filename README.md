@@ -1,5 +1,9 @@
 # Quorum
 
+Direct CLI verification now regression-tests paired `.mdown` Markdown answer
+and approved-source exports, keeping this supported alias on the same evidence
+path as `.md` and the other Markdown extensions.
+
 The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.

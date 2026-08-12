@@ -871,6 +871,38 @@ test("verify accepts paired .text answer and source exports", async () => {
   }
 });
 
+test("verify accepts paired .mdown answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdown-paired-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.mdown");
+    const sourcePath = join(tempDir, "policy.mdown");
+    await Promise.all([
+      writeFile(answerPath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(await runCli([
+      "verify", "--answer", answerPath, "--source", sourcePath, "--json",
+    ])) as {
+      answerPath: string;
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.summary.verified, 1);
+    assert.deepEqual(report.sources, [{
+      sourcePath,
+      title: "policy",
+      id: "source_1",
+      trustLevel: "medium",
+    }]);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct .mkdn answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-mdwn-direct-"));
 
