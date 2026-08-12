@@ -1,5 +1,9 @@
 # Quorum
 
+The evaluation suite now regression-tests the shipped support warranty
+workflow, preserving verified, contradicted, and unsupported verdicts for
+replacement-policy claims.
+
 The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.
