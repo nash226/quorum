@@ -1,5 +1,9 @@
 # Quorum
 
+Short Greek and Cyrillic policy claims ending in sentence punctuation now remain
+eligible for verification, keeping localized reviewer evidence from being
+dropped by the short-claim filter.
+
 The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.

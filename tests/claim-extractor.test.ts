@@ -1377,6 +1377,15 @@ test("keeps short claims with localized sentence terminators", () => {
   ]);
 });
 
+test("keeps short Greek and Cyrillic claims with sentence terminators", () => {
+  const claims = extractClaims("Έγκριση.\nОдобрено.");
+
+  assert.deepEqual(claims.map((claim) => claim.text), [
+    "Έγκριση.",
+    "Одобрено.",
+  ]);
+});
+
 test("does not merge localized sentence lines during normalization", () => {
   const claims = extractClaims(`Employees receive paid leave。\nManagers approve exceptions。`);
 

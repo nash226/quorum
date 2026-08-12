@@ -102,7 +102,7 @@ function isThematicBreak(text: string): boolean {
 
 function isShortPunctuatedClaim(text: string): boolean {
   const hasNonLatinLetters =
-    /\p{Script=Arabic}|\p{Script=Armenian}|\p{Script=Bengali}|\p{Script=Devanagari}|\p{Script=Ethiopic}|\p{Script=Georgian}|\p{Script=Gujarati}|\p{Script=Gurmukhi}|\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hebrew}|\p{Script=Hiragana}|\p{Script=Kannada}|\p{Script=Khmer}|\p{Script=Lao}|\p{Script=Malayalam}|\p{Script=Myanmar}|\p{Script=Nko}|\p{Script=Oriya}|\p{Script=Sinhala}|\p{Script=Syriac}|\p{Script=Tamil}|\p{Script=Telugu}|\p{Script=Thai}|\p{Script=Tibetan}|\p{Script=Yi}/u.test(text);
+    /\p{Script=Arabic}|\p{Script=Armenian}|\p{Script=Bengali}|\p{Script=Cyrillic}|\p{Script=Devanagari}|\p{Script=Ethiopic}|\p{Script=Georgian}|\p{Script=Greek}|\p{Script=Gujarati}|\p{Script=Gurmukhi}|\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hebrew}|\p{Script=Hiragana}|\p{Script=Kannada}|\p{Script=Khmer}|\p{Script=Lao}|\p{Script=Malayalam}|\p{Script=Myanmar}|\p{Script=Nko}|\p{Script=Oriya}|\p{Script=Sinhala}|\p{Script=Syriac}|\p{Script=Tamil}|\p{Script=Telugu}|\p{Script=Thai}|\p{Script=Tibetan}|\p{Script=Yi}/u.test(text);
 
   if (
     hasNonLatinLetters &&
