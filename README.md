@@ -462,6 +462,9 @@ subpath, and installed CLI binary together, catching publish-boundary drift.
 
 Installed packages now expose `npm run version -- --json` for the same stable
 CLI/API contract-version probe used by integration health checks.
+The installed `version` wrapper also forwards `--help`, so package users can
+inspect that probe's exact output contract without invoking the source CLI
+directly.
 The package smoke check runs this wrapper too, keeping the documented npm entry
 point aligned with the direct `quorum version --json` contract.
 
