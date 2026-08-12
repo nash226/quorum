@@ -2009,7 +2009,7 @@ in-memory and file-backed verification helpers used by the CLI; see the
 [programmatic API guide](docs/programmatic-api.md) for both patterns.
 The guide also documents the in-memory batch result contract for queue workers,
 including its `shouldFail` and `failVerdicts` gate metadata.
-File-backed programmatic verification also rejects empty source directories,
+File-backed verification, including batch runs, rejects empty source directories,
 so API and CLI workflows share the same fail-closed evidence requirement.
 The packaged programmatic API smoke gate exercises that rejection after build,
 so published workers cannot silently run without an approved source set.

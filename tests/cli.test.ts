@@ -2726,6 +2726,28 @@ test("verify rejects an empty source directory before producing unsupported clai
   }
 });
 
+test("verify-batch rejects an empty source directory before producing unsupported claims", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-batch-sources-"));
+
+  try {
+    const sourceDir = join(tempDir, "sources");
+    await mkdir(sourceDir);
+
+    const result = await runCliAllowFailure([
+      "verify-batch",
+      "--answer",
+      "examples/answers/hr-answer.md",
+      "--source-dir",
+      sourceDir,
+    ]);
+
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /No approved source files found/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch ignores unsupported files in recursive source directories", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-source-directory-filter-"));
 
