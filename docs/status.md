@@ -6,7 +6,7 @@
 
 - Product stage: early MVP CLI for enterprise AI claim verification
 - Default branch: `main`
-- Latest shipped change: `724e9267` on 2026-08-11, test: cover short top-level help alias
+- Latest shipped change: `3279f18d` on 2026-08-11, docs: explain streamed claim previews
 - CI: [![CI](https://github.com/nash226/quorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nash226/quorum/actions/workflows/ci.yml)
 
 ## Current Capabilities
@@ -49,6 +49,7 @@
 
 | Date | PR | Change | Commit |
 | --- | --- | --- | --- |
+| 2026-08-11 | Direct push | docs: explain streamed claim previews | `3279f18d` |
 | 2026-08-11 | Direct push | test: cover short top-level help alias | `724e9267` |
 | 2026-08-11 | Direct push | docs: add verification architecture guide | `09adadd9` |
 | 2026-08-11 | Direct push | docs: advertise all supported input formats | `b925389b` |
@@ -56,5 +57,4 @@
 | 2026-08-11 | Direct push | fix: expose Allow header on CORS preflight | `5a8ac4eb` |
 | 2026-08-11 | Direct push | test: cover query-bearing reviewer queue requests | `85d3cefc` |
 | 2026-08-11 | Direct push | docs: refresh verified API contract note | `0f9a133a` |
-| 2026-08-11 | Direct push | test: preserve in-memory source IDs in evidence | `5e629183` |
 
