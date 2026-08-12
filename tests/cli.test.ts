@@ -6685,6 +6685,34 @@ test("verify accepts an RFC 822 email answer against an email source", async () 
   }
 });
 
+test("verify accepts an Apple Mail EMLX answer against an EMLX source", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-emlx-answer-"));
+  const answerPath = join(tempDir, "refund-answer.emlx");
+  const sourcePath = join(tempDir, "refund-policy.emlx");
+
+  try {
+    await Promise.all([
+      writeFile(
+        answerPath,
+        "141\nFrom: agent@example.com\nDate: 2026-08-04\nSubject: Refund answer\n\nCustomers can request refunds within 30 days.\n",
+      ),
+      writeFile(
+        sourcePath,
+        "142\nFrom: support@example.com\nDate: 2026-08-03\nSubject: Refund policy\n\nCustomers can request refunds within 30 days.\n",
+      ),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as { summary: { verified: number }; answerPath: string };
+
+    assert.equal(report.summary.verified, 1);
+    assert.equal(report.answerPath, answerPath);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts directly supplied uppercase RFC 822 email paths", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-email-uppercase-direct-"));
   const answerPath = join(tempDir, "refund-answer.EML");
