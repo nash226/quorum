@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired uppercase `.YAML` and `.YML`
+answer and approved-source exports, keeping case-insensitive YAML inputs on the
+same evidence path as lowercase files.
+
 The evaluation suite now regression-tests the shipped support warranty
 workflow, preserving verified, contradicted, and unsupported verdicts for
 replacement-policy claims.
