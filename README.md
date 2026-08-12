@@ -1,5 +1,9 @@
 # Quorum
 
+Direct verification now regression-tests paired uppercase `.TXT` answer and
+approved-source exports, keeping the common plain-text alias case-insensitive
+on the same evidence path as lowercase inputs.
+
 The evaluation suite now regression-tests the shipped support warranty
 workflow, preserving verified, contradicted, and unsupported verdicts for
 replacement-policy claims.
