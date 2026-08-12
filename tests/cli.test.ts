@@ -964,6 +964,26 @@ test("verify accepts a direct .text source export", async () => {
   }
 });
 
+test("verify prints an explicit empty state when an answer has no claims", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-empty-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.md");
+    const sourcePath = join(tempDir, "policy.md");
+    await Promise.all([
+      writeFile(answerPath, "\n", "utf8"),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const stdout = await runCli(["verify", "--answer", answerPath, "--source", sourcePath]);
+
+    assert.match(stdout, /Summary: 0 verified, 0 contradicted, 0 unsupported, 0 needs review/);
+    assert.match(stdout, /No claims were extracted from this answer\./);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts direct .log answer and source exports", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-log-"));
 

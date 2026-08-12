@@ -1981,6 +1981,10 @@ exported review artifacts.
 The packaged CLI smoke gate verifies that `verify-batch --fail-on` exits with
 status code `2` when any answer contains a selected risky verdict.
 
+If a single answer contains no extractable claims, Quorum reports an explicit
+empty state with zero verdicts so callers can distinguish an empty review from
+an answer that passed verification.
+
 The same batch fail policy is available over HTTP: with `failOn` and
 `failOnStatus`, a risky batch returns HTTP `409` plus `shouldFail` and
 `failVerdicts` metadata for workflow gating.
