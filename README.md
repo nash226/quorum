@@ -1,5 +1,13 @@
 # Quorum
 
+Direct and recursive answer verification now accepts HTML and XHTML exports,
+normalizing their readable body text before claim extraction just like approved
+HTML sources.
+
+The public API extension inventory now regression-tests the same HTML/XHTML
+answer ordering exposed by the CLI, keeping discovery clients aligned with
+direct and recursive verification.
+
 The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.
