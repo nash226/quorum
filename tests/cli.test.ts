@@ -4062,6 +4062,41 @@ test("verify accepts a direct DOCX answer export", async () => {
   }
 });
 
+test("verify accepts paired DOCX answer and source exports", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-paired-docx-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.docx");
+    const sourcePath = join(tempDir, "policy.docx");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+    const content = await readFile(docxFixturePath);
+
+    await Promise.all([
+      writeFile(answerPath, content),
+      writeFile(sourcePath, content),
+    ]);
+
+    const report = JSON.parse(
+      await runCli(["verify", "--answer", answerPath, "--source", sourcePath, "--json"]),
+    ) as {
+      answerPath: string;
+      sources: Array<{ sourcePath: string; title: string }>;
+      summary: { verified: number };
+    };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.deepEqual(report.sources, [{
+      id: "source_1",
+      sourcePath,
+      title: "policy",
+      trustLevel: "medium",
+    }]);
+    assert.equal(report.summary.verified, 1);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify-batch discovers mixed-case answer and source extensions", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-case-insensitive-"));
 

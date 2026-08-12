@@ -1,5 +1,7 @@
 # Quorum
 
+Direct CLI verification now regression-tests paired DOCX answer and approved-source exports, keeping binary-to-binary Word policy checks covered alongside the existing Markdown-to-DOCX path.
+
 The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.
