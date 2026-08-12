@@ -74,7 +74,7 @@ interface ImportReviewArgs {
 }
 
 const SOURCE_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".html", ".htm", ".pdf"]);
-const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt"]);
+const ANSWER_EXTENSIONS = new Set([".md", ".markdown", ".txt", ".pdf"]);
 
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
@@ -558,8 +558,15 @@ async function verifySingleAnswer(
   answerPath: string,
   sources: SourceDocument[],
 ): Promise<VerificationReport> {
-  const answer = await readFile(answerPath, "utf8");
+  const answerContent = await readFile(answerPath);
+  const answer = isPdfAnswer(answerPath)
+    ? (await sourceDocumentFromFile(answerPath, answerContent, 0)).content
+    : answerContent.toString("utf8");
   return verifyAnswer(answer, sources, undefined, answerPath);
+}
+
+function isPdfAnswer(answerPath: string): boolean {
+  return extname(answerPath).toLowerCase() === ".pdf";
 }
 
 async function listSourceFiles(sourceDir: string): Promise<string[]> {

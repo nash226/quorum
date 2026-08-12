@@ -112,6 +112,36 @@ test("verify accepts pdf sources", async () => {
   }
 });
 
+test("verify accepts pdf answers", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-pdf-answer-"));
+
+  try {
+    const answerPath = join(tempDir, "answer.pdf");
+    const sourcePath = join(tempDir, "policy.md");
+
+    await Promise.all([
+      writeFile(answerPath, createSimplePdf("Employees receive 12 weeks of paid parental leave.")),
+      writeFile(sourcePath, "Employees receive 12 weeks of paid parental leave.\n", "utf8"),
+    ]);
+
+    const report = JSON.parse(
+      await runCli([
+        "verify",
+        "--answer",
+        answerPath,
+        "--source",
+        sourcePath,
+        "--json",
+      ]),
+    ) as { answerPath: string; assessments: Array<{ verdict: string }> };
+
+    assert.equal(report.answerPath, answerPath);
+    assert.equal(report.assessments[0]?.verdict, "verified");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify matches claims against html sources with named entities", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-html-entities-"));
 
