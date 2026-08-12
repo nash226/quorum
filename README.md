@@ -1,5 +1,9 @@
 # Quorum
 
+Claim extraction now keeps adjacent Georgian policy statements separate when
+exports use the Georgian paragraph separator (`჻`), preserving localized
+evidence boundaries for review.
+
 The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.
