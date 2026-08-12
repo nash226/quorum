@@ -7466,12 +7466,12 @@ test("verify-batch rejects an empty answer directory with a useful error", async
     await Promise.all([
       mkdir(answerDir, { recursive: true }),
       mkdir(sourceDir, { recursive: true }),
-      writeFile(
-        join(sourceDir, "hr-policy.md"),
-        "Employees receive 12 weeks of paid parental leave.\n",
-        "utf8",
-      ),
     ]);
+    await writeFile(
+      join(sourceDir, "hr-policy.md"),
+      "Employees receive 12 weeks of paid parental leave.\n",
+      "utf8",
+    );
 
     await assert.rejects(
       runCli([
