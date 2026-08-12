@@ -4,6 +4,9 @@ The claim-preview workflow can read an answer from stdin with
 `extract-claims --answer - --result-json`, preserving the `answerHasClaims`
 route flag without requiring an intermediate file.
 
+Claim previews can also be streamed directly to a stable JSON artifact with
+`--result-json-out`, leaving stdout available for pipeline logging.
+
 The CLI help now advertises the complete accepted input contract, including
 Apple Mail `.emlx` and rich-text `.rtf` files.
 

@@ -187,6 +187,17 @@ The streamed form preserves the same `answerHasClaims` result contract as a
 file-backed answer. Use `--answer-label` when the preview is being routed into
 a reviewer queue and needs a stable human-facing name.
 
+To hand the routing-aware preview to another process as a file, use
+`--result-json-out`:
+
+```bash
+cat generated-answer.md | npm run dev -- extract-claims \
+  --answer - --result-json-out reports/claim-preview.json
+```
+
+The command writes the same `claims` and `answerHasClaims` fields as
+`--result-json`, while keeping stdout available for the surrounding workflow.
+
 ## Batch verification
 
 Verify every answer in a directory and produce one reviewer handoff:
