@@ -4932,6 +4932,45 @@ test("verify-batch discovers PDF and nested DOCX answers from answer directories
   }
 });
 
+test("verify-batch discovers nested DOCX approved sources", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-docx-source-dir-"));
+
+  try {
+    const answerDir = join(tempDir, "answers");
+    const sourceDir = join(tempDir, "sources", "regional");
+    const docxFixturePath = "node_modules/mammoth/test/test-data/single-paragraph.docx";
+
+    await mkdir(answerDir, { recursive: true });
+    await mkdir(sourceDir, { recursive: true });
+    await Promise.all([
+      writeFile(join(answerDir, "support-answer.md"), "Walking on imported air\n", "utf8"),
+      readFile(docxFixturePath).then((content) => writeFile(join(sourceDir, "support-policy.docx"), content)),
+    ]);
+
+    const stdout = await runCli([
+      "verify-batch",
+      "--answer-dir",
+      answerDir,
+      "--source-dir",
+      join(tempDir, "sources"),
+      "--json",
+    ]);
+
+    const report = JSON.parse(stdout) as {
+      sourceCount: number;
+      summary: { verified: number };
+      sources: Array<{ sourcePath: string; title: string }>;
+    };
+
+    assert.equal(report.sourceCount, 1);
+    assert.equal(report.summary.verified, 1);
+    assert.match(report.sources[0]?.sourcePath ?? "", /regional[\\/]support-policy\.docx$/);
+    assert.equal(report.sources[0]?.title, "support-policy");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify accepts a direct PDF answer export", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-direct-pdf-answer-"));
 
