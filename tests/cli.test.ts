@@ -3067,6 +3067,30 @@ test("extract-claims result-json-out writes the routing-aware preview", async ()
   }
 });
 
+test("extract-claims result-json-out writes streamed answer provenance", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "quorum-cli-claim-preview-stdin-result-"));
+  const resultPath = join(tempDir, "preview.json");
+
+  try {
+    const result = await runCliAllowFailure(
+      ["extract-claims", "--answer", "-", "--result-json-out", resultPath],
+      { stdin: "Employees receive 12 weeks of paid parental leave.\n" },
+    );
+
+    assert.equal(result.code, 0);
+    const resultJson = JSON.parse(await readFile(resultPath, "utf8")) as {
+      answerHasClaims: boolean;
+      answerPath: string;
+      claims: Array<{ text: string }>;
+    };
+    assert.equal(resultJson.answerHasClaims, true);
+    assert.equal(resultJson.answerPath, "-");
+    assert.equal(resultJson.claims[0]?.text, "Employees receive 12 weeks of paid parental leave.");
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("verify --help prints command-specific usage without requiring sources", async () => {
   const result = await runCliAllowFailure(["verify", "--help"]);
 
