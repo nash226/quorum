@@ -2265,6 +2265,10 @@ human review; the CLI treats answers with no extracted claims as a review-policy
 failure too. See the [CLI guide](docs/cli-guide.md#fail-policy-gates) for the
 copy-pasteable example.
 
+The CLI rejects an incomplete `--fail-on` option or an unsupported verdict
+before verification starts, so configuration mistakes fail clearly instead of
+silently weakening a CI gate.
+
 Verification also stops with `No approved source files found` when the supplied
 source paths and directories contain no supported files, instead of producing a
 report where every claim is unsupported.
